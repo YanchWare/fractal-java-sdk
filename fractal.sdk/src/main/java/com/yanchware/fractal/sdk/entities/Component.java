@@ -1,19 +1,21 @@
 package com.yanchware.fractal.sdk.entities;
 
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
+import com.yanchware.fractal.sdk.valueobjects.ComponentType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Getter
-@Setter(AccessLevel.PRIVATE)
-public abstract class Component {
+@Setter(AccessLevel.PROTECTED)
+public abstract class Component implements Validatable {
+  private final static String ID_IS_NULL = "Component id has not been defined and it is required";
+  private final static String COMPONENT_TYPE_NOT_DEFINED = "Component type has not been defined and it is required";
+
   private String displayName;
-  private String type;
+  private ComponentType type;
   private ComponentId id;
   private String version;
   private Set<ComponentId> dependencies;
@@ -25,123 +27,103 @@ public abstract class Component {
     dependencies = new HashSet<>();
   }
 
-  public static ComponentBuilder builder() {
-    return new ComponentBuilder();
+  @Override
+  public Collection<String> validate() {
+    Collection<String> errors = new ArrayList<>();
+
+    if (id == null) {
+      errors.add(ID_IS_NULL);
+    }
+
+    if (type == ComponentType.Unknown) {
+      errors.add(COMPONENT_TYPE_NOT_DEFINED);
+    }
+
+    return errors;
   }
 
-  public static class ComponentBuilder {
-    private final Component component;
-    private String temporaryComponentId;
+  public abstract static class Builder<T extends Component, B extends Builder<T, B>> {
+    protected final T component;
+    protected final B builder;
+
     private final Set<String> temporaryDependencies;
     private final Set<String> temporaryLinks;
 
-    public ComponentBuilder() {
-      this.component = new Component();
+    public Builder() {
+      component = createComponent();
+      builder = getBuilder();
       temporaryLinks = new HashSet<>();
       temporaryDependencies = new HashSet<>();
     }
 
-    public T displayName(String displayName) {
+    protected abstract T createComponent();
+    protected abstract B getBuilder();
+
+    public B displayName(String displayName) {
       component.setDisplayName(displayName);
-      return this;
+      return builder;
     }
 
-    public T type<T extends ComponentB>(String type) {
+    public B type(ComponentType type) {
       component.setType(type);
-      return this;
+      return builder;
     }
 
-    public T id(String id) {
-      temporaryComponentId = id;
-      return this;
-    }
-
-    public ComponentBuilder id(ComponentId id) {
+    public B id(ComponentId id) {
       component.setId(id);
-      return this;
+      return builder;
     }
 
-    public ComponentBuilder version(String version) {
+    public B version(String version) {
       component.setVersion(version);
-      return this;
+      return builder;
     }
 
-    public ComponentBuilder dependencies(Set<String> dependencies) {
-      temporaryDependencies.addAll(dependencies);
-      return this;
+    public B dependencies(Collection<? extends ComponentId> dependencies) {
+      if(component.getDependencies() == null) {
+        component.setDependencies(new HashSet<>());
+      }
+
+      component.getDependencies().addAll(dependencies);
+
+      return builder;
     }
 
-    public ComponentBuilder dependency(String dependency) {
-      temporaryDependencies.add(dependency);
-      return this;
-    }
-
-    public ComponentBuilder dependency(ComponentId dependency) {
+    public B dependency(ComponentId dependency) {
       if(component.getDependencies() == null) {
         component.setDependencies(new HashSet<>());
       }
       component.getDependencies().add(dependency);
-      return this;
+      return builder;
     }
 
-    public ComponentBuilder links(Set<String> links) {
-      temporaryLinks.addAll(links);
-      return this;
+    public B links(Collection<? extends ComponentId> links) {
+      if(component.getLinks() == null) {
+        component.setLinks(new HashSet<>());
+      }
+
+      component.getLinks().addAll(links);
+
+      return builder;
     }
 
-    public ComponentBuilder link(String link) {
-      temporaryLinks.add(link);
-      return this;
-    }
-
-    public ComponentBuilder link(ComponentId link) {
+    public B link(ComponentId link) {
       if(component.getLinks() == null) {
         component.setLinks(new HashSet<>());
       }
       component.getLinks().add(link);
-      return this;
+      return builder;
     }
 
-    public ComponentBuilder description(String description) {
+    public B description(String description) {
       component.setDescription(description);
-      return this;
+      return builder;
     }
 
-    public Collection<String> validate() {
-      Collection<String> errors = new ArrayList<>();
-      if (component.getId() == null) {
-        errors.addAll(ComponentId.Validate(temporaryComponentId));
-      }
+    public T build() {
+      Collection<String> errors = component.validate();
 
-      errors.addAll(
-        Stream.concat(temporaryDependencies.stream(), temporaryLinks.stream())
-        .map(ComponentId::Validate)
-        .flatMap(Collection::stream)
-        .collect(Collectors.toList()));
-
-      return errors;
-    }
-
-    public Component build() {
-      Collection<String> errors = validate();
-
-      if (errors.isEmpty()) {
-        if (component.getId() == null) {
-          component.setId(ComponentId.With(temporaryComponentId));
-        }
-
-        component.getDependencies().addAll(
-          temporaryDependencies.stream()
-            .map(ComponentId::With)
-            .collect(Collectors.toSet()));
-        component.setDependencies(Collections.unmodifiableSet(component.getDependencies()));
-
-        component.getLinks().addAll(
-          temporaryLinks.stream()
-            .map(ComponentId::With)
-            .collect(Collectors.toSet()));
-        component.setLinks(Collections.unmodifiableSet(component.getLinks()));
-      } else {
+      if (!errors.isEmpty()) {
         throw new IllegalArgumentException(String.format(
           "Component validation failed. Errors: %s",
           Arrays.toString(errors.toArray())));

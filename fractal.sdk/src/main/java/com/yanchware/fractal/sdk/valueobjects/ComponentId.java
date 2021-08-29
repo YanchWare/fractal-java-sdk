@@ -27,7 +27,7 @@ public class ComponentId {
     this.value = value;
   }
 
-  public static ComponentId With(String value) {
+  public static ComponentId from(String value) {
     return new ComponentId(value);
   }
 
