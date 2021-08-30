@@ -11,7 +11,7 @@ public class LiveSystemFirstTest {
   @Test
   public void PositiveTest() {
     var gke = GoogleKubernetesEngine.builder()
-      .service(KubernetesService.builder()
+      .service(KubernetesService.builder().id(ComponentId.from("caas-1"))
         .build())
       .id(ComponentId.from("kube-1"))
       .description("Test GKE cluster")
