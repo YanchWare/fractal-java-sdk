@@ -30,10 +30,10 @@ public class ComponentIdNegativeTests
           {"\r", List.of(String.format(ComponentId.ID_NULL_OR_EMPTY_TEMPLATE, "\r"))},
           {"1test-compo", List.of(String.format(ComponentId.ILLEGAL_ID_TEMPLATE, "1test-compo"))},
           {"1test\ncompo", List.of(String.format(ComponentId.ILLEGAL_ID_TEMPLATE, "1test\ncompo"))},
-          {"this-is-a-very-long-id-which-will-break", List.of(String.format(ComponentId.ID_TOO_LONG_TEMPLATE, "this-is-a-very-long-id-which-will-break"))},
+          {"this-is-a-very-long-id-which-will-break", List.of(String.format(ComponentId.ID_LENGTH_MISMATCH_TEMPLATE, "this-is-a-very-long-id-which-will-break"))},
           {"this-is-a-very--and-bad-id-which-will-break", List.of(
             String.format(ComponentId.ILLEGAL_ID_TEMPLATE, "this-is-a-very--and-bad-id-which-will-break"),
-            String.format(ComponentId.ID_TOO_LONG_TEMPLATE, "this-is-a-very--and-bad-id-which-will-break"))},
+            String.format(ComponentId.ID_LENGTH_MISMATCH_TEMPLATE, "this-is-a-very--and-bad-id-which-will-break"))},
           {"a-", List.of(String.format(ComponentId.ILLEGAL_ID_TEMPLATE, "a-"))},
           {"a-strange--id", List.of(String.format(ComponentId.ILLEGAL_ID_TEMPLATE, "a-strange--id"))},
         });
@@ -42,7 +42,7 @@ public class ComponentIdNegativeTests
     @Test
     public void validationFailsForBadInput()
     {
-        Collection<String> errors = ComponentId.Validate(value);
+        Collection<String> errors = ComponentId.validate(value);
         assertThat(errors).containsAll(expectedErrors);
     }
 }

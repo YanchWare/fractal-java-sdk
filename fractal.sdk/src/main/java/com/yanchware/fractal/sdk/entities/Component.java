@@ -46,14 +46,9 @@ public abstract class Component implements Validatable {
     protected final T component;
     protected final B builder;
 
-    private final Set<String> temporaryDependencies;
-    private final Set<String> temporaryLinks;
-
     public Builder() {
       component = createComponent();
       builder = getBuilder();
-      temporaryLinks = new HashSet<>();
-      temporaryDependencies = new HashSet<>();
     }
 
     protected abstract T createComponent();

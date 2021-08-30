@@ -28,7 +28,7 @@ public class ComponentIdPositiveTests
     @Test
     public void validationFailsForBadInput()
     {
-        Collection<String> errors = ComponentId.Validate(value);
+        Collection<String> errors = ComponentId.validate(value);
         assertThat(errors).isEmpty();
     }
 }
