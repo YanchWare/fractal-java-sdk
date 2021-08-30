@@ -8,6 +8,9 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toCollection;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
@@ -95,7 +98,8 @@ public class GoogleKubernetesEngine extends KubernetesCluster {
 
     nodePools.stream()
       .map(GcpNodePool::validate)
-      .map(errors::addAll);
+      .forEach(errors::addAll);
+
     return errors;
   }
 

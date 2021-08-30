@@ -46,7 +46,7 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
     Collection<String> errors = super.validate();
     services.stream()
       .map(CaaSService::validate)
-      .map(errors::addAll);
+      .forEach(errors::addAll);
     return errors;
   }
 

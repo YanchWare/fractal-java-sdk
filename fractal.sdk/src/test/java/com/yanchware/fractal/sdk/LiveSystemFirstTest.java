@@ -6,6 +6,8 @@ import com.yanchware.fractal.sdk.entities.livesystem.caas.KubernetesService;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import org.junit.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class LiveSystemFirstTest {
 
   @Test
@@ -16,11 +18,10 @@ public class LiveSystemFirstTest {
       .id(ComponentId.from("kube-1"))
       .description("Test GKE cluster")
       .displayName("Kube 1")
-      .nodePool(GcpNodePool.builder().build())
+      .nodePool(GcpNodePool.builder().name("gcp-node-pool-name").build())
     .build();
 
-    gke.validate()
-      .isEmpty();
+    assertThat(gke.validate()).isEmpty();
   }
 
 }
