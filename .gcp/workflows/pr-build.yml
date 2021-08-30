@@ -1,0 +1,5 @@
+steps:
+  - name: maven:3-jdk-11
+    dir: fractal.sdk
+    entrypoint: mvn
+    args: ['package']
