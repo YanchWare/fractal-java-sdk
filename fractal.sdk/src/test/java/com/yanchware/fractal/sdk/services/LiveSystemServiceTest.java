@@ -1,6 +1,6 @@
 package com.yanchware.fractal.sdk.services;
 
-import com.yanchware.fractal.sdk.services.livesystemcontract.command.InstantiateCommandRequest;
+import com.yanchware.fractal.sdk.services.livesystemcontract.commands.InstantiateCommandRequest;
 import org.junit.Test;
 
 public class LiveSystemServiceTest {

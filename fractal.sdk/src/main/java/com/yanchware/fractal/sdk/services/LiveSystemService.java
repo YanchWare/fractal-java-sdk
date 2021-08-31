@@ -2,7 +2,7 @@ package com.yanchware.fractal.sdk.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yanchware.fractal.sdk.services.livesystemcontract.command.InstantiateCommandRequest;
+import com.yanchware.fractal.sdk.services.livesystemcontract.commands.InstantiateCommandRequest;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URI;
