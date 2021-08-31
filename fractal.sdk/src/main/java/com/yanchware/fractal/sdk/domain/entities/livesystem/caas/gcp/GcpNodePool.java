@@ -1,12 +1,10 @@
-package com.yanchware.fractal.sdk.entities.livesystem.caas;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.gcp;
 
-import com.yanchware.fractal.sdk.entities.Validatable;
-import com.yanchware.fractal.sdk.valueobjects.ComponentType;
+import com.yanchware.fractal.sdk.domain.entities.Validatable;
 import lombok.Builder;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @Builder
 public class GcpNodePool implements Validatable {

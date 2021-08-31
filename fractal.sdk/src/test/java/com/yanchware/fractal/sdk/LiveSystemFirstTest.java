@@ -1,8 +1,8 @@
 package com.yanchware.fractal.sdk;
 
-import com.yanchware.fractal.sdk.entities.livesystem.caas.GcpNodePool;
-import com.yanchware.fractal.sdk.entities.livesystem.caas.GoogleKubernetesEngine;
-import com.yanchware.fractal.sdk.entities.livesystem.caas.KubernetesService;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.gcp.GcpNodePool;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.gcp.GoogleKubernetesEngine;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.KubernetesService;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import org.junit.Test;
 

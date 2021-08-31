@@ -1,4 +1,4 @@
-package com.yanchware.fractal.sdk.entities;
+package com.yanchware.fractal.sdk.domain.entities;
 
 import java.util.Collection;
 

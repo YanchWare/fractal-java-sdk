@@ -1,4 +1,4 @@
-package com.yanchware.fractal.sdk.entities.livesystem.caas;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.gcp;
 
 import java.util.Collection;
 

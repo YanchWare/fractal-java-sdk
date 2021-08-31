@@ -1,4 +1,4 @@
-package com.yanchware.fractal.sdk.entities;
+package com.yanchware.fractal.sdk.domain.entities;
 
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import com.yanchware.fractal.sdk.valueobjects.ComponentType;

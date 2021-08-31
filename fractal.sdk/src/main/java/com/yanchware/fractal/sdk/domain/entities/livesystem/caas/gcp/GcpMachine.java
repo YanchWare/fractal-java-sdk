@@ -1,4 +1,4 @@
-package com.yanchware.fractal.sdk.entities.livesystem.caas;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.gcp;
 
 public enum GcpMachine {
   E2HighCpu2("e2-highcpu-2"),

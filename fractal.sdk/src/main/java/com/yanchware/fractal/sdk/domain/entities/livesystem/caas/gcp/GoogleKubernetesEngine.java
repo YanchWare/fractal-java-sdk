@@ -1,16 +1,12 @@
-package com.yanchware.fractal.sdk.entities.livesystem.caas;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.gcp;
 
-import com.yanchware.fractal.sdk.entities.blueprint.caas.CaaSService;
-import com.yanchware.fractal.sdk.entities.livesystem.KubernetesCluster;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.KubernetesCluster;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.toCollection;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)

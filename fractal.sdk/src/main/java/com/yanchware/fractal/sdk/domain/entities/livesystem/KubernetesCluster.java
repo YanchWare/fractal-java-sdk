@@ -1,8 +1,8 @@
-package com.yanchware.fractal.sdk.entities.livesystem;
+package com.yanchware.fractal.sdk.domain.entities.livesystem;
 
-import com.yanchware.fractal.sdk.entities.Component;
-import com.yanchware.fractal.sdk.entities.blueprint.caas.CaaSContainerPlatform;
-import com.yanchware.fractal.sdk.entities.blueprint.caas.CaaSService;
+import com.yanchware.fractal.sdk.domain.entities.Component;
+import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSContainerPlatform;
+import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSService;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;

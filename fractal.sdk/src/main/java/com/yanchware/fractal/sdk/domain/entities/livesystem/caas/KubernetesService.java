@@ -1,8 +1,7 @@
-package com.yanchware.fractal.sdk.entities.livesystem.caas;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
-import com.yanchware.fractal.sdk.entities.Component;
-import com.yanchware.fractal.sdk.entities.blueprint.caas.CaaSService;
-import com.yanchware.fractal.sdk.entities.livesystem.KubernetesCluster;
+import com.yanchware.fractal.sdk.domain.entities.Component;
+import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSService;
 
 public class KubernetesService extends CaaSService {
 
