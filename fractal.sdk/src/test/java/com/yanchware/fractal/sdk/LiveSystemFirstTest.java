@@ -1,6 +1,7 @@
 package com.yanchware.fractal.sdk;
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.Environment;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystem;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.KubernetesService;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureKubernetesService;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureNodePool;
@@ -56,10 +57,10 @@ public class LiveSystemFirstTest {
                 .build();
 
 
-        //LiveSystem.builder()
-        //.id(LiveSystemId.from("ls-id"))
-        //.component(gke)
-        //.build(); //check at build time if you have correct info, if not, generate it if possible
+        LiveSystem liveSystem = LiveSystem.builder()
+                .id("ls-id")
+                .component(aks)
+                .build();//check at build time if you have correct info, if not, generate it if possible
 
         //Automaton.instantiate(list<livesystems>)
         //automaton could have a public constructor for users to inject as a singleton
@@ -67,6 +68,7 @@ public class LiveSystemFirstTest {
         assertThat(env.validate()).isEmpty();
         assertThat(aks.validate()).isEmpty();
         assertThat(gke.validate()).isEmpty();
+        assertThat(liveSystem.validate()).isEmpty();
     }
 
 }
