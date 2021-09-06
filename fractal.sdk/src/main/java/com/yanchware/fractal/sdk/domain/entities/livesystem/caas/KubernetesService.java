@@ -15,7 +15,6 @@ public class KubernetesService extends CaaSService {
 
   public static class KubernetesServiceBuilder extends Component.Builder<KubernetesService, KubernetesService.KubernetesServiceBuilder> {
 
-
     @Override
     protected KubernetesService createComponent() {
       return new KubernetesService();
