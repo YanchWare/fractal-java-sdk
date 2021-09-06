@@ -7,7 +7,7 @@ import org.junit.Test;
 
 public class LiveSystemServiceTest {
 
-    private LiveSystemService liveSystemService = new LiveSystemService(null);
+    private LiveSystemService liveSystemService = new LiveSystemService(null, null);
 
     @Test
     public void test() throws InstantiatorException {
