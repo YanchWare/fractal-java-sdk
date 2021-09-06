@@ -2,6 +2,7 @@ package com.yanchware.fractal.sdk.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yanchware.fractal.sdk.configuration.EnvVarServiceConfiguration;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands.InstantiateLiveSystemCommandRequest;
 import lombok.Data;
@@ -12,7 +13,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-import static com.yanchware.fractal.sdk.configuration.Constants.ENDPOINT;
+import static com.yanchware.fractal.sdk.configuration.Constants.*;
 import static java.net.http.HttpRequest.BodyPublishers.ofString;
 
 @Data
@@ -20,6 +21,8 @@ import static java.net.http.HttpRequest.BodyPublishers.ofString;
 public class LiveSystemService {
 
     private final HttpClient client;
+
+    private final EnvVarServiceConfiguration envVarServiceConfiguration;
 
     /*public LiveSystemDto Retrieve(RetrieveQuery query) {
 
@@ -33,13 +36,11 @@ public class LiveSystemService {
         var objectMapper = new ObjectMapper();
 
         HttpRequest request;
-        String resourceGroupId = "resource-group-id";
         try {
-            //command line variable or Env vars
             request = HttpRequest.newBuilder()
-                    .uri(URI.create(ENDPOINT + "/" + resourceGroupId + "/livesystems"))
-                    .header("X-ClientID", "clientId")
-                    .header("X-ClientSecret", "clientSecret")
+                    .uri(URI.create(ENDPOINT + "/" + envVarServiceConfiguration.getResourceGroupId() + "/livesystems"))
+                    .header(X_CLIENT_ID_HEADER, envVarServiceConfiguration.getClientId())
+                    .header(X_CLIENT_SECRET_HEADER, envVarServiceConfiguration.getClientSecret())
                     .POST(ofString(objectMapper.writeValueAsString(command)))
                     .build();
         } catch (JsonProcessingException e) {
@@ -50,7 +51,7 @@ public class LiveSystemService {
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) {
-                log.error("Attempted instantiation of livesystem for resourceGroupId: {}, but received status {}", resourceGroupId, response.statusCode());
+                log.error("Attempted instantiation of livesystem for resourceGroupId: {}, but received status {}", envVarServiceConfiguration.getResourceGroupId(), response.statusCode());
                 throw new InstantiatorException("Attempted instantiation with response code: " + response.statusCode());
             }
         } catch (Exception e) {
