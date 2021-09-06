@@ -33,9 +33,8 @@ public class BlueprintServiceTest {
 
         stubFor(post(urlPathMatching("/blueprint/resource-group/fr/fr"))
                 .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "text/xml")
-                        .withBody("<response>SUCCESS</response>")));
+                        .withStatus(202)
+                        .withHeader("Content-Type", "application/json");
 
         blueprintService.instantiate(buildBlueprintRequest(), "fr", "fr");
 
