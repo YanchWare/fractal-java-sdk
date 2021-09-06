@@ -70,7 +70,7 @@ public class LiveSystemFirstTest {
         assertThat(gke.validate()).isEmpty();
         assertThat(liveSystem.validate()).isEmpty();
 
-        Automaton.gitinstantiate(List.of(liveSystem));
+        Automaton.instantiate(List.of(liveSystem));
         //automaton could have a public constructor for users to inject as a singleton
     }
 
