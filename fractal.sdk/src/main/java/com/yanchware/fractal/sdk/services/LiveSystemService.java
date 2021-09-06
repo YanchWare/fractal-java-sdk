@@ -38,7 +38,7 @@ public class LiveSystemService {
         HttpRequest request;
         try {
             request = HttpRequest.newBuilder()
-                    .uri(URI.create(LIVESYSTEM_ENDPOINT + "/" + envVarServiceConfiguration.getResourceGroupId() + "/livesystems"))
+                    .uri(getLiveSystemUri())
                     .header(X_CLIENT_ID_HEADER, envVarServiceConfiguration.getClientId())
                     .header(X_CLIENT_SECRET_HEADER, envVarServiceConfiguration.getClientSecret())
                     .POST(ofString(objectMapper.writeValueAsString(command)))
@@ -58,5 +58,9 @@ public class LiveSystemService {
             log.error("Attempted instantiation of livesystem failed", e);
             throw new InstantiatorException("Attempted instantiation with generic exception", e);
         }
+    }
+
+    private URI getLiveSystemUri() {
+        return URI.create(envVarServiceConfiguration.getLiveSystemEndpoint() + "/" + envVarServiceConfiguration.getResourceGroupId() + "/livesystems");
     }
 }

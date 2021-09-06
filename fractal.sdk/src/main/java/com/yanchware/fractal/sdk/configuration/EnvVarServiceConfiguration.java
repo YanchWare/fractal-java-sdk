@@ -17,4 +17,14 @@ public class EnvVarServiceConfiguration implements ServiceConfiguration {
     public String getClientSecret() {
         return System.getenv(CLIENT_SECRET_KEY);
     }
+
+    @Override
+    public String getBlueprintEndpoint() {
+        return System.getenv(BLUEPRINT_ENDPOINT_KEY);
+    }
+
+    @Override
+    public String getLiveSystemEndpoint() {
+        return System.getenv(LIVESYSTEM_ENDPOINT_KEY);
+    }
 }

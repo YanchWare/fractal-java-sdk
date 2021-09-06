@@ -1,8 +1,8 @@
 package com.yanchware.fractal.sdk.configuration;
 
 public class Constants {
-    public static final String LIVESYSTEM_ENDPOINT = "https://livesystem";
-    public static final String BLUEPRINTS_ENDPOINT = "https://blueprints";
+    public static final String LIVESYSTEM_ENDPOINT_KEY = "LIVESYSTEM_ENDPOINT_KEY";
+    public static final String BLUEPRINT_ENDPOINT_KEY = "BLUEPRINT_ENDPOINT_KEY";
 
     public static final String X_CLIENT_ID_HEADER = "X-ClientID";
     public static final String X_CLIENT_SECRET_HEADER = "X-ClientSecret";

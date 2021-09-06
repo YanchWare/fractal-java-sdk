@@ -53,6 +53,6 @@ public class BlueprintService {
     }
 
     private URI getBlueprintsUri(String fractalName, String fractalVersion) {
-        return URI.create(BLUEPRINTS_ENDPOINT + "/" + envVarServiceConfiguration.getResourceGroupId() + "/" + fractalName + "/" + fractalVersion);
+        return URI.create(envVarServiceConfiguration.getBlueprintEndpoint() + "/" + envVarServiceConfiguration.getResourceGroupId() + "/" + fractalName + "/" + fractalVersion);
     }
 }

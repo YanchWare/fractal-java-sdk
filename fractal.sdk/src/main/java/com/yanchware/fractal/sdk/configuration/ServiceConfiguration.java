@@ -7,4 +7,8 @@ public interface ServiceConfiguration {
     String getClientId();
 
     String getClientSecret();
+
+    String getBlueprintEndpoint();
+
+    String getLiveSystemEndpoint();
 }
