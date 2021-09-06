@@ -120,7 +120,8 @@ public abstract class Component implements Validatable {
 
       if (!errors.isEmpty()) {
         throw new IllegalArgumentException(String.format(
-          "Component validation failed. Errors: %s",
+          "Component '%s' validation failed. Errors: %s",
+          this.getClass().getSimpleName(),
           Arrays.toString(errors.toArray())));
       }
 

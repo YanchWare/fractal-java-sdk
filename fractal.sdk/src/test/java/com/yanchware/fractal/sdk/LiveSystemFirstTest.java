@@ -1,6 +1,8 @@
 package com.yanchware.fractal.sdk;
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.Environment;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureKubernetesService;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureNodePool;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.gcp.GcpNodePool;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.gcp.GoogleKubernetesEngine;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.KubernetesService;
@@ -23,11 +25,19 @@ public class LiveSystemFirstTest {
                 .build();
 
         var env = Environment.builder()
-                .id("")
+                .id("env-id")
                 .displayName("STARK PROD")
                 .parentId("123456789")
                 .parentType("folder")
                 .build();
+
+        var aks = AzureKubernetesService.builder()
+                .id(ComponentId.from("aks-1"))
+                .description("Test AKS cluster")
+                .displayName("AKS #1")
+                .nodePool(AzureNodePool.builder().name("aks-node-pool").diskSizeGb(35).build())
+                .build();
+
 
         //LiveSystem.builder()
         //.id(LiveSystemId.from("ls-id"))
@@ -38,7 +48,7 @@ public class LiveSystemFirstTest {
         //automaton could have a public constructor for users to inject as a singleton
 
         assertThat(env.validate()).isEmpty();
-
+        assertThat(aks.validate()).isEmpty();
         assertThat(gke.validate()).isEmpty();
     }
 
