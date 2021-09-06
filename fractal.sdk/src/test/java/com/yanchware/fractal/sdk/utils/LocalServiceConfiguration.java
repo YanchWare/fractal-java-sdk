@@ -20,11 +20,11 @@ public class LocalServiceConfiguration implements ServiceConfiguration {
 
     @Override
     public String getBlueprintEndpoint() {
-        return "https://localhost:8080/blueprint";
+        return "http://localhost:8090/blueprint";
     }
 
     @Override
     public String getLiveSystemEndpoint() {
-        return "https://localhost:8080/livesystem";
+        return "http://localhost:8090/livesystem";
     }
 }
