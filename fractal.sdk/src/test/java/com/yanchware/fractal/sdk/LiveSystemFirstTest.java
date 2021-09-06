@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureMachineType.STANDARD_B2S;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureOsType.LINUX;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureRegion.EUROPE_WEST;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class LiveSystemFirstTest {
@@ -37,6 +38,11 @@ public class LiveSystemFirstTest {
                 .id(ComponentId.from("aks-1"))
                 .description("Test AKS cluster")
                 .displayName("AKS #1")
+                .region(EUROPE_WEST)
+                .network("network-host")
+                .subNetwork("compute-tier-1")
+                .podsRange("tier-1-pods")
+                .serviceRange("tier-1-services")
                 .nodePool(AzureNodePool.builder().
                         name("aks-node-pool").
                         diskSizeGb(35).
