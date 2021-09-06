@@ -1,14 +1,16 @@
 package com.yanchware.fractal.sdk;
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.Environment;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.KubernetesService;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureKubernetesService;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureNodePool;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.gcp.GcpNodePool;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.gcp.GoogleKubernetesEngine;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.KubernetesService;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import org.junit.Test;
 
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureMachineType.STANDARD_B2S;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureOsType.LINUX;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class LiveSystemFirstTest {
@@ -35,7 +37,16 @@ public class LiveSystemFirstTest {
                 .id(ComponentId.from("aks-1"))
                 .description("Test AKS cluster")
                 .displayName("AKS #1")
-                .nodePool(AzureNodePool.builder().name("aks-node-pool").diskSizeGb(35).build())
+                .nodePool(AzureNodePool.builder().
+                        name("aks-node-pool").
+                        diskSizeGb(35).
+                        machineType(STANDARD_B2S).
+                        maxNodeCount(3).
+                        maxSurge(1).
+                        minNodeCount(1).
+                        maxPodsPerNode(100).
+                        osType(LINUX).
+                        build())
                 .build();
 
 

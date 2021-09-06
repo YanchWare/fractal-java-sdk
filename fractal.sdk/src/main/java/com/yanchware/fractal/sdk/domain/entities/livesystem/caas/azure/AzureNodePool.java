@@ -18,6 +18,8 @@ public class AzureNodePool implements Validatable {
     private int maxSurge;
     private int minNodeCount;
     private String name;
+    private int maxPodsPerNode;
+    private AzureOsType osType;
 
     @Override
     public Collection<String> validate() {
