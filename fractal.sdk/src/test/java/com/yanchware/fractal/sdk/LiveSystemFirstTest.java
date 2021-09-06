@@ -16,6 +16,8 @@ import java.util.List;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureMachineType.STANDARD_B2S;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureOsType.LINUX;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureRegion.EUROPE_WEST;
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.CONTAINER_PLATFORM;
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class LiveSystemFirstTest {
@@ -23,9 +25,12 @@ public class LiveSystemFirstTest {
     @Test
     public void PositiveTest() throws InstantiatorException {
         var gke = GoogleKubernetesEngine.builder()
-                .service(KubernetesService.builder().id(ComponentId.from("caas-1"))
+                .service(KubernetesService.builder()
+                        .id(ComponentId.from("caas-1"))
+                        .type(CONTAINER_PLATFORM)
                         .build())
                 .id(ComponentId.from("kube-1"))
+                .type(KUBERNETES)
                 .description("Test GKE cluster")
                 .displayName("Kube 1")
                 .nodePool(GcpNodePool.builder().name("gcp-node-pool-name").build())
@@ -40,6 +45,7 @@ public class LiveSystemFirstTest {
 
         var aks = AzureKubernetesService.builder()
                 .id(ComponentId.from("aks-1"))
+                .type(KUBERNETES)
                 .description("Test AKS cluster")
                 .displayName("AKS #1")
                 .region(EUROPE_WEST)
@@ -70,8 +76,9 @@ public class LiveSystemFirstTest {
         assertThat(gke.validate()).isEmpty();
         assertThat(liveSystem.validate()).isEmpty();
 
+        //CreateBlueprintCommandRequest.fromLiveSystem(liveSystem.getComponents());
+
         Automaton.instantiate(List.of(liveSystem));
-        //automaton could have a public constructor for users to inject as a singleton
     }
 
 }

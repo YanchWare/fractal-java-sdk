@@ -35,7 +35,7 @@ public abstract class Component implements Validatable {
       errors.add(ID_IS_NULL);
     }
 
-    if (type == ComponentType.Unknown) {
+    if (type == null || type == ComponentType.UNKNOWN) {
       errors.add(COMPONENT_TYPE_NOT_DEFINED);
     }
 

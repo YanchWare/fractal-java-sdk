@@ -1,8 +1,9 @@
 package com.yanchware.fractal.sdk.valueobjects;
 
 public enum ComponentType {
-  Unknown("Unknown"),
-  ContainerPlatform("NetworkAndCompute.CaaS.ContainerPlatform");
+  UNKNOWN("Unknown"),
+  CONTAINER_PLATFORM("NetworkAndCompute.CaaS.ContainerPlatform"),
+  KUBERNETES("NetworkAndCompute.CaaS.Kubernetes");
 
   private String id;
 

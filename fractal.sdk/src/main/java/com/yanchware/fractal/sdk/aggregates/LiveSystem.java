@@ -24,13 +24,13 @@ public class LiveSystem implements Validatable {
     private Timestamp lastUpdated;
     private Collection<Component> components;
 
-    public static LiveSystem.LiveSystemBuilder builder() {
-        return new LiveSystem.LiveSystemBuilder();
+    public static LiveSystemBuilder builder() {
+        return new LiveSystemBuilder();
     }
 
     public static class LiveSystemBuilder {
         private LiveSystem liveSystem;
-        private LiveSystem.LiveSystemBuilder builder;
+        private LiveSystemBuilder builder;
 
         public LiveSystemBuilder() {
             liveSystem = createLiveSystem();
@@ -42,26 +42,26 @@ public class LiveSystem implements Validatable {
             return new LiveSystem();
         }
 
-        protected LiveSystem.LiveSystemBuilder getBuilder() {
+        protected LiveSystemBuilder getBuilder() {
             return this;
         }
 
-        public LiveSystem.LiveSystemBuilder id(String id) {
+        public LiveSystemBuilder id(String id) {
             liveSystem.setId(id);
             return builder;
         }
 
-        public LiveSystem.LiveSystemBuilder resourceGroupId(String resourceGroupId) {
+        public LiveSystemBuilder resourceGroupId(String resourceGroupId) {
             liveSystem.setResourceGroupId(resourceGroupId);
             return builder;
         }
 
-        public LiveSystem.LiveSystemBuilder environment(Environment environment) {
+        public LiveSystemBuilder environment(Environment environment) {
             liveSystem.setEnvironment(environment);
             return builder;
         }
 
-        public LiveSystem.LiveSystemBuilder components(Collection<? extends Component> components) {
+        public LiveSystemBuilder components(Collection<? extends Component> components) {
             if (liveSystem.getComponents() == null) {
                 liveSystem.setComponents(new ArrayList<>());
             }

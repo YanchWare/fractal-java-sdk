@@ -6,6 +6,7 @@ import com.yanchware.fractal.sdk.configuration.ServiceConfiguration;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.services.BlueprintService;
 import com.yanchware.fractal.sdk.services.LiveSystemService;
+import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.commands.CreateBlueprintCommandRequest;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.http.HttpClient;
@@ -25,8 +26,10 @@ public class Automaton {
         BlueprintService blueprintService = new BlueprintService(httpClient, serviceConfiguration);
         LiveSystemService liveSystemService = new LiveSystemService(httpClient, serviceConfiguration);
 
-        blueprintService.instantiate(null, "", "");
-        liveSystemService.instantiate(null);
+        for(LiveSystem ls : liveSystems) {
+            blueprintService.instantiate(CreateBlueprintCommandRequest.fromLiveSystem(ls.getComponents()), "", "");
+            //liveSystemService.instantiate(null);
+        }
     }
 
 }

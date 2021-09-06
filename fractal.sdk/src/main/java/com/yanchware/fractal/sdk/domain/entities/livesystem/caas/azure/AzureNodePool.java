@@ -2,10 +2,12 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure;
 
 import com.yanchware.fractal.sdk.domain.entities.Validatable;
 import lombok.Builder;
+import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
+@Data
 @Builder
 public class AzureNodePool implements Validatable {
     private final static String NAME_IS_NULL_OR_EMPTY = "AzureNodePool name has not been defined and it is required";
