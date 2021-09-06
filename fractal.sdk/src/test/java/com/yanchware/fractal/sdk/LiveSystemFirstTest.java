@@ -1,14 +1,17 @@
 package com.yanchware.fractal.sdk;
 
-import com.yanchware.fractal.sdk.domain.entities.livesystem.Environment;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystem;
+import com.yanchware.fractal.sdk.aggregates.Environment;
+import com.yanchware.fractal.sdk.aggregates.LiveSystem;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.KubernetesService;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureKubernetesService;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureNodePool;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.gcp.GcpNodePool;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.gcp.GoogleKubernetesEngine;
+import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import org.junit.Test;
+
+import java.util.List;
 
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureMachineType.STANDARD_B2S;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureOsType.LINUX;
@@ -18,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class LiveSystemFirstTest {
 
     @Test
-    public void PositiveTest() {
+    public void PositiveTest() throws InstantiatorException {
         var gke = GoogleKubernetesEngine.builder()
                 .service(KubernetesService.builder().id(ComponentId.from("caas-1"))
                         .build())
@@ -62,13 +65,13 @@ public class LiveSystemFirstTest {
                 .component(aks)
                 .build();//check at build time if you have correct info, if not, generate it if possible
 
-        //Automaton.instantiate(list<livesystems>)
-        //automaton could have a public constructor for users to inject as a singleton
-
         assertThat(env.validate()).isEmpty();
         assertThat(aks.validate()).isEmpty();
         assertThat(gke.validate()).isEmpty();
         assertThat(liveSystem.validate()).isEmpty();
+
+        Automaton.gitinstantiate(List.of(liveSystem));
+        //automaton could have a public constructor for users to inject as a singleton
     }
 
 }

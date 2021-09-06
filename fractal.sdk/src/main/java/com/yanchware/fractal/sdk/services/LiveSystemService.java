@@ -2,7 +2,7 @@ package com.yanchware.fractal.sdk.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yanchware.fractal.sdk.configuration.EnvVarServiceConfiguration;
+import com.yanchware.fractal.sdk.configuration.ServiceConfiguration;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands.InstantiateLiveSystemCommandRequest;
 import lombok.Data;
@@ -13,7 +13,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-import static com.yanchware.fractal.sdk.configuration.Constants.*;
+import static com.yanchware.fractal.sdk.configuration.Constants.X_CLIENT_ID_HEADER;
+import static com.yanchware.fractal.sdk.configuration.Constants.X_CLIENT_SECRET_HEADER;
 import static java.net.http.HttpRequest.BodyPublishers.ofString;
 
 @Data
@@ -22,7 +23,7 @@ public class LiveSystemService {
 
     private final HttpClient client;
 
-    private final EnvVarServiceConfiguration envVarServiceConfiguration;
+    private final ServiceConfiguration serviceConfiguration;
 
     /*public LiveSystemDto Retrieve(RetrieveQuery query) {
 
@@ -39,8 +40,8 @@ public class LiveSystemService {
         try {
             request = HttpRequest.newBuilder()
                     .uri(getLiveSystemUri())
-                    .header(X_CLIENT_ID_HEADER, envVarServiceConfiguration.getClientId())
-                    .header(X_CLIENT_SECRET_HEADER, envVarServiceConfiguration.getClientSecret())
+                    .header(X_CLIENT_ID_HEADER, serviceConfiguration.getClientId())
+                    .header(X_CLIENT_SECRET_HEADER, serviceConfiguration.getClientSecret())
                     .POST(ofString(objectMapper.writeValueAsString(command)))
                     .build();
         } catch (JsonProcessingException e) {
@@ -51,7 +52,7 @@ public class LiveSystemService {
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) {
-                log.error("Attempted instantiation of livesystem for resourceGroupId: {}, but received status {}", envVarServiceConfiguration.getResourceGroupId(), response.statusCode());
+                log.error("Attempted instantiation of livesystem for resourceGroupId: {}, but received status {}", serviceConfiguration.getResourceGroupId(), response.statusCode());
                 throw new InstantiatorException("Attempted instantiation with response code: " + response.statusCode());
             }
         } catch (Exception e) {
@@ -61,6 +62,6 @@ public class LiveSystemService {
     }
 
     private URI getLiveSystemUri() {
-        return URI.create(envVarServiceConfiguration.getLiveSystemEndpoint() + "/" + envVarServiceConfiguration.getResourceGroupId() + "/livesystems");
+        return URI.create(serviceConfiguration.getLiveSystemEndpoint() + "/" + serviceConfiguration.getResourceGroupId() + "/livesystems");
     }
 }
