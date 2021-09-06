@@ -3,7 +3,7 @@ package com.yanchware.fractal.sdk.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
-import com.yanchware.fractal.sdk.services.livesystemcontract.commands.InstantiateCommandRequest;
+import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands.InstantiateLiveSystemCommandRequest;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -29,12 +29,13 @@ public class LiveSystemService {
 
     }*/
 
-    public void instantiate(InstantiateCommandRequest command) throws InstantiatorException {
+    public void instantiate(InstantiateLiveSystemCommandRequest command) throws InstantiatorException {
         var objectMapper = new ObjectMapper();
 
         HttpRequest request;
         String resourceGroupId = "resource-group-id";
         try {
+            //command line variable or Env vars
             request = HttpRequest.newBuilder()
                     .uri(URI.create(ENDPOINT + "/" + resourceGroupId + "/livesystems"))
                     .header("X-ClientID", "clientId")

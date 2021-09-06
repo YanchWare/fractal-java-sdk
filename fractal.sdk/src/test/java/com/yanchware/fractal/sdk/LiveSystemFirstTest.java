@@ -21,6 +21,15 @@ public class LiveSystemFirstTest {
       .nodePool(GcpNodePool.builder().name("gcp-node-pool-name").build())
     .build();
 
+    //LiveSystem.builder()
+    //.id(LiveSystemId.from("ls-id"))
+    //.component(gke)
+    //.build(); //check at build time if you have correct info, if not, generate it if possible
+
+    //Automaton.instantiate(list<livesystems>)
+    //automaton could have a public constructor for users to inject as a singleton
+
+
     assertThat(gke.validate()).isEmpty();
   }
 

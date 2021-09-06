@@ -1,5 +1,6 @@
-package com.yanchware.fractal.sdk.services.livesystemcontract.dtos;
+package com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos;
 
+import com.yanchware.fractal.sdk.services.contracts.ComponentDto;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

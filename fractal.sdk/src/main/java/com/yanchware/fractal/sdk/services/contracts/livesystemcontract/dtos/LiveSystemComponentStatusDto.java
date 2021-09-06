@@ -1,4 +1,4 @@
-package com.yanchware.fractal.sdk.services.livesystemcontract.dtos;
+package com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos;
 
 public enum LiveSystemComponentStatusDto {
     Instantiating,
