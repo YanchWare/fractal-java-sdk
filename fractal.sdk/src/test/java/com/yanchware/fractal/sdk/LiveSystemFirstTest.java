@@ -38,7 +38,7 @@ public class LiveSystemFirstTest {
 
         var env = Environment.builder()
                 .id("env-id")
-                .displayName("STARK PROD")
+                .displayName("PROD")
                 .parentId("123456789")
                 .parentType("folder")
                 .build();

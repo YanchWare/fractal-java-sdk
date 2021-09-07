@@ -24,11 +24,11 @@ public class Environment implements Validatable {
     }
 
     public static class EnvironmentBuilder {
-        private Environment component;
+        private Environment environment;
         private EnvironmentBuilder builder;
 
         public EnvironmentBuilder() {
-            component = createComponent();
+            environment = createComponent();
             builder = getBuilder();
         }
 
@@ -41,27 +41,27 @@ public class Environment implements Validatable {
         }
 
         public EnvironmentBuilder id(String id) {
-            component.setId(id);
+            environment.setId(id);
             return builder;
         }
 
         public EnvironmentBuilder displayName(String displayName) {
-            component.setDisplayName(displayName);
+            environment.setDisplayName(displayName);
             return builder;
         }
 
         public EnvironmentBuilder parentId(String parentId) {
-            component.setParentId(parentId);
+            environment.setParentId(parentId);
             return builder;
         }
 
         public EnvironmentBuilder parentType(String parentType) {
-            component.setParentType(parentType);
+            environment.setParentType(parentType);
             return builder;
         }
 
         public Environment build() {
-            Collection<String> errors = component.validate();
+            Collection<String> errors = environment.validate();
 
             if (!errors.isEmpty()) {
                 throw new IllegalArgumentException(String.format(
@@ -69,7 +69,7 @@ public class Environment implements Validatable {
                         Arrays.toString(errors.toArray())));
             }
 
-            return component;
+            return environment;
         }
     }
 

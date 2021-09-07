@@ -2,11 +2,10 @@ package com.yanchware.fractal.sdk.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yanchware.fractal.sdk.configuration.ServiceConfiguration;
+import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.commands.CreateBlueprintCommandRequest;
 import lombok.AllArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URI;
@@ -19,13 +18,12 @@ import static com.yanchware.fractal.sdk.configuration.Constants.X_CLIENT_SECRET_
 import static java.net.http.HttpRequest.BodyPublishers.ofString;
 
 @AllArgsConstructor
-@Setter
 @Slf4j
 public class BlueprintService {
 
     private final HttpClient client;
 
-    private final ServiceConfiguration serviceConfiguration;
+    private final SdkConfiguration serviceConfiguration;
 
     public void instantiate(CreateBlueprintCommandRequest command, String fractalName, String fractalVersion) throws InstantiatorException {
         var objectMapper = new ObjectMapper();

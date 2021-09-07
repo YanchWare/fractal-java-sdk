@@ -1,8 +1,8 @@
 package com.yanchware.fractal.sdk;
 
 import com.yanchware.fractal.sdk.aggregates.LiveSystem;
-import com.yanchware.fractal.sdk.configuration.EnvVarServiceConfiguration;
-import com.yanchware.fractal.sdk.configuration.ServiceConfiguration;
+import com.yanchware.fractal.sdk.configuration.EnvVarSdkConfiguration;
+import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.services.BlueprintService;
 import com.yanchware.fractal.sdk.services.LiveSystemService;
@@ -22,7 +22,7 @@ public class Automaton {
         HttpClient httpClient = HttpClient.newBuilder()
                 .version(HttpClient.Version.HTTP_2)
                 .build();
-        ServiceConfiguration serviceConfiguration = new EnvVarServiceConfiguration();
+        SdkConfiguration serviceConfiguration = new EnvVarSdkConfiguration();
         BlueprintService blueprintService = new BlueprintService(httpClient, serviceConfiguration);
         LiveSystemService liveSystemService = new LiveSystemService(httpClient, serviceConfiguration);
 

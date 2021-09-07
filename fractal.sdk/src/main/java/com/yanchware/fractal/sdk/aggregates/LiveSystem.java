@@ -6,11 +6,10 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
@@ -20,8 +19,8 @@ public class LiveSystem implements Validatable {
     private String id;
     private String resourceGroupId;
     private Environment environment;
-    private Timestamp created; //TODO check what timestamp to use
-    private Timestamp lastUpdated;
+    private Date created;
+    private Date lastUpdated;
     private Collection<Component> components;
 
     public static LiveSystemBuilder builder() {
@@ -35,7 +34,7 @@ public class LiveSystem implements Validatable {
         public LiveSystemBuilder() {
             liveSystem = createLiveSystem();
             builder = getBuilder();
-            liveSystem.setCreated(Timestamp.from(Instant.now()));
+            liveSystem.setCreated(new Date());
         }
 
         protected LiveSystem createLiveSystem() {

@@ -2,7 +2,7 @@ package com.yanchware.fractal.sdk.configuration;
 
 import static com.yanchware.fractal.sdk.configuration.Constants.*;
 
-public class EnvVarServiceConfiguration implements ServiceConfiguration {
+public class EnvVarSdkConfiguration implements SdkConfiguration {
     @Override
     public String getResourceGroupId() {
         return System.getenv(RESOURCE_GROUP_ID_KEY);

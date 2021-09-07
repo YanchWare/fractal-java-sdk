@@ -1,6 +1,6 @@
 package com.yanchware.fractal.sdk.configuration;
 
-public interface ServiceConfiguration {
+public interface SdkConfiguration {
 
     String getResourceGroupId();
 

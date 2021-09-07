@@ -12,9 +12,9 @@ public class LiveSystemServiceTest {
     @Test
     public void test() throws InstantiatorException {
         InstantiateLiveSystemCommandRequest command = InstantiateLiveSystemCommandRequest.builder()
-                .liveSystemId("stark/stark-prod") //form of "resourceGroupId/name"
-                .description("prod for stark")
-                .fractalId("stark/fractalName:fractalVersion") //form of "resourceGroupId/fractalName:fractalVersion", needs to exist in blueprints, otherwise wont work
+                .liveSystemId("resourceGroupId/prod") //form of "resourceGroupId/name"
+                .description("prod")
+                .fractalId("resourceGroupId/fractalName:fractalVersion") //form of "resourceGroupId/fractalName:fractalVersion", needs to exist in blueprints, otherwise wont work
                 .type("type")
                 .provider("azure") //can be an enum, as in ls service it will be converted to enum.
                 .environmentDto(getEnvironment())
@@ -26,10 +26,10 @@ public class LiveSystemServiceTest {
 
     private EnvironmentDto getEnvironment() {
         return EnvironmentDto.builder()
-                .id("stark-prod")
+                .id("prod")
                 .parentId("parent-id")
                 .parentType("folder")
-                .displayName("STARK PROD")
+                .displayName("PROD")
                 .build();
     }
 

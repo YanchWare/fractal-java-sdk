@@ -1,8 +1,8 @@
 package com.yanchware.fractal.sdk.utils;
 
-import com.yanchware.fractal.sdk.configuration.ServiceConfiguration;
+import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 
-public class LocalServiceConfiguration implements ServiceConfiguration {
+public class LocalServiceConfiguration implements SdkConfiguration {
     @Override
     public String getResourceGroupId() {
         return "resource-group";
