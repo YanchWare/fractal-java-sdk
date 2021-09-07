@@ -1,6 +1,5 @@
 package com.yanchware.fractal.sdk.valueobjects;
 
-import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -26,7 +25,7 @@ public class ComponentIdPositiveTests
     }
 
     @Test
-    public void validationFailsForBadInput()
+    public void validationFails_when_badInput()
     {
         Collection<String> errors = ComponentId.validate(value);
         assertThat(errors).isEmpty();

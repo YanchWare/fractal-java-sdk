@@ -10,7 +10,7 @@ import static org.junit.Assert.assertEquals;
 public class LiveSystemComponentDtoTest {
 
     @Test
-    public void when_ConvertFromLiveSystemComponentToBlueprintComponent_valuesAreTheSame() {
+    public void valuesAreTheSame_when_convertFromLiveSystemComponentToBlueprintComponent() {
         var liveSystemComponentDto = LiveSystemComponentDto.builder()
                 .id("0001")
                 .displayName("display name")

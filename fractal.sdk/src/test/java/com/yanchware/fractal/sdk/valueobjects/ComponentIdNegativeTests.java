@@ -40,7 +40,7 @@ public class ComponentIdNegativeTests
     }
 
     @Test
-    public void validationFailsForBadInput()
+    public void validationFails_when_badInput()
     {
         Collection<String> errors = ComponentId.validate(value);
         assertThat(errors).containsAll(expectedErrors);
