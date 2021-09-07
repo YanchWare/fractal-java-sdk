@@ -14,7 +14,9 @@ import java.util.Date;
 @Getter
 @Setter(AccessLevel.PRIVATE)
 public class LiveSystem implements Validatable {
-    private final static String ID_IS_NULL = "LiveSystem id has not been defined and it is required";
+    private final static String ID_IS_NULL = "[LiveSystem Validation] Id has not been defined and it is required";
+    private final static String RESOURCE_GROUP_ID_IS_NULL = "[LiveSystem Validation] ResourceGroupId has not been defined and it is required'";
+    private final static String EMPTY_COMPONENT_LIST = "[LiveSystem Validation] Components list is null or empty and at least one component is required";
 
     private String id;
     private String resourceGroupId;
@@ -22,6 +24,10 @@ public class LiveSystem implements Validatable {
     private Date created;
     private Date lastUpdated;
     private Collection<Component> components;
+
+    protected LiveSystem() {
+        components = new ArrayList<>();
+    }
 
     public static LiveSystemBuilder builder() {
         return new LiveSystemBuilder();
@@ -64,6 +70,11 @@ public class LiveSystem implements Validatable {
             if (liveSystem.getComponents() == null) {
                 liveSystem.setComponents(new ArrayList<>());
             }
+
+            if (components == null) {
+                components = new ArrayList<>();
+            }
+
             liveSystem.getComponents().addAll(components);
             return builder;
         }
@@ -72,7 +83,9 @@ public class LiveSystem implements Validatable {
             if (liveSystem.getComponents() == null) {
                 liveSystem.setComponents(new ArrayList<>());
             }
-            liveSystem.getComponents().add(component);
+            if (component != null) {
+                liveSystem.getComponents().add(component);
+            }
             return builder;
         }
 
@@ -95,6 +108,14 @@ public class LiveSystem implements Validatable {
 
         if (id == null || id.isEmpty() || id.isBlank()) {
             errors.add(ID_IS_NULL);
+        }
+
+        if (resourceGroupId == null || resourceGroupId.isEmpty() || resourceGroupId.isBlank()) {
+            errors.add(RESOURCE_GROUP_ID_IS_NULL);
+        }
+
+        if (components.isEmpty()) {
+            errors.add(EMPTY_COMPONENT_LIST);
         }
         return errors;
     }

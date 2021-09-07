@@ -70,7 +70,9 @@ public class AzureKubernetesService extends KubernetesCluster {
                 component.setNodePools(new ArrayList<>());
             }
 
-            component.getNodePools().add(nodePool);
+            if (nodePool != null) {
+                component.getNodePools().add(nodePool);
+            }
             return builder;
         }
 

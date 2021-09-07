@@ -44,13 +44,13 @@ public class LiveSystemServiceTest {
 
     private InstantiateLiveSystemCommandRequest buildLiveSystemCommand() {
         InstantiateLiveSystemCommandRequest command = InstantiateLiveSystemCommandRequest.builder()
-                .liveSystemId("resourceGroupId/prod") //form of "resourceGroupId/name"
+                .liveSystemId("resourceGroupId/prod")
                 .description("prod")
                 .fractalId("resourceGroupId/fractalName:fractalVersion") //form of "resourceGroupId/fractalName:fractalVersion", needs to exist in blueprints, otherwise wont work
                 .type("type")
                 .provider("azure") //can be an enum, as in ls service it will be converted to enum.
                 .environmentDto(getEnvironment())
-                .blueprintMap(null) // needs to have at least one component, needs to have same components as blueprint in blueprint svc and all providers of component valid
+                .blueprintMap(null)
                 .build();
         return command;
     }
