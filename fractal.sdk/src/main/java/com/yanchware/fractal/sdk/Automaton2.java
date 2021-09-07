@@ -1,36 +1,36 @@
 package com.yanchware.fractal.sdk;
 
 import com.yanchware.fractal.sdk.aggregates.LiveSystem;
-import com.yanchware.fractal.sdk.configuration.EnvVarSdkConfiguration;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.services.BlueprintService;
 import com.yanchware.fractal.sdk.services.LiveSystemService;
 import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.commands.CreateBlueprintCommandRequest;
-import lombok.Builder;
-import lombok.extern.slf4j.Slf4j;
 
 import java.net.http.HttpClient;
 import java.util.List;
 
-@Slf4j
-@Builder
-public class Automaton {
+public final class Automaton2 {
+    private static Automaton2 instance;
 
-    static HttpClient httpClient;
+    private static HttpClient httpClient;
+    private static SdkConfiguration sdkConfiguration;
 
-    static SdkConfiguration sdkConfiguration;
-
-    public Automaton(HttpClient httpClient, SdkConfiguration sdkConfiguration) {
-        Automaton.httpClient = httpClient;
-        Automaton.sdkConfiguration = sdkConfiguration;
+    private Automaton2() {
+        this.httpClient = null;
+        this.sdkConfiguration = null;
     }
 
-    protected Automaton() {
-        httpClient = HttpClient.newBuilder()
-                .version(HttpClient.Version.HTTP_2)
-                .build();
-        sdkConfiguration = new EnvVarSdkConfiguration();
+    private Automaton2(HttpClient httpClient, SdkConfiguration sdkConfiguration) {
+        this.httpClient = httpClient;
+        this.sdkConfiguration = sdkConfiguration;
+    }
+
+    public static Automaton2 getInstance(HttpClient httpClient, SdkConfiguration sdkConfiguration) {
+        if (instance == null) {
+            instance = new Automaton2(httpClient, sdkConfiguration);
+        }
+        return instance;
     }
 
     public static void instantiate(List<LiveSystem> liveSystems) throws InstantiatorException {
@@ -42,5 +42,4 @@ public class Automaton {
             //liveSystemService.instantiate(null);
         }
     }
-
 }
