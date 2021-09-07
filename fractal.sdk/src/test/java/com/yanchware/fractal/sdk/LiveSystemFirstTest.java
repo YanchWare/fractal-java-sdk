@@ -71,7 +71,6 @@ public class LiveSystemFirstTest {
                 .component(aks)
                 .build();//check at build time if you have correct info, if not, generate it if possible
 
-        assertThat(env.validate()).isEmpty();
         assertThat(aks.validate()).isEmpty();
         assertThat(gke.validate()).isEmpty();
         assertThat(liveSystem.validate()).isEmpty();

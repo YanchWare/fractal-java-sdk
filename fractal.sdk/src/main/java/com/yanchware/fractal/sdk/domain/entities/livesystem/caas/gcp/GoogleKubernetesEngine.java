@@ -11,7 +11,7 @@ import java.util.Collection;
 @Getter
 @Setter(AccessLevel.PRIVATE)
 public class GoogleKubernetesEngine extends KubernetesCluster {
-  private final static String EMPTY_NODE_POOL = "[GoogleKubernetesEngine Validation] Node pool list is empty and at least one node pool is required";
+  private final static String EMPTY_NODE_POOL = "[GoogleKubernetesEngine Validation] Node pool list is null or empty and at least one node pool is required";
 
   public static GoogleKubernetesEngineBuilder builder() {
     return new GoogleKubernetesEngineBuilder();
@@ -79,6 +79,10 @@ public class GoogleKubernetesEngine extends KubernetesCluster {
         component.setNodePools(new ArrayList<>());
       }
 
+      if(nodePools == null) {
+          nodePools = new ArrayList<>();
+      }
+
       component.getNodePools().addAll(nodePools);
       return builder;
     }
@@ -88,7 +92,7 @@ public class GoogleKubernetesEngine extends KubernetesCluster {
   @Override
   public Collection<String> validate() {
     Collection<String> errors = super.validate();
-    if (nodePools.isEmpty()) {
+    if (nodePools == null || nodePools.isEmpty()) {
       errors.add(EMPTY_NODE_POOL);
     }
 
