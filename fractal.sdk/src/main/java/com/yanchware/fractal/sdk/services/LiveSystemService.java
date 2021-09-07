@@ -25,14 +25,6 @@ public class LiveSystemService {
 
     private final SdkConfiguration sdkConfiguration;
 
-    /*public LiveSystemDto Retrieve(RetrieveQuery query) {
-
-    }
-
-    public void Update(UpdateCommand command) {
-
-    }*/
-
     public void instantiate(InstantiateLiveSystemCommandRequest command) throws InstantiatorException {
         var objectMapper = new ObjectMapper();
 
