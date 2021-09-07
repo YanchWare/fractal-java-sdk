@@ -23,7 +23,7 @@ public class BlueprintService {
 
     private final HttpClient client;
 
-    private final SdkConfiguration serviceConfiguration;
+    private final SdkConfiguration sdkConfiguration;
 
     public void instantiate(CreateBlueprintCommandRequest command, String fractalName, String fractalVersion) throws InstantiatorException {
         var objectMapper = new ObjectMapper();
@@ -32,8 +32,8 @@ public class BlueprintService {
         try {
             request = HttpRequest.newBuilder()
                     .uri(getBlueprintsUri(fractalName, fractalVersion))
-                    .header(X_CLIENT_ID_HEADER, serviceConfiguration.getClientId())
-                    .header(X_CLIENT_SECRET_HEADER, serviceConfiguration.getClientSecret())
+                    .header(X_CLIENT_ID_HEADER, sdkConfiguration.getClientId())
+                    .header(X_CLIENT_SECRET_HEADER, sdkConfiguration.getClientSecret())
                     .POST(ofString(objectMapper.writeValueAsString(command)))
                     .build();
         } catch (JsonProcessingException e) {
@@ -43,8 +43,8 @@ public class BlueprintService {
 
         try {
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() != 200) {
-                log.error("Attempted CreateBlueprintCommandRequest for resourceGroupId: {}, but received status {}", serviceConfiguration.getResourceGroupId(), response.statusCode());
+            if (response.statusCode() != 202) {
+                log.error("Attempted CreateBlueprintCommandRequest for resourceGroupId: {}, but received status {}", sdkConfiguration.getResourceGroupId(), response.statusCode());
                 throw new InstantiatorException("Attempted CreateBlueprintCommandRequest with response code: " + response.statusCode());
             }
         } catch (Exception e) {
@@ -55,6 +55,6 @@ public class BlueprintService {
 
 
     private URI getBlueprintsUri(String fractalName, String fractalVersion) {
-        return URI.create(serviceConfiguration.getBlueprintEndpoint() + "/" + serviceConfiguration.getResourceGroupId() + "/" + fractalName + "/" + fractalVersion);
+        return URI.create(sdkConfiguration.getBlueprintEndpoint() + "/" + sdkConfiguration.getResourceGroupId() + "/" + fractalName + "/" + fractalVersion);
     }
 }

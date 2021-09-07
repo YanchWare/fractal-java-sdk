@@ -1,10 +1,12 @@
 package com.yanchware.fractal.sdk.services;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.commands.CreateBlueprintCommandRequest;
 import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.dtos.BlueprintComponentDto;
-import com.yanchware.fractal.sdk.utils.LocalServiceConfiguration;
+import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -20,17 +22,19 @@ public class BlueprintServiceTest {
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(8090);
 
+    private BlueprintService blueprintService;
 
-    @Test
-    public void exampleTest() throws InstantiatorException {
-        LocalServiceConfiguration serviceConfiguration = new LocalServiceConfiguration();
-
+    @Before
+    public void setUp() {
+        SdkConfiguration sdkConfiguration = new LocalSdkConfiguration();
         HttpClient httpClient = HttpClient.newBuilder()
                 .version(HttpClient.Version.HTTP_2)
                 .build();
+        blueprintService = new BlueprintService(httpClient, sdkConfiguration);
+    }
 
-        BlueprintService blueprintService = new BlueprintService(httpClient, serviceConfiguration);
-
+    @Test
+    public void urlPathMatching_when_postRequestToBlueprint() throws InstantiatorException {
         stubFor(post(urlPathMatching("/blueprint/resource-group/fr/fr"))
                 .willReturn(aResponse()
                         .withStatus(202)
@@ -62,5 +66,4 @@ public class BlueprintServiceTest {
                 .outputFields(emptyMap())
                 .build();
     }
-
 }
