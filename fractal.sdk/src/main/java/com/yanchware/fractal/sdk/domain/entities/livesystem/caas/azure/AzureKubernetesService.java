@@ -11,7 +11,7 @@ import java.util.Collection;
 @Getter
 @Setter(AccessLevel.PRIVATE)
 public class AzureKubernetesService extends KubernetesCluster {
-    private final static String EMPTY_NODE_POOL = "[AzureKubernetesService Validation] Node pool list is empty and at least one node pool is required";
+    private final static String EMPTY_NODE_POOL = "[AzureKubernetesService Validation] Node pool list is null or empty and at least one node pool is required";
 
     public static AzureKubernetesServiceBuilder builder() {
         return new AzureKubernetesServiceBuilder();
@@ -77,6 +77,10 @@ public class AzureKubernetesService extends KubernetesCluster {
         public AzureKubernetesServiceBuilder nodePools(Collection<? extends AzureNodePool> nodePools) {
             if (component.getNodePools() == null) {
                 component.setNodePools(new ArrayList<>());
+            }
+
+            if (nodePools == null) {
+                nodePools = new ArrayList<>();
             }
 
             component.getNodePools().addAll(nodePools);
