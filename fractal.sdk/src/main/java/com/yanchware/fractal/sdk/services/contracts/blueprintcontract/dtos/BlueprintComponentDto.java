@@ -1,38 +1,37 @@
 package com.yanchware.fractal.sdk.services.contracts.blueprintcontract.dtos;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yanchware.fractal.sdk.domain.entities.Component;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.services.contracts.ComponentDto;
-import com.yanchware.fractal.sdk.valueobjects.ComponentId;
+import com.yanchware.fractal.sdk.utils.ReflectionUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
+@Slf4j
 public class BlueprintComponentDto extends ComponentDto {
     private Map<String, Object> outputFields;
 
-    public static BlueprintComponentDto fromComponent(Component component) {
-        System.out.println("COMPONENT: " + component.getClass());
-        ObjectMapper m = new ObjectMapper();
+    public static BlueprintComponentDto fromLiveSystemComponent(LiveSystemComponent liveSystemComponent) {
+        ReflectionUtils.findBlueprintComponentType(liveSystemComponent);
+        Map<String, Object> allFields = ReflectionUtils.getAllFields(liveSystemComponent);
+        /*ObjectMapper m = new ObjectMapper();
         Map<String, Object> mappedObject = m.convertValue(component, new TypeReference<>() {
-        });
-        System.out.println("MAPPPPPPP: " + mappedObject);
+        });*/
         return BlueprintComponentDto.builder()
-                .id(component.getId().getValue())
-                .displayName(component.getDisplayName())
-                .description(component.getDescription())
-                .type(component.getType().getId())
-                .version(component.getVersion())
-                .links(component.getLinks().stream().map(ComponentId::getValue).collect(Collectors.toSet()))
-                .dependencies(component.getDependencies().stream().map(ComponentId::getValue).collect(Collectors.toSet()))
+                .id(String.valueOf(allFields.get("id")))
+                .displayName(String.valueOf(allFields.get("displayName")))
+                .description(String.valueOf(allFields.get("description")))
+                .type(String.valueOf(allFields.get("type")))
+                .version("0.0.1")
                 .parameters(mappedObject)
                 .build();
+
+        return null;
     }
 }

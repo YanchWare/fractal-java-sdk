@@ -5,11 +5,13 @@ import com.yanchware.fractal.sdk.valueobjects.ComponentType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.*;
 
 @Getter
 @Setter(AccessLevel.PROTECTED)
+@ToString(callSuper = true)
 public abstract class Component implements Validatable {
   private final static String ID_IS_NULL = "Component id has not been defined and it is required";
   private final static String COMPONENT_TYPE_NOT_DEFINED = "Component type has not been defined and it is required";

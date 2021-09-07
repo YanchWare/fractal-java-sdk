@@ -6,7 +6,6 @@ import lombok.Data;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 public class CreateBlueprintCommandRequest {
@@ -17,7 +16,7 @@ public class CreateBlueprintCommandRequest {
     public static CreateBlueprintCommandRequest fromLiveSystem(Collection<Component> components) {
         CreateBlueprintCommandRequest command = new CreateBlueprintCommandRequest();
         command.setPrivate(true);
-        command.setComponents(components.stream().map(BlueprintComponentDto::fromComponent).collect(Collectors.toList()));
+        //command.setComponents(components.stream().map(BlueprintComponentDto::fromLiveSystemComponent).collect(Collectors.toList()));
 
         return command;
     }

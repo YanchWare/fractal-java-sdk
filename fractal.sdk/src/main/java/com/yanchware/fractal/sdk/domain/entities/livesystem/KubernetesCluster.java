@@ -6,6 +6,7 @@ import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSService;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @Getter
 @Setter(AccessLevel.PROTECTED)
+@ToString(callSuper = true)
 public abstract class KubernetesCluster extends CaaSContainerPlatform implements LiveSystemComponent {
   protected List<CaaSService> services;
 

@@ -4,12 +4,14 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.KubernetesCluster;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
+@ToString(callSuper = true)
 public class AzureKubernetesService extends KubernetesCluster {
     private final static String EMPTY_NODE_POOL = "[AzureKubernetesService Validation] Node pool list is null or empty and at least one node pool is required";
 
