@@ -14,25 +14,28 @@ import java.util.List;
 
 @Slf4j
 public class Automaton {
+    private static Automaton instance;
 
-    static HttpClient httpClient;
+    private static HttpClient httpClient;
+    private static SdkConfiguration sdkConfiguration;
 
-    static SdkConfiguration sdkConfiguration;
-
-    static {
-        httpClient = HttpClient.newBuilder()
-                .version(HttpClient.Version.HTTP_2)
-                .build();
-        sdkConfiguration = new EnvVarSdkConfiguration();
-    }
-
-    //TODO This is not working as intended
-    public Automaton(HttpClient httpClient, SdkConfiguration sdkConfiguration) {
+    protected Automaton(HttpClient httpClient, SdkConfiguration sdkConfiguration) {
         Automaton.httpClient = httpClient;
         Automaton.sdkConfiguration = sdkConfiguration;
     }
 
+    public static Automaton getInstance(HttpClient httpClient, SdkConfiguration sdkConfiguration) {
+        if (instance == null) {
+            instance = new Automaton(httpClient, sdkConfiguration);
+        }
+        return instance;
+    }
+
     public static void instantiate(List<LiveSystem> liveSystems) throws InstantiatorException {
+        if (instance == null) {
+            instance = new Automaton(HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build(), new EnvVarSdkConfiguration());
+        }
+
         BlueprintService blueprintService = new BlueprintService(httpClient, sdkConfiguration);
         LiveSystemService liveSystemService = new LiveSystemService(httpClient, sdkConfiguration);
 

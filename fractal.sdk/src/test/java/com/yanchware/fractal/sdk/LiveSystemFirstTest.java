@@ -65,6 +65,7 @@ public class LiveSystemFirstTest {
 
         LiveSystem liveSystem = LiveSystem.builder()
                 .id("ls-id")
+                .resourceGroupId("rsGroupId")
                 .component(aks)
                 .environment(env)
                 .build();//check at build time if you have correct info, if not, generate it if possible
