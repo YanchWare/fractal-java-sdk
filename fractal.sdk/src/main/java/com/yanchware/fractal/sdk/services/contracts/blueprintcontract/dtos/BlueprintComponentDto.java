@@ -18,8 +18,8 @@ public class BlueprintComponentDto extends ComponentDto {
     private Map<String, Object> outputFields;
 
     public static BlueprintComponentDto fromLiveSystemComponent(LiveSystemComponent liveSystemComponent) {
-        ReflectionUtils.findBlueprintComponentType(liveSystemComponent);
         Map<String, Object> allFields = ReflectionUtils.getAllFields(liveSystemComponent);
+        Map<String, Object> allFields2 = ReflectionUtils.getAllFields2(liveSystemComponent);
         /*ObjectMapper m = new ObjectMapper();
         Map<String, Object> mappedObject = m.convertValue(component, new TypeReference<>() {
         });*/
@@ -29,9 +29,6 @@ public class BlueprintComponentDto extends ComponentDto {
                 .description(String.valueOf(allFields.get("description")))
                 .type(String.valueOf(allFields.get("type")))
                 .version("0.0.1")
-                .parameters(mappedObject)
                 .build();
-
-        return null;
     }
 }
