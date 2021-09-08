@@ -5,7 +5,6 @@ import org.junit.Test;
 
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.emptySet;
-import static org.junit.Assert.assertEquals;
 
 public class LiveSystemComponentDtoTest {
 
@@ -25,7 +24,6 @@ public class LiveSystemComponentDtoTest {
 
         var blueprintComponentDto = liveSystemComponentDto.toBlueprintComponent();
 
-        assertEquals(liveSystemComponentDto.getId(), blueprintComponentDto.getId());
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(blueprintComponentDto.getId()).as("Component ID").isEqualTo(liveSystemComponentDto.getId());
             softly.assertThat(blueprintComponentDto.getDisplayName()).as("Component Display Name").isEqualTo(liveSystemComponentDto.getDisplayName());

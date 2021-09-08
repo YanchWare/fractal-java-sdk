@@ -17,21 +17,6 @@ public class ReflectionUtils {
     public static Map<String, Object> getAllFields(LiveSystemComponent component) {
         Class<?> clazz = component.getClass();
         Map<String, Object> fieldValueMap = new HashMap<>();
-        while (Arrays.stream(clazz.getInterfaces()).noneMatch(x -> x.isAssignableFrom(Validatable.class))) {
-            log.info("Class under: {}, fields: {}", clazz.getSimpleName(), clazz.getDeclaredFields());
-            boolean isBlueprintComponent = Arrays.stream(clazz.getInterfaces()).anyMatch(x -> x.isAssignableFrom(BlueprintComponent.class));
-            tryPutFieldsInMap(fieldValueMap, clazz.getDeclaredFields(), component, isBlueprintComponent);
-            clazz = clazz.getSuperclass();
-        }
-        log.info("Final class: {}, fields: {}", clazz.getSimpleName(), clazz.getDeclaredFields());
-        tryPutFieldsInMap(fieldValueMap, clazz.getDeclaredFields(), component, false);
-        log.info("Final map: {}", fieldValueMap);
-        return fieldValueMap;
-    }
-
-    public static Map<String, Object> getAllFields2(LiveSystemComponent component) {
-        Class<?> clazz = component.getClass();
-        Map<String, Object> fieldValueMap = new HashMap<>();
         Map<String, Object> parametersMap = new HashMap<>();
         while (clazz.getSuperclass() != null) {
             log.info("Class under: {}, fields: {}", clazz.getSimpleName(), clazz.getDeclaredFields());
@@ -66,23 +51,5 @@ public class ReflectionUtils {
         log.info("Final class: {}, fields: {}", clazz.getSimpleName(), clazz.getDeclaredFields());
         log.info("Final map: {}", fieldValueMap);
         return fieldValueMap;
-    }
-
-    private static void tryPutFieldsInMap(Map<String, Object> fieldValueMap, Field[] fields, Object component, boolean isBlueprintComponent) {
-        for (Field f : fields) {
-            f.setAccessible(true);
-            try {
-                if (isBlueprintComponent) {
-                    fieldValueMap.put("blueprintType", f.get(component));
-                    continue;
-                }
-                //trying to avoid private constants
-                if (!(Modifier.isStatic(f.getModifiers()) && Modifier.isFinal(f.getModifiers()))) {
-                    fieldValueMap.put(f.getName(), f.get(component));
-                }
-            } catch (IllegalAccessException e) {
-                log.error("Error trying to access field", e);
-            }
-        }
     }
 }
