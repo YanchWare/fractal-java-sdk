@@ -11,7 +11,7 @@ import static java.util.stream.Collectors.toList;
 
 @Data
 public class CreateBlueprintCommandRequest {
-    private String description;gi
+    private String description;
     private boolean isPrivate;
     List<BlueprintComponentDto> components;
 
