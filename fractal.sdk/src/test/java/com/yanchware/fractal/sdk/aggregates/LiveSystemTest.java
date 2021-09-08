@@ -5,7 +5,6 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureNode
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import org.junit.Test;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -62,7 +61,6 @@ public class LiveSystemTest {
                 .resourceGroupId("res/group")
                 .component(AzureKubernetesService.builder()
                         .id(ComponentId.from("aks-1"))
-                        .type(KUBERNETES)
                         .nodePool(AzureNodePool.builder().
                                 name("aks-node-pool").
                                 diskSizeGb(35).

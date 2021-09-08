@@ -61,11 +61,6 @@ public abstract class Component implements Validatable {
       return builder;
     }
 
-    public B type(ComponentType type) {
-      component.setType(type);
-      return builder;
-    }
-
     public B id(ComponentId id) {
       component.setId(id);
       return builder;

@@ -5,8 +5,7 @@ import org.junit.Test;
 
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
 import static java.util.Collections.emptyList;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 
 public class AzureKubernetesServiceTest {
 
@@ -21,15 +20,16 @@ public class AzureKubernetesServiceTest {
     }
 
     @Test
-    public void exceptionThrown_when_aksCreatedWithNullType() {
-        assertThatThrownBy(() -> generateBuilder().type(null).build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Component type has not been defined and it is required");
+    public void typeIsKubernetes_when_aksIsBuiltWithoutSpecifyType() {
+        var aksBuilder = generateBuilder();
+        assertThat(aksBuilder.build().getType()).isEqualTo(KUBERNETES);
+        assertThatCode(() -> aksBuilder.build()).doesNotThrowAnyException();
     }
 
     @Test
     public void exceptionThrown_when_aksCreatedWithNullNodePools() {
         var aks = AzureKubernetesService.builder()
-                .id(ComponentId.from("test"))
-                .type(KUBERNETES);
+                .id(ComponentId.from("test"));
         assertThatThrownBy(aks::build).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Node pool list is null or empty");
     }
 
@@ -37,7 +37,6 @@ public class AzureKubernetesServiceTest {
     public void exceptionThrown_when_aksCreatedWithEmptyNodePools() {
         var aks = AzureKubernetesService.builder()
                 .id(ComponentId.from("test"))
-                .type(KUBERNETES)
                 .nodePools(emptyList());
         assertThatThrownBy(aks::build).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Node pool list is null or empty");
     }
@@ -45,7 +44,6 @@ public class AzureKubernetesServiceTest {
     private AzureKubernetesService.AzureKubernetesServiceBuilder generateBuilder() {
         return AzureKubernetesService.builder()
                 .id(ComponentId.from("test"))
-                .type(KUBERNETES)
                 .nodePool(AzureNodePool.builder().name("azure-node-pool-name").diskSizeGb(30).build());
     }
 }

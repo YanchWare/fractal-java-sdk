@@ -7,14 +7,12 @@ import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureMachineType.STANDARD_B2S;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureOsType.LINUX;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureRegion.EUROPE_WEST;
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
 
 public class TestUtils {
 
     public static AzureKubernetesService getAksExample() {
         return AzureKubernetesService.builder()
                 .id(ComponentId.from("aks-1"))
-                .type(KUBERNETES)
                 .description("Test AKS cluster")
                 .displayName("AKS #1")
                 .region(EUROPE_WEST)

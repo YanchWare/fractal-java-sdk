@@ -9,6 +9,8 @@ import lombok.ToString;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
+
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
@@ -89,6 +91,12 @@ public class AzureKubernetesService extends KubernetesCluster {
 
             component.getNodePools().addAll(nodePools);
             return builder;
+        }
+
+        @Override
+        public AzureKubernetesService build() {
+            component.setType(KUBERNETES);
+            return super.build();
         }
 
     }
