@@ -38,7 +38,7 @@ public final class Automaton2 {
         LiveSystemService liveSystemService = new LiveSystemService(httpClient, sdkConfiguration);
 
         for (LiveSystem ls : liveSystems) {
-            blueprintService.instantiate(CreateBlueprintCommandRequest.fromLiveSystem(ls.getComponents()), "", "");
+            blueprintService.instantiate(CreateBlueprintCommandRequest.fromLiveSystem(ls.getComponents(), ""), "", "");
             //liveSystemService.instantiate(null);
         }
     }

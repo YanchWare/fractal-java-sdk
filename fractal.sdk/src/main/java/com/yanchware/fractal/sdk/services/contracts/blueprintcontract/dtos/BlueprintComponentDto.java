@@ -6,6 +6,7 @@ import com.yanchware.fractal.sdk.utils.ReflectionUtils;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 
@@ -15,8 +16,9 @@ import static java.util.Collections.emptyMap;
 import static java.util.Collections.emptySet;
 
 @Data
-@EqualsAndHashCode(callSuper = true)
 @SuperBuilder
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 @Slf4j
 public class BlueprintComponentDto extends ComponentDto {
     private Map<String, Object> outputFields;

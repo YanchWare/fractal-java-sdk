@@ -2,14 +2,16 @@ package com.yanchware.fractal.sdk.services.contracts;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import java.util.Map;
 import java.util.Set;
 
 @Data
-@EqualsAndHashCode
 @SuperBuilder
+@EqualsAndHashCode
+@ToString
 public class ComponentDto {
     private String id;
     public String displayName;

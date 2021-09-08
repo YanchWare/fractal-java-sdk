@@ -1,7 +1,7 @@
 package com.yanchware.fractal.sdk.aggregates;
 
-import com.yanchware.fractal.sdk.domain.entities.Component;
 import com.yanchware.fractal.sdk.domain.entities.Validatable;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemComponent;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -23,7 +23,7 @@ public class LiveSystem implements Validatable {
     private Environment environment;
     private Date created;
     private Date lastUpdated;
-    private Collection<Component> components;
+    private Collection<LiveSystemComponent> components;
 
     protected LiveSystem() {
         components = new ArrayList<>();
@@ -66,7 +66,7 @@ public class LiveSystem implements Validatable {
             return builder;
         }
 
-        public LiveSystemBuilder components(Collection<? extends Component> components) {
+        public LiveSystemBuilder components(Collection<? extends LiveSystemComponent> components) {
             if (liveSystem.getComponents() == null) {
                 liveSystem.setComponents(new ArrayList<>());
             }
@@ -79,7 +79,7 @@ public class LiveSystem implements Validatable {
             return builder;
         }
 
-        public LiveSystemBuilder component(Component component) {
+        public LiveSystemBuilder component(LiveSystemComponent component) {
             if (liveSystem.getComponents() == null) {
                 liveSystem.setComponents(new ArrayList<>());
             }

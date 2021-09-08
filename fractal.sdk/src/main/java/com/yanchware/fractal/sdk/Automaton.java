@@ -26,6 +26,7 @@ public class Automaton {
         sdkConfiguration = new EnvVarSdkConfiguration();
     }
 
+    //TODO This is not working as intended
     public Automaton(HttpClient httpClient, SdkConfiguration sdkConfiguration) {
         Automaton.httpClient = httpClient;
         Automaton.sdkConfiguration = sdkConfiguration;
@@ -36,7 +37,8 @@ public class Automaton {
         LiveSystemService liveSystemService = new LiveSystemService(httpClient, sdkConfiguration);
 
         for (LiveSystem ls : liveSystems) {
-            blueprintService.instantiate(CreateBlueprintCommandRequest.fromLiveSystem(ls.getComponents()), "", "");
+            String fractalName = ls.getResourceGroupId() + "/" + ls.getId();
+            blueprintService.instantiate(CreateBlueprintCommandRequest.fromLiveSystem(ls.getComponents(), "some blueprint description"), fractalName, "0.0.1");
             //liveSystemService.instantiate(null);
         }
     }

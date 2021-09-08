@@ -12,6 +12,8 @@ import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.List;
+
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureMachineType.STANDARD_B2S;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureOsType.LINUX;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureRegion.EUROPE_WEST;
@@ -75,7 +77,7 @@ public class LiveSystemFirstTest {
 
         //CreateBlueprintCommandRequest.fromLiveSystem(liveSystem.getComponents());
 
-        //Automaton.instantiate(List.of(liveSystem));
+        Automaton.instantiate(List.of(liveSystem));
     }
 
 }
