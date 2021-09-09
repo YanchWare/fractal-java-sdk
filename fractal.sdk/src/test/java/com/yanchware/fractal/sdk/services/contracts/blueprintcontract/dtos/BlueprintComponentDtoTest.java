@@ -19,9 +19,9 @@ public class BlueprintComponentDtoTest {
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(blueprintComponentDto.getId()).as("Component ID").isEqualTo(aks.getId().getValue());
             softly.assertThat(blueprintComponentDto.getDisplayName()).as("Component Display Name").isEqualTo(aks.getDisplayName());
-            softly.assertThat(blueprintComponentDto.getDescription()).as("Component Description").isEqualTo(aks.getDescription());
+            softly.assertThat(blueprintComponentDto.getDescription()).as("Component Description").contains("Blueprint created via SDK by LiveSystem with ID: ");
             softly.assertThat(blueprintComponentDto.getType()).as("Component Type").isEqualTo(TYPE);
-            softly.assertThat(blueprintComponentDto.getVersion()).as("Component Version").isEqualTo("0.0.1");
+            softly.assertThat(blueprintComponentDto.getVersion()).as("Component Version").isEmpty();
             softly.assertThat(blueprintComponentDto.getParameters().values()).as("Component Parameters").contains(aks.getNetwork());
             softly.assertThat(blueprintComponentDto.getDependencies()).as("Component Dependencies").isEmpty();
             softly.assertThat(blueprintComponentDto.getLinks()).as("Component Links").isEmpty();

@@ -31,6 +31,7 @@ public class BlueprintService {
     public void createOrUpdateBlueprint(CreateBlueprintCommandRequest command, String fractalId) throws InstantiatorException {
         if (retrieveBlueprint(fractalId)) {
             updateBlueprint(UpdateBlueprintCommandRequest.fromCreateCommand(command, fractalId), fractalId);
+            return;
         }
         createBlueprint(command, fractalId);
     }
@@ -77,7 +78,7 @@ public class BlueprintService {
 
         try {
             HttpResponse<String> response = client.send(updateRequest, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() != 202) {
+            if (response.statusCode() != 200) {
                 log.error("Attempted UpdateBlueprintCommandRequest for resourceGroupId: {}, but received status {}", sdkConfiguration.getResourceGroupId(), response.statusCode());
                 throw new InstantiatorException("Attempted UpdateBlueprintCommandRequest with response code: " + response.statusCode());
             }
@@ -109,6 +110,7 @@ public class BlueprintService {
     }
 
     private URI getBlueprintsUri(String fractalId) {
+        log.info("BLUEPRINT URI: {}", URI.create(sdkConfiguration.getBlueprintEndpoint() + "/" + fractalId.replace(":", "/")));
         return URI.create(sdkConfiguration.getBlueprintEndpoint() + "/" + fractalId.replace(":", "/"));
     }
 }

@@ -89,7 +89,7 @@ public class LiveSystemFirstTest {
 
         assertThat(liveSystem.validate()).isEmpty();
 
-        TestUtils.stubWireMockForBlueprints("/blueprint/resource-group/rsGroupId/ls-id/0.0.1");
+        TestUtils.stubWireMockForBlueprints("/blueprint/rsGroupId/ls-id/1.0");
         TestUtils.stubWireMockForLiveSystem("/livesystem/resource-group/livesystems");
         Automaton.instantiate(List.of(liveSystem));
     }

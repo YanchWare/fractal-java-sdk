@@ -2,9 +2,11 @@ package com.yanchware.fractal.sdk.services.contracts.blueprintcontract.commands;
 
 import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.dtos.BlueprintComponentDto;
 import lombok.Builder;
+import lombok.Data;
 
 import java.util.List;
 
+@Data
 @Builder
 public class UpdateBlueprintCommandRequest {
     private String resourceGroupId;

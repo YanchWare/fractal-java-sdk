@@ -54,6 +54,7 @@ public class LiveSystemService {
     }
 
     private URI getLiveSystemUri() {
+        log.info("LIVESYSTEM URI: {}", URI.create(sdkConfiguration.getLiveSystemEndpoint() + "/" + sdkConfiguration.getResourceGroupId() + "/livesystems"));
         return URI.create(sdkConfiguration.getLiveSystemEndpoint() + "/" + sdkConfiguration.getResourceGroupId() + "/livesystems");
     }
 }

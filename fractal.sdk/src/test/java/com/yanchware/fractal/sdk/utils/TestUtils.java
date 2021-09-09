@@ -43,6 +43,14 @@ public class TestUtils {
     }
 
     public static void stubWireMockForBlueprints(String url) {
+        stubFor(get(urlPathMatching(url))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")));
+        stubFor(put(urlPathMatching(url))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")));
         stubFor(post(urlPathMatching(url))
                 .willReturn(aResponse()
                         .withStatus(202)
