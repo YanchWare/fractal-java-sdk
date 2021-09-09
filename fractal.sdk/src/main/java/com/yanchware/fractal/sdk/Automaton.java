@@ -7,6 +7,7 @@ import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.services.BlueprintService;
 import com.yanchware.fractal.sdk.services.LiveSystemService;
 import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.commands.CreateBlueprintCommandRequest;
+import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands.InstantiateLiveSystemCommandRequest;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.http.HttpClient;
@@ -40,7 +41,7 @@ public class Automaton {
         for (LiveSystem ls : liveSystems) {
             String fractalName = ls.getResourceGroupId() + "/" + ls.getId();
             blueprintService.instantiate(CreateBlueprintCommandRequest.fromLiveSystem(ls.getComponents(), "some blueprint description"), fractalName, "0.0.1");
-            //liveSystemService.instantiate(null);
+            liveSystemService.instantiate(InstantiateLiveSystemCommandRequest.fromLiveSystem(ls));
         }
     }
 
