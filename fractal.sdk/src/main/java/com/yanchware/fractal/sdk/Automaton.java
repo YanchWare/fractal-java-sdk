@@ -19,16 +19,14 @@ public class Automaton {
     private static HttpClient httpClient;
     private static SdkConfiguration sdkConfiguration;
 
-    protected Automaton(HttpClient httpClient, SdkConfiguration sdkConfiguration) {
+    private Automaton(HttpClient httpClient, SdkConfiguration sdkConfiguration) {
         Automaton.httpClient = httpClient;
         Automaton.sdkConfiguration = sdkConfiguration;
     }
 
-    public static Automaton getInstance(HttpClient httpClient, SdkConfiguration sdkConfiguration) {
-        if (instance == null) {
-            instance = new Automaton(httpClient, sdkConfiguration);
-        }
-        return instance;
+    //used for unit testing
+    protected static void initializeAutomaton(HttpClient httpClient, SdkConfiguration sdkConfiguration) {
+        instance = new Automaton(httpClient, sdkConfiguration);
     }
 
     public static void instantiate(List<LiveSystem> liveSystems) throws InstantiatorException {

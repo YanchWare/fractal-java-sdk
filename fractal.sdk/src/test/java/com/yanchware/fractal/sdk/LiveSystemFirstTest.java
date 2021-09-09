@@ -74,6 +74,7 @@ public class LiveSystemFirstTest {
 
         //CreateBlueprintCommandRequest.fromLiveSystem(liveSystem.getComponents());
 
+        Automaton.initializeAutomaton(null, null);
         Automaton.instantiate(List.of(liveSystem));
     }
 
