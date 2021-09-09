@@ -46,7 +46,7 @@ public class LiveSystemServiceTest {
         InstantiateLiveSystemCommandRequest command = InstantiateLiveSystemCommandRequest.builder()
                 .liveSystemId("resourceGroupId/prod")
                 .description("prod")
-                .fractalId("resourceGroupId/fractalName:fractalVersion") //form of "resourceGroupId/fractalName:fractalVersion", needs to exist in blueprints, otherwise wont work
+                .fractalId("resourceGroupId/fractalName:fractalVersion")
                 .environmentDto(getEnvironment())
                 .blueprintMap(null)
                 .build();

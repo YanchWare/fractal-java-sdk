@@ -26,7 +26,7 @@ public class InstantiateLiveSystemCommandRequest {
     public static InstantiateLiveSystemCommandRequest fromLiveSystem(LiveSystem ls) {
         return InstantiateLiveSystemCommandRequest.builder()
                 .liveSystemId(ls.getId())
-                .fractalId(ls.getId())//resourceGroup/liveSystemId:1.0
+                .fractalId(String.format("%s/%s:1.0", ls.getResourceGroupId(), ls.getId()))
                 .description(ls.getDescription())
                 .environmentDto(EnvironmentDto.fromEnvironment(ls.getEnvironment()))
                 .blueprintMap(ls.getComponents().stream().map(LiveSystemComponentDto::fromLiveSystemComponent).collect(toMap(LiveSystemComponentDto::getId, x -> x)))
