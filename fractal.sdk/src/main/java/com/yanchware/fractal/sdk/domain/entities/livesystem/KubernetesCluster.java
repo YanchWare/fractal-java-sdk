@@ -12,10 +12,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
+
 @Getter
 @Setter(AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 public abstract class KubernetesCluster extends CaaSContainerPlatform implements LiveSystemComponent {
+  public static final String TYPE = KUBERNETES.getId();
   protected List<CaaSService> services;
 
   public KubernetesCluster() {

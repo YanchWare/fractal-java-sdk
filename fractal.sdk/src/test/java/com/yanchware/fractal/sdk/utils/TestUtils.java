@@ -4,6 +4,8 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureKube
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureNodePool;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureMachineType.STANDARD_B2S;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureOsType.LINUX;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureRegion.EUROPE_WEST;
@@ -31,5 +33,19 @@ public class TestUtils {
                         osType(LINUX).
                         build())
                 .build();
+    }
+
+    public static void stubWireMockForLiveSystem(String url) {
+        stubFor(post(urlPathMatching(url))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")));
+    }
+
+    public static void stubWireMockForBlueprints(String url) {
+        stubFor(post(urlPathMatching(url))
+                .willReturn(aResponse()
+                        .withStatus(202)
+                        .withHeader("Content-Type", "application/json")));
     }
 }

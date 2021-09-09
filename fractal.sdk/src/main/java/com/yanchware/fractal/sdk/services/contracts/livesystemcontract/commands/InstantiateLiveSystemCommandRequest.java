@@ -7,11 +7,14 @@ import lombok.*;
 
 import java.util.Map;
 
+import static java.util.stream.Collectors.toMap;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
 @Builder
+@ToString
 public class InstantiateLiveSystemCommandRequest {
     private String liveSystemId;
     private String fractalId;
@@ -21,7 +24,6 @@ public class InstantiateLiveSystemCommandRequest {
     private Map<String, LiveSystemComponentDto> blueprintMap;
     private EnvironmentDto environmentDto;
 
-
     public static InstantiateLiveSystemCommandRequest fromLiveSystem(LiveSystem ls) {
         return InstantiateLiveSystemCommandRequest.builder()
                 .liveSystemId(ls.getId())
@@ -30,7 +32,7 @@ public class InstantiateLiveSystemCommandRequest {
                 .description("description")
                 .provider("provider")
                 .environmentDto(EnvironmentDto.fromEnvironment(ls.getEnvironment()))
-                .blueprintMap(null)
+                .blueprintMap(ls.getComponents().stream().map(LiveSystemComponentDto::fromLiveSystemComponent).collect(toMap(LiveSystemComponentDto::getId, x -> x)))
                 .build();
     }
 }

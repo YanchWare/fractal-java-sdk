@@ -14,6 +14,8 @@ public class BlueprintComponentDtoTest {
 
         BlueprintComponentDto blueprintComponentDto = BlueprintComponentDto.fromLiveSystemComponent(aks);
 
+        System.out.println(blueprintComponentDto);
+
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(blueprintComponentDto.getId()).as("Component ID").isEqualTo(aks.getId().getValue());
             softly.assertThat(blueprintComponentDto.getDisplayName()).as("Component Display Name").isEqualTo(aks.getDisplayName());

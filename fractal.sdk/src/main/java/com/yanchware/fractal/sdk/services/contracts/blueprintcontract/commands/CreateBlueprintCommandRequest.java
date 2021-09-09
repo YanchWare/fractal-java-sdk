@@ -3,6 +3,7 @@ package com.yanchware.fractal.sdk.services.contracts.blueprintcontract.commands;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.dtos.BlueprintComponentDto;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.Collection;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 @Data
+@ToString
 public class CreateBlueprintCommandRequest {
     private String description;
     private boolean isPrivate;

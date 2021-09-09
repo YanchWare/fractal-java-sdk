@@ -40,8 +40,14 @@ public class Automaton {
 
         for (LiveSystem ls : liveSystems) {
             String fractalName = ls.getResourceGroupId() + "/" + ls.getId();
-            blueprintService.instantiate(CreateBlueprintCommandRequest.fromLiveSystem(ls.getComponents(), "some blueprint description"), fractalName, "0.0.1");
-            liveSystemService.instantiate(InstantiateLiveSystemCommandRequest.fromLiveSystem(ls));
+            var blueprintCommand = CreateBlueprintCommandRequest.fromLiveSystem(ls.getComponents(), "some blueprint description");
+            var liveSystemCommand = InstantiateLiveSystemCommandRequest.fromLiveSystem(ls);
+
+            log.info("BlueprintCmd : {}", blueprintCommand);
+            log.info("LiveSystemCmd: {}", liveSystemCommand);
+
+            blueprintService.instantiate(blueprintCommand, fractalName, "0.0.1");
+            liveSystemService.instantiate(liveSystemCommand);
         }
     }
 
