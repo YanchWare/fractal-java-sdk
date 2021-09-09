@@ -40,7 +40,7 @@ public class BlueprintServiceTest {
                         .withStatus(202)
                         .withHeader("Content-Type", "application/json")));
 
-        blueprintService.createBlueprint(buildBlueprintRequest(), "fr", "fr");
+        blueprintService.createBlueprint(buildBlueprintRequest(), "resource-group/fr:fr");
 
         verify(postRequestedFor(urlPathEqualTo("/blueprint/resource-group/fr/fr")));
     }

@@ -19,5 +19,4 @@ public class CreateBlueprintCommandRequestTest {
         assertThat(commandRequest.isPrivate()).isTrue();
         assertThat(commandRequest.getComponents()).hasSize(1);
     }
-
 }
