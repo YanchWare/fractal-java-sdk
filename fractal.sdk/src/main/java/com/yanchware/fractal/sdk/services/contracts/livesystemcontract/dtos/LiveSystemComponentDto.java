@@ -24,9 +24,7 @@ public class LiveSystemComponentDto extends ComponentDto {
     private LiveSystemComponentStatusDto status;
     private Map<String, Object> outputFields;
     private Date lastUpdated;
-    private int lastOperationRetried;
-    private ProviderTypeDto provider;
-    private String lastOperationStatusMessage;
+    private ProviderType provider;
 
     public static LiveSystemComponentDto fromLiveSystemComponent(LiveSystemComponent component) {
         Map<String, Object> allFields = ReflectionUtils.getAllFields(component);
@@ -35,16 +33,14 @@ public class LiveSystemComponentDto extends ComponentDto {
                 .displayName(String.valueOf(allFields.get("displayName")))
                 .description(String.valueOf(allFields.get("description")))
                 .type(String.valueOf(allFields.get("liveSystemType")))
-                .version("0.0.1")
+                .version("")
                 .parameters((Map<String, Object>) allFields.get("parameters"))
                 .dependencies(emptySet())
                 .links(emptySet())
                 .outputFields(emptyMap())
                 .status(Instantiating)
                 .lastUpdated(new Date())
-                .lastOperationRetried(999)
-                .provider(null)
-                .lastOperationStatusMessage("")
+                .provider(component.getProvider())
                 .build();
     }
 }

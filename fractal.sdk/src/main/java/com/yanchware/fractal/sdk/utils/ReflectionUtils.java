@@ -43,7 +43,7 @@ public class ReflectionUtils {
                         }
                     } else {
                         if (!isFieldPrivateStatic(f)) {
-                            parametersMap.put(f.getName(), f.get(component));
+                            parametersMap.put(f.getName(), f.get(component).toString());
                         }
                     }
                 } catch (IllegalAccessException e) {

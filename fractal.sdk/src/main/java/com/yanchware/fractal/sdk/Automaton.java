@@ -46,7 +46,7 @@ public class Automaton {
             log.info("BlueprintCmd : {}", blueprintCommand);
             log.info("LiveSystemCmd: {}", liveSystemCommand);
 
-            blueprintService.instantiate(blueprintCommand, fractalName, "0.0.1");
+            blueprintService.createBlueprint(blueprintCommand, fractalName, "0.0.1");
             liveSystemService.instantiate(liveSystemCommand);
         }
     }

@@ -1,6 +1,7 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure;
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.KubernetesCluster;
+import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -30,6 +31,11 @@ public class AzureKubernetesService extends KubernetesCluster {
 
     protected AzureKubernetesService() {
         nodePools = new ArrayList<>();
+    }
+
+    @Override
+    public ProviderType getProvider() {
+        return ProviderType.Azure;
     }
 
     public static class AzureKubernetesServiceBuilder extends Builder<AzureKubernetesService, AzureKubernetesServiceBuilder> {

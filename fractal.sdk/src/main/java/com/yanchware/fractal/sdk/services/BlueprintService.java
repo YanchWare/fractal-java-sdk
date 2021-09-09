@@ -25,7 +25,9 @@ public class BlueprintService {
 
     private final SdkConfiguration sdkConfiguration;
 
-    public void instantiate(CreateBlueprintCommandRequest command, String fractalName, String fractalVersion) throws InstantiatorException {
+
+    //TODO: get blueprint, if exists, update. if not, create
+    public void createBlueprint(CreateBlueprintCommandRequest command, String fractalName, String fractalVersion) throws InstantiatorException {
         var objectMapper = new ObjectMapper();
 
         HttpRequest request;

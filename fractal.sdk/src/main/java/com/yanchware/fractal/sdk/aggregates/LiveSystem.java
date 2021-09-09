@@ -20,6 +20,7 @@ public class LiveSystem implements Validatable {
 
     private String id;
     private String resourceGroupId;
+    private String description;
     private Environment environment;
     private Date created;
     private Date lastUpdated;
@@ -58,6 +59,11 @@ public class LiveSystem implements Validatable {
 
         public LiveSystemBuilder resourceGroupId(String resourceGroupId) {
             liveSystem.setResourceGroupId(resourceGroupId);
+            return builder;
+        }
+
+        public LiveSystemBuilder description(String description) {
+            liveSystem.setDescription(description);
             return builder;
         }
 

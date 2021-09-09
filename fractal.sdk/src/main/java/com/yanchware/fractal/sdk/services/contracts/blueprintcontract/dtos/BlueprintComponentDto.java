@@ -11,9 +11,9 @@ import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
+import java.util.Set;
 
 import static java.util.Collections.emptyMap;
-import static java.util.Collections.emptySet;
 
 @Data
 @SuperBuilder
@@ -25,15 +25,16 @@ public class BlueprintComponentDto extends ComponentDto {
 
     public static BlueprintComponentDto fromLiveSystemComponent(LiveSystemComponent liveSystemComponent) {
         Map<String, Object> allFields = ReflectionUtils.getAllFields(liveSystemComponent);
+        String liveSystemId = ((ComponentId) allFields.get("id")).getValue();
         return BlueprintComponentDto.builder()
-                .id(((ComponentId) allFields.get("id")).getValue())
-                .displayName(String.valueOf(allFields.get("displayName"))) //TODO: this is sitll displayName fo LiveSystem I guess
-                .description(String.valueOf(allFields.get("description"))) //TODO: this is still description of LiveSystem
+                .id(liveSystemId)
+                .displayName(String.valueOf(allFields.get("displayName")))
+                .description(String.format("Blueprint created via SDK by LiveSystem with ID: %s", liveSystemId))
                 .type(String.valueOf(allFields.get("blueprintType")))
-                .version("0.0.1")
+                .version("")
                 .parameters((Map<String, Object>) allFields.get("parameters"))
-                .dependencies(emptySet())
-                .links(emptySet())
+                .dependencies((Set<String>) allFields.get("dependencies"))
+                .links((Set<String>) allFields.get("links"))
                 .outputFields(emptyMap())
                 .build();
     }

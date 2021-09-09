@@ -1,6 +1,7 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.gcp;
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.KubernetesCluster;
+import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,6 +9,7 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType.GCP;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
 
 @Getter
@@ -28,6 +30,11 @@ public class GoogleKubernetesEngine extends KubernetesCluster {
 
     protected GoogleKubernetesEngine() {
         nodePools = new ArrayList<>();
+    }
+
+    @Override
+    public ProviderType getProvider() {
+        return GCP;
     }
 
     public static class GoogleKubernetesEngineBuilder extends Builder<GoogleKubernetesEngine, GoogleKubernetesEngineBuilder> {

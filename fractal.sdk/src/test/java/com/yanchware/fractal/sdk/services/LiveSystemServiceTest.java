@@ -47,8 +47,6 @@ public class LiveSystemServiceTest {
                 .liveSystemId("resourceGroupId/prod")
                 .description("prod")
                 .fractalId("resourceGroupId/fractalName:fractalVersion") //form of "resourceGroupId/fractalName:fractalVersion", needs to exist in blueprints, otherwise wont work
-                .type("type")
-                .provider("azure") //can be an enum, as in ls service it will be converted to enum.
                 .environmentDto(getEnvironment())
                 .blueprintMap(null)
                 .build();
