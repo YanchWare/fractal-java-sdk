@@ -1,6 +1,5 @@
 package com.yanchware.fractal.sdk;
 
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import com.yanchware.fractal.sdk.aggregates.Environment;
 import com.yanchware.fractal.sdk.aggregates.LiveSystem;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
@@ -11,10 +10,8 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.gcp.GcpNodePool
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.gcp.GoogleKubernetesEngine;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
-import com.yanchware.fractal.sdk.utils.TestUtils;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 
 import java.net.http.HttpClient;
@@ -27,8 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class LiveSystemFirstTest {
 
-    @Rule
-    public WireMockRule wireMockRule = new WireMockRule(8090);
+    //@Rule public WireMockRule wireMockRule = new WireMockRule(8090);
 
     @Before
     public void setUp() {
@@ -89,8 +85,8 @@ public class LiveSystemFirstTest {
 
         assertThat(liveSystem.validate()).isEmpty();
 
-        TestUtils.stubWireMockForBlueprints("/blueprint/rsGroupId/ls-id/1.0");
-        TestUtils.stubWireMockForLiveSystem("/livesystem/resource-group/livesystems");
+        //TestUtils.stubWireMockForBlueprints("/blueprint/rsGroupId/ls-id/1.0");
+        //TestUtils.stubWireMockForLiveSystem("/livesystem/resource-group/livesystems");
         Automaton.instantiate(List.of(liveSystem));
     }
 

@@ -10,21 +10,21 @@ public class LocalSdkConfiguration implements SdkConfiguration {
 
     @Override
     public String getClientId() {
-        return "client-id";
+        return "sdk";
     }
 
     @Override
     public String getClientSecret() {
-        return "client-secret";
+        return "sdksecret";
     }
 
     @Override
     public String getBlueprintEndpoint() {
-        return "http://localhost:8090/blueprint";
+        return "https://local.yanchware.com:4443/blueprints";
     }
 
     @Override
     public String getLiveSystemEndpoint() {
-        return "http://localhost:8090/livesystem";
+        return "https://local.yanchware.com:4443/livesystems";
     }
 }
