@@ -17,17 +17,17 @@ public class LiveSystemTest {
 
     @Test
     public void multipleValidationErrors_when_liveSystemHasNullId() {
-        assertThatThrownBy(() -> LiveSystem.builder().id(null).build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Id has not been defined");
+        assertThatThrownBy(() -> LiveSystem.builder().name(null).build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Id has not been defined");
     }
 
     @Test
     public void multipleValidationErrors_when_liveSystemHasEmptyId() {
-        assertThatThrownBy(() -> LiveSystem.builder().id("").build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Id has not been defined");
+        assertThatThrownBy(() -> LiveSystem.builder().name("").build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Id has not been defined");
     }
 
     @Test
     public void multipleValidationErrors_when_liveSystemHasBlankId() {
-        assertThatThrownBy(() -> LiveSystem.builder().id("   ").build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Id has not been defined");
+        assertThatThrownBy(() -> LiveSystem.builder().name("   ").build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Id has not been defined");
     }
 
     @Test
@@ -57,7 +57,7 @@ public class LiveSystemTest {
 
     private LiveSystem generateBuilder() {
         return LiveSystem.builder()
-                .id("ls")
+                .name("ls")
                 .resourceGroupId("res/group")
                 .component(AzureKubernetesService.builder()
                         .id(ComponentId.from("aks-1"))

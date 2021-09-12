@@ -78,7 +78,7 @@ public class LiveSystemFirstTest {
                 .build();
 
         LiveSystem liveSystem = LiveSystem.builder()
-                .id("ls-id")
+                .name("ls-id")
                 .description("LiveSystemDescription")
                 .resourceGroupId("rsGroupId")
                 .component(aks)

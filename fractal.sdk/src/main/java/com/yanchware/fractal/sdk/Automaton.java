@@ -39,7 +39,7 @@ public class Automaton {
         LiveSystemService liveSystemService = new LiveSystemService(httpClient, sdkConfiguration);
 
         for (LiveSystem ls : liveSystems) {
-            String fractalId = ls.getResourceGroupId() + "/" + ls.getId() + ":" + "1.0";
+            String fractalId = ls.getResourceGroupId() + "/" + ls.getName() + ":" + "1.0";
             var blueprintCommand = CreateBlueprintCommandRequest.fromLiveSystem(ls.getComponents(), "some blueprint description");
             var liveSystemCommand = InstantiateLiveSystemCommandRequest.fromLiveSystem(ls);
 

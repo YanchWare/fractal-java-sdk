@@ -11,6 +11,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 @Getter
 @Setter(AccessLevel.PRIVATE)
 public class LiveSystem implements Validatable {
@@ -18,7 +20,7 @@ public class LiveSystem implements Validatable {
     private final static String RESOURCE_GROUP_ID_IS_NULL = "[LiveSystem Validation] ResourceGroupId has not been defined and it is required'";
     private final static String EMPTY_COMPONENT_LIST = "[LiveSystem Validation] Components list is null or empty and at least one component is required";
 
-    private String id;
+    private String name;
     private String resourceGroupId;
     private String description;
     private Environment environment;
@@ -52,8 +54,8 @@ public class LiveSystem implements Validatable {
             return this;
         }
 
-        public LiveSystemBuilder id(String id) {
-            liveSystem.setId(id);
+        public LiveSystemBuilder name(String name) {
+            liveSystem.setName(name);
             return builder;
         }
 
@@ -112,7 +114,7 @@ public class LiveSystem implements Validatable {
     public Collection<String> validate() {
         Collection<String> errors = new ArrayList<>();
 
-        if (id == null || id.isEmpty() || id.isBlank()) {
+        if (isBlank(name)) {
             errors.add(ID_IS_NULL);
         }
 
