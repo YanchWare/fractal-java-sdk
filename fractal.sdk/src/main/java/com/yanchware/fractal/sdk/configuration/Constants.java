@@ -4,6 +4,9 @@ public class Constants {
     public static final String LIVESYSTEM_ENDPOINT_KEY = "LIVESYSTEM_ENDPOINT_KEY";
     public static final String BLUEPRINT_ENDPOINT_KEY = "BLUEPRINT_ENDPOINT_KEY";
 
+    public static final String DEFAULT_BLUEPRINT_ENDPOINT = "https://api.fractal-arch.org/blueprints";
+    public static final String DEFAULT_LIVESYSTEM_ENDPOINT = "https://api.fractal-arch.org/livesystems";
+
     public static final String X_CLIENT_ID_HEADER = "X-ClientID";
     public static final String X_CLIENT_SECRET_HEADER = "X-ClientSecret";
 

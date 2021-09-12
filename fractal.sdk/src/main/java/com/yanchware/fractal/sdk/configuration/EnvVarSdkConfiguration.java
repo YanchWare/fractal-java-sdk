@@ -1,5 +1,6 @@
 package com.yanchware.fractal.sdk.configuration;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import static com.yanchware.fractal.sdk.configuration.Constants.*;
 
 public class EnvVarSdkConfiguration implements SdkConfiguration {
@@ -20,11 +21,17 @@ public class EnvVarSdkConfiguration implements SdkConfiguration {
 
     @Override
     public String getBlueprintEndpoint() {
-        return System.getenv(BLUEPRINT_ENDPOINT_KEY);
+        String blueprintEndpoint = System.getenv(BLUEPRINT_ENDPOINT_KEY);
+        return isBlank(blueprintEndpoint)
+          ? DEFAULT_BLUEPRINT_ENDPOINT
+          : blueprintEndpoint;
     }
 
     @Override
     public String getLiveSystemEndpoint() {
-        return System.getenv(LIVESYSTEM_ENDPOINT_KEY);
+        String blueprintEndpoint = System.getenv(LIVESYSTEM_ENDPOINT_KEY);
+        return isBlank(blueprintEndpoint)
+          ? DEFAULT_LIVESYSTEM_ENDPOINT
+          : blueprintEndpoint;
     }
 }
