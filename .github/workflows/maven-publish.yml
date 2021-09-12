@@ -6,7 +6,7 @@ name: Maven Package
 on:
   pull_request:
     branches:
-      - master
+      - main
 jobs:
   publish:
     runs-on: ubuntu-latest
