@@ -9,6 +9,7 @@ import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junitpioneer.jupiter.SetEnvironmentVariable;
 
@@ -33,8 +34,9 @@ public class LiveSystemFirstTest {
     }
 
     @Test
+    @Disabled
     @SetEnvironmentVariable(key = "CLIENT_ID", value = "xxx")
-    @SetEnvironmentVariable(key = "CLIENT_SECRET", value = "xxxx")
+    @SetEnvironmentVariable(key = "CLIENT_SECRET", value = "xxx")
     public void liveSystemInstantiated_when_AutomatonCalledWithValidLiveSystemInformation() throws InstantiatorException {
         var env = Environment.builder()
           .id("2251bad7-45a2-4202-a233-cc021be0b1f9")
