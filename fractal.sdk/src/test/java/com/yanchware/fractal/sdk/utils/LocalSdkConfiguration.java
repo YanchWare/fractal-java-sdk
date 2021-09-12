@@ -10,21 +10,21 @@ public class LocalSdkConfiguration implements SdkConfiguration {
 
     @Override
     public String getClientId() {
-        return "sdk";
+        return "aa574c7e-8adb-4ab8-a783-b0b0db62acf2";
     }
 
     @Override
     public String getClientSecret() {
-        return "sdksecret";
+        return "MnBBt&ySyZjpa%88KfC_S";
     }
 
     @Override
     public String getBlueprintEndpoint() {
-        return "https://local.yanchware.com:4443/blueprints";
+        return "https://api.fractal-arch.org/blueprints";
     }
 
     @Override
     public String getLiveSystemEndpoint() {
-        return "https://local.yanchware.com:4443/livesystems";
+        return "https://api.fractal-arch.org/livesystems";
     }
 }

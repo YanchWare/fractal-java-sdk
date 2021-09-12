@@ -4,24 +4,23 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.services.contracts.ComponentDto;
 import com.yanchware.fractal.sdk.utils.ReflectionUtils;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 import java.util.Set;
 
-import static java.util.Collections.emptyMap;
+import static java.util.Collections.emptySet;
 
 @Data
 @SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @ToString(callSuper = true)
+@NoArgsConstructor()
 @Slf4j
 public class BlueprintComponentDto extends ComponentDto {
-    private Map<String, Object> outputFields;
+    private Set<String> outputFields;
 
     public static BlueprintComponentDto fromLiveSystemComponent(LiveSystemComponent liveSystemComponent) {
         Map<String, Object> allFields = ReflectionUtils.getAllFields(liveSystemComponent);
@@ -35,7 +34,7 @@ public class BlueprintComponentDto extends ComponentDto {
                 .parameters((Map<String, Object>) allFields.get("parameters"))
                 .dependencies((Set<String>) allFields.get("dependencies"))
                 .links((Set<String>) allFields.get("links"))
-                .outputFields(emptyMap())
+                .outputFields(emptySet())
                 .build();
     }
 }

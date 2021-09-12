@@ -1,7 +1,7 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem;
 
 import com.yanchware.fractal.sdk.aggregates.Environment;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

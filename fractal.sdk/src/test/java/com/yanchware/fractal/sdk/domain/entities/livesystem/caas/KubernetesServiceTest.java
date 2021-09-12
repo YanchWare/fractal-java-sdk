@@ -1,7 +1,7 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.CONTAINER_PLATFORM;
 import static org.assertj.core.api.Assertions.assertThat;

@@ -2,6 +2,7 @@ package com.yanchware.fractal.sdk.services.contracts;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
@@ -12,6 +13,7 @@ import java.util.Set;
 @SuperBuilder
 @EqualsAndHashCode
 @ToString
+@NoArgsConstructor
 public class ComponentDto {
     private String id;
     public String displayName;

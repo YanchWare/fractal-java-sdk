@@ -1,14 +1,15 @@
 package com.yanchware.fractal.sdk.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.commands.CreateBlueprintCommandRequest;
 import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.commands.UpdateBlueprintCommandRequest;
+import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.dtos.BlueprintDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -16,20 +17,19 @@ import java.net.http.HttpResponse;
 
 import static com.yanchware.fractal.sdk.configuration.Constants.X_CLIENT_ID_HEADER;
 import static com.yanchware.fractal.sdk.configuration.Constants.X_CLIENT_SECRET_HEADER;
+import static com.yanchware.fractal.sdk.utils.SerializationUtils.serialize;
 import static java.net.http.HttpRequest.BodyPublishers.ofString;
+import static com.yanchware.fractal.sdk.utils.SerializationUtils.deserialize;
 
-@AllArgsConstructor
 @Slf4j
+@AllArgsConstructor
 public class BlueprintService {
 
     private final HttpClient client;
-
     private final SdkConfiguration sdkConfiguration;
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
     public void createOrUpdateBlueprint(CreateBlueprintCommandRequest command, String fractalId) throws InstantiatorException {
-        if (retrieveBlueprint(fractalId)) {
+        if (retrieveBlueprint(fractalId) != null) {
             updateBlueprint(UpdateBlueprintCommandRequest.fromCreateCommand(command, fractalId), fractalId);
             return;
         }
@@ -40,25 +40,29 @@ public class BlueprintService {
         HttpRequest request;
         try {
             request = HttpRequest.newBuilder()
-                    .uri(getBlueprintsUri(fractalId))
-                    .header(X_CLIENT_ID_HEADER, sdkConfiguration.getClientId())
-                    .header(X_CLIENT_SECRET_HEADER, sdkConfiguration.getClientSecret())
-                    .POST(ofString(objectMapper.writeValueAsString(command)))
-                    .build();
+              .uri(getBlueprintsUri(fractalId))
+              .header(X_CLIENT_ID_HEADER, sdkConfiguration.getClientId())
+              .header(X_CLIENT_SECRET_HEADER, sdkConfiguration.getClientSecret())
+              .header("content-type", "application/json")
+              .POST(ofString(serialize(command)))
+              .build();
         } catch (JsonProcessingException e) {
-            log.error("Error processing CreateBlueprintCommandRequest: {}", command, e);
             throw new InstantiatorException("Error processing CreateBlueprintCommandRequest because of JsonProcessing", e);
         }
 
+        HttpResponse<String> response;
         try {
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() != 202) {
-                log.error("Attempted CreateBlueprintCommandRequest for resourceGroupId: {}, but received status {}", sdkConfiguration.getResourceGroupId(), response.statusCode());
-                throw new InstantiatorException("Attempted CreateBlueprintCommandRequest with response code: " + response.statusCode());
-            }
-        } catch (Exception e) {
-            log.error("Attempted CreateBlueprintCommandRequest failed", e);
-            throw new InstantiatorException("Attempted CreateBlueprintCommandRequest with generic exception", e);
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
+            throw new InstantiatorException("Attempted CreateBlueprintCommandRequest failed", e);
+        }
+
+        if (response.statusCode() != 202) {
+            throw new InstantiatorException(
+              String.format(
+                "Attempted CreateBlueprintCommandRequest failed with response code: %s and body %s ",
+                response.statusCode(),
+                response.body()));
         }
     }
 
@@ -66,47 +70,68 @@ public class BlueprintService {
         HttpRequest updateRequest;
         try {
             updateRequest = HttpRequest.newBuilder()
-                    .uri(getBlueprintsUri(fractalId))
-                    .header(X_CLIENT_ID_HEADER, sdkConfiguration.getClientId())
-                    .header(X_CLIENT_SECRET_HEADER, sdkConfiguration.getClientSecret())
-                    .PUT(ofString(objectMapper.writeValueAsString(command)))
-                    .build();
+              .uri(getBlueprintsUri(fractalId))
+              .header(X_CLIENT_ID_HEADER, sdkConfiguration.getClientId())
+              .header(X_CLIENT_SECRET_HEADER, sdkConfiguration.getClientSecret())
+              .header("content-type", "application/json")
+              .PUT(ofString(serialize(command)))
+              .build();
         } catch (JsonProcessingException e) {
-            log.error("Error processing UpdateBlueprintCommandRequest: {}", command, e);
             throw new InstantiatorException("Error processing UpdateBlueprintCommandRequest because of JsonProcessing", e);
         }
 
+        HttpResponse<String> response;
         try {
-            HttpResponse<String> response = client.send(updateRequest, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() != 200) {
-                log.error("Attempted UpdateBlueprintCommandRequest for resourceGroupId: {}, but received status {}", sdkConfiguration.getResourceGroupId(), response.statusCode());
-                throw new InstantiatorException("Attempted UpdateBlueprintCommandRequest with response code: " + response.statusCode());
-            }
-        } catch (Exception e) {
-            log.error("Attempted UpdateBlueprintCommandRequest failed", e);
-            throw new InstantiatorException("Attempted UpdateBlueprintCommandRequest with generic exception", e);
+            response = client.send(updateRequest, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
+            throw new InstantiatorException("Attempted UpdateBlueprintCommandRequest failed.", e);
+        }
+
+        if (response.statusCode() != 202) {
+            throw new InstantiatorException(
+              String.format(
+                "Attempted UpdateBlueprintCommandRequest with response code: %s and body %s ",
+                response.statusCode(),
+                response.body()));
         }
     }
 
-    protected boolean retrieveBlueprint(String fractalId) throws InstantiatorException {
+    protected BlueprintDto retrieveBlueprint(String fractalId) throws InstantiatorException {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(getBlueprintsUri(fractalId))
-                .header(X_CLIENT_ID_HEADER, sdkConfiguration.getClientId())
-                .header(X_CLIENT_SECRET_HEADER, sdkConfiguration.getClientSecret())
-                .GET()
-                .build();
+          .uri(getBlueprintsUri(fractalId))
+          .header(X_CLIENT_ID_HEADER, sdkConfiguration.getClientId())
+          .header(X_CLIENT_SECRET_HEADER, sdkConfiguration.getClientSecret())
+          .GET()
+          .build();
 
+        HttpResponse<String> response;
         try {
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            if (response.statusCode() != 200) {
-                log.error("Attempted Retrieve Blueprint for fractalId: {}, but received status {}", fractalId, response.statusCode());
-                throw new InstantiatorException("Attempted Retrieve Blueprint with code: " + response.statusCode());
-            }
-        } catch (Exception e) {
-            log.error("Attempted Retrieve Blueprint for fractalId: {}, but received status {}", fractalId, e);
-            throw new InstantiatorException("Attempted Retrieve Blueprint with generic exception", e);
+            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        } catch (IOException | InterruptedException e) {
+            throw new InstantiatorException("Attempted Retrieve Blueprint failed", e);
         }
-        return true;
+
+        if (response.statusCode() == 404) {
+            log.info("Blueprint with id {} does not exist", fractalId);
+            return null;
+        }
+
+        if (response.statusCode() != 200) {
+            throw new InstantiatorException(
+              String.format(
+                "Attempted UpdateBlueprintCommandRequest with response code: %s and body %s ",
+                response.statusCode(),
+                response.body()));
+        }
+
+        String bodyContents = response.body();
+        try {
+            return deserialize(bodyContents, BlueprintDto.class);
+        } catch (JsonProcessingException e) {
+            throw new InstantiatorException(
+              String.format("Attempted Retrieve Blueprint failed. Deserialization of %s failed.", bodyContents),
+              e);
+        }
     }
 
     private URI getBlueprintsUri(String fractalId) {

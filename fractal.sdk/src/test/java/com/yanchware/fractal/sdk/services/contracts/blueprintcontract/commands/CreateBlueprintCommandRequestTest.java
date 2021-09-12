@@ -1,7 +1,7 @@
 package com.yanchware.fractal.sdk.services.contracts.blueprintcontract.commands;
 
 import com.yanchware.fractal.sdk.utils.TestUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 

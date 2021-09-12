@@ -2,7 +2,7 @@ package com.yanchware.fractal.sdk.services.contracts.blueprintcontract.dtos;
 
 import com.yanchware.fractal.sdk.utils.TestUtils;
 import org.assertj.core.api.SoftAssertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSContainerPlatform.TYPE;
 

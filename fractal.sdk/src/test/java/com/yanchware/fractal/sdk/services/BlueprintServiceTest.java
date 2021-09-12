@@ -6,10 +6,9 @@ import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.commands.CreateBlueprintCommandRequest;
 import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.dtos.BlueprintComponentDto;
 import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.net.http.HttpClient;
 import java.util.List;
@@ -20,12 +19,12 @@ import static java.util.Collections.emptySet;
 
 public class BlueprintServiceTest {
 
-    @Rule
-    public WireMockRule wireMockRule = new WireMockRule(8090);
+//    @Rule
+//    public WireMockRule wireMockRule = new WireMockRule(8090);
 
     private BlueprintService blueprintService;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         SdkConfiguration sdkConfiguration = new LocalSdkConfiguration();
         HttpClient httpClient = HttpClient.newBuilder()
@@ -35,7 +34,7 @@ public class BlueprintServiceTest {
     }
 
     @Test
-    @Ignore
+    @Disabled
     public void urlPathMatching_when_postRequestToBlueprint() throws InstantiatorException {
         stubFor(post(urlPathMatching("/blueprint/resource-group/fr/fr"))
                 .willReturn(aResponse()
@@ -65,7 +64,7 @@ public class BlueprintServiceTest {
                 .parameters(emptyMap())
                 .dependencies(emptySet())
                 .links(emptySet())
-                .outputFields(emptyMap())
+                .outputFields(emptySet())
                 .build();
     }
 }
