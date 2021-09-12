@@ -7,6 +7,7 @@ import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.commands.C
 import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.dtos.BlueprintComponentDto;
 import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -34,6 +35,7 @@ public class BlueprintServiceTest {
     }
 
     @Test
+    @Ignore
     public void urlPathMatching_when_postRequestToBlueprint() throws InstantiatorException {
         stubFor(post(urlPathMatching("/blueprint/resource-group/fr/fr"))
                 .willReturn(aResponse()

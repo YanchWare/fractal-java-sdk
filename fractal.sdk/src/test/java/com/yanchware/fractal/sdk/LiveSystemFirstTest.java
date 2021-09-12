@@ -12,6 +12,7 @@ import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.net.http.HttpClient;
@@ -36,6 +37,7 @@ public class LiveSystemFirstTest {
     }
 
     @Test
+    @Ignore
     public void liveSystemInstantiated_when_AutomatonCalledWithValidLiveSystemInformation() throws InstantiatorException {
         var gke = GoogleKubernetesEngine.builder()
                 .service(KubernetesService.builder()

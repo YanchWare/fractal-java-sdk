@@ -7,6 +7,7 @@ import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands.
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.EnvironmentDto;
 import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -31,6 +32,7 @@ public class LiveSystemServiceTest {
     }
 
     @Test
+    @Ignore
     public void urlPathMatching_when_postRequestToLiveSystem() throws InstantiatorException {
         stubFor(post(urlPathMatching("/livesystem/resource-group/livesystems"))
                 .willReturn(aResponse()
