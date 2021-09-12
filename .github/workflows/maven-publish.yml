@@ -4,7 +4,6 @@
 name: Maven Package
 
 on:
-  push:
   pull_request:
     branches:
       - main
