@@ -43,7 +43,12 @@ public class ReflectionUtils {
                         }
                     } else {
                         if (!isFieldPrivateStatic(f)) {
-                            parametersMap.put(f.getName(), f.get(component).toString());
+                            Object componentObj = f.get(component);
+                            if (componentObj.getClass().isEnum()) {
+                                parametersMap.put(f.getName(), componentObj.toString());
+                            } else {
+                                parametersMap.put(f.getName(), componentObj);
+                            }
                         }
                     }
                 } catch (IllegalAccessException e) {
