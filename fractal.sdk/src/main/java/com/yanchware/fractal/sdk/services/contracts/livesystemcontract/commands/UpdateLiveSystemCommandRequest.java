@@ -1,6 +1,5 @@
 package com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands;
 
-import com.yanchware.fractal.sdk.aggregates.LiveSystem;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.EnvironmentDto;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemComponentDto;
 import lombok.*;
@@ -13,7 +12,7 @@ import java.util.Map;
 @EqualsAndHashCode
 @Builder
 @ToString
-public class InstantiateLiveSystemCommandRequest {
+public class UpdateLiveSystemCommandRequest {
     private String liveSystemId;
     private String fractalId;
     private String description;
@@ -21,13 +20,13 @@ public class InstantiateLiveSystemCommandRequest {
     private Map<String, LiveSystemComponentDto> blueprintMap;
     private EnvironmentDto environment;
 
-    public static InstantiateLiveSystemCommandRequest fromLiveSystem(LiveSystem ls) {
-        return InstantiateLiveSystemCommandRequest.builder()
-                .liveSystemId(String.format("%s/%s", ls.getResourceGroupId(), ls.getName()))
-                .fractalId(String.format("%s/%s:1.0", ls.getResourceGroupId(), ls.getName()))
-                .description(ls.getDescription())
-                .environment(EnvironmentDto.fromEnvironment(ls.getEnvironment()))
-                .blueprintMap(LiveSystemComponentDto.fromLiveSystemComponents(ls.getComponents()))
-                .build();
+    public static UpdateLiveSystemCommandRequest fromInstantiateCommand(InstantiateLiveSystemCommandRequest command) {
+        return UpdateLiveSystemCommandRequest.builder()
+            .liveSystemId(command.getLiveSystemId())
+            .fractalId(command.getFractalId())
+            .description(command.getDescription())
+            .environment(command.getEnvironment())
+            .blueprintMap(command.getBlueprintMap())
+            .build();
     }
 }

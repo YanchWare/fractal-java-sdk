@@ -8,8 +8,6 @@ import lombok.ToString;
 import java.util.Collection;
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
-
 @Data
 @ToString
 public class CreateBlueprintCommandRequest {
@@ -21,7 +19,7 @@ public class CreateBlueprintCommandRequest {
         CreateBlueprintCommandRequest command = new CreateBlueprintCommandRequest();
         command.setPrivate(true);
         command.setDescription(description);
-        command.setComponents(components.stream().map(BlueprintComponentDto::fromLiveSystemComponent).collect(toList()));
+        command.setComponents(BlueprintComponentDto.fromLiveSystemComponents(components));
         return command;
     }
 }

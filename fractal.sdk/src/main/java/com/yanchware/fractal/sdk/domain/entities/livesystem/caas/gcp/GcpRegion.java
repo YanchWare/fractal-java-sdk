@@ -41,6 +41,7 @@ public enum GcpRegion {
   public String getId() {
     return id;
   }
+
   public Collection<GcpZone> getZones() {
     // TODO: Implement
     throw new IllegalArgumentException("Not implemented");

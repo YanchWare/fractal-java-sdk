@@ -88,7 +88,6 @@ public class BlueprintService {
     }
 
     private URI getBlueprintsUri(String fractalId) {
-        log.info("BLUEPRINT URI: {}", URI.create(sdkConfiguration.getBlueprintEndpoint() + "/" + fractalId.replace(":", "/")));
         return URI.create(sdkConfiguration.getBlueprintEndpoint() + "/" + fractalId.replace(":", "/"));
     }
 }
