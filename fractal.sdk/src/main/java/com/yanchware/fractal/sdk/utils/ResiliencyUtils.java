@@ -28,7 +28,7 @@ public class ResiliencyUtils {
 
       Retry retry = retryRegistry.retry(requestName);
 
-      CheckedFunction0<Throwable> callToBlueprintsService = Retry.decorateCheckedSupplier(retry, () -> {
+      CheckedFunction0<Throwable> callWithRetry = Retry.decorateCheckedSupplier(retry, () -> {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         if (Arrays.stream(acceptedResponses).noneMatch((x) -> x == response.statusCode())) {
           throw new InstantiatorException(
@@ -42,7 +42,7 @@ public class ResiliencyUtils {
         return null;
       });
 
-      Try<Throwable> result = Try.of(callToBlueprintsService).recover((throwable) -> throwable);
+      Try<Throwable> result = Try.of(callWithRetry).recover((throwable) -> throwable);
 
       if (result.isFailure()) {
         throw new InstantiatorException(
@@ -61,7 +61,7 @@ public class ResiliencyUtils {
 
     Retry retry = retryRegistry.retry(requestName);
 
-    CheckedFunction0<T> callToBlueprintsService = Retry.decorateCheckedSupplier(retry, () -> {
+    CheckedFunction0<T> callWithRetry = Retry.decorateCheckedSupplier(retry, () -> {
       HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
       if (Arrays.stream(acceptedResponses).noneMatch((x) -> x == response.statusCode())) {
         throw new InstantiatorException(
@@ -89,7 +89,7 @@ public class ResiliencyUtils {
 
     });
 
-    Try<T> result = Try.of(callToBlueprintsService).recover((throwable) -> {
+    Try<T> result = Try.of(callWithRetry).recover((throwable) -> {
       log.error("Attempted {} failed all attempts", requestName, throwable);
       return null;
     });
