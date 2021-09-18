@@ -5,6 +5,7 @@ import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands.InstantiateLiveSystemCommandRequest;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.EnvironmentDto;
 import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
+import io.github.resilience4j.retry.RetryRegistry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -26,7 +27,7 @@ public class LiveSystemServiceTest {
         HttpClient httpClient = HttpClient.newBuilder()
           .version(HttpClient.Version.HTTP_2)
           .build();
-        liveSystemService = new LiveSystemService(httpClient, sdkConfiguration);
+        liveSystemService = new LiveSystemService(httpClient, sdkConfiguration, RetryRegistry.ofDefaults());
     }
 
     @Test

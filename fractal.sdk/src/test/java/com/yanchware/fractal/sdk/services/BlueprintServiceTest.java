@@ -6,6 +6,7 @@ import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.commands.CreateBlueprintCommandRequest;
 import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.dtos.BlueprintComponentDto;
 import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
+import io.github.resilience4j.retry.RetryRegistry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,7 @@ public class BlueprintServiceTest {
         HttpClient httpClient = HttpClient.newBuilder()
                 .version(HttpClient.Version.HTTP_2)
                 .build();
-        blueprintService = new BlueprintService(httpClient, sdkConfiguration);
+        blueprintService = new BlueprintService(httpClient, sdkConfiguration, RetryRegistry.ofDefaults());
     }
 
     @Test
