@@ -8,6 +8,10 @@ import com.yanchware.fractal.sdk.services.BlueprintService;
 import com.yanchware.fractal.sdk.services.LiveSystemService;
 import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.commands.CreateBlueprintCommandRequest;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands.InstantiateLiveSystemCommandRequest;
+import io.github.resilience4j.core.IntervalFunction;
+import io.github.resilience4j.retry.Retry;
+import io.github.resilience4j.retry.RetryConfig;
+import io.github.resilience4j.retry.RetryRegistry;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.http.HttpClient;
@@ -35,8 +39,15 @@ public class Automaton {
             instance = new Automaton(HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build(), new EnvVarSdkConfiguration());
         }
 
-        BlueprintService blueprintService = new BlueprintService(httpClient, sdkConfiguration);
-        LiveSystemService liveSystemService = new LiveSystemService(httpClient, sdkConfiguration);
+        // Improve resiliency
+        RetryConfig retryConfig = RetryConfig.custom()
+          .intervalFunction(IntervalFunction.ofExponentialBackoff())
+          .build();
+
+        RetryRegistry registry = RetryRegistry.of(retryConfig);
+
+        BlueprintService blueprintService = new BlueprintService(httpClient, sdkConfiguration, registry);
+        LiveSystemService liveSystemService = new LiveSystemService(httpClient, sdkConfiguration, registry);
 
         for (LiveSystem ls : liveSystems) {
             String fractalId = ls.getResourceGroupId() + "/" + ls.getName() + ":" + "1.0";
