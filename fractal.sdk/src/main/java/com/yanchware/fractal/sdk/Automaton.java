@@ -41,6 +41,7 @@ public class Automaton {
 
         // Improve resiliency
         RetryConfig retryConfig = RetryConfig.custom()
+          .maxAttempts(20)
           .intervalFunction(IntervalFunction.ofExponentialBackoff())
           .build();
 
