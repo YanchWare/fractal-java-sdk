@@ -9,6 +9,7 @@ import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
@@ -76,24 +77,17 @@ public class AzureKubernetesService extends KubernetesCluster {
             return builder;
         }
 
-        public AzureKubernetesServiceBuilder nodePool(AzureNodePool nodePool) {
-            if (component.getNodePools() == null) {
-                component.setNodePools(new ArrayList<>());
-            }
-
-            if (nodePool != null) {
-                component.getNodePools().add(nodePool);
-            }
-            return builder;
+        public AzureKubernetesServiceBuilder withNodePool(AzureNodePool nodePool) {
+            return nodePools(List.of(nodePool));
         }
 
         public AzureKubernetesServiceBuilder nodePools(Collection<? extends AzureNodePool> nodePools) {
-            if (component.getNodePools() == null) {
-                component.setNodePools(new ArrayList<>());
+            if (nodePools == null || nodePools.isEmpty()) {
+                return builder;
             }
 
-            if (nodePools == null) {
-                nodePools = new ArrayList<>();
+            if (component.getNodePools() == null) {
+                component.setNodePools(new ArrayList<>());
             }
 
             component.getNodePools().addAll(nodePools);

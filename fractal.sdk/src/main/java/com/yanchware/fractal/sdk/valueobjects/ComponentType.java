@@ -4,6 +4,8 @@ public enum ComponentType {
     UNKNOWN("Unknown"),
     CONTAINER_PLATFORM("NetworkAndCompute.CaaS.ContainerPlatform"),
     KAFKA("Messaging.CaaS.Broker"),
+    KAFKA_TOPIC("Messaging.CaaS.KafkaTopic"),
+    KAFKA_USER("Messaging.CaaS.KafkaUser"),
     KUBERNETES("NetworkAndCompute.CaaS.Kubernetes"),
     POSTGRESQL("DataStorage.PaaS.PostgreSQL"),
     POSTGRESQLDB("DataStorage.PaaS.PostgreSQLDatabase");

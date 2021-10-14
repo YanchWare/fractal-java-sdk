@@ -7,6 +7,8 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 @Data
 @Builder
 public class AzureNodePool implements Validatable {
@@ -27,7 +29,7 @@ public class AzureNodePool implements Validatable {
     public Collection<String> validate() {
         Collection<String> errors = new ArrayList<>();
 
-        if (name == null || name.isEmpty() || name.isBlank()) {
+        if (isBlank(name)) {
             errors.add(NAME_IS_NULL_OR_EMPTY);
         }
 

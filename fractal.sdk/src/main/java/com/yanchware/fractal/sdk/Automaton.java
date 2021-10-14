@@ -9,7 +9,6 @@ import com.yanchware.fractal.sdk.services.LiveSystemService;
 import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.commands.CreateBlueprintCommandRequest;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands.InstantiateLiveSystemCommandRequest;
 import io.github.resilience4j.core.IntervalFunction;
-import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryConfig;
 import io.github.resilience4j.retry.RetryRegistry;
 import lombok.extern.slf4j.Slf4j;
@@ -55,9 +54,6 @@ public class Automaton {
             log.info("Starting to instantiate live system with id: {}", fractalId);
             var blueprintCommand = CreateBlueprintCommandRequest.fromLiveSystem(ls.getComponents(), "some blueprint description");
             var liveSystemCommand = InstantiateLiveSystemCommandRequest.fromLiveSystem(ls);
-
-            log.debug("BlueprintCmd : {}", blueprintCommand);
-            log.debug("LiveSystemCmd: {}", liveSystemCommand);
 
             blueprintService.createOrUpdateBlueprint(blueprintCommand, fractalId);
             liveSystemService.instantiate(liveSystemCommand);

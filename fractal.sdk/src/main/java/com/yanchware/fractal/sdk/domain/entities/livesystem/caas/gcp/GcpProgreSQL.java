@@ -104,23 +104,23 @@ public class GcpProgreSQL extends PostgreSQL {
             errors.add(REGION_IS_NULL);
         }
 
-        if (StringUtils.isEmpty(network)) {
+        if (StringUtils.isBlank(network)) {
             errors.add(NETWORK_IS_NULL_OR_EMPTY);
         }
 
-        if (peeringNetworkAddress != null && (peeringNetworkAddress.isEmpty() || peeringNetworkAddress.isBlank())) {
+        if (peeringNetworkAddress != null && StringUtils.isBlank(peeringNetworkAddress)) {
             errors.add(PEERING_NETWORK_ADDRESS_IS_EMPTY);
         }
 
-        if (peeringNetworkAddressDescription != null && (peeringNetworkAddressDescription.isEmpty() || peeringNetworkAddressDescription.isBlank())) {
+        if (peeringNetworkAddressDescription != null && StringUtils.isBlank(peeringNetworkAddressDescription)) {
             errors.add(PEERING_NETWORK_ADDRESS_DESCRIPTION_IS_EMPTY);
         }
 
-        if (peeringNetworkName != null && (peeringNetworkName.isEmpty() || peeringNetworkName.isBlank())) {
+        if (peeringNetworkName != null && StringUtils.isBlank(peeringNetworkName)) {
             errors.add(PEERING_NETWORK_NAME_IS_EMPTY);
         }
 
-        if (peeringNetworkPrefix != null && (peeringNetworkPrefix.isEmpty() || peeringNetworkPrefix.isBlank())) {
+        if (peeringNetworkPrefix != null && StringUtils.isBlank(peeringNetworkPrefix)) {
             errors.add(PEERING_NETWORK_PREFIX_IS_EMPTY);
         }
 

@@ -6,6 +6,8 @@ import lombok.Builder;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 @Builder
 public class GcpNodePool implements Validatable {
   private final static String NAME_IS_NULL_OR_EMPTY = "GcpNodePool name has not been defined and it is required";
@@ -22,7 +24,7 @@ public class GcpNodePool implements Validatable {
   public Collection<String> validate() {
     Collection<String> errors = new ArrayList<>();
 
-    if (name == null || name.isEmpty() || name.isBlank()) {
+    if (isBlank(name)) {
       errors.add(NAME_IS_NULL_OR_EMPTY);
     }
 

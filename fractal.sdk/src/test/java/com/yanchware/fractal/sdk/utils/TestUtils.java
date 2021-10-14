@@ -2,11 +2,16 @@ package com.yanchware.fractal.sdk.utils;
 
 import com.yanchware.fractal.sdk.aggregates.Environment;
 import com.yanchware.fractal.sdk.aggregates.LiveSystem;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.KafkaCluster;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.KafkaTopic;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.KafkaUser;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureKubernetesService;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureNodePool;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzurePostgreSQL;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzurePostgreSQLDB;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
+
+import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureMachineType.STANDARD_B2S;
@@ -27,7 +32,7 @@ public class TestUtils {
                 .subNetwork("compute-tier-1")
                 .podsRange("tier-1-pods")
                 .serviceRange("tier-1-services")
-                .nodePool(AzureNodePool.builder().
+                .withNodePool(AzureNodePool.builder().
                         name("aks-node-pool").
                         diskSizeGb(35).
                         machineType(STANDARD_B2S).
@@ -37,6 +42,22 @@ public class TestUtils {
                         maxPodsPerNode(100).
                         osType(LINUX).
                         build())
+                .withKafkaCluster(getKafkaClusterExample())
+                .build();
+    }
+
+    private static KafkaCluster getKafkaClusterExample() {
+        return KafkaCluster.builder()
+                .id(ComponentId.from("azure-kafka"))
+                .description("Kafka for Azure")
+                .displayName("AzureKafka #1")
+                .namespace("namespace")
+                .withKafkaTopics(List.of(
+                        KafkaTopic.builder().id(ComponentId.from("topic")).displayName("kafka-topic").build(),
+                        KafkaTopic.builder().id(ComponentId.from("topic-2")).displayName("kafka-topic-2").build()))
+                .withKafkaUsers(List.of(
+                        KafkaUser.builder().id(ComponentId.from("user-1")).displayName("kafka-user").withTopicReadACL("svcName").build(),
+                        KafkaUser.builder().id(ComponentId.from("user-2")).displayName("kafka-user-2").build()))
                 .build();
     }
 
@@ -51,8 +72,8 @@ public class TestUtils {
                 .storageAutoGrow(ENABLED)
                 .storageMB(5 * 1024)
                 .backupRetentionDays(12)
-                .database(AzurePostgreSQLDB.builder().id(ComponentId.from("db-1")).name("db").build())
-                .database(AzurePostgreSQLDB.builder().id(ComponentId.from("db-2")).name("db2").build())
+                .withDatabase(AzurePostgreSQLDB.builder().id(ComponentId.from("db-1")).displayName("db-1").name("db").build())
+                .withDatabase(AzurePostgreSQLDB.builder().id(ComponentId.from("db-2")).displayName("db-2").name("db2").build())
                 .build();
     }
 
@@ -70,8 +91,8 @@ public class TestUtils {
                 .name("business-platform-test")
                 .description("Business platform")
                 .resourceGroupId("xxx")
-                .component(getAksExample())
-                .component(getAzurePostgresExample())
+                .withComponent(getAksExample())
+                .withComponent(getAzurePostgresExample())
                 .environment(getEnvExample())
                 .build();
     }

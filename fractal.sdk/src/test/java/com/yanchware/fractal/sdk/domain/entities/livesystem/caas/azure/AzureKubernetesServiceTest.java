@@ -23,7 +23,7 @@ public class AzureKubernetesServiceTest {
     public void typeIsKubernetes_when_aksIsBuiltWithoutSpecifyType() {
         var aksBuilder = generateBuilder();
         assertThat(aksBuilder.build().getType()).isEqualTo(KUBERNETES);
-        assertThatCode(() -> aksBuilder.build()).doesNotThrowAnyException();
+        assertThatCode(aksBuilder::build).doesNotThrowAnyException();
     }
 
     @Test
@@ -44,6 +44,6 @@ public class AzureKubernetesServiceTest {
     private AzureKubernetesService.AzureKubernetesServiceBuilder generateBuilder() {
         return AzureKubernetesService.builder()
                 .id(ComponentId.from("test"))
-                .nodePool(AzureNodePool.builder().name("azure-node-pool-name").diskSizeGb(30).build());
+                .withNodePool(AzureNodePool.builder().name("azure-node-pool-name").diskSizeGb(30).build());
     }
 }

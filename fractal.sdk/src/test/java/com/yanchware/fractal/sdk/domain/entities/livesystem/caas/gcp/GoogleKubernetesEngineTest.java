@@ -27,8 +27,8 @@ public class GoogleKubernetesEngineTest {
     @Test
     public void typeIsKubernetes_when_gkeIsBuiltWithoutSpecifyType() {
         var gkeBuilder = generateBuilder();
+        assertThatCode(gkeBuilder::build).doesNotThrowAnyException();
         assertThat(gkeBuilder.build().getType()).isEqualTo(KUBERNETES);
-        assertThatCode(() -> gkeBuilder.build()).doesNotThrowAnyException();
     }
 
     @Test
@@ -42,14 +42,14 @@ public class GoogleKubernetesEngineTest {
     public void exceptionThrown_when_gkeCreatedWithEmptyNodePools() {
         var gke = GoogleKubernetesEngine.builder()
                 .id(ComponentId.from("test"))
-                .nodePools(emptyList());
+                .withNodePools(emptyList());
         assertThatThrownBy(gke::build).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Node pool list is null or empty");
     }
 
     private GoogleKubernetesEngine.GoogleKubernetesEngineBuilder generateBuilder() {
         return GoogleKubernetesEngine.builder()
                 .id(ComponentId.from("test"))
-                .nodePool(GcpNodePool.builder().name("gcp-node-pool-name").build());
+                .withNodePool(GcpNodePool.builder().name("gcp-node-pool-name").build());
     }
 
 }

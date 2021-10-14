@@ -47,7 +47,7 @@ public class LiveSystemTest {
 
     @Test
     public void multipleValidationErrors_when_liveSystemHasNoComponents() {
-        assertThatThrownBy(() -> LiveSystem.builder().component(null).build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Components list is null or empty and at least one component is required");
+        assertThatThrownBy(() -> LiveSystem.builder().withComponent(null).build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Components list is null or empty and at least one component is required");
     }
 
     @Test
@@ -59,9 +59,9 @@ public class LiveSystemTest {
         return LiveSystem.builder()
                 .name("ls")
                 .resourceGroupId("res/group")
-                .component(AzureKubernetesService.builder()
+                .withComponent(AzureKubernetesService.builder()
                         .id(ComponentId.from("aks-1"))
-                        .nodePool(AzureNodePool.builder().
+                        .withNodePool(AzureNodePool.builder().
                                 name("aks-node-pool").
                                 diskSizeGb(35).
                                 build())

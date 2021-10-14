@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import static com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType.GCP;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
@@ -74,24 +75,17 @@ public class GoogleKubernetesEngine extends KubernetesCluster {
             return builder;
         }
 
-        public GoogleKubernetesEngineBuilder nodePool(GcpNodePool nodePool) {
-            if (component.getNodePools() == null) {
-                component.setNodePools(new ArrayList<>());
-            }
-
-            if (nodePool != null) {
-                component.getNodePools().add(nodePool);
-            }
-            return builder;
+        public GoogleKubernetesEngineBuilder withNodePool(GcpNodePool nodePool) {
+            return withNodePools(List.of(nodePool));
         }
 
-        public GoogleKubernetesEngineBuilder nodePools(Collection<? extends GcpNodePool> nodePools) {
-            if (component.getNodePools() == null) {
-                component.setNodePools(new ArrayList<>());
+        public GoogleKubernetesEngineBuilder withNodePools(Collection<? extends GcpNodePool> nodePools) {
+            if (nodePools == null || nodePools.isEmpty()) {
+                return builder;
             }
 
-            if (nodePools == null) {
-                nodePools = new ArrayList<>();
+            if (component.getNodePools() == null) {
+                component.setNodePools(new ArrayList<>());
             }
 
             component.getNodePools().addAll(nodePools);

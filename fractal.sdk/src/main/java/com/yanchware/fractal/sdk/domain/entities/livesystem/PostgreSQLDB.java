@@ -48,7 +48,7 @@ public abstract class PostgreSQLDB extends PaaSPostgreSQLDB implements LiveSyste
     public Collection<String> validate() {
         Collection<String> errors = super.validate();
 
-        if (StringUtils.isEmpty(name) || StringUtils.isBlank(name)) {
+        if (StringUtils.isBlank(name)) {
             errors.add(NAME_IS_NULL_OR_EMPTY);
         }
 

@@ -3,6 +3,7 @@ package com.yanchware.fractal.sdk.utils;
 import com.yanchware.fractal.sdk.domain.entities.Validatable;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.BlueprintComponent;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemComponent;
+import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import lombok.extern.slf4j.Slf4j;
 
@@ -145,6 +146,10 @@ public class ReflectionUtils {
     }
 
     private static void handleParams(LiveSystemComponent component, Map<String, Object> fieldValueMap, Map<String, Object> parametersMap, Field f, String type) throws IllegalAccessException {
+        if (f.getType() == ProviderType.class) {
+            log.debug("Found a provider type: {}, {}", f, component);
+            return;
+        }
         Object componentObject = f.get(component);
         if (componentObject == null) {
             log.debug("Field '{}' of component '{}' is null. Will skipp.", f, component);

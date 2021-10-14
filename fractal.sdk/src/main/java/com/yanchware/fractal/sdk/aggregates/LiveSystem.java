@@ -74,20 +74,20 @@ public class LiveSystem implements Validatable {
             return builder;
         }
 
-        public LiveSystemBuilder components(Collection<? extends LiveSystemComponent> components) {
-            if (liveSystem.getComponents() == null) {
-                liveSystem.setComponents(new ArrayList<>());
+        public LiveSystemBuilder withComponents(Collection<? extends LiveSystemComponent> components) {
+            if (components == null || components.isEmpty()) {
+                return builder;
             }
 
-            if (components == null) {
-                components = new ArrayList<>();
+            if (liveSystem.getComponents() == null) {
+                liveSystem.setComponents(new ArrayList<>());
             }
 
             liveSystem.getComponents().addAll(components);
             return builder;
         }
 
-        public LiveSystemBuilder component(LiveSystemComponent component) {
+        public LiveSystemBuilder withComponent(LiveSystemComponent component) {
             if (liveSystem.getComponents() == null) {
                 liveSystem.setComponents(new ArrayList<>());
             }
@@ -118,7 +118,7 @@ public class LiveSystem implements Validatable {
             errors.add(ID_IS_NULL);
         }
 
-        if (resourceGroupId == null || resourceGroupId.isEmpty() || resourceGroupId.isBlank()) {
+        if (isBlank(resourceGroupId)) {
             errors.add(RESOURCE_GROUP_ID_IS_NULL);
         }
 

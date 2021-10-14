@@ -31,9 +31,9 @@ public class AzurePostgreSQL extends PostgreSQL {
 
     private AzureStorageAutoGrow storageAutoGrow;
 
-    private int storageMB;
+    private Integer storageMB;
 
-    private int backupRetentionDays;
+    private Integer backupRetentionDays;
 
     public static AzurePostgreSQLBuilder builder() {
         return new AzurePostgreSQLBuilder();
@@ -102,11 +102,11 @@ public class AzurePostgreSQL extends PostgreSQL {
             errors.add(REGION_IS_NULL);
         }
 
-        if (storageMB < 5 * 1024) {
+        if (storageMB != null && storageMB < 5 * 1024) {
             errors.add(INVALID_STORAGE_MB);
         }
 
-        if (backupRetentionDays < 7 || backupRetentionDays > 35) {
+        if (backupRetentionDays != null && (backupRetentionDays < 7 || backupRetentionDays > 35)) {
             errors.add(INVALID_BACKUP_RETENTION_DAYS);
         }
 
