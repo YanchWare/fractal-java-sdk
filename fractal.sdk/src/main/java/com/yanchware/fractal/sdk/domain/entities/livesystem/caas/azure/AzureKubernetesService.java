@@ -10,6 +10,7 @@ import lombok.ToString;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
 
 @Getter
@@ -35,7 +36,7 @@ public class AzureKubernetesService extends KubernetesCluster {
 
     @Override
     public ProviderType getProvider() {
-        return ProviderType.Azure;
+        return ProviderType.AZURE;
     }
 
     public static class AzureKubernetesServiceBuilder extends Builder<AzureKubernetesService, AzureKubernetesServiceBuilder> {
@@ -102,6 +103,7 @@ public class AzureKubernetesService extends KubernetesCluster {
         @Override
         public AzureKubernetesService build() {
             component.setType(KUBERNETES);
+            component.setVersion(DEFAULT_VERSION);
             return super.build();
         }
 

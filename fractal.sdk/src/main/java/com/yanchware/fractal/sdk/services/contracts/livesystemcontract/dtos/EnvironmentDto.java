@@ -1,11 +1,13 @@
 package com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos;
 
 import com.yanchware.fractal.sdk.aggregates.Environment;
-import lombok.Builder;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class EnvironmentDto {
     private String id;
     private String displayName;
@@ -13,11 +15,10 @@ public class EnvironmentDto {
     private String parentType;
 
     public static EnvironmentDto fromEnvironment(Environment env) {
-        return EnvironmentDto.builder()
-                .id(env.getId())
-                .displayName(env.getDisplayName())
-                .parentId(env.getParentId())
-                .parentType(env.getParentType())
-                .build();
+        return new EnvironmentDto(
+          env.getId(),
+          env.getDisplayName(),
+          env.getParentId(),
+          env.getParentType());
     }
 }

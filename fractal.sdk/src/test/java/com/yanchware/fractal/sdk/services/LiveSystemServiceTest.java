@@ -25,8 +25,8 @@ public class LiveSystemServiceTest {
     public void setUp() {
         SdkConfiguration sdkConfiguration = new LocalSdkConfiguration();
         HttpClient httpClient = HttpClient.newBuilder()
-          .version(HttpClient.Version.HTTP_2)
-          .build();
+                .version(HttpClient.Version.HTTP_2)
+                .build();
         liveSystemService = new LiveSystemService(httpClient, sdkConfiguration, RetryRegistry.ofDefaults());
     }
 
@@ -34,9 +34,9 @@ public class LiveSystemServiceTest {
     @Disabled
     public void urlPathMatching_when_postRequestToLiveSystem() throws InstantiatorException {
         stubFor(post(urlPathMatching("/livesystem/resource-group/livesystems"))
-          .willReturn(aResponse()
-            .withStatus(200)
-            .withHeader("Content-Type", "application/json")));
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")));
 
         liveSystemService.instantiate(buildLiveSystemCommand());
 
@@ -45,24 +45,21 @@ public class LiveSystemServiceTest {
 
     private InstantiateLiveSystemCommandRequest buildLiveSystemCommand() {
         InstantiateLiveSystemCommandRequest command = InstantiateLiveSystemCommandRequest.builder()
-          .resourceGroupId("resourceGroupId")
-          .liveSystemName("prod")
-          .description("prod")
-          .fractalId("resourceGroupId/fractalName:fractalVersion")
-//               .environmentDto(getEnvironment())
-          .blueprintMap(null)
-          .build();
+                .description("prod")
+                .fractalId("resourceGroupId/fractalName:fractalVersion")
+                .environment(getEnvironment())
+                .blueprintMap(null)
+                .build();
         return command;
     }
 
 
     private EnvironmentDto getEnvironment() {
-        return EnvironmentDto.builder()
-          .id("prod")
-          .parentId("parent-id")
-          .parentType("folder")
-          .displayName("PROD")
-          .build();
+        return new EnvironmentDto(
+                "prod",
+                "parent-id",
+                "folder",
+                "PROD");
     }
 
 }
