@@ -1,5 +1,6 @@
 package com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos;
 
+import com.yanchware.fractal.sdk.domain.entities.ComponentLink;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.services.contracts.ComponentDto;
 import com.yanchware.fractal.sdk.utils.ReflectionUtils;
@@ -12,10 +13,9 @@ import lombok.experimental.SuperBuilder;
 
 import java.util.*;
 
-import static com.yanchware.fractal.sdk.configuration.Constants.LIVESYSTEM_TYPE;
+import static com.yanchware.fractal.sdk.configuration.Constants.*;
 import static com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemComponentStatusDto.Instantiating;
 import static java.util.Collections.emptyMap;
-import static java.util.Collections.emptySet;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -42,14 +42,14 @@ public class LiveSystemComponentDto extends ComponentDto {
 
     private static LiveSystemComponentDto toLiveSystemComponent(LiveSystemComponent component, Map<String, Object> allFields) {
         return LiveSystemComponentDto.builder()
-                .id(((ComponentId) allFields.get("id")).getValue())
-                .displayName(String.valueOf(allFields.get("displayName")))
-                .description(String.valueOf(allFields.get("description")))
+                .id(((ComponentId) allFields.get(ID_KEY)).getValue())
+                .displayName(String.valueOf(allFields.get(DISPLAY_NAME_KEY)))
+                .description(String.valueOf(allFields.get(DESCRIPTION_KEY)))
                 .type(String.valueOf(allFields.get(LIVESYSTEM_TYPE)))
-                .version(String.valueOf(allFields.get("version")))
-                .parameters((Map<String, Object>) allFields.get("parameters"))
-                .dependencies((Set<String>) allFields.get("dependencies"))
-                .links(emptySet())
+                .version(String.valueOf(allFields.get(VERSION_KEY)))
+                .parameters((Map<String, Object>) allFields.get(PARAMETERS_KEY))
+                .dependencies((Set<String>) allFields.get(DEPENDENCIES_KEY))
+                .links((Set<ComponentLink>) allFields.get(LINKS_KEY))
                 .outputFields(emptyMap())
                 .status(Instantiating)
                 .lastUpdated(new Date())

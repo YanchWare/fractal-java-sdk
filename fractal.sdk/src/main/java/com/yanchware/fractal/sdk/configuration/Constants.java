@@ -19,4 +19,18 @@ public class Constants {
     public static final String LIVESYSTEM_TYPE = "liveSystemType";
 
     public static final String DEFAULT_VERSION = "1.0";
+
+    public static final String ID_KEY = "id";
+
+    public static final String DESCRIPTION_KEY = "description";
+
+    public static final String DISPLAY_NAME_KEY = "displayName";
+
+    public static final String VERSION_KEY = "version";
+
+    public static final String PARAMETERS_KEY = "parameters";
+
+    public static final String DEPENDENCIES_KEY = "dependencies";
+
+    public static final String LINKS_KEY = "links";
 }

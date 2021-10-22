@@ -38,6 +38,7 @@ public class BlueprintComponentDtoTest {
                     aks.getNodePools()
             );
             softly.assertThat(blueprintComponentDto.getDependencies()).as("Component Dependencies").isEmpty();
+            softly.assertThat(blueprintComponentDto.getLinks()).as("Component Links").isEmpty();
         });
 
         //assert kafka
@@ -50,6 +51,7 @@ public class BlueprintComponentDtoTest {
                     kafkaComp.getContainerPlatform()
             );
             softly.assertThat(kafkaDto.getDependencies()).as("Component Dependencies").containsExactly(aks.getId().getValue());
+            softly.assertThat(kafkaDto.getLinks()).as("Component Links").isEmpty();
         });
 
         //assert kafka topic#1
@@ -63,6 +65,7 @@ public class BlueprintComponentDtoTest {
                     kafkaTopicComp1.getClusterName()
             );
             softly.assertThat(kafkaTopicDto1.getDependencies()).as("Component Dependencies").containsExactly(kafkaComp.getId().getValue());
+            softly.assertThat(kafkaTopicDto1.getLinks()).as("Component Links").isEmpty();
         });
 
         //assert kafka topic#2
@@ -76,6 +79,7 @@ public class BlueprintComponentDtoTest {
                     kafkaTopicComp2.getClusterName()
             );
             softly.assertThat(kafkaTopicDto2.getDependencies()).as("Component Dependencies").containsExactly(kafkaComp.getId().getValue());
+            softly.assertThat(kafkaTopicDto2.getLinks()).as("Component Links").isEmpty();
         });
 
         //assert kafka user#1
@@ -90,6 +94,7 @@ public class BlueprintComponentDtoTest {
                     kafkaUserComp.getAcls()
             );
             softly.assertThat(kafkaUserDto.getDependencies()).as("Component Dependencies").containsExactly(kafkaComp.getId().getValue());
+            softly.assertThat(kafkaUserDto.getLinks()).as("Component Links").isEmpty();
         });
 
         //assert kafka user#2
@@ -104,6 +109,7 @@ public class BlueprintComponentDtoTest {
                     kafkaUserComp2.getAcls()
             );
             softly.assertThat(kafkaUserDto2.getDependencies()).as("Component Dependencies").containsExactly(kafkaComp.getId().getValue());
+            softly.assertThat(kafkaUserDto2.getLinks()).as("Component Links").isEmpty();
         });
     }
 
@@ -128,6 +134,7 @@ public class BlueprintComponentDtoTest {
                             apg.getBackupRetentionDays()
                     );
             softly.assertThat(azurePgBlueprintCompDto.getDependencies()).as("Component Dependencies").isEmpty();
+            softly.assertThat(azurePgBlueprintCompDto.getLinks()).as("Component Links").isEmpty();
         });
 
         //assert postgres db#1
@@ -137,6 +144,7 @@ public class BlueprintComponentDtoTest {
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(azurePgDbBlueprintCompDto.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(db1.getName());
             softly.assertThat(azurePgDbBlueprintCompDto.getDependencies()).as("Component Dependencies").containsExactly(apg.getId().getValue());
+            softly.assertThat(azurePgDbBlueprintCompDto.getLinks()).as("Component Links").isEmpty();
         });
 
         //assert postgres db#2
@@ -146,6 +154,7 @@ public class BlueprintComponentDtoTest {
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(azurePgDbBlueprintCompDto2.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(db2.getName());
             softly.assertThat(azurePgDbBlueprintCompDto2.getDependencies()).as("Component Dependencies").containsExactly(apg.getId().getValue());
+            softly.assertThat(azurePgDbBlueprintCompDto2.getLinks()).as("Component Links").containsAll(apg.getLinks());
         });
     }
 
@@ -156,7 +165,6 @@ public class BlueprintComponentDtoTest {
             softly.assertThat(componentDto.getDescription()).as("Component Description").contains("Blueprint created via SDK by LiveSystem with ID: ");
             softly.assertThat(componentDto.getType()).as("Component Type").isEqualTo(type);
             softly.assertThat(componentDto.getVersion()).as("Component Version").isEqualTo(DEFAULT_VERSION);
-            softly.assertThat(componentDto.getLinks()).as("Component Links").isEmpty();
             softly.assertThat(componentDto.getOutputFields()).as("Component Output Fields").isEmpty();
         });
     }

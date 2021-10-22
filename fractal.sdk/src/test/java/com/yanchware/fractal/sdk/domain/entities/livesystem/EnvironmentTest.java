@@ -31,10 +31,10 @@ public class EnvironmentTest {
 
     private Environment generateBuilderWithInfo(String id) {
         return Environment.builder()
-                .id(id)
-                .displayName("PROD")
-                .parentId("123456789")
-                .parentType("folder")
+                .withId(id)
+                .withDisplayName("PROD")
+                .withParentId("123456789")
+                .withParentType("folder")
                 .build();
     }
 

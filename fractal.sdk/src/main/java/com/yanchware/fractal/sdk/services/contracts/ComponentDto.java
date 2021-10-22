@@ -1,5 +1,6 @@
 package com.yanchware.fractal.sdk.services.contracts;
 
+import com.yanchware.fractal.sdk.domain.entities.ComponentLink;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -22,5 +23,5 @@ public class ComponentDto {
     private String version;
     private Map<String, Object> parameters;
     private Set<String> dependencies;
-    private Set<String> links;
+    private Set<ComponentLink> links;
 }

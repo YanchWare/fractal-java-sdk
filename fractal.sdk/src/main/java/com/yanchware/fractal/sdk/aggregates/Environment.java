@@ -42,22 +42,22 @@ public class Environment implements Validatable {
             return this;
         }
 
-        public EnvironmentBuilder id(String id) {
+        public EnvironmentBuilder withId(String id) {
             environment.setId(id);
             return builder;
         }
 
-        public EnvironmentBuilder displayName(String displayName) {
+        public EnvironmentBuilder withDisplayName(String displayName) {
             environment.setDisplayName(displayName);
             return builder;
         }
 
-        public EnvironmentBuilder parentId(String parentId) {
+        public EnvironmentBuilder withParentId(String parentId) {
             environment.setParentId(parentId);
             return builder;
         }
 
-        public EnvironmentBuilder parentType(String parentType) {
+        public EnvironmentBuilder withParentType(String parentType) {
             environment.setParentType(parentType);
             return builder;
         }
