@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 @Data
 public class ComponentId {
 
@@ -33,7 +35,7 @@ public class ComponentId {
 
   public static Collection<String> validate(String value) {
     List<String> ret = new ArrayList<>();
-    if (value == null || value.trim().length() == 0) {
+    if (isBlank(value)) {
       ret.add(String.format(ID_NULL_OR_EMPTY_TEMPLATE, value));
       return ret;
     }

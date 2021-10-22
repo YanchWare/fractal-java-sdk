@@ -7,11 +7,13 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 @Data
 @Builder
 public class AzureNodePool implements Validatable {
-    private final static String NAME_IS_NULL_OR_EMPTY = "AzureNodePool name has not been defined and it is required";
-    private final static String DISK_SIZE_UNDER_30GB = "AzureNodePool disk size must be at least 30GB";
+    private final static String NAME_IS_BLANK = "[AzureNodePool Validation] Name has not been defined and it is required";
+    private final static String DISK_SIZE_UNDER_30GB = "[AzureNodePool Validation] Disk size must be at least 30GB";
 
     private int diskSizeGb;
     private int initialNodeCount;
@@ -27,8 +29,8 @@ public class AzureNodePool implements Validatable {
     public Collection<String> validate() {
         Collection<String> errors = new ArrayList<>();
 
-        if (name == null || name.isEmpty() || name.isBlank()) {
-            errors.add(NAME_IS_NULL_OR_EMPTY);
+        if (isBlank(name)) {
+            errors.add(NAME_IS_BLANK);
         }
 
         if (diskSizeGb < 30) {

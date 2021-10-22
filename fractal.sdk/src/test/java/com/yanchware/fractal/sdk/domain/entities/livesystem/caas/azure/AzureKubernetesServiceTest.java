@@ -23,7 +23,7 @@ public class AzureKubernetesServiceTest {
     public void typeIsKubernetes_when_aksIsBuiltWithoutSpecifyType() {
         var aksBuilder = generateBuilder();
         assertThat(aksBuilder.build().getType()).isEqualTo(KUBERNETES);
-        assertThatCode(() -> aksBuilder.build()).doesNotThrowAnyException();
+        assertThatCode(aksBuilder::build).doesNotThrowAnyException();
     }
 
     @Test
@@ -37,13 +37,13 @@ public class AzureKubernetesServiceTest {
     public void exceptionThrown_when_aksCreatedWithEmptyNodePools() {
         var aks = AzureKubernetesService.builder()
                 .id(ComponentId.from("test"))
-                .nodePools(emptyList());
+                .withNodePools(emptyList());
         assertThatThrownBy(aks::build).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Node pool list is null or empty");
     }
 
     private AzureKubernetesService.AzureKubernetesServiceBuilder generateBuilder() {
         return AzureKubernetesService.builder()
                 .id(ComponentId.from("test"))
-                .nodePool(AzureNodePool.builder().name("azure-node-pool-name").diskSizeGb(30).build());
+                .withNodePool(AzureNodePool.builder().name("azure-node-pool-name").diskSizeGb(30).build());
     }
 }

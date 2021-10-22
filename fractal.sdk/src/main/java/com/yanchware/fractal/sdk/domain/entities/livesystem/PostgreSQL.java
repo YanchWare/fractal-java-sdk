@@ -9,7 +9,9 @@ import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
+import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.POSTGRESQL;
 
 @Getter
@@ -26,24 +28,17 @@ public abstract class PostgreSQL extends PaaSPostgreSQL implements LiveSystemCom
 
     public static abstract class Builder<T extends PostgreSQL, B extends Builder<T, B>> extends Component.Builder<T, B> {
 
-        public B database(PostgreSQLDB db) {
-            if (component.getDatabases() == null) {
-                component.setDatabases(new ArrayList<>());
-            }
-
-            if (db != null) {
-                component.getDatabases().add(db);
-            }
-            return builder;
+        public B withDatabase(PostgreSQLDB db) {
+            return withDatabases(List.of(db));
         }
 
-        public B databases(Collection<? extends PostgreSQLDB> dbs) {
-            if (component.getDatabases() == null) {
-                component.setDatabases(new ArrayList<>());
+        public B withDatabases(Collection<? extends PostgreSQLDB> dbs) {
+            if (isBlank(dbs)) {
+                return builder;
             }
 
-            if (dbs == null) {
-                dbs = new ArrayList<>();
+            if (component.getDatabases() == null) {
+                component.setDatabases(new ArrayList<>());
             }
 
             component.getDatabases().addAll(dbs);

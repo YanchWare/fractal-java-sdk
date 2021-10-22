@@ -3,6 +3,7 @@ package com.yanchware.fractal.sdk.utils;
 import com.yanchware.fractal.sdk.domain.entities.Validatable;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.BlueprintComponent;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemComponent;
+import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,9 +47,8 @@ public class ReflectionUtils {
                     if (fieldClazzUnder.isLiveSystemComponent()) {
                         try {
                             Object o = f.get(component);
-                            log.debug("compo: {}", o);
                             if (o == null) {
-                                log.debug("Field '{}' of component '{}' is null. Will skipp.", f, component);
+                                log.debug("Field '{}' of component '{}' is null. Will skipp.", f.getName(), component.getClass().getSimpleName());
                                 continue;
                             }
                             List<LiveSystemComponent> listOfComp = (List<LiveSystemComponent>) o;
@@ -57,7 +57,7 @@ public class ReflectionUtils {
                                 listOfComponentJson.addAll(buildComponents(comp, getIdOfComponent(component)));
                             }
                         } catch (IllegalAccessException e) {
-                            log.error("Error when trying to map field '{}' for class '{}", f, clazz, e);
+                            log.error("Error when trying to map field '{}' for class '{}", f.getName(), clazz.getSimpleName(), e);
                         }
                     }
                 } else {
@@ -66,14 +66,14 @@ public class ReflectionUtils {
                         try {
                             Object o = f.get(component);
                             if (o == null) {
-                                log.debug("Field '{}' of component '{}' is null. Will skipp.", f, component);
+                                log.debug("Field '{}' of component '{}' is null. Will skipp.", f.getName(), component.getClass().getSimpleName());
                                 continue;
                             }
                             LiveSystemComponent comp = (LiveSystemComponent) o;
                             log.debug("Component to map: {}, with SuperComp: {}", comp.getClass().getSimpleName(), component.getClass().getSimpleName());
                             listOfComponentJson.addAll(buildComponents(comp, getIdOfComponent(component)));
                         } catch (IllegalAccessException e) {
-                            log.error("Error when trying to map field '{}' for class '{}", f, clazz, e);
+                            log.error("Error when trying to map field '{}' for class '{}", f.getName(), clazz.getSimpleName(), e);
                         }
                     }
                 }
@@ -88,13 +88,13 @@ public class ReflectionUtils {
         Map<String, Object> parametersMap = new HashMap<>();
         Class<?> clazz = component.getClass();
         while (clazz.getSuperclass() != null) {
-            log.debug("Class under: {}, fields: {}", clazz.getSimpleName(), clazz.getDeclaredFields());
+            log.debug("Mapping class: {}", clazz.getSimpleName());
             var classUnder = determineClassType(clazz);
 
             for (Field f : clazz.getDeclaredFields()) {
                 f.setAccessible(true);
                 if (isFieldTypeComponent(f)) {
-                    log.debug("Field '{}' is a component. Skipped.", f);
+                    log.debug("Field '{}' is a component. Skipped.", f.getName());
                     continue;
                 }
                 try {
@@ -105,7 +105,7 @@ public class ReflectionUtils {
                     } else if (classUnder.isValidatable() && !isFieldPrivateStaticFinal(f)) {
                         Object componentObj = f.get(component);
                         if (componentObj == null) {
-                            log.debug("Field '{}' of component '{}' is null. Will skipp.", f, component);
+                            log.debug("Field '{}' of component '{}' is null. Will skipp.", f.getName(), component.getClass().getSimpleName());
                             continue;
                         }
                         if (componentObj.getClass().isEnum()) {
@@ -118,7 +118,7 @@ public class ReflectionUtils {
                         handleParams(component, fieldValueMap, parametersMap, f, null);
                     }
                 } catch (IllegalAccessException e) {
-                    log.error("Error trying to access field: {}", f, e);
+                    log.error("Error trying to access field: {}", f.getName(), e);
                 }
             }
             clazz = clazz.getSuperclass();
@@ -128,26 +128,32 @@ public class ReflectionUtils {
     }
 
     private static String getIdOfComponent(LiveSystemComponent component) {
+        log.debug("Trying to find ID of component: {}", component.getClass().getSimpleName());
         Class<?> clazz = component.getClass();
         while (clazz.getSuperclass() != null) {
             try {
                 Field idField = clazz.getDeclaredField("id");
                 idField.setAccessible(true);
                 ComponentId id = (ComponentId) idField.get(component);
+                log.debug("Found ID: '{}' for component: '{}'", id.getValue(), component.getClass().getSimpleName());
                 return id.getValue();
-            } catch (Exception e) {
-                log.debug("No id found yet.");
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                log.error("Exception when looking for id: {}", e.getClass());
             }
             clazz = clazz.getSuperclass();
         }
-        log.debug("No ID found in component: {}", component);
+        log.debug("No ID found in component: {}", component.getClass().getSimpleName());
         return null;
     }
 
     private static void handleParams(LiveSystemComponent component, Map<String, Object> fieldValueMap, Map<String, Object> parametersMap, Field f, String type) throws IllegalAccessException {
+        if (f.getType() == ProviderType.class) {
+            log.debug("Found a provider type for component: {}", component.getClass().getSimpleName());
+            return;
+        }
         Object componentObject = f.get(component);
         if (componentObject == null) {
-            log.debug("Field '{}' of component '{}' is null. Will skipp.", f, component);
+            log.debug("Field '{}' of component '{}' is null. Will skipp.", f.getName(), component.getClass().getSimpleName());
             return;
         }
         if (isFieldTypeConstant(f)) {
@@ -155,7 +161,7 @@ public class ReflectionUtils {
             return;
         }
         if (isFieldPrivateStaticFinal(f)) {
-            log.debug("Field '{}' is private-static-final, so will be ignored.", f);
+            log.debug("Field '{}' is private-static-final, so will be ignored.", f.getName());
             return;
         }
         if (componentObject.getClass().isEnum()) {

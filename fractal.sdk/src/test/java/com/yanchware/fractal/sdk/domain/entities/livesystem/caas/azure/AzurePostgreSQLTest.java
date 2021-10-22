@@ -17,33 +17,14 @@ public class AzurePostgreSQLTest {
         var azurePg = AzurePostgreSQL.builder();
         assertThatThrownBy(azurePg::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
                 "Component id has not been defined and it is required",
-                "[AzurePostgreSQL Validation] Region has not been defined and it is required",
-                "[AzurePostgreSQL Validation] Storage MB is less than minimum requirement of 5 GB",
-                "[AzurePostgreSQL Validation] Backup Retention Days must be between 7 and 35 days");
+                "[AzurePostgreSQL Validation] Region has not been defined and it is required");
     }
 
     @Test
     public void exceptionThrown_when_azurePgCreatedWithJustId() {
         var azurePg = AzurePostgreSQL.builder().id(ComponentId.from("azure-pg"));
         assertThatThrownBy(azurePg::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
-                "[AzurePostgreSQL Validation] Region has not been defined and it is required",
-                "[AzurePostgreSQL Validation] Storage MB is less than minimum requirement of 5 GB",
-                "[AzurePostgreSQL Validation] Backup Retention Days must be between 7 and 35 days");
-    }
-
-    @Test
-    public void exceptionThrown_when_azurePgCreatedWithJustIdAndRegion() {
-        var azurePg = AzurePostgreSQL.builder().id(ComponentId.from("azure-pg")).region(EUROPE_WEST);
-        assertThatThrownBy(azurePg::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
-                "[AzurePostgreSQL Validation] Storage MB is less than minimum requirement of 5 GB",
-                "[AzurePostgreSQL Validation] Backup Retention Days must be between 7 and 35 days");
-    }
-
-    @Test
-    public void exceptionThrown_when_azurePgCreatedWithIdAndRegionAndStorageMb() {
-        var azurePg = AzurePostgreSQL.builder().id(ComponentId.from("azure-pg")).region(EUROPE_WEST).storageMB(1234);
-        assertThatThrownBy(azurePg::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
-                "[AzurePostgreSQL Validation] Backup Retention Days must be between 7 and 35 days");
+                "[AzurePostgreSQL Validation] Region has not been defined and it is required");
     }
 
     @Test
@@ -69,6 +50,12 @@ public class AzurePostgreSQLTest {
     }
 
     @Test
+    public void propertiesAreSet_when_azurePgCreatedWithJustIdAndRegion() {
+        var azurePg = AzurePostgreSQL.builder().id(ComponentId.from("azure-pg")).region(EUROPE_WEST);
+        assertThat(azurePg.build().validate()).isEmpty();
+    }
+
+    @Test
     public void propertiesAreSet_when_azurePostgresIsCreated() {
         var azurePgBuilder = AzurePostgreSQL.builder()
                 .id(ComponentId.from("azure-psg"))
@@ -78,7 +65,7 @@ public class AzurePostgreSQLTest {
                 .storageAutoGrow(ENABLED)
                 .storageMB(5 * 1024)
                 .backupRetentionDays(12)
-                .database(AzurePostgreSQLDB.builder().id(ComponentId.from("db-1")).name("db").build());
+                .withDatabase(AzurePostgreSQLDB.builder().id(ComponentId.from("db-1")).name("db").build());
         assertThat(azurePgBuilder.build())
                 .returns(POSTGRESQL, from(AzurePostgreSQL::getType))
                 .returns(AZURE, from(AzurePostgreSQL::getProvider))

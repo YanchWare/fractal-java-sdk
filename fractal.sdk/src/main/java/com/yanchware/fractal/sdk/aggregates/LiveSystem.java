@@ -6,11 +6,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
 
+import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Getter
@@ -74,27 +72,21 @@ public class LiveSystem implements Validatable {
             return builder;
         }
 
-        public LiveSystemBuilder components(Collection<? extends LiveSystemComponent> components) {
-            if (liveSystem.getComponents() == null) {
-                liveSystem.setComponents(new ArrayList<>());
+        public LiveSystemBuilder withComponents(Collection<? extends LiveSystemComponent> components) {
+            if (isBlank(components)) {
+                return builder;
             }
 
-            if (components == null) {
-                components = new ArrayList<>();
+            if (liveSystem.getComponents() == null) {
+                liveSystem.setComponents(new ArrayList<>());
             }
 
             liveSystem.getComponents().addAll(components);
             return builder;
         }
 
-        public LiveSystemBuilder component(LiveSystemComponent component) {
-            if (liveSystem.getComponents() == null) {
-                liveSystem.setComponents(new ArrayList<>());
-            }
-            if (component != null) {
-                liveSystem.getComponents().add(component);
-            }
-            return builder;
+        public LiveSystemBuilder withComponent(LiveSystemComponent component) {
+            return withComponents(List.of(component));
         }
 
         public LiveSystem build() {
@@ -118,7 +110,7 @@ public class LiveSystem implements Validatable {
             errors.add(ID_IS_NULL);
         }
 
-        if (resourceGroupId == null || resourceGroupId.isEmpty() || resourceGroupId.isBlank()) {
+        if (isBlank(resourceGroupId)) {
             errors.add(RESOURCE_GROUP_ID_IS_NULL);
         }
 

@@ -6,18 +6,18 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collection;
 
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.POSTGRESQLDB;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Getter
 @Setter(AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 public abstract class PostgreSQLDB extends PaaSPostgreSQLDB implements LiveSystemComponent {
     public static final String TYPE = POSTGRESQLDB.getId();
-    private final static String NAME_IS_NULL_OR_EMPTY = "PostgreSQLDB name has not been defined and it is required";
+    private final static String NAME_IS_BLANK = "PostgreSQLDB name has not been defined and it is required";
 
     private String name;
     private PostgreSQLCharset charset;
@@ -48,8 +48,8 @@ public abstract class PostgreSQLDB extends PaaSPostgreSQLDB implements LiveSyste
     public Collection<String> validate() {
         Collection<String> errors = super.validate();
 
-        if (StringUtils.isEmpty(name) || StringUtils.isBlank(name)) {
-            errors.add(NAME_IS_NULL_OR_EMPTY);
+        if (isBlank(name)) {
+            errors.add(NAME_IS_BLANK);
         }
 
         return errors;

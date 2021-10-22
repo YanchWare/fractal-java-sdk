@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
 @Getter
 @Setter(AccessLevel.PRIVATE)
 public class Environment implements Validatable {
@@ -77,7 +79,7 @@ public class Environment implements Validatable {
     public Collection<String> validate() {
         Collection<String> errors = new ArrayList<>();
 
-        if (id == null || id.isEmpty() || id.isBlank()) {
+        if (isBlank(id)) {
             errors.add(ID_IS_NULL);
         }
         return errors;
