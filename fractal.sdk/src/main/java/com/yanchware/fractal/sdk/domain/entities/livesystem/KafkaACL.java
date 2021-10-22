@@ -7,5 +7,5 @@ import lombok.Data;
 @Builder
 public class KafkaACL {
     private KafkaResource resource;
-    private String operation;
+    private ACLOperation operation;
 }

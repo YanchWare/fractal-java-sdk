@@ -6,13 +6,15 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.ACLOperation.READ;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.KafkaACLType.TOPIC;
+import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KAFKA_USER;
 
 @Getter
@@ -41,34 +43,12 @@ public class KafkaUser extends CaaSKafkaUser implements LiveSystemComponent {
 
     public static class KafkaUserBuilder extends Builder<KafkaUser, KafkaUserBuilder> {
 
-        //TODO if we agree/enforce these to be passed from KafkaCluster, I would remove them.
-        public KafkaUserBuilder containerPlatform(String containerPlatform) {
-            component.setContainerPlatform(containerPlatform);
-            return builder;
+        public KafkaUserBuilder withAcl(KafkaACL acl) {
+            return withAcls(List.of(acl));
         }
 
-        public KafkaUserBuilder namespace(String namespace) {
-            component.setNamespace(namespace);
-            return builder;
-        }
-
-        public KafkaUserBuilder clusterName(String clusterName) {
-            component.setClusterName(clusterName);
-            return builder;
-        }
-
-        public KafkaUserBuilder acl(KafkaACL acl) {
-            if (component.getAcls() == null) {
-                component.setAcls(new ArrayList<>());
-            }
-            if (acl != null) {
-                component.getAcls().add(acl);
-            }
-            return builder;
-        }
-
-        public KafkaUserBuilder acls(List<KafkaACL> acls) {
-            if (acls == null || acls.isEmpty()) {
+        public KafkaUserBuilder withAcls(List<KafkaACL> acls) {
+            if (isBlank(acls)) {
                 return builder;
             }
 
@@ -81,18 +61,12 @@ public class KafkaUser extends CaaSKafkaUser implements LiveSystemComponent {
         }
 
         public KafkaUserBuilder withTopicReadACL(String serviceName) {
-            if (component.getAcls() == null) {
-                component.setAcls(new ArrayList<>());
-            }
-            if (!StringUtils.isBlank(serviceName)) {
-                component.getAcls().add(KafkaACL.builder().
-                        resource(KafkaResource.builder().
-                                type("topic").
-                                name(serviceName).
-                                patternType("literal").build()).
-                        operation("read").build());
-            }
-            return builder;
+            return withAcl(KafkaACL.builder().
+                    resource(KafkaResource.builder().
+                            type(TOPIC).
+                            name(serviceName).
+                            patternType(KafkaACLPatternType.LITERAL).build()).
+                    operation(READ).build());
         }
 
         @Override

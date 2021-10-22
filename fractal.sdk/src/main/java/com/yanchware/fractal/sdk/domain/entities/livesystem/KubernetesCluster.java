@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
 
 @Getter
@@ -36,7 +37,7 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
         }
 
         public B withServices(Collection<? extends CaaSService> services) {
-            if (services == null || services.isEmpty()) {
+            if (isBlank(services)) {
                 return builder;
             }
 
@@ -53,7 +54,7 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
         }
 
         public B withKafkaClusters(Collection<? extends KafkaCluster> kafkaClusters) {
-            if (kafkaClusters == null || kafkaClusters.isEmpty()) {
+            if (isBlank(kafkaClusters)) {
                 return builder;
             }
 

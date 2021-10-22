@@ -47,7 +47,7 @@ public class LiveSystemTest {
 
     @Test
     public void multipleValidationErrors_when_liveSystemHasNoComponents() {
-        assertThatThrownBy(() -> LiveSystem.builder().withComponent(null).build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Components list is null or empty and at least one component is required");
+        assertThatThrownBy(() -> LiveSystem.builder().build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Components list is null or empty and at least one component is required");
     }
 
     @Test

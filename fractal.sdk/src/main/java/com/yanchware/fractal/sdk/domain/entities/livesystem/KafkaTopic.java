@@ -32,22 +32,6 @@ public class KafkaTopic extends CaaSKafkaTopic implements LiveSystemComponent {
 
     public static class KafkaTopicBuilder extends Component.Builder<KafkaTopic, KafkaTopicBuilder> {
 
-        //TODO if we agree/enforce these to be passed from KafkaCluster, I would remove them.
-        public KafkaTopicBuilder containerPlatform(String containerPlatform) {
-            component.setContainerPlatform(containerPlatform);
-            return builder;
-        }
-
-        public KafkaTopicBuilder namespace(String namespace) {
-            component.setNamespace(namespace);
-            return builder;
-        }
-
-        public KafkaTopicBuilder clusterName(String clusterName) {
-            component.setClusterName(clusterName);
-            return builder;
-        }
-
         @Override
         protected KafkaTopic createComponent() {
             return new KafkaTopic();

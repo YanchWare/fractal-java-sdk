@@ -37,7 +37,7 @@ public class AzureKubernetesServiceTest {
     public void exceptionThrown_when_aksCreatedWithEmptyNodePools() {
         var aks = AzureKubernetesService.builder()
                 .id(ComponentId.from("test"))
-                .nodePools(emptyList());
+                .withNodePools(emptyList());
         assertThatThrownBy(aks::build).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Node pool list is null or empty");
     }
 

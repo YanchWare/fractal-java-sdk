@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.POSTGRESQL;
 
 @Getter
@@ -32,7 +33,7 @@ public abstract class PostgreSQL extends PaaSPostgreSQL implements LiveSystemCom
         }
 
         public B withDatabases(Collection<? extends PostgreSQLDB> dbs) {
-            if (dbs == null || dbs.isEmpty()) {
+            if (isBlank(dbs)) {
                 return builder;
             }
 

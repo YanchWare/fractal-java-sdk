@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType.GCP;
+import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
 
 @Getter
@@ -80,7 +81,7 @@ public class GoogleKubernetesEngine extends KubernetesCluster {
         }
 
         public GoogleKubernetesEngineBuilder withNodePools(Collection<? extends GcpNodePool> nodePools) {
-            if (nodePools == null || nodePools.isEmpty()) {
+            if (isBlank(nodePools)) {
                 return builder;
             }
 
@@ -103,7 +104,7 @@ public class GoogleKubernetesEngine extends KubernetesCluster {
     @Override
     public Collection<String> validate() {
         Collection<String> errors = super.validate();
-        if (nodePools == null || nodePools.isEmpty()) {
+        if (isBlank(nodePools)) {
             errors.add(EMPTY_NODE_POOL);
         }
 

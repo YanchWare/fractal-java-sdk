@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class KafkaResource {
-    private String type;
+    private KafkaACLType type;
     private String name;
-    private String patternType;
+    private KafkaACLPatternType patternType;
 }

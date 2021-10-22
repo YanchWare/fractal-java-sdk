@@ -75,10 +75,10 @@ class KafkaClusterTest {
                 .returns(1, from(x -> x.getAcls().size()));
 
         assertThat(kafkaUser.getAcls().stream().findFirst().get())
-                .returns("read", from(KafkaACL::getOperation))
+                .returns("read", from(x -> x.getOperation().getId()))
                 .returns("svcName", from(x -> x.getResource().getName()))
-                .returns("topic", from(x -> x.getResource().getType()))
-                .returns("literal", from(x -> x.getResource().getPatternType()));
+                .returns("topic", from(x -> x.getResource().getType().getId()))
+                .returns("literal", from(x -> x.getResource().getPatternType().getId()));
 
         assertThat(kafkaCluster.getKafkaTopics().stream().findFirst().get())
                 .returns("topic", from(x -> x.getId().getValue()))

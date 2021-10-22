@@ -6,12 +6,12 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collection;
 
 import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.POSTGRESQL;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
@@ -104,23 +104,23 @@ public class GcpProgreSQL extends PostgreSQL {
             errors.add(REGION_IS_NULL);
         }
 
-        if (StringUtils.isBlank(network)) {
+        if (isBlank(network)) {
             errors.add(NETWORK_IS_NULL_OR_EMPTY);
         }
 
-        if (peeringNetworkAddress != null && StringUtils.isBlank(peeringNetworkAddress)) {
+        if (peeringNetworkAddress != null && isBlank(peeringNetworkAddress)) {
             errors.add(PEERING_NETWORK_ADDRESS_IS_EMPTY);
         }
 
-        if (peeringNetworkAddressDescription != null && StringUtils.isBlank(peeringNetworkAddressDescription)) {
+        if (peeringNetworkAddressDescription != null && isBlank(peeringNetworkAddressDescription)) {
             errors.add(PEERING_NETWORK_ADDRESS_DESCRIPTION_IS_EMPTY);
         }
 
-        if (peeringNetworkName != null && StringUtils.isBlank(peeringNetworkName)) {
+        if (peeringNetworkName != null && isBlank(peeringNetworkName)) {
             errors.add(PEERING_NETWORK_NAME_IS_EMPTY);
         }
 
-        if (peeringNetworkPrefix != null && StringUtils.isBlank(peeringNetworkPrefix)) {
+        if (peeringNetworkPrefix != null && isBlank(peeringNetworkPrefix)) {
             errors.add(PEERING_NETWORK_PREFIX_IS_EMPTY);
         }
 

@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
+import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
 
 @Getter
@@ -78,11 +79,11 @@ public class AzureKubernetesService extends KubernetesCluster {
         }
 
         public AzureKubernetesServiceBuilder withNodePool(AzureNodePool nodePool) {
-            return nodePools(List.of(nodePool));
+            return withNodePools(List.of(nodePool));
         }
 
-        public AzureKubernetesServiceBuilder nodePools(Collection<? extends AzureNodePool> nodePools) {
-            if (nodePools == null || nodePools.isEmpty()) {
+        public AzureKubernetesServiceBuilder withNodePools(Collection<? extends AzureNodePool> nodePools) {
+            if (isBlank(nodePools)) {
                 return builder;
             }
 

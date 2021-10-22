@@ -4,11 +4,12 @@ import com.yanchware.fractal.sdk.domain.entities.Validatable;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
@@ -78,7 +79,7 @@ public class Environment implements Validatable {
     public Collection<String> validate() {
         Collection<String> errors = new ArrayList<>();
 
-        if (StringUtils.isBlank(id)) {
+        if (isBlank(id)) {
             errors.add(ID_IS_NULL);
         }
         return errors;

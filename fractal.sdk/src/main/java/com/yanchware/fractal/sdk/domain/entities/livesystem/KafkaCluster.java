@@ -12,6 +12,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
+import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KAFKA;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -70,7 +71,7 @@ public class KafkaCluster extends CaaSKafka implements LiveSystemComponent {
         }
 
         public KafkaClusterBuilder withKafkaTopics(List<KafkaTopic> topics) {
-            if (topics == null || topics.isEmpty()) {
+            if (isBlank(topics)) {
                 return builder;
             }
 
@@ -88,7 +89,7 @@ public class KafkaCluster extends CaaSKafka implements LiveSystemComponent {
         }
 
         public KafkaClusterBuilder withKafkaUsers(List<KafkaUser> users) {
-            if (users == null || users.isEmpty()) {
+            if (isBlank(users)) {
                 return builder;
             }
 

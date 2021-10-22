@@ -6,11 +6,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Date;
+import java.util.*;
 
+import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Getter
@@ -75,7 +73,7 @@ public class LiveSystem implements Validatable {
         }
 
         public LiveSystemBuilder withComponents(Collection<? extends LiveSystemComponent> components) {
-            if (components == null || components.isEmpty()) {
+            if (isBlank(components)) {
                 return builder;
             }
 
@@ -88,13 +86,7 @@ public class LiveSystem implements Validatable {
         }
 
         public LiveSystemBuilder withComponent(LiveSystemComponent component) {
-            if (liveSystem.getComponents() == null) {
-                liveSystem.setComponents(new ArrayList<>());
-            }
-            if (component != null) {
-                liveSystem.getComponents().add(component);
-            }
-            return builder;
+            return withComponents(List.of(component));
         }
 
         public LiveSystem build() {
