@@ -1,7 +1,6 @@
 package com.yanchware.fractal.sdk.services.contracts.blueprintcontract.dtos;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yanchware.fractal.sdk.domain.entities.ComponentLink;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.services.contracts.ComponentDto;
 import com.yanchware.fractal.sdk.utils.ReflectionUtils;
@@ -15,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 
-import static com.yanchware.fractal.sdk.configuration.Constants.BLUEPRINT_TYPE;
+import static com.yanchware.fractal.sdk.configuration.Constants.*;
 import static java.util.Collections.emptySet;
 
 @Data
@@ -36,26 +35,20 @@ public class BlueprintComponentDto extends ComponentDto {
                 blueprintComponentDtoList.add(componentDto);
             }
         }
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            log.debug("Json Map: {}", mapper.writerWithDefaultPrettyPrinter().writeValueAsString(blueprintComponentDtoList));
-        } catch (JsonProcessingException e) {
-            log.error("Error when trying to process component: {}", lsComponents, e);
-        }
         return blueprintComponentDtoList;
     }
 
     private static BlueprintComponentDto toBlueprintComponentDto(Map<String, Object> allFields) {
-        String liveSystemId = ((ComponentId) allFields.get("id")).getValue();
+        String liveSystemId = ((ComponentId) allFields.get(ID_KEY)).getValue();
         return BlueprintComponentDto.builder()
                 .id(liveSystemId)
-                .displayName(String.valueOf(allFields.get("displayName")))
+                .displayName(String.valueOf(allFields.get(DISPLAY_NAME_KEY)))
                 .description(String.format("Blueprint created via SDK by LiveSystem with ID: %s", liveSystemId))
                 .type(String.valueOf(allFields.get(BLUEPRINT_TYPE)))
-                .version(String.valueOf(allFields.get("version")))
-                .parameters((Map<String, Object>) allFields.get("parameters"))
-                .dependencies((Set<String>) allFields.get("dependencies"))
-                .links((Set<String>) allFields.get("links"))
+                .version(String.valueOf(allFields.get(VERSION_KEY)))
+                .parameters((Map<String, Object>) allFields.get(PARAMETERS_KEY))
+                .dependencies((Set<String>) allFields.get(DEPENDENCIES_KEY))
+                .links((Set<ComponentLink>) allFields.get(LINKS_KEY))
                 .outputFields(emptySet())
                 .build();
     }

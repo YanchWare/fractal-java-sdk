@@ -28,7 +28,7 @@ public class ReflectionUtils {
     private static List<Map<String, Object>> buildComponents(LiveSystemComponent component, String dependencyId) {
         List<Map<String, Object>> listOfComponentJson = new ArrayList<>();
         Map<String, Object> allFields = getAllFields(component);
-        if(dependencyId != null) {
+        if (dependencyId != null) {
             allFields.put("dependencies", Set.of(dependencyId));
         }
         listOfComponentJson.add(allFields);

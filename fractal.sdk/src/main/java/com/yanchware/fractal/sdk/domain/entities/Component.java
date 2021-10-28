@@ -21,7 +21,7 @@ public abstract class Component implements Validatable {
   private ComponentId id;
   private String version;
   private Set<ComponentId> dependencies;
-  private Set<ComponentId> links;
+  private Set<ComponentLink> links;
   private String description;
 
   protected Component() {
@@ -71,7 +71,7 @@ public abstract class Component implements Validatable {
       return builder;
     }
 
-    public B dependencies(Collection<? extends ComponentId> dependencies) {
+    public B withDependencies(Collection<? extends ComponentId> dependencies) {
       if(component.getDependencies() == null) {
         component.setDependencies(new HashSet<>());
       }
@@ -81,15 +81,11 @@ public abstract class Component implements Validatable {
       return builder;
     }
 
-    public B dependency(ComponentId dependency) {
-      if(component.getDependencies() == null) {
-        component.setDependencies(new HashSet<>());
-      }
-      component.getDependencies().add(dependency);
-      return builder;
+    public B withDependency(ComponentId dependency) {
+      return withDependencies(Set.of(dependency));
     }
 
-    public B links(Collection<? extends ComponentId> links) {
+    public B withLinks(Collection<? extends ComponentLink> links) {
       if(component.getLinks() == null) {
         component.setLinks(new HashSet<>());
       }
@@ -99,12 +95,8 @@ public abstract class Component implements Validatable {
       return builder;
     }
 
-    public B link(ComponentId link) {
-      if(component.getLinks() == null) {
-        component.setLinks(new HashSet<>());
-      }
-      component.getLinks().add(link);
-      return builder;
+    public B withLink(ComponentLink link) {
+      return withLinks(Set.of(link));
     }
 
     public B description(String description) {
