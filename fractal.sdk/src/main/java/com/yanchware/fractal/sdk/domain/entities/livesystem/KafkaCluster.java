@@ -56,12 +56,12 @@ public class KafkaCluster extends CaaSKafka implements LiveSystemComponent {
             return this;
         }
 
-        public KafkaClusterBuilder namespace(String namespace) {
+        public KafkaClusterBuilder withNamespace(String namespace) {
             component.setNamespace(namespace);
             return builder;
         }
 
-        public KafkaClusterBuilder containerPlatform(String containerPlatform) {
+        public KafkaClusterBuilder withContainerPlatform(String containerPlatform) {
             component.setContainerPlatform(containerPlatform);
             return builder;
         }
@@ -129,6 +129,7 @@ public class KafkaCluster extends CaaSKafka implements LiveSystemComponent {
         user.setClusterName(cluster.getId().getValue());
         user.setNamespace(cluster.getNamespace());
         user.setProvider(cluster.getProvider());
+        user.getDependencies().add(cluster.getId());
     }
 
     private static void extractTopicInfo(KafkaTopic topic, KafkaCluster cluster) {
@@ -136,5 +137,6 @@ public class KafkaCluster extends CaaSKafka implements LiveSystemComponent {
         topic.setClusterName(cluster.getId().getValue());
         topic.setNamespace(cluster.getNamespace());
         topic.setProvider(cluster.getProvider());
+        topic.getDependencies().add(cluster.getId());
     }
 }

@@ -15,6 +15,6 @@ public class CreateBlueprintCommandRequestTest {
         CreateBlueprintCommandRequest commandRequest = CreateBlueprintCommandRequest.fromLiveSystem(ls.getComponents(), blueprintDescription);
         assertThat(commandRequest.getDescription()).isEqualTo(blueprintDescription);
         assertThat(commandRequest.isPrivate()).isTrue();
-        assertThat(commandRequest.getComponents()).hasSize(9);
+        assertThat(commandRequest.getComponents()).hasSize(10);
     }
 }

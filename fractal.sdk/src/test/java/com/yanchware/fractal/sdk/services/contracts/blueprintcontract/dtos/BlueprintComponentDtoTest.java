@@ -1,12 +1,10 @@
 package com.yanchware.fractal.sdk.services.contracts.blueprintcontract.dtos;
 
 import com.yanchware.fractal.sdk.domain.entities.Component;
-import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSContainerPlatform;
-import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSKafka;
-import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSKafkaTopic;
-import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSKafkaUser;
+import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.*;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSPostgreSQL;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSPostgreSQLDB;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.Prometheus;
 import com.yanchware.fractal.sdk.utils.TestUtils;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
@@ -23,7 +21,7 @@ public class BlueprintComponentDtoTest {
         var aks = TestUtils.getAksExample();
         var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(aks));
 
-        assertThat(blueprintComponentDtoList).hasSize(6);
+        assertThat(blueprintComponentDtoList).hasSize(7);
 
         //assert aks
         var blueprintComponentDto = blueprintComponentDtoList.get(0);
@@ -98,8 +96,8 @@ public class BlueprintComponentDtoTest {
         });
 
         //assert kafka user#2
-        var kafkaUserDto2 = blueprintComponentDtoList.get(4);
-        var kafkaUserComp2 = kafkaComp.getKafkaUsers().stream().filter(x -> x.getId().getValue().equals(kafkaUserDto.getId())).findFirst().get();
+        var kafkaUserDto2 = blueprintComponentDtoList.get(5);
+        var kafkaUserComp2 = kafkaComp.getKafkaUsers().stream().filter(x -> x.getId().getValue().equals(kafkaUserDto2.getId())).findFirst().get();
         assertGenericBlueprintComponent(kafkaUserDto2, kafkaUserComp2, CaaSKafkaUser.TYPE);
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(kafkaUserDto2.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(
@@ -110,6 +108,19 @@ public class BlueprintComponentDtoTest {
             );
             softly.assertThat(kafkaUserDto2.getDependencies()).as("Component Dependencies").containsExactly(kafkaComp.getId().getValue());
             softly.assertThat(kafkaUserDto2.getLinks()).as("Component Links").isEmpty();
+        });
+
+        //assert prometheus
+        var prometheusDto = blueprintComponentDtoList.get(6);
+        Prometheus prometheusInstance = aks.getPrometheusInstances().get(0);
+        assertGenericBlueprintComponent(prometheusDto, prometheusInstance, CaaSPrometheus.TYPE);
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(prometheusDto.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(
+                    prometheusInstance.getNamespace(),
+                    prometheusInstance.getContainerPlatform()
+            );
+            softly.assertThat(prometheusDto.getDependencies()).as("Component Dependencies").containsExactly(aks.getId().getValue());
+            softly.assertThat(prometheusDto.getLinks()).as("Component Links").isEmpty();
         });
     }
 

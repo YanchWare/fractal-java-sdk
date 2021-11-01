@@ -3,6 +3,7 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem;
 import com.yanchware.fractal.sdk.domain.entities.Component;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSContainerPlatform;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSKafka;
+import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSPrometheus;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSService;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -23,11 +24,13 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
     public static final String TYPE = KUBERNETES.getId();
     private List<CaaSService> services;
     private List<KafkaCluster> kafkaClusters;
+    private List<Prometheus> prometheusInstances;
 
     public KubernetesCluster() {
         super();
         services = new ArrayList<>();
         kafkaClusters = new ArrayList<>();
+        prometheusInstances = new ArrayList<>();
     }
 
     public static abstract class Builder<T extends KubernetesCluster, B extends Builder<T, B>> extends Component.Builder<T, B> {
@@ -73,8 +76,31 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
                     topic.setContainerPlatform(component.getId().getValue());
                     topic.setProvider(component.getProvider());
                 });
+                cluster.getDependencies().add(component.getId());
             });
             component.getKafkaClusters().addAll(kafkaClusters);
+            return builder;
+        }
+
+        public B withPrometheus(Prometheus prometheus) {
+            return withPrometheusInstances(List.of(prometheus));
+        }
+
+        public B withPrometheusInstances(Collection<? extends Prometheus> prometheusInstances) {
+            if (isBlank(prometheusInstances)) {
+                return builder;
+            }
+
+            if (component.getPrometheusInstances() == null) {
+                component.setPrometheusInstances(new ArrayList<>());
+            }
+
+            prometheusInstances.forEach(prometheus -> {
+                prometheus.setProvider(component.getProvider());
+                prometheus.setContainerPlatform(component.getId().getValue());
+                prometheus.getDependencies().add(component.getId());
+            });
+            component.getPrometheusInstances().addAll(prometheusInstances);
             return builder;
         }
 
@@ -88,6 +114,9 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
                 .forEach(errors::addAll);
         kafkaClusters.stream()
                 .map(CaaSKafka::validate)
+                .forEach(errors::addAll);
+        prometheusInstances.stream()
+                .map(CaaSPrometheus::validate)
                 .forEach(errors::addAll);
         return errors;
     }

@@ -24,7 +24,7 @@ class KafkaClusterTest {
         var kafkaBuilder = KafkaCluster.builder()
                 .description("Kafka for Azure")
                 .displayName("AzureKafka #1")
-                .namespace("namespace");
+                .withNamespace("namespace");
         assertThatThrownBy(kafkaBuilder::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
                 "Component id has not been defined and it is required");
     }
@@ -35,8 +35,8 @@ class KafkaClusterTest {
                 .id(ComponentId.from("azure-kafka"))
                 .description("Kafka for Azure")
                 .displayName("AzureKafka #1")
-                .namespace("namespace")
-                .containerPlatform("");
+                .withNamespace("namespace")
+                .withContainerPlatform("");
         assertThatThrownBy(kafkaBuilder::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
                 "[KafkaCluster Validation] ContainerPlatform defined was either empty or blank and it is required");
     }
@@ -47,8 +47,8 @@ class KafkaClusterTest {
                 .id(ComponentId.from("azure-kafka"))
                 .description("Kafka for Azure")
                 .displayName("AzureKafka #1")
-                .namespace("namespace")
-                .containerPlatform("containerPlatform")
+                .withNamespace("namespace")
+                .withContainerPlatform("containerPlatform")
                 .withKafkaTopics(List.of(
                         KafkaTopic.builder().id(ComponentId.from("topic")).displayName("kafka-topic").build()))
                 .withKafkaUsers(List.of(

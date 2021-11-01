@@ -10,7 +10,7 @@ class InstantiateLiveSystemCommandRequestTest {
     @Test
     public void instantiateLiveSystemCommandRequestValid_when_liveSystemValid() {
         var instantiateLiveSystemCommandRequest = InstantiateLiveSystemCommandRequest.fromLiveSystem(getLiveSystemExample());
-        assertThat(instantiateLiveSystemCommandRequest.getBlueprintMap()).hasSize(9);
+        assertThat(instantiateLiveSystemCommandRequest.getBlueprintMap()).hasSize(10);
     }
 
 }

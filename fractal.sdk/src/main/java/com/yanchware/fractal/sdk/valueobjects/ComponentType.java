@@ -8,7 +8,8 @@ public enum ComponentType {
     KAFKA_USER("Messaging.CaaS.KafkaUser"),
     KUBERNETES("NetworkAndCompute.CaaS.Kubernetes"),
     POSTGRESQL("DataStorage.PaaS.PostgreSQL"),
-    POSTGRESQLDB("DataStorage.PaaS.PostgreSQLDatabase");
+    POSTGRESQLDB("DataStorage.PaaS.PostgreSQLDatabase"),
+    PROMETHEUS("Observability.CaaS.Prometheus");
 
     private String id;
 
