@@ -11,9 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
 import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
@@ -94,14 +92,6 @@ public class AzureKubernetesService extends KubernetesCluster {
             component.getNodePools().addAll(nodePools);
             return builder;
         }
-
-        @Override
-        public AzureKubernetesService build() {
-            component.setType(KUBERNETES);
-            component.setVersion(DEFAULT_VERSION);
-            return super.build();
-        }
-
     }
 
     @Override

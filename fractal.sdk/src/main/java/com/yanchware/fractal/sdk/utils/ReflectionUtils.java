@@ -12,7 +12,6 @@ import java.lang.reflect.ParameterizedType;
 import java.util.*;
 
 import static com.yanchware.fractal.sdk.configuration.Constants.BLUEPRINT_TYPE;
-import static com.yanchware.fractal.sdk.configuration.Constants.LIVESYSTEM_TYPE;
 
 @Slf4j
 public class ReflectionUtils {
@@ -105,13 +104,13 @@ public class ReflectionUtils {
                 }
                 try {
                     if (classUnder.isBlueprintComponent()) {
-                        handleParams(component, fieldValueMap, parametersMap, f, BLUEPRINT_TYPE);
+                        handleParams(component, fieldValueMap, parametersMap, f, classUnder);
                     } else if (classUnder.isLiveSystemComponent()) {
-                        handleParams(component, fieldValueMap, parametersMap, f, LIVESYSTEM_TYPE);
+                        handleParams(component, fieldValueMap, parametersMap, f, classUnder);
                     } else if (classUnder.isValidatable() && !isFieldPrivateStaticFinal(f)) {
                         Object componentObj = f.get(component);
                         if (componentObj == null) {
-                            log.debug("Field '{}' of component '{}' is null. Will skipp.", f.getName(), component.getClass().getSimpleName());
+                            log.debug("Field '{}' of component '{}' is null. Will skip.", f.getName(), component.getClass().getSimpleName());
                             continue;
                         }
                         if (componentObj.getClass().isEnum()) {
@@ -121,7 +120,7 @@ public class ReflectionUtils {
                         }
                     } else {
                         //for now, we don't have a "TYPE" in other classes except ones that implement BlueprintComponent or LiveSystemComponent
-                        handleParams(component, fieldValueMap, parametersMap, f, null);
+                        handleParams(component, fieldValueMap, parametersMap, f, classUnder);
                     }
                 } catch (IllegalAccessException e) {
                     log.error("Error trying to access field: {}", f.getName(), e);
@@ -139,10 +138,9 @@ public class ReflectionUtils {
      * @param fieldValueMap map that holds generic component fields
      * @param parametersMap map that holds parameters of a component
      * @param f field we are handling
-     * @param type can be blueprintType or liveSystemType, based on the component it is coming from
      * @throws IllegalAccessException
      */
-    private static void handleParams(LiveSystemComponent component, Map<String, Object> fieldValueMap, Map<String, Object> parametersMap, Field f, String type) throws IllegalAccessException {
+    private static void handleParams(LiveSystemComponent component, Map<String, Object> fieldValueMap, Map<String, Object> parametersMap, Field f, ReflectionClassUnder classUnder) throws IllegalAccessException {
         if (f.getType() == ProviderType.class) {
             log.debug("Found a provider type for component: {}", component.getClass().getSimpleName());
             return;
@@ -152,8 +150,8 @@ public class ReflectionUtils {
             log.debug("Field '{}' of component '{}' is null. Will skipp.", f.getName(), component.getClass().getSimpleName());
             return;
         }
-        if (isFieldTypeConstant(f)) {
-            fieldValueMap.put(type, componentObject);
+        if (classUnder.isBlueprintComponent() && isFieldTypeConstant(f)) {
+            fieldValueMap.put(BLUEPRINT_TYPE, componentObject);
             return;
         }
         if (isFieldPrivateStaticFinal(f)) {

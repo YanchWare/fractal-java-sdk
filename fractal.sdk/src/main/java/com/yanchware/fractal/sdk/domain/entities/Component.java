@@ -9,6 +9,8 @@ import lombok.ToString;
 
 import java.util.*;
 
+import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
+
 @Getter
 @Setter(AccessLevel.PROTECTED)
 @ToString(callSuper = true)
@@ -56,17 +58,22 @@ public abstract class Component implements Validatable {
     protected abstract T createComponent();
     protected abstract B getBuilder();
 
-    public B displayName(String displayName) {
+    public B withDisplayName(String displayName) {
       component.setDisplayName(displayName);
       return builder;
     }
 
-    public B id(ComponentId id) {
+    public B withId(ComponentId id) {
       component.setId(id);
       return builder;
     }
 
-    public B version(String version) {
+    public B withId(String id) {
+      component.setId(ComponentId.from(id));
+      return builder;
+    }
+
+    public B withVersion(String version) {
       component.setVersion(version);
       return builder;
     }
@@ -99,7 +106,7 @@ public abstract class Component implements Validatable {
       return withLinks(Set.of(link));
     }
 
-    public B description(String description) {
+    public B withDescription(String description) {
       component.setDescription(description);
       return builder;
     }
@@ -114,6 +121,10 @@ public abstract class Component implements Validatable {
           Arrays.toString(errors.toArray())));
       }
 
+      if (component.getDescription() == null) {
+        component.setDescription(String.format("%s generated via SDK", component.getType().getId()));
+      }
+      component.setVersion(DEFAULT_VERSION);
       return component;
     }
   }

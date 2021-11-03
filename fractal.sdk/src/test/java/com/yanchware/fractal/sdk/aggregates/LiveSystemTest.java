@@ -17,32 +17,32 @@ public class LiveSystemTest {
 
     @Test
     public void multipleValidationErrors_when_liveSystemHasNullId() {
-        assertThatThrownBy(() -> LiveSystem.builder().name(null).build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Id has not been defined");
+        assertThatThrownBy(() -> LiveSystem.builder().withName(null).build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Id has not been defined");
     }
 
     @Test
     public void multipleValidationErrors_when_liveSystemHasEmptyId() {
-        assertThatThrownBy(() -> LiveSystem.builder().name("").build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Id has not been defined");
+        assertThatThrownBy(() -> LiveSystem.builder().withName("").build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Id has not been defined");
     }
 
     @Test
     public void multipleValidationErrors_when_liveSystemHasBlankId() {
-        assertThatThrownBy(() -> LiveSystem.builder().name("   ").build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Id has not been defined");
+        assertThatThrownBy(() -> LiveSystem.builder().withName("   ").build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Id has not been defined");
     }
 
     @Test
     public void multipleValidationErrors_when_liveSystemHasNullResourceGroupId() {
-        assertThatThrownBy(() -> LiveSystem.builder().resourceGroupId(null).build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("ResourceGroupId has not been defined and it is required");
+        assertThatThrownBy(() -> LiveSystem.builder().withResourceGroupId(null).build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("ResourceGroupId has not been defined and it is required");
     }
 
     @Test
     public void multipleValidationErrors_when_liveSystemHasEmptyResourceGroupId() {
-        assertThatThrownBy(() -> LiveSystem.builder().resourceGroupId("").build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("ResourceGroupId has not been defined and it is required");
+        assertThatThrownBy(() -> LiveSystem.builder().withResourceGroupId("").build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("ResourceGroupId has not been defined and it is required");
     }
 
     @Test
     public void multipleValidationErrors_when_liveSystemHasBlankResourceGroupId() {
-        assertThatThrownBy(() -> LiveSystem.builder().resourceGroupId("   ").build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("ResourceGroupId has not been defined and it is required");
+        assertThatThrownBy(() -> LiveSystem.builder().withResourceGroupId("   ").build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("ResourceGroupId has not been defined and it is required");
     }
 
     @Test
@@ -57,10 +57,10 @@ public class LiveSystemTest {
 
     private LiveSystem generateBuilder() {
         return LiveSystem.builder()
-                .name("ls")
-                .resourceGroupId("res/group")
+                .withName("ls")
+                .withResourceGroupId("res/group")
                 .withComponent(AzureKubernetesService.builder()
-                        .id(ComponentId.from("aks-1"))
+                        .withId(ComponentId.from("aks-1"))
                         .withNodePool(AzureNodePool.builder().
                                 name("aks-node-pool").
                                 diskSizeGb(35).

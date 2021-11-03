@@ -16,7 +16,7 @@ public class Constants {
 
     public static final String BLUEPRINT_TYPE = "blueprintType";
 
-    public static final String LIVESYSTEM_TYPE = "liveSystemType";
+    public static final String COMPONENT_TYPE = "type";
 
     public static final String DEFAULT_VERSION = "1.0";
 

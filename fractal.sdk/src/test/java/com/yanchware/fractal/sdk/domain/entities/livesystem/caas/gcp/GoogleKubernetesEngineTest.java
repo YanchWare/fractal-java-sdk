@@ -1,6 +1,5 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.gcp;
 
-import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import org.junit.jupiter.api.Test;
 
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
@@ -21,7 +20,7 @@ public class GoogleKubernetesEngineTest {
 
     @Test
     public void exceptionThrown_when_gkeCreatedWithNullId() {
-        assertThatThrownBy(() -> generateBuilder().id(null).build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Component id has not been defined and it is required");
+        assertThatThrownBy(() -> generateBuilder().withId("").build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Component id has not been defined and it is required");
     }
 
     @Test
@@ -34,21 +33,21 @@ public class GoogleKubernetesEngineTest {
     @Test
     public void exceptionThrown_when_gkeCreatedWithNullNodePools() {
         var gke = GoogleKubernetesEngine.builder()
-                .id(ComponentId.from("test"));
+                .withId("test");
         assertThatThrownBy(gke::build).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Node pool list is null or empty");
     }
 
     @Test
     public void exceptionThrown_when_gkeCreatedWithEmptyNodePools() {
         var gke = GoogleKubernetesEngine.builder()
-                .id(ComponentId.from("test"))
+                .withId("test")
                 .withNodePools(emptyList());
         assertThatThrownBy(gke::build).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Node pool list is null or empty");
     }
 
     private GoogleKubernetesEngine.GoogleKubernetesEngineBuilder generateBuilder() {
         return GoogleKubernetesEngine.builder()
-                .id(ComponentId.from("test"))
+                .withId("test")
                 .withNodePool(GcpNodePool.builder().name("gcp-node-pool-name").build());
     }
 

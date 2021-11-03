@@ -18,8 +18,6 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.POSTGRESQL;
 @Setter(AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 public abstract class PostgreSQL extends PaaSPostgreSQL implements LiveSystemComponent {
-    public static final String TYPE = POSTGRESQL.getId();
-
     private Collection<PostgreSQLDB> databases;
 
     protected PostgreSQL() {
@@ -44,6 +42,12 @@ public abstract class PostgreSQL extends PaaSPostgreSQL implements LiveSystemCom
             dbs.forEach(db -> db.getDependencies().add(component.getId()));
             component.getDatabases().addAll(dbs);
             return builder;
+        }
+
+        @Override
+        public T build() {
+            component.setType(POSTGRESQL);
+            return super.build();
         }
     }
 

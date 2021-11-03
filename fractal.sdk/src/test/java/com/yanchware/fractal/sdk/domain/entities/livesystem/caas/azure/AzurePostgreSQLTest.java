@@ -22,7 +22,7 @@ public class AzurePostgreSQLTest {
 
     @Test
     public void exceptionThrown_when_azurePgCreatedWithJustId() {
-        var azurePg = AzurePostgreSQL.builder().id(ComponentId.from("azure-pg"));
+        var azurePg = AzurePostgreSQL.builder().withId(ComponentId.from("azure-pg"));
         assertThatThrownBy(azurePg::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
                 "[AzurePostgreSQL Validation] Region has not been defined and it is required");
     }
@@ -30,7 +30,7 @@ public class AzurePostgreSQLTest {
     @Test
     public void exceptionThrown_when_azurePgCreatedWithBackUpRetentionDaysLessThan7() {
         var azurePg = AzurePostgreSQL.builder()
-                .id(ComponentId.from("azure-pg"))
+                .withId(ComponentId.from("azure-pg"))
                 .region(EUROPE_WEST)
                 .storageMB(1234)
                 .backupRetentionDays(6);
@@ -41,7 +41,7 @@ public class AzurePostgreSQLTest {
     @Test
     public void exceptionThrown_when_azurePgCreatedWithBackUpRetentionDaysHigherThan35() {
         var azurePg = AzurePostgreSQL.builder()
-                .id(ComponentId.from("azure-pg"))
+                .withId(ComponentId.from("azure-pg"))
                 .region(EUROPE_WEST)
                 .storageMB(1234)
                 .backupRetentionDays(36);
@@ -51,21 +51,21 @@ public class AzurePostgreSQLTest {
 
     @Test
     public void propertiesAreSet_when_azurePgCreatedWithJustIdAndRegion() {
-        var azurePg = AzurePostgreSQL.builder().id(ComponentId.from("azure-pg")).region(EUROPE_WEST);
+        var azurePg = AzurePostgreSQL.builder().withId(ComponentId.from("azure-pg")).region(EUROPE_WEST);
         assertThat(azurePg.build().validate()).isEmpty();
     }
 
     @Test
     public void propertiesAreSet_when_azurePostgresIsCreated() {
         var azurePgBuilder = AzurePostgreSQL.builder()
-                .id(ComponentId.from("azure-psg"))
+                .withId(ComponentId.from("azure-psg"))
                 .region(EUROPE_WEST)
                 .rootUser("rootUser")
                 .skuName(B_GEN5_1)
                 .storageAutoGrow(ENABLED)
                 .storageMB(5 * 1024)
                 .backupRetentionDays(12)
-                .withDatabase(AzurePostgreSQLDB.builder().id(ComponentId.from("db-1")).name("db").build());
+                .withDatabase(AzurePostgreSQLDB.builder().withId(ComponentId.from("db-1")).name("db").build());
         assertThat(azurePgBuilder.build())
                 .returns(POSTGRESQL, from(AzurePostgreSQL::getType))
                 .returns(AZURE, from(AzurePostgreSQL::getProvider))

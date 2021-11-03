@@ -16,7 +16,7 @@ public class AzureKubernetesServiceTest {
 
     @Test
     public void exceptionThrown_when_aksCreatedWithNullId() {
-        assertThatThrownBy(() -> generateBuilder().id(null).build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Component id has not been defined and it is required");
+        assertThatThrownBy(() -> generateBuilder().withId("").build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Component id has not been defined and it is required");
     }
 
     @Test
@@ -29,21 +29,21 @@ public class AzureKubernetesServiceTest {
     @Test
     public void exceptionThrown_when_aksCreatedWithNullNodePools() {
         var aks = AzureKubernetesService.builder()
-                .id(ComponentId.from("test"));
+                .withId(ComponentId.from("test"));
         assertThatThrownBy(aks::build).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Node pool list is null or empty");
     }
 
     @Test
     public void exceptionThrown_when_aksCreatedWithEmptyNodePools() {
         var aks = AzureKubernetesService.builder()
-                .id(ComponentId.from("test"))
+                .withId(ComponentId.from("test"))
                 .withNodePools(emptyList());
         assertThatThrownBy(aks::build).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Node pool list is null or empty");
     }
 
     private AzureKubernetesService.AzureKubernetesServiceBuilder generateBuilder() {
         return AzureKubernetesService.builder()
-                .id(ComponentId.from("test"))
+                .withId(ComponentId.from("test"))
                 .withNodePool(AzureNodePool.builder().name("azure-node-pool-name").diskSizeGb(30).build());
     }
 }

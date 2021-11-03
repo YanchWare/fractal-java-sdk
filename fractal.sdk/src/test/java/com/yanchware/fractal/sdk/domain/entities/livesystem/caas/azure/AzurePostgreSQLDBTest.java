@@ -28,7 +28,7 @@ class AzurePostgreSQLDBTest {
 
     @Test
     public void noValidationError_when_dbWithValidName() {
-        AzurePostgreSQLDB pgdb = AzurePostgreSQLDB.builder().id(ComponentId.from("dbid")).name("db").build();
+        AzurePostgreSQLDB pgdb = AzurePostgreSQLDB.builder().withId(ComponentId.from("dbid")).name("db").build();
         assertThat(pgdb.validate()).isEmpty();
         assertThat(pgdb.getCharset()).isNull();
         assertThat(pgdb.getCollation()).isNull();

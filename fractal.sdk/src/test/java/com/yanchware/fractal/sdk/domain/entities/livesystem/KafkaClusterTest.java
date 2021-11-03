@@ -12,9 +12,9 @@ class KafkaClusterTest {
     @Test
     public void exceptionThrown_when_kafkaCluster_isCreatedWithoutNamespace() {
         var kafkaBuilder = KafkaCluster.builder()
-                .id(ComponentId.from("azure-kafka"))
-                .description("Kafka for Azure")
-                .displayName("AzureKafka #1");
+                .withId("azure-kafka")
+                .withDescription("Kafka for Azure")
+                .withDisplayName("AzureKafka #1");
         assertThatThrownBy(kafkaBuilder::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
                 "[KafkaCluster Validation] Namespace has not been defined and it is required");
     }
@@ -22,8 +22,8 @@ class KafkaClusterTest {
     @Test
     public void exceptionThrown_when_kafkaCluster_isCreatedWithoutId() {
         var kafkaBuilder = KafkaCluster.builder()
-                .description("Kafka for Azure")
-                .displayName("AzureKafka #1")
+                .withDescription("Kafka for Azure")
+                .withDisplayName("AzureKafka #1")
                 .withNamespace("namespace");
         assertThatThrownBy(kafkaBuilder::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
                 "Component id has not been defined and it is required");
@@ -32,9 +32,9 @@ class KafkaClusterTest {
     @Test
     public void exceptionThrown_when_kafkaCluster_isCreatedWithEmptyContainerPlatform() {
         var kafkaBuilder = KafkaCluster.builder()
-                .id(ComponentId.from("azure-kafka"))
-                .description("Kafka for Azure")
-                .displayName("AzureKafka #1")
+                .withId("azure-kafka")
+                .withDescription("Kafka for Azure")
+                .withDisplayName("AzureKafka #1")
                 .withNamespace("namespace")
                 .withContainerPlatform("");
         assertThatThrownBy(kafkaBuilder::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
@@ -44,15 +44,15 @@ class KafkaClusterTest {
     @Test
     public void propertiesAreSet_when_kafkaCluster_isProperlyConfigured() {
         var kafkaCluster = KafkaCluster.builder()
-                .id(ComponentId.from("azure-kafka"))
-                .description("Kafka for Azure")
-                .displayName("AzureKafka #1")
+                .withId("azure-kafka")
+                .withDescription("Kafka for Azure")
+                .withDisplayName("AzureKafka #1")
                 .withNamespace("namespace")
                 .withContainerPlatform("containerPlatform")
                 .withKafkaTopics(List.of(
-                        KafkaTopic.builder().id(ComponentId.from("topic")).displayName("kafka-topic").build()))
+                        KafkaTopic.builder().withId(ComponentId.from("topic")).withDisplayName("kafka-topic").build()))
                 .withKafkaUsers(List.of(
-                        KafkaUser.builder().id(ComponentId.from("user-1")).displayName("kafka-user").withTopicReadACL("svcName").build())).build();
+                        KafkaUser.builder().withId(ComponentId.from("user-1")).withDisplayName("kafka-user").withTopicReadACL("svcName").build())).build();
 
         assertThat(kafkaCluster)
                 .returns("azure-kafka", from(x -> x.getId().getValue()))

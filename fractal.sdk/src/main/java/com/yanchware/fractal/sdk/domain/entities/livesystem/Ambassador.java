@@ -1,6 +1,6 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem;
 
-import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSPrometheus;
+import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSAPIGateway;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -9,54 +9,56 @@ import lombok.ToString;
 
 import java.util.Collection;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PROMETHEUS;
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.AMBASSADOR;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Getter
 @Setter(AccessLevel.PROTECTED)
 @ToString(callSuper = true)
-public class Prometheus extends CaaSPrometheus implements LiveSystemComponent {
-    private final static String NAMESPACE_IS_NULL_OR_EMPTY = "[Prometheus Validation] Namespace has not been defined and it is required";
-    private final static String CONTAINER_PLATFORM_IS_EMPTY = "[Prometheus Validation] ContainerPlatform defined was either empty or blank and it is required";
+public class Ambassador extends CaaSAPIGateway implements LiveSystemComponent {
+    private final static String NAMESPACE_IS_NULL_OR_EMPTY = "[Ambassador Validation] Namespace has not been defined and it is required";
+    private final static String CONTAINER_PLATFORM_IS_EMPTY = "[Ambassador Validation] ContainerPlatform defined was either empty or blank and it is required";
 
-    private String namespace;
     private String containerPlatform;
+    private String namespace;
     private ProviderType provider;
+
+    protected Ambassador() {
+    }
 
     @Override
     public ProviderType getProvider() {
         return provider;
     }
 
-    public static PrometheusBuilder builder() {
-        return new PrometheusBuilder();
+    public static AmbassadorBuilder builder() {
+        return new AmbassadorBuilder();
     }
 
-    public static class PrometheusBuilder extends Builder<Prometheus, PrometheusBuilder> {
-
+    public static class AmbassadorBuilder extends Builder<Ambassador, AmbassadorBuilder> {
         @Override
-        protected Prometheus createComponent() {
-            return new Prometheus();
+        protected Ambassador createComponent() {
+            return new Ambassador();
         }
 
         @Override
-        protected PrometheusBuilder getBuilder() {
+        protected AmbassadorBuilder getBuilder() {
             return this;
         }
 
-        public PrometheusBuilder withNamespace(String namespace) {
+        public AmbassadorBuilder withNamespace(String namespace) {
             component.setNamespace(namespace);
             return builder;
         }
 
-        public PrometheusBuilder withContainerPlatform(String containerPlatform) {
+        public AmbassadorBuilder withContainerPlatform(String containerPlatform) {
             component.setContainerPlatform(containerPlatform);
             return builder;
         }
 
         @Override
-        public Prometheus build() {
-            component.setType(PROMETHEUS);
+        public Ambassador build() {
+            component.setType(AMBASSADOR);
             return super.build();
         }
     }

@@ -12,7 +12,6 @@ import java.util.List;
 
 import static com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType.GCP;
 import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
@@ -92,13 +91,6 @@ public class GoogleKubernetesEngine extends KubernetesCluster {
             component.getNodePools().addAll(nodePools);
             return builder;
         }
-
-        @Override
-        public GoogleKubernetesEngine build() {
-            component.setType(KUBERNETES);
-            return super.build();
-        }
-
     }
 
     @Override

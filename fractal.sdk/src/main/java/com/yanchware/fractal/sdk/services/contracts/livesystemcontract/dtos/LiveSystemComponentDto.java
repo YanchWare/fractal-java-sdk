@@ -16,6 +16,7 @@ import java.util.*;
 import static com.yanchware.fractal.sdk.configuration.Constants.*;
 import static com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemComponentStatusDto.Instantiating;
 import static java.util.Collections.emptyMap;
+import static java.util.stream.Collectors.toSet;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -41,14 +42,15 @@ public class LiveSystemComponentDto extends ComponentDto {
     }
 
     private static LiveSystemComponentDto toLiveSystemComponent(LiveSystemComponent component, Map<String, Object> allFields) {
+        Set<ComponentId> componentIds = (Set<ComponentId>) allFields.get(DEPENDENCIES_KEY);
         return LiveSystemComponentDto.builder()
                 .id(((ComponentId) allFields.get(ID_KEY)).getValue())
                 .displayName(String.valueOf(allFields.get(DISPLAY_NAME_KEY)))
                 .description(String.valueOf(allFields.get(DESCRIPTION_KEY)))
-                .type(String.valueOf(allFields.get(LIVESYSTEM_TYPE)))
+                .type(String.valueOf(allFields.get(COMPONENT_TYPE)))
                 .version(String.valueOf(allFields.get(VERSION_KEY)))
                 .parameters((Map<String, Object>) allFields.get(PARAMETERS_KEY))
-                .dependencies((Set<String>) allFields.get(DEPENDENCIES_KEY))
+                .dependencies(componentIds.stream().map(ComponentId::getValue).collect(toSet()))
                 .links((Set<ComponentLink>) allFields.get(LINKS_KEY))
                 .outputFields(emptyMap())
                 .status(Instantiating)
