@@ -4,7 +4,6 @@ import com.yanchware.fractal.sdk.domain.entities.Validatable;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.BlueprintComponent;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
-import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Field;
@@ -18,20 +17,21 @@ import static com.yanchware.fractal.sdk.configuration.Constants.LIVESYSTEM_TYPE;
 @Slf4j
 public class ReflectionUtils {
 
-    public static List<Map<String, Object>> buildComponents(LiveSystemComponent component) {
-        return buildComponents(component, null);
-    }
+    /**
+     * Build component list together with dependencies
+     * #1 run "dependencyId" is null because we start at the top level of components (in most cases, a ContainerPlatform)
+     * @param component component to build from - can result in multiple components, depending on hierarchy
+     * @return a list of all components mapped as key-value
+     */
 
-    //loop through all fields of this component
-    //if fields are components, build them
-    //add all to a list including this component
-    private static List<Map<String, Object>> buildComponents(LiveSystemComponent component, String dependencyId) {
+    public static List<Map<String, Object>> buildComponents(LiveSystemComponent component) {
         List<Map<String, Object>> listOfComponentJson = new ArrayList<>();
+
+        //get fields of current component
         Map<String, Object> allFields = getAllFields(component);
-        if (dependencyId != null) {
-            allFields.put("dependencies", Set.of(dependencyId));
-        }
         listOfComponentJson.add(allFields);
+
+        //start looping through all the fields of all classes in the hierarchy
         Class<?> clazz = component.getClass();
         while (clazz.getSuperclass() != null) {
             for (Field f : clazz.getDeclaredFields()) {
@@ -54,7 +54,7 @@ public class ReflectionUtils {
                             List<LiveSystemComponent> listOfComp = (List<LiveSystemComponent>) o;
                             for (LiveSystemComponent comp : listOfComp) {
                                 log.debug("Component to map: {}, with SuperComp: {}", comp.getClass().getSimpleName(), component.getClass().getSimpleName());
-                                listOfComponentJson.addAll(buildComponents(comp, getIdOfComponent(component)));
+                                listOfComponentJson.addAll(buildComponents(comp));
                             }
                         } catch (IllegalAccessException e) {
                             log.error("Error when trying to map field '{}' for class '{}", f.getName(), clazz.getSimpleName(), e);
@@ -71,7 +71,7 @@ public class ReflectionUtils {
                             }
                             LiveSystemComponent comp = (LiveSystemComponent) o;
                             log.debug("Component to map: {}, with SuperComp: {}", comp.getClass().getSimpleName(), component.getClass().getSimpleName());
-                            listOfComponentJson.addAll(buildComponents(comp, getIdOfComponent(component)));
+                            listOfComponentJson.addAll(buildComponents(comp));
                         } catch (IllegalAccessException e) {
                             log.error("Error when trying to map field '{}' for class '{}", f.getName(), clazz.getSimpleName(), e);
                         }
@@ -83,6 +83,12 @@ public class ReflectionUtils {
         return listOfComponentJson;
     }
 
+    /**
+     * Takes in a component and generates a map with generic component fields and parameters.
+     * Loop through all fields of a class and skips constants.
+     * @param component component to be mapped
+     * @return map of all fields and parameters of component
+     */
     public static Map<String, Object> getAllFields(LiveSystemComponent component) {
         Map<String, Object> fieldValueMap = new HashMap<>();
         Map<String, Object> parametersMap = new HashMap<>();
@@ -127,25 +133,15 @@ public class ReflectionUtils {
         return fieldValueMap;
     }
 
-    private static String getIdOfComponent(LiveSystemComponent component) {
-        log.debug("Trying to find ID of component: {}", component.getClass().getSimpleName());
-        Class<?> clazz = component.getClass();
-        while (clazz.getSuperclass() != null) {
-            try {
-                Field idField = clazz.getDeclaredField("id");
-                idField.setAccessible(true);
-                ComponentId id = (ComponentId) idField.get(component);
-                log.debug("Found ID: '{}' for component: '{}'", id.getValue(), component.getClass().getSimpleName());
-                return id.getValue();
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                log.error("Exception when looking for id: {}", e.getClass());
-            }
-            clazz = clazz.getSuperclass();
-        }
-        log.debug("No ID found in component: {}", component.getClass().getSimpleName());
-        return null;
-    }
-
+    /**
+     * Method that will take a field in and determine how to handle it based on the type of the field
+     * @param component that holds the field we are mapping
+     * @param fieldValueMap map that holds generic component fields
+     * @param parametersMap map that holds parameters of a component
+     * @param f field we are handling
+     * @param type can be blueprintType or liveSystemType, based on the component it is coming from
+     * @throws IllegalAccessException
+     */
     private static void handleParams(LiveSystemComponent component, Map<String, Object> fieldValueMap, Map<String, Object> parametersMap, Field f, String type) throws IllegalAccessException {
         if (f.getType() == ProviderType.class) {
             log.debug("Found a provider type for component: {}", component.getClass().getSimpleName());
@@ -171,7 +167,11 @@ public class ReflectionUtils {
         }
     }
 
-    //private constants
+    /**
+     * Determine if a field is private static final (private constant) or not.
+     * @param f field to be determined
+     * @return true if it is a private static final, false otherwise
+     */
     private static boolean isFieldPrivateStaticFinal(Field f) {
         int fieldModifiers = f.getModifiers();
         return Modifier.isPrivate(fieldModifiers) && Modifier.isStatic(fieldModifiers) && Modifier.isFinal(fieldModifiers);
@@ -182,7 +182,11 @@ public class ReflectionUtils {
         return Modifier.isPublic(fieldModifiers) && Modifier.isStatic(fieldModifiers) && Modifier.isFinal(fieldModifiers) && f.getName().equals("TYPE");
     }
 
-    //determine type of class. For now, we can break exit quickly, as we don't implement multiple interfaces.
+    /**
+     * Loops through all the interface of the class and returns an object that holds said information.
+     * @param clazz class to be determined
+     * @return a {@link ReflectionClassUnder} object that holds information about what type of class it is
+     */
     private static ReflectionClassUnder determineClassType(Class<?> clazz) {
         for (Class<?> aClass : clazz.getInterfaces()) {
             if (aClass.isAssignableFrom(BlueprintComponent.class)) {

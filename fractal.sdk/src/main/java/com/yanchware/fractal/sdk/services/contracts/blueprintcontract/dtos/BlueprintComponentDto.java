@@ -16,6 +16,7 @@ import java.util.*;
 
 import static com.yanchware.fractal.sdk.configuration.Constants.*;
 import static java.util.Collections.emptySet;
+import static java.util.stream.Collectors.toSet;
 
 @Data
 @SuperBuilder
@@ -40,6 +41,7 @@ public class BlueprintComponentDto extends ComponentDto {
 
     private static BlueprintComponentDto toBlueprintComponentDto(Map<String, Object> allFields) {
         String liveSystemId = ((ComponentId) allFields.get(ID_KEY)).getValue();
+        Set<ComponentId> componentIds = (Set<ComponentId>) allFields.get(DEPENDENCIES_KEY);
         return BlueprintComponentDto.builder()
                 .id(liveSystemId)
                 .displayName(String.valueOf(allFields.get(DISPLAY_NAME_KEY)))
@@ -47,7 +49,7 @@ public class BlueprintComponentDto extends ComponentDto {
                 .type(String.valueOf(allFields.get(BLUEPRINT_TYPE)))
                 .version(String.valueOf(allFields.get(VERSION_KEY)))
                 .parameters((Map<String, Object>) allFields.get(PARAMETERS_KEY))
-                .dependencies((Set<String>) allFields.get(DEPENDENCIES_KEY))
+                .dependencies(componentIds.stream().map(ComponentId::getValue).collect(toSet()))
                 .links((Set<ComponentLink>) allFields.get(LINKS_KEY))
                 .outputFields(emptySet())
                 .build();

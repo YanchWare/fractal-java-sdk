@@ -8,6 +8,7 @@ import com.yanchware.fractal.sdk.domain.entities.ComponentLink;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.KafkaCluster;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.KafkaTopic;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.KafkaUser;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.Prometheus;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureKubernetesService;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureNodePool;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzurePostgreSQL;
@@ -51,6 +52,16 @@ public class TestUtils {
                         osType(LINUX).
                         build())
                 .withKafkaCluster(getKafkaClusterExample())
+                .withPrometheus(getPrometheusExample())
+                .build();
+    }
+
+    private static Prometheus getPrometheusExample() {
+        return Prometheus.builder()
+                .id(ComponentId.from("prometheus"))
+                .description("Prometheus monitoring")
+                .displayName("Prometheus")
+                .withNamespace("monitoring")
                 .build();
     }
 
@@ -59,7 +70,7 @@ public class TestUtils {
                 .id(ComponentId.from("azure-kafka"))
                 .description("Kafka for Azure")
                 .displayName("AzureKafka #1")
-                .namespace("namespace")
+                .withNamespace("namespace")
                 .withKafkaTopics(List.of(
                         KafkaTopic.builder().id(ComponentId.from("topic")).displayName("kafka-topic").build(),
                         KafkaTopic.builder().id(ComponentId.from("topic-2")).displayName("kafka-topic-2").build()))
