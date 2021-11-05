@@ -16,7 +16,7 @@ public class AzureKubernetesServiceTest {
 
     @Test
     public void exceptionThrown_when_aksCreatedWithNullId() {
-        assertThatThrownBy(() -> generateBuilder().withId("").build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Component id has not been defined and it is required");
+        assertThatThrownBy(() -> generateBuilder().withId("").build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("A valid component id cannot be null, empty or contain spaces");
     }
 
     @Test

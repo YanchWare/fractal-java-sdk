@@ -11,7 +11,7 @@ class AmbassadorTest {
 
     @Test
     public void exceptionThrown_when_ambassadorCreatedWithNullId() {
-        assertThatThrownBy(() -> Ambassador.builder().withId("").build()).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll("Component id has not been defined and it is required", "[Ambassador Validation] Namespace has not been defined and it is required");
+        assertThatThrownBy(() -> Ambassador.builder().withId("").build()).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll("A valid component id cannot be null, empty or contain spaces");
     }
 
     @Test
