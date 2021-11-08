@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.ACLOperation.READ;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.KafkaACLType.TOPIC;
 import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
@@ -82,7 +81,6 @@ public class KafkaUser extends CaaSKafkaUser implements LiveSystemComponent {
         @Override
         public KafkaUser build() {
             component.setType(KAFKA_USER);
-            component.setVersion(DEFAULT_VERSION);
             return super.build();
         }
     }

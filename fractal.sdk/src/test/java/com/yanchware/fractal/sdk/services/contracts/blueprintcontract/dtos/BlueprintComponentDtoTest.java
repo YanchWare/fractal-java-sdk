@@ -1,6 +1,5 @@
 package com.yanchware.fractal.sdk.services.contracts.blueprintcontract.dtos;
 
-import com.yanchware.fractal.sdk.domain.entities.Component;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.*;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSPostgreSQL;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSPostgreSQLDB;
@@ -11,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
+import static com.yanchware.fractal.sdk.utils.TestUtils.assertGenericComponent;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class BlueprintComponentDtoTest {
@@ -21,11 +20,11 @@ public class BlueprintComponentDtoTest {
         var aks = TestUtils.getAksExample();
         var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(aks));
 
-        assertThat(blueprintComponentDtoList).hasSize(7);
+        assertThat(blueprintComponentDtoList).hasSize(8);
 
         //assert aks
         var blueprintComponentDto = blueprintComponentDtoList.get(0);
-        assertGenericBlueprintComponent(blueprintComponentDto, aks, CaaSContainerPlatform.TYPE);
+        assertGenericComponent(blueprintComponentDto, aks, CaaSContainerPlatform.TYPE);
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(blueprintComponentDto.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(
                     aks.getNetwork(),
@@ -42,11 +41,11 @@ public class BlueprintComponentDtoTest {
         //assert kafka
         var kafkaDto = blueprintComponentDtoList.get(1);
         var kafkaComp = aks.getKafkaClusters().get(0);
-        assertGenericBlueprintComponent(kafkaDto, kafkaComp, CaaSKafka.TYPE);
+        assertGenericComponent(kafkaDto, kafkaComp, CaaSKafka.TYPE);
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(kafkaDto.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(
                     kafkaComp.getNamespace(),
-                    kafkaComp.getContainerPlatform()
+                    aks.getId().getValue()
             );
             softly.assertThat(kafkaDto.getDependencies()).as("Component Dependencies").containsExactly(aks.getId().getValue());
             softly.assertThat(kafkaDto.getLinks()).as("Component Links").isEmpty();
@@ -55,11 +54,11 @@ public class BlueprintComponentDtoTest {
         //assert kafka topic#1
         var kafkaTopicDto1 = blueprintComponentDtoList.get(2);
         var kafkaTopicComp1 = kafkaComp.getKafkaTopics().stream().filter(x -> x.getId().getValue().equals(kafkaTopicDto1.getId())).findFirst().get();
-        assertGenericBlueprintComponent(kafkaTopicDto1, kafkaTopicComp1, CaaSKafkaTopic.TYPE);
+        assertGenericComponent(kafkaTopicDto1, kafkaTopicComp1, CaaSKafkaTopic.TYPE);
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(kafkaTopicDto1.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(
                     kafkaTopicComp1.getNamespace(),
-                    kafkaTopicComp1.getContainerPlatform(),
+                    aks.getId().getValue(),
                     kafkaTopicComp1.getClusterName()
             );
             softly.assertThat(kafkaTopicDto1.getDependencies()).as("Component Dependencies").containsExactly(kafkaComp.getId().getValue());
@@ -69,11 +68,11 @@ public class BlueprintComponentDtoTest {
         //assert kafka topic#2
         var kafkaTopicDto2 = blueprintComponentDtoList.get(3);
         var kafkaTopicComp2 = kafkaComp.getKafkaTopics().stream().filter(x -> x.getId().getValue().equals(kafkaTopicDto2.getId())).findFirst().get();
-        assertGenericBlueprintComponent(kafkaTopicDto2, kafkaTopicComp2, CaaSKafkaTopic.TYPE);
+        assertGenericComponent(kafkaTopicDto2, kafkaTopicComp2, CaaSKafkaTopic.TYPE);
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(kafkaTopicDto2.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(
                     kafkaTopicComp2.getNamespace(),
-                    kafkaTopicComp2.getContainerPlatform(),
+                    aks.getId().getValue(),
                     kafkaTopicComp2.getClusterName()
             );
             softly.assertThat(kafkaTopicDto2.getDependencies()).as("Component Dependencies").containsExactly(kafkaComp.getId().getValue());
@@ -83,11 +82,11 @@ public class BlueprintComponentDtoTest {
         //assert kafka user#1
         var kafkaUserDto = blueprintComponentDtoList.get(4);
         var kafkaUserComp = kafkaComp.getKafkaUsers().stream().filter(x -> x.getId().getValue().equals(kafkaUserDto.getId())).findFirst().get();
-        assertGenericBlueprintComponent(kafkaUserDto, kafkaUserComp, CaaSKafkaUser.TYPE);
+        assertGenericComponent(kafkaUserDto, kafkaUserComp, CaaSKafkaUser.TYPE);
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(kafkaUserDto.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(
                     kafkaUserComp.getNamespace(),
-                    kafkaUserComp.getContainerPlatform(),
+                    aks.getId().getValue(),
                     kafkaUserComp.getClusterName(),
                     kafkaUserComp.getAcls()
             );
@@ -98,11 +97,11 @@ public class BlueprintComponentDtoTest {
         //assert kafka user#2
         var kafkaUserDto2 = blueprintComponentDtoList.get(5);
         var kafkaUserComp2 = kafkaComp.getKafkaUsers().stream().filter(x -> x.getId().getValue().equals(kafkaUserDto2.getId())).findFirst().get();
-        assertGenericBlueprintComponent(kafkaUserDto2, kafkaUserComp2, CaaSKafkaUser.TYPE);
+        assertGenericComponent(kafkaUserDto2, kafkaUserComp2, CaaSKafkaUser.TYPE);
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(kafkaUserDto2.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(
                     kafkaUserComp2.getNamespace(),
-                    kafkaUserComp2.getContainerPlatform(),
+                    aks.getId().getValue(),
                     kafkaUserComp2.getClusterName(),
                     kafkaUserComp2.getAcls()
             );
@@ -113,14 +112,27 @@ public class BlueprintComponentDtoTest {
         //assert prometheus
         var prometheusDto = blueprintComponentDtoList.get(6);
         Prometheus prometheusInstance = aks.getPrometheusInstances().get(0);
-        assertGenericBlueprintComponent(prometheusDto, prometheusInstance, CaaSPrometheus.TYPE);
+        assertGenericComponent(prometheusDto, prometheusInstance, CaaSPrometheus.TYPE);
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(prometheusDto.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(
                     prometheusInstance.getNamespace(),
-                    prometheusInstance.getContainerPlatform()
+                    aks.getId().getValue()
             );
             softly.assertThat(prometheusDto.getDependencies()).as("Component Dependencies").containsExactly(aks.getId().getValue());
             softly.assertThat(prometheusDto.getLinks()).as("Component Links").isEmpty();
+        });
+
+        //assert ambassador
+        var ambassadorDto = blueprintComponentDtoList.get(7);
+        var ambassador = aks.getAmbassadorInstances().get(0);
+        assertGenericComponent(ambassadorDto, ambassador, CaaSAPIGateway.TYPE);
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(ambassadorDto.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(
+                    ambassador.getNamespace(),
+                    aks.getId().getValue()
+            );
+            softly.assertThat(ambassadorDto.getDependencies()).as("Component Dependencies").containsExactly(aks.getId().getValue());
+            softly.assertThat(ambassadorDto.getLinks()).as("Component Links").isEmpty();
         });
     }
 
@@ -133,7 +145,7 @@ public class BlueprintComponentDtoTest {
 
         //assert postgres server
         var azurePgBlueprintCompDto = blueprintComponentDtoList.get(0);
-        assertGenericBlueprintComponent(azurePgBlueprintCompDto, apg, PaaSPostgreSQL.TYPE);
+        assertGenericComponent(azurePgBlueprintCompDto, apg, PaaSPostgreSQL.TYPE);
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(azurePgBlueprintCompDto.getParameters().values()).as("Component Parameters")
                     .containsExactlyInAnyOrder(
@@ -151,7 +163,7 @@ public class BlueprintComponentDtoTest {
         //assert postgres db#1
         var azurePgDbBlueprintCompDto = blueprintComponentDtoList.get(1);
         var db1 = apg.getDatabases().stream().filter(x -> x.getId().getValue().equals(azurePgDbBlueprintCompDto.getId())).findFirst().get();
-        assertGenericBlueprintComponent(azurePgDbBlueprintCompDto, db1, PaaSPostgreSQLDB.TYPE);
+        assertGenericComponent(azurePgDbBlueprintCompDto, db1, PaaSPostgreSQLDB.TYPE);
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(azurePgDbBlueprintCompDto.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(db1.getName());
             softly.assertThat(azurePgDbBlueprintCompDto.getDependencies()).as("Component Dependencies").containsExactly(apg.getId().getValue());
@@ -161,22 +173,11 @@ public class BlueprintComponentDtoTest {
         //assert postgres db#2
         var azurePgDbBlueprintCompDto2 = blueprintComponentDtoList.get(2);
         var db2 = apg.getDatabases().stream().filter(x -> x.getId().getValue().equals(azurePgDbBlueprintCompDto2.getId())).findFirst().get();
-        assertGenericBlueprintComponent(azurePgDbBlueprintCompDto2, db2, PaaSPostgreSQLDB.TYPE);
+        assertGenericComponent(azurePgDbBlueprintCompDto2, db2, PaaSPostgreSQLDB.TYPE);
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(azurePgDbBlueprintCompDto2.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(db2.getName());
             softly.assertThat(azurePgDbBlueprintCompDto2.getDependencies()).as("Component Dependencies").containsExactly(apg.getId().getValue());
             softly.assertThat(azurePgDbBlueprintCompDto2.getLinks()).as("Component Links").containsAll(apg.getLinks());
-        });
-    }
-
-    private void assertGenericBlueprintComponent(BlueprintComponentDto componentDto, Component comp, String type) {
-        SoftAssertions.assertSoftly(softly -> {
-            softly.assertThat(componentDto.getId()).as("Component ID").isEqualTo(comp.getId().getValue());
-            softly.assertThat(componentDto.getDisplayName()).as("Component Display Name").isEqualTo(comp.getDisplayName());
-            softly.assertThat(componentDto.getDescription()).as("Component Description").contains("Blueprint created via SDK by LiveSystem with ID: ");
-            softly.assertThat(componentDto.getType()).as("Component Type").isEqualTo(type);
-            softly.assertThat(componentDto.getVersion()).as("Component Version").isEqualTo(DEFAULT_VERSION);
-            softly.assertThat(componentDto.getOutputFields()).as("Component Output Fields").isEmpty();
         });
     }
 

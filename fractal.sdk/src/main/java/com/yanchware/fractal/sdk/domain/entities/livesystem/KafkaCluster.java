@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
 import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KAFKA;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -20,7 +19,6 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Setter(AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 public class KafkaCluster extends CaaSKafka implements LiveSystemComponent {
-    public static final String TYPE = KAFKA.getId();
     private final static String NAMESPACE_IS_NULL_OR_EMPTY = "[KafkaCluster Validation] Namespace has not been defined and it is required";
     private final static String CONTAINER_PLATFORM_IS_EMPTY = "[KafkaCluster Validation] ContainerPlatform defined was either empty or blank and it is required";
 
@@ -105,7 +103,6 @@ public class KafkaCluster extends CaaSKafka implements LiveSystemComponent {
         @Override
         public KafkaCluster build() {
             component.setType(KAFKA);
-            component.setVersion(DEFAULT_VERSION);
             return super.build();
         }
     }
@@ -121,6 +118,14 @@ public class KafkaCluster extends CaaSKafka implements LiveSystemComponent {
         if (containerPlatform != null && isBlank(containerPlatform)) {
             errors.add(CONTAINER_PLATFORM_IS_EMPTY);
         }
+
+        kafkaTopics.stream()
+                .map(KafkaTopic::validate)
+                .forEach(errors::addAll);
+        kafkaUsers.stream()
+                .map(KafkaUser::validate)
+                .forEach(errors::addAll);
+
         return errors;
     }
 

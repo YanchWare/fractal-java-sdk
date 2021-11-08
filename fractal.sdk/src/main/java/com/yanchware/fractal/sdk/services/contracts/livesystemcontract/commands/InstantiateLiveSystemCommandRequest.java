@@ -7,6 +7,8 @@ import lombok.*;
 
 import java.util.Map;
 
+import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -17,14 +19,14 @@ public class InstantiateLiveSystemCommandRequest {
     private String liveSystemId;
     private String fractalId;
     private String description;
-    private String provider; //not set, here just to match the request in liveSystem. We will have provider at LiveSystemComponent level
+    private String provider;
     private Map<String, LiveSystemComponentDto> blueprintMap;
     private EnvironmentDto environment;
 
     public static InstantiateLiveSystemCommandRequest fromLiveSystem(LiveSystem ls) {
         return InstantiateLiveSystemCommandRequest.builder()
                 .liveSystemId(String.format("%s/%s", ls.getResourceGroupId(), ls.getName()))
-                .fractalId(String.format("%s/%s:1.0", ls.getResourceGroupId(), ls.getName()))
+                .fractalId(String.format("%s/%s:%s", ls.getResourceGroupId(), ls.getName(), DEFAULT_VERSION))
                 .description(ls.getDescription())
                 .environment(EnvironmentDto.fromEnvironment(ls.getEnvironment()))
                 .blueprintMap(LiveSystemComponentDto.fromLiveSystemComponents(ls.getComponents()))

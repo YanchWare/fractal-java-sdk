@@ -16,7 +16,6 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Setter(AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 public abstract class PostgreSQLDB extends PaaSPostgreSQLDB implements LiveSystemComponent {
-    public static final String TYPE = POSTGRESQLDB.getId();
     private final static String NAME_IS_BLANK = "PostgreSQLDB name has not been defined and it is required";
 
     private String name;
@@ -41,6 +40,12 @@ public abstract class PostgreSQLDB extends PaaSPostgreSQLDB implements LiveSyste
         public B collation(String collation) {
             component.setCollation(collation);
             return builder;
+        }
+
+        @Override
+        public T build() {
+            component.setType(POSTGRESQLDB);
+            return super.build();
         }
     }
 

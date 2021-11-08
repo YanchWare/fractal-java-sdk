@@ -3,9 +3,11 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem;
 import com.yanchware.fractal.sdk.domain.entities.Component;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSKafkaTopic;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KAFKA_TOPIC;
 
 @Getter
@@ -45,7 +47,6 @@ public class KafkaTopic extends CaaSKafkaTopic implements LiveSystemComponent {
         @Override
         public KafkaTopic build() {
             component.setType(KAFKA_TOPIC);
-            component.setVersion(DEFAULT_VERSION);
             return super.build();
         }
     }

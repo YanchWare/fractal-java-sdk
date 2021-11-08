@@ -52,22 +52,22 @@ public class LiveSystem implements Validatable {
             return this;
         }
 
-        public LiveSystemBuilder name(String name) {
+        public LiveSystemBuilder withName(String name) {
             liveSystem.setName(name);
             return builder;
         }
 
-        public LiveSystemBuilder resourceGroupId(String resourceGroupId) {
+        public LiveSystemBuilder withResourceGroupId(String resourceGroupId) {
             liveSystem.setResourceGroupId(resourceGroupId);
             return builder;
         }
 
-        public LiveSystemBuilder description(String description) {
+        public LiveSystemBuilder withDescription(String description) {
             liveSystem.setDescription(description);
             return builder;
         }
 
-        public LiveSystemBuilder environment(Environment environment) {
+        public LiveSystemBuilder withEnvironment(Environment environment) {
             liveSystem.setEnvironment(environment);
             return builder;
         }

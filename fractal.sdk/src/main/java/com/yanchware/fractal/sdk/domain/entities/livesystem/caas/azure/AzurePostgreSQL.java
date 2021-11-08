@@ -9,9 +9,6 @@ import lombok.ToString;
 
 import java.util.Collection;
 
-import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.POSTGRESQL;
-
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
@@ -84,13 +81,6 @@ public class AzurePostgreSQL extends PostgreSQL {
         public AzurePostgreSQLBuilder backupRetentionDays(int backupRetentionDays) {
             component.setBackupRetentionDays(backupRetentionDays);
             return builder;
-        }
-
-        @Override
-        public AzurePostgreSQL build() {
-            component.setType(POSTGRESQL);
-            component.setVersion(DEFAULT_VERSION);
-            return super.build();
         }
     }
 

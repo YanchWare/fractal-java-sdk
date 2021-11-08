@@ -1,10 +1,7 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem;
 
 import com.yanchware.fractal.sdk.domain.entities.Component;
-import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSContainerPlatform;
-import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSKafka;
-import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSPrometheus;
-import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSService;
+import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,16 +18,17 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
 @Setter(AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 public abstract class KubernetesCluster extends CaaSContainerPlatform implements LiveSystemComponent {
-    public static final String TYPE = KUBERNETES.getId();
     private List<CaaSService> services;
     private List<KafkaCluster> kafkaClusters;
     private List<Prometheus> prometheusInstances;
+    private List<Ambassador> ambassadorInstances;
 
     public KubernetesCluster() {
         super();
         services = new ArrayList<>();
         kafkaClusters = new ArrayList<>();
         prometheusInstances = new ArrayList<>();
+        ambassadorInstances = new ArrayList<>();
     }
 
     public static abstract class Builder<T extends KubernetesCluster, B extends Builder<T, B>> extends Component.Builder<T, B> {
@@ -104,6 +102,34 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
             return builder;
         }
 
+        public B withAmbassador(Ambassador ambassador) {
+            return withAmbassadorInstances(List.of(ambassador));
+        }
+
+        public B withAmbassadorInstances(Collection<? extends Ambassador> ambassadorInstances) {
+            if (isBlank(ambassadorInstances)) {
+                return builder;
+            }
+
+            if (component.getAmbassadorInstances() == null) {
+                component.setAmbassadorInstances(new ArrayList<>());
+            }
+
+            ambassadorInstances.forEach(ambassador -> {
+                ambassador.setProvider(component.getProvider());
+                ambassador.setContainerPlatform(component.getId().getValue());
+                ambassador.getDependencies().add(component.getId());
+            });
+            component.getAmbassadorInstances().addAll(ambassadorInstances);
+            return builder;
+        }
+
+        @Override
+        public T build() {
+            component.setType(KUBERNETES);
+            return super.build();
+        }
+
     }
 
     @Override
@@ -117,6 +143,9 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
                 .forEach(errors::addAll);
         prometheusInstances.stream()
                 .map(CaaSPrometheus::validate)
+                .forEach(errors::addAll);
+        ambassadorInstances.stream()
+                .map(CaaSAPIGateway::validate)
                 .forEach(errors::addAll);
         return errors;
     }

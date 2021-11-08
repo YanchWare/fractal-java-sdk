@@ -21,7 +21,7 @@ class GcpProgreSQLTest {
 
     @Test
     public void exceptionThrown_when_gcpPgCreatedWithNoRegionNoNetwork() {
-        var postgres = GcpProgreSQL.builder().id(ComponentId.from("postg"));
+        var postgres = GcpProgreSQL.builder().withId(ComponentId.from("postg"));
         assertThatThrownBy(postgres::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
                 "[GcpProgreSQL Validation] Region has not been defined and it is required",
                 "[GcpProgreSQL Validation] Network has not been defined and it is required]"
@@ -31,7 +31,7 @@ class GcpProgreSQLTest {
     @Test
     public void exceptionThrown_when_gcpPgCreatedWithNoNetwork() {
         var postgres = GcpProgreSQL.builder()
-                .id(ComponentId.from("postg"))
+                .withId(ComponentId.from("postg"))
                 .region(ASIA_SOUTH1);
         assertThatThrownBy(postgres::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
                 "[GcpProgreSQL Validation] Network has not been defined and it is required]"
@@ -117,7 +117,7 @@ class GcpProgreSQLTest {
 
     private GcpProgreSQL.GcpPostgreSQLBuilder getGcpPostgresBuilder() {
         return GcpProgreSQL.builder()
-                .id(ComponentId.from("postg"))
+                .withId(ComponentId.from("postg"))
                 .region(ASIA_SOUTH1)
                 .network("network");
     }

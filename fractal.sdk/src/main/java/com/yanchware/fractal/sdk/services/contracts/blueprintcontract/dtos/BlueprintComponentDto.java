@@ -45,7 +45,7 @@ public class BlueprintComponentDto extends ComponentDto {
         return BlueprintComponentDto.builder()
                 .id(liveSystemId)
                 .displayName(String.valueOf(allFields.get(DISPLAY_NAME_KEY)))
-                .description(String.format("Blueprint created via SDK by LiveSystem with ID: %s", liveSystemId))
+                .description(String.valueOf(allFields.get(DESCRIPTION_KEY)))
                 .type(String.valueOf(allFields.get(BLUEPRINT_TYPE)))
                 .version(String.valueOf(allFields.get(VERSION_KEY)))
                 .parameters((Map<String, Object>) allFields.get(PARAMETERS_KEY))

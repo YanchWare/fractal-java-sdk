@@ -9,8 +9,6 @@ import lombok.ToString;
 
 import java.util.Collection;
 
-import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.POSTGRESQL;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Getter
@@ -86,13 +84,6 @@ public class GcpProgreSQL extends PostgreSQL {
         public GcpPostgreSQLBuilder peeringNetworkPrefix(String peeringNetworkPrefix) {
             component.setPeeringNetworkPrefix(peeringNetworkPrefix);
             return builder;
-        }
-
-        @Override
-        public GcpProgreSQL build() {
-            component.setType(POSTGRESQL);
-            component.setVersion(DEFAULT_VERSION);
-            return super.build();
         }
     }
 

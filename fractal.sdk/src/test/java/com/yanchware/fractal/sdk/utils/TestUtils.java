@@ -4,24 +4,22 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yanchware.fractal.sdk.aggregates.Environment;
 import com.yanchware.fractal.sdk.aggregates.LiveSystem;
+import com.yanchware.fractal.sdk.domain.entities.Component;
 import com.yanchware.fractal.sdk.domain.entities.ComponentLink;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.KafkaCluster;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.KafkaTopic;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.KafkaUser;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.Prometheus;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.*;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureKubernetesService;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureNodePool;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzurePostgreSQL;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzurePostgreSQLDB;
 import com.yanchware.fractal.sdk.services.contracts.ComponentDto;
-import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import lombok.extern.slf4j.Slf4j;
+import org.assertj.core.api.SoftAssertions;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureMachineType.STANDARD_B2S;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureOsType.LINUX;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureRegion.EUROPE_WEST;
@@ -33,72 +31,78 @@ public class TestUtils {
 
     public static AzureKubernetesService getAksExample() {
         return AzureKubernetesService.builder()
-                .id(ComponentId.from("aks-1"))
-                .description("Test AKS cluster")
-                .displayName("AKS #1")
+                .withId("aks-1")
+                .withDescription("Test AKS cluster")
+                .withDisplayName("AKS #1")
                 .region(EUROPE_WEST)
                 .network("network-host")
                 .subNetwork("compute-tier-1")
                 .podsRange("tier-1-pods")
                 .serviceRange("tier-1-services")
-                .withNodePool(AzureNodePool.builder().
-                        name("aks-node-pool").
-                        diskSizeGb(35).
-                        machineType(STANDARD_B2S).
-                        maxNodeCount(3).
-                        maxSurge(1).
-                        minNodeCount(1).
-                        maxPodsPerNode(100).
-                        osType(LINUX).
-                        build())
+                .withNodePool(AzureNodePool.builder()
+                        .name("aks-node-pool")
+                        .diskSizeGb(35)
+                        .machineType(STANDARD_B2S)
+                        .maxNodeCount(3)
+                        .maxSurge(1)
+                        .minNodeCount(1)
+                        .maxPodsPerNode(100)
+                        .osType(LINUX)
+                        .build())
                 .withKafkaCluster(getKafkaClusterExample())
                 .withPrometheus(getPrometheusExample())
+                .withAmbassador(getAmbassadorExample())
                 .build();
     }
 
     private static Prometheus getPrometheusExample() {
         return Prometheus.builder()
-                .id(ComponentId.from("prometheus"))
-                .description("Prometheus monitoring")
-                .displayName("Prometheus")
+                .withId("prometheus")
+                .withDescription("Prometheus monitoring")
+                .withDisplayName("Prometheus")
                 .withNamespace("monitoring")
+                .build();
+    }
+
+    private static Ambassador getAmbassadorExample() {
+        return Ambassador.builder()
+                .withId("ambassador")
+                .withDescription("Ambassador")
+                .withDisplayName("Ambassador")
+                .withNamespace("ambassador")
                 .build();
     }
 
     private static KafkaCluster getKafkaClusterExample() {
         return KafkaCluster.builder()
-                .id(ComponentId.from("azure-kafka"))
-                .description("Kafka for Azure")
-                .displayName("AzureKafka #1")
+                .withId("azure-kafka")
+                .withDescription("Kafka for Azure")
+                .withDisplayName("AzureKafka #1")
                 .withNamespace("namespace")
                 .withKafkaTopics(List.of(
-                        KafkaTopic.builder().id(ComponentId.from("topic")).displayName("kafka-topic").build(),
-                        KafkaTopic.builder().id(ComponentId.from("topic-2")).displayName("kafka-topic-2").build()))
+                        KafkaTopic.builder().withId("topic").withDisplayName("kafka-topic").build(),
+                        KafkaTopic.builder().withId("topic-2").withDisplayName("kafka-topic-2").build()))
                 .withKafkaUsers(List.of(
-                        KafkaUser.builder().id(ComponentId.from("user-1")).displayName("kafka-user").withTopicReadACL("svcName").build(),
-                        KafkaUser.builder().id(ComponentId.from("user-2")).displayName("kafka-user-2").build()))
+                        KafkaUser.builder().withId("user-1").withDisplayName("kafka-user").withTopicReadACL("svcName").build(),
+                        KafkaUser.builder().withId("user-2").withDisplayName("kafka-user-2").build()))
                 .build();
     }
 
     public static AzurePostgreSQL getAzurePostgresExample() {
-        HashMap<String, Object> linkSettings = new HashMap<>();
-        linkSettings.put("roles", List.of("roles/micro", "roles/service"));
-        linkSettings.put("subscribe", true);
-
         return AzurePostgreSQL.builder()
-                .id(ComponentId.from("dbpg"))
-                .description("PostgreSQL")
-                .displayName("PostgreSQL")
+                .withId("dbpg")
+                .withDescription("PostgreSQL")
+                .withDisplayName("PostgreSQL")
                 .region(EUROPE_WEST)
                 .rootUser("rootUser")
                 .skuName(B_GEN5_1)
                 .storageAutoGrow(ENABLED)
                 .storageMB(5 * 1024)
                 .backupRetentionDays(12)
-                .withDatabase(AzurePostgreSQLDB.builder().id(ComponentId.from("db-1")).displayName("db-1").name("db").build())
+                .withDatabase(AzurePostgreSQLDB.builder().withId("db-1").withDisplayName("db-1").name("db").build())
                 .withDatabase(AzurePostgreSQLDB.builder()
-                        .id(ComponentId.from("db-2"))
-                        .displayName("db-2")
+                        .withId("db-2")
+                        .withDisplayName("db-2")
                         .name("db2")
                         .withLink(getComponentLink())
                         .build())
@@ -116,12 +120,12 @@ public class TestUtils {
 
     public static LiveSystem getLiveSystemExample() {
         return LiveSystem.builder()
-                .name("business-platform-test")
-                .description("Business platform")
-                .resourceGroupId("xxx")
+                .withName("business-platform-test")
+                .withDescription("Business platform")
+                .withResourceGroupId("xxx")
                 .withComponent(getAksExample())
                 .withComponent(getAzurePostgresExample())
-                .environment(getEnvExample())
+                .withEnvironment(getEnvExample())
                 .build();
     }
 
@@ -136,14 +140,11 @@ public class TestUtils {
                 .build();
     }
 
-    public static String getJsonRepresentation(Collection<? extends ComponentDto> components) {
+    public static String getJsonRepresentation(Object obj) {
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            String jsonRep = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(components);
-            log.debug("Json Map: {}", jsonRep);
-            return jsonRep;
+            return new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(obj);
         } catch (JsonProcessingException e) {
-            log.error("Error when trying to process component: {}", components, e);
+            log.error("Error when trying to process: {}", obj, e);
         }
         return null;
     }
@@ -168,5 +169,15 @@ public class TestUtils {
                 .willReturn(aResponse()
                         .withStatus(202)
                         .withHeader("Content-Type", "application/json")));
+    }
+
+    public static void assertGenericComponent(ComponentDto componentDto, Component comp, String type) {
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(componentDto.getId()).as("Component ID").isEqualTo(comp.getId().getValue());
+            softly.assertThat(componentDto.getDisplayName()).as("Component Display Name").isEqualTo(comp.getDisplayName());
+            softly.assertThat(componentDto.getDescription()).as("Component Description").contains(comp.getDescription());
+            softly.assertThat(componentDto.getType()).as("Component Type").isEqualTo(type);
+            softly.assertThat(componentDto.getVersion()).as("Component Version").isEqualTo(DEFAULT_VERSION);
+        });
     }
 }

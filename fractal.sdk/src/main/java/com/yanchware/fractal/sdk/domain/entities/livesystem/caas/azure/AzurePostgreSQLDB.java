@@ -7,9 +7,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.POSTGRESQLDB;
-
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
@@ -34,13 +31,6 @@ public class AzurePostgreSQLDB extends PostgreSQLDB {
         @Override
         protected AzurePostgreSQLDBBuilder getBuilder() {
             return this;
-        }
-
-        @Override
-        public AzurePostgreSQLDB build() {
-            component.setType(POSTGRESQLDB);
-            component.setVersion(DEFAULT_VERSION);
-            return super.build();
         }
     }
 }
