@@ -15,7 +15,9 @@ public enum ComponentType {
     POSTGRESQL("DataStorage.PaaS.PostgreSQL"),
     POSTGRESQLDB("DataStorage.PaaS.PostgreSQLDatabase"),
     CAAS_MONITORING("Observability.CaaS.Monitoring"),
-    PROMETHEUS("Observability.CaaS.Prometheus");
+    PROMETHEUS("Observability.CaaS.Prometheus"),
+    SERVICE_MESH_SECURITY("Security.CaaS.ServiceMeshSecurity"),
+    OCELOT("Security.CaaS.Ocelot");
 
     private String id;
 

@@ -156,6 +156,24 @@ public class BlueprintComponentDtoTest {
             softly.assertThat(k8sWorkloadDto.getDependencies()).as("Component Dependencies").containsExactly(aks.getId().getValue());
             softly.assertThat(k8sWorkloadDto.getLinks()).as("Component Links").isEmpty();
         });
+
+        //assert ocelot
+        var ocelotDto = blueprintComponentDtoList.stream().filter(dto -> dto.getId().equals(aks.getOcelotInstances().get(0).getId().getValue())).findFirst().get();
+        var ocelot = aks.getOcelotInstances().get(0);
+        assertGenericComponent(ocelotDto, ocelot, CaaSServiceMeshSecurity.TYPE);
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(ocelotDto.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(
+                    ocelot.getNamespace(),
+                    ocelot.getHost(),
+                    ocelot.getHostOwnerEmail(),
+                    ocelot.getCorsOrigins(),
+                    ocelot.getCookieMaxAgeSec(),
+                    ocelot.getPathPrefix(),
+                    aks.getId().getValue()
+            );
+            softly.assertThat(ocelotDto.getDependencies()).as("Component Dependencies").containsExactly(aks.getId().getValue());
+            softly.assertThat(ocelotDto.getLinks()).as("Component Links").isEmpty();
+        });
     }
 
     @Test
@@ -209,6 +227,7 @@ public class BlueprintComponentDtoTest {
         componentSize += kubernetesCluster.getKafkaClusters().size();
         componentSize += kubernetesCluster.getPrometheusInstances().size();
         componentSize += kubernetesCluster.getAmbassadorInstances().size();
+        componentSize += kubernetesCluster.getOcelotInstances().size();
         componentSize += kubernetesCluster.getKafkaClusters().stream().mapToLong(x -> x.getKafkaTopics().size()).sum();
         componentSize += kubernetesCluster.getKafkaClusters().stream().mapToLong(x -> x.getKafkaUsers().size()).sum();
 

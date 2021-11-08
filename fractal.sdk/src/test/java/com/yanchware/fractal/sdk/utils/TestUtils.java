@@ -56,6 +56,7 @@ public class TestUtils {
                 .withKafkaCluster(getKafkaClusterExample())
                 .withPrometheus(getPrometheusExample())
                 .withAmbassador(getAmbassadorExample())
+                .withOcelot(getOcelotExample())
                 .build();
     }
 
@@ -89,6 +90,20 @@ public class TestUtils {
                 .withDescription("Ambassador")
                 .withDisplayName("Ambassador")
                 .withNamespace("ambassador")
+                .build();
+    }
+
+    public static Ocelot getOcelotExample() {
+        return Ocelot.builder()
+                .withId("ocelot")
+                .withDescription("Security with Ocelot")
+                .withDisplayName("Ocelot")
+                .withNamespace("security")
+                .withHost("api.fractal-arch.org")
+                .withHostOwnerEmail("hello@fractal-arch.org")
+                .withCookieMaxAgeSec(3600)
+                .withCorsOrigins("https://fractal-arch.org")
+                .withPathPrefix("/api/*")
                 .build();
     }
 
