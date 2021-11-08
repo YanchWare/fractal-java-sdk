@@ -1,6 +1,6 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure;
 
-import com.yanchware.fractal.sdk.domain.entities.livesystem.PostgreSQL;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PostgreSQL;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.AccessLevel;
 import lombok.Getter;

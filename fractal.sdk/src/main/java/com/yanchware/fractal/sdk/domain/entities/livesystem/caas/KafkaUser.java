@@ -1,4 +1,4 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
 import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSKafkaUser;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.ACLOperation.READ;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.KafkaACLType.TOPIC;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.ACLOperation.READ;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.KafkaACLType.TOPIC;
 import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KAFKA_USER;
 

@@ -11,9 +11,9 @@ public class CreateBlueprintCommandRequestTest {
     @Test
     public void createBlueprintCommandRequestValid_when_liveSystemValid() {
         var ls = TestUtils.getLiveSystemExample();
-        String blueprintDescription = "blueprint description";
-        CreateBlueprintCommandRequest commandRequest = CreateBlueprintCommandRequest.fromLiveSystem(ls.getComponents(), blueprintDescription);
-        assertThat(commandRequest.getDescription()).isEqualTo(blueprintDescription);
+        String fractalId = "fractalId";
+        CreateBlueprintCommandRequest commandRequest = CreateBlueprintCommandRequest.fromLiveSystem(ls.getComponents(), fractalId);
+        assertThat(commandRequest.getDescription()).contains("Blueprint created via SDK from LiveSystem with Fractal ID", fractalId);
         assertThat(commandRequest.isPrivate()).isTrue();
         assertThat(commandRequest.getComponents()).isNotEmpty();
     }

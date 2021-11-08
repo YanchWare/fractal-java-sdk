@@ -1,4 +1,4 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
 import com.yanchware.fractal.sdk.domain.entities.Component;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.*;
@@ -18,7 +18,7 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
 @Setter(AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 public abstract class KubernetesCluster extends CaaSContainerPlatform implements LiveSystemComponent {
-    private List<CaaSService> services;
+    private List<KubernetesService> services;
     private List<KafkaCluster> kafkaClusters;
     private List<Prometheus> prometheusInstances;
     private List<Ambassador> ambassadorInstances;
@@ -33,11 +33,11 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
 
     public static abstract class Builder<T extends KubernetesCluster, B extends Builder<T, B>> extends Component.Builder<T, B> {
 
-        public B withService(CaaSService service) {
+        public B withService(KubernetesService service) {
             return withServices(List.of(service));
         }
 
-        public B withServices(Collection<? extends CaaSService> services) {
+        public B withServices(Collection<? extends KubernetesService> services) {
             if (isBlank(services)) {
                 return builder;
             }
@@ -46,6 +46,11 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
                 component.setServices(new ArrayList<>());
             }
 
+            services.forEach(svc -> {
+                svc.setProvider(component.getProvider());
+                svc.setContainerPlatform(component.getId().getValue());
+                svc.getDependencies().add(component.getId());
+            });
             component.getServices().addAll(services);
             return builder;
         }

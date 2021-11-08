@@ -1,4 +1,4 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
 //https://www.postgresql.org/docs/14/multibyte.html
 public enum PostgreSQLCharset {

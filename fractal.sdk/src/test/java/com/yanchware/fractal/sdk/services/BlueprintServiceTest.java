@@ -1,6 +1,5 @@
 package com.yanchware.fractal.sdk.services;
 
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.commands.CreateBlueprintCommandRequest;
@@ -57,15 +56,15 @@ public class BlueprintServiceTest {
 
     private BlueprintComponentDto buildBlueprintComponent() {
         return BlueprintComponentDto.builder()
-                .id("0001")
-                .displayName("blueprint basic")
-                .description("blueprint basic desc")
-                .type("type")
-                .version("V0.1")
-                .parameters(emptyMap())
-                .dependencies(emptySet())
-                .links(emptySet())
-                .outputFields(emptySet())
+                .withId("0001")
+                .withDisplayName("blueprint basic")
+                .withDescription("blueprint basic desc")
+                .withType("type")
+                .withVersion("V0.1")
+                .withParameters(emptyMap())
+                .withDependencies(emptySet())
+                .withLinks(emptySet())
+                .withOutputFields(emptySet())
                 .build();
     }
 }

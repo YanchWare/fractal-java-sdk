@@ -4,6 +4,8 @@ public enum ComponentType {
     UNKNOWN("Unknown"),
     API_GATEWAY("APIManagement.CaaS.APIGateway"),
     AMBASSADOR("APIManagement.CaaS.Ambassador"),
+    CAAS_SERVICE("NetworkAndCompute.CaaS.Service"),
+    K8S_SERVICE("NetworkAndCompute.CaaS.K8sService"),
     CONTAINER_PLATFORM("NetworkAndCompute.CaaS.ContainerPlatform"),
     CONTAINERIZED_MESSAGE_BROKER("Messaging.CaaS.Broker"),
     KAFKA("Messaging.CaaS.Kafka"),

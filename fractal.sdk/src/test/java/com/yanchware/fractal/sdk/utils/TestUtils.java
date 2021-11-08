@@ -6,11 +6,14 @@ import com.yanchware.fractal.sdk.aggregates.Environment;
 import com.yanchware.fractal.sdk.aggregates.LiveSystem;
 import com.yanchware.fractal.sdk.domain.entities.Component;
 import com.yanchware.fractal.sdk.domain.entities.ComponentLink;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.*;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.*;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureKubernetesService;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureNodePool;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzurePostgreSQL;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzurePostgreSQLDB;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.KafkaCluster;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.KafkaTopic;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.KafkaUser;
 import com.yanchware.fractal.sdk.services.contracts.ComponentDto;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.SoftAssertions;
@@ -49,13 +52,29 @@ public class TestUtils {
                         .maxPodsPerNode(100)
                         .osType(LINUX)
                         .build())
+                .withService(getK8sServiceExample())
                 .withKafkaCluster(getKafkaClusterExample())
                 .withPrometheus(getPrometheusExample())
                 .withAmbassador(getAmbassadorExample())
                 .build();
     }
 
-    private static Prometheus getPrometheusExample() {
+    public static KubernetesService getK8sServiceExample() {
+        return KubernetesService.builder()
+                .withId("fractal-svc")
+                .withDescription("Fractal Service on K8S")
+                .withDisplayName("Fractal SVC")
+                .withNamespace("fractal")
+                .withPrivateSSHKeyPassphraseSecretId("fractal-private-passphrase")
+                .withPrivateSSHKeySecretId("fractal-private-ssh")
+                .withPublicSSHKey("public-ssh")
+                .withSshRepositoryURI("ssh-uri")
+                .withRepoId("fractal-svc-id")
+                .withRoles(List.of("roles/datastore.user", "roles/pubsub.editor"))
+                .build();
+    }
+
+    public static Prometheus getPrometheusExample() {
         return Prometheus.builder()
                 .withId("prometheus")
                 .withDescription("Prometheus monitoring")
@@ -64,7 +83,7 @@ public class TestUtils {
                 .build();
     }
 
-    private static Ambassador getAmbassadorExample() {
+    public static Ambassador getAmbassadorExample() {
         return Ambassador.builder()
                 .withId("ambassador")
                 .withDescription("Ambassador")
@@ -73,7 +92,7 @@ public class TestUtils {
                 .build();
     }
 
-    private static KafkaCluster getKafkaClusterExample() {
+    public static KafkaCluster getKafkaClusterExample() {
         return KafkaCluster.builder()
                 .withId("azure-kafka")
                 .withDescription("Kafka for Azure")

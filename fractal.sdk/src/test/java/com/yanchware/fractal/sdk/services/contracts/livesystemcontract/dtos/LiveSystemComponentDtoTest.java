@@ -10,6 +10,7 @@ import java.util.Map;
 
 import static com.yanchware.fractal.sdk.utils.TestUtils.assertGenericComponent;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class LiveSystemComponentDtoTest {
 
@@ -19,21 +20,21 @@ class LiveSystemComponentDtoTest {
         var postgres = TestUtils.getAzurePostgresExample();
         Map<String, LiveSystemComponentDto> lsDtoMap = LiveSystemComponentDto.fromLiveSystemComponents(List.of(aks, postgres));
 
-        LiveSystemComponentDto aksDto = lsDtoMap.get(aks.getId().getValue());
-        assertGenericComponent(aksDto, aks, KUBERNETES.getId());
+        assertLsComponent(lsDtoMap, aks, KUBERNETES, aks.getProvider());
 
-        aks.getKafkaClusters().forEach(component -> assertLsComponent(lsDtoMap, component, KAFKA));
-        aks.getPrometheusInstances().forEach(component -> assertLsComponent(lsDtoMap, component, PROMETHEUS));
-        aks.getAmbassadorInstances().forEach(component -> assertLsComponent(lsDtoMap, component, AMBASSADOR));
+        aks.getKafkaClusters().forEach(component -> assertLsComponent(lsDtoMap, component, KAFKA, aks.getProvider()));
+        aks.getPrometheusInstances().forEach(component -> assertLsComponent(lsDtoMap, component, PROMETHEUS, aks.getProvider()));
+        aks.getAmbassadorInstances().forEach(component -> assertLsComponent(lsDtoMap, component, AMBASSADOR, aks.getProvider()));
+        aks.getServices().forEach(component -> assertLsComponent(lsDtoMap, component, K8S_SERVICE, aks.getProvider()));
 
-        LiveSystemComponentDto pgDto = lsDtoMap.get(postgres.getId().getValue());
-        assertGenericComponent(pgDto, postgres, POSTGRESQL.getId());
-        postgres.getDatabases().forEach(component -> assertLsComponent(lsDtoMap, component, POSTGRESQLDB));
+        assertLsComponent(lsDtoMap, postgres, POSTGRESQL, postgres.getProvider());
 
+        postgres.getDatabases().forEach(component -> assertLsComponent(lsDtoMap, component, POSTGRESQLDB, postgres.getProvider()));
     }
 
-    private void assertLsComponent(Map<String, LiveSystemComponentDto> lsDtoMap, Component component, ComponentType type) {
+    private void assertLsComponent(Map<String, LiveSystemComponentDto> lsDtoMap, Component component, ComponentType type, ProviderType provider) {
         var dto = lsDtoMap.get(component.getId().getValue());
         assertGenericComponent(dto, component, type.getId());
+        assertThat(dto.getProvider()).isEqualTo(provider);
     }
 }
