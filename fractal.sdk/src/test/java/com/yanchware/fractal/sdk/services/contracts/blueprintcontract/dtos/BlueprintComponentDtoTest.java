@@ -138,7 +138,7 @@ public class BlueprintComponentDtoTest {
             softly.assertThat(ambassadorDto.getLinks()).as("Component Links").isEmpty();
         });
 
-        //assert workload
+        //assert k8s workload
         var k8sWorkloadDto = blueprintComponentDtoList.stream().filter(dto -> dto.getId().equals(aks.getKubernetesWorkloads().get(0).getId().getValue())).findFirst().get();
         var k8sWorkload = aks.getKubernetesWorkloads().get(0);
         assertGenericComponent(k8sWorkloadDto, k8sWorkload, CaaSWorkload.TYPE);
