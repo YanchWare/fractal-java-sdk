@@ -14,6 +14,7 @@ public enum ComponentType {
     KUBERNETES("NetworkAndCompute.CaaS.Kubernetes"),
     POSTGRESQL("DataStorage.PaaS.PostgreSQL"),
     POSTGRESQLDB("DataStorage.PaaS.PostgreSQLDatabase"),
+    CAAS_MONITORING("Observability.CaaS.Monitoring"),
     PROMETHEUS("Observability.CaaS.Prometheus");
 
     private String id;
