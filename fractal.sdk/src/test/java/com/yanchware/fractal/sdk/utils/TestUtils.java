@@ -52,14 +52,14 @@ public class TestUtils {
                         .maxPodsPerNode(100)
                         .osType(LINUX)
                         .build())
-                .withService(getK8sServiceExample())
+                .withWorkload(getK8sWorkloadExample())
                 .withKafkaCluster(getKafkaClusterExample())
                 .withPrometheus(getPrometheusExample())
                 .withAmbassador(getAmbassadorExample())
                 .build();
     }
 
-    public static KubernetesWorkload getK8sServiceExample() {
+    public static KubernetesWorkload getK8sWorkloadExample() {
         return KubernetesWorkload.builder()
                 .withId("fractal-svc")
                 .withDescription("Fractal Service on K8S")

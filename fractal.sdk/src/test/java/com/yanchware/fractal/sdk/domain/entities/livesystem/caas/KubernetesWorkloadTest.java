@@ -9,28 +9,28 @@ import static org.assertj.core.api.Assertions.*;
 public class KubernetesWorkloadTest {
 
     @Test
-    public void exceptionThrown_when_svcBuiltWithNullId() {
+    public void exceptionThrown_when_workloadBuiltWithNullId() {
         assertThatThrownBy(() -> builder().withId("").build()).
                 isInstanceOf(IllegalArgumentException.class).
                 hasMessageContaining("Component Id is illegal");
     }
 
     @Test
-    public void exceptionThrown_when_svcBuiltWithContainerPlatformBlank() {
+    public void exceptionThrown_when_workloadBuiltWithContainerPlatformBlank() {
         assertThatThrownBy(() -> generateBuilder().withContainerPlatform("").build()).
                 isInstanceOf(IllegalArgumentException.class).
                 hasMessageContaining("ContainerPlatform is either empty or blank");
     }
 
     @Test
-    public void exceptionThrown_when_svcBuiltWithContainerPlatformEmpty() {
+    public void exceptionThrown_when_workloadBuiltWithContainerPlatformEmpty() {
         assertThatThrownBy(() -> generateBuilder().withContainerPlatform("   ").build()).
                 isInstanceOf(IllegalArgumentException.class).
                 hasMessageContaining("ContainerPlatform is either empty or blank");
     }
 
     @Test
-    public void exceptionThrown_when_svcBuiltWithEmptyValues() {
+    public void exceptionThrown_when_workloadBuiltWithEmptyValues() {
         assertThatThrownBy(() -> generateBuilder().build()).
                 isInstanceOf(IllegalArgumentException.class).
                 hasMessageContainingAll(
@@ -43,7 +43,7 @@ public class KubernetesWorkloadTest {
     }
 
     @Test
-    public void typeIsKubernetes_when_svcBuiltWithAllRequiredValues() {
+    public void typeIsKubernetes_when_workloadBuiltWithAllRequiredValues() {
         var builder = generateBuilder()
                 .withNamespace("fractal")
                 .withPrivateSSHKeyPassphraseSecretId("svc-private-ssh-key-pass")

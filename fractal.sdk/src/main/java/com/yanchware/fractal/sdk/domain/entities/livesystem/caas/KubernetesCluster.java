@@ -18,14 +18,14 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
 @Setter(AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 public abstract class KubernetesCluster extends CaaSContainerPlatform implements LiveSystemComponent {
-    private List<KubernetesWorkload> services;
+    private List<KubernetesWorkload> kubernetesWorkloads;
     private List<KafkaCluster> kafkaClusters;
     private List<Prometheus> prometheusInstances;
     private List<Ambassador> ambassadorInstances;
 
     public KubernetesCluster() {
         super();
-        services = new ArrayList<>();
+        kubernetesWorkloads = new ArrayList<>();
         kafkaClusters = new ArrayList<>();
         prometheusInstances = new ArrayList<>();
         ambassadorInstances = new ArrayList<>();
@@ -33,25 +33,25 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
 
     public static abstract class Builder<T extends KubernetesCluster, B extends Builder<T, B>> extends Component.Builder<T, B> {
 
-        public B withService(KubernetesWorkload service) {
-            return withServices(List.of(service));
+        public B withWorkload(KubernetesWorkload workload) {
+            return withWorkloads(List.of(workload));
         }
 
-        public B withServices(Collection<? extends KubernetesWorkload> services) {
-            if (isBlank(services)) {
+        public B withWorkloads(Collection<? extends KubernetesWorkload> workloads) {
+            if (isBlank(workloads)) {
                 return builder;
             }
 
-            if (component.getServices() == null) {
-                component.setServices(new ArrayList<>());
+            if (component.getKubernetesWorkloads() == null) {
+                component.setKubernetesWorkloads(new ArrayList<>());
             }
 
-            services.forEach(svc -> {
-                svc.setProvider(component.getProvider());
-                svc.setContainerPlatform(component.getId().getValue());
-                svc.getDependencies().add(component.getId());
+            workloads.forEach(workload -> {
+                workload.setProvider(component.getProvider());
+                workload.setContainerPlatform(component.getId().getValue());
+                workload.getDependencies().add(component.getId());
             });
-            component.getServices().addAll(services);
+            component.getKubernetesWorkloads().addAll(workloads);
             return builder;
         }
 
@@ -140,7 +140,7 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
     @Override
     public Collection<String> validate() {
         Collection<String> errors = super.validate();
-        services.stream()
+        kubernetesWorkloads.stream()
                 .map(CaaSWorkload::validate)
                 .forEach(errors::addAll);
         kafkaClusters.stream()

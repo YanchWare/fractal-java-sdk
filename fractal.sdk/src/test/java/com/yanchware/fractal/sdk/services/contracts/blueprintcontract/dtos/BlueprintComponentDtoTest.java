@@ -139,8 +139,8 @@ public class BlueprintComponentDtoTest {
         });
 
         //assert ambassador
-        var k8sServiceDto = blueprintComponentDtoList.stream().filter(dto -> dto.getId().equals(aks.getServices().get(0).getId().getValue())).findFirst().get();
-        var k8sService = aks.getServices().get(0);
+        var k8sServiceDto = blueprintComponentDtoList.stream().filter(dto -> dto.getId().equals(aks.getKubernetesWorkloads().get(0).getId().getValue())).findFirst().get();
+        var k8sService = aks.getKubernetesWorkloads().get(0);
         assertGenericComponent(k8sServiceDto, k8sService, CaaSWorkload.TYPE);
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(k8sServiceDto.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(
@@ -205,7 +205,7 @@ public class BlueprintComponentDtoTest {
 
     private void assertComponentSize(KubernetesCluster kubernetesCluster, List<BlueprintComponentDto> blueprintComponentDtos) {
         int componentSize = 1; //containerPlatform itself
-        componentSize += kubernetesCluster.getServices().size();
+        componentSize += kubernetesCluster.getKubernetesWorkloads().size();
         componentSize += kubernetesCluster.getKafkaClusters().size();
         componentSize += kubernetesCluster.getPrometheusInstances().size();
         componentSize += kubernetesCluster.getAmbassadorInstances().size();
