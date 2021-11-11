@@ -141,7 +141,7 @@ public class BlueprintComponentDtoTest {
         //assert ambassador
         var k8sServiceDto = blueprintComponentDtoList.stream().filter(dto -> dto.getId().equals(aks.getServices().get(0).getId().getValue())).findFirst().get();
         var k8sService = aks.getServices().get(0);
-        assertGenericComponent(k8sServiceDto, k8sService, CaaSService.TYPE);
+        assertGenericComponent(k8sServiceDto, k8sService, CaaSWorkload.TYPE);
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(k8sServiceDto.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(
                     k8sService.getNamespace(),

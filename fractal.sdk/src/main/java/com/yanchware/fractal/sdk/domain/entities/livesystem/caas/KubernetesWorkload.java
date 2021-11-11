@@ -1,6 +1,6 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
-import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSService;
+import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSWorkload;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -13,19 +13,19 @@ import java.util.Collection;
 import java.util.List;
 
 import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.K8S_SERVICE;
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.K8S_WORKLOAD;
 
 @Getter
 @Setter(AccessLevel.PROTECTED)
 @ToString(callSuper = true)
-public class KubernetesService extends CaaSService implements LiveSystemComponent {
-    private final static String NAMESPACE_IS_NULL_OR_EMPTY = "[KubernetesService Validation] Namespace is either empty or blank and it is required";
-    private final static String CONTAINER_PLATFORM_IS_EMPTY = "[KubernetesService Validation] ContainerPlatform is either empty or blank and it is required";
-    private final static String SSH_KEY_PASS_SECRET_IS_EMPTY = "[KubernetesService Validation] privateSSHKeyPassphraseSecretId is either empty or blank and it is required";
-    private final static String SSH_KEY_SECRET_IS_EMPTY = "[KubernetesService Validation] privateSSHKeySecretId is either empty or blank and it is required";
-    private final static String SSH_KEY_IS_EMPTY = "[KubernetesService Validation] publicSSHKey is either empty or blank and it is required";
-    private final static String SSH_REPO_URI_IS_EMPTY = "[KubernetesService Validation] sshRepositoryURI is either empty or blank and it is required";
-    private final static String REPO_ID_IS_EMPTY = "[KubernetesService Validation] repoId is either empty or blank and it is required";
+public class KubernetesWorkload extends CaaSWorkload implements LiveSystemComponent {
+    private final static String NAMESPACE_IS_NULL_OR_EMPTY = "[KubernetesWorkload Validation] Namespace is either empty or blank and it is required";
+    private final static String CONTAINER_PLATFORM_IS_EMPTY = "[KubernetesWorkload Validation] ContainerPlatform is either empty or blank and it is required";
+    private final static String SSH_KEY_PASS_SECRET_IS_EMPTY = "[KubernetesWorkload Validation] privateSSHKeyPassphraseSecretId is either empty or blank and it is required";
+    private final static String SSH_KEY_SECRET_IS_EMPTY = "[KubernetesWorkload Validation] privateSSHKeySecretId is either empty or blank and it is required";
+    private final static String SSH_KEY_IS_EMPTY = "[KubernetesWorkload Validation] publicSSHKey is either empty or blank and it is required";
+    private final static String SSH_REPO_URI_IS_EMPTY = "[KubernetesWorkload Validation] sshRepositoryURI is either empty or blank and it is required";
+    private final static String REPO_ID_IS_EMPTY = "[KubernetesWorkload Validation] repoId is either empty or blank and it is required";
 
     private String namespace;
     private String containerPlatform;
@@ -37,12 +37,12 @@ public class KubernetesService extends CaaSService implements LiveSystemComponen
     private List<String> roles;
     private ProviderType provider;
 
-    protected KubernetesService() {
+    protected KubernetesWorkload() {
         roles = new ArrayList<>();
     }
 
-    public static KubernetesServiceBuilder builder() {
-        return new KubernetesServiceBuilder();
+    public static KubernetesWorkloadBuilder builder() {
+        return new KubernetesWorkloadBuilder();
     }
 
     @Override
@@ -50,58 +50,58 @@ public class KubernetesService extends CaaSService implements LiveSystemComponen
         return provider;
     }
 
-    public static class KubernetesServiceBuilder extends Builder<KubernetesService, KubernetesServiceBuilder> {
+    public static class KubernetesWorkloadBuilder extends Builder<KubernetesWorkload, KubernetesWorkloadBuilder> {
 
         @Override
-        protected KubernetesService createComponent() {
-            return new KubernetesService();
+        protected KubernetesWorkload createComponent() {
+            return new KubernetesWorkload();
         }
 
         @Override
-        protected KubernetesServiceBuilder getBuilder() {
+        protected KubernetesWorkloadBuilder getBuilder() {
             return this;
         }
 
-        public KubernetesServiceBuilder withNamespace(String namespace) {
+        public KubernetesWorkloadBuilder withNamespace(String namespace) {
             component.setNamespace(namespace);
             return builder;
         }
 
-        public KubernetesServiceBuilder withContainerPlatform(String containerPlatform) {
+        public KubernetesWorkloadBuilder withContainerPlatform(String containerPlatform) {
             component.setContainerPlatform(containerPlatform);
             return builder;
         }
 
-        public KubernetesServiceBuilder withPrivateSSHKeyPassphraseSecretId(String privateSSHKeyPassphraseSecretId) {
+        public KubernetesWorkloadBuilder withPrivateSSHKeyPassphraseSecretId(String privateSSHKeyPassphraseSecretId) {
             component.setPrivateSSHKeyPassphraseSecretId(privateSSHKeyPassphraseSecretId);
             return builder;
         }
 
-        public KubernetesServiceBuilder withPrivateSSHKeySecretId(String privateSSHKeySecretId) {
+        public KubernetesWorkloadBuilder withPrivateSSHKeySecretId(String privateSSHKeySecretId) {
             component.setPrivateSSHKeySecretId(privateSSHKeySecretId);
             return builder;
         }
 
-        public KubernetesServiceBuilder withPublicSSHKey(String publicSSHKey) {
+        public KubernetesWorkloadBuilder withPublicSSHKey(String publicSSHKey) {
             component.setPublicSSHKey(publicSSHKey);
             return builder;
         }
 
-        public KubernetesServiceBuilder withSshRepositoryURI(String sshRepositoryURI) {
+        public KubernetesWorkloadBuilder withSshRepositoryURI(String sshRepositoryURI) {
             component.setSshRepositoryURI(sshRepositoryURI);
             return builder;
         }
 
-        public KubernetesServiceBuilder withRepoId(String repoId) {
+        public KubernetesWorkloadBuilder withRepoId(String repoId) {
             component.setRepoId(repoId);
             return builder;
         }
 
-        public KubernetesServiceBuilder withRole(String role) {
+        public KubernetesWorkloadBuilder withRole(String role) {
             return withRoles(List.of(role));
         }
 
-        public KubernetesServiceBuilder withRoles(List<String> roles) {
+        public KubernetesWorkloadBuilder withRoles(List<String> roles) {
             if (isBlank(roles)) {
                 return builder;
             }
@@ -113,8 +113,8 @@ public class KubernetesService extends CaaSService implements LiveSystemComponen
         }
 
         @Override
-        public KubernetesService build() {
-            component.setType(K8S_SERVICE);
+        public KubernetesWorkload build() {
+            component.setType(K8S_WORKLOAD);
             return super.build();
         }
     }

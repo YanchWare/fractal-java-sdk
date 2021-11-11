@@ -2,11 +2,11 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
 import org.junit.jupiter.api.Test;
 
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.KubernetesService.*;
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.K8S_SERVICE;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.KubernetesWorkload.*;
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.K8S_WORKLOAD;
 import static org.assertj.core.api.Assertions.*;
 
-public class KubernetesServiceTest {
+public class KubernetesWorkloadTest {
 
     @Test
     public void exceptionThrown_when_svcBuiltWithNullId() {
@@ -51,11 +51,11 @@ public class KubernetesServiceTest {
                 .withPublicSSHKey("public-ssh")
                 .withSshRepositoryURI("ssh")
                 .withRepoId("repo-id");
-        assertThat(builder.build().getType()).isEqualTo(K8S_SERVICE);
+        assertThat(builder.build().getType()).isEqualTo(K8S_WORKLOAD);
         assertThatCode(builder::build).doesNotThrowAnyException();
     }
 
-    private KubernetesServiceBuilder generateBuilder() {
+    private KubernetesWorkloadBuilder generateBuilder() {
         return builder().withId("kube");
     }
 }

@@ -59,8 +59,8 @@ public class TestUtils {
                 .build();
     }
 
-    public static KubernetesService getK8sServiceExample() {
-        return KubernetesService.builder()
+    public static KubernetesWorkload getK8sServiceExample() {
+        return KubernetesWorkload.builder()
                 .withId("fractal-svc")
                 .withDescription("Fractal Service on K8S")
                 .withDisplayName("Fractal SVC")

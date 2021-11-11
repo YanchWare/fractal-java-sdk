@@ -18,7 +18,7 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
 @Setter(AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 public abstract class KubernetesCluster extends CaaSContainerPlatform implements LiveSystemComponent {
-    private List<KubernetesService> services;
+    private List<KubernetesWorkload> services;
     private List<KafkaCluster> kafkaClusters;
     private List<Prometheus> prometheusInstances;
     private List<Ambassador> ambassadorInstances;
@@ -33,11 +33,11 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
 
     public static abstract class Builder<T extends KubernetesCluster, B extends Builder<T, B>> extends Component.Builder<T, B> {
 
-        public B withService(KubernetesService service) {
+        public B withService(KubernetesWorkload service) {
             return withServices(List.of(service));
         }
 
-        public B withServices(Collection<? extends KubernetesService> services) {
+        public B withServices(Collection<? extends KubernetesWorkload> services) {
             if (isBlank(services)) {
                 return builder;
             }
@@ -141,7 +141,7 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
     public Collection<String> validate() {
         Collection<String> errors = super.validate();
         services.stream()
-                .map(CaaSService::validate)
+                .map(CaaSWorkload::validate)
                 .forEach(errors::addAll);
         kafkaClusters.stream()
                 .map(CaaSKafka::validate)
