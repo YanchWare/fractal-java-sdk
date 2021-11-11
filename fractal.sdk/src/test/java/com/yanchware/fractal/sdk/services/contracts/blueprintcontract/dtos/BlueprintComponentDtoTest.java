@@ -115,7 +115,7 @@ public class BlueprintComponentDtoTest {
         //assert prometheus
         var prometheusDto = blueprintComponentDtoList.stream().filter(dto -> dto.getId().equals(aks.getPrometheusInstances().get(0).getId().getValue())).findFirst().get();
         var prometheusInstance = aks.getPrometheusInstances().get(0);
-        assertGenericComponent(prometheusDto, prometheusInstance, CaaSPrometheus.TYPE);
+        assertGenericComponent(prometheusDto, prometheusInstance, CaaSMonitoring.TYPE);
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(prometheusDto.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(
                     prometheusInstance.getNamespace(),
@@ -138,23 +138,23 @@ public class BlueprintComponentDtoTest {
             softly.assertThat(ambassadorDto.getLinks()).as("Component Links").isEmpty();
         });
 
-        //assert ambassador
-        var k8sServiceDto = blueprintComponentDtoList.stream().filter(dto -> dto.getId().equals(aks.getKubernetesWorkloads().get(0).getId().getValue())).findFirst().get();
-        var k8sService = aks.getKubernetesWorkloads().get(0);
-        assertGenericComponent(k8sServiceDto, k8sService, CaaSWorkload.TYPE);
+        //assert workload
+        var k8sWorkloadDto = blueprintComponentDtoList.stream().filter(dto -> dto.getId().equals(aks.getKubernetesWorkloads().get(0).getId().getValue())).findFirst().get();
+        var k8sWorkload = aks.getKubernetesWorkloads().get(0);
+        assertGenericComponent(k8sWorkloadDto, k8sWorkload, CaaSWorkload.TYPE);
         SoftAssertions.assertSoftly(softly -> {
-            softly.assertThat(k8sServiceDto.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(
-                    k8sService.getNamespace(),
-                    k8sService.getPrivateSSHKeyPassphraseSecretId(),
-                    k8sService.getPrivateSSHKeySecretId(),
-                    k8sService.getPublicSSHKey(),
-                    k8sService.getSshRepositoryURI(),
-                    k8sService.getRoles(),
-                    k8sService.getRepoId(),
+            softly.assertThat(k8sWorkloadDto.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(
+                    k8sWorkload.getNamespace(),
+                    k8sWorkload.getPrivateSSHKeyPassphraseSecretId(),
+                    k8sWorkload.getPrivateSSHKeySecretId(),
+                    k8sWorkload.getPublicSSHKey(),
+                    k8sWorkload.getSshRepositoryURI(),
+                    k8sWorkload.getRoles(),
+                    k8sWorkload.getRepoId(),
                     aks.getId().getValue()
             );
-            softly.assertThat(k8sServiceDto.getDependencies()).as("Component Dependencies").containsExactly(aks.getId().getValue());
-            softly.assertThat(k8sServiceDto.getLinks()).as("Component Links").isEmpty();
+            softly.assertThat(k8sWorkloadDto.getDependencies()).as("Component Dependencies").containsExactly(aks.getId().getValue());
+            softly.assertThat(k8sWorkloadDto.getLinks()).as("Component Links").isEmpty();
         });
     }
 

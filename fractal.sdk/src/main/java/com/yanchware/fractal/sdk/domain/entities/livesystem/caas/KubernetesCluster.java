@@ -147,7 +147,7 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
                 .map(CaaSKafka::validate)
                 .forEach(errors::addAll);
         prometheusInstances.stream()
-                .map(CaaSPrometheus::validate)
+                .map(CaaSMonitoring::validate)
                 .forEach(errors::addAll);
         ambassadorInstances.stream()
                 .map(CaaSAPIGateway::validate)
