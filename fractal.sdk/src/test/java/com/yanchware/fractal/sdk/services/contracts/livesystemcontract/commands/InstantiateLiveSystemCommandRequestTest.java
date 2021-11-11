@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 
 import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
 import static com.yanchware.fractal.sdk.utils.TestUtils.getLiveSystemExample;
-import static org.assertj.core.api.Assertions.assertThat;
 
 class InstantiateLiveSystemCommandRequestTest {
 
@@ -19,9 +18,6 @@ class InstantiateLiveSystemCommandRequestTest {
 
         assertLiveSystemInfo(commandRequest, ls);
         assertEnvironment(commandRequest.getEnvironment(), ls.getEnvironment());
-
-        //aks + kafka + 2 topics + 2 users + prometheus + ambassador + pg dbms + 2 pg db
-        assertThat(commandRequest.getBlueprintMap().size()).isEqualTo(11);
     }
 
     private void assertLiveSystemInfo(InstantiateLiveSystemCommandRequest commandRequest, LiveSystem ls) {

@@ -1,4 +1,4 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
 import lombok.Builder;
 import lombok.Data;

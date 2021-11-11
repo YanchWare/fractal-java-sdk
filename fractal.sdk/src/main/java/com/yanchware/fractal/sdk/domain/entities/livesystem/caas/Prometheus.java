@@ -1,6 +1,6 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
-import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSPrometheus;
+import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSMonitoring;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -15,7 +15,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Getter
 @Setter(AccessLevel.PROTECTED)
 @ToString(callSuper = true)
-public class Prometheus extends CaaSPrometheus implements LiveSystemComponent {
+public class Prometheus extends CaaSMonitoring implements LiveSystemComponent {
     private final static String NAMESPACE_IS_NULL_OR_EMPTY = "[Prometheus Validation] Namespace has not been defined and it is required";
     private final static String CONTAINER_PLATFORM_IS_EMPTY = "[Prometheus Validation] ContainerPlatform defined was either empty or blank and it is required";
 

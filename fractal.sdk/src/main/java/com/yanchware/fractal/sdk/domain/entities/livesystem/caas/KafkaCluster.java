@@ -1,4 +1,4 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
 import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSKafka;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;

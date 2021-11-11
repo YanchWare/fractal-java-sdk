@@ -52,7 +52,7 @@ public class Automaton {
         for (LiveSystem ls : liveSystems) {
             String fractalId = String.format("%s/%s:%s", ls.getResourceGroupId(), ls.getName(), "1.0");
             log.info("Starting to instantiate live system with id: {}", fractalId);
-            var blueprintCommand = CreateBlueprintCommandRequest.fromLiveSystem(ls.getComponents(), "some blueprint description");
+            var blueprintCommand = CreateBlueprintCommandRequest.fromLiveSystem(ls.getComponents(), fractalId);
             var liveSystemCommand = InstantiateLiveSystemCommandRequest.fromLiveSystem(ls);
 
             blueprintService.createOrUpdateBlueprint(blueprintCommand, fractalId);

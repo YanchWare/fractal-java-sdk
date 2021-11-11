@@ -2,7 +2,7 @@ package com.yanchware.fractal.sdk.utils;
 
 import com.yanchware.fractal.sdk.domain.entities.Validatable;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.BlueprintComponent;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemComponent;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.LiveSystemComponent;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.extern.slf4j.Slf4j;
 

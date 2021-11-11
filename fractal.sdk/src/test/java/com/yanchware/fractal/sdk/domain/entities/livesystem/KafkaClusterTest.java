@@ -1,5 +1,8 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem;
 
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.KafkaCluster;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.KafkaTopic;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.KafkaUser;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import org.junit.jupiter.api.Test;
 
