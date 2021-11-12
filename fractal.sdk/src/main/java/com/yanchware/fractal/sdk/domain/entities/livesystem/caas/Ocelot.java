@@ -76,7 +76,8 @@ public class Ocelot extends CaaSServiceMeshSecurity implements LiveSystemCompone
         }
 
         public OcelotBuilder withCorsOrigins(String corsOrigins) {
-            return withCorsOrigins(List.of(corsOrigins));
+            String[] corsOriginsSplit = corsOrigins.split(",");
+            return withCorsOrigins(List.of(corsOriginsSplit));
         }
 
         public OcelotBuilder withCorsOrigins(List<String> corsOrigins) {

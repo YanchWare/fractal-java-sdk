@@ -46,9 +46,11 @@ class OcelotTest {
                 .withHost("api.fractal-arch.org")
                 .withHostOwnerEmail("hello@fractal-arch.org")
                 .withCookieMaxAgeSec(3600)
-                .withCorsOrigins("https://fractal-arch.org")
+                .withCorsOrigins("https://fractal-arch.org,localhost:8080")
                 .withPathPrefix("/api/*");
-        assertThat(builder.build().getType()).isEqualTo(OCELOT);
         assertThatCode(builder::build).doesNotThrowAnyException();
+        assertThat(builder.build().getType()).isEqualTo(OCELOT);
+        assertThat(builder.build().getCorsOrigins()).hasSize(2);
+        assertThat(builder.build().getCorsOrigins()).containsExactlyInAnyOrder("https://fractal-arch.org","localhost:8080");
     }
 }
