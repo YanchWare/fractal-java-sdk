@@ -104,6 +104,9 @@ public class TestUtils {
                 .withCookieMaxAgeSec(3600)
                 .withCorsOrigins("https://fractal-arch.org")
                 .withPathPrefix("/api/*")
+                .withLink(ComponentLink.builder()
+                        .withComponentId("db-1")
+                        .build())
                 .build();
     }
 

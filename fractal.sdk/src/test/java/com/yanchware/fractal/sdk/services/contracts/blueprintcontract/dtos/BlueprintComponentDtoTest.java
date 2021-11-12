@@ -1,5 +1,6 @@
 package com.yanchware.fractal.sdk.services.contracts.blueprintcontract.dtos;
 
+import com.yanchware.fractal.sdk.domain.entities.ComponentLink;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.*;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSPostgreSQL;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSPostgreSQLDB;
@@ -172,7 +173,7 @@ public class BlueprintComponentDtoTest {
                     aks.getId().getValue()
             );
             softly.assertThat(ocelotDto.getDependencies()).as("Component Dependencies").containsExactly(aks.getId().getValue());
-            softly.assertThat(ocelotDto.getLinks()).as("Component Links").isEmpty();
+            softly.assertThat(ocelotDto.getLinks().stream().map(ComponentLink::getComponentId).collect(Collectors.toSet())).as("Component Links").contains("db-1");
         });
     }
 
