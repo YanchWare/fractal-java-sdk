@@ -26,9 +26,9 @@ class LiveSystemComponentDtoTest {
         aks.getPrometheusInstances().forEach(component -> assertLsComponent(lsDtoMap, component, PROMETHEUS, aks.getProvider()));
         aks.getAmbassadorInstances().forEach(component -> assertLsComponent(lsDtoMap, component, AMBASSADOR, aks.getProvider()));
         aks.getKubernetesWorkloads().forEach(component -> assertLsComponent(lsDtoMap, component, K8S_WORKLOAD, aks.getProvider()));
+        aks.getOcelotInstances().forEach(component -> assertLsComponent(lsDtoMap, component, OCELOT, aks.getProvider()));
 
         assertLsComponent(lsDtoMap, postgres, POSTGRESQL, postgres.getProvider());
-
         postgres.getDatabases().forEach(component -> assertLsComponent(lsDtoMap, component, POSTGRESQLDB, postgres.getProvider()));
     }
 

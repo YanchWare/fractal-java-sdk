@@ -22,6 +22,7 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
     private List<KafkaCluster> kafkaClusters;
     private List<Prometheus> prometheusInstances;
     private List<Ambassador> ambassadorInstances;
+    private List<Ocelot> ocelotInstances;
 
     public KubernetesCluster() {
         super();
@@ -29,6 +30,7 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
         kafkaClusters = new ArrayList<>();
         prometheusInstances = new ArrayList<>();
         ambassadorInstances = new ArrayList<>();
+        ocelotInstances = new ArrayList<>();
     }
 
     public static abstract class Builder<T extends KubernetesCluster, B extends Builder<T, B>> extends Component.Builder<T, B> {
@@ -129,6 +131,26 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
             return builder;
         }
 
+        public B withOcelot(Ocelot ocelot) {
+            return withOcelot(List.of(ocelot));
+        }
+
+        public B withOcelot(Collection<? extends Ocelot> ocelotInstances) {
+            if (isBlank(ocelotInstances)) {
+                return builder;
+            }
+            if (component.getOcelotInstances() == null) {
+                component.setOcelotInstances(new ArrayList<>());
+            }
+            ocelotInstances.forEach(ocelot -> {
+                ocelot.setProvider(component.getProvider());
+                ocelot.setContainerPlatform(component.getId().getValue());
+                ocelot.getDependencies().add(component.getId());
+            });
+            component.getOcelotInstances().addAll(ocelotInstances);
+            return builder;
+        }
+
         @Override
         public T build() {
             component.setType(KUBERNETES);
@@ -151,6 +173,9 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
                 .forEach(errors::addAll);
         ambassadorInstances.stream()
                 .map(CaaSAPIGateway::validate)
+                .forEach(errors::addAll);
+        ocelotInstances.stream()
+                .map(CaaSServiceMeshSecurity::validate)
                 .forEach(errors::addAll);
         return errors;
     }
