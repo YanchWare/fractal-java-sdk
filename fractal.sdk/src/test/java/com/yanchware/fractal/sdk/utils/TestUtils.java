@@ -57,6 +57,7 @@ public class TestUtils {
                 .withPrometheus(getPrometheusExample())
                 .withAmbassador(getAmbassadorExample())
                 .withOcelot(getOcelotExample())
+                .withJaeger(getJaegerExample())
                 .build();
     }
 
@@ -107,6 +108,19 @@ public class TestUtils {
                 .withLink(ComponentLink.builder()
                         .withComponentId("db-1")
                         .build())
+                .build();
+    }
+
+    public static Jaeger getJaegerExample() {
+        return Jaeger.builder()
+                .withId("jaeger")
+                .withDescription("Jaeger Tracing")
+                .withDisplayName("Jaeger")
+                .withNamespace("tracing")
+                .withStorageCpu(1)
+                .withStorageMemory(2)
+                .withStorageInstances(1)
+                .withStorageStorageClassName("standard")
                 .build();
     }
 
@@ -177,13 +191,12 @@ public class TestUtils {
                 .build();
     }
 
-    public static String getJsonRepresentation(Object obj) {
+    public static void printJsonRepresentation(Object obj) {
         try {
-            return new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(obj);
+            log.debug(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(obj));
         } catch (JsonProcessingException e) {
             log.error("Error when trying to process: {}", obj, e);
         }
-        return null;
     }
 
     public static void stubWireMockForLiveSystem(String url) {

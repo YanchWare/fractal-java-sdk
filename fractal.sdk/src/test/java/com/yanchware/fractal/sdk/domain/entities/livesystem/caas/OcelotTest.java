@@ -39,7 +39,7 @@ class OcelotTest {
     }
 
     @Test
-    public void typeIsKubernetes_when_svcBuiltWithAllRequiredValues() {
+    public void typeIsOcelot_when_BuiltWithAllRequiredValues() {
         var builder = Ocelot.builder()
                 .withId("ocelot")
                 .withNamespace("security")
