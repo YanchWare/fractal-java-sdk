@@ -58,6 +58,7 @@ public class TestUtils {
                 .withAmbassador(getAmbassadorExample())
                 .withOcelot(getOcelotExample())
                 .withJaeger(getJaegerExample())
+                .withElasticLogging(getElasticLoggingExample())
                 .build();
     }
 
@@ -108,6 +109,23 @@ public class TestUtils {
                 .withLink(ComponentLink.builder()
                         .withComponentId("db-1")
                         .build())
+                .build();
+    }
+
+    public static ElasticLogging getElasticLoggingExample() {
+        return ElasticLogging.builder()
+                .withId("elastic-logging")
+                .withDescription("Elastic Logging")
+                .withDisplayName("Elastic Logging")
+                .withNamespace("logging")
+                .withAPM(true)
+                .withKibana(true)
+                .withElasticVersion("1")
+                .withInstances(3)
+                .withStorage("standard")
+                .withStorageClassName("standard")
+                .withMemory(3)
+                .withCpu(3)
                 .build();
     }
 

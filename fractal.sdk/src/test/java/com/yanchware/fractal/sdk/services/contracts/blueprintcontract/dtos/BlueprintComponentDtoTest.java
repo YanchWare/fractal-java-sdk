@@ -187,6 +187,28 @@ public class BlueprintComponentDtoTest {
                     aks.getId().getValue()
             );
             softly.assertThat(jaegerDto.getDependencies()).as("Component Dependencies").containsExactly(aks.getId().getValue());
+            softly.assertThat(jaegerDto.getLinks()).as("Component Links").isEmpty();
+        });
+
+        //assert elastic logging
+        var elasticLoggingDto = blueprintComponentDtoList.stream().filter(dto -> dto.getId().equals(aks.getElasticLoggingInstances().get(0).getId().getValue())).findFirst().get();
+        var elasticLogging = aks.getElasticLoggingInstances().get(0);
+        assertGenericComponent(elasticLoggingDto, elasticLogging, CaaSLogging.TYPE);
+        System.out.println(elasticLoggingDto.getParameters());
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(elasticLoggingDto.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(
+                    elasticLogging.getNamespace(),
+                    elasticLogging.isAPMRequired(),
+                    elasticLogging.isKibanaRequired(),
+                    elasticLogging.getElasticVersion(),
+                    elasticLogging.getElasticInstances(),
+                    elasticLogging.getStorage(),
+                    elasticLogging.getStorageClassName(),
+                    elasticLogging.getMemory(),
+                    elasticLogging.getCpu(),
+                    aks.getId().getValue()
+            );
+            softly.assertThat(elasticLoggingDto.getDependencies()).as("Component Dependencies").containsExactly(aks.getId().getValue());
             softly.assertThat(k8sWorkloadDto.getLinks()).as("Component Links").isEmpty();
         });
     }
@@ -244,6 +266,7 @@ public class BlueprintComponentDtoTest {
         componentSize += kubernetesCluster.getAmbassadorInstances().size();
         componentSize += kubernetesCluster.getOcelotInstances().size();
         componentSize += kubernetesCluster.getJaegerInstances().size();
+        componentSize += kubernetesCluster.getElasticLoggingInstances().size();
         componentSize += kubernetesCluster.getKafkaClusters().stream().mapToLong(x -> x.getKafkaTopics().size()).sum();
         componentSize += kubernetesCluster.getKafkaClusters().stream().mapToLong(x -> x.getKafkaUsers().size()).sum();
 

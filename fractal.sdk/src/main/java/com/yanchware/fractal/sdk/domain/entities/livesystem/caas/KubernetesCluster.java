@@ -24,7 +24,8 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
     private List<Ambassador> ambassadorInstances;
     private List<Ocelot> ocelotInstances;
     private List<Jaeger> jaegerInstances;
-
+    private List<ElasticLogging> elasticLoggingInstances;
+    
     public KubernetesCluster() {
         super();
         kubernetesWorkloads = new ArrayList<>();
@@ -33,6 +34,7 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
         ambassadorInstances = new ArrayList<>();
         ocelotInstances = new ArrayList<>();
         jaegerInstances = new ArrayList<>();
+        elasticLoggingInstances = new ArrayList<>();
     }
 
     public static abstract class Builder<T extends KubernetesCluster, B extends Builder<T, B>> extends Component.Builder<T, B> {
@@ -173,6 +175,26 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
             return builder;
         }
 
+        public B withElasticLogging(ElasticLogging elasticLogging) {
+            return withElasticLogging(List.of(elasticLogging));
+        }
+
+        public B withElasticLogging(Collection<? extends ElasticLogging> elasticLoggingInstances) {
+            if (isBlank(elasticLoggingInstances)) {
+                return builder;
+            }
+            if (component.getElasticLoggingInstances() == null) {
+                component.setElasticLoggingInstances(new ArrayList<>());
+            }
+            elasticLoggingInstances.forEach(jaeger -> {
+                jaeger.setProvider(component.getProvider());
+                jaeger.setContainerPlatform(component.getId().getValue());
+                jaeger.getDependencies().add(component.getId());
+            });
+            component.getElasticLoggingInstances().addAll(elasticLoggingInstances);
+            return builder;
+        }
+
         @Override
         public T build() {
             component.setType(KUBERNETES);
@@ -201,6 +223,9 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
                 .forEach(errors::addAll);
         jaegerInstances.stream()
                 .map(CaaSTracing::validate)
+                .forEach(errors::addAll);
+        elasticLoggingInstances.stream()
+                .map(CaaSLogging::validate)
                 .forEach(errors::addAll);
         return errors;
     }
