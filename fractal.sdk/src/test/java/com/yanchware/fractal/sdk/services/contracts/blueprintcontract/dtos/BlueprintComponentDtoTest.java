@@ -175,6 +175,20 @@ public class BlueprintComponentDtoTest {
             softly.assertThat(ocelotDto.getDependencies()).as("Component Dependencies").containsExactly(aks.getId().getValue());
             softly.assertThat(ocelotDto.getLinks().stream().map(ComponentLink::getComponentId).collect(Collectors.toSet())).as("Component Links").contains("db-1");
         });
+
+        //assert jaeger
+        var jaegerDto = blueprintComponentDtoList.stream().filter(dto -> dto.getId().equals(aks.getJaegerInstances().get(0).getId().getValue())).findFirst().get();
+        var jaeger = aks.getJaegerInstances().get(0);
+        assertGenericComponent(jaegerDto, jaeger, CaaSTracing.TYPE);
+        SoftAssertions.assertSoftly(softly -> {
+            softly.assertThat(jaegerDto.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(
+                    jaeger.getNamespace(),
+                    jaeger.getStorageSettings(),
+                    aks.getId().getValue()
+            );
+            softly.assertThat(jaegerDto.getDependencies()).as("Component Dependencies").containsExactly(aks.getId().getValue());
+            softly.assertThat(k8sWorkloadDto.getLinks()).as("Component Links").isEmpty();
+        });
     }
 
     @Test
@@ -229,6 +243,7 @@ public class BlueprintComponentDtoTest {
         componentSize += kubernetesCluster.getPrometheusInstances().size();
         componentSize += kubernetesCluster.getAmbassadorInstances().size();
         componentSize += kubernetesCluster.getOcelotInstances().size();
+        componentSize += kubernetesCluster.getJaegerInstances().size();
         componentSize += kubernetesCluster.getKafkaClusters().stream().mapToLong(x -> x.getKafkaTopics().size()).sum();
         componentSize += kubernetesCluster.getKafkaClusters().stream().mapToLong(x -> x.getKafkaUsers().size()).sum();
 

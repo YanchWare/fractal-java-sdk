@@ -23,6 +23,7 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
     private List<Prometheus> prometheusInstances;
     private List<Ambassador> ambassadorInstances;
     private List<Ocelot> ocelotInstances;
+    private List<Jaeger> jaegerInstances;
 
     public KubernetesCluster() {
         super();
@@ -31,6 +32,7 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
         prometheusInstances = new ArrayList<>();
         ambassadorInstances = new ArrayList<>();
         ocelotInstances = new ArrayList<>();
+        jaegerInstances = new ArrayList<>();
     }
 
     public static abstract class Builder<T extends KubernetesCluster, B extends Builder<T, B>> extends Component.Builder<T, B> {
@@ -151,6 +153,26 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
             return builder;
         }
 
+        public B withJaeger(Jaeger jaeger) {
+            return withJaeger(List.of(jaeger));
+        }
+
+        public B withJaeger(Collection<? extends Jaeger> jaegerInstances) {
+            if (isBlank(jaegerInstances)) {
+                return builder;
+            }
+            if (component.getJaegerInstances() == null) {
+                component.setJaegerInstances(new ArrayList<>());
+            }
+            jaegerInstances.forEach(jaeger -> {
+                jaeger.setProvider(component.getProvider());
+                jaeger.setContainerPlatform(component.getId().getValue());
+                jaeger.getDependencies().add(component.getId());
+            });
+            component.getJaegerInstances().addAll(jaegerInstances);
+            return builder;
+        }
+
         @Override
         public T build() {
             component.setType(KUBERNETES);
@@ -176,6 +198,9 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
                 .forEach(errors::addAll);
         ocelotInstances.stream()
                 .map(CaaSServiceMeshSecurity::validate)
+                .forEach(errors::addAll);
+        jaegerInstances.stream()
+                .map(CaaSTracing::validate)
                 .forEach(errors::addAll);
         return errors;
     }

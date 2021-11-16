@@ -17,7 +17,9 @@ public enum ComponentType {
     CAAS_MONITORING("Observability.CaaS.Monitoring"),
     PROMETHEUS("Observability.CaaS.Prometheus"),
     SERVICE_MESH_SECURITY("Security.CaaS.ServiceMeshSecurity"),
-    OCELOT("Security.CaaS.Ocelot");
+    OCELOT("Security.CaaS.Ocelot"),
+    CAAS_TRACING("Observability.CaaS.Monitoring"),
+    JAEGER("Observability.CaaS.Jaeger");
 
     private String id;
 
