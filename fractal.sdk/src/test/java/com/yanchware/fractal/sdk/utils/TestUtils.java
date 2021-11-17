@@ -62,6 +62,7 @@ public class TestUtils {
                 .withOcelot(getOcelotExample())
                 .withJaeger(getJaegerExample())
                 .withElasticLogging(getElasticLoggingExample())
+                .withElasticDataStore(getElasticDataStoreExample())
                 .build();
     }
 
@@ -125,8 +126,25 @@ public class TestUtils {
                 .withKibana(true)
                 .withElasticVersion("1")
                 .withInstances(3)
-                .withStorage("standard")
+                .withStorage("250Gi")
                 .withStorageClassName("standard")
+                .withMemory(3)
+                .withCpu(3)
+                .build();
+    }
+
+    public static ElasticDataStore getElasticDataStoreExample() {
+        return ElasticDataStore.builder()
+                .withId("elastic-data")
+                .withDescription("Elastic Data Store")
+                .withDisplayName("Elastic Data Store")
+                .withNamespace("elastic-data")
+                .withAPM(true)
+                .withKibana(false)
+                .withElasticVersion("1")
+                .withInstances(3)
+                .withStorage("250Gi")
+                .withStorageClassName("ssd")
                 .withMemory(3)
                 .withCpu(3)
                 .build();
