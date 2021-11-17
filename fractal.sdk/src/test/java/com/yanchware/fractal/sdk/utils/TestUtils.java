@@ -11,10 +11,8 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureKube
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureNodePool;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzurePostgreSQL;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzurePostgreSQLDB;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.KafkaCluster;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.KafkaTopic;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.KafkaUser;
 import com.yanchware.fractal.sdk.services.contracts.ComponentDto;
+import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.SoftAssertions;
 
@@ -28,11 +26,12 @@ import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.Az
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureRegion.EUROPE_WEST;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureSkuName.B_GEN5_1;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureStorageAutoGrow.ENABLED;
+import static java.util.stream.Collectors.toSet;
 
 @Slf4j
 public class TestUtils {
 
-    public static AzureKubernetesService getAksExample() {
+    public static AzureKubernetesService.AzureKubernetesServiceBuilder getAksBuilder() {
         return AzureKubernetesService.builder()
                 .withId("aks-1")
                 .withDescription("Test AKS cluster")
@@ -51,7 +50,11 @@ public class TestUtils {
                         .minNodeCount(1)
                         .maxPodsPerNode(100)
                         .osType(LINUX)
-                        .build())
+                        .build());
+    }
+
+    public static AzureKubernetesService getAksExample() {
+        return getAksBuilder()
                 .withWorkload(getK8sWorkloadExample())
                 .withKafkaCluster(getKafkaClusterExample())
                 .withPrometheus(getPrometheusExample())
@@ -246,6 +249,8 @@ public class TestUtils {
             softly.assertThat(componentDto.getDescription()).as("Component Description").contains(comp.getDescription());
             softly.assertThat(componentDto.getType()).as("Component Type").isEqualTo(type);
             softly.assertThat(componentDto.getVersion()).as("Component Version").isEqualTo(DEFAULT_VERSION);
+            softly.assertThat(componentDto.getDependencies()).as("Component Dependencies").containsAll(comp.getDependencies().stream().map(ComponentId::getValue).collect(toSet()));
+            softly.assertThat(componentDto.getLinks()).as("Component Links").containsAll(comp.getLinks());
         });
     }
 }
