@@ -28,6 +28,7 @@ class LiveSystemComponentDtoTest {
         aks.getKubernetesWorkloads().forEach(component -> assertLsComponent(lsDtoMap, component, K8S_WORKLOAD, aks.getProvider()));
         aks.getOcelotInstances().forEach(component -> assertLsComponent(lsDtoMap, component, OCELOT, aks.getProvider()));
         aks.getJaegerInstances().forEach(component -> assertLsComponent(lsDtoMap, component, JAEGER, aks.getProvider()));
+        aks.getElasticLoggingInstances().forEach(component -> assertLsComponent(lsDtoMap, component, ELASTIC_LOGGING, aks.getProvider()));
 
         assertLsComponent(lsDtoMap, postgres, POSTGRESQL, postgres.getProvider());
         postgres.getDatabases().forEach(component -> assertLsComponent(lsDtoMap, component, POSTGRESQLDB, postgres.getProvider()));
