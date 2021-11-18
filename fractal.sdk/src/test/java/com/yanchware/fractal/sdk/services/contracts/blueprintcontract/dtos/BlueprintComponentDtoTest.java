@@ -126,6 +126,33 @@ public class BlueprintComponentDtoTest {
     }
 
     @Test
+    public void blueprintComponentValid_when_aksWithElasticDataStore() {
+        var aks = getAksBuilder().withElasticDataStore(getElasticDataStoreExample()).build();
+        var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(aks));
+
+        var elasticDataStore = aks.getElasticDataStoreInstances().get(0);
+        var elasticDataStoreDto = getBlueprintComponentDto(blueprintComponentDtoList, elasticDataStore.getId().getValue());
+        var aksId = aks.getId().getValue();
+
+        assertGenericComponent(elasticDataStoreDto, elasticDataStore, CaaSDocumentDB.TYPE);
+        assertSoftly(softly -> softly
+                .assertThat(elasticDataStoreDto.getParameters().values())
+                .as("Component Parameters")
+                .containsExactlyInAnyOrder(
+                        elasticDataStore.getNamespace(),
+                        elasticDataStore.isAPMRequired(),
+                        elasticDataStore.isKibanaRequired(),
+                        elasticDataStore.getElasticVersion(),
+                        elasticDataStore.getElasticInstances(),
+                        elasticDataStore.getStorage(),
+                        elasticDataStore.getStorageClassName(),
+                        elasticDataStore.getMemory(),
+                        elasticDataStore.getCpu(),
+                        aksId
+                ));
+    }
+
+    @Test
     public void blueprintComponentValid_when_aksWithK8sWorkload() {
         var aks = getAksBuilder().withWorkload(getK8sWorkloadExample()).build();
         var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(aks));
@@ -275,6 +302,7 @@ public class BlueprintComponentDtoTest {
         componentSize += kubernetesCluster.getOcelotInstances().size();
         componentSize += kubernetesCluster.getJaegerInstances().size();
         componentSize += kubernetesCluster.getElasticLoggingInstances().size();
+        componentSize += kubernetesCluster.getElasticDataStoreInstances().size();
         componentSize += kubernetesCluster.getKafkaClusters().stream().mapToLong(x -> x.getKafkaTopics().size()).sum();
         componentSize += kubernetesCluster.getKafkaClusters().stream().mapToLong(x -> x.getKafkaUsers().size()).sum();
 

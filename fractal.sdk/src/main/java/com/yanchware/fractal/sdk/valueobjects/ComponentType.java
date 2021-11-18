@@ -21,7 +21,9 @@ public enum ComponentType {
     CAAS_TRACING("Observability.CaaS.Tracing"),
     JAEGER("Observability.CaaS.Jaeger"),
     CAAS_LOGGING("Observability.CaaS.Logging"),
-    ELASTIC_LOGGING("Observability.CaaS.Elastic");
+    ELASTIC_LOGGING("Observability.CaaS.Elastic"),
+    CAAS_DOCUMENT_DB("DataStorage.CaaS.DocumentDB"),
+    ELASTIC_DATASTORE("DataStorage.CaaS.Elastic");
 
     private String id;
 

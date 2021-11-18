@@ -25,7 +25,8 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
     private List<Ocelot> ocelotInstances;
     private List<Jaeger> jaegerInstances;
     private List<ElasticLogging> elasticLoggingInstances;
-    
+    private List<ElasticDataStore> elasticDataStoreInstances;
+
     public KubernetesCluster() {
         super();
         kubernetesWorkloads = new ArrayList<>();
@@ -35,6 +36,7 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
         ocelotInstances = new ArrayList<>();
         jaegerInstances = new ArrayList<>();
         elasticLoggingInstances = new ArrayList<>();
+        elasticDataStoreInstances = new ArrayList<>();
     }
 
     public static abstract class Builder<T extends KubernetesCluster, B extends Builder<T, B>> extends Component.Builder<T, B> {
@@ -195,6 +197,26 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
             return builder;
         }
 
+        public B withElasticDataStore(ElasticDataStore elasticDataStore) {
+            return withElasticDataStore(List.of(elasticDataStore));
+        }
+
+        public B withElasticDataStore(Collection<? extends ElasticDataStore> elasticDataStoreInstances) {
+            if (isBlank(elasticDataStoreInstances)) {
+                return builder;
+            }
+            if (component.getElasticDataStoreInstances() == null) {
+                component.setElasticDataStoreInstances(new ArrayList<>());
+            }
+            elasticDataStoreInstances.forEach(jaeger -> {
+                jaeger.setProvider(component.getProvider());
+                jaeger.setContainerPlatform(component.getId().getValue());
+                jaeger.getDependencies().add(component.getId());
+            });
+            component.getElasticDataStoreInstances().addAll(elasticDataStoreInstances);
+            return builder;
+        }
+
         @Override
         public T build() {
             component.setType(KUBERNETES);
@@ -210,7 +232,7 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
                 .map(CaaSWorkload::validate)
                 .forEach(errors::addAll);
         kafkaClusters.stream()
-                .map(CaaSKafka::validate)
+                .map(KafkaCluster::validate)
                 .forEach(errors::addAll);
         prometheusInstances.stream()
                 .map(CaaSMonitoring::validate)
@@ -226,6 +248,9 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
                 .forEach(errors::addAll);
         elasticLoggingInstances.stream()
                 .map(CaaSLogging::validate)
+                .forEach(errors::addAll);
+        elasticDataStoreInstances.stream()
+                .map(CaaSDocumentDB::validate)
                 .forEach(errors::addAll);
         return errors;
     }
