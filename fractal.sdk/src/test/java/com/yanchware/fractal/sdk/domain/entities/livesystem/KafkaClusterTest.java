@@ -19,7 +19,7 @@ class KafkaClusterTest {
                 .withDescription("Kafka for Azure")
                 .withDisplayName("AzureKafka #1");
         assertThatThrownBy(kafkaBuilder::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
-                "[KafkaCluster Validation] Namespace has not been defined and it is required");
+                "Namespace has not been defined and it is required");
     }
 
     @Test
@@ -41,7 +41,7 @@ class KafkaClusterTest {
                 .withNamespace("namespace")
                 .withContainerPlatform("");
         assertThatThrownBy(kafkaBuilder::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
-                "[KafkaCluster Validation] ContainerPlatform defined was either empty or blank and it is required");
+                "ContainerPlatform defined was either empty or blank and it is required");
     }
 
     @Test

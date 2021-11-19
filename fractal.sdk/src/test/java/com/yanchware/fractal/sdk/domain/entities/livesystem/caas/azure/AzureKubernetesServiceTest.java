@@ -1,5 +1,7 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure;
 
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureKubernetesService;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureNodePool;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import org.junit.jupiter.api.Test;
 

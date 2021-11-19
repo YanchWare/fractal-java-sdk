@@ -1,5 +1,7 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.gcp;
 
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.GcpNodePool;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.GoogleKubernetesEngine;
 import org.junit.jupiter.api.Test;
 
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;

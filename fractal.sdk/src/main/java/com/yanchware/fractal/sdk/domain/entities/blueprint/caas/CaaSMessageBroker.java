@@ -7,6 +7,6 @@ import lombok.ToString;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.CONTAINERIZED_MESSAGE_BROKER;
 
 @ToString(callSuper = true)
-public class CaaSKafka extends Component implements BlueprintComponent {
+public class CaaSMessageBroker extends Component implements BlueprintComponent {
     public static final String TYPE = CONTAINERIZED_MESSAGE_BROKER.getId();
 }

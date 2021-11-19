@@ -49,7 +49,7 @@ public class KubernetesWorkloadTest {
                 .withPrivateSSHKeyPassphraseSecretId("svc-private-ssh-key-pass")
                 .withPrivateSSHKeySecretId("svc-private-ssh-key-secret")
                 .withPublicSSHKey("public-ssh")
-                .withSshRepositoryURI("ssh")
+                .withSSHRepositoryURI("ssh")
                 .withRepoId("repo-id");
         assertThat(builder.build().getType()).isEqualTo(K8S_WORKLOAD);
         assertThatCode(builder::build).doesNotThrowAnyException();

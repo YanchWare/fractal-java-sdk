@@ -1,4 +1,4 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure;
 
 public enum AzureOsType {
     LINUX("Linux"),

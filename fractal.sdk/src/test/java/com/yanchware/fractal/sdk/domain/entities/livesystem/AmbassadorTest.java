@@ -17,12 +17,12 @@ class AmbassadorTest {
 
     @Test
     public void exceptionThrown_when_ambassadorCreatedWithNoNamespace() {
-        assertThatThrownBy(() -> Ambassador.builder().withId(ComponentId.from("ambassador")).build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("[Ambassador Validation] Namespace has not been defined and it is required");
+        assertThatThrownBy(() -> Ambassador.builder().withId(ComponentId.from("ambassador")).build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("[CaaSAPIGateway Validation] Namespace has not been defined and it is required");
     }
 
     @Test
     public void exceptionThrown_when_ambassadorCreatedWithEmptyContainerPlatform() {
-        assertThatThrownBy(() -> Ambassador.builder().withId(ComponentId.from("ambassador")).withNamespace("ambassador").withContainerPlatform("").build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("[Ambassador Validation] ContainerPlatform defined was either empty or blank and it is required");
+        assertThatThrownBy(() -> Ambassador.builder().withId(ComponentId.from("ambassador")).withNamespace("ambassador").withContainerPlatform("").build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("[CaaSAPIGateway Validation] ContainerPlatform defined was either empty or blank and it is required");
     }
 
     @Test

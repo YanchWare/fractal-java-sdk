@@ -22,13 +22,13 @@ class LiveSystemComponentDtoTest {
 
         assertLsComponent(lsDtoMap, aks, KUBERNETES, aks.getProvider());
 
-        aks.getKafkaClusters().forEach(component -> assertLsComponent(lsDtoMap, component, KAFKA, aks.getProvider()));
-        aks.getPrometheusInstances().forEach(component -> assertLsComponent(lsDtoMap, component, PROMETHEUS, aks.getProvider()));
-        aks.getAmbassadorInstances().forEach(component -> assertLsComponent(lsDtoMap, component, AMBASSADOR, aks.getProvider()));
-        aks.getKubernetesWorkloads().forEach(component -> assertLsComponent(lsDtoMap, component, K8S_WORKLOAD, aks.getProvider()));
-        aks.getOcelotInstances().forEach(component -> assertLsComponent(lsDtoMap, component, OCELOT, aks.getProvider()));
-        aks.getJaegerInstances().forEach(component -> assertLsComponent(lsDtoMap, component, JAEGER, aks.getProvider()));
-        aks.getElasticLoggingInstances().forEach(component -> assertLsComponent(lsDtoMap, component, ELASTIC_LOGGING, aks.getProvider()));
+        aks.getMessageBrokerInstances().forEach(component -> assertLsComponent(lsDtoMap, component, KAFKA, aks.getProvider()));
+        aks.getMonitoringInstances().forEach(component -> assertLsComponent(lsDtoMap, component, PROMETHEUS, aks.getProvider()));
+        aks.getApiGatewayInstances().forEach(component -> assertLsComponent(lsDtoMap, component, AMBASSADOR, aks.getProvider()));
+        aks.getK8sWorkloadInstances().forEach(component -> assertLsComponent(lsDtoMap, component, K8S_WORKLOAD, aks.getProvider()));
+        aks.getServiceMeshSecurityInstances().forEach(component -> assertLsComponent(lsDtoMap, component, OCELOT, aks.getProvider()));
+        aks.getTracingInstances().forEach(component -> assertLsComponent(lsDtoMap, component, JAEGER, aks.getProvider()));
+        aks.getLoggingInstances().forEach(component -> assertLsComponent(lsDtoMap, component, ELASTIC_LOGGING, aks.getProvider()));
 
         assertLsComponent(lsDtoMap, postgres, POSTGRESQL, postgres.getProvider());
         postgres.getDatabases().forEach(component -> assertLsComponent(lsDtoMap, component, POSTGRESQLDB, postgres.getProvider()));
