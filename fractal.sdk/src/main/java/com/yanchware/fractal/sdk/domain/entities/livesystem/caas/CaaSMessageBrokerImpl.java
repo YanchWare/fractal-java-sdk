@@ -1,5 +1,6 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
+import com.yanchware.fractal.sdk.domain.entities.Component;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSMessageBroker;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.AccessLevel;
@@ -26,6 +27,8 @@ public abstract class CaaSMessageBrokerImpl extends CaaSMessageBroker implements
     public ProviderType getProvider() {
         return provider;
     }
+
+    public abstract void extractInfo(ProviderType provider, Component from);
 
     @Override
     public Collection<String> validate() {

@@ -1,5 +1,7 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
+import com.yanchware.fractal.sdk.domain.entities.Component;
+import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -91,6 +93,21 @@ public class KafkaCluster extends CaaSMessageBrokerImpl implements LiveSystemCom
             component.setType(KAFKA);
             return super.build();
         }
+    }
+
+    @Override
+    public void extractInfo(ProviderType provider, Component from) {
+        setProvider(provider);
+        setContainerPlatform(from.getId().getValue());
+        getDependencies().add(from.getId());
+        getKafkaUsers().forEach(user -> {
+            user.setContainerPlatform(from.getId().getValue());
+            user.setProvider(provider);
+        });
+        getKafkaTopics().forEach(user -> {
+            user.setContainerPlatform(from.getId().getValue());
+            user.setProvider(provider);
+        });
     }
 
     @Override

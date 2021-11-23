@@ -76,22 +76,7 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
                 component.setMessageBrokerInstances(new ArrayList<>());
             }
 
-            messageBrokers.forEach(messageBroker -> {
-                messageBroker.setProvider(component.getProvider());
-                messageBroker.setContainerPlatform(component.getId().getValue());
-                messageBroker.getDependencies().add(component.getId());
-                if (messageBroker instanceof KafkaCluster) {
-                    ((KafkaCluster) messageBroker).getKafkaUsers().forEach(user -> {
-                        user.setContainerPlatform(component.getId().getValue());
-                        user.setProvider(component.getProvider());
-                    });
-                    ((KafkaCluster) messageBroker).getKafkaTopics().forEach(topic -> {
-                        topic.setContainerPlatform(component.getId().getValue());
-                        topic.setProvider(component.getProvider());
-                    });
-                }
-
-            });
+            messageBrokers.forEach(messageBroker -> messageBroker.extractInfo(component.getProvider(), component));
             component.getMessageBrokerInstances().addAll(messageBrokers);
             return builder;
         }
