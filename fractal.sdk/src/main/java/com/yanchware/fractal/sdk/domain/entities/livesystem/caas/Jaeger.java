@@ -6,12 +6,19 @@ import lombok.Setter;
 import lombok.ToString;
 
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.JaegerStorageType.Elastic;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.JaegerStorageType.Unknown;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.JAEGER;
 
 @Getter
 @Setter(AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 public class Jaeger extends CaaSTracingImpl implements LiveSystemComponent {
+    private JaegerStorageSetting storageSettings;
+
+    protected Jaeger() {
+        storageSettings = new JaegerStorageSetting();
+        storageSettings.setType(Unknown);
+    }
 
     public static JaegerBuilder builder() {
         return new JaegerBuilder();

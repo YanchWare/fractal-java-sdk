@@ -9,7 +9,6 @@ import lombok.ToString;
 
 import java.util.Collection;
 
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.JaegerStorageType.Unknown;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Getter
@@ -21,13 +20,8 @@ public abstract class CaaSTracingImpl extends CaaSTracing implements LiveSystemC
 
     private String namespace;
     private String containerPlatform;
-    private JaegerStorageSetting storageSettings;
     private ProviderType provider;
 
-    protected CaaSTracingImpl() {
-        storageSettings = new JaegerStorageSetting();
-        storageSettings.setType(Unknown);
-    }
     @Override
     public ProviderType getProvider() {
         return provider;

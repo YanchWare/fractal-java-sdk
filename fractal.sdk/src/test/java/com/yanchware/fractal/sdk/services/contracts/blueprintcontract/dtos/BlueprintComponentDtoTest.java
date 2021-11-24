@@ -3,8 +3,7 @@ package com.yanchware.fractal.sdk.services.contracts.blueprintcontract.dtos;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.*;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSPostgreSQL;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSPostgreSQLDB;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.KafkaCluster;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.KubernetesCluster;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.*;
 import com.yanchware.fractal.sdk.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 
@@ -60,7 +59,7 @@ public class BlueprintComponentDtoTest {
         var aks = getAksBuilder().withServiceMeshSecurity(getOcelotExample()).build();
         var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(aks));
 
-        var ocelot = aks.getServiceMeshSecurityInstances().get(0);
+        var ocelot = (Ocelot) aks.getServiceMeshSecurityInstances().get(0);
         var ocelotDto = getBlueprintComponentDto(blueprintComponentDtoList, ocelot.getId().getValue());
         var aksId = aks.getId().getValue();
 
@@ -84,7 +83,7 @@ public class BlueprintComponentDtoTest {
         var aks = getAksBuilder().withTracing(getJaegerExample()).build();
         var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(aks));
 
-        var jaeger = aks.getTracingInstances().get(0);
+        var jaeger = (Jaeger) aks.getTracingInstances().get(0);
         var jaegerDto = getBlueprintComponentDto(blueprintComponentDtoList, jaeger.getId().getValue());
         var aksId = aks.getId().getValue();
 
@@ -104,7 +103,7 @@ public class BlueprintComponentDtoTest {
         var aks = getAksBuilder().withLogging(getElasticLoggingExample()).build();
         var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(aks));
 
-        var elasticLogging = aks.getLoggingInstances().get(0);
+        var elasticLogging = (ElasticLogging) aks.getLoggingInstances().get(0);
         var elasticLoggingDto = getBlueprintComponentDto(blueprintComponentDtoList, elasticLogging.getId().getValue());
         var aksId = aks.getId().getValue();
 
@@ -131,7 +130,7 @@ public class BlueprintComponentDtoTest {
         var aks = getAksBuilder().withDocumentDB(getElasticDataStoreExample()).build();
         var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(aks));
 
-        var elasticDataStore = aks.getDocumentDBInstances().get(0);
+        var elasticDataStore = (ElasticDataStore) aks.getDocumentDBInstances().get(0);
         var elasticDataStoreDto = getBlueprintComponentDto(blueprintComponentDtoList, elasticDataStore.getId().getValue());
         var aksId = aks.getId().getValue();
 
