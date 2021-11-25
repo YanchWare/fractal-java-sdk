@@ -287,6 +287,30 @@ public class BlueprintComponentDtoTest {
         });
     }
 
+    @Test
+    public void blueprintComponentValid_when_gcpPostgresLiveSystemComponentConverted() {
+        var gcpPostgres = TestUtils.getGcpPostgresExample();
+        var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(gcpPostgres));
+
+        assertThat(blueprintComponentDtoList).hasSize(2);
+
+        var gcpPgBlueprintCompDto = blueprintComponentDtoList.get(0);
+        assertGenericComponent(gcpPgBlueprintCompDto, gcpPostgres, PaaSPostgreSQL.TYPE);
+        assertSoftly(softly -> {
+            softly.assertThat(gcpPgBlueprintCompDto.getParameters().values()).as("Component Parameters")
+                    .containsExactlyInAnyOrder(
+                            gcpPostgres.getRegion().getId(),
+                            gcpPostgres.getNetwork(),
+                            gcpPostgres.getPeeringNetworkAddress(),
+                            gcpPostgres.getPeeringNetworkAddressDescription(),
+                            gcpPostgres.getPeeringNetworkName(),
+                            gcpPostgres.getPeeringNetworkPrefix()
+                    );
+            softly.assertThat(gcpPgBlueprintCompDto.getDependencies()).as("Component Dependencies").isEmpty();
+            softly.assertThat(gcpPgBlueprintCompDto.getLinks()).as("Component Links").isEmpty();
+        });
+    }
+
     private BlueprintComponentDto getBlueprintComponentDto(List<BlueprintComponentDto> blueprintComponentDtoList, String compId) {
         return blueprintComponentDtoList.stream().filter(dto -> dto.getId().equals(compId)).findFirst().get();
     }

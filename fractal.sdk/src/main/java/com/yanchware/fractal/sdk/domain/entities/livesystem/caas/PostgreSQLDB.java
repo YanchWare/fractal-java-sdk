@@ -1,7 +1,7 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
-import com.yanchware.fractal.sdk.domain.entities.Component;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSPostgreSQLDB;
+import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,35 +15,55 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Getter
 @Setter(AccessLevel.PROTECTED)
 @ToString(callSuper = true)
-public abstract class PostgreSQLDB extends PaaSPostgreSQLDB implements LiveSystemComponent {
+public class PostgreSQLDB extends PaaSPostgreSQLDB implements LiveSystemComponent {
     private final static String NAME_IS_BLANK = "PostgreSQLDB name has not been defined and it is required";
 
     private String name;
     private PostgreSQLCharset charset;
     private String collation;
+    private ProviderType provider;
 
     protected PostgreSQLDB() {
     }
 
-    public static abstract class Builder<T extends PostgreSQLDB, B extends Builder<T, B>> extends Component.Builder<T, B> {
+    @Override
+    public ProviderType getProvider() {
+        return provider;
+    }
 
-        public B name(String name) {
+    public static PostgreSQLDBBuilder builder() {
+        return new PostgreSQLDBBuilder();
+    }
+
+    public static class PostgreSQLDBBuilder extends Builder<PostgreSQLDB, PostgreSQLDBBuilder> {
+
+        @Override
+        protected PostgreSQLDB createComponent() {
+            return new PostgreSQLDB();
+        }
+
+        @Override
+        protected PostgreSQLDBBuilder getBuilder() {
+            return this;
+        }
+
+        public PostgreSQLDBBuilder name(String name) {
             component.setName(name);
             return builder;
         }
 
-        public B charset(PostgreSQLCharset charset) {
+        public PostgreSQLDBBuilder charset(PostgreSQLCharset charset) {
             component.setCharset(charset);
             return builder;
         }
 
-        public B collation(String collation) {
+        public PostgreSQLDBBuilder collation(String collation) {
             component.setCollation(collation);
             return builder;
         }
 
         @Override
-        public T build() {
+        public PostgreSQLDB build() {
             component.setType(POSTGRESQLDB);
             return super.build();
         }

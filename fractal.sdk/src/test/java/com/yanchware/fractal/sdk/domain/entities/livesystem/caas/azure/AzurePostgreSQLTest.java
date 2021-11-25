@@ -1,12 +1,12 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure;
 
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PostgreSQLDB;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzurePostgreSQL;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzurePostgreSQLDB;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import org.junit.jupiter.api.Test;
 
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureSkuName.B_GEN5_1;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureRegion.EUROPE_WEST;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureSkuName.B_GEN5_1;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureStorageAutoGrow.ENABLED;
 import static com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType.AZURE;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.POSTGRESQL;
@@ -67,7 +67,7 @@ public class AzurePostgreSQLTest {
                 .storageAutoGrow(ENABLED)
                 .storageMB(5 * 1024)
                 .backupRetentionDays(12)
-                .withDatabase(AzurePostgreSQLDB.builder().withId(ComponentId.from("db-1")).name("db").build());
+                .withDatabase(PostgreSQLDB.builder().withId(ComponentId.from("db-1")).name("db").build());
         assertThat(azurePgBuilder.build())
                 .returns(POSTGRESQL, from(AzurePostgreSQL::getType))
                 .returns(AZURE, from(AzurePostgreSQL::getProvider))
@@ -78,7 +78,8 @@ public class AzurePostgreSQLTest {
                 .returns(5 * 1024, from(AzurePostgreSQL::getStorageMB))
                 .returns(12, from(AzurePostgreSQL::getBackupRetentionDays))
                 .returns(1, from(x -> x.getDatabases().size()))
-                .returns("db", from(x -> x.getDatabases().stream().findFirst().get().getName()));
+                .returns("db", from(x -> x.getDatabases().stream().findFirst().get().getName()))
+                .returns(AZURE, from(x -> x.getDatabases().stream().findFirst().get().getProvider()));
     }
 
 }

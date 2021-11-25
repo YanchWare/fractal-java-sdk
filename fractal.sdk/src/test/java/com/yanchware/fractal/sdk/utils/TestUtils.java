@@ -8,12 +8,13 @@ import com.yanchware.fractal.sdk.domain.entities.Component;
 import com.yanchware.fractal.sdk.domain.entities.ComponentLink;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.*;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureKubernetesService;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureKubernetesService.AzureKubernetesServiceBuilder;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureNodePool;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzurePostgreSQL;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzurePostgreSQLDB;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.KafkaCluster;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.Ambassador;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.Jaeger;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.GcpNodePool;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.GcpProgreSQL;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.GoogleKubernetesEngine;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.GoogleKubernetesEngine.GoogleKubernetesEngineBuilder;
 import com.yanchware.fractal.sdk.services.contracts.ComponentDto;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import lombok.extern.slf4j.Slf4j;
@@ -29,12 +30,14 @@ import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.provider
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureRegion.EUROPE_WEST;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureSkuName.B_GEN5_1;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureStorageAutoGrow.ENABLED;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.GcpMachine.E2_STANDARD2;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.GcpRegion.EU_WEST1;
 import static java.util.stream.Collectors.toSet;
 
 @Slf4j
 public class TestUtils {
 
-    public static AzureKubernetesService.AzureKubernetesServiceBuilder getAksBuilder() {
+    public static AzureKubernetesServiceBuilder getAksBuilder() {
         return AzureKubernetesService.builder()
                 .withId("aks-1")
                 .withDescription("Test AKS cluster")
@@ -56,8 +59,42 @@ public class TestUtils {
                         .build());
     }
 
+    public static GoogleKubernetesEngineBuilder getGkeBuilder() {
+        return GoogleKubernetesEngine.builder()
+                .withId("aks-1")
+                .withDescription("Test AKS cluster")
+                .withDisplayName("AKS #1")
+                .region(EU_WEST1)
+                .network("network-host")
+                .subNetwork("compute-tier-1")
+                .podsRange("tier-1-pods")
+                .serviceRange("tier-1-services")
+                .withNodePool(GcpNodePool.builder()
+                        .name("gcp-node-pool")
+                        .diskSizeGb(35)
+                        .initialNodeCount(1)
+                        .machineType(E2_STANDARD2)
+                        .maxNodeCount(3)
+                        .maxSurge(1)
+                        .minNodeCount(1)
+                        .build());
+    }
+
     public static AzureKubernetesService getAksExample() {
         return getAksBuilder()
+                .withK8sWorkload(getK8sWorkloadExample())
+                .withMessageBroker(getKafkaClusterExample())
+                .withMonitoring(getPrometheusExample())
+                .withAPIGateway(getAmbassadorExample())
+                .withServiceMeshSecurity(getOcelotExample())
+                .withTracing(getJaegerExample())
+                .withLogging(getElasticLoggingExample())
+                .withDocumentDB(getElasticDataStoreExample())
+                .build();
+    }
+
+    public static GoogleKubernetesEngine getGkeExample() {
+        return getGkeBuilder()
                 .withK8sWorkload(getK8sWorkloadExample())
                 .withMessageBroker(getKafkaClusterExample())
                 .withMonitoring(getPrometheusExample())
@@ -190,13 +227,32 @@ public class TestUtils {
                 .storageAutoGrow(ENABLED)
                 .storageMB(5 * 1024)
                 .backupRetentionDays(12)
-                .withDatabase(AzurePostgreSQLDB.builder().withId("db-1").withDisplayName("db-1").name("db").build())
-                .withDatabase(AzurePostgreSQLDB.builder()
-                        .withId("db-2")
-                        .withDisplayName("db-2")
-                        .name("db2")
-                        .withLink(getComponentLink())
-                        .build())
+                .withDatabase(PostgreSQLDB.builder().withId("db-1").withDisplayName("db-1").name("db").build())
+                .withDatabase(getPostgresDbExample())
+                .build();
+    }
+
+    public static GcpProgreSQL getGcpPostgresExample() {
+        return GcpProgreSQL.builder()
+                .withId("dbpg")
+                .withDescription("PostgreSQL")
+                .withDisplayName("PostgreSQL")
+                .region(EU_WEST1)
+                .network("network")
+                .peeringNetworkAddress("address")
+                .peeringNetworkAddressDescription("address-desc")
+                .peeringNetworkName("network-name")
+                .peeringNetworkPrefix("network-prefix")
+                .withDatabase(getPostgresDbExample())
+                .build();
+    }
+
+    public static PostgreSQLDB getPostgresDbExample() {
+        return PostgreSQLDB.builder()
+                .withId("db-2")
+                .withDisplayName("db-2")
+                .name("db2")
+                .withLink(getComponentLink())
                 .build();
     }
 
