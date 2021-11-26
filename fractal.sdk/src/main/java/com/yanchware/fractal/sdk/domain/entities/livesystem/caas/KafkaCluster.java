@@ -96,16 +96,16 @@ public class KafkaCluster extends CaaSMessageBrokerImpl implements LiveSystemCom
     }
 
     @Override
-    public void extractInfo(ProviderType provider, Component from) {
+    public void initialiseParameters(ProviderType provider, Component parentComponent) {
         setProvider(provider);
-        setContainerPlatform(from.getId().getValue());
-        getDependencies().add(from.getId());
+        setContainerPlatform(parentComponent.getId().getValue());
+        getDependencies().add(parentComponent.getId());
         getKafkaUsers().forEach(user -> {
-            user.setContainerPlatform(from.getId().getValue());
+            user.setContainerPlatform(parentComponent.getId().getValue());
             user.setProvider(provider);
         });
         getKafkaTopics().forEach(user -> {
-            user.setContainerPlatform(from.getId().getValue());
+            user.setContainerPlatform(parentComponent.getId().getValue());
             user.setProvider(provider);
         });
     }

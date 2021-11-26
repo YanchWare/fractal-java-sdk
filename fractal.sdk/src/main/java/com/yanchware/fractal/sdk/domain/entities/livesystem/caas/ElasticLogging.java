@@ -16,20 +16,13 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 public class ElasticLogging extends CaaSLoggingImpl implements LiveSystemComponent {
     private final static String ELASTIC_INSTANCES_NEGATIVE_OR_ZERO = "[ElasticLogging Validation] Elastic Instances defined was either 0 or negative and it needs to be greater than 0";
     private final static String VERSION_IS_BLANK = "[ElasticLogging Validation] Elastic Version has not been defined and it is required";
-    private final static String STORAGE_IS_BLANK = "[ElasticLogging Validation] Elastic Storage has not been defined and it is required";
 
     private boolean isAPMRequired;
-    private boolean isKibanaRequired;
     private String elasticVersion;
     private int elasticInstances;
-    private String storage;
-    private String storageClassName;
-    private int memory;
-    private int cpu;
 
     protected ElasticLogging() {
         isAPMRequired = false;
-        isKibanaRequired = true;
     }
 
     public static ElasticLoggingBuilder builder() {
@@ -59,11 +52,6 @@ public class ElasticLogging extends CaaSLoggingImpl implements LiveSystemCompone
 
         public ElasticLoggingBuilder withAPM(boolean isAPMRequired) {
             component.setAPMRequired(isAPMRequired);
-            return builder;
-        }
-
-        public ElasticLoggingBuilder withKibana(boolean isKibanaRequired) {
-            component.setKibanaRequired(isKibanaRequired);
             return builder;
         }
 
@@ -114,10 +102,6 @@ public class ElasticLogging extends CaaSLoggingImpl implements LiveSystemCompone
 
         if (isBlank(elasticVersion)) {
             errors.add(VERSION_IS_BLANK);
-        }
-
-        if (isBlank(storage)) {
-            errors.add(STORAGE_IS_BLANK);
         }
 
         return errors;

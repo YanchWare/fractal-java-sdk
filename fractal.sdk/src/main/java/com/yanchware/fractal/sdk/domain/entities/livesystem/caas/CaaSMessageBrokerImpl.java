@@ -28,7 +28,7 @@ public abstract class CaaSMessageBrokerImpl extends CaaSMessageBroker implements
         return provider;
     }
 
-    public abstract void extractInfo(ProviderType provider, Component from);
+    public abstract void initialiseParameters(ProviderType provider, Component parentComponent);
 
     @Override
     public Collection<String> validate() {

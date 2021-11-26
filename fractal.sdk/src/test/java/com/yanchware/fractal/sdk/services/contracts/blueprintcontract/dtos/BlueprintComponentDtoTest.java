@@ -114,7 +114,6 @@ public class BlueprintComponentDtoTest {
                 .containsExactlyInAnyOrder(
                         elasticLogging.getNamespace(),
                         elasticLogging.isAPMRequired(),
-                        elasticLogging.isKibanaRequired(),
                         elasticLogging.getElasticVersion(),
                         elasticLogging.getElasticInstances(),
                         elasticLogging.getStorage(),
@@ -140,7 +139,6 @@ public class BlueprintComponentDtoTest {
                 .as("Component Parameters")
                 .containsExactlyInAnyOrder(
                         elasticDataStore.getNamespace(),
-                        elasticDataStore.isAPMRequired(),
                         elasticDataStore.isKibanaRequired(),
                         elasticDataStore.getElasticVersion(),
                         elasticDataStore.getElasticInstances(),

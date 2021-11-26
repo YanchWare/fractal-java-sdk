@@ -76,7 +76,7 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
                 component.setMessageBrokerInstances(new ArrayList<>());
             }
 
-            messageBrokers.forEach(messageBroker -> messageBroker.extractInfo(component.getProvider(), component));
+            messageBrokers.forEach(messageBroker -> messageBroker.initialiseParameters(component.getProvider(), component));
             component.getMessageBrokerInstances().addAll(messageBrokers);
             return builder;
         }
@@ -217,7 +217,7 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
     public Collection<String> validate() {
         Collection<String> errors = super.validate();
         k8sWorkloadInstances.stream()
-                .map(CaaSK8sWorkloadImpl::validate)
+                .map(CaaSWorkload::validate)
                 .forEach(errors::addAll);
         messageBrokerInstances.stream()
                 .map(CaaSMessageBroker::validate)
