@@ -1,4 +1,4 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure;
 
 public enum AzureSkuName {
     B_GEN5_1("B_Gen5_1"),

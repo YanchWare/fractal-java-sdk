@@ -1,86 +1,85 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp;
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.KubernetesCluster;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType.GCP;
 import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
-@ToString(callSuper = true)
-public class AzureKubernetesService extends KubernetesCluster {
-    private final static String EMPTY_NODE_POOL = "[AzureKubernetesService Validation] Node pool list is null or empty and at least one node pool is required";
+public class GoogleKubernetesEngine extends KubernetesCluster {
+    private final static String EMPTY_NODE_POOL = "[GoogleKubernetesEngine Validation] Node pool list is null or empty and at least one node pool is required";
 
-    public static AzureKubernetesServiceBuilder builder() {
-        return new AzureKubernetesServiceBuilder();
+    public static GoogleKubernetesEngineBuilder builder() {
+        return new GoogleKubernetesEngineBuilder();
     }
 
-    private AzureRegion region;
+    private GcpRegion region;
     private String network;
     private String subNetwork;
     private String podsRange;
     private String serviceRange;
-    private Collection<AzureNodePool> nodePools;
+    private Collection<GcpNodePool> nodePools;
 
-    protected AzureKubernetesService() {
+    protected GoogleKubernetesEngine() {
         nodePools = new ArrayList<>();
     }
 
     @Override
     public ProviderType getProvider() {
-        return ProviderType.AZURE;
+        return GCP;
     }
 
-    public static class AzureKubernetesServiceBuilder extends Builder<AzureKubernetesService, AzureKubernetesServiceBuilder> {
+    public static class GoogleKubernetesEngineBuilder extends Builder<GoogleKubernetesEngine, GoogleKubernetesEngineBuilder> {
 
         @Override
-        protected AzureKubernetesService createComponent() {
-            return new AzureKubernetesService();
+        protected GoogleKubernetesEngine createComponent() {
+            return new GoogleKubernetesEngine();
         }
 
         @Override
-        protected AzureKubernetesServiceBuilder getBuilder() {
+        protected GoogleKubernetesEngineBuilder getBuilder() {
             return this;
         }
 
-        public AzureKubernetesServiceBuilder region(AzureRegion region) {
+        public GoogleKubernetesEngineBuilder region(GcpRegion region) {
             component.setRegion(region);
             return builder;
         }
 
-        public AzureKubernetesServiceBuilder network(String network) {
+        public GoogleKubernetesEngineBuilder network(String network) {
             component.setNetwork(network);
             return builder;
         }
 
-        public AzureKubernetesServiceBuilder subNetwork(String subNetwork) {
+        public GoogleKubernetesEngineBuilder subNetwork(String subNetwork) {
             component.setSubNetwork(subNetwork);
             return builder;
         }
 
-        public AzureKubernetesServiceBuilder podsRange(String podsRange) {
+        public GoogleKubernetesEngineBuilder podsRange(String podsRange) {
             component.setPodsRange(podsRange);
             return builder;
         }
 
-        public AzureKubernetesServiceBuilder serviceRange(String serviceRange) {
+        public GoogleKubernetesEngineBuilder serviceRange(String serviceRange) {
             component.setServiceRange(serviceRange);
             return builder;
         }
 
-        public AzureKubernetesServiceBuilder withNodePool(AzureNodePool nodePool) {
+        public GoogleKubernetesEngineBuilder withNodePool(GcpNodePool nodePool) {
             return withNodePools(List.of(nodePool));
         }
 
-        public AzureKubernetesServiceBuilder withNodePools(Collection<? extends AzureNodePool> nodePools) {
+        public GoogleKubernetesEngineBuilder withNodePools(Collection<? extends GcpNodePool> nodePools) {
             if (isBlank(nodePools)) {
                 return builder;
             }
@@ -97,12 +96,12 @@ public class AzureKubernetesService extends KubernetesCluster {
     @Override
     public Collection<String> validate() {
         Collection<String> errors = super.validate();
-        if (nodePools.isEmpty()) {
+        if (isBlank(nodePools)) {
             errors.add(EMPTY_NODE_POOL);
         }
 
         nodePools.stream()
-                .map(AzureNodePool::validate)
+                .map(GcpNodePool::validate)
                 .forEach(errors::addAll);
 
         return errors;

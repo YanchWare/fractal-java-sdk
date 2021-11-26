@@ -38,3 +38,10 @@ An example on how to use warnings is by for instance alerting the user that two 
 The code created by the users referring to this SDK needs to run in a CI/CD environment.
 
 This means that tests and design of the SDK needs to be done accordingly (nice output of warnings and errors. Error exit on error in order to block pipeline, secrets through env vars and/or cli inputs, etc).
+
+
+## Documentation template
+
+Intro + Drawing
+Arguments (required & optional - specify defaults) - java code example with comments to the fields + detailed
+Examples (maybe with tabs for each provider)

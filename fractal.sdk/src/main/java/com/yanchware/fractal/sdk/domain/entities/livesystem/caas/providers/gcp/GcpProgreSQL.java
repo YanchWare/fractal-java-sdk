@@ -1,4 +1,4 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.gcp;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp;
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PostgreSQL;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;

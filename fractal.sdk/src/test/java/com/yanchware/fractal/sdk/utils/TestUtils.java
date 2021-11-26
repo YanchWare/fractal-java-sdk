@@ -7,10 +7,13 @@ import com.yanchware.fractal.sdk.aggregates.LiveSystem;
 import com.yanchware.fractal.sdk.domain.entities.Component;
 import com.yanchware.fractal.sdk.domain.entities.ComponentLink;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.*;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureKubernetesService;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureNodePool;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzurePostgreSQL;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzurePostgreSQLDB;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureKubernetesService;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureNodePool;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzurePostgreSQL;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzurePostgreSQLDB;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.KafkaCluster;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.Ambassador;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.Jaeger;
 import com.yanchware.fractal.sdk.services.contracts.ComponentDto;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import lombok.extern.slf4j.Slf4j;
@@ -21,11 +24,11 @@ import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureMachineType.STANDARD_B2S;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureOsType.LINUX;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureRegion.EUROPE_WEST;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureSkuName.B_GEN5_1;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure.AzureStorageAutoGrow.ENABLED;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureMachineType.STANDARD_B2S;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureOsType.LINUX;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureRegion.EUROPE_WEST;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureSkuName.B_GEN5_1;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureStorageAutoGrow.ENABLED;
 import static java.util.stream.Collectors.toSet;
 
 @Slf4j
@@ -55,14 +58,14 @@ public class TestUtils {
 
     public static AzureKubernetesService getAksExample() {
         return getAksBuilder()
-                .withWorkload(getK8sWorkloadExample())
-                .withKafkaCluster(getKafkaClusterExample())
-                .withPrometheus(getPrometheusExample())
-                .withAmbassador(getAmbassadorExample())
-                .withOcelot(getOcelotExample())
-                .withJaeger(getJaegerExample())
-                .withElasticLogging(getElasticLoggingExample())
-                .withElasticDataStore(getElasticDataStoreExample())
+                .withK8sWorkload(getK8sWorkloadExample())
+                .withMessageBroker(getKafkaClusterExample())
+                .withMonitoring(getPrometheusExample())
+                .withAPIGateway(getAmbassadorExample())
+                .withServiceMeshSecurity(getOcelotExample())
+                .withTracing(getJaegerExample())
+                .withLogging(getElasticLoggingExample())
+                .withDocumentDB(getElasticDataStoreExample())
                 .build();
     }
 
@@ -75,7 +78,7 @@ public class TestUtils {
                 .withPrivateSSHKeyPassphraseSecretId("fractal-private-passphrase")
                 .withPrivateSSHKeySecretId("fractal-private-ssh")
                 .withPublicSSHKey("public-ssh")
-                .withSshRepositoryURI("ssh-uri")
+                .withSSHRepositoryURI("ssh-uri")
                 .withRepoId("fractal-svc-id")
                 .withRoles(List.of("roles/datastore.user", "roles/pubsub.editor"))
                 .build();
@@ -123,7 +126,6 @@ public class TestUtils {
                 .withDisplayName("Elastic Logging")
                 .withNamespace("logging")
                 .withAPM(true)
-                .withKibana(true)
                 .withElasticVersion("1")
                 .withInstances(3)
                 .withStorage("250Gi")
@@ -139,7 +141,6 @@ public class TestUtils {
                 .withDescription("Elastic Data Store")
                 .withDisplayName("Elastic Data Store")
                 .withNamespace("elastic-data")
-                .withAPM(true)
                 .withKibana(false)
                 .withElasticVersion("1")
                 .withInstances(3)

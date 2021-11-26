@@ -3,7 +3,7 @@ package com.yanchware.fractal.sdk.services.contracts.blueprintcontract.dtos;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.*;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSPostgreSQL;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSPostgreSQLDB;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.KubernetesCluster;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.*;
 import com.yanchware.fractal.sdk.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 
@@ -18,10 +18,10 @@ public class BlueprintComponentDtoTest {
 
     @Test
     public void blueprintComponentValid_when_aksWithPrometheus() {
-        var aks = getAksBuilder().withPrometheus(getPrometheusExample()).build();
+        var aks = getAksBuilder().withMonitoring(getPrometheusExample()).build();
         var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(aks));
 
-        var prometheus = aks.getPrometheusInstances().get(0);
+        var prometheus = aks.getMonitoringInstances().get(0);
         var prometheusDto = getBlueprintComponentDto(blueprintComponentDtoList, prometheus.getId().getValue());
         var aksId = aks.getId().getValue();
 
@@ -37,10 +37,10 @@ public class BlueprintComponentDtoTest {
 
     @Test
     public void blueprintComponentValid_when_aksWithAmbassador() {
-        var aks = getAksBuilder().withAmbassador(getAmbassadorExample()).build();
+        var aks = getAksBuilder().withAPIGateway(getAmbassadorExample()).build();
         var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(aks));
 
-        var ambassador = aks.getAmbassadorInstances().get(0);
+        var ambassador = aks.getApiGatewayInstances().get(0);
         var ambassadorDto = getBlueprintComponentDto(blueprintComponentDtoList, ambassador.getId().getValue());
         var aksId = aks.getId().getValue();
 
@@ -56,10 +56,10 @@ public class BlueprintComponentDtoTest {
 
     @Test
     public void blueprintComponentValid_when_aksWithOcelot() {
-        var aks = getAksBuilder().withOcelot(getOcelotExample()).build();
+        var aks = getAksBuilder().withServiceMeshSecurity(getOcelotExample()).build();
         var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(aks));
 
-        var ocelot = aks.getOcelotInstances().get(0);
+        var ocelot = (Ocelot) aks.getServiceMeshSecurityInstances().get(0);
         var ocelotDto = getBlueprintComponentDto(blueprintComponentDtoList, ocelot.getId().getValue());
         var aksId = aks.getId().getValue();
 
@@ -80,10 +80,10 @@ public class BlueprintComponentDtoTest {
 
     @Test
     public void blueprintComponentValid_when_aksWithJaeger() {
-        var aks = getAksBuilder().withJaeger(getJaegerExample()).build();
+        var aks = getAksBuilder().withTracing(getJaegerExample()).build();
         var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(aks));
 
-        var jaeger = aks.getJaegerInstances().get(0);
+        var jaeger = (Jaeger) aks.getTracingInstances().get(0);
         var jaegerDto = getBlueprintComponentDto(blueprintComponentDtoList, jaeger.getId().getValue());
         var aksId = aks.getId().getValue();
 
@@ -100,10 +100,10 @@ public class BlueprintComponentDtoTest {
 
     @Test
     public void blueprintComponentValid_when_aksWithElasticLogging() {
-        var aks = getAksBuilder().withElasticLogging(getElasticLoggingExample()).build();
+        var aks = getAksBuilder().withLogging(getElasticLoggingExample()).build();
         var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(aks));
 
-        var elasticLogging = aks.getElasticLoggingInstances().get(0);
+        var elasticLogging = (ElasticLogging) aks.getLoggingInstances().get(0);
         var elasticLoggingDto = getBlueprintComponentDto(blueprintComponentDtoList, elasticLogging.getId().getValue());
         var aksId = aks.getId().getValue();
 
@@ -114,7 +114,6 @@ public class BlueprintComponentDtoTest {
                 .containsExactlyInAnyOrder(
                         elasticLogging.getNamespace(),
                         elasticLogging.isAPMRequired(),
-                        elasticLogging.isKibanaRequired(),
                         elasticLogging.getElasticVersion(),
                         elasticLogging.getElasticInstances(),
                         elasticLogging.getStorage(),
@@ -127,10 +126,10 @@ public class BlueprintComponentDtoTest {
 
     @Test
     public void blueprintComponentValid_when_aksWithElasticDataStore() {
-        var aks = getAksBuilder().withElasticDataStore(getElasticDataStoreExample()).build();
+        var aks = getAksBuilder().withDocumentDB(getElasticDataStoreExample()).build();
         var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(aks));
 
-        var elasticDataStore = aks.getElasticDataStoreInstances().get(0);
+        var elasticDataStore = (ElasticDataStore) aks.getDocumentDBInstances().get(0);
         var elasticDataStoreDto = getBlueprintComponentDto(blueprintComponentDtoList, elasticDataStore.getId().getValue());
         var aksId = aks.getId().getValue();
 
@@ -140,7 +139,6 @@ public class BlueprintComponentDtoTest {
                 .as("Component Parameters")
                 .containsExactlyInAnyOrder(
                         elasticDataStore.getNamespace(),
-                        elasticDataStore.isAPMRequired(),
                         elasticDataStore.isKibanaRequired(),
                         elasticDataStore.getElasticVersion(),
                         elasticDataStore.getElasticInstances(),
@@ -154,10 +152,10 @@ public class BlueprintComponentDtoTest {
 
     @Test
     public void blueprintComponentValid_when_aksWithK8sWorkload() {
-        var aks = getAksBuilder().withWorkload(getK8sWorkloadExample()).build();
+        var aks = getAksBuilder().withK8sWorkload(getK8sWorkloadExample()).build();
         var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(aks));
 
-        var k8sWorkload = aks.getKubernetesWorkloads().get(0);
+        var k8sWorkload = aks.getK8sWorkloadInstances().get(0);
         var k8sWorkloadDto = getBlueprintComponentDto(blueprintComponentDtoList, k8sWorkload.getId().getValue());
         var aksId = aks.getId().getValue();
 
@@ -178,26 +176,26 @@ public class BlueprintComponentDtoTest {
     }
 
     @Test
-    public void blueprintComponentValid_when_aksWithKafka() {
-        var aks = getAksBuilder().withKafkaCluster(getKafkaClusterExample()).build();
+    public void blueprintComponentValid_when_aksWithMessageBroker() {
+        var aks = getAksBuilder().withMessageBroker(getKafkaClusterExample()).build();
         var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(aks));
 
-        var kafkaCluster = aks.getKafkaClusters().get(0);
-        var kafkaClusterDto = getBlueprintComponentDto(blueprintComponentDtoList, kafkaCluster.getId().getValue());
+        var messageBroker = (KafkaCluster) aks.getMessageBrokerInstances().get(0);
+        var messageBrokerDto = getBlueprintComponentDto(blueprintComponentDtoList, messageBroker.getId().getValue());
         var aksId = aks.getId().getValue();
 
-        assertGenericComponent(kafkaClusterDto, kafkaCluster, CaaSKafka.TYPE);
+        assertGenericComponent(messageBrokerDto, messageBroker, CaaSMessageBroker.TYPE);
         assertSoftly(softly -> softly
-                .assertThat(kafkaClusterDto.getParameters().values())
+                .assertThat(messageBrokerDto.getParameters().values())
                 .as("Component Parameters")
                 .containsExactlyInAnyOrder(
-                        kafkaCluster.getNamespace(),
+                        messageBroker.getNamespace(),
                         aksId
                 ));
 
-        List<String> kafkaTopicIds = kafkaCluster.getKafkaTopics().stream().map(topic -> topic.getId().getValue()).collect(toList());
+        List<String> kafkaTopicIds = messageBroker.getKafkaTopics().stream().map(topic -> topic.getId().getValue()).collect(toList());
         var kafkaTopicDto = getBlueprintComponentDto(blueprintComponentDtoList, kafkaTopicIds.get(0));
-        var kafkaTopicComp = kafkaCluster.getKafkaTopics().stream().filter(x -> x.getId().getValue().equals(kafkaTopicDto.getId())).findFirst().get();
+        var kafkaTopicComp = messageBroker.getKafkaTopics().stream().filter(x -> x.getId().getValue().equals(kafkaTopicDto.getId())).findFirst().get();
         assertGenericComponent(kafkaTopicDto, kafkaTopicComp, CaaSKafkaTopic.TYPE);
         assertSoftly(softly -> softly
                 .assertThat(kafkaTopicDto.getParameters().values())
@@ -208,9 +206,9 @@ public class BlueprintComponentDtoTest {
                         kafkaTopicComp.getClusterName()
                 ));
 
-        List<String> kafkaUserIds = kafkaCluster.getKafkaUsers().stream().map(user -> user.getId().getValue()).collect(toList());
+        List<String> kafkaUserIds = messageBroker.getKafkaUsers().stream().map(user -> user.getId().getValue()).collect(toList());
         var kafkaUserDto = getBlueprintComponentDto(blueprintComponentDtoList, kafkaUserIds.get(0));
-        var kafkaUserComp = kafkaCluster.getKafkaUsers().stream().filter(x -> x.getId().getValue().equals(kafkaUserDto.getId())).findFirst().get();
+        var kafkaUserComp = messageBroker.getKafkaUsers().stream().filter(x -> x.getId().getValue().equals(kafkaUserDto.getId())).findFirst().get();
         assertGenericComponent(kafkaUserDto, kafkaUserComp, CaaSKafkaUser.TYPE);
         assertSoftly(softly -> softly
                 .assertThat(kafkaUserDto.getParameters().values())
@@ -295,16 +293,17 @@ public class BlueprintComponentDtoTest {
 
     private void assertComponentSize(KubernetesCluster kubernetesCluster, List<BlueprintComponentDto> blueprintComponentDtos) {
         int componentSize = 1; //containerPlatform itself
-        componentSize += kubernetesCluster.getKubernetesWorkloads().size();
-        componentSize += kubernetesCluster.getKafkaClusters().size();
-        componentSize += kubernetesCluster.getPrometheusInstances().size();
-        componentSize += kubernetesCluster.getAmbassadorInstances().size();
-        componentSize += kubernetesCluster.getOcelotInstances().size();
-        componentSize += kubernetesCluster.getJaegerInstances().size();
-        componentSize += kubernetesCluster.getElasticLoggingInstances().size();
-        componentSize += kubernetesCluster.getElasticDataStoreInstances().size();
-        componentSize += kubernetesCluster.getKafkaClusters().stream().mapToLong(x -> x.getKafkaTopics().size()).sum();
-        componentSize += kubernetesCluster.getKafkaClusters().stream().mapToLong(x -> x.getKafkaUsers().size()).sum();
+        componentSize += kubernetesCluster.getK8sWorkloadInstances().size();
+        componentSize += kubernetesCluster.getMessageBrokerInstances().size();
+        componentSize += kubernetesCluster.getMonitoringInstances().size();
+        componentSize += kubernetesCluster.getApiGatewayInstances().size();
+        componentSize += kubernetesCluster.getServiceMeshSecurityInstances().size();
+        componentSize += kubernetesCluster.getTracingInstances().size();
+        componentSize += kubernetesCluster.getLoggingInstances().size();
+        componentSize += kubernetesCluster.getDocumentDBInstances().size();
+        var messageBrokerInstance = (KafkaCluster) kubernetesCluster.getMessageBrokerInstances().get(0);
+        componentSize += messageBrokerInstance.getKafkaTopics().size();
+        componentSize += messageBrokerInstance.getKafkaUsers().size();
 
         assertThat(blueprintComponentDtos).hasSize(componentSize);
     }

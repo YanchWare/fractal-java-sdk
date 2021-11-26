@@ -1,4 +1,4 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.gcp;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp;
 
 public enum GcpZone {
   US_EAST1B("us-east1-b"),
