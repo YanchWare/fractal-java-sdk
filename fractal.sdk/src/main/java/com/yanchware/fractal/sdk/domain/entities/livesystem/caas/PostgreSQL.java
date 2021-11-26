@@ -39,7 +39,10 @@ public abstract class PostgreSQL extends PaaSPostgreSQL implements LiveSystemCom
                 component.setDatabases(new ArrayList<>());
             }
 
-            dbs.forEach(db -> db.getDependencies().add(component.getId()));
+            dbs.forEach(db -> {
+                db.getDependencies().add(component.getId());
+                db.setProvider(component.getProvider());
+            });
             component.getDatabases().addAll(dbs);
             return builder;
         }
