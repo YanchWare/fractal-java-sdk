@@ -35,6 +35,6 @@ public class AzureNodePoolTest {
     }
 
     private AzureNodePool buildAzureNodePool(String name) {
-        return AzureNodePool.builder().name(name).diskSizeGb(30).build();
+        return AzureNodePool.builder().withName(name).withDiskSizeGb(30).build();
     }
 }

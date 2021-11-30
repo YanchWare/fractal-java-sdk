@@ -50,7 +50,7 @@ public class GoogleKubernetesEngineTest {
     private GoogleKubernetesEngine.GoogleKubernetesEngineBuilder generateBuilder() {
         return GoogleKubernetesEngine.builder()
                 .withId("test")
-                .withNodePool(GcpNodePool.builder().name("gcp-node-pool-name").build());
+                .withNodePool(GcpNodePool.builder().withName("gcp-node-pool-name").build());
     }
 
 }

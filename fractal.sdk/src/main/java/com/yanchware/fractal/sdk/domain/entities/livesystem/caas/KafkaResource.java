@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
+@Builder(setterPrefix = "with")
 public class KafkaResource {
     private KafkaACLType type;
     private String name;

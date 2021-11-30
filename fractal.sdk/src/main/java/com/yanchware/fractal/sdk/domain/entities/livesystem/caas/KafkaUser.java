@@ -61,11 +61,11 @@ public class KafkaUser extends CaaSKafkaUser implements LiveSystemComponent {
 
         public KafkaUserBuilder withTopicReadACL(String serviceName) {
             return withAcl(KafkaACL.builder().
-                    resource(KafkaResource.builder().
-                            type(TOPIC).
-                            name(serviceName).
-                            patternType(KafkaACLPatternType.LITERAL).build()).
-                    operation(READ).build());
+                    withResource(KafkaResource.builder().
+                            withType(TOPIC).
+                            withName(serviceName).
+                            withPatternType(KafkaACLPatternType.LITERAL).build()).
+                    withOperation(READ).build());
         }
 
         @Override

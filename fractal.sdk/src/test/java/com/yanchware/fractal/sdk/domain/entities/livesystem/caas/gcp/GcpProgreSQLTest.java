@@ -33,7 +33,7 @@ class GcpProgreSQLTest {
     public void exceptionThrown_when_gcpPgCreatedWithNoNetwork() {
         var postgres = GcpProgreSQL.builder()
                 .withId(ComponentId.from("postg"))
-                .region(ASIA_SOUTH1);
+                .withRegion(ASIA_SOUTH1);
         assertThatThrownBy(postgres::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
                 "[GcpProgreSQL Validation] Network has not been defined and it is required]"
         );
@@ -42,7 +42,7 @@ class GcpProgreSQLTest {
     @Test
     public void exceptionThrown_when_gcpPgCreatedWithEmptyPeeringNetworkAddress() {
         var postgres = getGcpPostgresBuilder()
-                .peeringNetworkAddress("");
+                .withPeeringNetworkAddress("");
         assertThatThrownBy(postgres::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
                 "[GcpProgreSQL Validation] Peering network address is empty"
         );
@@ -51,7 +51,7 @@ class GcpProgreSQLTest {
     @Test
     public void exceptionThrown_when_gcpPgCreatedWithBlankPeeringNetworkAddress() {
         var postgres = getGcpPostgresBuilder()
-                .peeringNetworkAddress("   ");
+                .withPeeringNetworkAddress("   ");
         assertThatThrownBy(postgres::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
                 "[GcpProgreSQL Validation] Peering network address is empty"
         );
@@ -60,7 +60,7 @@ class GcpProgreSQLTest {
     @Test
     public void exceptionThrown_when_gcpPgCreatedWithEmptyPeeringNetworkAddressDescription() {
         var postgres = getGcpPostgresBuilder()
-                .peeringNetworkAddressDescription("");
+                .withPeeringNetworkAddressDescription("");
         assertThatThrownBy(postgres::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
                 "[GcpProgreSQL Validation] Peering network address description is empty"
         );
@@ -69,7 +69,7 @@ class GcpProgreSQLTest {
     @Test
     public void exceptionThrown_when_gcpPgCreatedWithBlankPeeringNetworkAddressDescription() {
         var postgres = getGcpPostgresBuilder()
-                .peeringNetworkAddressDescription("   ");
+                .withPeeringNetworkAddressDescription("   ");
         assertThatThrownBy(postgres::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
                 "[GcpProgreSQL Validation] Peering network address description is empty"
         );
@@ -78,7 +78,7 @@ class GcpProgreSQLTest {
     @Test
     public void exceptionThrown_when_gcpPgCreatedWithEmptyPeeringNetworkName() {
         var postgres = getGcpPostgresBuilder()
-                .peeringNetworkName("");
+                .withPeeringNetworkName("");
         assertThatThrownBy(postgres::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
                 "[GcpProgreSQL Validation] Peering network name is empty"
         );
@@ -87,7 +87,7 @@ class GcpProgreSQLTest {
     @Test
     public void exceptionThrown_when_gcpPgCreatedWithBlankPeeringNetworkName() {
         var postgres = getGcpPostgresBuilder()
-                .peeringNetworkName("   ");
+                .withPeeringNetworkName("   ");
         assertThatThrownBy(postgres::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
                 "[GcpProgreSQL Validation] Peering network name is empty"
         );
@@ -96,7 +96,7 @@ class GcpProgreSQLTest {
     @Test
     public void exceptionThrown_when_gcpPgCreatedWithEmptyPeeringNetworkPrefix() {
         var postgres = getGcpPostgresBuilder()
-                .peeringNetworkPrefix("");
+                .withPeeringNetworkPrefix("");
         assertThatThrownBy(postgres::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
                 "[GcpProgreSQL Validation] Peering network prefix is empty"
         );
@@ -105,7 +105,7 @@ class GcpProgreSQLTest {
     @Test
     public void exceptionThrown_when_gcpPgCreatedWithBlankPeeringNetworkPrefix() {
         var postgres = getGcpPostgresBuilder()
-                .peeringNetworkPrefix("   ");
+                .withPeeringNetworkPrefix("   ");
         assertThatThrownBy(postgres::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
                 "[GcpProgreSQL Validation] Peering network prefix is empty"
         );
@@ -119,7 +119,7 @@ class GcpProgreSQLTest {
     private GcpProgreSQL.GcpPostgreSQLBuilder getGcpPostgresBuilder() {
         return GcpProgreSQL.builder()
                 .withId(ComponentId.from("postg"))
-                .region(ASIA_SOUTH1)
-                .network("network");
+                .withRegion(ASIA_SOUTH1)
+                .withNetwork("network");
     }
 }

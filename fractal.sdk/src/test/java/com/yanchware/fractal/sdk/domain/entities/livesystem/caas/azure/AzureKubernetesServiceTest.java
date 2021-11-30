@@ -46,6 +46,6 @@ public class AzureKubernetesServiceTest {
     private AzureKubernetesService.AzureKubernetesServiceBuilder generateBuilder() {
         return AzureKubernetesService.builder()
                 .withId(ComponentId.from("test"))
-                .withNodePool(AzureNodePool.builder().name("azure-node-pool-name").diskSizeGb(30).build());
+                .withNodePool(AzureNodePool.builder().withName("azure-node-pool-name").withDiskSizeGb(30).build());
     }
 }

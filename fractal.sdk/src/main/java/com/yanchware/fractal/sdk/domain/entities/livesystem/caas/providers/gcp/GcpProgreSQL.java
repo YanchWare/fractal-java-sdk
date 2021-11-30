@@ -56,32 +56,32 @@ public class GcpProgreSQL extends PostgreSQL {
             return this;
         }
 
-        public GcpPostgreSQLBuilder region(GcpRegion region) {
+        public GcpPostgreSQLBuilder withRegion(GcpRegion region) {
             component.setRegion(region);
             return builder;
         }
 
-        public GcpPostgreSQLBuilder network(String network) {
+        public GcpPostgreSQLBuilder withNetwork(String network) {
             component.setNetwork(network);
             return builder;
         }
 
-        public GcpPostgreSQLBuilder peeringNetworkAddress(String peeringNetworkAddress) {
+        public GcpPostgreSQLBuilder withPeeringNetworkAddress(String peeringNetworkAddress) {
             component.setPeeringNetworkAddress(peeringNetworkAddress);
             return builder;
         }
 
-        public GcpPostgreSQLBuilder peeringNetworkAddressDescription(String peeringNetworkAddressDescription) {
+        public GcpPostgreSQLBuilder withPeeringNetworkAddressDescription(String peeringNetworkAddressDescription) {
             component.setPeeringNetworkAddressDescription(peeringNetworkAddressDescription);
             return builder;
         }
 
-        public GcpPostgreSQLBuilder peeringNetworkName(String peeringNetworkName) {
+        public GcpPostgreSQLBuilder withPeeringNetworkName(String peeringNetworkName) {
             component.setPeeringNetworkName(peeringNetworkName);
             return builder;
         }
 
-        public GcpPostgreSQLBuilder peeringNetworkPrefix(String peeringNetworkPrefix) {
+        public GcpPostgreSQLBuilder withPeeringNetworkPrefix(String peeringNetworkPrefix) {
             component.setPeeringNetworkPrefix(peeringNetworkPrefix);
             return builder;
         }

@@ -28,6 +28,6 @@ public class GcpNodePoolTest {
     }
 
     private GcpNodePool buildGcpNodePool(String name) {
-        return GcpNodePool.builder().name(name).build();
+        return GcpNodePool.builder().withName(name).build();
     }
 }
