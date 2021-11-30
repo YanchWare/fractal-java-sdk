@@ -51,27 +51,27 @@ public class AzureKubernetesService extends KubernetesCluster {
             return this;
         }
 
-        public AzureKubernetesServiceBuilder region(AzureRegion region) {
+        public AzureKubernetesServiceBuilder withRegion(AzureRegion region) {
             component.setRegion(region);
             return builder;
         }
 
-        public AzureKubernetesServiceBuilder network(String network) {
+        public AzureKubernetesServiceBuilder withNetwork(String network) {
             component.setNetwork(network);
             return builder;
         }
 
-        public AzureKubernetesServiceBuilder subNetwork(String subNetwork) {
+        public AzureKubernetesServiceBuilder withSubNetwork(String subNetwork) {
             component.setSubNetwork(subNetwork);
             return builder;
         }
 
-        public AzureKubernetesServiceBuilder podsRange(String podsRange) {
+        public AzureKubernetesServiceBuilder withPodsRange(String podsRange) {
             component.setPodsRange(podsRange);
             return builder;
         }
 
-        public AzureKubernetesServiceBuilder serviceRange(String serviceRange) {
+        public AzureKubernetesServiceBuilder withServiceRange(String serviceRange) {
             component.setServiceRange(serviceRange);
             return builder;
         }

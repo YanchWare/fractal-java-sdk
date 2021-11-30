@@ -10,7 +10,7 @@ import java.util.Collection;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Data
-@Builder
+@Builder(setterPrefix = "with")
 public class AzureNodePool implements Validatable {
     private final static String NAME_IS_BLANK = "[AzureNodePool Validation] Name has not been defined and it is required";
     private final static String DISK_SIZE_UNDER_30GB = "[AzureNodePool Validation] Disk size must be at least 30GB";

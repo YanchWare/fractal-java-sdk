@@ -53,32 +53,32 @@ public class AzurePostgreSQL extends PostgreSQL {
             return this;
         }
 
-        public AzurePostgreSQLBuilder rootUser(String rootUser) {
+        public AzurePostgreSQLBuilder withRootUser(String rootUser) {
             component.setRootUser(rootUser);
             return builder;
         }
 
-        public AzurePostgreSQLBuilder region(AzureRegion region) {
+        public AzurePostgreSQLBuilder withRegion(AzureRegion region) {
             component.setRegion(region);
             return builder;
         }
 
-        public AzurePostgreSQLBuilder skuName(AzureSkuName skuName) {
+        public AzurePostgreSQLBuilder withSkuName(AzureSkuName skuName) {
             component.setSkuName(skuName);
             return builder;
         }
 
-        public AzurePostgreSQLBuilder storageAutoGrow(AzureStorageAutoGrow storageAutoGrow) {
+        public AzurePostgreSQLBuilder withStorageAutoGrow(AzureStorageAutoGrow storageAutoGrow) {
             component.setStorageAutoGrow(storageAutoGrow);
             return builder;
         }
 
-        public AzurePostgreSQLBuilder storageMB(int storageMB) {
+        public AzurePostgreSQLBuilder withStorageMB(int storageMB) {
             component.setStorageMB(storageMB);
             return builder;
         }
 
-        public AzurePostgreSQLBuilder backupRetentionDays(int backupRetentionDays) {
+        public AzurePostgreSQLBuilder withBackupRetentionDays(int backupRetentionDays) {
             component.setBackupRetentionDays(backupRetentionDays);
             return builder;
         }

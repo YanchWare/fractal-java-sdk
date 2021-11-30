@@ -8,7 +8,7 @@ import java.util.Collection;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
-@Builder
+@Builder(setterPrefix = "with")
 public class GcpNodePool implements Validatable {
   private final static String NAME_IS_BLANK = "[GcpNodePool Validation] Name has not been defined and it is required";
 

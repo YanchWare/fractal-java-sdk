@@ -50,27 +50,27 @@ public class GoogleKubernetesEngine extends KubernetesCluster {
             return this;
         }
 
-        public GoogleKubernetesEngineBuilder region(GcpRegion region) {
+        public GoogleKubernetesEngineBuilder withRegion(GcpRegion region) {
             component.setRegion(region);
             return builder;
         }
 
-        public GoogleKubernetesEngineBuilder network(String network) {
+        public GoogleKubernetesEngineBuilder withNetwork(String network) {
             component.setNetwork(network);
             return builder;
         }
 
-        public GoogleKubernetesEngineBuilder subNetwork(String subNetwork) {
+        public GoogleKubernetesEngineBuilder withSubNetwork(String subNetwork) {
             component.setSubNetwork(subNetwork);
             return builder;
         }
 
-        public GoogleKubernetesEngineBuilder podsRange(String podsRange) {
+        public GoogleKubernetesEngineBuilder withPodsRange(String podsRange) {
             component.setPodsRange(podsRange);
             return builder;
         }
 
-        public GoogleKubernetesEngineBuilder serviceRange(String serviceRange) {
+        public GoogleKubernetesEngineBuilder withServiceRange(String serviceRange) {
             component.setServiceRange(serviceRange);
             return builder;
         }

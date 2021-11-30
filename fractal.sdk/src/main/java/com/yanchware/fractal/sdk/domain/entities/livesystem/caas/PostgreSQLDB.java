@@ -47,17 +47,17 @@ public class PostgreSQLDB extends PaaSPostgreSQLDB implements LiveSystemComponen
             return this;
         }
 
-        public PostgreSQLDBBuilder name(String name) {
+        public PostgreSQLDBBuilder withName(String name) {
             component.setName(name);
             return builder;
         }
 
-        public PostgreSQLDBBuilder charset(PostgreSQLCharset charset) {
+        public PostgreSQLDBBuilder withCharset(PostgreSQLCharset charset) {
             component.setCharset(charset);
             return builder;
         }
 
-        public PostgreSQLDBBuilder collation(String collation) {
+        public PostgreSQLDBBuilder withCollation(String collation) {
             component.setCollation(collation);
             return builder;
         }
