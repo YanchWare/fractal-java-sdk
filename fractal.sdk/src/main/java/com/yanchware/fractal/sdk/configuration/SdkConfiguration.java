@@ -1,14 +1,13 @@
 package com.yanchware.fractal.sdk.configuration;
 
+import java.net.URI;
+
 public interface SdkConfiguration {
-
-    String getResourceGroupId();
-
     String getClientId();
 
     String getClientSecret();
 
-    String getBlueprintEndpoint();
+    URI getBlueprintEndpoint();
 
-    String getLiveSystemEndpoint();
+    URI getLiveSystemEndpoint();
 }
