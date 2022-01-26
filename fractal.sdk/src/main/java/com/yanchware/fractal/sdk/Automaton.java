@@ -13,8 +13,17 @@ import io.github.resilience4j.retry.RetryConfig;
 import io.github.resilience4j.retry.RetryRegistry;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import java.net.URISyntaxException;
 import java.net.http.HttpClient;
+import java.security.GeneralSecurityException;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 import java.util.List;
+
+import static com.yanchware.fractal.sdk.configuration.Constants.TEST_ENVIRONMENT;
 
 @Slf4j
 public class Automaton {
@@ -35,7 +44,24 @@ public class Automaton {
 
     public static void instantiate(List<LiveSystem> liveSystems) throws InstantiatorException {
         if (instance == null) {
-            instance = new Automaton(HttpClient.newBuilder().version(HttpClient.Version.HTTP_2).build(), new EnvVarSdkConfiguration());
+            EnvVarSdkConfiguration configuration;
+
+            try {
+                configuration = new EnvVarSdkConfiguration();
+            } catch (URISyntaxException e) {
+                throw new InstantiatorException("Error with Sdk configuration", e);
+            }
+
+            var builder = HttpClient
+              .newBuilder()
+              .version(HttpClient.Version.HTTP_2);
+
+            if (isRunningAgainstTestEnvironment(configuration)) {
+                builder
+                  .sslContext(getTestSSLContext());
+            }
+
+            instance = new Automaton(builder.build(), configuration);
         }
 
         // Improve resiliency
@@ -58,6 +84,33 @@ public class Automaton {
             blueprintService.createOrUpdateBlueprint(blueprintCommand, fractalId);
             liveSystemService.instantiate(liveSystemCommand);
         }
+    }
+
+    private static boolean isRunningAgainstTestEnvironment(SdkConfiguration configuration) {
+        return TEST_ENVIRONMENT.equalsIgnoreCase(configuration.getBlueprintEndpoint().getHost())
+          && TEST_ENVIRONMENT.equalsIgnoreCase(configuration.getLiveSystemEndpoint().getHost());
+    }
+
+    private static SSLContext getTestSSLContext() {
+        var trustAllCerts = new TrustManager[] {
+          new X509TrustManager() {
+              public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                  return new X509Certificate[0];
+              }
+              public void checkClientTrusted(java.security.cert.X509Certificate[] certs, String authType) {}
+              public void checkServerTrusted(java.security.cert.X509Certificate[] certs, String authType) {}
+          }
+        };
+
+        try {
+            SSLContext sc = SSLContext.getInstance("SSL");
+            sc.init(null, trustAllCerts, new SecureRandom());
+            return sc;
+        } catch (GeneralSecurityException e) {
+            log.warn("Error installing test trust manager", e);
+        }
+
+        return null;
     }
 
 }

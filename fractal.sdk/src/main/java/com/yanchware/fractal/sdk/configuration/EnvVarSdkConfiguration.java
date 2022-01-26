@@ -1,12 +1,22 @@
 package com.yanchware.fractal.sdk.configuration;
 
-import static org.apache.commons.lang3.StringUtils.isBlank;
-import static com.yanchware.fractal.sdk.configuration.Constants.*;
+import lombok.extern.slf4j.Slf4j;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
+import static com.yanchware.fractal.sdk.configuration.Constants.*;
+import static org.apache.commons.lang3.StringUtils.isBlank;
+
+@Slf4j
 public class EnvVarSdkConfiguration implements SdkConfiguration {
-    @Override
-    public String getResourceGroupId() {
-        return System.getenv(RESOURCE_GROUP_ID_KEY);
+
+    public final URI DEFAULT_BLUEPRINT_ENDPOINT;
+    public final URI DEFAULT_LIVESYSTEM_ENDPOINT;
+
+    public EnvVarSdkConfiguration() throws URISyntaxException {
+        DEFAULT_LIVESYSTEM_ENDPOINT = new URI("https://api.fractal-arch.org/livesystems");
+        DEFAULT_BLUEPRINT_ENDPOINT = new URI("https://api.fractal-arch.org/blueprints");
     }
 
     @Override
@@ -20,18 +30,26 @@ public class EnvVarSdkConfiguration implements SdkConfiguration {
     }
 
     @Override
-    public String getBlueprintEndpoint() {
-        String blueprintEndpoint = System.getenv(BLUEPRINT_ENDPOINT_KEY);
-        return isBlank(blueprintEndpoint)
-          ? DEFAULT_BLUEPRINT_ENDPOINT
-          : blueprintEndpoint;
+    public URI getBlueprintEndpoint() {
+        return checkAndReturnUri(BLUEPRINT_ENDPOINT_KEY, DEFAULT_BLUEPRINT_ENDPOINT);
     }
 
     @Override
-    public String getLiveSystemEndpoint() {
-        String blueprintEndpoint = System.getenv(LIVESYSTEM_ENDPOINT_KEY);
-        return isBlank(blueprintEndpoint)
-          ? DEFAULT_LIVESYSTEM_ENDPOINT
-          : blueprintEndpoint;
+    public URI getLiveSystemEndpoint() {
+        return checkAndReturnUri(LIVESYSTEM_ENDPOINT_KEY, DEFAULT_LIVESYSTEM_ENDPOINT);
+    }
+
+    private URI checkAndReturnUri(String endpointEnvKey, URI defaultValue) {
+        String endpoint = System.getenv(endpointEnvKey);
+        if (isBlank(endpoint)) {
+            return defaultValue;
+        }
+
+        try {
+            return new URI(endpoint);
+        } catch (URISyntaxException e) {
+            log.warn("Tried to override endpoint {} with a non valid URI {}. Fallback to standard", endpointEnvKey, endpoint);
+            return defaultValue;
+        }
     }
 }
