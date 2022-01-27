@@ -2,12 +2,17 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp;
 
 import com.yanchware.fractal.sdk.domain.entities.Validatable;
 import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
+@Getter
+@Setter
 @Builder(setterPrefix = "with")
 public class GcpNodePool implements Validatable {
   private final static String NAME_IS_BLANK = "[GcpNodePool Validation] Name has not been defined and it is required";

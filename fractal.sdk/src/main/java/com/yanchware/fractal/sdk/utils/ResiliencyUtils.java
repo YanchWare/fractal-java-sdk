@@ -26,29 +26,29 @@ public class ResiliencyUtils {
     HttpRequest request,
     int[] acceptedResponses) throws InstantiatorException {
 
-      Retry retry = retryRegistry.retry(requestName);
+    Retry retry = retryRegistry.retry(requestName);
 
-      CheckedFunction0<Throwable> callWithRetry = Retry.decorateCheckedSupplier(retry, () -> {
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        if (Arrays.stream(acceptedResponses).noneMatch((x) -> x == response.statusCode())) {
-          throw new InstantiatorException(
-            String.format(
-              "Attempted %s failed with response code: %s and body %s ",
-              requestName,
-              response.statusCode(),
-              response.body()));
-        }
-
-        return null;
-      });
-
-      Try<Throwable> result = Try.of(callWithRetry).recover((throwable) -> throwable);
-
-      if (result.isFailure()) {
+    CheckedFunction0<Throwable> callWithRetry = Retry.decorateCheckedSupplier(retry, () -> {
+      HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+      if (Arrays.stream(acceptedResponses).noneMatch((x) -> x == response.statusCode())) {
         throw new InstantiatorException(
-          String.format("All attempts for request %s failed", requestName),
-          result.get());
+          String.format(
+            "Attempted %s failed with response code: %s and body %s ",
+            requestName,
+            response.statusCode(),
+            response.body()));
       }
+
+      return null;
+    });
+
+    Try<Throwable> result = Try.of(callWithRetry).recover((throwable) -> throwable);
+
+    if (result.isFailure()) {
+      throw new InstantiatorException(
+        String.format("All attempts for request %s failed", requestName),
+        result.get());
+    }
   }
 
   public static <T> T executeRequestWithRetries(
@@ -64,27 +64,26 @@ public class ResiliencyUtils {
     CheckedFunction0<T> callWithRetry = Retry.decorateCheckedSupplier(retry, () -> {
       HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
       if (Arrays.stream(acceptedResponses).noneMatch((x) -> x == response.statusCode())) {
-        throw new InstantiatorException(
-          String.format(
-            "Attempted %s failed with response code: %s and body %s ",
-            requestName,
-            response.statusCode(),
-            response.body()));
+        String errorMessage = String.format(
+          "Attempted %s failed with response code: %s and body %s ",
+          requestName,
+          response.statusCode(),
+          response.body());
+        log.error(errorMessage);
+        throw new InstantiatorException(errorMessage);
       }
 
       String bodyContents = response.body();
       if (isBlank(bodyContents)) {
+        log.error("Attempted {} has come up with empty or null body contents: {}", requestName, bodyContents);
         return null;
       }
 
       try {
         return deserialize(bodyContents, classRef);
       } catch (JsonProcessingException e) {
-        throw new InstantiatorException(
-          String.format("Attempted %s failed. Deserialization of %s failed."
-            ,requestName,
-            bodyContents),
-          e);
+        log.error("Attempted {} failed. Deserialization of {} failed.", requestName, bodyContents);
+        return null;
       }
 
     });

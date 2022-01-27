@@ -1,5 +1,5 @@
 steps:
-  - name: maven:3.8.3-openjdk-16
+  - name: maven:3.8.4-openjdk-17-slim
     dir: fractal.sdk
     entrypoint: mvn
     args: ['package']
