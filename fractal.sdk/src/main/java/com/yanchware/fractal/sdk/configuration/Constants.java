@@ -30,5 +30,5 @@ public class Constants {
 
     public static final String LINKS_KEY = "links";
 
-    public static final String TEST_ENVIRONMENT = "local.yanchware.com";
+    public static final String TEST_ENVIRONMENT = "api.local.fractal.cloud";
 }
