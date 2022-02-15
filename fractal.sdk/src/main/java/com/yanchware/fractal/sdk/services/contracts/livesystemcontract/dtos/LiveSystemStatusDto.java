@@ -8,5 +8,5 @@ public enum LiveSystemStatusDto {
   PROCESSING,
   ERROR,
   READY,
-  DELETED
+  DELETING
 }
