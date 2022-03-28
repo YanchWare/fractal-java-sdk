@@ -15,8 +15,8 @@ public class EnvVarSdkConfiguration implements SdkConfiguration {
     public final URI DEFAULT_LIVESYSTEM_ENDPOINT;
 
     public EnvVarSdkConfiguration() throws URISyntaxException {
-        DEFAULT_LIVESYSTEM_ENDPOINT = new URI("https://api.fractal-arch.org/livesystems");
-        DEFAULT_BLUEPRINT_ENDPOINT = new URI("https://api.fractal-arch.org/blueprints");
+        DEFAULT_LIVESYSTEM_ENDPOINT = new URI("https://api.fractal.cloud/livesystems");
+        DEFAULT_BLUEPRINT_ENDPOINT = new URI("https://api.fractal.cloud/blueprints");
     }
 
     @Override
