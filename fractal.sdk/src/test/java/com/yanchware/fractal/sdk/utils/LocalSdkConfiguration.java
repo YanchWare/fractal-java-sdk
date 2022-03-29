@@ -19,12 +19,12 @@ public class LocalSdkConfiguration implements SdkConfiguration {
     @SneakyThrows
     @Override
     public URI getBlueprintEndpoint() {
-        return new URI("https://api.fractal-arch.org/blueprints");
+        return new URI("https://api.local.fractal.cloud/blueprints");
     }
 
     @SneakyThrows
     @Override
     public URI getLiveSystemEndpoint() {
-        return new URI("https://api.fractal-arch.org/livesystems");
+        return new URI("https://api.local.fractal.cloud/livesystems");
     }
 }
