@@ -5,12 +5,18 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.Collection;
+
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PROMETHEUS;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Getter
 @Setter(AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 public class Prometheus extends CaaSMonitoringImpl implements LiveSystemComponent {
+    private final static String API_GATEWAY_URL_IS_BLANK = "[Prometheus Validation] API Gateway URL has not been defined and it is required";
+
+    private String apiGatewayUrl;
 
     public static PrometheusBuilder builder() {
         return new PrometheusBuilder();
@@ -38,10 +44,26 @@ public class Prometheus extends CaaSMonitoringImpl implements LiveSystemComponen
             return builder;
         }
 
+        public PrometheusBuilder withApiGatewayUrl(String apiGatewayUrl) {
+            component.setApiGatewayUrl(apiGatewayUrl);
+            return builder;
+        }
+
         @Override
         public Prometheus build() {
             component.setType(PROMETHEUS);
             return super.build();
         }
+    }
+
+    @Override
+    public Collection<String> validate() {
+        Collection<String> errors = super.validate();
+
+        if (isBlank(apiGatewayUrl)) {
+            errors.add(API_GATEWAY_URL_IS_BLANK);
+        }
+
+        return errors;
     }
 }
