@@ -55,6 +55,36 @@ public class KubernetesWorkloadTest {
         assertThatCode(builder::build).doesNotThrowAnyException();
     }
 
+    @Test
+    public void exceptionThrown_when_workloadBuiltWithWorkloadSecretIdKeyEmpty() {
+        var builder = generateBuilder()
+            .withNamespace("fractal")
+            .withPrivateSSHKeyPassphraseSecretId("svc-private-ssh-key-pass")
+            .withPrivateSSHKeySecretId("svc-private-ssh-key-secret")
+            .withPublicSSHKey("public-ssh")
+            .withSSHRepositoryURI("ssh")
+            .withRepoId("repo-id")
+            .withWorkloadSecretIdKey("");
+        assertThatThrownBy(builder::build).
+            isInstanceOf(IllegalArgumentException.class).
+            hasMessageContaining("Workload Secret Id Key is either empty or blank");
+    }
+
+    @Test
+    public void exceptionThrown_when_workloadBuiltWithWorkloadSecretPasswordKeyEmpty() {
+        var builder = generateBuilder()
+            .withNamespace("fractal")
+            .withPrivateSSHKeyPassphraseSecretId("svc-private-ssh-key-pass")
+            .withPrivateSSHKeySecretId("svc-private-ssh-key-secret")
+            .withPublicSSHKey("public-ssh")
+            .withSSHRepositoryURI("ssh")
+            .withRepoId("repo-id")
+            .withWorkloadSecretPasswordKey("");
+        assertThatThrownBy(builder::build).
+            isInstanceOf(IllegalArgumentException.class).
+            hasMessageContaining("Workload Secret Password Key is either empty or blank");
+    }
+
     private KubernetesWorkloadBuilder generateBuilder() {
         return builder().withId("kube");
     }
