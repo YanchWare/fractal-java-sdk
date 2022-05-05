@@ -83,11 +83,11 @@ public class KubernetesWorkload extends CaaSK8sWorkloadImpl implements LiveSyste
             return builder;
         }
 
-        public KubernetesWorkloadBuilder withWorkloadScope(String workloadScope) {
-            return withWorkloadScopes(List.of(workloadScope));
+        public KubernetesWorkloadBuilder withScope(String workloadScope) {
+            return withScopes(List.of(workloadScope));
         }
 
-        public KubernetesWorkloadBuilder withWorkloadScopes(List<String> workloadScopes) {
+        public KubernetesWorkloadBuilder withScopes(List<String> workloadScopes) {
             if (isBlank(workloadScopes)) {
                 return builder;
             }
@@ -98,12 +98,12 @@ public class KubernetesWorkload extends CaaSK8sWorkloadImpl implements LiveSyste
             return builder;
         }
 
-        public KubernetesWorkloadBuilder withWorkloadSecretIdKey(String workloadSecretIdKey) {
+        public KubernetesWorkloadBuilder withSecretIdKey(String workloadSecretIdKey) {
             component.setWorkloadSecretIdKey(workloadSecretIdKey);
             return builder;
         }
 
-        public KubernetesWorkloadBuilder withWorkloadSecretPasswordKey(String workloadSecretPasswordKey) {
+        public KubernetesWorkloadBuilder withSecretPasswordKey(String workloadSecretPasswordKey) {
             component.setWorkloadSecretPasswordKey(workloadSecretPasswordKey);
             return builder;
         }

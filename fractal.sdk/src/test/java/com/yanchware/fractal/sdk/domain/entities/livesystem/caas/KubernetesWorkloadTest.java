@@ -64,7 +64,7 @@ public class KubernetesWorkloadTest {
             .withPublicSSHKey("public-ssh")
             .withSSHRepositoryURI("ssh")
             .withRepoId("repo-id")
-            .withWorkloadSecretIdKey("");
+            .withSecretIdKey("");
         assertThatThrownBy(builder::build).
             isInstanceOf(IllegalArgumentException.class).
             hasMessageContaining("Workload Secret Id Key is either empty or blank");
@@ -79,7 +79,7 @@ public class KubernetesWorkloadTest {
             .withPublicSSHKey("public-ssh")
             .withSSHRepositoryURI("ssh")
             .withRepoId("repo-id")
-            .withWorkloadSecretPasswordKey("");
+            .withSecretPasswordKey("");
         assertThatThrownBy(builder::build).
             isInstanceOf(IllegalArgumentException.class).
             hasMessageContaining("Workload Secret Password Key is either empty or blank");

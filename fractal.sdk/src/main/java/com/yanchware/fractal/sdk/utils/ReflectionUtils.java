@@ -47,7 +47,7 @@ public class ReflectionUtils {
                         try {
                             Object o = f.get(component);
                             if (o == null) {
-                                log.trace("Field '{}' of component '{}' is null. Will skipp.", f.getName(), component.getClass().getSimpleName());
+                                log.trace("Field '{}' of component '{}' is null. Will skip.", f.getName(), component.getClass().getSimpleName());
                                 continue;
                             }
                             List<LiveSystemComponent> listOfComp = (List<LiveSystemComponent>) o;
@@ -65,7 +65,7 @@ public class ReflectionUtils {
                         try {
                             Object o = f.get(component);
                             if (o == null) {
-                                log.trace("Field '{}' of component '{}' is null. Will skipp.", f.getName(), component.getClass().getSimpleName());
+                                log.trace("Field '{}' of component '{}' is null. Will skip.", f.getName(), component.getClass().getSimpleName());
                                 continue;
                             }
                             LiveSystemComponent comp = (LiveSystemComponent) o;
@@ -147,7 +147,7 @@ public class ReflectionUtils {
         }
         Object componentObject = f.get(component);
         if (componentObject == null) {
-            log.trace("Field '{}' of component '{}' is null. Will skipp.", f.getName(), component.getClass().getSimpleName());
+            log.trace("Field '{}' of component '{}' is null. Will skip.", f.getName(), component.getClass().getSimpleName());
             return;
         }
         if (classUnder.isBlueprintComponent() && isFieldTypeConstant(f)) {
