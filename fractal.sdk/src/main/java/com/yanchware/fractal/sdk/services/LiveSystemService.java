@@ -83,12 +83,12 @@ public class LiveSystemService {
         HttpRequest request;
         try {
             String serializedCommand = serialize(command);
-            log.debug("Update LIveSystem message: {}", serializedCommand);
+            log.debug("Update LiveSystem message: {}", serializedCommand);
             request = HttpRequest.newBuilder()
                     .uri(getLiveSystemUri(command.getLiveSystemId()))
                     .header(X_CLIENT_ID_HEADER, sdkConfiguration.getClientId())
                     .header(X_CLIENT_SECRET_HEADER, sdkConfiguration.getClientSecret())
-                    .header("content-type", "application/json")
+                    .header("Content-Type", "application/json")
                     .PUT(ofString(serializedCommand))
                     .build();
         } catch (JsonProcessingException e) {
@@ -115,12 +115,12 @@ public class LiveSystemService {
         HttpRequest request;
         try {
             String serializedCommand = serialize(command);
-            log.debug("Instantiate LIveSystem message: {}", serializedCommand);
+            log.debug("Instantiate LiveSystem message: {}", serializedCommand);
             request = HttpRequest.newBuilder()
                     .uri(getLiveSystemUri())
                     .header(X_CLIENT_ID_HEADER, sdkConfiguration.getClientId())
                     .header(X_CLIENT_SECRET_HEADER, sdkConfiguration.getClientSecret())
-                    .header("content-type", "application/json")
+                    .header("Content-Type", "application/json")
                     .POST(ofString(serializedCommand))
                     .build();
         } catch (JsonProcessingException e) {

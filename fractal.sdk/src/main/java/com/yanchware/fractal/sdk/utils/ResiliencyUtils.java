@@ -20,11 +20,11 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 public class ResiliencyUtils {
 
   public static void executeRequestWithRetries(
-    String requestName,
-    HttpClient client,
-    RetryRegistry retryRegistry,
-    HttpRequest request,
-    int[] acceptedResponses) throws InstantiatorException {
+      String requestName,
+      HttpClient client,
+      RetryRegistry retryRegistry,
+      HttpRequest request,
+      int[] acceptedResponses) throws InstantiatorException {
 
     Retry retry = retryRegistry.retry(requestName);
 
@@ -32,32 +32,32 @@ public class ResiliencyUtils {
       HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
       if (Arrays.stream(acceptedResponses).noneMatch((x) -> x == response.statusCode())) {
         throw new InstantiatorException(
-          String.format(
-            "Attempted %s failed with response code: %s and body %s ",
-            requestName,
-            response.statusCode(),
-            response.body()));
+            String.format(
+                "Attempted %s failed with response code: %s and body %s ",
+                requestName,
+                response.statusCode(),
+                response.body()));
       }
 
       return null;
     });
 
-    Try<Throwable> result = Try.of(callWithRetry).recover((throwable) -> throwable);
+    Try<Throwable> result = Try.of(callWithRetry);
 
     if (result.isFailure()) {
       throw new InstantiatorException(
-        String.format("All attempts for request %s failed", requestName),
-        result.get());
+          String.format("All attempts for request %s failed", requestName),
+          result.get());
     }
   }
 
   public static <T> T executeRequestWithRetries(
-    String requestName,
-    HttpClient client,
-    RetryRegistry retryRegistry,
-    HttpRequest request,
-    int[] acceptedResponses,
-    Class<T> classRef) throws InstantiatorException {
+      String requestName,
+      HttpClient client,
+      RetryRegistry retryRegistry,
+      HttpRequest request,
+      int[] acceptedResponses,
+      Class<T> classRef) throws InstantiatorException {
 
     Retry retry = retryRegistry.retry(requestName);
 
@@ -65,12 +65,17 @@ public class ResiliencyUtils {
       HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
       if (Arrays.stream(acceptedResponses).noneMatch((x) -> x == response.statusCode())) {
         String errorMessage = String.format(
-          "Attempted %s failed with response code: %s and body %s ",
-          requestName,
-          response.statusCode(),
-          response.body());
+            "Attempted %s failed with response code: %s and body %s ",
+            requestName,
+            response.statusCode(),
+            response.body());
         log.error(errorMessage);
         throw new InstantiatorException(errorMessage);
+      }
+
+      if (response.statusCode() == 404) {
+        log.error("Attempted {} has come up with a 404 Not Found error: {}", requestName, response.body());
+        return null;
       }
 
       String bodyContents = response.body();
@@ -88,14 +93,12 @@ public class ResiliencyUtils {
 
     });
 
-    Try<T> result = Try.of(callWithRetry).recover((throwable) -> {
-      log.error("Attempted {} failed all attempts", requestName, throwable);
-      return null;
-    });
+    Try<T> result = Try.of(callWithRetry);
 
     if (result.isFailure()) {
+      log.error("Attempted {} failed all attempts", requestName, result.getCause());
       throw new InstantiatorException(
-        String.format("All attempts for request %s failed", requestName));
+          String.format("All attempts for request %s failed with cause: %s", requestName, result.getCause()));
     }
 
     return result.get();
