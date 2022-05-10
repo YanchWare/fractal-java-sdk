@@ -1,5 +1,6 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
+import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -46,6 +47,11 @@ public class Prometheus extends CaaSMonitoringImpl implements LiveSystemComponen
 
         public PrometheusBuilder withApiGatewayUrl(String apiGatewayUrl) {
             component.setApiGatewayUrl(apiGatewayUrl);
+            return builder;
+        }
+
+        public PrometheusBuilder withProvider(ProviderType providerType) {
+            component.setProvider(providerType);
             return builder;
         }
 
