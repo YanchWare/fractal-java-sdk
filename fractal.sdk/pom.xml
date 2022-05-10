@@ -143,13 +143,13 @@
 
     <profiles>
         <profile>
-            <id>yw-github</id>
+            <id>github</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
             <distributionManagement>
                 <repository>
-                    <id>yw-github</id>
+                    <id>github</id>
                     <name>GitHub Packages</name>
                     <url>https://maven.pkg.github.com/yanchware/fractal-java-sdk</url>
                 </repository>
