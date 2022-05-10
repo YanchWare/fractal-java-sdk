@@ -149,7 +149,7 @@
             </activation>
             <distributionManagement>
                 <repository>
-                    <id>>yw-github</id>
+                    <id>yw-github</id>
                     <name>GitHub Packages</name>
                     <url>https://maven.pkg.github.com/yanchware/fractal-java-sdk</url>
                 </repository>
