@@ -57,7 +57,7 @@ public class LiveSystemService {
         }
 
         if (response.statusCode() == 404) {
-            log.info("LiveSystem with id {} does not exist", liveSystemId);
+            log.info("LiveSystem with id {} does not exist. Will attempt to instantiate it.", liveSystemId);
             return null;
         }
 

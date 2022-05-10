@@ -74,7 +74,7 @@ public class ResiliencyUtils {
       }
 
       if (response.statusCode() == 404) {
-        log.error("Attempted {} has come up with a 404 Not Found error: {}", requestName, response.body());
+        log.info("Attempted {} has come up with a 404 Not Found. Will attempt to create it.", requestName);
         return null;
       }
 
