@@ -26,13 +26,13 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.22</version>
+            <version>1.18.24</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.2.10</version>
+            <version>1.2.11</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -49,7 +49,7 @@
         <dependency>
             <groupId>org.junit-pioneer</groupId>
             <artifactId>junit-pioneer</artifactId>
-            <version>1.5.0</version>
+            <version>1.7.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -61,13 +61,13 @@
         <dependency>
             <groupId>com.github.tomakehurst</groupId>
             <artifactId>wiremock-jre8</artifactId>
-            <version>2.32.0</version>
+            <version>2.33.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>4.3.1</version>
+            <version>4.5.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -79,7 +79,7 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.13.1</version>
+            <version>2.13.2.2</version>
         </dependency>
         <dependency>
             <groupId>io.github.resilience4j</groupId>
@@ -89,7 +89,7 @@
     </dependencies>
 
     <build>
-        <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+        <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (cloud be moved to parent pom) -->
             <plugins>
                 <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
                 <plugin>
@@ -141,11 +141,46 @@
         </pluginManagement>
     </build>
 
-    <distributionManagement>
-        <repository>
-            <id>github</id>
-            <name>GitHub Packages</name>
-            <url>https://maven.pkg.github.com/yanchware/fractal-java-sdk</url>
-        </repository>
-    </distributionManagement>
+    <profiles>
+        <profile>
+            <id>yw-github</id>
+            <distributionManagement>
+                <repository>
+                    <id>>yw-github</id>
+                    <name>GitHub Packages</name>
+                    <url>https://maven.pkg.github.com/yanchware/fractal-java-sdk</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+        <profile>
+            <id>yw-azure-demo</id>
+            <distributionManagement>
+                <repository>
+                    <id>yw-azure-demo</id>
+                    <url>https://pkgs.dev.azure.com/YanchWare/1edf3298-dc05-46eb-b08d-56de5ca00486/_packaging/Fractal_Feed/maven/v1</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+            </distributionManagement>
+        </profile>
+        <profile>
+            <id>targit-azure-poc</id>
+            <distributionManagement>
+                <repository>
+                    <id>targit-azure-poc</id>
+                    <url>https://pkgs.dev.azure.com/TARGITCloud/TARGIT.Cloud/_packaging/Fractal_Feed/maven/v1</url>
+                    <releases>
+                        <enabled>true</enabled>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+            </distributionManagement>
+        </profile>
+    </profiles>
 </project>

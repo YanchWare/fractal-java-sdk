@@ -6,11 +6,14 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
 import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
 
+@Slf4j
 @Getter
 @Setter(AccessLevel.PROTECTED)
 @ToString(callSuper = true)
@@ -124,7 +127,12 @@ public abstract class Component implements Validatable {
       if (component.getDescription() == null) {
         component.setDescription(String.format("%s generated via SDK", component.getType().getId()));
       }
-      component.setVersion(DEFAULT_VERSION);
+
+      //TODO Version is overwritten to 1.0, trying to fix this
+      if (component.getVersion() == null) {
+        component.setVersion(DEFAULT_VERSION);
+      }
+
       return component;
     }
   }
