@@ -144,6 +144,9 @@
     <profiles>
         <profile>
             <id>yw-github</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
             <distributionManagement>
                 <repository>
                     <id>>yw-github</id>
