@@ -23,7 +23,7 @@ public class LiveSystemFirstTest {
                 .version(HttpClient.Version.HTTP_2)
                 .build();
         SdkConfiguration sdkConfiguration = new LocalSdkConfiguration();
-        Automaton.initializeAutomaton(httpClient, sdkConfiguration);
+        Automaton.initializeAutomaton(sdkConfiguration);
     }
 
     @Test

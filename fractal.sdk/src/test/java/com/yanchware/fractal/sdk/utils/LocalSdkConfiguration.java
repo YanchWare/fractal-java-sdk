@@ -8,23 +8,23 @@ import java.net.URI;
 public class LocalSdkConfiguration implements SdkConfiguration {
     @Override
     public String getClientId() {
-        return "aa574c7e-8adb-4ab8-a783-b0b0db62acf2";
+        return "test-client-id";
     }
 
     @Override
     public String getClientSecret() {
-        return "MnBBt&ySyZjpa%88KfC_S";
+        return "test-client-secret";
     }
 
     @SneakyThrows
     @Override
     public URI getBlueprintEndpoint() {
-        return new URI("https://api.local.fractal.cloud/blueprints");
+        return new URI("https://api.local.fractal.cloud:8443/blueprints");
     }
 
     @SneakyThrows
     @Override
     public URI getLiveSystemEndpoint() {
-        return new URI("https://api.local.fractal.cloud/livesystems");
+        return new URI("https://api.local.fractal.cloud:8443/livesystems");
     }
 }

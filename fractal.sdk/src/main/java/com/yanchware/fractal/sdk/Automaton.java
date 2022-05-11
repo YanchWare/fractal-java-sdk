@@ -42,6 +42,18 @@ public class Automaton {
         instance = new Automaton(httpClient, sdkConfiguration);
     }
 
+    protected static void initializeAutomaton(SdkConfiguration sdkConfiguration) {
+        var builder = HttpClient
+            .newBuilder()
+            .version(HttpClient.Version.HTTP_2);
+
+        if (isRunningAgainstTestEnvironment(sdkConfiguration)) {
+            builder
+                .sslContext(getTestSSLContext());
+        }
+        instance = new Automaton(builder.build(), sdkConfiguration);
+    }
+
     public static void instantiate(List<LiveSystem> liveSystems) throws InstantiatorException {
         if (instance == null) {
             EnvVarSdkConfiguration configuration;
@@ -66,7 +78,7 @@ public class Automaton {
 
         // Improve resiliency
         RetryConfig retryConfig = RetryConfig.custom()
-          .maxAttempts(20)
+          .maxAttempts(5)
           .intervalFunction(IntervalFunction.ofExponentialBackoff())
           .build();
 
