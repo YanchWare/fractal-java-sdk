@@ -17,13 +17,13 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 public class Ambassador extends CaaSAPIGatewayImpl {
     private final static String HOST_IS_BLANK = "[Ambassador Validation] Host has not been defined and it is required";
     private final static String HOST_OWNER_EMAIL_IS_BLANK = "[Ambassador Validation] Host Owner Email has not been defined and it is required";
-    private final static String AUTHORITY_IS_BLANK = "[Ambassador Validation] Authority has not been defined and it is required";
+    private final static String ACME_PROVIDER_AUTHORITY_IS_BLANK = "[Ambassador Validation] Automated Certificate Management Environment (ACME) Provider Authority has not been defined and it is required";
     private final static String LICENSE_IS_BLANK = "[Ambassador Validation] License Key defined was either empty or blank and it is required";
     private final static String TLS_SECRET_IS_BLANK = "[Ambassador Validation] TLS Secret has not been defined and it is required";
 
     private String host;
     private String hostOwnerEmail;
-    private String authority;
+    private String acmeProviderAuthority;
     private String licenseKey;
     private String tlsSecretName;
 
@@ -65,8 +65,8 @@ public class Ambassador extends CaaSAPIGatewayImpl {
             return builder;
         }
 
-        public AmbassadorBuilder withAuthority(String authority) {
-            component.setAuthority(authority);
+        public AmbassadorBuilder withAcmeProviderAuthority(String acmeProviderAuthority) {
+            component.setAcmeProviderAuthority(acmeProviderAuthority);
             return builder;
         }
 
@@ -104,8 +104,8 @@ public class Ambassador extends CaaSAPIGatewayImpl {
             errors.add(HOST_OWNER_EMAIL_IS_BLANK);
         }
 
-        if (isBlank(authority)) {
-            errors.add(AUTHORITY_IS_BLANK);
+        if (isBlank(acmeProviderAuthority)) {
+            errors.add(ACME_PROVIDER_AUTHORITY_IS_BLANK);
         }
 
         if (licenseKey != null && isBlank(licenseKey)) {

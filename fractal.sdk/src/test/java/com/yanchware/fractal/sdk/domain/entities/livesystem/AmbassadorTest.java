@@ -44,9 +44,9 @@ class AmbassadorTest {
   }
 
   @Test
-  public void exceptionThrown_when_ambassadorCreatedWithEmptyAuthority() {
-    var ambassadorBuilder = ambassadorBuilder().withAuthority("");
-    assertThatThrownBy(ambassadorBuilder::build).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Authority has not been defined and it is required");
+  public void exceptionThrown_when_ambassadorCreatedWithEmptyAcmeProviderAuthority() {
+    var ambassadorBuilder = ambassadorBuilder().withAcmeProviderAuthority("");
+    assertThatThrownBy(ambassadorBuilder::build).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("[Ambassador Validation] Automated Certificate Management Environment (ACME) Provider Authority has not been defined and it is required");
   }
 
   @Test
@@ -72,7 +72,7 @@ class AmbassadorTest {
         .withNamespace("ambassador")
         .withHost("host")
         .withHostOwnerEmail("email@email.com")
-        .withAuthority("authority")
+        .withAcmeProviderAuthority("authority")
         .withTlsSecretName("tls");
   }
 }

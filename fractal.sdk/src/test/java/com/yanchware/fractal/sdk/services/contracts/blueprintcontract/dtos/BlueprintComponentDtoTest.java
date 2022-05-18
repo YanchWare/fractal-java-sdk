@@ -52,7 +52,7 @@ public class BlueprintComponentDtoTest {
         .containsExactlyInAnyOrder(
             ambassador.getHost(),
             ambassador.getHostOwnerEmail(),
-            ambassador.getAuthority(),
+            ambassador.getAcmeProviderAuthority(),
             ambassador.getTlsSecretName(),
             ambassador.getNamespace(),
             aksId

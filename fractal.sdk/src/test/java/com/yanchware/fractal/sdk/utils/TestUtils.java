@@ -139,7 +139,7 @@ public class TestUtils {
         .withNamespace("ambassador")
         .withHost("host")
         .withHostOwnerEmail("hostOwnerEmail")
-        .withAuthority("authority")
+        .withAcmeProviderAuthority("authority")
         .withTlsSecretName("tls")
         .build();
   }
