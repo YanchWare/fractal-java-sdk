@@ -4,5 +4,6 @@ public enum LiveSystemMutationStatusDto {
   UNKNOWN,
   INPROGRESS,
   COMPLETED,
-  FAILED
+  FAILED,
+  CANCELLED
 }
