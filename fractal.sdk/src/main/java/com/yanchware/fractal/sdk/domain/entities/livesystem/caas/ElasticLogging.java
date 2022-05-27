@@ -17,12 +17,15 @@ public class ElasticLogging extends CaaSLoggingImpl implements LiveSystemCompone
     private final static String ELASTIC_INSTANCES_NEGATIVE_OR_ZERO = "[ElasticLogging Validation] Elastic Instances defined was either 0 or negative and it needs to be greater than 0";
     private final static String VERSION_IS_BLANK = "[ElasticLogging Validation] Elastic Version has not been defined and it is required";
 
-    private boolean isAPMRequired;
+    private boolean isApmRequired;
+    private boolean isKibanaRequired;
+
     private String elasticVersion;
     private int elasticInstances;
 
     protected ElasticLogging() {
-        isAPMRequired = false;
+        isApmRequired = false;
+        isKibanaRequired = true;
     }
 
     public static ElasticLoggingBuilder builder() {
@@ -50,8 +53,13 @@ public class ElasticLogging extends CaaSLoggingImpl implements LiveSystemCompone
             return builder;
         }
 
-        public ElasticLoggingBuilder withAPM(boolean isAPMRequired) {
-            component.setAPMRequired(isAPMRequired);
+        public ElasticLoggingBuilder withAPM(boolean isApmRequired) {
+            component.setApmRequired(isApmRequired);
+            return builder;
+        }
+
+        public ElasticLoggingBuilder withKibana(boolean isKibanaRequired) {
+            component.setKibanaRequired(isKibanaRequired);
             return builder;
         }
 

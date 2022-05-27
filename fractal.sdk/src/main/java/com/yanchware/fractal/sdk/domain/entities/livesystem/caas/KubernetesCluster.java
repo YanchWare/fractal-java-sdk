@@ -210,19 +210,6 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
     @Override
     public T build() {
       component.setType(KUBERNETES);
-
-      var apiGatewayInstances = component.getApiGatewayInstances();
-      var monitoringInstances = component.getMonitoringInstances();
-
-      if (!CollectionUtils.isBlank(apiGatewayInstances) &&
-          !CollectionUtils.isBlank(monitoringInstances)) {
-        monitoringInstances.forEach((m) -> m.getDependencies().addAll(
-            apiGatewayInstances
-                .stream()
-                .map(CaaSAPIGatewayImpl::getId)
-                .collect(Collectors.toList())));
-      }
-
       return super.build();
     }
 

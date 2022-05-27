@@ -168,6 +168,7 @@ public class TestUtils {
         .withDisplayName("Elastic Logging")
         .withNamespace("logging")
         .withAPM(true)
+        . withKibana(true)
         .withElasticVersion("1")
         .withInstances(3)
         .withStorage("250Gi")
