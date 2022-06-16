@@ -17,10 +17,13 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @ToString(callSuper = true)
 public class PostgreSQLDB extends PaaSPostgreSQLDB implements LiveSystemComponent {
     private final static String NAME_IS_BLANK = "PostgreSQLDB name has not been defined and it is required";
+    private final static String COLLATION_IS_BLANK = "PostgreSQLDB collation defined was either empty or blank and it is required";
+    private final static String SCHEMA_IS_BLANK = "PostgreSQLDB schema defined was either empty or blank and it is required";
 
     private String name;
     private PostgreSQLCharset charset;
     private String collation;
+    private String schema;
     private ProviderType provider;
 
     protected PostgreSQLDB() {
@@ -62,6 +65,11 @@ public class PostgreSQLDB extends PaaSPostgreSQLDB implements LiveSystemComponen
             return builder;
         }
 
+        public PostgreSQLDBBuilder withSchema(String schema) {
+            component.setSchema(schema);
+            return builder;
+        }
+
         @Override
         public PostgreSQLDB build() {
             component.setType(POSTGRESQLDB);
@@ -75,6 +83,14 @@ public class PostgreSQLDB extends PaaSPostgreSQLDB implements LiveSystemComponen
 
         if (isBlank(name)) {
             errors.add(NAME_IS_BLANK);
+        }
+
+        if(collation != null && isBlank(collation)) {
+            errors.add(COLLATION_IS_BLANK);
+        }
+
+        if(schema != null && isBlank(schema)) {
+            errors.add(SCHEMA_IS_BLANK);
         }
 
         return errors;
