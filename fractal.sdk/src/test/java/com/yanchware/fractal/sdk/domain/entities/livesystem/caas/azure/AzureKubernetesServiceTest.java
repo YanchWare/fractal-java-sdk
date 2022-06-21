@@ -1,7 +1,9 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure;
 
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureAgentPoolMode;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureKubernetesService;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureNodePool;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureOsType;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +15,27 @@ public class AzureKubernetesServiceTest {
 
     @Test
     public void noValidationErrors_when_aksHasRequiredFields() {
-        assertThat(generateBuilder().build().validate()).isEmpty();
+        var aks = generateBuilder().build();
+        assertThat(aks.validate()).isEmpty();
+        assertThat(aks.getNodePools()).first()
+          .extracting(AzureNodePool::getAgentPoolMode, AzureNodePool::getOsType)
+          .containsExactly(AzureAgentPoolMode.SYSTEM, AzureOsType.LINUX);
+    }
+
+    @Test
+    public void noValidationErrors_when_aksHasRequiredFieldsAndMultipleNodePool() {
+        var aks = generateBuilder().withNodePool(
+          AzureNodePool.builder()
+            .withName("windows-node-pool-name")
+            .withDiskSizeGb(30)
+            .withOsType(AzureOsType.WINDOWS)
+            .withAgentPoolMode(AzureAgentPoolMode.USER)
+            .build())
+          .build();
+        assertThat(aks.validate()).isEmpty();
+        assertThat(aks.getNodePools()).first()
+          .extracting(AzureNodePool::getAgentPoolMode)
+          .isEqualTo(AzureAgentPoolMode.SYSTEM);
     }
 
     @Test
@@ -41,6 +63,20 @@ public class AzureKubernetesServiceTest {
                 .withId(ComponentId.from("test"))
                 .withNodePools(emptyList());
         assertThatThrownBy(aks::build).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Node pool list is null or empty");
+    }
+
+    @Test
+    public void exceptionThrown_when_aksCreatedWithWindowsSystemNodePools() {
+        assertThatThrownBy(() -> generateBuilder().withNodePool(
+            AzureNodePool.builder()
+              .withName("broken-node-pool-name")
+              .withDiskSizeGb(30)
+              .withOsType(AzureOsType.WINDOWS)
+              .build())
+          .build()
+          .validate())
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("Pool Mode is set to SYSTEM");
     }
 
     private AzureKubernetesService.AzureKubernetesServiceBuilder generateBuilder() {
