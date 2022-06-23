@@ -20,7 +20,6 @@ public abstract class CaaSK8sWorkloadImpl extends CaaSWorkload implements LiveSy
     private final static String CONTAINER_PLATFORM_IS_EMPTY = "[CaaSWorkload Validation] ContainerPlatform is either empty or blank and it is required";
     private final static String SSH_KEY_PASS_SECRET_IS_EMPTY = "[CaaSWorkload Validation] privateSSHKeyPassphraseSecretId is either empty or blank and it is required";
     private final static String SSH_KEY_SECRET_IS_EMPTY = "[CaaSWorkload Validation] privateSSHKeySecretId is either empty or blank and it is required";
-    private final static String SSH_KEY_IS_EMPTY = "[CaaSWorkload Validation] publicSSHKey is either empty or blank and it is required";
     private final static String SSH_REPO_URI_IS_EMPTY = "[CaaSWorkload Validation] sshRepositoryURI is either empty or blank and it is required";
     private final static String REPO_ID_IS_EMPTY = "[CaaSWorkload Validation] repoId is either empty or blank and it is required";
     private final static String WORKLOAD_SECRET_ID_KEY_IS_EMPTY = "[CaaSWorkload Validation] Workload Secret Id Key is either empty or blank and it is required";
@@ -30,7 +29,6 @@ public abstract class CaaSK8sWorkloadImpl extends CaaSWorkload implements LiveSy
     private String containerPlatform;
     private String privateSSHKeyPassphraseSecretId;
     private String privateSSHKeySecretId;
-    private String publicSSHKey;
     private String sshRepositoryURI;
     private String repoId;
     private List<String> roles;
@@ -66,10 +64,6 @@ public abstract class CaaSK8sWorkloadImpl extends CaaSWorkload implements LiveSy
 
         if (StringUtils.isBlank(privateSSHKeySecretId)) {
             errors.add(SSH_KEY_SECRET_IS_EMPTY);
-        }
-
-        if (StringUtils.isBlank(publicSSHKey)) {
-            errors.add(SSH_KEY_IS_EMPTY);
         }
 
         if (StringUtils.isBlank(sshRepositoryURI)) {

@@ -37,7 +37,6 @@ public class KubernetesWorkloadTest {
                         "Namespace is either empty or blank",
                         "privateSSHKeyPassphraseSecretId is either empty or blank",
                         "privateSSHKeySecretId is either empty or blank",
-                        "publicSSHKey is either empty or blank",
                         "sshRepositoryURI is either empty or blank",
                         "repoId is either empty or blank");
     }
@@ -48,7 +47,6 @@ public class KubernetesWorkloadTest {
                 .withNamespace("fractal")
                 .withPrivateSSHKeyPassphraseSecretId("svc-private-ssh-key-pass")
                 .withPrivateSSHKeySecretId("svc-private-ssh-key-secret")
-                .withPublicSSHKey("public-ssh")
                 .withSSHRepositoryURI("ssh")
                 .withRepoId("repo-id");
         assertThat(builder.build().getType()).isEqualTo(K8S_WORKLOAD);
@@ -61,7 +59,6 @@ public class KubernetesWorkloadTest {
             .withNamespace("fractal")
             .withPrivateSSHKeyPassphraseSecretId("svc-private-ssh-key-pass")
             .withPrivateSSHKeySecretId("svc-private-ssh-key-secret")
-            .withPublicSSHKey("public-ssh")
             .withSSHRepositoryURI("ssh")
             .withRepoId("repo-id")
             .withSecretIdKey("");
@@ -76,7 +73,6 @@ public class KubernetesWorkloadTest {
             .withNamespace("fractal")
             .withPrivateSSHKeyPassphraseSecretId("svc-private-ssh-key-pass")
             .withPrivateSSHKeySecretId("svc-private-ssh-key-secret")
-            .withPublicSSHKey("public-ssh")
             .withSSHRepositoryURI("ssh")
             .withRepoId("repo-id")
             .withSecretPasswordKey("");

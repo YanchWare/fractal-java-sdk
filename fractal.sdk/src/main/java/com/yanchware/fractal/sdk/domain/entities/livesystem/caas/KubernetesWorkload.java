@@ -53,11 +53,6 @@ public class KubernetesWorkload extends CaaSK8sWorkloadImpl implements LiveSyste
             return builder;
         }
 
-        public KubernetesWorkloadBuilder withPublicSSHKey(String publicSSHKey) {
-            component.setPublicSSHKey(publicSSHKey);
-            return builder;
-        }
-
         public KubernetesWorkloadBuilder withSSHRepositoryURI(String sshRepositoryURI) {
             component.setSshRepositoryURI(sshRepositoryURI);
             return builder;

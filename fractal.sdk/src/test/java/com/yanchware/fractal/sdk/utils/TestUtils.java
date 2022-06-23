@@ -114,7 +114,6 @@ public class TestUtils {
         .withNamespace("fractal")
         .withPrivateSSHKeyPassphraseSecretId("fractal-private-passphrase")
         .withPrivateSSHKeySecretId("fractal-private-ssh")
-        .withPublicSSHKey("public-ssh")
         .withSSHRepositoryURI("ssh-uri")
         .withRepoId("fractal-svc-id")
         .withRoles(List.of("roles/datastore.user", "roles/pubsub.editor"))

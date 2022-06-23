@@ -173,7 +173,6 @@ public class BlueprintComponentDtoTest {
             k8sWorkload.getNamespace(),
             k8sWorkload.getPrivateSSHKeyPassphraseSecretId(),
             k8sWorkload.getPrivateSSHKeySecretId(),
-            k8sWorkload.getPublicSSHKey(),
             k8sWorkload.getSshRepositoryURI(),
             k8sWorkload.getRoles(),
             k8sWorkload.getRepoId(),
