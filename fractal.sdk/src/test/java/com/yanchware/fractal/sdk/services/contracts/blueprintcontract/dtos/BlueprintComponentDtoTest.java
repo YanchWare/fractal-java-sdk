@@ -176,6 +176,7 @@ public class BlueprintComponentDtoTest {
             k8sWorkload.getSshRepositoryURI(),
             k8sWorkload.getRoles(),
             k8sWorkload.getRepoId(),
+            k8sWorkload.getBranchName(),
             aksId
         ));
   }

@@ -103,6 +103,11 @@ public class KubernetesWorkload extends CaaSK8sWorkloadImpl implements LiveSyste
             return builder;
         }
 
+        public KubernetesWorkloadBuilder withBranchName(String branchName) {
+            component.setBranchName(branchName);
+            return builder;
+        }
+
         @Override
         public KubernetesWorkload build() {
             component.setType(K8S_WORKLOAD);
