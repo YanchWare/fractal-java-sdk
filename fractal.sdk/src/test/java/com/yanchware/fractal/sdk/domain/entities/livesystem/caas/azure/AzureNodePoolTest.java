@@ -15,53 +15,75 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class AzureNodePoolTest {
     @Test
     public void validationError_when_azureNodePoolWithNullName() {
-        assertThat(buildAzureNodePool(null).validate()).contains("[AzureNodePool Validation] Name has not been defined and it is required");
+        IllegalArgumentException exception = assertThrows(
+            IllegalArgumentException.class,
+            () -> buildAzureNodePool(null, 30,false)
+        );
+
+        assertEquals("[AzureNodePool Validation] Name has not been defined and it is required", exception.getMessage());
     }
 
     @Test
     public void validationError_when_azureNodePoolWithEmptyName() {
-        assertThat(buildAzureNodePool("").validate()).contains("[AzureNodePool Validation] Name has not been defined and it is required");
+        IllegalArgumentException exception = assertThrows(
+            IllegalArgumentException.class,
+            () -> buildAzureNodePool("", 30,false)
+        );
+
+        assertEquals("[AzureNodePool Validation] Name has not been defined and it is required", exception.getMessage());
     }
 
     @Test
     public void validationError_when_azureNodePoolWithBlankName() {
-        assertThat(buildAzureNodePool("  ").validate()).contains("[AzureNodePool Validation] Name has not been defined and it is required");
+        IllegalArgumentException exception = assertThrows(
+            IllegalArgumentException.class,
+            () -> buildAzureNodePool("  ", 30,false)
+        );
+
+        assertEquals("[AzureNodePool Validation] Name has not been defined and it is required", exception.getMessage());
     }
 
     @Test
     public void validationError_when_azureNodePoolWithDiskSizeLessThan30Gb() {
-        var azureNodePool = buildAzureNodePool("azure-node");
-        azureNodePool.setDiskSizeGb(29);
-        assertThat(azureNodePool.validate()).contains("[AzureNodePool Validation] Disk size must be at least 30GB");
+        IllegalArgumentException exception = assertThrows(
+            IllegalArgumentException.class,
+            () -> buildAzureNodePool("good_name", 29,false)
+        );
+
+        assertEquals("[AzureNodePool Validation] Disk size must be at least 30GB", exception.getMessage());
     }
 
     @Test
     public void noValidationErrors_when_azureNodePoolWithValidFields() {
-        assertThat(buildAzureNodePool("azure-node").validate()).isEmpty();
-    }
-
-    @Test
-    public void throwException_When_NameIsNull() {
-        assertThrows(NullPointerException.class,
-            ()-> buildAzureNodePool(null));
+        assertThat(buildAzureNodePool("azure-node", 30,false).validate()).isEmpty();
     }
 
     @Test
     public void throwException_When_NameIsEmpty() {
         assertThrows(IllegalArgumentException.class,
-            ()-> buildAzureNodePool(""));
+            ()-> buildAzureNodePool("", 30,false));
     }
 
     @Test
     public void returns_3_nodeTaints_when_azureNodePoolWithValidFields() {
-        var azureNodePool = buildAzureNodePool("azure-node");
+        var azureNodePool = buildAzureNodePool("linuxdynamic", 30,false);
         assertEquals(azureNodePool.getNodeTaints().stream().count(), 3);
     }
 
-    private AzureNodePool buildAzureNodePool(String name) {
+    @Test
+    public void validationError_when_azureNodePoolWithMaxNodeCountNullAndAutoscalingEnabled() {
+        IllegalArgumentException exception = assertThrows(
+            IllegalArgumentException.class,
+            () -> buildAzureNodePool("good_name", 30,true)
+        );
+
+        assertEquals("[AzureNodePool Validation] MinNodeCount has not been defined and it is required when autoscaling is enabled", exception.getMessage());
+    }
+
+    private AzureNodePool buildAzureNodePool(String name, int diskSizeGb, boolean autoscalingEnabled) {
         return AzureNodePool.builder()
             .withName(name)
-            .withDiskSizeGb(30)
+            .withDiskSizeGb(diskSizeGb)
             .withInitialNodeCount(1)
             .withMaxNodeCount(3)
             .withNodeTaint(NodeTaint.builder()
@@ -73,6 +95,7 @@ public class AzureNodePoolTest {
                 NodeTaint.builder().withKey("key1").withValue("value1").withEffect(TaintEffect.NO_SCHEDULE).build(),
                 NodeTaint.builder().withKey("key2").withValue("value3").withEffect(TaintEffect.PREFER_NO_SCHEDULE).build()
             ))
+            .withAutoscalingEnabled(autoscalingEnabled)
             .build();
     }
 }
