@@ -52,10 +52,12 @@ public class TestUtils {
             .withDiskSizeGb(35)
             .withMachineType(STANDARD_B2S)
             .withMaxNodeCount(3)
+            .withInitialNodeCount(1)
             .withMaxSurge(1)
             .withMinNodeCount(1)
             .withMaxPodsPerNode(100)
             .withOsType(LINUX)
+            .withAutoscalingEnabled(true)
             .build());
   }
 
