@@ -244,7 +244,32 @@ public class BlueprintComponentDtoTest {
             aks.getRegion().getId(),
             aks.getServiceRange(),
             aks.getSubNetwork(),
-            aks.getNodePools()
+            aks.getNodePools(),
+            aks.getServiceIpMask(),
+            aks.getPodIpMask()
+        ));
+  }
+
+  @Test
+  public void blueprintComponentValid_when_GkeLiveSystemComponentConverted() {
+    var gke = TestUtils.getGkeExample();
+    var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(gke));
+
+    assertComponentSize(gke, blueprintComponentDtoList);
+    var gkeDto = getBlueprintComponentDto(blueprintComponentDtoList, gke.getId().getValue());
+    assertGenericComponent(gkeDto, gke, CaaSContainerPlatform.TYPE);
+    assertSoftly(softly -> softly
+        .assertThat(gkeDto.getParameters().values())
+        .as("Component Parameters")
+        .containsExactlyInAnyOrder(
+            gke.getNetwork(),
+            gke.getPodsRange(),
+            gke.getRegion().getId(),
+            gke.getServiceRange(),
+            gke.getSubNetwork(),
+            gke.getNodePools(),
+            gke.getServiceIpMask(),
+            gke.getPodIpMask()
         ));
   }
 

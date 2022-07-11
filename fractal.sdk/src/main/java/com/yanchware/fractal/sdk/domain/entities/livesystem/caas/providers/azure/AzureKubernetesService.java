@@ -24,10 +24,6 @@ public class AzureKubernetesService extends KubernetesCluster {
     }
 
     private AzureRegion region;
-    private String network;
-    private String subNetwork;
-    private String podsRange;
-    private String serviceRange;
     private Collection<AzureNodePool> nodePools;
 
     protected AzureKubernetesService() {
@@ -53,26 +49,6 @@ public class AzureKubernetesService extends KubernetesCluster {
 
         public AzureKubernetesServiceBuilder withRegion(AzureRegion region) {
             component.setRegion(region);
-            return builder;
-        }
-
-        public AzureKubernetesServiceBuilder withNetwork(String network) {
-            component.setNetwork(network);
-            return builder;
-        }
-
-        public AzureKubernetesServiceBuilder withSubNetwork(String subNetwork) {
-            component.setSubNetwork(subNetwork);
-            return builder;
-        }
-
-        public AzureKubernetesServiceBuilder withPodsRange(String podsRange) {
-            component.setPodsRange(podsRange);
-            return builder;
-        }
-
-        public AzureKubernetesServiceBuilder withServiceRange(String serviceRange) {
-            component.setServiceRange(serviceRange);
             return builder;
         }
 
