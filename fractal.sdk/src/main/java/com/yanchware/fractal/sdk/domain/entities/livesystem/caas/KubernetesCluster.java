@@ -2,7 +2,6 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
 import com.yanchware.fractal.sdk.domain.entities.Component;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.*;
-import com.yanchware.fractal.sdk.utils.CollectionUtils;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +10,6 @@ import lombok.ToString;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
@@ -20,6 +18,15 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
 @Setter(AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 public abstract class KubernetesCluster extends CaaSContainerPlatform implements LiveSystemComponent {
+  private final static String SERVICE_IP_MASK_NOT_VALID = "[KubernetesCluster Validation] Service IP Mask does not contain a valid ip with mask";
+  private final static String POD_MASK_NOT_VALID = "[KubernetesCluster Validation] Pod IP Mask does not contain a valid ip with mask";
+  private static final String IP_MASK_REGEX = "^(((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(((\\/([4-9]|[12][0-9]|3[0-2]))?)|\\s?-\\s?((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))))(,\\s?|$))+";
+  private String network;
+  private String subNetwork;
+  private String podsRange;
+  private String serviceRange;
+  private String serviceIpMask;
+  private String podIpMask;
   private List<CaaSK8sWorkloadImpl> k8sWorkloadInstances;
   private List<CaaSMessageBrokerImpl> messageBrokerInstances;
   private List<CaaSMonitoringImpl> monitoringInstances;
@@ -42,6 +49,36 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
   }
 
   public static abstract class Builder<T extends KubernetesCluster, B extends Builder<T, B>> extends Component.Builder<T, B> {
+
+    public B withNetwork(String network) {
+      component.setNetwork(network);
+      return builder;
+    }
+
+    public B withSubNetwork(String subNetwork) {
+      component.setSubNetwork(subNetwork);
+      return builder;
+    }
+
+    public B withPodsRange(String podsRange) {
+      component.setPodsRange(podsRange);
+      return builder;
+    }
+
+    public B withServiceRange(String serviceRange) {
+      component.setServiceRange(serviceRange);
+      return builder;
+    }
+
+    public B withServiceIpMask(String serviceIpMask) {
+      component.setServiceIpMask(serviceIpMask);
+      return builder;
+    }
+
+    public B withPodIpMask(String podIpMask) {
+      component.setPodIpMask(podIpMask);
+      return builder;
+    }
 
     public B withK8sWorkload(KubernetesWorkload workload) {
       return withK8sWorkloadInstances(List.of(workload));
@@ -218,6 +255,15 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
   @Override
   public Collection<String> validate() {
     Collection<String> errors = super.validate();
+
+    if (serviceIpMask != null && !serviceIpMask.matches(IP_MASK_REGEX)) {
+      errors.add(SERVICE_IP_MASK_NOT_VALID);
+    }
+
+    if (podIpMask != null && !podIpMask.matches(IP_MASK_REGEX)) {
+      errors.add(POD_MASK_NOT_VALID);
+    }
+
     k8sWorkloadInstances.stream()
         .map(CaaSWorkload::validate)
         .forEach(errors::addAll);

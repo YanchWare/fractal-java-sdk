@@ -23,10 +23,6 @@ public class GoogleKubernetesEngine extends KubernetesCluster {
     }
 
     private GcpRegion region;
-    private String network;
-    private String subNetwork;
-    private String podsRange;
-    private String serviceRange;
     private Collection<GcpNodePool> nodePools;
 
     protected GoogleKubernetesEngine() {
@@ -52,26 +48,6 @@ public class GoogleKubernetesEngine extends KubernetesCluster {
 
         public GoogleKubernetesEngineBuilder withRegion(GcpRegion region) {
             component.setRegion(region);
-            return builder;
-        }
-
-        public GoogleKubernetesEngineBuilder withNetwork(String network) {
-            component.setNetwork(network);
-            return builder;
-        }
-
-        public GoogleKubernetesEngineBuilder withSubNetwork(String subNetwork) {
-            component.setSubNetwork(subNetwork);
-            return builder;
-        }
-
-        public GoogleKubernetesEngineBuilder withPodsRange(String podsRange) {
-            component.setPodsRange(podsRange);
-            return builder;
-        }
-
-        public GoogleKubernetesEngineBuilder withServiceRange(String serviceRange) {
-            component.setServiceRange(serviceRange);
             return builder;
         }
 
