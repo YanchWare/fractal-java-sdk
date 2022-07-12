@@ -18,6 +18,9 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
 @Setter(AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 public abstract class KubernetesCluster extends CaaSContainerPlatform implements LiveSystemComponent {
+  private final static String SERVICE_IP_MASK_NOT_VALID = "[KubernetesCluster Validation] Service IP Mask does not contain a valid ip with mask";
+  private final static String POD_MASK_NOT_VALID = "[KubernetesCluster Validation] Pod IP Mask does not contain a valid ip with mask";
+  private static final String IP_MASK_REGEX = "^(((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(((\\/([4-9]|[12][0-9]|3[0-2]))?)|\\s?-\\s?((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))))(,\\s?|$))+";
   private String network;
   private String subNetwork;
   private String podsRange;
@@ -252,6 +255,15 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
   @Override
   public Collection<String> validate() {
     Collection<String> errors = super.validate();
+
+    if (serviceIpMask != null && !serviceIpMask.matches(IP_MASK_REGEX)) {
+      errors.add(SERVICE_IP_MASK_NOT_VALID);
+    }
+
+    if (podIpMask != null && !podIpMask.matches(IP_MASK_REGEX)) {
+      errors.add(POD_MASK_NOT_VALID);
+    }
+
     k8sWorkloadInstances.stream()
         .map(CaaSWorkload::validate)
         .forEach(errors::addAll);
