@@ -81,26 +81,6 @@ public class AzureKubernetesServiceTest {
         .hasMessageContaining("Pool Mode is set to SYSTEM");
   }
 
-  @Test
-  public void exceptionThrown_when_aksCreatedWithPodIpMaskNotValid() {
-    assertThatThrownBy(() -> generateBuilder()
-        .withPodIpMask("1234.1234.1234.1234")
-        .build()
-        .validate())
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("Pod IP Mask does not contain a valid ip with mask");
-  }
-
-  @Test
-  public void exceptionThrown_when_aksCreatedWithServiceIpMaskNotValid() {
-    assertThatThrownBy(() -> generateBuilder()
-        .withServiceIpMask("1234.1234.1234.1234")
-        .build()
-        .validate())
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("Service IP Mask does not contain a valid ip with mask");
-  }
-
   private AzureKubernetesService.AzureKubernetesServiceBuilder generateBuilder() {
     return AzureKubernetesService.builder()
         .withId(ComponentId.from("test"))
