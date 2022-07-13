@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static com.yanchware.fractal.sdk.utils.TestUtils.*;
-import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
 
@@ -199,7 +198,7 @@ public class BlueprintComponentDtoTest {
             aksId
         ));
 
-    List<String> kafkaTopicIds = messageBroker.getKafkaTopics().stream().map(topic -> topic.getId().getValue()).collect(toList());
+    List<String> kafkaTopicIds = messageBroker.getKafkaTopics().stream().map(topic -> topic.getId().getValue()).toList();
     var kafkaTopicDto = getBlueprintComponentDto(blueprintComponentDtoList, kafkaTopicIds.get(0));
     var kafkaTopicComp = messageBroker.getKafkaTopics().stream().filter(x -> x.getId().getValue().equals(kafkaTopicDto.getId())).findFirst().get();
     assertGenericComponent(kafkaTopicDto, kafkaTopicComp, CaaSKafkaTopic.TYPE);
@@ -212,7 +211,7 @@ public class BlueprintComponentDtoTest {
             kafkaTopicComp.getClusterName()
         ));
 
-    List<String> kafkaUserIds = messageBroker.getKafkaUsers().stream().map(user -> user.getId().getValue()).collect(toList());
+    List<String> kafkaUserIds = messageBroker.getKafkaUsers().stream().map(user -> user.getId().getValue()).toList();
     var kafkaUserDto = getBlueprintComponentDto(blueprintComponentDtoList, kafkaUserIds.get(0));
     var kafkaUserComp = messageBroker.getKafkaUsers().stream().filter(x -> x.getId().getValue().equals(kafkaUserDto.getId())).findFirst().get();
     assertGenericComponent(kafkaUserDto, kafkaUserComp, CaaSKafkaUser.TYPE);
@@ -246,7 +245,9 @@ public class BlueprintComponentDtoTest {
             aks.getSubNetwork(),
             aks.getNodePools(),
             aks.getServiceIpMask(),
-            aks.getPodIpMask()
+            aks.getPodIpMask(),
+            aks.getVnetAddressSpaceIpMask(),
+            aks.getVnetSubnetAddressIpMask()
         ));
   }
 
@@ -269,7 +270,9 @@ public class BlueprintComponentDtoTest {
             gke.getSubNetwork(),
             gke.getNodePools(),
             gke.getServiceIpMask(),
-            gke.getPodIpMask()
+            gke.getPodIpMask(),
+            gke.getVnetAddressSpaceIpMask(),
+            gke.getVnetSubnetAddressIpMask()
         ));
   }
 

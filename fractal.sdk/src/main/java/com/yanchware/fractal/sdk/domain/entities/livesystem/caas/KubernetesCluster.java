@@ -20,13 +20,17 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
 public abstract class KubernetesCluster extends CaaSContainerPlatform implements LiveSystemComponent {
   private final static String SERVICE_IP_MASK_NOT_VALID = "[KubernetesCluster Validation] Service IP Mask does not contain a valid ip with mask";
   private final static String POD_MASK_NOT_VALID = "[KubernetesCluster Validation] Pod IP Mask does not contain a valid ip with mask";
-  private static final String IP_MASK_REGEX = "^(((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(((\\/([4-9]|[12][0-9]|3[0-2]))?)|\\s?-\\s?((([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))))(,\\s?|$))+";
+  private final static String VNET_ADDRESS_SPACE_MASK_NOT_VALID = "[KubernetesCluster Validation] VNet Address Space IP Mask does not contain a valid ip with mask";
+  private final static String VNET_SUBNET_ADDRESS_IP_MASK_NOT_VALID = "[KubernetesCluster Validation] VNet Subnet Address IP Mask does not contain a valid ip with mask";
+  private static final String IP_MASK_REGEX = "^(?:\\d{1,2}|1\\d{2}|2[0-4]\\d|25[0-5])(?:\\.(?:\\d{1,2}|1\\d{2}|2[0-4]\\d|25[0-5])){3}(?<Mask>\\/(?:\\d|1\\d|2\\d|3[0-2]))$";
   private String network;
   private String subNetwork;
   private String podsRange;
   private String serviceRange;
   private String serviceIpMask;
   private String podIpMask;
+  private String vnetAddressSpaceIpMask;
+  private String vnetSubnetAddressIpMask;
   private List<CaaSK8sWorkloadImpl> k8sWorkloadInstances;
   private List<CaaSMessageBrokerImpl> messageBrokerInstances;
   private List<CaaSMonitoringImpl> monitoringInstances;
@@ -77,6 +81,16 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
 
     public B withPodIpMask(String podIpMask) {
       component.setPodIpMask(podIpMask);
+      return builder;
+    }
+
+    public B withVnetAddressSpaceIpMask(String vnetAddressSpaceIpMask) {
+      component.setVnetAddressSpaceIpMask(vnetAddressSpaceIpMask);
+      return builder;
+    }
+
+    public B withVnetSubnetAddressIpMask(String vnetSubnetAddressIpMask) {
+      component.setVnetSubnetAddressIpMask(vnetSubnetAddressIpMask);
       return builder;
     }
 
@@ -262,6 +276,14 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
 
     if (podIpMask != null && !podIpMask.matches(IP_MASK_REGEX)) {
       errors.add(POD_MASK_NOT_VALID);
+    }
+
+    if (vnetAddressSpaceIpMask != null && !vnetAddressSpaceIpMask.matches(IP_MASK_REGEX)) {
+      errors.add(VNET_ADDRESS_SPACE_MASK_NOT_VALID);
+    }
+
+    if (vnetSubnetAddressIpMask != null && !vnetSubnetAddressIpMask.matches(IP_MASK_REGEX)) {
+      errors.add(VNET_SUBNET_ADDRESS_IP_MASK_NOT_VALID);
     }
 
     k8sWorkloadInstances.stream()
