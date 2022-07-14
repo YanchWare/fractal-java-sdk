@@ -25,6 +25,7 @@ import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PreemptionPolicy.NEVER;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PreemptionPolicy.PREEMPT_LOWER_PRIORITY;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureMachineType.STANDARD_B2S;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureOsType.LINUX;
@@ -70,6 +71,13 @@ public class TestUtils {
             .withGlobalDefault(false)
             .withPreemptionPolicy(PREEMPT_LOWER_PRIORITY)
             .withValue(1_999_999_000)
+            .build())
+        .withPriorityClass(PriorityClass.builder()
+            .withName("fractal-critical.2")
+            .withDescription("Used for Fractal Components")
+            .withGlobalDefault(true)
+            .withPreemptionPolicy(NEVER)
+            .withValue(1_999_999_001)
             .build());
   }
 
