@@ -273,7 +273,8 @@ public class BlueprintComponentDtoTest {
             gke.getServiceIpMask(),
             gke.getPodIpMask(),
             gke.getVnetAddressSpaceIpMask(),
-            gke.getVnetSubnetAddressIpMask()
+            gke.getVnetSubnetAddressIpMask(),
+            gke.getPriorityClasses()
         ));
   }
 

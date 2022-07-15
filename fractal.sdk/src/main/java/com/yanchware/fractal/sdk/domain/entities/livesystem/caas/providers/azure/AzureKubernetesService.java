@@ -22,11 +22,9 @@ public class AzureKubernetesService extends KubernetesCluster {
 
   private AzureRegion region;
   private Collection<AzureNodePool> nodePools;
-  private Collection<PriorityClass> priorityClasses;
 
   protected AzureKubernetesService() {
     nodePools = new ArrayList<>();
-    priorityClasses = new ArrayList<>();
   }
 
   @Override
@@ -71,23 +69,6 @@ public class AzureKubernetesService extends KubernetesCluster {
       component.getNodePools().addAll(nodePools);
       return builder;
     }
-
-    public AzureKubernetesServiceBuilder withPriorityClass(PriorityClass priorityClass) {
-      return withPriorityClasses(List.of(priorityClass));
-    }
-
-    public AzureKubernetesServiceBuilder withPriorityClasses(Collection<PriorityClass> priorityClasses) {
-      if (isBlank(priorityClasses)) {
-        return builder;
-      }
-
-      if (component.getPriorityClasses() == null) {
-        component.setPriorityClasses(new ArrayList<>());
-      }
-
-      component.getPriorityClasses().addAll(priorityClasses);
-      return builder;
-    }
   }
 
   @Override
@@ -99,10 +80,6 @@ public class AzureKubernetesService extends KubernetesCluster {
 
     nodePools.stream()
         .map(AzureNodePool::validate)
-        .forEach(errors::addAll);
-
-    priorityClasses.stream()
-        .map(PriorityClass::validate)
         .forEach(errors::addAll);
 
     return errors;

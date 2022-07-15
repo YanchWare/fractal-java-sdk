@@ -1,8 +1,8 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
 public enum PreemptionPolicy {
-  PREEMPT_LOWER_PRIORITY("PreemptLowerPriority"),
-  NEVER("Never");
+  PreemptLowerPriority("PreemptLowerPriority"),
+  Never("Never");
 
   private final String id;
 
