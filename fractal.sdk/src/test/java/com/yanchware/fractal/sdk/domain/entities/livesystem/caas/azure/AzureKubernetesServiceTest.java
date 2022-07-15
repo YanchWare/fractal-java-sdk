@@ -1,5 +1,6 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure;
 
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PriorityClass;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureAgentPoolMode;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureKubernetesService;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureNodePool;
@@ -65,6 +66,20 @@ public class AzureKubernetesServiceTest {
         .withId(ComponentId.from("test"))
         .withNodePools(emptyList());
     assertThatThrownBy(aks::build).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Node pool list is null or empty");
+  }
+
+  @Test
+  public void exceptionThrown_when_aksCreatedWithPriorityClassValueNegative() {
+    var aks = generateBuilder()
+        .withPriorityClass(PriorityClass.builder().withValue(-123).build());
+    assertThatThrownBy(aks::build).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Value must be between 1 and 1_000_000_000");
+  }
+
+  @Test
+  public void exceptionThrown_when_aksCreatedWithPriorityClassValueOverMax() {
+    var aks = generateBuilder()
+        .withPriorityClass(PriorityClass.builder().withValue(2_000_000_001).build());
+    assertThatThrownBy(aks::build).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Value must be between 1 and 1_000_000_000");
   }
 
   @Test

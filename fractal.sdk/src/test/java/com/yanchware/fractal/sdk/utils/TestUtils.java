@@ -25,6 +25,8 @@ import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PreemptionPolicy.Never;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PreemptionPolicy.PreemptLowerPriority;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureMachineType.STANDARD_B2S;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureOsType.LINUX;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureRegion.EUROPE_WEST;
@@ -62,6 +64,18 @@ public class TestUtils {
             .withMaxPodsPerNode(100)
             .withOsType(LINUX)
             .withAutoscalingEnabled(true)
+            .build())
+        .withPriorityClass(PriorityClass.builder()
+            .withName("fractal-critical")
+            .withDescription("Used for Fractal Components")
+            .withPreemptionPolicy(PreemptLowerPriority)
+            .withValue(1_000_000_000)
+            .build())
+        .withPriorityClass(PriorityClass.builder()
+            .withName("fractal-critical.2")
+            .withDescription("Used for Fractal Components")
+            .withPreemptionPolicy(Never)
+            .withValue(999_999_000)
             .build());
   }
 
@@ -87,6 +101,12 @@ public class TestUtils {
             .withMaxNodeCount(3)
             .withMaxSurge(1)
             .withMinNodeCount(1)
+            .build())
+        .withPriorityClass(PriorityClass.builder()
+            .withName("fractal-critical")
+            .withDescription("Used for Fractal Components")
+            .withPreemptionPolicy(PreemptLowerPriority)
+            .withValue(1_000_000_000)
             .build());
   }
 

@@ -31,6 +31,8 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
   private String podIpMask;
   private String vnetAddressSpaceIpMask;
   private String vnetSubnetAddressIpMask;
+
+  private Collection<PriorityClass> priorityClasses;
   private List<CaaSK8sWorkloadImpl> k8sWorkloadInstances;
   private List<CaaSMessageBrokerImpl> messageBrokerInstances;
   private List<CaaSMonitoringImpl> monitoringInstances;
@@ -42,6 +44,7 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
 
   public KubernetesCluster() {
     super();
+    priorityClasses = new ArrayList<>();
     k8sWorkloadInstances = new ArrayList<>();
     messageBrokerInstances = new ArrayList<>();
     monitoringInstances = new ArrayList<>();
@@ -94,6 +97,23 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
       return builder;
     }
 
+    public B withPriorityClass(PriorityClass priorityClass) {
+      return withPriorityClasses(List.of(priorityClass));
+    }
+
+    public B withPriorityClasses(Collection<PriorityClass> priorityClasses) {
+      if (isBlank(priorityClasses)) {
+        return builder;
+      }
+
+      if (isBlank(component.getPriorityClasses())) {
+        component.setPriorityClasses(new ArrayList<>());
+      }
+
+      component.getPriorityClasses().addAll(priorityClasses);
+      return builder;
+    }
+
     public B withK8sWorkload(KubernetesWorkload workload) {
       return withK8sWorkloadInstances(List.of(workload));
     }
@@ -103,7 +123,7 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
         return builder;
       }
 
-      if (component.getK8sWorkloadInstances() == null) {
+      if (isBlank(component.getK8sWorkloadInstances())) {
         component.setK8sWorkloadInstances(new ArrayList<>());
       }
 
@@ -125,7 +145,7 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
         return builder;
       }
 
-      if (component.getMessageBrokerInstances() == null) {
+      if (isBlank(component.getMessageBrokerInstances())) {
         component.setMessageBrokerInstances(new ArrayList<>());
       }
 
@@ -143,7 +163,7 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
         return builder;
       }
 
-      if (component.getMonitoringInstances() == null) {
+      if (isBlank(component.getMonitoringInstances())) {
         component.setMonitoringInstances(new ArrayList<>());
       }
 
@@ -165,7 +185,7 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
         return builder;
       }
 
-      if (component.getApiGatewayInstances() == null) {
+      if (isBlank(component.getApiGatewayInstances())) {
         component.setApiGatewayInstances(new ArrayList<>());
       }
 
@@ -186,7 +206,7 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
       if (isBlank(serviceMeshSecurityInstances)) {
         return builder;
       }
-      if (component.getServiceMeshSecurityInstances() == null) {
+      if (isBlank(component.getServiceMeshSecurityInstances())) {
         component.setServiceMeshSecurityInstances(new ArrayList<>());
       }
       serviceMeshSecurityInstances.forEach(serviceMeshSecurity -> {
@@ -206,7 +226,7 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
       if (isBlank(tracingInstances)) {
         return builder;
       }
-      if (component.getTracingInstances() == null) {
+      if (isBlank(component.getTracingInstances())) {
         component.setTracingInstances(new ArrayList<>());
       }
       tracingInstances.forEach(tracing -> {
@@ -226,7 +246,7 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
       if (isBlank(loggingInstances)) {
         return builder;
       }
-      if (component.getLoggingInstances() == null) {
+      if (isBlank(component.getLoggingInstances())) {
         component.setLoggingInstances(new ArrayList<>());
       }
       loggingInstances.forEach(logging -> {
@@ -246,7 +266,7 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
       if (isBlank(documentDBInstances)) {
         return builder;
       }
-      if (component.getDocumentDBInstances() == null) {
+      if (isBlank(component.getDocumentDBInstances())) {
         component.setDocumentDBInstances(new ArrayList<>());
       }
       documentDBInstances.forEach(documentDB -> {
@@ -286,6 +306,9 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
       errors.add(VNET_SUBNET_ADDRESS_IP_MASK_NOT_VALID);
     }
 
+    priorityClasses.stream()
+        .map(PriorityClass::validate)
+        .forEach(errors::addAll);
     k8sWorkloadInstances.stream()
         .map(CaaSWorkload::validate)
         .forEach(errors::addAll);

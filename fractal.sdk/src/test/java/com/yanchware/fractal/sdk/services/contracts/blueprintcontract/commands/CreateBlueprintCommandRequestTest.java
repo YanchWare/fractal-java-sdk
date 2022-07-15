@@ -13,6 +13,7 @@ public class CreateBlueprintCommandRequestTest {
         var ls = TestUtils.getLiveSystemExample();
         String fractalId = "fractalId";
         CreateBlueprintCommandRequest commandRequest = CreateBlueprintCommandRequest.fromLiveSystem(ls.getComponents(), fractalId);
+        TestUtils.printJsonRepresentation(commandRequest);
         assertThat(commandRequest.getDescription()).contains("Blueprint created via SDK from LiveSystem with Fractal ID", fractalId);
         assertThat(commandRequest.isPrivate()).isTrue();
         assertThat(commandRequest.getComponents()).isNotEmpty();
