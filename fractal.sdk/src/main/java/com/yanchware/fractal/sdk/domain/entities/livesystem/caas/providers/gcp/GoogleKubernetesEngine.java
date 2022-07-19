@@ -16,71 +16,71 @@ import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 @Getter
 @Setter(AccessLevel.PRIVATE)
 public class GoogleKubernetesEngine extends KubernetesCluster {
-    private final static String EMPTY_NODE_POOL = "[GoogleKubernetesEngine Validation] Node pool list is null or empty and at least one node pool is required";
+  private final static String EMPTY_NODE_POOL = "[GoogleKubernetesEngine Validation] Node pool list is null or empty and at least one node pool is required";
 
-    public static GoogleKubernetesEngineBuilder builder() {
-        return new GoogleKubernetesEngineBuilder();
-    }
+  public static GoogleKubernetesEngineBuilder builder() {
+    return new GoogleKubernetesEngineBuilder();
+  }
 
-    private GcpRegion region;
-    private Collection<GcpNodePool> nodePools;
+  private GcpRegion region;
+  private Collection<GcpNodePool> nodePools;
 
-    protected GoogleKubernetesEngine() {
-        nodePools = new ArrayList<>();
+  protected GoogleKubernetesEngine() {
+    nodePools = new ArrayList<>();
+  }
+
+  @Override
+  public ProviderType getProvider() {
+    return GCP;
+  }
+
+  public static class GoogleKubernetesEngineBuilder extends Builder<GoogleKubernetesEngine, GoogleKubernetesEngineBuilder> {
+
+    @Override
+    protected GoogleKubernetesEngine createComponent() {
+      return new GoogleKubernetesEngine();
     }
 
     @Override
-    public ProviderType getProvider() {
-        return GCP;
+    protected GoogleKubernetesEngineBuilder getBuilder() {
+      return this;
     }
 
-    public static class GoogleKubernetesEngineBuilder extends Builder<GoogleKubernetesEngine, GoogleKubernetesEngineBuilder> {
-
-        @Override
-        protected GoogleKubernetesEngine createComponent() {
-            return new GoogleKubernetesEngine();
-        }
-
-        @Override
-        protected GoogleKubernetesEngineBuilder getBuilder() {
-            return this;
-        }
-
-        public GoogleKubernetesEngineBuilder withRegion(GcpRegion region) {
-            component.setRegion(region);
-            return builder;
-        }
-
-        public GoogleKubernetesEngineBuilder withNodePool(GcpNodePool nodePool) {
-            return withNodePools(List.of(nodePool));
-        }
-
-        public GoogleKubernetesEngineBuilder withNodePools(Collection<? extends GcpNodePool> nodePools) {
-            if (isBlank(nodePools)) {
-                return builder;
-            }
-
-            if (component.getNodePools() == null) {
-                component.setNodePools(new ArrayList<>());
-            }
-
-            component.getNodePools().addAll(nodePools);
-            return builder;
-        }
+    public GoogleKubernetesEngineBuilder withRegion(GcpRegion region) {
+      component.setRegion(region);
+      return builder;
     }
 
-    @Override
-    public Collection<String> validate() {
-        Collection<String> errors = super.validate();
-        if (isBlank(nodePools)) {
-            errors.add(EMPTY_NODE_POOL);
-        }
-
-        nodePools.stream()
-                .map(GcpNodePool::validate)
-                .forEach(errors::addAll);
-
-        return errors;
+    public GoogleKubernetesEngineBuilder withNodePool(GcpNodePool nodePool) {
+      return withNodePools(List.of(nodePool));
     }
+
+    public GoogleKubernetesEngineBuilder withNodePools(Collection<? extends GcpNodePool> nodePools) {
+      if (isBlank(nodePools)) {
+        return builder;
+      }
+
+      if (component.getNodePools() == null) {
+        component.setNodePools(new ArrayList<>());
+      }
+
+      component.getNodePools().addAll(nodePools);
+      return builder;
+    }
+  }
+
+  @Override
+  public Collection<String> validate() {
+    Collection<String> errors = super.validate();
+    if (isBlank(nodePools)) {
+      errors.add(EMPTY_NODE_POOL);
+    }
+
+    nodePools.stream()
+        .map(GcpNodePool::validate)
+        .forEach(errors::addAll);
+
+    return errors;
+  }
 
 }

@@ -1,5 +1,7 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum GcpMachine {
   E2_HIGH_CPU2("e2-highcpu-2"),
   E2_HIGH_CPU4("e2-highcpu-4"),
@@ -73,7 +75,13 @@ public enum GcpMachine {
     this.id = id;
   }
 
+  @JsonValue
   public String getId() {
+    return id;
+  }
+
+  @Override
+  public String toString() {
     return id;
   }
 
