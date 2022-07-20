@@ -3,7 +3,6 @@ package com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands
 import com.yanchware.fractal.sdk.aggregates.Environment;
 import com.yanchware.fractal.sdk.aggregates.LiveSystem;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.EnvironmentDto;
-import com.yanchware.fractal.sdk.utils.TestUtils;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
 
@@ -16,9 +15,7 @@ class InstantiateLiveSystemCommandRequestTest {
     public void instantiateLiveSystemCommandRequestValid_when_liveSystemValid() {
         var ls = getLiveSystemExample();
         var commandRequest = InstantiateLiveSystemCommandRequest.fromLiveSystem(ls);
-
-        TestUtils.printJsonRepresentation(commandRequest);
-
+        
         assertLiveSystemInfo(commandRequest, ls);
         assertEnvironment(commandRequest.getEnvironment(), ls.getEnvironment());
     }

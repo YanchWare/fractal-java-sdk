@@ -1,5 +1,7 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum GcpZone {
   US_EAST1B("us-east1-b"),
   US_EAST1C("us-east1-c"),
@@ -93,7 +95,13 @@ public enum GcpZone {
     this.id = id;
   }
 
-  public String id() {
+  @JsonValue
+  public String getId() {
+    return id;
+  }
+
+  @Override
+  public String toString() {
     return id;
   }
 }

@@ -50,21 +50,21 @@ public class AzureNodePool implements Validatable {
   private boolean autoscalingEnabled;
 
   public static AzureNodePoolBuilder builder() {
-    return new AzureNodePoolBuilder(){
+    return new AzureNodePoolBuilder() {
       @Override
       public AzureNodePool build() {
 
-        if(super.osType == null) {
+        if (super.osType == null) {
           super.osType = AzureOsType.LINUX;
         }
 
-        if(super.agentPoolMode == null) {
+        if (super.agentPoolMode == null) {
           super.agentPoolMode = AzureAgentPoolMode.SYSTEM;
         }
 
         Collection<String> errors = getValidationErrors();
 
-        if(!errors.isEmpty()) {
+        if (!errors.isEmpty()) {
           throw new IllegalArgumentException(String.join("; ", errors));
         }
 
@@ -86,36 +86,32 @@ public class AzureNodePool implements Validatable {
           errors.add(SYSTEM_POOL_MODE_WINDOWS);
         }
 
-        if(super.initialNodeCount == null) {
+        if (super.initialNodeCount == null) {
           errors.add(INITIAL_NODE_COUNT_IS_NULL);
         }
 
-        if(super.initialNodeCount != null) {
-          validateIntegerInRange("InitialNodeCount", super.initialNodeCount,
-              MIN_NUMBER_OF_NODES,MAX_NUMBER_OF_NODES, errors);
+        if (super.initialNodeCount != null) {
+          validateIntegerInRange("InitialNodeCount", super.initialNodeCount, MIN_NUMBER_OF_NODES, MAX_NUMBER_OF_NODES, errors);
         }
 
-        if(super.maxNodeCount != null) {
-          validateIntegerInRange("MaxNodeCount", super.maxNodeCount,
-              MIN_NUMBER_OF_NODES,MAX_NUMBER_OF_NODES, errors);
+        if (super.maxNodeCount != null) {
+          validateIntegerInRange("MaxNodeCount", super.maxNodeCount, MIN_NUMBER_OF_NODES, MAX_NUMBER_OF_NODES, errors);
         }
 
-        if(super.minNodeCount != null) {
-          validateIntegerInRange("MinNodeCount", super.minNodeCount,
-              MIN_NUMBER_OF_NODES,MAX_NUMBER_OF_NODES, errors);
+        if (super.minNodeCount != null) {
+          validateIntegerInRange("MinNodeCount", super.minNodeCount, MIN_NUMBER_OF_NODES, MAX_NUMBER_OF_NODES, errors);
         }
 
-        if(super.maxPodsPerNode != null) {
-          validateIntegerInRange("MaxPodsPerNode", super.maxPodsPerNode,
-              MIN_NUMBER_OF_PODS_PER_NODE, MAX_NUMBER_OF_PODS_PER_NODE, errors);
+        if (super.maxPodsPerNode != null) {
+          validateIntegerInRange("MaxPodsPerNode", super.maxPodsPerNode, MIN_NUMBER_OF_PODS_PER_NODE, MAX_NUMBER_OF_PODS_PER_NODE, errors);
         }
 
-        if(super.autoscalingEnabled) {
-          if(super.maxNodeCount == null) {
+        if (super.autoscalingEnabled) {
+          if (super.maxNodeCount == null) {
             errors.add(MAX_NODE_COUNT_IS_NULL);
           }
 
-          if(super.minNodeCount == null) {
+          if (super.minNodeCount == null) {
             errors.add(MIN_NODE_COUNT_IS_NULL);
           }
         }
@@ -124,6 +120,7 @@ public class AzureNodePool implements Validatable {
       }
     };
   }
+
   public static class AzureNodePoolBuilder {
 
     private SortedSet<String> nodeTaints;
@@ -151,6 +148,7 @@ public class AzureNodePool implements Validatable {
       return this;
     }
   }
+
   @Override
   public Collection<String> validate() {
 
@@ -168,30 +166,26 @@ public class AzureNodePool implements Validatable {
       errors.add(SYSTEM_POOL_MODE_WINDOWS);
     }
 
-    validateIntegerInRange("InitialNodeCount", this.initialNodeCount,
-        MIN_NUMBER_OF_NODES,MAX_NUMBER_OF_NODES, errors);
+    validateIntegerInRange("InitialNodeCount", this.initialNodeCount, MIN_NUMBER_OF_NODES, MAX_NUMBER_OF_NODES, errors);
 
-    if(this.maxNodeCount != null) {
-      validateIntegerInRange("MaxNodeCount", this.maxNodeCount,
-          MIN_NUMBER_OF_NODES,MAX_NUMBER_OF_NODES, errors);
+    if (this.maxNodeCount != null) {
+      validateIntegerInRange("MaxNodeCount", this.maxNodeCount, MIN_NUMBER_OF_NODES, MAX_NUMBER_OF_NODES, errors);
     }
 
-    if(this.minNodeCount != null) {
-      validateIntegerInRange("MinNodeCount", this.minNodeCount,
-          MIN_NUMBER_OF_NODES,MAX_NUMBER_OF_NODES, errors);
+    if (this.minNodeCount != null) {
+      validateIntegerInRange("MinNodeCount", this.minNodeCount, MIN_NUMBER_OF_NODES, MAX_NUMBER_OF_NODES, errors);
     }
 
-    if(this.maxPodsPerNode != null) {
-      validateIntegerInRange("MaxPodsPerNode", this.maxPodsPerNode,
-          MIN_NUMBER_OF_PODS_PER_NODE, MAX_NUMBER_OF_PODS_PER_NODE, errors);
+    if (this.maxPodsPerNode != null) {
+      validateIntegerInRange("MaxPodsPerNode", this.maxPodsPerNode, MIN_NUMBER_OF_PODS_PER_NODE, MAX_NUMBER_OF_PODS_PER_NODE, errors);
     }
 
-    if(this.autoscalingEnabled) {
-      if(this.maxNodeCount == null) {
+    if (this.autoscalingEnabled) {
+      if (this.maxNodeCount == null) {
         errors.add(MAX_NODE_COUNT_IS_NULL);
       }
 
-      if(this.minNodeCount == null) {
+      if (this.minNodeCount == null) {
         errors.add(MIN_NODE_COUNT_IS_NULL);
       }
     }

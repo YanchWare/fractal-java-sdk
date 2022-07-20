@@ -1,21 +1,24 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum AzureStorageAutoGrow {
-    ENABLED("Enabled"),
-    DISABLED("Disabled");
+  ENABLED("Enabled"),
+  DISABLED("Disabled");
 
-    private final String id;
+  private final String id;
 
-    AzureStorageAutoGrow(final String id) {
-        this.id = id;
-    }
+  AzureStorageAutoGrow(final String id) {
+    this.id = id;
+  }
 
-    public String getId() {
-        return id;
-    }
+  @JsonValue
+  public String getId() {
+    return id;
+  }
 
-    @Override
-    public String toString() {
-        return id;
-    }
+  @Override
+  public String toString() {
+    return id;
+  }
 }

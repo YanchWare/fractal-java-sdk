@@ -1,27 +1,35 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum ACLOperation {
-    ALL("all"),
-    ALTER("alter"),
-    ALTER_CONFIGS("alter_configs"),
-    ANY("any"),
-    CLUSTER_ACTION("cluster_action"),
-    CREATE("create"),
-    DELETE("delete"),
-    DESCRIBE("describe"),
-    DESCRIBE_CONFIGS("describe_configs"),
-    IDEMPOTENT_WRITE("idempotent_write"),
-    READ("read"),
-    UNKNOWN("unknown"),
-    WRITE("write");
+  ALL("all"),
+  ALTER("alter"),
+  ALTER_CONFIGS("alter_configs"),
+  ANY("any"),
+  CLUSTER_ACTION("cluster_action"),
+  CREATE("create"),
+  DELETE("delete"),
+  DESCRIBE("describe"),
+  DESCRIBE_CONFIGS("describe_configs"),
+  IDEMPOTENT_WRITE("idempotent_write"),
+  READ("read"),
+  UNKNOWN("unknown"),
+  WRITE("write");
 
-    private final String id;
+  private final String id;
 
-    ACLOperation(final String id) {
-        this.id = id;
-    }
+  ACLOperation(final String id) {
+    this.id = id;
+  }
 
-    public String getId() {
-        return id;
-    }
+  @JsonValue
+  public String getId() {
+    return id;
+  }
+
+  @Override
+  public String toString() {
+    return id;
+  }
 }

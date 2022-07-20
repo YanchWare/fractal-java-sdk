@@ -1,8 +1,10 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 public enum PreemptionPolicy {
-  PreemptLowerPriority("PreemptLowerPriority"),
-  Never("Never");
+  PREEMPT_LOWER_PRIORITY("PreemptLowerPriority"),
+  NEVER("Never");
 
   private final String id;
 
@@ -10,6 +12,7 @@ public enum PreemptionPolicy {
     this.id = id;
   }
 
+  @JsonValue
   public String getId() {
     return id;
   }
