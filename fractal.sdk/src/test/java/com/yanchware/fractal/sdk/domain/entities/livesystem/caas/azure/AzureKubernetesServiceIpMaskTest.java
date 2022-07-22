@@ -95,7 +95,7 @@ public class AzureKubernetesServiceIpMaskTest {
     return AzureKubernetesService.builder()
         .withId(ComponentId.from("test"))
         .withNodePool(AzureNodePool.builder()
-            .withName("azure-node-pool-name")
+            .withName("azure")
             .withDiskSizeGb(30)
             .withInitialNodeCount(1)
             .withAutoscalingEnabled(false).build());

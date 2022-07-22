@@ -62,7 +62,7 @@ public class LiveSystemTest {
         .withComponent(AzureKubernetesService.builder()
             .withId(ComponentId.from("aks-1"))
             .withNodePool(AzureNodePool.builder()
-                .withName("aks-node-pool")
+                .withName("aks")
                 .withDiskSizeGb(35)
                 .withInitialNodeCount(1)
                 .withAutoscalingEnabled(false)

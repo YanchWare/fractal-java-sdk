@@ -17,7 +17,11 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Setter(AccessLevel.PRIVATE)
 @Builder(setterPrefix = "with")
 public class AzureNodePool implements Validatable {
+  private final static String NAME_REGEX = "^[a-z\\d]+$";
   private final static String NAME_IS_BLANK = "[AzureNodePool Validation] Name has not been defined and it is required";
+  private final static String NAME_ONLY_LOWERCASE_ALPHANUMERIC = "[AzureNodePool Validation] Name should only contain lowercase alphanumeric characters";
+  private final static String LINUX_NAME_IS_TOO_LONG = "[AzureNodePool Validation] Name for node with Linux OS Type should be between 1 and 12 characters";
+  private final static String WINDOWS_NAME_IS_TOO_LONG = "[AzureNodePool Validation] Name for node with Windows OS Type should be between 1 and 6 characters";
   private final static String DISK_SIZE_UNDER_30GB = "[AzureNodePool Validation] Disk size must be at least 30GB";
   private final static String SYSTEM_POOL_MODE_WINDOWS = "[AzureNodePool Validation] Pool Mode is set to SYSTEM but that is not supported for a Windows node pool";
   private final static String MAX_NODE_COUNT = "[AzureNodePool Validation] Max node count must be a positive integer (> 0)";
@@ -76,6 +80,18 @@ public class AzureNodePool implements Validatable {
 
         if (isBlank(super.name)) {
           errors.add(NAME_IS_BLANK);
+        }
+
+        if (!isBlank(super.name) && !super.name.matches(NAME_REGEX)) {
+          errors.add(NAME_ONLY_LOWERCASE_ALPHANUMERIC);
+        }
+
+        if(!isBlank(super.name) && super.osType == AzureOsType.LINUX && super.name.length() > 12) {
+          errors.add(LINUX_NAME_IS_TOO_LONG);
+        }
+
+        if(!isBlank(super.name) && super.osType == AzureOsType.WINDOWS && super.name.length() > 6) {
+          errors.add(WINDOWS_NAME_IS_TOO_LONG);
         }
 
         if (super.diskSizeGb < 30) {

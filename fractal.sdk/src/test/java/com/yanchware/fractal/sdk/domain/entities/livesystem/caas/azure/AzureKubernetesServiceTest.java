@@ -27,7 +27,7 @@ public class AzureKubernetesServiceTest {
   public void noValidationErrors_when_aksHasRequiredFieldsAndMultipleNodePool() {
     var aks = generateBuilder().withNodePool(
             AzureNodePool.builder()
-                .withName("windows-node-pool-name")
+                .withName("winds")
                 .withDiskSizeGb(30)
                 .withOsType(AzureOsType.WINDOWS)
                 .withAgentPoolMode(AzureAgentPoolMode.USER)
@@ -100,7 +100,7 @@ public class AzureKubernetesServiceTest {
     return AzureKubernetesService.builder()
         .withId(ComponentId.from("test"))
         .withNodePool(AzureNodePool.builder()
-            .withName("azure-node-pool-name")
+            .withName("azure")
             .withDiskSizeGb(30)
             .withInitialNodeCount(1)
             .withAutoscalingEnabled(false).build());
