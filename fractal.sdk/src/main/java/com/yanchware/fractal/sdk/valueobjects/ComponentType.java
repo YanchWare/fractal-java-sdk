@@ -4,6 +4,7 @@ public enum ComponentType {
     UNKNOWN("Unknown"),
     API_GATEWAY("APIManagement.CaaS.APIGateway"),
     AMBASSADOR("APIManagement.CaaS.Ambassador"),
+    TRAEFIK("APIManagement.CaaS.Traefik"),
     CAAS_WORKLOAD("NetworkAndCompute.CaaS.Workload"),
     K8S_WORKLOAD("NetworkAndCompute.CaaS.K8sWorkload"),
     CONTAINER_PLATFORM("NetworkAndCompute.CaaS.ContainerPlatform"),
@@ -25,7 +26,7 @@ public enum ComponentType {
     CAAS_DOCUMENT_DB("DataStorage.CaaS.DocumentDB"),
     ELASTIC_DATASTORE("DataStorage.CaaS.Elastic");
 
-    private String id;
+    private final String id;
 
     ComponentType(String id) {
         this.id = id;

@@ -11,23 +11,40 @@ class PrometheusTest {
 
   @Test
   public void exceptionThrown_when_prometheusCreatedWithNullId() {
-    assertThatThrownBy(() -> Prometheus.builder().withId("").build()).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll("A valid component id cannot be null, empty or contain spaces");
+    assertThatThrownBy(() -> Prometheus.builder().withId(""))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContainingAll("A valid component id cannot be null, empty or contain spaces");
   }
 
   @Test
   public void exceptionThrown_when_prometheusCreatedWithNoNamespace() {
-    assertThatThrownBy(() -> Prometheus.builder().withId(ComponentId.from("prometheus")).build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("[CaaSMonitoring Validation] Namespace has not been defined and it is required");
+    var prometheusBuilder = Prometheus.builder()
+      .withId(ComponentId.from("prometheus"));
+
+    assertThatThrownBy(prometheusBuilder::build)
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("[CaaSMonitoring Validation] Namespace has not been defined and it is required");
   }
 
   @Test
   public void exceptionThrown_when_prometheusCreatedWithEmptyContainerPlatform() {
-    assertThatThrownBy(() -> Prometheus.builder().withId(ComponentId.from("prometheus")).withNamespace("prometheus").withContainerPlatform("").build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("[CaaSMonitoring Validation] ContainerPlatform defined was either empty or blank and it is required");
+    var prometheusBuilder = Prometheus.builder()
+      .withId(ComponentId.from("prometheus"))
+      .withNamespace("prometheus")
+      .withContainerPlatform("");
+
+    assertThatThrownBy(prometheusBuilder::build)
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("[CaaSMonitoring Validation] ContainerPlatform defined was either empty or blank and it is required");
   }
 
   @Test
   public void exceptionThrown_when_ambassadorCreatedWithEmptyApiGatewayUrl() {
     var prometheusBuilder = prometheusBuilder().withApiGatewayUrl("");
-    assertThatThrownBy(prometheusBuilder::build).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("API Gateway URL has not been defined and it is required");
+
+    assertThatThrownBy(prometheusBuilder::build)
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("API Gateway URL has not been defined and it is required");
   }
 
   @Test

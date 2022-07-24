@@ -51,6 +51,7 @@ public class Ambassador extends CaaSAPIGatewayImpl {
         }
 
         public AmbassadorBuilder withContainerPlatform(String containerPlatform) {
+            component.setProvider(ProviderType.CAAS);
             component.setContainerPlatform(containerPlatform);
             return builder;
         }
