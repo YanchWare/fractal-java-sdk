@@ -11,7 +11,7 @@ import java.util.Map;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class AzureKubernetesPodTest {
+public class AzureKubernetesPodManagedIdentityTest {
 
   @Test
   public void exceptionThrown_when_aksCreatedWithNameNotValid() {
@@ -86,13 +86,6 @@ public class AzureKubernetesPodTest {
   @Test
   public void exceptionThrown_when_aksCreatedWithPodManagedIdentityValid() {
     assertThat(generateBuilder()
-        .withPodManagedIdentity(PodManagedIdentity.builder()
-            .withName("azure-pod-identity")
-            .withNamespace("kube-system")
-            .withExceptionPodLabels(Map.of("app", "mic", "component", "mic"))
-            .withEnable(true)
-            .withAllowNetworkPluginKubeNet(true)
-            .build())
         .build()
         .validate()).isEmpty();
   }
@@ -101,7 +94,7 @@ public class AzureKubernetesPodTest {
     return AzureKubernetesService.builder()
         .withId(ComponentId.from("test"))
         .withNodePool(AzureNodePool.builder()
-            .withName("azure-node-pool-name")
+            .withName("azurenode")
             .withDiskSizeGb(30)
             .withInitialNodeCount(1)
             .withAutoscalingEnabled(false).build());

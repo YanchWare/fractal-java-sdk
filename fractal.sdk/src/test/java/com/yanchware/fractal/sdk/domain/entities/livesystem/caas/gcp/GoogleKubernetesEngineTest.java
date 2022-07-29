@@ -1,8 +1,11 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.gcp;
 
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PodManagedIdentity;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.GcpNodePool;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.GoogleKubernetesEngine;
 import org.junit.jupiter.api.Test;
+
+import java.util.Map;
 
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
 import static java.util.Collections.emptyList;
@@ -50,7 +53,14 @@ public class GoogleKubernetesEngineTest {
     private GoogleKubernetesEngine.GoogleKubernetesEngineBuilder generateBuilder() {
         return GoogleKubernetesEngine.builder()
                 .withId("test")
-                .withNodePool(GcpNodePool.builder().withName("gcp-node-pool-name").build());
+                .withNodePool(GcpNodePool.builder().withName("gcp-node-pool-name").build())
+                .withPodManagedIdentity(PodManagedIdentity.builder()
+                    .withName("azure-pod-identity")
+                    .withNamespace("kube-system")
+                    .withExceptionPodLabels(Map.of("app", "mic", "component", "mic"))
+                    .withEnable(true)
+                    .withAllowNetworkPluginKubeNet(true)
+                    .build());
     }
 
 }

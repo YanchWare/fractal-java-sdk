@@ -350,8 +350,9 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
         .map(CaaSDocumentDB::validate)
         .forEach(errors::addAll);
 
-    errors.addAll(podManagedIdentity.validate());
-
+    if(podManagedIdentity != null) {
+      errors.addAll(podManagedIdentity.validate());
+    }
     return errors;
   }
 
