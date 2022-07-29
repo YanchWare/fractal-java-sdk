@@ -41,6 +41,8 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
   private List<CaaSTracingImpl> tracingInstances;
   private List<CaaSLoggingImpl> loggingInstances;
   private List<CaaSDocumentDBImpl> documentDBInstances;
+  private PodManagedIdentity podManagedIdentity;
+  private String windowsAdminUsername;
 
   public KubernetesCluster() {
     super();
@@ -278,6 +280,20 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
       return builder;
     }
 
+    public B withPodManagedIdentity(PodManagedIdentity podManagedIdentity) {
+      if (podManagedIdentity == null) {
+        return builder;
+      }
+
+      component.setPodManagedIdentity(podManagedIdentity);
+      return builder;
+    }
+
+    public B withWindowsAdminUsername(String windowsAdminUsername) {
+      component.setWindowsAdminUsername(windowsAdminUsername);
+      return builder;
+    }
+
     @Override
     public T build() {
       component.setType(KUBERNETES);
@@ -333,6 +349,9 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
     documentDBInstances.stream()
         .map(CaaSDocumentDB::validate)
         .forEach(errors::addAll);
+
+    errors.addAll(podManagedIdentity.validate());
+
     return errors;
   }
 
