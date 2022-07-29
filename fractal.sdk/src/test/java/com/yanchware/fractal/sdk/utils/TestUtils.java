@@ -22,6 +22,7 @@ import org.assertj.core.api.SoftAssertions;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
@@ -75,6 +76,13 @@ public class TestUtils {
             .withDescription("Used for Fractal Components")
             .withPreemptionPolicy(NEVER)
             .withValue(999_999_000)
+            .build())
+        .withPodManagedIdentity(PodManagedIdentity.builder()
+            .withName("azure-pod-identity")
+            .withNamespace("kube-system")
+            .withExceptionPodLabels(Map.of("app", "mic", "component", "mic"))
+            .withEnable(true)
+            .withAllowNetworkPluginKubeNet(true)
             .build());
   }
 
@@ -106,6 +114,13 @@ public class TestUtils {
             .withDescription("Used for Fractal Components")
             .withPreemptionPolicy(PREEMPT_LOWER_PRIORITY)
             .withValue(1_000_000_000)
+            .build())
+        .withPodManagedIdentity(PodManagedIdentity.builder()
+            .withName("azure-pod-identity")
+            .withNamespace("kube-system")
+            .withExceptionPodLabels(Map.of("app", "mic", "component", "mic"))
+            .withEnable(true)
+            .withAllowNetworkPluginKubeNet(true)
             .build());
   }
 

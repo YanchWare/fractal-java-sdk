@@ -1,5 +1,6 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure;
 
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PreemptionPolicy;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PriorityClass;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureAgentPoolMode;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureKubernetesService;
@@ -34,7 +35,14 @@ public class AzureKubernetesServiceTest {
                 .withInitialNodeCount(1)
                 .withAutoscalingEnabled(false)
                 .build())
+        .withPriorityClass(PriorityClass.builder()
+            .withName("priority-class")
+            .withDescription("description")
+            .withPreemptionPolicy(PreemptionPolicy.PREEMPT_LOWER_PRIORITY)
+            .withValue(1)
+            .build())
         .build();
+
     assertThat(aks.validate()).isEmpty();
     assertThat(aks.getNodePools()).first()
         .extracting(AzureNodePool::getAgentPoolMode)
