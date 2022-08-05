@@ -22,7 +22,7 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
   private final static String POD_MASK_NOT_VALID = "[KubernetesCluster Validation] Pod IP Mask does not contain a valid ip with mask";
   private final static String VNET_ADDRESS_SPACE_MASK_NOT_VALID = "[KubernetesCluster Validation] VNet Address Space IP Mask does not contain a valid ip with mask";
   private final static String VNET_SUBNET_ADDRESS_IP_MASK_NOT_VALID = "[KubernetesCluster Validation] VNet Subnet Address IP Mask does not contain a valid ip with mask";
-  private static final String IP_MASK_REGEX = "^(?:\\d{1,2}|1\\d{2}|2[0-4]\\d|25[0-5])(?:\\.(?:\\d{1,2}|1\\d{2}|2[0-4]\\d|25[0-5])){3}(?<Mask>\\/(?:\\d|1\\d|2\\d|3[0-2]))$";
+  private static final String IP_MASK_REGEX = "^(?:\\d{1,2}|1\\d{2}|2[0-4]\\d|25[0-5])(?:\\.(?:\\d{1,2}|1\\d{2}|2[0-4]\\d|25[0-5])){3}(?<Mask>/(?:\\d|1\\d|2\\d|3[0-2]))$";
   private String network;
   private String subNetwork;
   private String podsRange;

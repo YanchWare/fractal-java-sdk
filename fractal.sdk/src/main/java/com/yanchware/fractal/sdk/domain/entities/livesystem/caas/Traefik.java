@@ -9,7 +9,6 @@ import lombok.ToString;
 import java.util.Collection;
 import java.util.List;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.AMBASSADOR;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.TRAEFIK;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -19,6 +18,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 public class Traefik extends CaaSAPIGatewayImpl {
     private final static String OIDC_IS_PARTIAL = "[Traefik Validation] OIDC has been partially configured. You must provide all required values or none of them";
     private final static String NO_ENTRY_POINTS = "[Traefik Validation] Traefik should have at least one entrypoint";
+    private final static String NO_HOSTNAME = "[Traefik Validation] Traefik should have a hostname";
 
     private String oidcClientId;
     private String oidcClientSecretId;
@@ -26,7 +26,9 @@ public class Traefik extends CaaSAPIGatewayImpl {
     private String oidcIssuer;
     private String loadbalancerIp;
     private String jaegerHost;
+    private String hostname;
     private List<TraefikEntryPoint> entryPoints;
+    private List<TraefikTlsCertificate> tlsCertificates;
 
 
     protected Traefik() {
@@ -49,6 +51,16 @@ public class Traefik extends CaaSAPIGatewayImpl {
 
         public TraefikBuilder withNamespace(String namespace) {
             component.setNamespace(namespace);
+            return builder;
+        }
+
+        public TraefikBuilder withCertificates(List<TraefikTlsCertificate> tlsCertificates) {
+            component.setTlsCertificates(tlsCertificates);
+            return builder;
+        }
+
+        public TraefikBuilder withHostname(String hostname) {
+            component.setHostname(hostname);
             return builder;
         }
 
@@ -89,6 +101,10 @@ public class Traefik extends CaaSAPIGatewayImpl {
 
         if (!allBlank() && !allDefined()){
             errors.add(OIDC_IS_PARTIAL);
+        }
+
+        if (isBlank(hostname)) {
+            errors.add(NO_HOSTNAME);
         }
 
         if (entryPoints == null || entryPoints.isEmpty()) {
