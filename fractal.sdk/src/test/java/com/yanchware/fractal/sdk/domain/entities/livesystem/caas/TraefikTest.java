@@ -135,7 +135,8 @@ class TraefikTest extends TestWithFixture {
   private Traefik.TraefikBuilder traefikBuilder() {
     return Traefik.builder()
       .withId("traefik")
-      .withNamespace("traefik")
+      .withNamespace(a(String.class))
+      .withHostname(a(String.class))
       .withEntryPoints(aListOf(TraefikEntryPoint.class));
   }
 
