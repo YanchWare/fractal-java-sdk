@@ -23,7 +23,7 @@ public class Traefik extends CaaSAPIGatewayImpl {
     private String oidcClientId;
     private String oidcClientSecretId;
     private String forwardAuthSecretId;
-    private String oidcIssuer;
+    private String oidcIssuerUrl;
     private String loadbalancerIp;
     private String jaegerHost;
     private String hostname;
@@ -82,7 +82,7 @@ public class Traefik extends CaaSAPIGatewayImpl {
 
         public TraefikBuilder withForwardAuth(ForwardAuthSettings forwardAuthSettings) {
             component.setOidcClientId(forwardAuthSettings.getOidcClientId());
-            component.setOidcIssuer(forwardAuthSettings.getOidcIssuer());
+            component.setOidcIssuerUrl(forwardAuthSettings.getOidcIssuer());
             component.setOidcClientSecretId(forwardAuthSettings.getOidcClientSecretId());
             component.setForwardAuthSecretId(forwardAuthSettings.getForwardAuthSecretId());
             return builder;
@@ -115,14 +115,14 @@ public class Traefik extends CaaSAPIGatewayImpl {
     }
 
     private boolean allBlank(){
-        return isBlank(oidcIssuer)
+        return isBlank(oidcIssuerUrl)
           && isBlank(oidcClientId)
           && isBlank(oidcClientSecretId)
           && isBlank(forwardAuthSecretId);
     }
 
     private boolean allDefined(){
-        return !isBlank(oidcIssuer)
+        return !isBlank(oidcIssuerUrl)
           && !isBlank(oidcClientId)
           && !isBlank(oidcClientSecretId)
           && !isBlank(forwardAuthSecretId);
