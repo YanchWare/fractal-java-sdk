@@ -9,6 +9,7 @@ public class TraefikEntryPoint {
   private String name;
   private boolean isTlsEnabled;
   private int port;
+  private int exposedPort;
   private String protocol;
   private boolean isHttpsRedirected;
 }
