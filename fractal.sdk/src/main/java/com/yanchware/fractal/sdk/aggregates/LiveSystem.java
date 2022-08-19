@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.util.*;
 
+import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
 import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -20,6 +21,7 @@ public class LiveSystem implements Validatable {
 
     private String name;
     private String resourceGroupId;
+    private String fractalName;
     private String description;
     private Environment environment;
     private Date created;
@@ -54,6 +56,14 @@ public class LiveSystem implements Validatable {
 
         public LiveSystemBuilder withName(String name) {
             liveSystem.setName(name);
+            return builder;
+        }
+
+        public LiveSystemBuilder withFractalName(String fractalName) {
+            if(isBlank(fractalName)) {
+                throw new IllegalArgumentException("Fractal name cannot be null or empty");
+            }
+            liveSystem.setFractalName(fractalName);
             return builder;
         }
 
@@ -118,5 +128,14 @@ public class LiveSystem implements Validatable {
             errors.add(EMPTY_COMPONENT_LIST);
         }
         return errors;
+    }
+
+    public String getFractalId() {
+        return String.format("%s/%s:%s", getResourceGroupId(),
+            getFractalName() != null ? getFractalName() : getName(), DEFAULT_VERSION);
+    }
+
+    public String getLiveSystemId() {
+        return String.format("%s/%s:%s", getResourceGroupId(), getName(), DEFAULT_VERSION);
     }
 }

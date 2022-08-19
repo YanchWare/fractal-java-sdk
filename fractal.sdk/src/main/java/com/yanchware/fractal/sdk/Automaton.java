@@ -88,12 +88,11 @@ public class Automaton {
         LiveSystemService liveSystemService = new LiveSystemService(httpClient, sdkConfiguration, registry);
 
         for (LiveSystem ls : liveSystems) {
-            String fractalId = String.format("%s/%s:%s", ls.getResourceGroupId(), ls.getName(), "1.0");
-            log.info("Starting to instantiate live system with id: {}", fractalId);
-            var blueprintCommand = CreateBlueprintCommandRequest.fromLiveSystem(ls.getComponents(), fractalId);
+            log.info("Starting to instantiate live system with id: {}", ls.getLiveSystemId());
+            var blueprintCommand = CreateBlueprintCommandRequest.fromLiveSystem(ls.getComponents(), ls.getFractalId());
             var liveSystemCommand = InstantiateLiveSystemCommandRequest.fromLiveSystem(ls);
 
-            blueprintService.createOrUpdateBlueprint(blueprintCommand, fractalId);
+            blueprintService.createOrUpdateBlueprint(blueprintCommand, ls.getFractalId());
             liveSystemService.instantiate(liveSystemCommand);
         }
     }
