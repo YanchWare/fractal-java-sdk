@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.util.*;
 
+import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
 import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -15,11 +16,13 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Setter(AccessLevel.PRIVATE)
 public class LiveSystem implements Validatable {
     private final static String ID_IS_NULL = "[LiveSystem Validation] Id has not been defined and it is required";
+    private final static String FRACTAL_NAME_IS_INVALID = "[LiveSystem Validation] Fractal name has been specified but it's invalid";
     private final static String RESOURCE_GROUP_ID_IS_NULL = "[LiveSystem Validation] ResourceGroupId has not been defined and it is required'";
     private final static String EMPTY_COMPONENT_LIST = "[LiveSystem Validation] Components list is null or empty and at least one component is required";
 
     private String name;
     private String resourceGroupId;
+    private String fractalName;
     private String description;
     private Environment environment;
     private Date created;
@@ -54,6 +57,11 @@ public class LiveSystem implements Validatable {
 
         public LiveSystemBuilder withName(String name) {
             liveSystem.setName(name);
+            return builder;
+        }
+
+        public LiveSystemBuilder withFractalName(String fractalName) {
+            liveSystem.setFractalName(fractalName);
             return builder;
         }
 
@@ -110,6 +118,10 @@ public class LiveSystem implements Validatable {
             errors.add(ID_IS_NULL);
         }
 
+        if (fractalName!=null && isBlank(fractalName)) {
+            errors.add(FRACTAL_NAME_IS_INVALID);
+        }
+
         if (isBlank(resourceGroupId)) {
             errors.add(RESOURCE_GROUP_ID_IS_NULL);
         }
@@ -118,5 +130,14 @@ public class LiveSystem implements Validatable {
             errors.add(EMPTY_COMPONENT_LIST);
         }
         return errors;
+    }
+
+    public String getFractalId() {
+        return String.format("%s/%s:%s", getResourceGroupId(),
+            getFractalName() != null ? getFractalName() : getName(), DEFAULT_VERSION);
+    }
+
+    public String getLiveSystemId() {
+        return String.format("%s/%s:%s", getResourceGroupId(), getName(), DEFAULT_VERSION);
     }
 }
