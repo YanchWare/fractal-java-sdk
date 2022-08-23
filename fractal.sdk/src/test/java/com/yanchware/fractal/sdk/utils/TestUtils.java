@@ -320,7 +320,7 @@ public class TestUtils {
     return LiveSystem.builder()
         .withName("business-platform-test")
         .withDescription("Business platform")
-        .withResourceGroupId("ge12616")
+        .withResourceGroupId("test-resource-group")
         .withComponent(getAksExample())
         .withComponent(getAzurePostgresExample())
         .withEnvironment(getEnvExample())
