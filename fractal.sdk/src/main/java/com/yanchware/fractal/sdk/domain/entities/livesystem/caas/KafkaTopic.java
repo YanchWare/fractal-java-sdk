@@ -18,8 +18,7 @@ public class KafkaTopic extends CaaSKafkaTopic implements LiveSystemComponent {
 
   private String containerPlatform;
   private String namespace;
-  private String clusterName;*/
-/**//*
+  private String clusterName;
 
   private ProviderType provider;
 
