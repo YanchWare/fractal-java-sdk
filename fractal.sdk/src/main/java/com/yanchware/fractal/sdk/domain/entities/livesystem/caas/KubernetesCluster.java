@@ -34,27 +34,27 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
 
   private Collection<PriorityClass> priorityClasses;
   private List<CaaSK8sWorkloadImpl> k8sWorkloadInstances;
-  private List<CaaSMessageBrokerImpl> messageBrokerInstances;
   private List<CaaSMonitoringImpl> monitoringInstances;
   private List<CaaSAPIGatewayImpl> apiGatewayInstances;
   private List<CaaSServiceMeshSecurityImpl> serviceMeshSecurityInstances;
-  //private List<CaaSTracingImpl> tracingInstances;
   private List<CaaSLoggingImpl> loggingInstances;
   private List<CaaSDocumentDBImpl> documentDBInstances;
   private PodManagedIdentity podManagedIdentity;
   private String windowsAdminUsername;
+  //private List<CaaSMessageBrokerImpl> messageBrokerInstances;
+  //private List<CaaSTracingImpl> tracingInstances;
 
   public KubernetesCluster() {
     super();
     priorityClasses = new ArrayList<>();
     k8sWorkloadInstances = new ArrayList<>();
-    messageBrokerInstances = new ArrayList<>();
     monitoringInstances = new ArrayList<>();
     apiGatewayInstances = new ArrayList<>();
     serviceMeshSecurityInstances = new ArrayList<>();
-    //tracingInstances = new ArrayList<>();
     loggingInstances = new ArrayList<>();
     documentDBInstances = new ArrayList<>();
+    //messageBrokerInstances = new ArrayList<>();
+    //tracingInstances = new ArrayList<>();
   }
 
   public static abstract class Builder<T extends KubernetesCluster, B extends Builder<T, B>> extends Component.Builder<T, B> {
@@ -138,7 +138,7 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
       return builder;
     }
 
-    public B withMessageBroker(CaaSMessageBrokerImpl messageBroker) {
+    /*public B withMessageBroker(CaaSMessageBrokerImpl messageBroker) {
       return withMessageBroker(List.of(messageBroker));
     }
 
@@ -154,7 +154,7 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
       messageBrokers.forEach(messageBroker -> messageBroker.initialiseParameters(component.getProvider(), component));
       component.getMessageBrokerInstances().addAll(messageBrokers);
       return builder;
-    }
+    }*/
 
     public B withMonitoring(CaaSMonitoringImpl monitoring) {
       return withMonitoring(List.of(monitoring));
@@ -330,9 +330,9 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
     k8sWorkloadInstances.stream()
         .map(CaaSWorkload::validate)
         .forEach(errors::addAll);
-    messageBrokerInstances.stream()
+    /*messageBrokerInstances.stream()
         .map(CaaSMessageBroker::validate)
-        .forEach(errors::addAll);
+        .forEach(errors::addAll);*/
     monitoringInstances.stream()
         .map(CaaSMonitoring::validate)
         .forEach(errors::addAll);

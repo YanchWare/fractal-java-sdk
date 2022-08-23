@@ -127,7 +127,7 @@ public class TestUtils {
   public static AzureKubernetesService getAksExample() {
     return getAksBuilder()
         .withK8sWorkload(getK8sWorkloadExample())
-        .withMessageBroker(getKafkaClusterExample())
+        //.withMessageBroker(getKafkaClusterExample())
         .withMonitoring(getPrometheusExample())
         .withAPIGateway(getAmbassadorExample())
         .withServiceMeshSecurity(getOcelotExample())
@@ -140,7 +140,7 @@ public class TestUtils {
   public static GoogleKubernetesEngine getGkeExample() {
     return getGkeBuilder()
         .withK8sWorkload(getK8sWorkloadExample())
-        .withMessageBroker(getKafkaClusterExample())
+        //.withMessageBroker(getKafkaClusterExample())
         .withMonitoring(getPrometheusExample())
         .withAPIGateway(getAmbassadorExample())
         .withServiceMeshSecurity(getOcelotExample())
@@ -251,7 +251,7 @@ public class TestUtils {
         .build();
   }*/
 
-  public static KafkaCluster getKafkaClusterExample() {
+  /*public static KafkaCluster getKafkaClusterExample() {
     return KafkaCluster.builder()
         .withId("azure-kafka")
         .withDescription("Kafka for Azure")
@@ -264,7 +264,7 @@ public class TestUtils {
             KafkaUser.builder().withId("user-1").withDisplayName("kafka-user").withTopicReadACL("svcName").build(),
             KafkaUser.builder().withId("user-2").withDisplayName("kafka-user-2").build()))
         .build();
-  }
+  }*/
 
   public static AzurePostgreSQL getAzurePostgresExample() {
     return AzurePostgreSQL.builder()

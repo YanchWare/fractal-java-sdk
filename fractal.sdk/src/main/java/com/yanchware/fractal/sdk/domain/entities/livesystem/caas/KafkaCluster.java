@@ -1,3 +1,4 @@
+/*
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
 import com.yanchware.fractal.sdk.domain.entities.Component;
@@ -140,3 +141,4 @@ public class KafkaCluster extends CaaSMessageBrokerImpl implements LiveSystemCom
         topic.getDependencies().add(cluster.getId());
     }
 }
+*/

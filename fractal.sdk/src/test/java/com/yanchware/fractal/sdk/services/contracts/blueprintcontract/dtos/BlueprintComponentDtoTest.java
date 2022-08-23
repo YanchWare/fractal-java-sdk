@@ -180,7 +180,7 @@ public class BlueprintComponentDtoTest {
         ));
   }
 
-  @Test
+  /*@Test
   public void blueprintComponentValid_when_aksWithMessageBroker() {
     var aks = getAksBuilder().withMessageBroker(getKafkaClusterExample()).build();
     var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(aks));
@@ -224,7 +224,7 @@ public class BlueprintComponentDtoTest {
             kafkaUserComp.getClusterName(),
             kafkaUserComp.getAcls()
         ));
-  }
+  }*/
 
   @Test
   public void blueprintComponentValid_when_AksLiveSystemComponentConverted() {
@@ -356,16 +356,16 @@ public class BlueprintComponentDtoTest {
   private void assertComponentSize(KubernetesCluster kubernetesCluster, List<BlueprintComponentDto> blueprintComponentDtos) {
     int componentSize = 1; //containerPlatform itself
     componentSize += kubernetesCluster.getK8sWorkloadInstances().size();
-    componentSize += kubernetesCluster.getMessageBrokerInstances().size();
     componentSize += kubernetesCluster.getMonitoringInstances().size();
     componentSize += kubernetesCluster.getApiGatewayInstances().size();
     componentSize += kubernetesCluster.getServiceMeshSecurityInstances().size();
-    //componentSize += kubernetesCluster.getTracingInstances().size();
     componentSize += kubernetesCluster.getLoggingInstances().size();
     componentSize += kubernetesCluster.getDocumentDBInstances().size();
+    /*componentSize += kubernetesCluster.getTracingInstances().size();
+    componentSize += kubernetesCluster.getMessageBrokerInstances().size();
     var messageBrokerInstance = (KafkaCluster) kubernetesCluster.getMessageBrokerInstances().get(0);
     componentSize += messageBrokerInstance.getKafkaTopics().size();
-    componentSize += messageBrokerInstance.getKafkaUsers().size();
+    componentSize += messageBrokerInstance.getKafkaUsers().size();*/
 
     assertThat(blueprintComponentDtos).hasSize(componentSize);
   }
