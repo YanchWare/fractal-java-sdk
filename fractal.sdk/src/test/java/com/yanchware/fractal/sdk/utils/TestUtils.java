@@ -131,7 +131,7 @@ public class TestUtils {
         .withMonitoring(getPrometheusExample())
         .withAPIGateway(getAmbassadorExample())
         .withServiceMeshSecurity(getOcelotExample())
-        .withTracing(getJaegerExample())
+        //.withTracing(getJaegerExample())
         .withLogging(getElasticLoggingExample())
         .withDocumentDB(getElasticDataStoreExample())
         .build();
@@ -144,7 +144,7 @@ public class TestUtils {
         .withMonitoring(getPrometheusExample())
         .withAPIGateway(getAmbassadorExample())
         .withServiceMeshSecurity(getOcelotExample())
-        .withTracing(getJaegerExample())
+        //.withTracing(getJaegerExample())
         .withLogging(getElasticLoggingExample())
         .withDocumentDB(getElasticDataStoreExample())
         .build();
@@ -238,7 +238,7 @@ public class TestUtils {
         .build();
   }
 
-  public static Jaeger getJaegerExample() {
+  /*public static Jaeger getJaegerExample() {
     return Jaeger.builder()
         .withId("jaeger")
         .withDescription("Jaeger Tracing")
@@ -249,7 +249,7 @@ public class TestUtils {
         .withStorageInstances(1)
         .withStorageStorageClassName("standard")
         .build();
-  }
+  }*/
 
   public static KafkaCluster getKafkaClusterExample() {
     return KafkaCluster.builder()
@@ -319,7 +319,7 @@ public class TestUtils {
     return LiveSystem.builder()
         .withName("business-platform-test")
         .withDescription("Business platform")
-        .withResourceGroupId("test-resource-group")
+        .withResourceGroupId("ge12616")
         .withComponent(getAksExample())
         .withComponent(getAzurePostgresExample())
         .withEnvironment(getEnvExample())

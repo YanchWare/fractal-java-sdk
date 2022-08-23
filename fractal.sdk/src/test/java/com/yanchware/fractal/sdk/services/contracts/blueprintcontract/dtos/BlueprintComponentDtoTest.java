@@ -82,7 +82,7 @@ public class BlueprintComponentDtoTest {
         ));
   }
 
-  @Test
+  /*@Test
   public void blueprintComponentValid_when_aksWithJaeger() {
     var aks = getAksBuilder().withTracing(getJaegerExample()).build();
     var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(aks));
@@ -100,7 +100,7 @@ public class BlueprintComponentDtoTest {
             jaeger.getStorageSettings(),
             aksId
         ));
-  }
+  }*/
 
   @Test
   public void blueprintComponentValid_when_aksWithElasticLogging() {
@@ -360,7 +360,7 @@ public class BlueprintComponentDtoTest {
     componentSize += kubernetesCluster.getMonitoringInstances().size();
     componentSize += kubernetesCluster.getApiGatewayInstances().size();
     componentSize += kubernetesCluster.getServiceMeshSecurityInstances().size();
-    componentSize += kubernetesCluster.getTracingInstances().size();
+    //componentSize += kubernetesCluster.getTracingInstances().size();
     componentSize += kubernetesCluster.getLoggingInstances().size();
     componentSize += kubernetesCluster.getDocumentDBInstances().size();
     var messageBrokerInstance = (KafkaCluster) kubernetesCluster.getMessageBrokerInstances().get(0);

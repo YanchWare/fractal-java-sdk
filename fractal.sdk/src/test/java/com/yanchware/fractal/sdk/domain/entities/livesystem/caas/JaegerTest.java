@@ -1,3 +1,4 @@
+/*
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
 import com.yanchware.fractal.sdk.utils.TestUtils;
@@ -42,4 +43,4 @@ class JaegerTest {
         assertThatCode(TestUtils::getJaegerExample).doesNotThrowAnyException();
         assertThat(getJaegerExample().getType()).isEqualTo(JAEGER);
     }
-}
+}*/

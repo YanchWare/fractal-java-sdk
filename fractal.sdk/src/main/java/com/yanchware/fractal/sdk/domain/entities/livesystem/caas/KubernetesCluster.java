@@ -38,7 +38,7 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
   private List<CaaSMonitoringImpl> monitoringInstances;
   private List<CaaSAPIGatewayImpl> apiGatewayInstances;
   private List<CaaSServiceMeshSecurityImpl> serviceMeshSecurityInstances;
-  private List<CaaSTracingImpl> tracingInstances;
+  //private List<CaaSTracingImpl> tracingInstances;
   private List<CaaSLoggingImpl> loggingInstances;
   private List<CaaSDocumentDBImpl> documentDBInstances;
   private PodManagedIdentity podManagedIdentity;
@@ -52,7 +52,7 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
     monitoringInstances = new ArrayList<>();
     apiGatewayInstances = new ArrayList<>();
     serviceMeshSecurityInstances = new ArrayList<>();
-    tracingInstances = new ArrayList<>();
+    //tracingInstances = new ArrayList<>();
     loggingInstances = new ArrayList<>();
     documentDBInstances = new ArrayList<>();
   }
@@ -220,7 +220,7 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
       return builder;
     }
 
-    public B withTracing(CaaSTracingImpl tracing) {
+    /*public B withTracing(CaaSTracingImpl tracing) {
       return withTracing(List.of(tracing));
     }
 
@@ -238,7 +238,7 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
       });
       component.getTracingInstances().addAll(tracingInstances);
       return builder;
-    }
+    }*/
 
     public B withLogging(CaaSLoggingImpl logging) {
       return withLogging(List.of(logging));
@@ -259,6 +259,8 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
       component.getLoggingInstances().addAll(loggingInstances);
       return builder;
     }
+
+    //TODO: try to throw validation/comment out KubernetesCluster priority classes/taints
 
     public B withDocumentDB(CaaSDocumentDBImpl documentDB) {
       return withDocumentDB(List.of(documentDB));
@@ -340,9 +342,9 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
     serviceMeshSecurityInstances.stream()
         .map(CaaSServiceMeshSecurity::validate)
         .forEach(errors::addAll);
-    tracingInstances.stream()
+    /*tracingInstances.stream()
         .map(CaaSTracing::validate)
-        .forEach(errors::addAll);
+        .forEach(errors::addAll);*/
     loggingInstances.stream()
         .map(CaaSLogging::validate)
         .forEach(errors::addAll);
