@@ -1,3 +1,4 @@
+/*
 package com.yanchware.fractal.sdk.domain.entities.blueprint.caas;
 
 import com.yanchware.fractal.sdk.domain.entities.Component;
@@ -11,3 +12,4 @@ public class CaaSKafkaUser extends Component implements BlueprintComponent {
     public static final String TYPE = KAFKA_USER.getId();
 
 }
+*/

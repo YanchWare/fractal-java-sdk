@@ -1,3 +1,4 @@
+/*
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -23,3 +24,4 @@ public enum KafkaACLPatternType {
     return id;
   }
 }
+*/

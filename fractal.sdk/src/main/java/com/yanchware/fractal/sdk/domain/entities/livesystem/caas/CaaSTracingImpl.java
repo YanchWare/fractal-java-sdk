@@ -1,3 +1,4 @@
+/*
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
 import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSTracing;
@@ -40,3 +41,4 @@ public abstract class CaaSTracingImpl extends CaaSTracing implements LiveSystemC
         return errors;
     }
 }
+*/
