@@ -136,6 +136,6 @@ public class LiveSystem implements Validatable {
     }
 
     public String getLiveSystemId() {
-        return String.format("%s/%s:%s", getResourceGroupId(), getName(), DEFAULT_VERSION);
+        return String.format("%s/%s", getResourceGroupId(), getName());
     }
 }
