@@ -109,8 +109,8 @@ public class TestUtils {
             .withMaxNodeCount(3)
             .withMaxSurge(1)
             .withMinNodeCount(1)
-            .build())
-        .withPriorityClass(PriorityClass.builder()
+            .build());
+        /*.withPriorityClass(PriorityClass.builder()
             .withName("fractal-critical")
             .withDescription("Used for Fractal Components")
             .withPreemptionPolicy(PREEMPT_LOWER_PRIORITY)
@@ -122,7 +122,7 @@ public class TestUtils {
             .withExceptionPodLabels(Map.of("app", "mic", "component", "mic"))
             .withEnable(true)
             .withAllowNetworkPluginKubeNet(true)
-            .build());
+            .build());*/
   }
 
   public static AzureKubernetesService getAksExample() {
