@@ -26,7 +26,8 @@ import java.util.Map;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PreemptionPolicy.*;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PreemptionPolicy.NEVER;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PreemptionPolicy.PREEMPT_LOWER_PRIORITY;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureMachineType.STANDARD_B2S;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureOsType.LINUX;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureRegion.EUROPE_WEST;
@@ -127,11 +128,11 @@ public class TestUtils {
   public static AzureKubernetesService getAksExample() {
     return getAksBuilder()
         .withK8sWorkload(getK8sWorkloadExample())
-        .withMessageBroker(getKafkaClusterExample())
+        //.withMessageBroker(getKafkaClusterExample())
         .withMonitoring(getPrometheusExample())
         .withAPIGateway(getAmbassadorExample())
         .withServiceMeshSecurity(getOcelotExample())
-        .withTracing(getJaegerExample())
+        //.withTracing(getJaegerExample())
         .withLogging(getElasticLoggingExample())
         .withDocumentDB(getElasticDataStoreExample())
         .build();
@@ -140,11 +141,11 @@ public class TestUtils {
   public static GoogleKubernetesEngine getGkeExample() {
     return getGkeBuilder()
         .withK8sWorkload(getK8sWorkloadExample())
-        .withMessageBroker(getKafkaClusterExample())
+        //.withMessageBroker(getKafkaClusterExample())
         .withMonitoring(getPrometheusExample())
         .withAPIGateway(getAmbassadorExample())
         .withServiceMeshSecurity(getOcelotExample())
-        .withTracing(getJaegerExample())
+        //.withTracing(getJaegerExample())
         .withLogging(getElasticLoggingExample())
         .withDocumentDB(getElasticDataStoreExample())
         .build();
@@ -238,7 +239,7 @@ public class TestUtils {
         .build();
   }
 
-  public static Jaeger getJaegerExample() {
+  /*public static Jaeger getJaegerExample() {
     return Jaeger.builder()
         .withId("jaeger")
         .withDescription("Jaeger Tracing")
@@ -249,9 +250,9 @@ public class TestUtils {
         .withStorageInstances(1)
         .withStorageStorageClassName("standard")
         .build();
-  }
+  }*/
 
-  public static KafkaCluster getKafkaClusterExample() {
+  /*public static KafkaCluster getKafkaClusterExample() {
     return KafkaCluster.builder()
         .withId("azure-kafka")
         .withDescription("Kafka for Azure")
@@ -264,7 +265,7 @@ public class TestUtils {
             KafkaUser.builder().withId("user-1").withDisplayName("kafka-user").withTopicReadACL("svcName").build(),
             KafkaUser.builder().withId("user-2").withDisplayName("kafka-user-2").build()))
         .build();
-  }
+  }*/
 
   public static AzurePostgreSQL getAzurePostgresExample() {
     return AzurePostgreSQL.builder()

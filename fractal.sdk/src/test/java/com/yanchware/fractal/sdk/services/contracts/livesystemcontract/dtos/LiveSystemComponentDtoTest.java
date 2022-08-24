@@ -39,12 +39,12 @@ class LiveSystemComponentDtoTest {
     private void assertCaaSComponents(KubernetesCluster k8sCluster, Map<String, LiveSystemComponentDto> lsDtoMap) {
         ProviderType provider = k8sCluster.getProvider();
         assertLsComponent(lsDtoMap, k8sCluster, KUBERNETES, provider);
-        k8sCluster.getMessageBrokerInstances().forEach(component -> assertLsComponent(lsDtoMap, component, KAFKA, provider));
+        //k8sCluster.getMessageBrokerInstances().forEach(component -> assertLsComponent(lsDtoMap, component, KAFKA, provider));
         k8sCluster.getMonitoringInstances().forEach(component -> assertLsComponent(lsDtoMap, component, PROMETHEUS, provider));
         k8sCluster.getApiGatewayInstances().forEach(component -> assertLsComponent(lsDtoMap, component, AMBASSADOR, provider));
         k8sCluster.getK8sWorkloadInstances().forEach(component -> assertLsComponent(lsDtoMap, component, K8S_WORKLOAD, provider));
         k8sCluster.getServiceMeshSecurityInstances().forEach(component -> assertLsComponent(lsDtoMap, component, OCELOT, provider));
-        k8sCluster.getTracingInstances().forEach(component -> assertLsComponent(lsDtoMap, component, JAEGER, provider));
+        //k8sCluster.getTracingInstances().forEach(component -> assertLsComponent(lsDtoMap, component, JAEGER, provider));
         k8sCluster.getLoggingInstances().forEach(component -> assertLsComponent(lsDtoMap, component, ELASTIC_LOGGING, provider));
     }
 

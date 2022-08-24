@@ -1,3 +1,4 @@
+/*
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
 import lombok.AccessLevel;
@@ -109,3 +110,4 @@ public class Jaeger extends CaaSTracingImpl implements LiveSystemComponent {
         }
     }
 }
+*/

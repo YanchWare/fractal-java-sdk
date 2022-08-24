@@ -1,3 +1,4 @@
+/*
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
 import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSKafkaUser;
@@ -21,67 +22,68 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KAFKA_USER;
 @ToString(callSuper = true)
 public class KafkaUser extends CaaSKafkaUser implements LiveSystemComponent {
 
-    private String containerPlatform;
-    private String namespace;
-    private String clusterName;
-    private ProviderType provider;
-    private Collection<KafkaACL> acls;
+  private String containerPlatform;
+  private String namespace;
+  private String clusterName;
+  private ProviderType provider;
+  private Collection<KafkaACL> acls;
 
-    protected KafkaUser() {
-        acls = new ArrayList<>();
+  protected KafkaUser() {
+    acls = new ArrayList<>();
+  }
+
+  @Override
+  public ProviderType getProvider() {
+    return provider;
+  }
+
+  public static KafkaUserBuilder builder() {
+    return new KafkaUserBuilder();
+  }
+
+  public static class KafkaUserBuilder extends Builder<KafkaUser, KafkaUserBuilder> {
+
+    public KafkaUserBuilder withAcl(KafkaACL acl) {
+      return withAcls(List.of(acl));
+    }
+
+    public KafkaUserBuilder withAcls(List<KafkaACL> acls) {
+      if (isBlank(acls)) {
+        return builder;
+      }
+
+      if (component.getAcls() == null) {
+        component.setAcls(new ArrayList<>());
+      }
+
+      component.getAcls().addAll(acls);
+      return builder;
+    }
+
+    public KafkaUserBuilder withTopicReadACL(String serviceName) {
+      return withAcl(KafkaACL.builder().
+          withResource(KafkaResource.builder().
+              withType(TOPIC).
+              withName(serviceName).
+              withPatternType(KafkaACLPatternType.LITERAL).build()).
+          withOperation(READ).build());
     }
 
     @Override
-    public ProviderType getProvider() {
-        return provider;
+    protected KafkaUser createComponent() {
+      return new KafkaUser();
     }
 
-    public static KafkaUserBuilder builder() {
-        return new KafkaUserBuilder();
+    @Override
+    protected KafkaUserBuilder getBuilder() {
+      return this;
     }
 
-    public static class KafkaUserBuilder extends Builder<KafkaUser, KafkaUserBuilder> {
-
-        public KafkaUserBuilder withAcl(KafkaACL acl) {
-            return withAcls(List.of(acl));
-        }
-
-        public KafkaUserBuilder withAcls(List<KafkaACL> acls) {
-            if (isBlank(acls)) {
-                return builder;
-            }
-
-            if (component.getAcls() == null) {
-                component.setAcls(new ArrayList<>());
-            }
-
-            component.getAcls().addAll(acls);
-            return builder;
-        }
-
-        public KafkaUserBuilder withTopicReadACL(String serviceName) {
-            return withAcl(KafkaACL.builder().
-                    withResource(KafkaResource.builder().
-                            withType(TOPIC).
-                            withName(serviceName).
-                            withPatternType(KafkaACLPatternType.LITERAL).build()).
-                    withOperation(READ).build());
-        }
-
-        @Override
-        protected KafkaUser createComponent() {
-            return new KafkaUser();
-        }
-
-        @Override
-        protected KafkaUserBuilder getBuilder() {
-            return this;
-        }
-
-        @Override
-        public KafkaUser build() {
-            component.setType(KAFKA_USER);
-            return super.build();
-        }
+    @Override
+    public KafkaUser build() {
+      component.setType(KAFKA_USER);
+      return super.build();
     }
+  }
 }
+*/

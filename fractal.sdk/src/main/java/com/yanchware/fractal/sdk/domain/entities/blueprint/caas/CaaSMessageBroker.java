@@ -1,3 +1,4 @@
+/*
 package com.yanchware.fractal.sdk.domain.entities.blueprint.caas;
 
 import com.yanchware.fractal.sdk.domain.entities.Component;
@@ -10,3 +11,4 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.CONTAINERIZED
 public class CaaSMessageBroker extends Component implements BlueprintComponent {
     public static final String TYPE = CONTAINERIZED_MESSAGE_BROKER.getId();
 }
+*/

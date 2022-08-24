@@ -1,3 +1,4 @@
+/*
 package com.yanchware.fractal.sdk.domain.entities.blueprint.caas;
 
 import com.yanchware.fractal.sdk.domain.entities.Component;
@@ -9,3 +10,4 @@ public class CaaSTracing extends Component implements BlueprintComponent {
     public static final String TYPE = CAAS_TRACING.getId();
 
 }
+*/

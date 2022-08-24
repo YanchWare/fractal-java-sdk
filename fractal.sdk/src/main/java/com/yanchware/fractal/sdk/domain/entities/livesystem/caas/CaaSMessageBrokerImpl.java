@@ -1,3 +1,4 @@
+/*
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
 import com.yanchware.fractal.sdk.domain.entities.Component;
@@ -44,3 +45,4 @@ public abstract class CaaSMessageBrokerImpl extends CaaSMessageBroker implements
         return errors;
     }
 }
+*/
