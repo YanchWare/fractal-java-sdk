@@ -2,6 +2,7 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
 import com.yanchware.fractal.sdk.domain.entities.Component;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.*;
+import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -354,6 +355,12 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
 
     if(podManagedIdentity != null) {
       errors.addAll(podManagedIdentity.validate());
+    }
+
+    //FRA-684 - Add error until we implement in GCP
+    if(this.getProvider().equals(ProviderType.GCP)) {
+      if(podManagedIdentity != null) errors.add("Pod Managed Identity is not fully supported yet for GCP");
+      if(!priorityClasses.isEmpty()) errors.add("Priority classes are not fully supported yet for GCP");
     }
     return errors;
   }

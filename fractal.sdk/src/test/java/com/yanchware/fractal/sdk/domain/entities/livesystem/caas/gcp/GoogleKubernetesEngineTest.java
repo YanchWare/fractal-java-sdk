@@ -1,6 +1,7 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.gcp;
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PodManagedIdentity;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PriorityClass;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.GcpNodePool;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.GoogleKubernetesEngine;
 import org.junit.jupiter.api.Test;
@@ -50,17 +51,34 @@ public class GoogleKubernetesEngineTest {
         assertThatThrownBy(gke::build).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Node pool list is null or empty");
     }
 
+    @Test
+    public void exceptionThrown_when_gkeCreatedWithPodIdentityAndPriorityClasses() {
+        var gke = generateBuilder()
+            .withPodManagedIdentity(PodManagedIdentity.builder()
+                .withName("azure-pod-identity")
+                .withNamespace("kube-system")
+                .withExceptionPodLabels(Map.of("app", "mic", "component", "mic"))
+                .withEnable(true)
+                .withAllowNetworkPluginKubeNet(true)
+                .build())
+            .withPriorityClass(PriorityClass.builder()
+                .withName("test")
+                .withValue(200)
+                .build());
+        assertThatThrownBy(gke::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll("Priority classes are not fully supported yet for GCP", "Pod Managed Identity is not fully supported yet for GCP");
+    }
+
     private GoogleKubernetesEngine.GoogleKubernetesEngineBuilder generateBuilder() {
         return GoogleKubernetesEngine.builder()
                 .withId("test")
-                .withNodePool(GcpNodePool.builder().withName("gcp-node-pool-name").build())
-                .withPodManagedIdentity(PodManagedIdentity.builder()
+                .withNodePool(GcpNodePool.builder().withName("gcp-node-pool-name").build());
+                /*.withPodManagedIdentity(PodManagedIdentity.builder()
                     .withName("azure-pod-identity")
                     .withNamespace("kube-system")
                     .withExceptionPodLabels(Map.of("app", "mic", "component", "mic"))
                     .withEnable(true)
                     .withAllowNetworkPluginKubeNet(true)
-                    .build());
+                    .build());*/
     }
 
 }

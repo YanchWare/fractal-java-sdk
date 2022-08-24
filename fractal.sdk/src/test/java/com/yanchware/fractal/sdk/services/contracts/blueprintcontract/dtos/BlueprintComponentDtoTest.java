@@ -275,8 +275,8 @@ public class BlueprintComponentDtoTest {
             gke.getPodIpMask(),
             gke.getVnetAddressSpaceIpMask(),
             gke.getVnetSubnetAddressIpMask(),
-            gke.getPriorityClasses(),
-            gke.getPodManagedIdentity()
+            gke.getPriorityClasses()
+            //gke.getPodManagedIdentity()
         ));
   }
 
