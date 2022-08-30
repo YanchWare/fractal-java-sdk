@@ -65,7 +65,7 @@ public class TestUtils {
             .withMaxPodsPerNode(100)
             .withOsType(LINUX)
             .withAutoscalingEnabled(true)
-            .withVersion("1.1.1")
+            .withKubernetesVersion("1.1.1")
             .build())
         .withPriorityClass(PriorityClass.builder()
             .withName("fractal-critical")
