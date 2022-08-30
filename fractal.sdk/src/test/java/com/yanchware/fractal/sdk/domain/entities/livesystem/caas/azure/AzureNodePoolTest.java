@@ -91,12 +91,24 @@ public class AzureNodePoolTest {
         .hasMessageContaining("MinNodeCount has not been defined and it is required when autoscaling is enabled");
   }
 
+  @Test
+  public void correctValues_when_azureNodePoolBuilt() {
+    var nodePool = getAzureNodePoolBuilder("linux", 50, true)
+        .withMinNodeCount(1)
+        .withMaxNodeCount(2)
+        .build();
+    assertThat(nodePool)
+        .extracting("name", "diskSizeGb", "autoscalingEnabled", "version", "minNodeCount", "maxNodeCount")
+        .contains("linux", 50, true, "1.1.1", 1, 2);
+  }
+
   private AzureNodePool.AzureNodePoolBuilder getAzureNodePoolBuilder(String name, int diskSizeGb, boolean autoscalingEnabled) {
     return AzureNodePool.builder()
         .withName(name)
         .withDiskSizeGb(diskSizeGb)
         .withInitialNodeCount(1)
         .withMaxNodeCount(3)
+        .withVersion("1.1.1")
         .withNodeTaint(NodeTaint.builder()
             .withKey("testKey")
             .withValue("testValue")
