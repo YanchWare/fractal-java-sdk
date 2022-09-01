@@ -63,11 +63,11 @@ public class KubernetesWorkload extends CaaSK8sWorkloadImpl implements LiveSyste
             return builder;
         }
 
-        public KubernetesWorkloadBuilder withRole(String role) {
+        public KubernetesWorkloadBuilder withRole(CustomWorkloadRole role) {
             return withRoles(List.of(role));
         }
 
-        public KubernetesWorkloadBuilder withRoles(List<String> roles) {
+        public KubernetesWorkloadBuilder withRoles(List<CustomWorkloadRole> roles) {
             if (isBlank(roles)) {
                 return builder;
             }
@@ -75,21 +75,6 @@ public class KubernetesWorkload extends CaaSK8sWorkloadImpl implements LiveSyste
                 component.setRoles(new ArrayList<>());
             }
             component.getRoles().addAll(roles);
-            return builder;
-        }
-
-        public KubernetesWorkloadBuilder withScope(String workloadScope) {
-            return withScopes(List.of(workloadScope));
-        }
-
-        public KubernetesWorkloadBuilder withScopes(List<String> workloadScopes) {
-            if (isBlank(workloadScopes)) {
-                return builder;
-            }
-            if (component.getWorkloadScopes() == null) {
-                component.setWorkloadScopes(new ArrayList<>());
-            }
-            component.getWorkloadScopes().addAll(workloadScopes);
             return builder;
         }
 

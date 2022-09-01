@@ -163,7 +163,10 @@ public class TestUtils {
         .withSSHRepositoryURI("ssh-uri")
         .withRepoId("fractal-svc-id")
         .withBranchName("env/fractal-test")
-        .withRoles(List.of("roles/datastore.user", "roles/pubsub.editor"))
+        .withRoles(List.of(
+            CustomWorkloadRole.builder().withName("datastore").withScope("user").build(),
+            CustomWorkloadRole.builder().withName("pubsub").withScope("editor").build(),
+            CustomWorkloadRole.builder().withName("ocelot").withScope("user").withIsOcelotRole(true).build()))
         .build();
   }
 
@@ -214,7 +217,7 @@ public class TestUtils {
         .withDisplayName("Elastic Logging")
         .withNamespace("logging")
         .withAPM(true)
-        . withKibana(true)
+        .withKibana(true)
         .withElasticVersion("1")
         .withInstances(3)
         .withStorage("250Gi")
