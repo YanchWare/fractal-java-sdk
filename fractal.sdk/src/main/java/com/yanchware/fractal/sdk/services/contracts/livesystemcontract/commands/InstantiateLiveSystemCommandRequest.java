@@ -7,8 +7,6 @@ import lombok.*;
 
 import java.util.Map;
 
-import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

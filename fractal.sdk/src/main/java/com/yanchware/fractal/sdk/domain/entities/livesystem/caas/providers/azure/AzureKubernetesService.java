@@ -1,7 +1,6 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure;
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.KubernetesCluster;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PriorityClass;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.AccessLevel;
 import lombok.Getter;

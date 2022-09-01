@@ -33,8 +33,7 @@ public abstract class CaaSK8sWorkloadImpl extends CaaSWorkload implements LiveSy
     private String sshRepositoryURI;
     private String repoId;
     private String branchName;
-    private List<String> roles;
-    private List<String> workloadScopes;
+    private List<CustomWorkloadRole> roles;
     private String workloadSecretIdKey;
     private String workloadSecretPasswordKey;
     private ProviderType provider;
