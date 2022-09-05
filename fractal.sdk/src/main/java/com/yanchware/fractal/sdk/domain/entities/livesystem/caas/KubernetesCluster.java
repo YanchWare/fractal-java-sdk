@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
+import static com.yanchware.fractal.sdk.utils.ValidationUtils.isPresentAndValidIpMask;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
 
 @Getter
@@ -21,17 +22,8 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
 public abstract class KubernetesCluster extends CaaSContainerPlatform implements LiveSystemComponent {
   private final static String SERVICE_IP_MASK_NOT_VALID = "[KubernetesCluster Validation] Service IP Mask does not contain a valid ip with mask";
   private final static String POD_MASK_NOT_VALID = "[KubernetesCluster Validation] Pod IP Mask does not contain a valid ip with mask";
-  private final static String VNET_ADDRESS_SPACE_MASK_NOT_VALID = "[KubernetesCluster Validation] VNet Address Space IP Mask does not contain a valid ip with mask";
-  private final static String VNET_SUBNET_ADDRESS_IP_MASK_NOT_VALID = "[KubernetesCluster Validation] VNet Subnet Address IP Mask does not contain a valid ip with mask";
-  private static final String IP_MASK_REGEX = "^(?:\\d{1,2}|1\\d{2}|2[0-4]\\d|25[0-5])(?:\\.(?:\\d{1,2}|1\\d{2}|2[0-4]\\d|25[0-5])){3}(?<Mask>/(?:\\d|1\\d|2\\d|3[0-2]))$";
-  private String network;
-  private String subNetwork;
-  private String podsRange;
-  private String serviceRange;
-  private String serviceIpMask;
-  private String podIpMask;
-  private String vnetAddressSpaceIpMask;
-  private String vnetSubnetAddressIpMask;
+  private String serviceIpRange;
+  private String podIpRange;
 
   private Collection<PriorityClass> priorityClasses;
   private List<CaaSK8sWorkloadImpl> k8sWorkloadInstances;
@@ -60,43 +52,13 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
 
   public static abstract class Builder<T extends KubernetesCluster, B extends Builder<T, B>> extends Component.Builder<T, B> {
 
-    public B withNetwork(String network) {
-      component.setNetwork(network);
+    public B withServiceIpRange(String serviceIpRange) {
+      component.setServiceIpRange(serviceIpRange);
       return builder;
     }
 
-    public B withSubNetwork(String subNetwork) {
-      component.setSubNetwork(subNetwork);
-      return builder;
-    }
-
-    public B withPodsRange(String podsRange) {
-      component.setPodsRange(podsRange);
-      return builder;
-    }
-
-    public B withServiceRange(String serviceRange) {
-      component.setServiceRange(serviceRange);
-      return builder;
-    }
-
-    public B withServiceIpMask(String serviceIpMask) {
-      component.setServiceIpMask(serviceIpMask);
-      return builder;
-    }
-
-    public B withPodIpMask(String podIpMask) {
-      component.setPodIpMask(podIpMask);
-      return builder;
-    }
-
-    public B withVnetAddressSpaceIpMask(String vnetAddressSpaceIpMask) {
-      component.setVnetAddressSpaceIpMask(vnetAddressSpaceIpMask);
-      return builder;
-    }
-
-    public B withVnetSubnetAddressIpMask(String vnetSubnetAddressIpMask) {
-      component.setVnetSubnetAddressIpMask(vnetSubnetAddressIpMask);
+    public B withPodIpRange(String podIpRange) {
+      component.setPodIpRange(podIpRange);
       return builder;
     }
 
@@ -309,21 +271,8 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
   public Collection<String> validate() {
     Collection<String> errors = super.validate();
 
-    if (serviceIpMask != null && !serviceIpMask.matches(IP_MASK_REGEX)) {
-      errors.add(SERVICE_IP_MASK_NOT_VALID);
-    }
-
-    if (podIpMask != null && !podIpMask.matches(IP_MASK_REGEX)) {
-      errors.add(POD_MASK_NOT_VALID);
-    }
-
-    if (vnetAddressSpaceIpMask != null && !vnetAddressSpaceIpMask.matches(IP_MASK_REGEX)) {
-      errors.add(VNET_ADDRESS_SPACE_MASK_NOT_VALID);
-    }
-
-    if (vnetSubnetAddressIpMask != null && !vnetSubnetAddressIpMask.matches(IP_MASK_REGEX)) {
-      errors.add(VNET_SUBNET_ADDRESS_IP_MASK_NOT_VALID);
-    }
+    isPresentAndValidIpMask(serviceIpRange, errors, SERVICE_IP_MASK_NOT_VALID);
+    isPresentAndValidIpMask(podIpRange, errors, POD_MASK_NOT_VALID);
 
     priorityClasses.stream()
         .map(PriorityClass::validate)

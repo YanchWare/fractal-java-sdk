@@ -12,12 +12,17 @@ import java.util.Collection;
 import java.util.List;
 
 import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
+import static com.yanchware.fractal.sdk.utils.ValidationUtils.isPresentAndValidIpMask;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
 public class AzureKubernetesService extends KubernetesCluster {
   private final static String EMPTY_NODE_POOL = "[AzureKubernetesService Validation] Node pool list is null or empty and at least one node pool is required";
+  private final static String VNET_ADDRESS_SPACE_MASK_NOT_VALID = "[KubernetesCluster Validation] VNet Address Space IP Mask does not contain a valid ip with mask";
+  private final static String VNET_SUBNET_ADDRESS_IP_MASK_NOT_VALID = "[KubernetesCluster Validation] VNet Subnet Address IP Mask does not contain a valid ip with mask";
+  private String vnetAddressSpaceIpMask;
+  private String vnetSubnetAddressIpMask;
 
   private AzureRegion region;
   private Collection<AzureNodePool> nodePools;
@@ -45,6 +50,16 @@ public class AzureKubernetesService extends KubernetesCluster {
     @Override
     protected AzureKubernetesServiceBuilder getBuilder() {
       return this;
+    }
+
+    public AzureKubernetesServiceBuilder withVnetAddressSpaceIpMask(String vnetAddressSpaceIpMask) {
+      component.setVnetAddressSpaceIpMask(vnetAddressSpaceIpMask);
+      return builder;
+    }
+
+    public AzureKubernetesServiceBuilder withVnetSubnetAddressIpMask(String vnetSubnetAddressIpMask) {
+      component.setVnetSubnetAddressIpMask(vnetSubnetAddressIpMask);
+      return builder;
     }
 
     public AzureKubernetesServiceBuilder withRegion(AzureRegion region) {
@@ -76,6 +91,9 @@ public class AzureKubernetesService extends KubernetesCluster {
     if (nodePools.isEmpty()) {
       errors.add(EMPTY_NODE_POOL);
     }
+
+    isPresentAndValidIpMask(vnetAddressSpaceIpMask, errors, VNET_ADDRESS_SPACE_MASK_NOT_VALID);
+    isPresentAndValidIpMask(vnetSubnetAddressIpMask, errors, VNET_SUBNET_ADDRESS_IP_MASK_NOT_VALID);
 
     nodePools.stream()
         .map(AzureNodePool::validate)

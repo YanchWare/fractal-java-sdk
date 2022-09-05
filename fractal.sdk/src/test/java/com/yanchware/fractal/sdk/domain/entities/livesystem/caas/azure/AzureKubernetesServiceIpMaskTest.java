@@ -15,7 +15,7 @@ public class AzureKubernetesServiceIpMaskTest {
   @ValueSource(strings = {"255.255.255.256", "10.2.0.0/33", "1.1.1.1"})
   public void exceptionThrown_when_aksCreatedWithServiceIpMaskNotValid(String input) {
     assertThatThrownBy(() -> generateBuilder()
-        .withServiceIpMask(input)
+        .withServiceIpRange(input)
         .build()
         .validate())
         .isInstanceOf(IllegalArgumentException.class)
@@ -26,7 +26,7 @@ public class AzureKubernetesServiceIpMaskTest {
   @ValueSource(strings = {"255.255.255.256", "10.2.0.0/33", "1.1.1.1"})
   public void exceptionThrown_when_aksCreatedWithPodIpMaskNotValid(String input) {
     assertThatThrownBy(() -> generateBuilder()
-        .withPodIpMask(input)
+        .withPodIpRange(input)
         .build()
         .validate())
         .isInstanceOf(IllegalArgumentException.class)
@@ -59,7 +59,7 @@ public class AzureKubernetesServiceIpMaskTest {
   @ValueSource(strings = {"10.2.0.0/16", "10.2.0.255/16", "10.2.0.0/32"})
   public void exceptionThrown_when_aksCreatedWithServiceIpMaskValid(String input) {
     assertThat(generateBuilder()
-        .withServiceIpMask(input)
+        .withServiceIpRange(input)
         .build()
         .validate()).isEmpty();
   }
@@ -68,7 +68,7 @@ public class AzureKubernetesServiceIpMaskTest {
   @ValueSource(strings = {"10.2.0.0/16", "10.2.0.255/16", "10.2.0.0/32"})
   public void exceptionThrown_when_aksCreatedWithPodIpMaskValid(String input) {
     assertThat(generateBuilder()
-        .withPodIpMask(input)
+        .withPodIpRange(input)
         .build()
         .validate()).isEmpty();
   }
