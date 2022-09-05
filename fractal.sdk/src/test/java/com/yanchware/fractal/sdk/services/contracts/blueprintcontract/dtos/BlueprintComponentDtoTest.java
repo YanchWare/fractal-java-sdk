@@ -264,7 +264,7 @@ public class BlueprintComponentDtoTest {
             gke.getNetworkName(),
             gke.getPodsRangeName(),
             gke.getRegion().getId(),
-            gke.getServiceRangeName(),
+            gke.getServicesRangeName(),
             gke.getSubnetworkName(),
             gke.getNodePools(),
             gke.getServiceIpRange(),

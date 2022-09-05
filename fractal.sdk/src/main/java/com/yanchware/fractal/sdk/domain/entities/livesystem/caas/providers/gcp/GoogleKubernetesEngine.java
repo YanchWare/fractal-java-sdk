@@ -21,7 +21,7 @@ public class GoogleKubernetesEngine extends KubernetesCluster {
   private String networkName;
   private String subnetworkName;
   private String podsRangeName;
-  private String serviceRangeName;
+  private String servicesRangeName;
   private String subnetworkIpRange; //withSubnetIpCidrRange
 
   private GcpRegion region;
@@ -67,8 +67,8 @@ public class GoogleKubernetesEngine extends KubernetesCluster {
       return builder;
     }
 
-    public GoogleKubernetesEngineBuilder withServiceRangeName(String serviceRangeName) {
-      component.setServiceRangeName(serviceRangeName);
+    public GoogleKubernetesEngineBuilder withServicesRangeName(String servicesRangeName) {
+      component.setServicesRangeName(servicesRangeName);
       return builder;
     }
 
