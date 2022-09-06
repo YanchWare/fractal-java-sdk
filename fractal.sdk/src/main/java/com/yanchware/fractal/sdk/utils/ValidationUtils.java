@@ -14,7 +14,7 @@ public class ValidationUtils {
     }
   }
 
-  public static void isPresentAndValidIpMask(String input, Collection<String> errors, String errorMessage) {
+  public static void isPresentAndValidIpRange(String input, Collection<String> errors, String errorMessage) {
     if (input != null && !isValidIpMask(input)) {
       errors.add(errorMessage);
     }

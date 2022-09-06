@@ -242,8 +242,8 @@ public class BlueprintComponentDtoTest {
             aks.getNodePools(),
             aks.getServiceIpRange(),
             aks.getPodIpRange(),
-            aks.getVnetAddressSpaceIpMask(),
-            aks.getVnetSubnetAddressIpMask(),
+            aks.getVnetAddressSpaceIpRange(),
+            aks.getVnetSubnetAddressIpRange(),
             aks.getPriorityClasses(),
             aks.getPodManagedIdentity()
         ));

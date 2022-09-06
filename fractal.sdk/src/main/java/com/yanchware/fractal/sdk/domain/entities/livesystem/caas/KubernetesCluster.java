@@ -13,15 +13,15 @@ import java.util.Collection;
 import java.util.List;
 
 import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
-import static com.yanchware.fractal.sdk.utils.ValidationUtils.isPresentAndValidIpMask;
+import static com.yanchware.fractal.sdk.utils.ValidationUtils.isPresentAndValidIpRange;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
 
 @Getter
 @Setter(AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 public abstract class KubernetesCluster extends CaaSContainerPlatform implements LiveSystemComponent {
-  private final static String SERVICE_IP_MASK_NOT_VALID = "[KubernetesCluster Validation] Service IP Mask does not contain a valid ip with mask";
-  private final static String POD_MASK_NOT_VALID = "[KubernetesCluster Validation] Pod IP Mask does not contain a valid ip with mask";
+  private final static String SERVICE_IP_RANGE_NOT_VALID = "[KubernetesCluster Validation] Service IP Range does not contain a valid ip with mask";
+  private final static String POD_RANGE_NOT_VALID = "[KubernetesCluster Validation] Pod IP Range does not contain a valid ip with mask";
   private String serviceIpRange;
   private String podIpRange;
 
@@ -271,8 +271,8 @@ public abstract class KubernetesCluster extends CaaSContainerPlatform implements
   public Collection<String> validate() {
     Collection<String> errors = super.validate();
 
-    isPresentAndValidIpMask(serviceIpRange, errors, SERVICE_IP_MASK_NOT_VALID);
-    isPresentAndValidIpMask(podIpRange, errors, POD_MASK_NOT_VALID);
+    isPresentAndValidIpRange(serviceIpRange, errors, SERVICE_IP_RANGE_NOT_VALID);
+    isPresentAndValidIpRange(podIpRange, errors, POD_RANGE_NOT_VALID);
 
     priorityClasses.stream()
         .map(PriorityClass::validate)
