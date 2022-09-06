@@ -95,7 +95,7 @@ public class TestUtils {
         .withPodsRangeName("tier-1-pods")
         .withPodIpRange("10.3.0.0/16")
         .withServicesRangeName("tier-1-services")
-        .withServiceIpRange("10.2.0.0/16") // ServiceIpRange (GCP) Service CIDR (Azure)
+        .withServiceIpRange("10.2.0.0/16")
         .withSubnetworkIpRange("10.0.4.0/22")
         .withNodePool(GcpNodePool.builder()
             .withName("gcpnode")

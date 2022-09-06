@@ -22,7 +22,7 @@ public class GoogleKubernetesEngine extends KubernetesCluster {
   private String subnetworkName;
   private String podsRangeName;
   private String servicesRangeName;
-  private String subnetworkIpRange; //withSubnetIpCidrRange
+  private String subnetworkIpRange;
 
   private GcpRegion region;
   private Collection<GcpNodePool> nodePools;
