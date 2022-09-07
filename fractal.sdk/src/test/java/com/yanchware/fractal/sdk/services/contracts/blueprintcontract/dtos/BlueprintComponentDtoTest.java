@@ -238,16 +238,12 @@ public class BlueprintComponentDtoTest {
         .assertThat(aksDto.getParameters().values())
         .as("Component Parameters")
         .containsExactlyInAnyOrder(
-            aks.getNetwork(),
-            aks.getPodsRange(),
             aks.getRegion().getId(),
-            aks.getServiceRange(),
-            aks.getSubNetwork(),
             aks.getNodePools(),
-            aks.getServiceIpMask(),
-            aks.getPodIpMask(),
-            aks.getVnetAddressSpaceIpMask(),
-            aks.getVnetSubnetAddressIpMask(),
+            aks.getServiceIpRange(),
+            aks.getPodIpRange(),
+            aks.getVnetAddressSpaceIpRange(),
+            aks.getVnetSubnetAddressIpRange(),
             aks.getPriorityClasses(),
             aks.getPodManagedIdentity()
         ));
@@ -265,16 +261,15 @@ public class BlueprintComponentDtoTest {
         .assertThat(gkeDto.getParameters().values())
         .as("Component Parameters")
         .containsExactlyInAnyOrder(
-            gke.getNetwork(),
-            gke.getPodsRange(),
+            gke.getNetworkName(),
+            gke.getPodsRangeName(),
             gke.getRegion().getId(),
-            gke.getServiceRange(),
-            gke.getSubNetwork(),
+            gke.getServicesRangeName(),
+            gke.getSubnetworkName(),
             gke.getNodePools(),
-            gke.getServiceIpMask(),
-            gke.getPodIpMask(),
-            gke.getVnetAddressSpaceIpMask(),
-            gke.getVnetSubnetAddressIpMask(),
+            gke.getServiceIpRange(),
+            gke.getPodIpRange(),
+            gke.getSubnetworkIpRange(),
             gke.getPriorityClasses()
             //gke.getPodManagedIdentity()
         ));

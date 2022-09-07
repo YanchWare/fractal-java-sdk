@@ -18,9 +18,11 @@ import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 public class GoogleKubernetesEngine extends KubernetesCluster {
   private final static String EMPTY_NODE_POOL = "[GoogleKubernetesEngine Validation] Node pool list is null or empty and at least one node pool is required";
 
-  public static GoogleKubernetesEngineBuilder builder() {
-    return new GoogleKubernetesEngineBuilder();
-  }
+  private String networkName;
+  private String subnetworkName;
+  private String podsRangeName;
+  private String servicesRangeName;
+  private String subnetworkIpRange;
 
   private GcpRegion region;
   private Collection<GcpNodePool> nodePools;
@@ -34,6 +36,10 @@ public class GoogleKubernetesEngine extends KubernetesCluster {
     return GCP;
   }
 
+  public static GoogleKubernetesEngineBuilder builder() {
+    return new GoogleKubernetesEngineBuilder();
+  }
+
   public static class GoogleKubernetesEngineBuilder extends Builder<GoogleKubernetesEngine, GoogleKubernetesEngineBuilder> {
 
     @Override
@@ -44,6 +50,31 @@ public class GoogleKubernetesEngine extends KubernetesCluster {
     @Override
     protected GoogleKubernetesEngineBuilder getBuilder() {
       return this;
+    }
+
+    public GoogleKubernetesEngineBuilder withNetworkName(String networkName) {
+      component.setNetworkName(networkName);
+      return builder;
+    }
+
+    public GoogleKubernetesEngineBuilder withSubnetworkName(String subnetworkName) {
+      component.setSubnetworkName(subnetworkName);
+      return builder;
+    }
+
+    public GoogleKubernetesEngineBuilder withPodsRangeName(String podsRangeName) {
+      component.setPodsRangeName(podsRangeName);
+      return builder;
+    }
+
+    public GoogleKubernetesEngineBuilder withServicesRangeName(String servicesRangeName) {
+      component.setServicesRangeName(servicesRangeName);
+      return builder;
+    }
+
+    public GoogleKubernetesEngineBuilder withSubnetworkIpRange(String subnetworkIpRange) {
+      component.setSubnetworkIpRange(subnetworkIpRange);
+      return builder;
     }
 
     public GoogleKubernetesEngineBuilder withRegion(GcpRegion region) {

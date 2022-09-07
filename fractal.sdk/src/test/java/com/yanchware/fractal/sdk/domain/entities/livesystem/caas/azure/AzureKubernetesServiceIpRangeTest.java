@@ -9,84 +9,84 @@ import org.junit.jupiter.params.provider.ValueSource;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class AzureKubernetesServiceIpMaskTest {
+public class AzureKubernetesServiceIpRangeTest {
 
   @ParameterizedTest
   @ValueSource(strings = {"255.255.255.256", "10.2.0.0/33", "1.1.1.1"})
-  public void exceptionThrown_when_aksCreatedWithServiceIpMaskNotValid(String input) {
+  public void exceptionThrown_when_aksCreatedWithServiceIpRangeNotValid(String input) {
     assertThatThrownBy(() -> generateBuilder()
-        .withServiceIpMask(input)
+        .withServiceIpRange(input)
         .build()
         .validate())
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("Service IP Mask does not contain a valid ip with mask");
+        .hasMessageContaining("Service IP Range does not contain a valid ip with mask");
   }
 
   @ParameterizedTest
   @ValueSource(strings = {"255.255.255.256", "10.2.0.0/33", "1.1.1.1"})
-  public void exceptionThrown_when_aksCreatedWithPodIpMaskNotValid(String input) {
+  public void exceptionThrown_when_aksCreatedWithPodIpRangeNotValid(String input) {
     assertThatThrownBy(() -> generateBuilder()
-        .withPodIpMask(input)
+        .withPodIpRange(input)
         .build()
         .validate())
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("Pod IP Mask does not contain a valid ip with mask");
+        .hasMessageContaining("Pod IP Range does not contain a valid ip with mask");
   }
 
   @ParameterizedTest
   @ValueSource(strings = {"255.255.255.256", "10.2.0.0/33", "1.1.1.1"})
-  public void exceptionThrown_when_aksCreatedWithVnetAddressSpaceIpMaskNotValid(String input) {
+  public void exceptionThrown_when_aksCreatedWithVnetAddressSpaceIpRangeNotValid(String input) {
     assertThatThrownBy(() -> generateBuilder()
-        .withVnetAddressSpaceIpMask(input)
+        .withVnetAddressSpaceIpRange(input)
         .build()
         .validate())
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("VNet Address Space IP Mask does not contain a valid ip with mask");
+        .hasMessageContaining("VNet Address Space IP Range does not contain a valid ip with mask");
   }
 
   @ParameterizedTest
   @ValueSource(strings = {"255.255.255.256", "10.2.0.0/33", "1.1.1.1"})
-  public void exceptionThrown_when_aksCreatedWithVnetSubnetAddressIpMaskNotValid(String input) {
+  public void exceptionThrown_when_aksCreatedWithVnetSubnetAddressIpRangeNotValid(String input) {
     assertThatThrownBy(() -> generateBuilder()
-        .withVnetSubnetAddressIpMask(input)
+        .withVnetSubnetAddressIpRange(input)
         .build()
         .validate())
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("VNet Subnet Address IP Mask does not contain a valid ip with mask");
+        .hasMessageContaining("VNet Subnet Address IP Range does not contain a valid ip with mask");
   }
 
   @ParameterizedTest
   @ValueSource(strings = {"10.2.0.0/16", "10.2.0.255/16", "10.2.0.0/32"})
-  public void exceptionThrown_when_aksCreatedWithServiceIpMaskValid(String input) {
+  public void exceptionThrown_when_aksCreatedWithServiceIpRangeValid(String input) {
     assertThat(generateBuilder()
-        .withServiceIpMask(input)
+        .withServiceIpRange(input)
         .build()
         .validate()).isEmpty();
   }
 
   @ParameterizedTest
   @ValueSource(strings = {"10.2.0.0/16", "10.2.0.255/16", "10.2.0.0/32"})
-  public void exceptionThrown_when_aksCreatedWithPodIpMaskValid(String input) {
+  public void exceptionThrown_when_aksCreatedWithPodIpRangeValid(String input) {
     assertThat(generateBuilder()
-        .withPodIpMask(input)
+        .withPodIpRange(input)
         .build()
         .validate()).isEmpty();
   }
 
   @ParameterizedTest
   @ValueSource(strings = {"10.2.0.0/16", "10.2.0.255/16", "10.2.0.0/32"})
-  public void exceptionThrown_when_aksCreatedWithVnetAddressSpaceIpMaskValid(String input) {
+  public void exceptionThrown_when_aksCreatedWithVnetAddressSpaceIpRangeValid(String input) {
     assertThat(generateBuilder()
-        .withVnetAddressSpaceIpMask(input)
+        .withVnetAddressSpaceIpRange(input)
         .build()
         .validate()).isEmpty();
   }
 
   @ParameterizedTest
   @ValueSource(strings = {"10.2.0.0/16", "10.2.0.255/16", "10.2.0.0/32"})
-  public void exceptionThrown_when_aksCreatedWithVnetSubnetAddressIpMaskValid(String input) {
+  public void exceptionThrown_when_aksCreatedWithVnetSubnetAddressIpRangeValid(String input) {
     assertThat(generateBuilder()
-        .withVnetSubnetAddressIpMask(input)
+        .withVnetSubnetAddressIpRange(input)
         .build()
         .validate()).isEmpty();
   }
