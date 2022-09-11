@@ -5,6 +5,8 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PostgreSQLCharset.UTF8;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureRegion.EUROPE_WEST;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureSkuName.B_GEN5_1;
@@ -86,8 +88,9 @@ public class AzurePostgreSQLTest {
         .returns(5 * 1024, from(AzurePostgreSQL::getStorageMB))
         .returns(12, from(AzurePostgreSQL::getBackupRetentionDays))
         .returns(1, from(x -> x.getDatabases().size()));
-    PostgreSQLDB postgreSQLDB = azurePostgreSQL.getDatabases().stream().findFirst().get();
-    assertThat(postgreSQLDB)
+    Optional<PostgreSQLDB> postgreSqlDbOptional = azurePostgreSQL.getDatabases().stream().findFirst();
+    assertThat(postgreSqlDbOptional).isPresent();
+    assertThat(postgreSqlDbOptional.get())
         .returns("db", from(PostgreSQLDB::getName))
         .returns(UTF8, from(PostgreSQLDB::getCharset))
         .returns("collation", from(PostgreSQLDB::getCollation))

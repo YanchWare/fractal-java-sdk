@@ -8,6 +8,7 @@ import com.yanchware.fractal.sdk.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.yanchware.fractal.sdk.utils.TestUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -301,7 +302,9 @@ public class BlueprintComponentDtoTest {
 
     //assert postgres db#1
     var azurePgDbBlueprintCompDto = blueprintComponentDtoList.get(1);
-    var db1 = apg.getDatabases().stream().filter(x -> x.getId().getValue().equals(azurePgDbBlueprintCompDto.getId())).findFirst().get();
+    Optional<PostgreSQLDB> db1Optional = apg.getDatabases().stream().filter(x -> x.getId().getValue().equals(azurePgDbBlueprintCompDto.getId())).findFirst();
+    assertThat(db1Optional).isPresent();
+    var db1 = db1Optional.get();
     assertGenericComponent(azurePgDbBlueprintCompDto, db1, PaaSPostgreSQLDB.TYPE);
     assertSoftly(softly -> {
       softly.assertThat(azurePgDbBlueprintCompDto.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(db1.getName());
@@ -311,7 +314,9 @@ public class BlueprintComponentDtoTest {
 
     //assert postgres db#2
     var azurePgDbBlueprintCompDto2 = blueprintComponentDtoList.get(2);
-    var db2 = apg.getDatabases().stream().filter(x -> x.getId().getValue().equals(azurePgDbBlueprintCompDto2.getId())).findFirst().get();
+    Optional<PostgreSQLDB> db2Optional = apg.getDatabases().stream().filter(x -> x.getId().getValue().equals(azurePgDbBlueprintCompDto2.getId())).findFirst();
+    assertThat(db2Optional).isPresent();
+    var db2 = db2Optional.get();
     assertGenericComponent(azurePgDbBlueprintCompDto2, db2, PaaSPostgreSQLDB.TYPE);
     assertSoftly(softly -> {
       softly.assertThat(azurePgDbBlueprintCompDto2.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(db2.getName());

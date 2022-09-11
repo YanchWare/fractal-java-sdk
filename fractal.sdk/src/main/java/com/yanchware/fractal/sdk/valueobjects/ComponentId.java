@@ -13,7 +13,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Data
 public class ComponentId {
 
-    private final static Pattern valueValidation = Pattern.compile("^[a-z]+((?:-[a-z0-9]+)*)$");
+    private final static Pattern valueValidation = Pattern.compile("^(?!\\d)[a-z\\d]+((?:-[a-z\\d]+)*)+$");
     protected final static String ID_NULL_OR_EMPTY_TEMPLATE = "Component id '%s' is illegal. A valid component id cannot be null, empty or contain spaces";
     protected final static String ILLEGAL_ID_TEMPLATE = "Component id '%s' is illegal. A valid component id must start with a lowercase character and it can only contain lowercase characters, digits and hyphens";
     protected final static String ID_LENGTH_MISMATCH_TEMPLATE = "Component id '%s' is illegal. A valid component Id must be between 3 and 15 characters of length";
