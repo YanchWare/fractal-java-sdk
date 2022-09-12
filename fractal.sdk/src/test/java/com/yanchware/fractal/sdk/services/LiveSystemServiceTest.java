@@ -44,13 +44,12 @@ public class LiveSystemServiceTest {
     }
 
     private InstantiateLiveSystemCommandRequest buildLiveSystemCommand() {
-        InstantiateLiveSystemCommandRequest command = InstantiateLiveSystemCommandRequest.builder()
+        return InstantiateLiveSystemCommandRequest.builder()
                 .description("prod")
                 .fractalId("resourceGroupId/fractalName:fractalVersion")
                 .environment(getEnvironment())
                 .blueprintMap(null)
                 .build();
-        return command;
     }
 
 
