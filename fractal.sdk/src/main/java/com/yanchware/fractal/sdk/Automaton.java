@@ -87,7 +87,7 @@ public class Automaton {
 
         BlueprintService blueprintService = new BlueprintService(httpClient, sdkConfiguration, registry);
         LiveSystemService liveSystemService = new LiveSystemService(httpClient, sdkConfiguration, registry);
-        ProviderService providerService = new ProviderService(httpClient, sdkConfiguration, registry);
+        ProviderService providerService = new ProviderService(httpClient, sdkConfiguration);
 
         for (LiveSystem ls : liveSystems) {
             log.info("Starting to instantiate live system with id: {}", ls.getLiveSystemId());
@@ -96,8 +96,7 @@ public class Automaton {
 
             blueprintService.createOrUpdateBlueprint(blueprintCommand, ls.getFractalId());
             liveSystemService.instantiate(liveSystemCommand);
-            var providerLiveSystem = providerService.getLiveSystem(ls.getLiveSystemId(), ls.getResourceGroupId());
-            log.info("LS: {}", providerLiveSystem);
+            providerService.checkLiveSystem(ls.getLiveSystemId(), ls.getResourceGroupId());
         }
     }
 
