@@ -6,8 +6,10 @@ import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.services.BlueprintService;
 import com.yanchware.fractal.sdk.services.LiveSystemService;
+import com.yanchware.fractal.sdk.services.ProviderService;
 import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.commands.CreateBlueprintCommandRequest;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands.InstantiateLiveSystemCommandRequest;
+import com.yanchware.fractal.sdk.services.contracts.providers.responses.CurrentLiveSystemsResponse;
 import io.github.resilience4j.core.IntervalFunction;
 import io.github.resilience4j.retry.RetryConfig;
 import io.github.resilience4j.retry.RetryRegistry;
@@ -86,6 +88,7 @@ public class Automaton {
 
         BlueprintService blueprintService = new BlueprintService(httpClient, sdkConfiguration, registry);
         LiveSystemService liveSystemService = new LiveSystemService(httpClient, sdkConfiguration, registry);
+        ProviderService providerService = new ProviderService(httpClient, sdkConfiguration, registry);
 
         for (LiveSystem ls : liveSystems) {
             log.info("Starting to instantiate live system with id: {}", ls.getLiveSystemId());
@@ -94,6 +97,8 @@ public class Automaton {
 
             blueprintService.createOrUpdateBlueprint(blueprintCommand, ls.getFractalId());
             liveSystemService.instantiate(liveSystemCommand);
+            CurrentLiveSystemsResponse allLiveSystemsFromProviders = providerService.getLiveSystems(ls.getResourceGroupId());
+            log.info("All LS: {}", allLiveSystemsFromProviders);
         }
     }
 

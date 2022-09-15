@@ -1,6 +1,9 @@
 package com.yanchware.fractal.sdk.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
+import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
+import com.yanchware.fractal.sdk.services.contracts.providers.responses.CurrentLiveSystemsResponse;
 import io.github.resilience4j.retry.RetryRegistry;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +16,7 @@ import java.net.http.HttpResponse;
 
 import static com.yanchware.fractal.sdk.configuration.Constants.X_CLIENT_ID_HEADER;
 import static com.yanchware.fractal.sdk.configuration.Constants.X_CLIENT_SECRET_HEADER;
+import static com.yanchware.fractal.sdk.utils.SerializationUtils.deserialize;
 
 @Slf4j
 @AllArgsConstructor
@@ -22,13 +26,14 @@ public class ProviderService {
   private final SdkConfiguration sdkConfiguration;
   private final RetryRegistry retryRegistry;
 
-  public void getLiveSystems(String resourceGroup) {
+  public CurrentLiveSystemsResponse getLiveSystems(String resourceGroup) throws InstantiatorException {
     log.info("Starting operation [getLiveSystems] for resource group [{}]", resourceGroup);
 
     HttpRequest request = HttpRequest.newBuilder()
         .uri(getProvidersUri(resourceGroup))
         .header(X_CLIENT_ID_HEADER, sdkConfiguration.getClientId())
         .header(X_CLIENT_SECRET_HEADER, sdkConfiguration.getClientSecret())
+        .header("Content-Type", "application/json")
         .GET()
         .build();
 
@@ -36,11 +41,22 @@ public class ProviderService {
     try {
       response = client.send(request, HttpResponse.BodyHandlers.ofString());
     } catch (IOException | InterruptedException e) {
-      log.error("Error", e);
+      throw new InstantiatorException(
+          String.format("Attempted retrieval of LiveSystems from Providers for resource group [%s] failed with generic exception.", resourceGroup),
+          e);
+    }
+
+    String bodyContents = response.body();
+    try {
+      return deserialize(bodyContents, CurrentLiveSystemsResponse.class);
+    } catch (JsonProcessingException e) {
+      throw new InstantiatorException(
+          String.format("Attempted retrieval of LiveSystems from Providers for resource group [%s] failed. Deserialization of %s failed.", resourceGroup, bodyContents),
+          e);
     }
   }
 
   private URI getProvidersUri(String resourceGroup) {
-    return URI.create("");
+    return URI.create(String.format("%s/%s/liveSystems", sdkConfiguration.getProviderEndpoint(), resourceGroup));
   }
 }
