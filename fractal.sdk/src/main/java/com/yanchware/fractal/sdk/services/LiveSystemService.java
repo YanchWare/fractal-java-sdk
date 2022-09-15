@@ -32,7 +32,7 @@ public class LiveSystemService {
     private final RetryRegistry retryRegistry;
 
     public void instantiate(InstantiateLiveSystemCommandRequest command) throws InstantiatorException {
-        log.debug("Starting to instantiate live system: {}", command);
+        log.info("Starting to instantiate live system: {}", command);
 
         if (retrieveLiveSystem(command.getLiveSystemId()) != null) {
             updateLiveSystem(UpdateLiveSystemCommandRequest.fromInstantiateCommand(command));
