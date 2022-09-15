@@ -32,7 +32,7 @@ public class ProviderService {
         .GET()
         .build();
 
-    executeRequestWithRetries(
+    CurrentLiveSystemsResponse liveSystemsResponse = executeRequestWithRetries(
         "getLiveSystems",
         client,
         request,

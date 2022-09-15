@@ -2,8 +2,8 @@ package com.yanchware.fractal.sdk.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
+import com.yanchware.fractal.sdk.domain.exceptions.ProviderException;
 import com.yanchware.fractal.sdk.services.contracts.providers.responses.CurrentLiveSystemsResponse;
-import io.github.resilience4j.core.IntervalFunction;
 import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryConfig;
 import io.github.resilience4j.retry.RetryRegistry;
@@ -118,9 +118,11 @@ public class ResiliencyUtils {
       Class<T> classRef,
       String liveSystemId) throws InstantiatorException {
 
+    //12 attempts each at 10 minutes = 2 hours
     RetryConfig retryConfig = RetryConfig.custom()
-        .waitDuration(Duration.ofHours(2L))
-        .intervalFunction(IntervalFunction.of(Duration.ofMinutes(10L)))
+        .ignoreExceptions(ProviderException.class)
+        .maxAttempts(12)
+        .waitDuration(Duration.ofMinutes(10L))
         .build();
 
     Retry retry = RetryRegistry.of(retryConfig).retry(requestName);
@@ -174,11 +176,11 @@ public class ResiliencyUtils {
         return deserialized;
       } else if (liveSystem.getComponents().stream().allMatch(x -> x.getStatus().equals(Failed))) {
         log.debug("All components are Failed");
-        return deserialized;
+        throw new ProviderException("All components are Failed");
       }
 
       String errorMessage = String.format(
-          "Attempted %s failed because component is not Active or Failed. Full LiveSystem: %s ",
+          "Attempted %s failed because components are not Active or Failed. Full LiveSystem: %s ",
           requestName,
           response.body());
       log.error(errorMessage);
