@@ -22,7 +22,7 @@ public class ProviderService {
   private final SdkConfiguration sdkConfiguration;
 
   public void checkLiveSystem(String liveSystemId, String resourceGroup) throws InstantiatorException {
-    log.info("Starting operation [checkLiveSystem] for resource group [{}] abd LiveSystem id [{}]", resourceGroup, liveSystemId);
+    log.info("Starting operation [checkLiveSystem] for resource group [{}] and LiveSystem id [{}]", resourceGroup, liveSystemId);
 
     HttpRequest request = HttpRequest.newBuilder()
         .uri(getProvidersUri(resourceGroup))

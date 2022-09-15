@@ -96,6 +96,9 @@ public class Automaton {
 
             blueprintService.createOrUpdateBlueprint(blueprintCommand, ls.getFractalId());
             liveSystemService.instantiate(liveSystemCommand);
+        }
+
+        for (LiveSystem ls : liveSystems) {
             providerService.checkLiveSystem(ls.getLiveSystemId(), ls.getResourceGroupId());
         }
     }

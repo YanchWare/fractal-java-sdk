@@ -174,9 +174,9 @@ public class ResiliencyUtils {
       if (liveSystem.getComponents().stream().allMatch(x -> x.getStatus().equals(Active))) {
         log.debug("All components are Active");
         return deserialized;
-      } else if (liveSystem.getComponents().stream().allMatch(x -> x.getStatus().equals(Failed))) {
-        log.debug("All components are Failed");
-        throw new ProviderException("All components are Failed");
+      } else if (liveSystem.getComponents().stream().anyMatch(x -> x.getStatus().equals(Failed))) {
+        log.debug("At least one component has status Failed");
+        throw new ProviderException("At least one component has status Failed");
       }
 
       String errorMessage = String.format(
