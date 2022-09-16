@@ -6,6 +6,7 @@ import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands.InstantiateLiveSystemCommandRequest;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands.UpdateLiveSystemCommandRequest;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemDto;
+import com.yanchware.fractal.sdk.utils.HttpUtils;
 import io.github.resilience4j.retry.RetryRegistry;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,16 +43,12 @@ public class LiveSystemService {
     }
 
     private LiveSystemDto retrieveLiveSystem(String liveSystemId) throws InstantiatorException {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(getLiveSystemUri(liveSystemId))
-                .header(X_CLIENT_ID_HEADER, sdkConfiguration.getClientId())
-                .header(X_CLIENT_SECRET_HEADER, sdkConfiguration.getClientSecret())
-                .GET()
-                .build();
-
         HttpResponse<String> response;
         try {
-            response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            response = client.send(
+                HttpUtils.buildGetRequest(getLiveSystemUri(liveSystemId), sdkConfiguration),
+                HttpResponse.BodyHandlers.ofString()
+            );
         } catch (IOException | InterruptedException e) {
             throw new InstantiatorException("Attempted Retrieve LiveSystem failed", e);
         }
@@ -84,13 +81,8 @@ public class LiveSystemService {
         try {
             String serializedCommand = serialize(command);
             log.debug("Update LiveSystem message: {}", serializedCommand);
-            request = HttpRequest.newBuilder()
-                    .uri(getLiveSystemUri(command.getLiveSystemId()))
-                    .header(X_CLIENT_ID_HEADER, sdkConfiguration.getClientId())
-                    .header(X_CLIENT_SECRET_HEADER, sdkConfiguration.getClientSecret())
-                    .header("Content-Type", "application/json")
-                    .PUT(ofString(serializedCommand))
-                    .build();
+            request = HttpUtils.buildPutRequest(
+                getLiveSystemUri(command.getLiveSystemId()), sdkConfiguration, serializedCommand);
         } catch (JsonProcessingException e) {
             throw new InstantiatorException("Error processing UpdateLiveSystemCommandRequest because of JsonProcessing", e);
         }
@@ -116,13 +108,7 @@ public class LiveSystemService {
         try {
             String serializedCommand = serialize(command);
             log.debug("Instantiate LiveSystem message: {}", serializedCommand);
-            request = HttpRequest.newBuilder()
-                    .uri(getLiveSystemUri())
-                    .header(X_CLIENT_ID_HEADER, sdkConfiguration.getClientId())
-                    .header(X_CLIENT_SECRET_HEADER, sdkConfiguration.getClientSecret())
-                    .header("Content-Type", "application/json")
-                    .POST(ofString(serializedCommand))
-                    .build();
+            request = HttpUtils.buildPostRequest(getLiveSystemUri(), sdkConfiguration, serializedCommand);
         } catch (JsonProcessingException e) {
             throw new InstantiatorException("Error processing InstantiateLiveSystemCommandRequest because of JsonProcessing", e);
         }

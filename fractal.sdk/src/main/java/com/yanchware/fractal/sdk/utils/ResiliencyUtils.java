@@ -3,6 +3,7 @@ package com.yanchware.fractal.sdk.utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.domain.exceptions.ProviderException;
+import com.yanchware.fractal.sdk.services.contracts.providers.dtos.ProviderLiveSystemComponentDto;
 import com.yanchware.fractal.sdk.services.contracts.providers.responses.CurrentLiveSystemsResponse;
 import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryConfig;
@@ -15,11 +16,13 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
-import java.util.Arrays;
+import java.util.ArrayList;
 
 import static com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemComponentStatusDto.Active;
 import static com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemComponentStatusDto.Failed;
+import static com.yanchware.fractal.sdk.utils.HttpUtils.*;
 import static com.yanchware.fractal.sdk.utils.SerializationUtils.deserialize;
+import static com.yanchware.fractal.sdk.utils.SerializationUtils.serialize;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Slf4j
@@ -36,14 +39,7 @@ public class ResiliencyUtils {
 
     CheckedFunction0<Throwable> callWithRetry = Retry.decorateCheckedSupplier(retry, () -> {
       HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-      if (Arrays.stream(acceptedResponses).noneMatch((x) -> x == response.statusCode())) {
-        throw new InstantiatorException(
-            String.format(
-                "Attempted %s failed with response code: %s and body %s ",
-                requestName,
-                response.statusCode(),
-                response.body()));
-      }
+      ensureAcceptableResponse(response, requestName, acceptedResponses);
 
       return null;
     });
@@ -69,15 +65,7 @@ public class ResiliencyUtils {
 
     CheckedFunction0<T> callWithRetry = Retry.decorateCheckedSupplier(retry, () -> {
       HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-      if (Arrays.stream(acceptedResponses).noneMatch((x) -> x == response.statusCode())) {
-        String errorMessage = String.format(
-            "Attempted %s failed with response code: %s and body %s ",
-            requestName,
-            response.statusCode(),
-            response.body());
-        log.error(errorMessage);
-        throw new InstantiatorException(errorMessage);
-      }
+      ensureAcceptableResponse(response, requestName, acceptedResponses);
 
       if (response.statusCode() == 404) {
         log.info("Attempted {} has come up with a 404 Not Found. Will attempt to create it.", requestName);
@@ -116,28 +104,20 @@ public class ResiliencyUtils {
       HttpRequest request,
       int[] acceptedResponses,
       Class<T> classRef,
-      String liveSystemId) throws InstantiatorException {
+      String liveSystemId,
+      int timeoutMinutes) throws InstantiatorException {
 
-    //12 attempts each at 10 minutes = 2 hours
-    RetryConfig retryConfig = RetryConfig.custom()
+    var retryConfig = RetryConfig.custom()
         .ignoreExceptions(ProviderException.class)
-        .maxAttempts(12)
-        .waitDuration(Duration.ofMinutes(10L))
+        .maxAttempts(timeoutMinutes)
+        .waitDuration(Duration.ofMinutes(1L))
         .build();
 
-    Retry retry = RetryRegistry.of(retryConfig).retry(requestName);
+    var retry = RetryRegistry.of(retryConfig).retry(requestName);
 
-    CheckedFunction0<T> callWithRetry = Retry.decorateCheckedSupplier(retry, () -> {
+    var callWithRetry = Retry.decorateCheckedSupplier(retry, () -> {
       HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-      if (Arrays.stream(acceptedResponses).noneMatch((x) -> x == response.statusCode())) {
-        String errorMessage = String.format(
-            "Attempted %s failed with response code: %s and body %s ",
-            requestName,
-            response.statusCode(),
-            response.body());
-        log.error(errorMessage);
-        throw new InstantiatorException(errorMessage);
-      }
+      ensureAcceptableResponse(response, requestName, acceptedResponses);
 
       if (response.statusCode() == 404) {
         log.info("Attempted {} has come up with a 404 Not Found. Will attempt to create it.", requestName);
@@ -163,7 +143,8 @@ public class ResiliencyUtils {
         return null;
       }
 
-      var optionalProviderLiveSystemDto = liveSystemsResponse.getLiveSystems().stream().filter(x -> x.getId().equalsIgnoreCase(liveSystemId)).findFirst();
+      var optionalProviderLiveSystemDto = liveSystemsResponse.getLiveSystems().stream()
+          .filter(x -> x.getId().equalsIgnoreCase(liveSystemId)).findFirst();
       if (optionalProviderLiveSystemDto.isEmpty()) {
         log.info("Could not find live system with id [{}]", liveSystemId);
         return null;
@@ -171,16 +152,29 @@ public class ResiliencyUtils {
 
       var liveSystem = optionalProviderLiveSystemDto.get();
 
-      if (liveSystem.getComponents().stream().allMatch(x -> x.getStatus().equals(Active))) {
+      // Retrieve the components' statuses:
+      var activeComponents = new ArrayList<ProviderLiveSystemComponentDto>();
+      var failedComponents = new ArrayList<ProviderLiveSystemComponentDto>();
+      for (var component: liveSystem.getComponents()) {
+        if(component.getStatus() == Active) {
+          activeComponents.add(component);
+        }
+        if(component.getStatus() == Failed) {
+          failedComponents.add(component);
+        }
+      }
+
+      if(activeComponents.size() == liveSystem.getComponents().size()) {
         log.debug("All components are Active");
         return deserialized;
-      } else if (liveSystem.getComponents().stream().anyMatch(x -> x.getStatus().equals(Failed))) {
-        log.debug("At least one component has status Failed");
-        throw new ProviderException("At least one component has status Failed");
+      }
+      else if (failedComponents.size() > 0) {
+        log.error("Failed components: {}", serialize(failedComponents));
+        throw new ProviderException(failedComponents, "At least one component has status Failed");
       }
 
       String errorMessage = String.format(
-          "Attempted %s failed because components are not Active or Failed. Full LiveSystem: %s ",
+          "The instantiation is still in progress. Response is: %s",
           requestName,
           response.body());
       log.error(errorMessage);

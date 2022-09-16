@@ -6,6 +6,9 @@ import lombok.SneakyThrows;
 import java.net.URI;
 
 public class LocalSdkConfiguration implements SdkConfiguration {
+
+  private final String FRACTAL_ENDPOINT = "https://api.local.fractal.cloud:8443"
+
   @Override
   public String getClientId() {
     return "test-client-id";
@@ -19,18 +22,18 @@ public class LocalSdkConfiguration implements SdkConfiguration {
   @SneakyThrows
   @Override
   public URI getBlueprintEndpoint() {
-    return new URI("https://api.local.fractal.cloud:8443/blueprints");
+    return new URI(FRACTAL_ENDPOINT + "/blueprints");
   }
 
   @SneakyThrows
   @Override
   public URI getLiveSystemEndpoint() {
-    return new URI("https://api.local.fractal.cloud:8443/livesystems");
+    return new URI(FRACTAL_ENDPOINT + "/livesystems");
   }
 
   @SneakyThrows
   @Override
   public URI getProviderEndpoint() {
-    return new URI("https://api.local.fractal.cloud:8443/providers");
+    return new URI(FRACTAL_ENDPOINT + "/providers");
   }
 }

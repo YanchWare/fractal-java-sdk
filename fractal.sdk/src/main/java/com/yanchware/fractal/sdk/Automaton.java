@@ -32,13 +32,14 @@ public class Automaton {
 
     private static HttpClient httpClient;
     private static SdkConfiguration sdkConfiguration;
+    private static final int DEFAULT_LIVE_SYSTEM_INSTANTIATION_TIMEOUT_MINUTES = 120;
 
     private Automaton(HttpClient httpClient, SdkConfiguration sdkConfiguration) {
         Automaton.httpClient = httpClient;
         Automaton.sdkConfiguration = sdkConfiguration;
     }
 
-    //used for unit testing
+    // Used for unit testing:
     protected static void initializeAutomaton(HttpClient httpClient, SdkConfiguration sdkConfiguration) {
         instance = new Automaton(httpClient, sdkConfiguration);
     }
@@ -55,6 +56,16 @@ public class Automaton {
         instance = new Automaton(builder.build(), sdkConfiguration);
     }
 
+    private static void waitForInstantiation(List<LiveSystem> liveSystems, int timeOutMinutes)
+        throws InstantiatorException {
+
+        ProviderService providerService = new ProviderService(httpClient, sdkConfiguration);
+
+        for (LiveSystem ls : liveSystems) {
+            providerService.checkLiveSystemStatus(ls.getResourceGroupId(), ls.getLiveSystemId(), timeOutMinutes);
+        }
+    }
+
     public static void instantiate(List<LiveSystem> liveSystems) throws InstantiatorException {
         if (instance == null) {
             EnvVarSdkConfiguration configuration;
@@ -66,12 +77,12 @@ public class Automaton {
             }
 
             var builder = HttpClient
-              .newBuilder()
-              .version(HttpClient.Version.HTTP_2);
+                .newBuilder()
+                .version(HttpClient.Version.HTTP_2);
 
             if (isRunningAgainstTestEnvironment(configuration)) {
                 builder
-                  .sslContext(getTestSSLContext());
+                    .sslContext(getTestSSLContext());
             }
 
             instance = new Automaton(builder.build(), configuration);
@@ -79,15 +90,14 @@ public class Automaton {
 
         // Improve resiliency
         RetryConfig retryConfig = RetryConfig.custom()
-          .maxAttempts(5)
-          .intervalFunction(IntervalFunction.ofExponentialBackoff())
-          .build();
+            .maxAttempts(5)
+            .intervalFunction(IntervalFunction.ofExponentialBackoff())
+            .build();
 
         RetryRegistry registry = RetryRegistry.of(retryConfig);
 
         BlueprintService blueprintService = new BlueprintService(httpClient, sdkConfiguration, registry);
         LiveSystemService liveSystemService = new LiveSystemService(httpClient, sdkConfiguration, registry);
-        ProviderService providerService = new ProviderService(httpClient, sdkConfiguration);
 
         for (LiveSystem ls : liveSystems) {
             log.info("Starting to instantiate live system with id: {}", ls.getLiveSystemId());
@@ -97,9 +107,20 @@ public class Automaton {
             blueprintService.createOrUpdateBlueprint(blueprintCommand, ls.getFractalId());
             liveSystemService.instantiate(liveSystemCommand);
         }
+    }
 
-        for (LiveSystem ls : liveSystems) {
-            providerService.checkLiveSystem(ls.getLiveSystemId(), ls.getResourceGroupId());
+    public static void instantiate(List<LiveSystem> liveSystems, boolean waitForInstantiation)
+        throws InstantiatorException {
+
+        instantiate(liveSystems, waitForInstantiation, DEFAULT_LIVE_SYSTEM_INSTANTIATION_TIMEOUT_MINUTES);
+    }
+
+    public static void instantiate(List<LiveSystem> liveSystems, boolean waitForInstantiation, int waitTimeOutMinutes)
+        throws InstantiatorException {
+
+        instantiate(liveSystems);
+        if (waitForInstantiation) {
+            waitForInstantiation(liveSystems, waitTimeOutMinutes);
         }
     }
 
