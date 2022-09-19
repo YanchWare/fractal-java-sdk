@@ -5,5 +5,6 @@ public enum LiveSystemComponentStatusDto {
     Active,
     Failed,
     Mutating,
-    Deleting
+    Deleting,
+    Deleted
 }
