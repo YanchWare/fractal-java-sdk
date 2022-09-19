@@ -1,5 +1,6 @@
 package com.yanchware.fractal.sdk.services;
 
+import com.yanchware.fractal.sdk.aggregates.LiveSystem;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.configuration.instantiation.InstantiationWaitConfiguration;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
@@ -19,28 +20,29 @@ public class ProviderService {
   private final HttpClient client;
   private final SdkConfiguration sdkConfiguration;
 
-  public void checkLiveSystemStatus(String resourceGroup,
-                                    String liveSystemId,
+  public void checkLiveSystemStatus(LiveSystem liveSystem,
                                     LiveSystemService liveSystemService,
                                     InstantiationWaitConfiguration config)
       throws InstantiatorException {
-    log.info("Starting operation [checkLiveSystem] for resource group [{}] and LiveSystem id [{}]",
-        resourceGroup,
-        liveSystemId);
+    log.info("Starting operation [checkLiveSystem] for livesystem [{}]", liveSystem.getLiveSystemId());
 
     CurrentLiveSystemsResponse liveSystemsResponse = executeRequestWithRetries(
         "checkLiveSystem",
         client,
-        HttpUtils.buildGetRequest(getProvidersUri(resourceGroup), sdkConfiguration),
+        HttpUtils.buildGetRequest(
+            getProvidersUri(liveSystem.getResourceGroupId(), sdkConfiguration.getProviderName()),
+            sdkConfiguration
+        ),
         new int[]{200, 404},
         CurrentLiveSystemsResponse.class,
-        liveSystemId,
+        liveSystem.getLiveSystemId(),
         liveSystemService,
         config);
   }
 
-  private URI getProvidersUri(String resourceGroup) {
-    return URI.create(String.format("%s/%s/livesystems", sdkConfiguration.getProviderEndpoint(), resourceGroup));
+  private URI getProvidersUri(String resourceGroupId, String providerName) {
+    return URI.create(String.format("%s/%s/%s/livesystems",
+        sdkConfiguration.getProviderEndpoint(), resourceGroupId, providerName));
   }
 
 }

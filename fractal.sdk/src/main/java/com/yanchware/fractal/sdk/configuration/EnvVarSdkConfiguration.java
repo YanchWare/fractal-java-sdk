@@ -32,6 +32,9 @@ public class EnvVarSdkConfiguration implements SdkConfiguration {
     }
 
     @Override
+    public String getProviderName() { return System.getenv(PROVIDER_NAME_KEY);  }
+
+    @Override
     public URI getBlueprintEndpoint() {
         return checkAndReturnUri(BLUEPRINT_ENDPOINT_KEY, DEFAULT_BLUEPRINT_ENDPOINT);
     }
