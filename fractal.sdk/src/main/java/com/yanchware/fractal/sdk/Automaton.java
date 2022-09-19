@@ -115,7 +115,8 @@ public class Automaton {
 
         instantiate(liveSystems);
 
-        if(config != null && config.waitConfiguration != null && config.getWaitConfiguration().waitForInstantiation) {
+        if(config != null && config.waitConfiguration != null && config.getWaitConfiguration().waitForInstantiation)
+        {
             waitForInstantiation(liveSystems, config.getWaitConfiguration());
         }
     }
