@@ -97,12 +97,12 @@ public class Automaton {
             instance = new Automaton(builder.build(), configuration);
         }
 
-        for (LiveSystem ls : liveSystems) {
-            log.info("Starting to instantiate live system with id: {}", ls.getLiveSystemId());
-            var blueprintCommand = CreateBlueprintCommandRequest.fromLiveSystem(ls.getComponents(), ls.getFractalId());
-            var liveSystemCommand = InstantiateLiveSystemCommandRequest.fromLiveSystem(ls);
+        for (LiveSystem liveSystem : liveSystems) {
+            log.info("Starting to instantiate live system with id: {}", liveSystem.getLiveSystemId());
+            var blueprintCommand = CreateBlueprintCommandRequest.fromLiveSystem(liveSystem.getComponents(), liveSystem.getFractalId());
+            var liveSystemCommand = InstantiateLiveSystemCommandRequest.fromLiveSystem(liveSystem);
 
-            blueprintService.createOrUpdateBlueprint(blueprintCommand, ls.getFractalId());
+            blueprintService.createOrUpdateBlueprint(blueprintCommand, liveSystem.getFractalId());
             liveSystemService.instantiate(liveSystemCommand);
         }
     }
