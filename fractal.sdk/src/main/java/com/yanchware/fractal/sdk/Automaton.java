@@ -71,10 +71,7 @@ public class Automaton {
         throws InstantiatorException {
 
         for (LiveSystem ls : liveSystems) {
-            providerService.checkLiveSystemStatus(ls.getResourceGroupId(),
-                ls.getLiveSystemId(),
-                liveSystemService,
-                config);
+            providerService.checkLiveSystemStatus(ls, liveSystemService, config);
         }
     }
 

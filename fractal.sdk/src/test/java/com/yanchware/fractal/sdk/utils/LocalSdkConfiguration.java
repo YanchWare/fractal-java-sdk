@@ -20,6 +20,11 @@ public class LocalSdkConfiguration implements SdkConfiguration {
     return "test-client-secret";
   }
 
+  @Override
+  public String getProviderName() {
+    return "test-client-id";
+  }
+
   @SneakyThrows
   @Override
   public URI getBlueprintEndpoint() {
