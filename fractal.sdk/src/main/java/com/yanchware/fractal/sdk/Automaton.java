@@ -70,8 +70,8 @@ public class Automaton {
     private static void waitForInstantiation(List<LiveSystem> liveSystems, InstantiationWaitConfiguration config)
         throws InstantiatorException {
 
-        for (LiveSystem ls : liveSystems) {
-            providerService.checkLiveSystemStatus(ls, liveSystemService, config);
+        for (LiveSystem liveSystem : liveSystems) {
+            providerService.checkLiveSystemStatus(liveSystem, liveSystemService, config);
         }
     }
 
