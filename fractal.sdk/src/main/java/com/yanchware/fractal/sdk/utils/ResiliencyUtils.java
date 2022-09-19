@@ -113,7 +113,7 @@ public class ResiliencyUtils {
 
     var retryConfig = RetryConfig.custom()
         .ignoreExceptions(ProviderException.class)
-        .maxAttempts(waitConfig.getTimeoutMinutes())
+        .maxAttempts(waitConfig.getTimeoutMinutes() + 1)
         .waitDuration(Duration.ofMinutes(1L))
         .build();
 
