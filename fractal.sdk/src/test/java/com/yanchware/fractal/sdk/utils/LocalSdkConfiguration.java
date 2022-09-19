@@ -7,7 +7,7 @@ import java.net.URI;
 
 public class LocalSdkConfiguration implements SdkConfiguration {
 
-  private final String FRACTAL_ENDPOINT = "https://api.local.fractal.cloud:8443"
+  private final String FRACTAL_ENDPOINT = "https://api.local.fractal.cloud:8443";
 
   @Override
   public String getClientId() {
@@ -15,7 +15,8 @@ public class LocalSdkConfiguration implements SdkConfiguration {
   }
 
   @Override
-  public String getClientSecret() {
+  public String getClientSecret()
+  {
     return "test-client-secret";
   }
 

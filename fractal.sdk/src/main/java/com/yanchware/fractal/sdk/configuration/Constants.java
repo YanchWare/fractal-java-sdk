@@ -32,4 +32,6 @@ public class Constants {
     public static final String LINKS_KEY = "links";
 
     public static final String TEST_ENVIRONMENT = "api.local.fractal.cloud";
+
+    public static final int DEFAULT_LIVE_SYSTEM_INSTANTIATION_WAIT_TIMEOUT_MINUTES = 120;
 }

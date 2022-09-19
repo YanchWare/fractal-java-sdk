@@ -42,7 +42,7 @@ public class LiveSystemService {
         instantiateLiveSystem(command);
     }
 
-    private LiveSystemDto retrieveLiveSystem(String liveSystemId) throws InstantiatorException {
+    public LiveSystemDto retrieveLiveSystem(String liveSystemId) throws InstantiatorException {
         HttpResponse<String> response;
         try {
             response = client.send(
