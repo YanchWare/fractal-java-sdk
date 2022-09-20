@@ -133,27 +133,28 @@ public class ResiliencyUtils {
         log.error("Attempted {} has come up with empty or null body contents: {}", requestName, bodyContents);
         return null;
       }
-      T deserialized;
-      try {
-        deserialized = deserialize(bodyContents, classRef);
-      } catch (JsonProcessingException e) {
-        log.error("Attempted {} failed. Deserialization of {} failed.", requestName, bodyContents);
-        return null;
-      }
 
       var currentLiveSystem = liveSystemService.retrieveLiveSystem(liveSystemId);
       if (currentLiveSystem == null) {
-        String message = String.format("LiveSystem [%s] found", liveSystemId);
+        String message = String.format("LiveSystem [%s] not found", liveSystemId);
         log.info(message);
         throw new ProviderException(message);
       }
 
+      T deserialized;
+      try {
+        deserialized = deserialize(bodyContents, classRef);
+      } catch (JsonProcessingException e) {
+        String message = String.format("Attempted %s failed. Deserialization of %s failed.", requestName, bodyContents);
+        log.error(message);
+        throw new ProviderException(message);
+      }
       CurrentLiveSystemsResponse liveSystemsResponse = (CurrentLiveSystemsResponse) deserialized;
       if (liveSystemsResponse == null || CollectionUtils.isBlank(liveSystemsResponse.getLiveSystems())) {
         String message = String.format("The live-system [%s] exists, but the livesystem providers collection is still empty",
             liveSystemId);
         log.info(message);
-        throw new ProviderException(message);
+        throw new InstantiatorException(message);
       }
 
       var optionalProviderLiveSystemDto = liveSystemsResponse.getLiveSystems().stream()
@@ -162,7 +163,7 @@ public class ResiliencyUtils {
         String message = String.format("The live-system [%s] exists, but the provider for livesystem [%s] ts still empty",
             liveSystemId);
         log.info(message);
-        return null;
+        throw new InstantiatorException(message);
       }
 
       var liveSystem = optionalProviderLiveSystemDto.get();
