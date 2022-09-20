@@ -19,6 +19,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import static com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemComponentStatusDto.Active;
@@ -109,11 +110,15 @@ public class ResiliencyUtils {
       Class<T> classRef,
       String liveSystemId,
       LiveSystemService liveSystemService,
-      InstantiationWaitConfiguration waitConfig) throws InstantiatorException {
+      InstantiationWaitConfiguration waitConfig) throws InstantiatorException, InterruptedException {
+
+    // We should wait for the instantiation to be propagated to the live-providers,
+    // otherwise a live-system with all components in Active status will always appear as completed.
+    TimeUnit.MINUTES.sleep(1);
 
     var retryConfig = RetryConfig.custom()
         .ignoreExceptions(ProviderException.class)
-        .maxAttempts(waitConfig.getTimeoutMinutes() + 1)
+        .maxAttempts(waitConfig.getTimeoutMinutes())
         .waitDuration(Duration.ofMinutes(1L))
         .build();
 
