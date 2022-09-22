@@ -1,7 +1,6 @@
 package com.yanchware.fractal.sdk.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.yanchware.fractal.sdk.aggregates.LiveSystem;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands.InstantiateLiveSystemCommandRequest;
@@ -19,12 +18,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-import static com.yanchware.fractal.sdk.configuration.Constants.X_CLIENT_ID_HEADER;
-import static com.yanchware.fractal.sdk.configuration.Constants.X_CLIENT_SECRET_HEADER;
 import static com.yanchware.fractal.sdk.utils.ResiliencyUtils.executeRequestWithRetries;
 import static com.yanchware.fractal.sdk.utils.SerializationUtils.deserialize;
 import static com.yanchware.fractal.sdk.utils.SerializationUtils.serialize;
-import static java.net.http.HttpRequest.BodyPublishers.ofString;
 
 @Slf4j
 @AllArgsConstructor
