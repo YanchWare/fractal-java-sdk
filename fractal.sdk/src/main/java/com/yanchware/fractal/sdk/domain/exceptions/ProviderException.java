@@ -1,6 +1,6 @@
 package com.yanchware.fractal.sdk.domain.exceptions;
 
-import com.yanchware.fractal.sdk.services.contracts.providers.dtos.ProviderLiveSystemComponentDto;
+import com.yanchware.fractal.sdk.services.contracts.providerscontract.dtos.ProviderLiveSystemComponentDto;
 
 import java.io.Serial;
 import java.util.ArrayList;

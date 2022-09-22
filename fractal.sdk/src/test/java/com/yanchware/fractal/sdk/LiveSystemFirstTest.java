@@ -1,6 +1,8 @@
 package com.yanchware.fractal.sdk;
 
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
+import com.yanchware.fractal.sdk.configuration.instantiation.InstantiationConfiguration;
+import com.yanchware.fractal.sdk.configuration.instantiation.InstantiationWaitConfiguration;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,6 +34,23 @@ public class LiveSystemFirstTest {
     @SetEnvironmentVariable(key = "CLIENT_SECRET", value = "xxx")
     public void liveSystemInstantiated_when_AutomatonCalledWithValidLiveSystemInformation() throws InstantiatorException {
         Automaton.instantiate(List.of(getLiveSystemExample()));
+    }
+
+    @Test
+    @Disabled
+    @SetEnvironmentVariable(key = "CLIENT_ID", value = "xxx")
+    @SetEnvironmentVariable(key = "CLIENT_SECRET", value = "xxx")
+    public void liveSystemInstantiatedAdWaitedFor_when_AutomatonCalledWithValidLiveSystemInformation() throws InstantiatorException {
+        Automaton.instantiate(List.of(getLiveSystemExample()),
+            new InstantiationConfiguration(){{
+                setWaitConfiguration(new InstantiationWaitConfiguration(){{
+                    setWaitForInstantiation(true);
+                    setFailFast(true);
+                    setTimeoutMinutes(10);
+                }});
+            }}
+            );
+
     }
 
 }

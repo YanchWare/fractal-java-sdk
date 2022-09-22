@@ -1,6 +1,6 @@
-package com.yanchware.fractal.sdk.services.contracts.providers.responses;
+package com.yanchware.fractal.sdk.services.contracts.providerscontract.responses;
 
-import com.yanchware.fractal.sdk.services.contracts.providers.dtos.ProviderLiveSystemDto;
+import com.yanchware.fractal.sdk.services.contracts.providerscontract.dtos.ProviderLiveSystemDto;
 import lombok.*;
 
 import java.util.List;
