@@ -36,21 +36,4 @@ public class LiveSystemFirstTest {
         Automaton.instantiate(List.of(getLiveSystemExample()));
     }
 
-    @Test
-    @Disabled
-    @SetEnvironmentVariable(key = "CLIENT_ID", value = "xxx")
-    @SetEnvironmentVariable(key = "CLIENT_SECRET", value = "xxx")
-    public void liveSystemInstantiatedAdWaitedFor_when_AutomatonCalledWithValidLiveSystemInformation() throws InstantiatorException {
-        Automaton.instantiate(List.of(getLiveSystemExample()),
-            new InstantiationConfiguration(){{
-                setWaitConfiguration(new InstantiationWaitConfiguration(){{
-                    setWaitForInstantiation(true);
-                    setFailFast(true);
-                    setTimeoutMinutes(10);
-                }});
-            }}
-            );
-
-    }
-
 }
