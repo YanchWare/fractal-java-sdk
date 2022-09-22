@@ -6,6 +6,7 @@ import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands.InstantiateLiveSystemCommandRequest;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands.UpdateLiveSystemCommandRequest;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemDto;
+import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemMutationDto;
 import com.yanchware.fractal.sdk.utils.HttpUtils;
 import io.github.resilience4j.retry.RetryRegistry;
 import lombok.AllArgsConstructor;
@@ -17,12 +18,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-import static com.yanchware.fractal.sdk.configuration.Constants.X_CLIENT_ID_HEADER;
-import static com.yanchware.fractal.sdk.configuration.Constants.X_CLIENT_SECRET_HEADER;
 import static com.yanchware.fractal.sdk.utils.ResiliencyUtils.executeRequestWithRetries;
 import static com.yanchware.fractal.sdk.utils.SerializationUtils.deserialize;
 import static com.yanchware.fractal.sdk.utils.SerializationUtils.serialize;
-import static java.net.http.HttpRequest.BodyPublishers.ofString;
 
 @Slf4j
 @AllArgsConstructor
@@ -32,14 +30,13 @@ public class LiveSystemService {
     private final SdkConfiguration sdkConfiguration;
     private final RetryRegistry retryRegistry;
 
-    public void instantiate(InstantiateLiveSystemCommandRequest command) throws InstantiatorException {
+    public LiveSystemMutationDto instantiate(InstantiateLiveSystemCommandRequest command) throws InstantiatorException {
         log.info("Starting to instantiate live system: {}", command);
 
         if (retrieveLiveSystem(command.getLiveSystemId()) != null) {
-            updateLiveSystem(UpdateLiveSystemCommandRequest.fromInstantiateCommand(command));
-            return;
+            return updateLiveSystem(UpdateLiveSystemCommandRequest.fromInstantiateCommand(command));
         }
-        instantiateLiveSystem(command);
+        return instantiateLiveSystem(command);
     }
 
     public LiveSystemDto retrieveLiveSystem(String liveSystemId) throws InstantiatorException {
@@ -76,7 +73,7 @@ public class LiveSystemService {
         }
     }
 
-    private void updateLiveSystem(UpdateLiveSystemCommandRequest command) throws InstantiatorException {
+    private LiveSystemMutationDto updateLiveSystem(UpdateLiveSystemCommandRequest command) throws InstantiatorException {
         HttpRequest request;
         try {
             String serializedCommand = serialize(command);
@@ -101,9 +98,18 @@ public class LiveSystemService {
                             response.statusCode(),
                             response.body()));
         }
+
+        try {
+            var mutation = deserialize(response.body(), LiveSystemMutationDto.class);
+            return mutation;
+        }
+        catch (Exception e) {
+            throw new InstantiatorException("Could not deserialize the mutation on LiveSystem update", e);
+        }
+
     }
 
-    private void instantiateLiveSystem(InstantiateLiveSystemCommandRequest command) throws InstantiatorException {
+    private LiveSystemMutationDto instantiateLiveSystem(InstantiateLiveSystemCommandRequest command) throws InstantiatorException {
         HttpRequest request;
         try {
             String serializedCommand = serialize(command);
@@ -113,7 +119,13 @@ public class LiveSystemService {
             throw new InstantiatorException("Error processing InstantiateLiveSystemCommandRequest because of JsonProcessing", e);
         }
 
-        executeRequestWithRetries("instantiate", client, retryRegistry, request, new int[]{200});
+        return executeRequestWithRetries(
+            "instantiate",
+            client,
+            retryRegistry,
+            request,
+            new int[]{200},
+            LiveSystemMutationDto.class);
     }
 
     private URI getLiveSystemUri(String liveSystemId) {

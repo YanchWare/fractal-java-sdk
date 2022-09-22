@@ -11,10 +11,12 @@ import com.yanchware.fractal.sdk.services.LiveSystemService;
 import com.yanchware.fractal.sdk.services.ProviderService;
 import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.commands.CreateBlueprintCommandRequest;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands.InstantiateLiveSystemCommandRequest;
+import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemMutationDto;
 import io.github.resilience4j.core.IntervalFunction;
 import io.github.resilience4j.retry.RetryConfig;
 import io.github.resilience4j.retry.RetryRegistry;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.ImmutablePair;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -24,6 +26,7 @@ import java.net.http.HttpClient;
 import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.yanchware.fractal.sdk.configuration.Constants.TEST_ENVIRONMENT;
@@ -67,12 +70,23 @@ public class Automaton {
             .build());
     }
 
-    private static void waitForInstantiation(List<LiveSystem> liveSystems, InstantiationWaitConfiguration config)
+    private static void waitForMutationInstantiation(
+        LiveSystem liveSystem,
+        LiveSystemMutationDto mutation,
+        InstantiationWaitConfiguration config)
         throws InstantiatorException {
-
-        for (LiveSystem liveSystem : liveSystems) {
-            providerService.checkLiveSystemStatus(liveSystem, liveSystemService, config);
+            providerService.checkLiveSystemMutationStatus(liveSystem, mutation, liveSystemService, config);
         }
+
+    private static LiveSystemMutationDto instantiateLiveSystem(LiveSystem liveSystem, InstantiationConfiguration config)
+        throws InstantiatorException {
+        log.info("Starting to instantiate live system with id: {}", liveSystem.getLiveSystemId());
+        var blueprintCommand = CreateBlueprintCommandRequest.fromLiveSystem(
+            liveSystem.getComponents(), liveSystem.getFractalId());
+        var liveSystemCommand = InstantiateLiveSystemCommandRequest.fromLiveSystem(liveSystem);
+
+        blueprintService.createOrUpdateBlueprint(blueprintCommand, liveSystem.getFractalId());
+        return liveSystemService.instantiate(liveSystemCommand);
     }
 
     public static void instantiate(List<LiveSystem> liveSystems) throws InstantiatorException {
@@ -98,23 +112,26 @@ public class Automaton {
         }
 
         for (LiveSystem liveSystem : liveSystems) {
-            log.info("Starting to instantiate live system with id: {}", liveSystem.getLiveSystemId());
-            var blueprintCommand = CreateBlueprintCommandRequest.fromLiveSystem(liveSystem.getComponents(), liveSystem.getFractalId());
-            var liveSystemCommand = InstantiateLiveSystemCommandRequest.fromLiveSystem(liveSystem);
-
-            blueprintService.createOrUpdateBlueprint(blueprintCommand, liveSystem.getFractalId());
-            liveSystemService.instantiate(liveSystemCommand);
+            instantiateLiveSystem(liveSystem, null);
         }
     }
 
     public static void instantiate(List<LiveSystem> liveSystems, InstantiationConfiguration config)
         throws InstantiatorException {
 
-        instantiate(liveSystems);
+        var liveSystemsMutations = new ArrayList<ImmutablePair<LiveSystem, LiveSystemMutationDto>>();
+        for (LiveSystem liveSystem : liveSystems) {
+            liveSystemsMutations.add(new ImmutablePair<>(liveSystem, instantiateLiveSystem(liveSystem, config)));
+        }
 
         if(config != null && config.waitConfiguration != null && config.getWaitConfiguration().waitForInstantiation)
         {
-            waitForInstantiation(liveSystems, config.getWaitConfiguration());
+            for (var liveSystemMutation : liveSystemsMutations) {
+                waitForMutationInstantiation(
+                    liveSystemMutation.getKey(),
+                    liveSystemMutation.getValue(),
+                    config.getWaitConfiguration());
+            }
         }
     }
 

@@ -1,4 +1,4 @@
-package com.yanchware.fractal.sdk.services.contracts.providers.dtos;
+package com.yanchware.fractal.sdk.services.contracts.providerscontract.dtos;
 
 import com.yanchware.fractal.sdk.services.contracts.ComponentDto;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemComponentStatusDto;
