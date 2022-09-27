@@ -40,10 +40,10 @@ public class Automaton {
     private static RetryRegistry serviceRetryRegistry;
 
     private Automaton(HttpClient httpClient, SdkConfiguration sdkConfiguration) {
-        Automaton.serviceRetryRegistry = getDefaultRetryRegistry();
-        Automaton.blueprintService = new BlueprintService(httpClient, sdkConfiguration, serviceRetryRegistry);
-        Automaton.liveSystemService = new LiveSystemService(httpClient, sdkConfiguration, serviceRetryRegistry);
-        Automaton.providerService = new ProviderService(httpClient, sdkConfiguration);
+        serviceRetryRegistry = getDefaultRetryRegistry();
+        blueprintService = new BlueprintService(httpClient, sdkConfiguration, serviceRetryRegistry);
+        liveSystemService = new LiveSystemService(httpClient, sdkConfiguration, serviceRetryRegistry);
+        providerService = new ProviderService(httpClient, sdkConfiguration);
     }
 
     // Used for unit testing:
