@@ -337,6 +337,18 @@ public class TestUtils {
         .build();
   }
 
+  public static AzureKubernetesServiceBuilder getBasicAks() {
+    return AzureKubernetesService.builder()
+        .withId(ComponentId.from("test"))
+        .withRegion(EUROPE_WEST)
+        .withNodePool(AzureNodePool.builder()
+            .withMachineType(STANDARD_B2S)
+            .withName("azure")
+            .withDiskSizeGb(30)
+            .withInitialNodeCount(1)
+            .withAutoscalingEnabled(false).build());
+  }
+
   public static void printJsonRepresentation(Object obj) {
     try {
       log.debug(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(obj));
