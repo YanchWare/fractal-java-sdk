@@ -84,9 +84,9 @@ public class TestUtils {
 
   public static GoogleKubernetesEngineBuilder getGkeBuilder() {
     return GoogleKubernetesEngine.builder()
-        .withId("aks-1")
-        .withDescription("Test AKS cluster")
-        .withDisplayName("AKS #1")
+        .withId("gke-1")
+        .withDescription("Test GKE cluster")
+        .withDisplayName("GKE #1")
         .withRegion(EU_WEST1)
         .withNetworkName("network-host")
         .withSubnetworkName("compute-tier-1")
