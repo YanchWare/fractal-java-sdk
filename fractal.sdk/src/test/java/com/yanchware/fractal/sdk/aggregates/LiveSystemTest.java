@@ -5,6 +5,8 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import org.junit.jupiter.api.Test;
 
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureMachineType.STANDARD_B2S;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureRegion.EUROPE_WEST;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -61,8 +63,10 @@ public class LiveSystemTest {
         .withResourceGroupId("res/group")
         .withComponent(AzureKubernetesService.builder()
             .withId(ComponentId.from("aks-1"))
+            .withRegion(EUROPE_WEST)
             .withNodePool(AzureNodePool.builder()
                 .withName("aks")
+                .withMachineType(STANDARD_B2S)
                 .withDiskSizeGb(35)
                 .withInitialNodeCount(1)
                 .withAutoscalingEnabled(false)

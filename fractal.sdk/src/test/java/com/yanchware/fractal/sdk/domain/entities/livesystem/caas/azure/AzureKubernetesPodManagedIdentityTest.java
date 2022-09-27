@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureMachineType.STANDARD_B2S;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureRegion.EUROPE_WEST;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -93,7 +95,9 @@ public class AzureKubernetesPodManagedIdentityTest {
   private AzureKubernetesService.AzureKubernetesServiceBuilder generateBuilder() {
     return AzureKubernetesService.builder()
         .withId(ComponentId.from("test"))
+        .withRegion(EUROPE_WEST)
         .withNodePool(AzureNodePool.builder()
+            .withMachineType(STANDARD_B2S)
             .withName("azurenode")
             .withDiskSizeGb(30)
             .withInitialNodeCount(1)

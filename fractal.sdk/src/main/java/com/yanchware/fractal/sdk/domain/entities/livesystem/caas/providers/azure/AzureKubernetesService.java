@@ -19,11 +19,11 @@ import static com.yanchware.fractal.sdk.utils.ValidationUtils.isPresentAndValidI
 @ToString(callSuper = true)
 public class AzureKubernetesService extends KubernetesCluster {
   private final static String EMPTY_NODE_POOL = "[AzureKubernetesService Validation] Node pool list is null or empty and at least one node pool is required";
+  private final static String REGION_IS_NULL = "[AzureKubernetesService Validation] Region is not specified and it is required";
   private final static String VNET_ADDRESS_SPACE_RANGE_NOT_VALID = "[KubernetesCluster Validation] VNet Address Space IP Range does not contain a valid ip with mask";
   private final static String VNET_SUBNET_ADDRESS_IP_RANGE_NOT_VALID = "[KubernetesCluster Validation] VNet Subnet Address IP Range does not contain a valid ip with mask";
   private String vnetAddressSpaceIpRange;
   private String vnetSubnetAddressIpRange;
-
   private AzureRegion region;
   private Collection<AzureNodePool> nodePools;
 
@@ -88,6 +88,11 @@ public class AzureKubernetesService extends KubernetesCluster {
   @Override
   public Collection<String> validate() {
     Collection<String> errors = super.validate();
+
+    if (region == null) {
+      errors.add(REGION_IS_NULL);
+    }
+    
     if (nodePools.isEmpty()) {
       errors.add(EMPTY_NODE_POOL);
     }

@@ -6,6 +6,8 @@ import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureMachineType.STANDARD_B2S;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureRegion.EUROPE_WEST;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -94,7 +96,9 @@ public class AzureKubernetesServiceIpRangeTest {
   private AzureKubernetesService.AzureKubernetesServiceBuilder generateBuilder() {
     return AzureKubernetesService.builder()
         .withId(ComponentId.from("test"))
+        .withRegion(EUROPE_WEST)
         .withNodePool(AzureNodePool.builder()
+            .withMachineType(STANDARD_B2S)
             .withName("azure")
             .withDiskSizeGb(30)
             .withInitialNodeCount(1)
