@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
+import static com.yanchware.fractal.sdk.utils.TestUtils.getBasicGke;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.*;
@@ -17,6 +18,10 @@ public class GoogleKubernetesEngineTest {
     @Test
     public void noValidationErrors_when_gkeHasRequiredFields() {
         assertThat(generateBuilder().build().validate()).isEmpty();
+    }
+    @Test
+    public void noValidationErrors_when_basicGke() {
+        assertThat(getBasicGke().build().validate()).isEmpty();
     }
 
     @Test

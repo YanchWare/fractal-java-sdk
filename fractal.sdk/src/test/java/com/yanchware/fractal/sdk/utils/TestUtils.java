@@ -11,9 +11,7 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureKubernetesService.AzureKubernetesServiceBuilder;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureNodePool;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzurePostgreSQL;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.GcpNodePool;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.GcpProgreSQL;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.GoogleKubernetesEngine;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.*;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.GoogleKubernetesEngine.GoogleKubernetesEngineBuilder;
 import com.yanchware.fractal.sdk.services.contracts.ComponentDto;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
@@ -346,7 +344,18 @@ public class TestUtils {
             .withName("azure")
             .withDiskSizeGb(30)
             .withInitialNodeCount(1)
-            .withAutoscalingEnabled(false).build());
+            .withAutoscalingEnabled(false)
+            .build());
+  }
+
+  public static GoogleKubernetesEngineBuilder getBasicGke() {
+    return GoogleKubernetesEngine.builder()
+        .withId(ComponentId.from("test"))
+        .withRegion(EU_WEST1)
+        .withNodePool(GcpNodePool.builder()
+            .withName("azure")
+            .withMachineType(E2_STANDARD2)
+            .build());
   }
 
   public static void printJsonRepresentation(Object obj) {
