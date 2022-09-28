@@ -2,7 +2,7 @@ package com.yanchware.fractal.sdk.aggregates;
 
 import org.junit.jupiter.api.Test;
 
-import static com.yanchware.fractal.sdk.utils.TestUtils.getBasicAks;
+import static com.yanchware.fractal.sdk.utils.TestUtils.getDefaultAks;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -58,7 +58,7 @@ public class LiveSystemTest {
         .withName("ls")
         .withResourceGroupId("res/group")
         .withComponent(
-            getBasicAks()
+            getDefaultAks()
                 .build())
         .build();
   }

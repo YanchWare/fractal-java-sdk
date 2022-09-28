@@ -5,14 +5,14 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-import static com.yanchware.fractal.sdk.utils.TestUtils.getBasicAks;
+import static com.yanchware.fractal.sdk.utils.TestUtils.getDefaultAks;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class AzureKubernetesPodManagedIdentityTest {
 
   @Test
   public void exceptionThrown_when_aksCreatedWithNameNotValid() {
-    assertThatThrownBy(() -> getBasicAks()
+    assertThatThrownBy(() -> getDefaultAks()
         .withPodManagedIdentity(PodManagedIdentity.builder()
             .withName("")
             .build())
@@ -24,7 +24,7 @@ public class AzureKubernetesPodManagedIdentityTest {
 
   @Test
   public void exceptionThrown_when_aksCreatedWithNamespaceNotValid() {
-    assertThatThrownBy(() -> getBasicAks()
+    assertThatThrownBy(() -> getDefaultAks()
         .withPodManagedIdentity(PodManagedIdentity.builder()
             .withName("azure-pod-identity")
             .withNamespace("")
@@ -37,7 +37,7 @@ public class AzureKubernetesPodManagedIdentityTest {
 
   @Test
   public void exceptionThrown_when_aksCreatedWithExceptionPodLabelsNotValid() {
-    assertThatThrownBy(() -> getBasicAks()
+    assertThatThrownBy(() -> getDefaultAks()
         .withPodManagedIdentity(PodManagedIdentity.builder()
             .withName("azure-pod-identity")
             .withNamespace("kube-system")
@@ -51,7 +51,7 @@ public class AzureKubernetesPodManagedIdentityTest {
 
   @Test
   public void exceptionThrown_when_aksCreatedWithEnableNotValid() {
-    assertThatThrownBy(() -> getBasicAks()
+    assertThatThrownBy(() -> getDefaultAks()
         .withPodManagedIdentity(PodManagedIdentity.builder()
             .withName("azure-pod-identity")
             .withNamespace("kube-system")
@@ -66,7 +66,7 @@ public class AzureKubernetesPodManagedIdentityTest {
 
   @Test
   public void exceptionThrown_when_aksCreatedWithAllowNetworkPluginKubeNetNotValid() {
-    assertThatThrownBy(() -> getBasicAks()
+    assertThatThrownBy(() -> getDefaultAks()
         .withPodManagedIdentity(PodManagedIdentity.builder()
             .withName("azure-pod-identity")
             .withNamespace("kube-system")

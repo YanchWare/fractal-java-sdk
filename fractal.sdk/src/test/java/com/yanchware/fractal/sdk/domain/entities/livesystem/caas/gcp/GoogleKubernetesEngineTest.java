@@ -2,13 +2,12 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.gcp;
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PodManagedIdentity;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PriorityClass;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.GcpNodePool;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.GoogleKubernetesEngine;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-import static com.yanchware.fractal.sdk.utils.TestUtils.getBasicGke;
+import static com.yanchware.fractal.sdk.utils.TestUtils.getDefaultGke;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.*;
@@ -17,26 +16,26 @@ public class GoogleKubernetesEngineTest {
 
     @Test
     public void noValidationErrors_when_gkeHasRequiredFields() {
-        assertThat(generateBuilder().build().validate()).isEmpty();
+        assertThat(getDefaultGke().build().validate()).isEmpty();
     }
     @Test
     public void noValidationErrors_when_basicGke() {
-        assertThat(getBasicGke().build().validate()).isEmpty();
+        assertThat(getDefaultGke().build().validate()).isEmpty();
     }
 
     @Test
     public void typeIsKubernetes_when_gkeIsBuilt() {
-        assertThat(generateBuilder().build().getType()).isEqualTo(KUBERNETES);
+        assertThat(getDefaultGke().build().getType()).isEqualTo(KUBERNETES);
     }
 
     @Test
     public void exceptionThrown_when_gkeCreatedWithNullId() {
-        assertThatThrownBy(() -> generateBuilder().withId("").build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("A valid component id cannot be null, empty or contain spaces");
+        assertThatThrownBy(() -> getDefaultGke().withId("").build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("A valid component id cannot be null, empty or contain spaces");
     }
 
     @Test
     public void typeIsKubernetes_when_gkeIsBuiltWithoutSpecifyType() {
-        var gkeBuilder = generateBuilder();
+        var gkeBuilder = getDefaultGke();
         assertThatCode(gkeBuilder::build).doesNotThrowAnyException();
         assertThat(gkeBuilder.build().getType()).isEqualTo(KUBERNETES);
     }
@@ -58,7 +57,7 @@ public class GoogleKubernetesEngineTest {
 
     @Test
     public void exceptionThrown_when_gkeCreatedWithPodIdentityAndPriorityClasses() {
-        var gke = generateBuilder()
+        var gke = getDefaultGke()
             .withPodManagedIdentity(PodManagedIdentity.builder()
                 .withName("azure-pod-identity")
                 .withNamespace("kube-system")
@@ -71,19 +70,6 @@ public class GoogleKubernetesEngineTest {
                 .withValue(200)
                 .build());
         assertThatThrownBy(gke::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll("Priority classes are not fully supported yet for GCP", "Pod Managed Identity is not fully supported yet for GCP");
-    }
-
-    private GoogleKubernetesEngine.GoogleKubernetesEngineBuilder generateBuilder() {
-        return GoogleKubernetesEngine.builder()
-                .withId("test")
-                .withNodePool(GcpNodePool.builder().withName("gcp-node-pool-name").build());
-                /*.withPodManagedIdentity(PodManagedIdentity.builder()
-                    .withName("azure-pod-identity")
-                    .withNamespace("kube-system")
-                    .withExceptionPodLabels(Map.of("app", "mic", "component", "mic"))
-                    .withEnable(true)
-                    .withAllowNetworkPluginKubeNet(true)
-                    .build());*/
     }
 
 }

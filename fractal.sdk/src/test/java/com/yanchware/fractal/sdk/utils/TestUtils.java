@@ -335,7 +335,7 @@ public class TestUtils {
         .build();
   }
 
-  public static AzureKubernetesServiceBuilder getBasicAks() {
+  public static AzureKubernetesServiceBuilder getDefaultAks() {
     return AzureKubernetesService.builder()
         .withId(ComponentId.from("test"))
         .withRegion(EUROPE_WEST)
@@ -348,7 +348,7 @@ public class TestUtils {
             .build());
   }
 
-  public static GoogleKubernetesEngineBuilder getBasicGke() {
+  public static GoogleKubernetesEngineBuilder getDefaultGke() {
     return GoogleKubernetesEngine.builder()
         .withId(ComponentId.from("test"))
         .withRegion(EU_WEST1)
