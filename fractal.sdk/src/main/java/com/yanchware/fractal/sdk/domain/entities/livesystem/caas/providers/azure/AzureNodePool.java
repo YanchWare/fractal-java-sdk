@@ -27,13 +27,13 @@ public class AzureNodePool implements Validatable {
   private final static String MAX_NODE_COUNT = "[AzureNodePool Validation] Max node count must be a positive integer (> 0)";
   private final static String MIN_NODE_COUNT_IS_NULL = "[AzureNodePool Validation] MinNodeCount has not been defined and it is required when autoscaling is enabled";
   private final static String MAX_NODE_COUNT_IS_NULL = "[AzureNodePool Validation] MaxNodeCount has not been defined and it is required when autoscaling is enabled";
-  private final static String INITIAL_NODE_COUNT_IS_NULL = "[AzureNodePool Validation] InitialNodeCount has not been defined and it is required";
+  private final static String MACHINE_TYPE_IS_NULL = "[AzureNodePool Validation] Machine Type has not been defined and it is required";
   private final static Integer MIN_NUMBER_OF_NODES = 1;
   private final static Integer MAX_NUMBER_OF_NODES = 100;
   private final static Integer MIN_NUMBER_OF_PODS_PER_NODE = MIN_NUMBER_OF_NODES;
   private final static Integer MAX_NUMBER_OF_PODS_PER_NODE = 255;
 
-  private int diskSizeGb;
+  private Integer diskSizeGb;
 
   private Integer initialNodeCount;
 
@@ -87,24 +87,24 @@ public class AzureNodePool implements Validatable {
           errors.add(NAME_ONLY_LOWERCASE_ALPHANUMERIC);
         }
 
-        if(!isBlank(super.name) && super.osType == AzureOsType.LINUX && super.name.length() > 12) {
+        if (!isBlank(super.name) && super.osType == AzureOsType.LINUX && super.name.length() > 12) {
           errors.add(LINUX_NAME_IS_TOO_LONG);
         }
 
-        if(!isBlank(super.name) && super.osType == AzureOsType.WINDOWS && super.name.length() > 6) {
+        if (!isBlank(super.name) && super.osType == AzureOsType.WINDOWS && super.name.length() > 6) {
           errors.add(WINDOWS_NAME_IS_TOO_LONG);
         }
 
-        if (super.diskSizeGb < 30) {
+        if (super.machineType == null) {
+          errors.add(MACHINE_TYPE_IS_NULL);
+        }
+
+        if (super.diskSizeGb != null && super.diskSizeGb < 30) {
           errors.add(DISK_SIZE_UNDER_30GB);
         }
 
         if (super.agentPoolMode == AzureAgentPoolMode.SYSTEM && super.osType == AzureOsType.WINDOWS) {
           errors.add(SYSTEM_POOL_MODE_WINDOWS);
-        }
-
-        if (super.initialNodeCount == null) {
-          errors.add(INITIAL_NODE_COUNT_IS_NULL);
         }
 
         if (super.initialNodeCount != null) {
@@ -175,7 +175,11 @@ public class AzureNodePool implements Validatable {
       errors.add(NAME_IS_BLANK);
     }
 
-    if (this.diskSizeGb < 30) {
+    if (this.machineType == null) {
+      errors.add(MACHINE_TYPE_IS_NULL);
+    }
+
+    if (this.diskSizeGb != null && this.diskSizeGb < 30) {
       errors.add(DISK_SIZE_UNDER_30GB);
     }
 
@@ -183,7 +187,9 @@ public class AzureNodePool implements Validatable {
       errors.add(SYSTEM_POOL_MODE_WINDOWS);
     }
 
-    validateIntegerInRange("InitialNodeCount", this.initialNodeCount, MIN_NUMBER_OF_NODES, MAX_NUMBER_OF_NODES, errors);
+    if (this.initialNodeCount != null) {
+      validateIntegerInRange("InitialNodeCount", this.initialNodeCount, MIN_NUMBER_OF_NODES, MAX_NUMBER_OF_NODES, errors);
+    }
 
     if (this.maxNodeCount != null) {
       validateIntegerInRange("MaxNodeCount", this.maxNodeCount, MIN_NUMBER_OF_NODES, MAX_NUMBER_OF_NODES, errors);

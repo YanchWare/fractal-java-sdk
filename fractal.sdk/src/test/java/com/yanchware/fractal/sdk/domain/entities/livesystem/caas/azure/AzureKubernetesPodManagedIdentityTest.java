@@ -1,21 +1,18 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure;
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PodManagedIdentity;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureKubernetesService;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureNodePool;
-import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static com.yanchware.fractal.sdk.utils.TestUtils.getDefaultAks;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class AzureKubernetesPodManagedIdentityTest {
 
   @Test
   public void exceptionThrown_when_aksCreatedWithNameNotValid() {
-    assertThatThrownBy(() -> generateBuilder()
+    assertThatThrownBy(() -> getDefaultAks()
         .withPodManagedIdentity(PodManagedIdentity.builder()
             .withName("")
             .build())
@@ -27,7 +24,7 @@ public class AzureKubernetesPodManagedIdentityTest {
 
   @Test
   public void exceptionThrown_when_aksCreatedWithNamespaceNotValid() {
-    assertThatThrownBy(() -> generateBuilder()
+    assertThatThrownBy(() -> getDefaultAks()
         .withPodManagedIdentity(PodManagedIdentity.builder()
             .withName("azure-pod-identity")
             .withNamespace("")
@@ -40,7 +37,7 @@ public class AzureKubernetesPodManagedIdentityTest {
 
   @Test
   public void exceptionThrown_when_aksCreatedWithExceptionPodLabelsNotValid() {
-    assertThatThrownBy(() -> generateBuilder()
+    assertThatThrownBy(() -> getDefaultAks()
         .withPodManagedIdentity(PodManagedIdentity.builder()
             .withName("azure-pod-identity")
             .withNamespace("kube-system")
@@ -54,7 +51,7 @@ public class AzureKubernetesPodManagedIdentityTest {
 
   @Test
   public void exceptionThrown_when_aksCreatedWithEnableNotValid() {
-    assertThatThrownBy(() -> generateBuilder()
+    assertThatThrownBy(() -> getDefaultAks()
         .withPodManagedIdentity(PodManagedIdentity.builder()
             .withName("azure-pod-identity")
             .withNamespace("kube-system")
@@ -69,7 +66,7 @@ public class AzureKubernetesPodManagedIdentityTest {
 
   @Test
   public void exceptionThrown_when_aksCreatedWithAllowNetworkPluginKubeNetNotValid() {
-    assertThatThrownBy(() -> generateBuilder()
+    assertThatThrownBy(() -> getDefaultAks()
         .withPodManagedIdentity(PodManagedIdentity.builder()
             .withName("azure-pod-identity")
             .withNamespace("kube-system")
@@ -81,22 +78,5 @@ public class AzureKubernetesPodManagedIdentityTest {
         .validate())
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining("AllowNetworkPluginKubeNet has not been defined and it is required");
-  }
-
-  @Test
-  public void exceptionThrown_when_aksCreatedWithPodManagedIdentityValid() {
-    assertThat(generateBuilder()
-        .build()
-        .validate()).isEmpty();
-  }
-
-  private AzureKubernetesService.AzureKubernetesServiceBuilder generateBuilder() {
-    return AzureKubernetesService.builder()
-        .withId(ComponentId.from("test"))
-        .withNodePool(AzureNodePool.builder()
-            .withName("azurenode")
-            .withDiskSizeGb(30)
-            .withInitialNodeCount(1)
-            .withAutoscalingEnabled(false).build());
   }
 }

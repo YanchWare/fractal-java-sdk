@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureMachineType.STANDARD_B2S;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -32,6 +33,13 @@ public class AzureNodePoolTest {
     assertThatThrownBy(() -> getAzureNodePoolBuilder("   ", 30, false).build())
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining("Name has not been defined and it is required");
+  }
+
+  @Test
+  public void validationError_when_azureNodePoolWithNullMachineType() {
+    assertThatThrownBy(() -> getAzureNodePoolBuilder("test", 30, false).withMachineType(null).build())
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("Machine Type has not been defined and it is required");
   }
 
   @Test
@@ -79,6 +87,14 @@ public class AzureNodePoolTest {
   }
 
   @Test
+  public void noValidationErrors_when_azureNodePoolMinimalFields() {
+    var builder = AzureNodePool.builder()
+        .withName("azurenode")
+        .withMachineType(STANDARD_B2S);
+    assertThat(builder.build().validate()).isEmpty();
+  }
+
+  @Test
   public void returns_3_nodeTaints_when_azureNodePoolWithValidFields() {
     var azureNodePool = getAzureNodePoolBuilder("linuxdynamic", 30, false).build();
     assertThat(azureNodePool.getNodeTaints().size()).isEqualTo(3);
@@ -106,6 +122,7 @@ public class AzureNodePoolTest {
     return AzureNodePool.builder()
         .withName(name)
         .withDiskSizeGb(diskSizeGb)
+        .withMachineType(STANDARD_B2S)
         .withInitialNodeCount(1)
         .withMaxNodeCount(3)
         .withKubernetesVersion("1.1.1")

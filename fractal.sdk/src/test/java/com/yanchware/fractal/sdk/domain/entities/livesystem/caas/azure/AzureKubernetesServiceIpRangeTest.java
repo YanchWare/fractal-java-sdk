@@ -1,11 +1,9 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure;
 
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureKubernetesService;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureNodePool;
-import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import static com.yanchware.fractal.sdk.utils.TestUtils.getDefaultAks;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -14,7 +12,7 @@ public class AzureKubernetesServiceIpRangeTest {
   @ParameterizedTest
   @ValueSource(strings = {"255.255.255.256", "10.2.0.0/33", "1.1.1.1"})
   public void exceptionThrown_when_aksCreatedWithServiceIpRangeNotValid(String input) {
-    assertThatThrownBy(() -> generateBuilder()
+    assertThatThrownBy(() -> getDefaultAks()
         .withServiceIpRange(input)
         .build()
         .validate())
@@ -25,7 +23,7 @@ public class AzureKubernetesServiceIpRangeTest {
   @ParameterizedTest
   @ValueSource(strings = {"255.255.255.256", "10.2.0.0/33", "1.1.1.1"})
   public void exceptionThrown_when_aksCreatedWithPodIpRangeNotValid(String input) {
-    assertThatThrownBy(() -> generateBuilder()
+    assertThatThrownBy(() -> getDefaultAks()
         .withPodIpRange(input)
         .build()
         .validate())
@@ -36,7 +34,7 @@ public class AzureKubernetesServiceIpRangeTest {
   @ParameterizedTest
   @ValueSource(strings = {"255.255.255.256", "10.2.0.0/33", "1.1.1.1"})
   public void exceptionThrown_when_aksCreatedWithVnetAddressSpaceIpRangeNotValid(String input) {
-    assertThatThrownBy(() -> generateBuilder()
+    assertThatThrownBy(() -> getDefaultAks()
         .withVnetAddressSpaceIpRange(input)
         .build()
         .validate())
@@ -47,7 +45,7 @@ public class AzureKubernetesServiceIpRangeTest {
   @ParameterizedTest
   @ValueSource(strings = {"255.255.255.256", "10.2.0.0/33", "1.1.1.1"})
   public void exceptionThrown_when_aksCreatedWithVnetSubnetAddressIpRangeNotValid(String input) {
-    assertThatThrownBy(() -> generateBuilder()
+    assertThatThrownBy(() -> getDefaultAks()
         .withVnetSubnetAddressIpRange(input)
         .build()
         .validate())
@@ -58,7 +56,7 @@ public class AzureKubernetesServiceIpRangeTest {
   @ParameterizedTest
   @ValueSource(strings = {"10.2.0.0/16", "10.2.0.255/16", "10.2.0.0/32"})
   public void exceptionThrown_when_aksCreatedWithServiceIpRangeValid(String input) {
-    assertThat(generateBuilder()
+    assertThat(getDefaultAks()
         .withServiceIpRange(input)
         .build()
         .validate()).isEmpty();
@@ -67,7 +65,7 @@ public class AzureKubernetesServiceIpRangeTest {
   @ParameterizedTest
   @ValueSource(strings = {"10.2.0.0/16", "10.2.0.255/16", "10.2.0.0/32"})
   public void exceptionThrown_when_aksCreatedWithPodIpRangeValid(String input) {
-    assertThat(generateBuilder()
+    assertThat(getDefaultAks()
         .withPodIpRange(input)
         .build()
         .validate()).isEmpty();
@@ -76,7 +74,7 @@ public class AzureKubernetesServiceIpRangeTest {
   @ParameterizedTest
   @ValueSource(strings = {"10.2.0.0/16", "10.2.0.255/16", "10.2.0.0/32"})
   public void exceptionThrown_when_aksCreatedWithVnetAddressSpaceIpRangeValid(String input) {
-    assertThat(generateBuilder()
+    assertThat(getDefaultAks()
         .withVnetAddressSpaceIpRange(input)
         .build()
         .validate()).isEmpty();
@@ -85,19 +83,9 @@ public class AzureKubernetesServiceIpRangeTest {
   @ParameterizedTest
   @ValueSource(strings = {"10.2.0.0/16", "10.2.0.255/16", "10.2.0.0/32"})
   public void exceptionThrown_when_aksCreatedWithVnetSubnetAddressIpRangeValid(String input) {
-    assertThat(generateBuilder()
+    assertThat(getDefaultAks()
         .withVnetSubnetAddressIpRange(input)
         .build()
         .validate()).isEmpty();
-  }
-
-  private AzureKubernetesService.AzureKubernetesServiceBuilder generateBuilder() {
-    return AzureKubernetesService.builder()
-        .withId(ComponentId.from("test"))
-        .withNodePool(AzureNodePool.builder()
-            .withName("azure")
-            .withDiskSizeGb(30)
-            .withInitialNodeCount(1)
-            .withAutoscalingEnabled(false).build());
   }
 }
