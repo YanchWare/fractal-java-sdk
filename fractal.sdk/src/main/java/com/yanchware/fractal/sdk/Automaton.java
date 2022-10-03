@@ -56,11 +56,7 @@ public class Automaton {
             .newBuilder()
             .version(HttpClient.Version.HTTP_2);
 
-        if (isRunningAgainstTestEnvironment(sdkConfiguration)) {
-            builder
-                .sslContext(getTestSSLContext());
-        }
-        instance = new Automaton(builder.build(), sdkConfiguration);
+        initializeAutomaton(builder.build(), sdkConfiguration);
     }
 
     private static RetryRegistry getDefaultRetryRegistry() {
@@ -92,23 +88,12 @@ public class Automaton {
     public static void instantiate(List<LiveSystem> liveSystems) throws InstantiatorException {
         if (instance == null) {
             EnvVarSdkConfiguration configuration;
-
             try {
                 configuration = new EnvVarSdkConfiguration();
             } catch (URISyntaxException e) {
                 throw new InstantiatorException("Error with Sdk configuration", e);
             }
-
-            var builder = HttpClient
-                .newBuilder()
-                .version(HttpClient.Version.HTTP_2);
-
-            if (isRunningAgainstTestEnvironment(configuration)) {
-                builder
-                    .sslContext(getTestSSLContext());
-            }
-
-            instance = new Automaton(builder.build(), configuration);
+            initializeAutomaton(configuration);
         }
 
         for (LiveSystem liveSystem : liveSystems) {
@@ -119,6 +104,16 @@ public class Automaton {
     public static void instantiate(List<LiveSystem> liveSystems, InstantiationConfiguration config)
         throws InstantiatorException {
 
+        if (instance == null) {
+            EnvVarSdkConfiguration configuration;
+            try {
+                configuration = new EnvVarSdkConfiguration();
+            } catch (URISyntaxException e) {
+                throw new InstantiatorException("Error with Sdk configuration", e);
+            }
+            initializeAutomaton(configuration);
+        }
+        
         var liveSystemsMutations = new ArrayList<ImmutablePair<LiveSystem, LiveSystemMutationDto>>();
         for (LiveSystem liveSystem : liveSystems) {
             liveSystemsMutations.add(new ImmutablePair<>(liveSystem, instantiateLiveSystem(liveSystem, config)));
