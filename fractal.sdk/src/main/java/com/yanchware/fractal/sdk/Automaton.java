@@ -40,10 +40,10 @@ public class Automaton {
     private static RetryRegistry serviceRetryRegistry;
 
     private Automaton(HttpClient httpClient, SdkConfiguration sdkConfiguration) {
-        serviceRetryRegistry = getDefaultRetryRegistry();
-        blueprintService = new BlueprintService(httpClient, sdkConfiguration, serviceRetryRegistry);
-        liveSystemService = new LiveSystemService(httpClient, sdkConfiguration, serviceRetryRegistry);
-        providerService = new ProviderService(httpClient, sdkConfiguration);
+        Automaton.serviceRetryRegistry = getDefaultRetryRegistry();
+        Automaton.blueprintService = new BlueprintService(httpClient, sdkConfiguration, Automaton.serviceRetryRegistry);
+        Automaton.liveSystemService = new LiveSystemService(httpClient, sdkConfiguration, Automaton.serviceRetryRegistry);
+        Automaton.providerService = new ProviderService(httpClient, sdkConfiguration);
     }
 
     // Used for unit testing:
@@ -126,6 +126,12 @@ public class Automaton {
 
         if(config != null && config.waitConfiguration != null && config.getWaitConfiguration().waitForInstantiation)
         {
+            if (config.getWaitConfiguration().isFailFast()) {
+                log.warn("The instantiation waiting configuration is set to \"fail fast\": " +
+                    "the pipeline will fail as soon as a single component instantiation fails. " +
+                    "Please note that this won't stop the instantiation process for the other components");
+            }
+            
             for (var liveSystemMutation : liveSystemsMutations) {
                 waitForMutationInstantiation(
                     liveSystemMutation.getKey(),

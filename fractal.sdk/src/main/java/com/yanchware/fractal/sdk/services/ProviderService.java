@@ -149,8 +149,12 @@ public class ProviderService {
           liveSystemMutation.getStepsById().values().stream().map(c -> c.getId()).collect(Collectors.joining(", ")));
       log.info("Livesystem [{}] - [Active] components: {}", liveSystem.getLiveSystemId(),
           activeComponents.stream().map(c -> c.getId()).collect(Collectors.joining(", ")));
-      log.info("Livesystem [{}] - [Failed] components: {}", liveSystem.getLiveSystemId(),
-          failedComponents.stream().map(c -> c.getId()).collect(Collectors.joining(", ")));
+
+      if (failedComponents.size() > 0) {
+        log.info("Livesystem [{}] - [Failed] components: {}", liveSystem.getLiveSystemId(),
+            failedComponents.stream().map(c -> c.getId()).collect(Collectors.joining(", ")));        
+      }
+
       String timeoutExceptionMessage = String.format(
           "Livesystem [%s] instantiation wait timeout. Response is %s",
           liveSystem.getLiveSystemId(),
