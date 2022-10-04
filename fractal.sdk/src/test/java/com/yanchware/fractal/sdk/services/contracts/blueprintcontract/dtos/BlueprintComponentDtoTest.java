@@ -246,7 +246,10 @@ public class BlueprintComponentDtoTest {
             aks.getVnetAddressSpaceIpRange(),
             aks.getVnetSubnetAddressIpRange(),
             aks.getPriorityClasses(),
-            aks.getPodManagedIdentity()
+            aks.getPodManagedIdentity(),
+            aks.getExternalWorkspaceResourceId(),
+            aks.getExternalLoadBalancerOutboundIps(),
+            aks.getAddonProfiles()
         ));
   }
 

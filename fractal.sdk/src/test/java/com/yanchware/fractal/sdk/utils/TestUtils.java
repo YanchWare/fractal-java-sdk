@@ -7,6 +7,7 @@ import com.yanchware.fractal.sdk.aggregates.LiveSystem;
 import com.yanchware.fractal.sdk.domain.entities.Component;
 import com.yanchware.fractal.sdk.domain.entities.ComponentLink;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.*;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureAddonProfile;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureKubernetesService;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureKubernetesService.AzureKubernetesServiceBuilder;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureNodePool;
@@ -48,6 +49,9 @@ public class TestUtils {
         .withPodIpRange("10.3.0.0/16")
         .withVnetAddressSpaceIpRange("10.1.0.0/22")
         .withVnetSubnetAddressIpRange("10.1.0.0/22")
+        .withExternalWorkspaceResourceId("workplaceResourceId")
+        .withExternalLoadBalancerOutboundIps(List.of("ip1", "ip2"))
+        .withAddonProfiles(List.of(AzureAddonProfile.AZURE_POLICY, AzureAddonProfile.AZURE_KEYVAULT_SECRETS_PROVIDER))
         .withNodePool(AzureNodePool.builder()
             .withName("akslinux")
             .withDiskSizeGb(35)

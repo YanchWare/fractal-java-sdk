@@ -26,6 +26,9 @@ public class AzureKubernetesService extends KubernetesCluster {
   private String vnetSubnetAddressIpRange;
   private AzureRegion region;
   private Collection<AzureNodePool> nodePools;
+  private Collection<String> externalLoadBalancerOutboundIps;
+  private String externalWorkspaceResourceId;
+  private Collection<AzureAddonProfile> addonProfiles;
 
   protected AzureKubernetesService() {
     nodePools = new ArrayList<>();
@@ -81,6 +84,45 @@ public class AzureKubernetesService extends KubernetesCluster {
       }
 
       component.getNodePools().addAll(nodePools);
+      return builder;
+    }
+
+    public AzureKubernetesServiceBuilder withExternalLoadBalancerOutboundIp(String externalLoadBalancerOutboundIp) {
+      return withExternalLoadBalancerOutboundIps(List.of(externalLoadBalancerOutboundIp));
+    }
+
+    public AzureKubernetesServiceBuilder withExternalLoadBalancerOutboundIps(List<String> externalLoadBalancerOutboundIps) {
+      if (isBlank(externalLoadBalancerOutboundIps)) {
+        return builder;
+      }
+
+      if (component.getExternalLoadBalancerOutboundIps() == null) {
+        component.setExternalLoadBalancerOutboundIps(new ArrayList<>());
+      }
+
+      component.getExternalLoadBalancerOutboundIps().addAll(externalLoadBalancerOutboundIps);
+      return builder;
+    }
+
+    public AzureKubernetesServiceBuilder withExternalWorkspaceResourceId(String externalWorkspaceResourceId) {
+      component.setExternalWorkspaceResourceId(externalWorkspaceResourceId);
+      return builder;
+    }
+    
+    public AzureKubernetesServiceBuilder withAddonProfile(AzureAddonProfile addonProfile) {
+      return withAddonProfiles(List.of(addonProfile));
+    }
+
+    public AzureKubernetesServiceBuilder withAddonProfiles(Collection<? extends AzureAddonProfile> addonProfiles) {
+      if (isBlank(addonProfiles)) {
+        return builder;
+      }
+
+      if (component.getAddonProfiles() == null) {
+        component.setAddonProfiles(new ArrayList<>());
+      }
+
+      component.getAddonProfiles().addAll(addonProfiles);
       return builder;
     }
   }
