@@ -62,8 +62,7 @@ public class ProviderService {
     var retryConfig = RetryConfig.custom()
         .ignoreExceptions(ProviderException.class)
         .maxAttempts(config.getTimeoutMinutes() + 1)
-        // .waitDuration(Duration.ofMinutes(1L))
-        .waitDuration(Duration.ofSeconds(20L))
+        .waitDuration(Duration.ofMinutes(3L))
         .build();
     var retry = RetryRegistry.of(retryConfig).retry(requestName);
 
