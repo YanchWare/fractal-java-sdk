@@ -158,13 +158,13 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <repository.url>https://maven.pkg.github.com/yanchware/fractal-java-sd</repository.url>
+                <repository.url>https://maven.pkg.github.com/yanchware/fractal-java-sdk</repository.url>
             </properties>
             <distributionManagement>
                 <repository>
                     <id>github</id>
                     <name>GitHub Packages</name>
-                    <url>${repository.url</url>
+                    <url>${repository.url}</url>
                 </repository>
             </distributionManagement>
         </profile>
