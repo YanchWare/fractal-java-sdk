@@ -1,5 +1,5 @@
 steps:
-  - name: maven:3.8.4-openjdk-17-slim
+  - name: maven:3.8.6-eclipse-temurin-18-alpine
     dir: fractal.sdk
     entrypoint: mvn
     args: ['package']
