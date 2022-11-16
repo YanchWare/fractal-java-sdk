@@ -2,9 +2,9 @@ package com.yanchware.fractal.sdk.valueobjects;
 
 public enum ComponentType {
     UNKNOWN("Unknown"),
-    CAAS_WORKLOAD("NetworkAndCompute.CaaS.Workload"),
+    CAAS_WORKLOAD("CustomWorkloads.CaaS.Workload"),
     CONTAINER_PLATFORM("NetworkAndCompute.PaaS.ContainerPlatform"),
-    K8S_WORKLOAD("NetworkAndCompute.CaaS.K8sWorkload"),
+    K8S_WORKLOAD("CustomWorkloads.CaaS.K8sWorkload"),
     KUBERNETES("NetworkAndCompute.PaaS.Kubernetes"),
     POSTGRESQL("Storage.PaaS.PostgreSQL"),
     POSTGRESQLDB("Storage.PaaS.PostgreSQLDatabase"),
