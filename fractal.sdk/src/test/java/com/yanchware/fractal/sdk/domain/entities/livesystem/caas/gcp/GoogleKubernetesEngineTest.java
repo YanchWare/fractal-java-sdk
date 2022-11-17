@@ -15,10 +15,6 @@ import static org.assertj.core.api.Assertions.*;
 public class GoogleKubernetesEngineTest {
 
     @Test
-    public void noValidationErrors_when_gkeHasRequiredFields() {
-        assertThat(getDefaultGke().build().validate()).isEmpty();
-    }
-    @Test
     public void noValidationErrors_when_basicGke() {
         assertThat(getDefaultGke().build().validate()).isEmpty();
     }

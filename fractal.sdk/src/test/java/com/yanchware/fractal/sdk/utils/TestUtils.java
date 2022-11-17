@@ -357,7 +357,7 @@ public class TestUtils {
         .withId(ComponentId.from("test"))
         .withRegion(EU_WEST1)
         .withNodePool(GcpNodePool.builder()
-            .withName("azure")
+            .withName("gke")
             .withMachineType(E2_STANDARD2)
             .build());
   }
