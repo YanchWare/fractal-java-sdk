@@ -23,8 +23,8 @@ public abstract class CaaSDocumentDBImpl extends CaaSDocumentDB implements LiveS
     private String namespace;
     private String storage;
     private String storageClassName;
-    private int memory;
-    private int cpu;
+    private Integer memory;
+    private Integer cpu;
     private ProviderType provider;
 
     @Override
