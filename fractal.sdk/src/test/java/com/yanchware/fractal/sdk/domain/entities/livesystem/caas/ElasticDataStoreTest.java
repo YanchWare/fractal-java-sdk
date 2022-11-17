@@ -16,77 +16,77 @@ class ElasticDataStoreTest {
 
     @Test
     public void exceptionThrown_when_BuiltWithContainerPlatformBlank() {
-        assertThatThrownBy(() -> ElasticDataStore.builder().withId("el-data-store").withContainerPlatform("").build()).
+        assertThatThrownBy(() -> getElasticDataStoreBuilder().withContainerPlatform("").build()).
                 isInstanceOf(IllegalArgumentException.class).
                 hasMessageContaining("ContainerPlatform defined was either empty or blank");
     }
 
     @Test
     public void exceptionThrown_when_BuiltWithContainerPlatformEmpty() {
-        assertThatThrownBy(() -> ElasticDataStore.builder().withId("el-data-store").withContainerPlatform("   ").build()).
+        assertThatThrownBy(() -> getElasticDataStoreBuilder().withContainerPlatform("   ").build()).
                 isInstanceOf(IllegalArgumentException.class).
                 hasMessageContaining("ContainerPlatform defined was either empty or blank");
     }
 
     @Test
     public void exceptionThrown_when_BuiltWithEmptyValues() {
-        assertThatThrownBy(() -> ElasticDataStore.builder().withId("el-data-store").build()).
+        assertThatThrownBy(() -> getElasticDataStoreBuilder().build()).
                 isInstanceOf(IllegalArgumentException.class).
                 hasMessageContaining("Namespace has not been defined and it is required");
     }
 
     @Test
     public void exceptionThrown_when_BuiltWithZeroInstances() {
-        assertThatThrownBy(() -> ElasticDataStore.builder().withId("el-data-store").withNamespace("namespace").withInstances(0).build()).
+        assertThatThrownBy(() -> getElasticDataStoreBuilder().withNamespace("namespace").withInstances(0).build()).
                 isInstanceOf(IllegalArgumentException.class).
                 hasMessageContaining("Elastic Instances defined was either 0 or negative");
     }
 
     @Test
     public void exceptionThrown_when_BuiltWithNegativeInstances() {
-        assertThatThrownBy(() -> ElasticDataStore.builder().withId("el-data-store").withNamespace("namespace").withInstances(-1).build()).
+        assertThatThrownBy(() -> getElasticDataStoreBuilder().withNamespace("namespace").withInstances(-1).build()).
                 isInstanceOf(IllegalArgumentException.class).
                 hasMessageContaining("Elastic Instances defined was either 0 or negative");
     }
 
     @Test
     public void exceptionThrown_when_BuiltWithEmptyElasticVersion() {
-        assertThatThrownBy(() -> ElasticDataStore.builder().withId("el-data-store").withNamespace("namespace").withElasticVersion("").build()).
+        assertThatThrownBy(() -> getElasticDataStoreBuilder().withNamespace("namespace").withElasticVersion("").build()).
                 isInstanceOf(IllegalArgumentException.class).
                 hasMessageContaining("Elastic Version has not been defined and it is required");
     }
 
     @Test
     public void exceptionThrown_when_BuiltWithBlankElasticVersion() {
-        assertThatThrownBy(() -> ElasticDataStore.builder().withId("el-data-store").withNamespace("namespace").withElasticVersion("   ").build()).
+        assertThatThrownBy(() -> getElasticDataStoreBuilder().withNamespace("namespace").withElasticVersion("   ").build()).
                 isInstanceOf(IllegalArgumentException.class).
                 hasMessageContaining("Elastic Version has not been defined and it is required");
     }
 
     @Test
     public void exceptionThrown_when_BuiltWithNullElasticVersion() {
-        assertThatThrownBy(() -> ElasticDataStore.builder().withId("el-data-store").withNamespace("namespace").withElasticVersion(null).build()).
+        assertThatThrownBy(() -> getElasticDataStoreBuilder().withNamespace("namespace").withElasticVersion(null).build()).
                 isInstanceOf(IllegalArgumentException.class).
                 hasMessageContaining("Elastic Version has not been defined and it is required");
     }
 
     @Test
     public void exceptionThrown_when_BuiltWithEmptyElasticStorage() {
-        assertThatThrownBy(() -> ElasticDataStore.builder().withId("el-data-store").withNamespace("namespace").withStorage("").build()).
+        assertThatThrownBy(() -> getElasticDataStoreBuilder().withNamespace("namespace").withStorage("").build()).
                 isInstanceOf(IllegalArgumentException.class).
                 hasMessageContaining("Elastic Storage has not been defined and it is required");
     }
 
     @Test
     public void exceptionThrown_when_BuiltWithBlankElasticStorage() {
-        assertThatThrownBy(() -> ElasticDataStore.builder().withId("el-data-store").withNamespace("namespace").withStorage("   ").build()).
+        assertThatThrownBy(() -> getElasticDataStoreBuilder().withNamespace("namespace").withStorage("   ").build()).
                 isInstanceOf(IllegalArgumentException.class).
                 hasMessageContaining("Elastic Storage has not been defined and it is required");
     }
 
     @Test
     public void exceptionThrown_when_BuiltWithNullElasticStorage() {
-        assertThatThrownBy(() -> ElasticDataStore.builder().withId("el-data-store").withNamespace("namespace").withStorage(null).build()).
+        assertThatThrownBy(() -> getElasticDataStoreBuilder().withNamespace("namespace").withStorage(null).build()).
                 isInstanceOf(IllegalArgumentException.class).
                 hasMessageContaining("Elastic Storage has not been defined and it is required");
     }
@@ -95,5 +95,9 @@ class ElasticDataStoreTest {
     public void typeIsElasticDataStore_when_WithAllRequiredValues() {
         assertThatCode(TestUtils::getElasticDataStoreExample).doesNotThrowAnyException();
         assertThat(TestUtils.getElasticDataStoreExample().getType()).isEqualTo(ELASTIC_DATASTORE);
+    }
+
+    private static ElasticDataStore.ElasticDataStoreBuilder getElasticDataStoreBuilder() {
+        return ElasticDataStore.builder().withId("el-data-store");
     }
 }
