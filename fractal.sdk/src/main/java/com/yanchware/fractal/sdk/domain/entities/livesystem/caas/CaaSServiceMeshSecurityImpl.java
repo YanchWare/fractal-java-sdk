@@ -13,7 +13,7 @@ import java.util.List;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Getter
-@Setter(AccessLevel.PROTECTED)
+@Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
 public abstract class CaaSServiceMeshSecurityImpl extends CaaSServiceMeshSecurity implements LiveSystemComponent {
     private final static String NAMESPACE_IS_NULL_OR_EMPTY = "[CaaSServiceMeshSecurity Validation] Namespace has not been defined and it is required";

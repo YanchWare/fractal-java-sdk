@@ -13,7 +13,7 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.TRAEFIK;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Getter
-@Setter(AccessLevel.PROTECTED)
+@Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
 public class Traefik extends CaaSAPIGatewayImpl {
     private final static String OIDC_IS_PARTIAL = "[Traefik Validation] OIDC has been partially configured. You must provide all required values or none of them";

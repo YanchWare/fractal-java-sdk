@@ -7,13 +7,17 @@ import com.yanchware.fractal.sdk.aggregates.LiveSystem;
 import com.yanchware.fractal.sdk.domain.entities.Component;
 import com.yanchware.fractal.sdk.domain.entities.ComponentLink;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.*;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureAddonProfile;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureKubernetesService;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureKubernetesService.AzureKubernetesServiceBuilder;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureNodePool;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzurePostgreSQL;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.*;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.GoogleKubernetesEngine.GoogleKubernetesEngineBuilder;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureAddonProfile;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureKubernetesService;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureKubernetesService.AzureKubernetesServiceBuilder;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureNodePool;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzurePostgreSQL;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpNodePool;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpProgreSQL;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GoogleKubernetesEngine;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GoogleKubernetesEngine.GoogleKubernetesEngineBuilder;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PodManagedIdentity;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PostgreSQLDB;
 import com.yanchware.fractal.sdk.services.contracts.ComponentDto;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import lombok.extern.slf4j.Slf4j;
@@ -27,13 +31,13 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PreemptionPolicy.NEVER;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PreemptionPolicy.PREEMPT_LOWER_PRIORITY;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureMachineType.STANDARD_B2S;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureOsType.LINUX;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureRegion.EUROPE_WEST;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureSkuName.B_GEN5_1;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureStorageAutoGrow.ENABLED;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.GcpMachine.E2_STANDARD2;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.GcpRegion.EU_WEST1;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureMachineType.STANDARD_B2S;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureOsType.LINUX;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion.EUROPE_WEST;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureSkuName.B_GEN5_1;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureStorageAutoGrow.ENABLED;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpMachine.E2_STANDARD2;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpRegion.EU_WEST1;
 import static java.util.stream.Collectors.toSet;
 
 @Slf4j
@@ -177,8 +181,8 @@ public class TestUtils {
         .build();
   }
 
-  public static Ambassador getAmbassadorExample() {
-    return Ambassador.builder()
+  public static CaaSAmbassador getAmbassadorExample() {
+    return CaaSAmbassador.builder()
         .withId("ambassador")
         .withDescription("Ambassador")
         .withDisplayName("Ambassador")
@@ -207,8 +211,8 @@ public class TestUtils {
         .build();
   }
 
-  public static ElasticLogging getElasticLoggingExample() {
-    return ElasticLogging.builder()
+  public static CaaSElasticLogging getElasticLoggingExample() {
+    return CaaSElasticLogging.builder()
         .withId("elastic-logging")
         .withDescription("Elastic Logging")
         .withDisplayName("Elastic Logging")
@@ -224,8 +228,8 @@ public class TestUtils {
         .build();
   }
 
-  public static ElasticDataStore getElasticDataStoreExample() {
-    return ElasticDataStore.builder()
+  public static CaaSElasticDataStore getElasticDataStoreExample() {
+    return CaaSElasticDataStore.builder()
         .withId("elastic-data")
         .withDescription("Elastic Data Store")
         .withDisplayName("Elastic Data Store")

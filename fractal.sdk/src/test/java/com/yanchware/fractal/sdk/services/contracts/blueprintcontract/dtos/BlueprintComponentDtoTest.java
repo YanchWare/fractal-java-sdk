@@ -1,9 +1,12 @@
 package com.yanchware.fractal.sdk.services.contracts.blueprintcontract.dtos;
 
 import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.*;
+import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSContainerPlatform;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSPostgreSQL;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSPostgreSQLDB;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.*;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.KubernetesCluster;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PostgreSQLDB;
 import com.yanchware.fractal.sdk.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 
@@ -41,7 +44,7 @@ public class BlueprintComponentDtoTest {
     var aks = getAksBuilder().withAPIGateway(getAmbassadorExample()).build();
     var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(aks));
 
-    var ambassador = (Ambassador) aks.getApiGatewayInstances().get(0);
+    var ambassador = (CaaSAmbassador) aks.getApiGatewayInstances().get(0);
     var ambassadorDto = getBlueprintComponentDto(blueprintComponentDtoList, ambassador.getId().getValue());
     var aksId = aks.getId().getValue();
 
@@ -108,7 +111,7 @@ public class BlueprintComponentDtoTest {
     var aks = getAksBuilder().withLogging(getElasticLoggingExample()).build();
     var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(aks));
 
-    var elasticLogging = (ElasticLogging) aks.getLoggingInstances().get(0);
+    var elasticLogging = (CaaSElasticLogging) aks.getLoggingInstances().get(0);
     var elasticLoggingDto = getBlueprintComponentDto(blueprintComponentDtoList, elasticLogging.getId().getValue());
     var aksId = aks.getId().getValue();
 
@@ -135,7 +138,7 @@ public class BlueprintComponentDtoTest {
     var aks = getAksBuilder().withDocumentDB(getElasticDataStoreExample()).build();
     var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(aks));
 
-    var elasticDataStore = (ElasticDataStore) aks.getDocumentDBInstances().get(0);
+    var elasticDataStore = (CaaSElasticDataStore) aks.getDocumentDBInstances().get(0);
     var elasticDataStoreDto = getBlueprintComponentDto(blueprintComponentDtoList, elasticDataStore.getId().getValue());
     var aksId = aks.getId().getValue();
 
@@ -234,7 +237,7 @@ public class BlueprintComponentDtoTest {
 
     assertComponentSize(aks, blueprintComponentDtoList);
     var aksDto = getBlueprintComponentDto(blueprintComponentDtoList, aks.getId().getValue());
-    assertGenericComponent(aksDto, aks, CaaSContainerPlatform.TYPE);
+    assertGenericComponent(aksDto, aks, PaaSContainerPlatform.TYPE);
     assertSoftly(softly -> softly
         .assertThat(aksDto.getParameters().values())
         .as("Component Parameters")
@@ -260,7 +263,7 @@ public class BlueprintComponentDtoTest {
 
     assertComponentSize(gke, blueprintComponentDtoList);
     var gkeDto = getBlueprintComponentDto(blueprintComponentDtoList, gke.getId().getValue());
-    assertGenericComponent(gkeDto, gke, CaaSContainerPlatform.TYPE);
+    assertGenericComponent(gkeDto, gke, PaaSContainerPlatform.TYPE);
     assertSoftly(softly -> softly
         .assertThat(gkeDto.getParameters().values())
         .as("Component Parameters")

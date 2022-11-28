@@ -12,7 +12,7 @@ import java.util.Collection;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Getter
-@Setter(AccessLevel.PROTECTED)
+@Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
 public abstract class CaaSAPIGatewayImpl extends CaaSAPIGateway implements LiveSystemComponent {
     private final static String NAMESPACE_IS_NULL_OR_EMPTY = "[CaaSAPIGateway Validation] Namespace has not been defined and it is required";

@@ -12,7 +12,7 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PROMETHEUS;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Getter
-@Setter(AccessLevel.PROTECTED)
+@Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
 public class Prometheus extends CaaSMonitoringImpl implements LiveSystemComponent {
     private final static String API_GATEWAY_URL_IS_BLANK = "[Prometheus Validation] API Gateway URL has not been defined and it is required";

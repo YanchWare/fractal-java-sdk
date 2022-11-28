@@ -12,7 +12,7 @@ import java.util.List;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.OCELOT;
 
 @Getter
-@Setter(AccessLevel.PROTECTED)
+@Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
 public class Ocelot extends CaaSServiceMeshSecurityImpl implements LiveSystemComponent {
 

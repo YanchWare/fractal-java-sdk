@@ -12,7 +12,7 @@ import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.K8S_WORKLOAD;
 
 @Getter
-@Setter(AccessLevel.PROTECTED)
+@Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
 public class KubernetesWorkload extends CaaSK8sWorkloadImpl implements LiveSystemComponent {
 

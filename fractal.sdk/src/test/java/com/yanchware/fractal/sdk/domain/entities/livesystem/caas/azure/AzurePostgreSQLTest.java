@@ -1,16 +1,16 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure;
 
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PostgreSQLDB;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzurePostgreSQL;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PostgreSQLDB;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzurePostgreSQL;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PostgreSQLCharset.UTF8;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureRegion.EUROPE_WEST;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureSkuName.B_GEN5_1;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureStorageAutoGrow.ENABLED;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PostgreSQLCharset.UTF8;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion.EUROPE_WEST;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureSkuName.B_GEN5_1;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureStorageAutoGrow.ENABLED;
 import static com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType.AZURE;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.POSTGRESQL;
 import static org.assertj.core.api.Assertions.*;

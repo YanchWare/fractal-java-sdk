@@ -13,7 +13,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Getter
-@Setter(AccessLevel.PROTECTED)
+@Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
 public abstract class CaaSK8sWorkloadImpl extends CaaSWorkload implements LiveSystemComponent {
     private final static String NAMESPACE_IS_NULL_OR_EMPTY = "[CaaSWorkload Validation] Namespace is either empty or blank and it is required";

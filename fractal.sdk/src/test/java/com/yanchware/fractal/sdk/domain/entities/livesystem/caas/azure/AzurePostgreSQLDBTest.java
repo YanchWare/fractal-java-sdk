@@ -1,6 +1,6 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure;
 
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PostgreSQLDB;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PostgreSQLDB;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import org.junit.jupiter.api.Test;
 

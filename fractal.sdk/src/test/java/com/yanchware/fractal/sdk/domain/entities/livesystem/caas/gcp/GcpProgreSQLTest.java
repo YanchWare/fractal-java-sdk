@@ -1,10 +1,10 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.gcp;
 
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.GcpProgreSQL;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpProgreSQL;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import org.junit.jupiter.api.Test;
 
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.GcpRegion.ASIA_SOUTH1;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpRegion.ASIA_SOUTH1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

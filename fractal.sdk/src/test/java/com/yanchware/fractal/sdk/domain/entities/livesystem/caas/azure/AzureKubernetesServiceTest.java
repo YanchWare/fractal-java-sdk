@@ -2,14 +2,14 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure;
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PreemptionPolicy;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PriorityClass;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureAgentPoolMode;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureKubernetesService;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureNodePool;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureOsType;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureAgentPoolMode;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureKubernetesService;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureNodePool;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureOsType;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import org.junit.jupiter.api.Test;
 
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureMachineType.STANDARD_B2S;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureMachineType.STANDARD_B2S;
 import static com.yanchware.fractal.sdk.utils.TestUtils.getDefaultAks;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
 import static java.util.Collections.emptyList;

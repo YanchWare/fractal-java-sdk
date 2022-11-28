@@ -1,6 +1,6 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure;
 
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PodManagedIdentity;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PodManagedIdentity;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;

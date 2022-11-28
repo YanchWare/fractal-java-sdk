@@ -1,8 +1,8 @@
 package com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos;
 
 import com.yanchware.fractal.sdk.domain.entities.Component;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.KubernetesCluster;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PostgreSQL;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.KubernetesCluster;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PostgreSQL;
 import com.yanchware.fractal.sdk.utils.TestUtils;
 import com.yanchware.fractal.sdk.valueobjects.ComponentType;
 import org.junit.jupiter.api.Test;

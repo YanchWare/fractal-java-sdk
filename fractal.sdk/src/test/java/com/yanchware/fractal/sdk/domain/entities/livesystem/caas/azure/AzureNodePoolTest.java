@@ -3,13 +3,13 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure;
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.NodeTaint;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.TaintEffect;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureNodePool;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureOsType;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureNodePool;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureOsType;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureMachineType.STANDARD_B2S;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureMachineType.STANDARD_B2S;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
