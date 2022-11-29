@@ -13,8 +13,6 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.K8S_WORKLOAD;
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
 public class CaaSKubernetesWorkload extends CaaSWorkloadImpl implements LiveSystemComponent {
-    public static final String TYPE = K8S_WORKLOAD.getId();
-
     public static KubernetesWorkloadBuilder builder() {
         return new KubernetesWorkloadBuilder();
     }

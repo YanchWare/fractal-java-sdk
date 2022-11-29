@@ -9,15 +9,12 @@ import lombok.ToString;
 import java.util.Collection;
 
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.AMBASSADOR;
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.POSTGRESQL;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
 public class CaaSAmbassador extends CaaSAPIGatewayImpl {
-    public static final String TYPE = AMBASSADOR.getId();
-
     private final static String HOST_IS_BLANK = "[CaaSAmbassador Validation] Host has not been defined and it is required";
     private final static String HOST_OWNER_EMAIL_IS_BLANK = "[CaaSAmbassador Validation] Host Owner Email has not been defined and it is required";
     private final static String ACME_PROVIDER_AUTHORITY_IS_BLANK = "[CaaSAmbassador Validation] Automated Certificate Management Environment (ACME) Provider Authority has not been defined and it is required";

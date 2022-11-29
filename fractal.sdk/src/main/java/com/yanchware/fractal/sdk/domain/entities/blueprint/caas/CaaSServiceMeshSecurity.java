@@ -4,5 +4,4 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.SERVICE_MESH_
 
 public class CaaSServiceMeshSecurity extends CaaSComponent {
     public static final String TYPE = SERVICE_MESH_SECURITY.getId();
-
 }

@@ -9,7 +9,6 @@ import lombok.ToString;
 import java.util.Collection;
 import java.util.List;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.OCELOT;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.TRAEFIK;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 

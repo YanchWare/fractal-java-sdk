@@ -64,7 +64,8 @@ public class BlueprintComponentDtoTest {
 
   @Test
   public void blueprintComponentValid_when_aksWithOcelot() {
-    var aks = getAksBuilder().withServiceMeshSecurity(getOcelotExample()).build();
+    var aks = getAksBuilder()
+      .withServiceMeshSecurity(getOcelotExample()).build();
     var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(aks));
 
     var ocelot = (CaaSOcelot) aks.getServiceMeshSecurityInstances().get(0);

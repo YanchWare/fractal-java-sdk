@@ -10,7 +10,6 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.OCELOT;
 
 @ToString(callSuper = true)
 public class CaaSOcelot extends CaaSServiceMeshSecurityImpl implements LiveSystemComponent {
-    public static final String TYPE = OCELOT.getId();
 
     public static OcelotBuilder builder() {
         return new OcelotBuilder();

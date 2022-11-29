@@ -8,7 +8,6 @@ import lombok.ToString;
 
 import java.util.Collection;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.OCELOT;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PROMETHEUS;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -16,7 +15,6 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
 public class CaaSPrometheus extends CaaSMonitoringImpl implements LiveSystemComponent {
-    public static final String TYPE = PROMETHEUS.getId();
     private final static String API_GATEWAY_URL_IS_BLANK = "[CaaSPrometheus Validation] API Gateway URL has not been defined and it is required";
 
     private String apiGatewayUrl;
