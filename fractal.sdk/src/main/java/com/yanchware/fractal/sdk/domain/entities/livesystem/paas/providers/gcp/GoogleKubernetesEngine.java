@@ -35,6 +35,8 @@ public class GoogleKubernetesEngine extends KubernetesCluster {
   public ProviderType getProvider() {
     return GCP;
   }
+  @Override
+  public void setProvider(ProviderType providerType) { }
 
   public static GoogleKubernetesEngineBuilder builder() {
     return new GoogleKubernetesEngineBuilder();

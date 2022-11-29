@@ -28,7 +28,7 @@ public abstract class KubernetesCluster extends PaaSContainerPlatform implements
   private String podIpRange;
 
   private Collection<PriorityClass> priorityClasses;
-  private List<CaaSK8sWorkloadImpl> k8sWorkloadInstances;
+  private List<CaaSWorkloadImpl> k8sWorkloadInstances;
   private List<CaaSMonitoringImpl> monitoringInstances;
   private List<CaaSAPIGatewayImpl> apiGatewayInstances;
   private List<CaaSServiceMeshSecurityImpl> serviceMeshSecurityInstances;
@@ -81,11 +81,11 @@ public abstract class KubernetesCluster extends PaaSContainerPlatform implements
       return builder;
     }
 
-    public B withK8sWorkload(KubernetesWorkload workload) {
+    public B withK8sWorkload(CaaSKubernetesWorkload workload) {
       return withK8sWorkloadInstances(List.of(workload));
     }
 
-    public B withK8sWorkloadInstances(Collection<? extends KubernetesWorkload> workloads) {
+    public B withK8sWorkloadInstances(Collection<? extends CaaSKubernetesWorkload> workloads) {
       if (isBlank(workloads)) {
         return builder;
       }

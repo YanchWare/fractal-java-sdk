@@ -12,47 +12,65 @@ class CaaSAmbassadorTest {
 
   @Test
   public void exceptionThrown_when_ambassadorCreatedWithNullId() {
-    assertThatThrownBy(() -> CaaSAmbassador.builder().withId("").build()).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll("A valid component id cannot be null, empty or contain spaces");
+    assertThatThrownBy(() -> CaaSAmbassador.builder()
+      .withId("")
+      .build())
+    .isInstanceOf(IllegalArgumentException.class)
+    .hasMessageContainingAll("A valid component id cannot be null, empty or contain spaces");
   }
 
   @Test
   public void exceptionThrown_when_ambassadorCreatedWithNoNamespace() {
-    assertThatThrownBy(() -> CaaSAmbassador.builder().withId(ComponentId.from("ambassador")).build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("[CaaSAPIGateway Validation] Namespace has not been defined and it is required");
+    assertThatThrownBy(() -> CaaSAmbassador.builder()
+      .withId(ComponentId.from("ambassador"))
+      .build())
+    .isInstanceOf(IllegalArgumentException.class)
+    .hasMessageContaining("[CaaSAmbassador Validation] Namespace has not been defined and it is required");
   }
 
   @Test
   public void exceptionThrown_when_ambassadorCreatedWithEmptyContainerPlatform() {
-    assertThatThrownBy(() -> CaaSAmbassador.builder().withId(ComponentId.from("ambassador")).withNamespace("ambassador").withContainerPlatform("").build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("[CaaSAPIGateway Validation] ContainerPlatform defined was either empty or blank and it is required");
+    assertThatThrownBy(() -> CaaSAmbassador.builder().withId(ComponentId.from("ambassador"))
+      .withNamespace("ambassador")
+      .withContainerPlatform("")
+      .build())
+    .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("[CaaSAmbassador Validation] ContainerPlatform defined was either empty or blank and it is required");
   }
 
   @Test
   public void exceptionThrown_when_ambassadorCreatedWithEmptyLicense() {
     var ambassadorBuilder = ambassadorBuilder().withLicenseKey("");
-    assertThatThrownBy(ambassadorBuilder::build).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("License Key defined was either empty or blank");
+    assertThatThrownBy(ambassadorBuilder::build).isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("License Key defined was either empty or blank");
   }
 
   @Test
   public void exceptionThrown_when_ambassadorCreatedWithEmptyHost() {
     var ambassadorBuilder = ambassadorBuilder().withHost("");
-    assertThatThrownBy(ambassadorBuilder::build).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Host has not been defined and it is required");
+    assertThatThrownBy(ambassadorBuilder::build)
+      .isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Host has not been defined and it is required");
   }
 
   @Test
   public void exceptionThrown_when_ambassadorCreatedWithEmptyHostOwnerEmail() {
     var ambassadorBuilder = ambassadorBuilder().withHostOwnerEmail("");
-    assertThatThrownBy(ambassadorBuilder::build).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Host Owner Email has not been defined and it is required");
+    assertThatThrownBy(ambassadorBuilder::build)
+      .isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Host Owner Email has not been defined and it is required");
   }
 
   @Test
   public void exceptionThrown_when_ambassadorCreatedWithEmptyAcmeProviderAuthority() {
     var ambassadorBuilder = ambassadorBuilder().withAcmeProviderAuthority("");
-    assertThatThrownBy(ambassadorBuilder::build).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("[Ambassador Validation] Automated Certificate Management Environment (ACME) Provider Authority has not been defined and it is required");
+    assertThatThrownBy(ambassadorBuilder::build)
+      .isInstanceOf(IllegalArgumentException.class).hasMessageContaining("[CaaSAmbassador Validation] Automated Certificate Management Environment (ACME) Provider Authority has not been defined and it is required");
   }
 
   @Test
   public void exceptionThrown_when_ambassadorCreatedWithEmptyTlsSecret() {
     var ambassadorBuilder = ambassadorBuilder().withTlsSecretName("");
-    assertThatThrownBy(ambassadorBuilder::build).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("TLS Secret has not been defined and it is required");
+    assertThatThrownBy(ambassadorBuilder::build).isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("TLS Secret has not been defined and it is required");
   }
 
   @Test

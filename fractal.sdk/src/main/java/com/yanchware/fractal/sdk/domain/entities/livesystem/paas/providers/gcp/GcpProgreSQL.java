@@ -43,6 +43,8 @@ public class GcpProgreSQL extends PostgreSQL {
   public ProviderType getProvider() {
     return ProviderType.GCP;
   }
+  @Override
+  public void setProvider(ProviderType providerType) { }
 
   public static class GcpPostgreSQLBuilder extends Builder<GcpProgreSQL, GcpPostgreSQLBuilder> {
 

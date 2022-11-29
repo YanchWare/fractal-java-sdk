@@ -25,15 +25,14 @@ public class PostgreSQLDB extends PaaSPostgreSQLDB implements LiveSystemComponen
     private PostgreSQLCharset charset;
     private String collation;
     private String schema;
+
+    @Getter
+    @Setter
     private ProviderType provider;
 
     protected PostgreSQLDB() {
     }
 
-    @Override
-    public ProviderType getProvider() {
-        return provider;
-    }
 
     public static PostgreSQLDBBuilder builder() {
         return new PostgreSQLDBBuilder();

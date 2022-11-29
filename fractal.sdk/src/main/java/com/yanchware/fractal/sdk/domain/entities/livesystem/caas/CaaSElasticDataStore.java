@@ -7,6 +7,7 @@ import lombok.ToString;
 
 import java.util.Collection;
 
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.AMBASSADOR;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.ELASTIC_DATASTORE;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -14,8 +15,10 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
 public class CaaSElasticDataStore extends CaaSDocumentDBImpl implements LiveSystemComponent {
-    private final static String ELASTIC_INSTANCES_NEGATIVE_OR_ZERO = "[ElasticDataStore Validation] Elastic Instances defined was either 0 or negative and it needs to be greater than 0";
-    private final static String VERSION_IS_BLANK = "[ElasticDataStore Validation] Elastic Version has not been defined and it is required";
+    public static final String TYPE = ELASTIC_DATASTORE.getId();
+
+    private final static String ELASTIC_INSTANCES_NEGATIVE_OR_ZERO = "[CaaSElasticDataStore Validation] Elastic Instances defined was either 0 or negative and it needs to be greater than 0";
+    private final static String VERSION_IS_BLANK = "[CaaSElasticDataStore Validation] Elastic Version has not been defined and it is required";
 
     private boolean isKibanaRequired;
     private String elasticVersion;

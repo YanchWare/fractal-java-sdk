@@ -24,7 +24,7 @@ public class BlueprintComponentDtoTest {
     var aks = getAksBuilder().withMonitoring(getPrometheusExample()).build();
     var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(aks));
 
-    var prometheus = (Prometheus) aks.getMonitoringInstances().get(0);
+    var prometheus = (CaaSPrometheus) aks.getMonitoringInstances().get(0);
     var prometheusDto = getBlueprintComponentDto(blueprintComponentDtoList, prometheus.getId().getValue());
     var aksId = aks.getId().getValue();
 
@@ -67,7 +67,7 @@ public class BlueprintComponentDtoTest {
     var aks = getAksBuilder().withServiceMeshSecurity(getOcelotExample()).build();
     var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(aks));
 
-    var ocelot = (Ocelot) aks.getServiceMeshSecurityInstances().get(0);
+    var ocelot = (CaaSOcelot) aks.getServiceMeshSecurityInstances().get(0);
     var ocelotDto = getBlueprintComponentDto(blueprintComponentDtoList, ocelot.getId().getValue());
     var aksId = aks.getId().getValue();
 

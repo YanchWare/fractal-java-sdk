@@ -153,8 +153,8 @@ public class TestUtils {
         .build();
   }
 
-  public static KubernetesWorkload getK8sWorkloadExample() {
-    return KubernetesWorkload.builder()
+  public static CaaSKubernetesWorkload getK8sWorkloadExample() {
+    return CaaSKubernetesWorkload.builder()
         .withId("fractal-svc")
         .withDescription("Fractal Service on K8S")
         .withDisplayName("Fractal SVC")
@@ -171,8 +171,8 @@ public class TestUtils {
         .build();
   }
 
-  public static Prometheus getPrometheusExample() {
-    return Prometheus.builder()
+  public static CaaSPrometheus getPrometheusExample() {
+    return CaaSPrometheus.builder()
         .withId("prometheus")
         .withDescription("Prometheus monitoring")
         .withDisplayName("Prometheus")
@@ -194,8 +194,8 @@ public class TestUtils {
         .build();
   }
 
-  public static Ocelot getOcelotExample() {
-    return Ocelot.builder()
+  public static CaaSOcelot getOcelotExample() {
+    return CaaSOcelot.builder()
         .withId("ocelot")
         .withDescription("Security with Ocelot")
         .withDisplayName("Ocelot")

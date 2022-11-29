@@ -5,31 +5,31 @@ import org.junit.jupiter.api.Test;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.OCELOT;
 import static org.assertj.core.api.Assertions.*;
 
-class OcelotTest {
+class CaaSOcelotTest {
     @Test
     public void exceptionThrown_when_ocelotBuiltWithNullId() {
-        assertThatThrownBy(() -> Ocelot.builder().withId("").build()).
+        assertThatThrownBy(() -> CaaSOcelot.builder().withId("").build()).
                 isInstanceOf(IllegalArgumentException.class).
                 hasMessageContaining("Component Id is illegal");
     }
 
     @Test
     public void exceptionThrown_when_ocelotBuiltWithContainerPlatformBlank() {
-        assertThatThrownBy(() -> Ocelot.builder().withId("ocelot").withContainerPlatform("").build()).
+        assertThatThrownBy(() -> CaaSOcelot.builder().withId("ocelot").withContainerPlatform("").build()).
                 isInstanceOf(IllegalArgumentException.class).
                 hasMessageContaining("ContainerPlatform defined was either empty or blank");
     }
 
     @Test
     public void exceptionThrown_when_ocelotBuiltWithContainerPlatformEmpty() {
-        assertThatThrownBy(() -> Ocelot.builder().withId("ocelot").withContainerPlatform("   ").build()).
+        assertThatThrownBy(() -> CaaSOcelot.builder().withId("ocelot").withContainerPlatform("   ").build()).
                 isInstanceOf(IllegalArgumentException.class).
                 hasMessageContaining("ContainerPlatform defined was either empty or blank");
     }
 
     @Test
     public void exceptionThrown_when_ocelotBuiltWithEmptyValues() {
-        assertThatThrownBy(() -> Ocelot.builder().withId("ocelot").build()).
+        assertThatThrownBy(() -> CaaSOcelot.builder().withId("ocelot").build()).
                 isInstanceOf(IllegalArgumentException.class).
                 hasMessageContainingAll(
                         "Namespace has not been defined and it is required",
@@ -40,7 +40,7 @@ class OcelotTest {
 
     @Test
     public void typeIsOcelot_when_BuiltWithAllRequiredValues() {
-        var builder = Ocelot.builder()
+        var builder = CaaSOcelot.builder()
                 .withId("ocelot")
                 .withNamespace("security")
                 .withHost("api.fractal-arch.org")

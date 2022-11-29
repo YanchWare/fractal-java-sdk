@@ -9,16 +9,17 @@ import lombok.ToString;
 import java.util.Collection;
 import java.util.List;
 
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.OCELOT;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.TRAEFIK;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
-public class Traefik extends CaaSAPIGatewayImpl {
-    private final static String OIDC_IS_PARTIAL = "[Traefik Validation] OIDC has been partially configured. You must provide all required values or none of them";
-    private final static String NO_ENTRY_POINTS = "[Traefik Validation] Traefik should have at least one entrypoint";
-    private final static String NO_HOSTNAME = "[Traefik Validation] Traefik should have a hostname";
+public class CaaSTraefik extends CaaSAPIGatewayImpl {
+    private final static String OIDC_IS_PARTIAL = "[CaaSTraefik Validation] OIDC has been partially configured. You must provide all required values or none of them";
+    private final static String NO_ENTRY_POINTS = "[CaaSTraefik Validation] Traefik should have at least one entrypoint";
+    private final static String NO_HOSTNAME = "[CaaSTraefik Validation] Traefik should have a hostname";
 
     private String oidcClientId;
     private String oidcClientSecretId;
@@ -30,18 +31,19 @@ public class Traefik extends CaaSAPIGatewayImpl {
     private List<TraefikEntryPoint> entryPoints;
     private List<TraefikTlsCertificate> tlsCertificates;
 
-
-    protected Traefik() {
+    protected CaaSTraefik() {
     }
 
     public static TraefikBuilder builder() {
         return new TraefikBuilder();
     }
 
-    public static class TraefikBuilder extends Builder<Traefik, TraefikBuilder> {
+    public static class TraefikBuilder extends Builder<CaaSTraefik, TraefikBuilder> {
+        public static final String TYPE = TRAEFIK.getId();
+
         @Override
-        protected Traefik createComponent() {
-            return new Traefik();
+        protected CaaSTraefik createComponent() {
+            return new CaaSTraefik();
         }
 
         @Override
@@ -89,7 +91,7 @@ public class Traefik extends CaaSAPIGatewayImpl {
         }
 
         @Override
-        public Traefik build() {
+        public CaaSTraefik build() {
             component.setType(TRAEFIK);
             return super.build();
         }

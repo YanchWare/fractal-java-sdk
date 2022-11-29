@@ -1,9 +1,6 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
 import com.yanchware.fractal.sdk.utils.CollectionUtils;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 
 import java.util.ArrayList;
@@ -11,20 +8,19 @@ import java.util.List;
 
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.OCELOT;
 
-@Getter
-@Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
-public class Ocelot extends CaaSServiceMeshSecurityImpl implements LiveSystemComponent {
+public class CaaSOcelot extends CaaSServiceMeshSecurityImpl implements LiveSystemComponent {
+    public static final String TYPE = OCELOT.getId();
 
     public static OcelotBuilder builder() {
         return new OcelotBuilder();
     }
 
-    public static class OcelotBuilder extends Builder<Ocelot, OcelotBuilder> {
+    public static class OcelotBuilder extends Builder<CaaSOcelot, OcelotBuilder> {
 
         @Override
-        protected Ocelot createComponent() {
-            return new Ocelot();
+        protected CaaSOcelot createComponent() {
+            return new CaaSOcelot();
         }
 
         @Override
@@ -79,7 +75,7 @@ public class Ocelot extends CaaSServiceMeshSecurityImpl implements LiveSystemCom
         }
 
         @Override
-        public Ocelot build() {
+        public CaaSOcelot build() {
             component.setType(OCELOT);
             return super.build();
         }

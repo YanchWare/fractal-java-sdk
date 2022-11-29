@@ -74,21 +74,21 @@ class CaaSElasticLoggingTest {
     public void exceptionThrown_when_BuiltWithEmptyElasticStorage() {
         assertThatThrownBy(() -> CaaSElasticLogging.builder().withId("el-log").withNamespace("namespace").withStorage("").build()).
                 isInstanceOf(IllegalArgumentException.class).
-                hasMessageContaining("Elastic Storage has not been defined and it is required");
+                hasMessageContaining("Storage has not been defined and it is required");
     }
 
     @Test
     public void exceptionThrown_when_BuiltWithBlankElasticStorage() {
         assertThatThrownBy(() -> CaaSElasticLogging.builder().withId("el-log").withNamespace("namespace").withStorage("   ").build()).
                 isInstanceOf(IllegalArgumentException.class).
-                hasMessageContaining("Elastic Storage has not been defined and it is required");
+                hasMessageContaining("Storage has not been defined and it is required");
     }
 
     @Test
     public void exceptionThrown_when_BuiltWithNullElasticStorage() {
         assertThatThrownBy(() -> CaaSElasticLogging.builder().withId("el-log").withNamespace("namespace").withStorage(null).build()).
                 isInstanceOf(IllegalArgumentException.class).
-                hasMessageContaining("Elastic Storage has not been defined and it is required");
+                hasMessageContaining("Storage has not been defined and it is required");
     }
 
     @Test

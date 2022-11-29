@@ -7,35 +7,35 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PROMETHEUS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class PrometheusTest {
+class CaaSPrometheusTest {
 
   @Test
   public void exceptionThrown_when_prometheusCreatedWithNullId() {
-    assertThatThrownBy(() -> Prometheus.builder().withId(""))
+    assertThatThrownBy(() -> CaaSPrometheus.builder().withId(""))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessageContainingAll("A valid component id cannot be null, empty or contain spaces");
   }
 
   @Test
   public void exceptionThrown_when_prometheusCreatedWithNoNamespace() {
-    var prometheusBuilder = Prometheus.builder()
+    var prometheusBuilder = CaaSPrometheus.builder()
       .withId(ComponentId.from("prometheus"));
 
     assertThatThrownBy(prometheusBuilder::build)
       .isInstanceOf(IllegalArgumentException.class)
-      .hasMessageContaining("[CaaSMonitoring Validation] Namespace has not been defined and it is required");
+      .hasMessageContaining("[CaaSPrometheus Validation] Namespace has not been defined and it is required");
   }
 
   @Test
   public void exceptionThrown_when_prometheusCreatedWithEmptyContainerPlatform() {
-    var prometheusBuilder = Prometheus.builder()
+    var prometheusBuilder = CaaSPrometheus.builder()
       .withId(ComponentId.from("prometheus"))
       .withNamespace("prometheus")
       .withContainerPlatform("");
 
     assertThatThrownBy(prometheusBuilder::build)
       .isInstanceOf(IllegalArgumentException.class)
-      .hasMessageContaining("[CaaSMonitoring Validation] ContainerPlatform defined was either empty or blank and it is required");
+      .hasMessageContaining("[CaaSPrometheus Validation] ContainerPlatform defined was either empty or blank and it is required");
   }
 
   @Test
@@ -58,8 +58,8 @@ class PrometheusTest {
     assertThat(ambassador.getType()).isEqualTo(PROMETHEUS);
   }
 
-  private Prometheus.PrometheusBuilder prometheusBuilder() {
-    return Prometheus.builder()
+  private CaaSPrometheus.PrometheusBuilder prometheusBuilder() {
+    return CaaSPrometheus.builder()
         .withId("prometheus")
         .withNamespace("prometheus")
         .withApiGatewayUrl("apiGatewayUrl");

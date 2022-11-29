@@ -1,7 +1,6 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
 import lombok.AccessLevel;
-import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -11,21 +10,21 @@ import java.util.List;
 import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.K8S_WORKLOAD;
 
-@Getter
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
-public class KubernetesWorkload extends CaaSK8sWorkloadImpl implements LiveSystemComponent {
+public class CaaSKubernetesWorkload extends CaaSWorkloadImpl implements LiveSystemComponent {
+    public static final String TYPE = K8S_WORKLOAD.getId();
 
     public static KubernetesWorkloadBuilder builder() {
         return new KubernetesWorkloadBuilder();
     }
 
 
-    public static class KubernetesWorkloadBuilder extends Builder<KubernetesWorkload, KubernetesWorkloadBuilder> {
+    public static class KubernetesWorkloadBuilder extends Builder<CaaSKubernetesWorkload, KubernetesWorkloadBuilder> {
 
         @Override
-        protected KubernetesWorkload createComponent() {
-            return new KubernetesWorkload();
+        protected CaaSKubernetesWorkload createComponent() {
+            return new CaaSKubernetesWorkload();
         }
 
         @Override
@@ -94,7 +93,7 @@ public class KubernetesWorkload extends CaaSK8sWorkloadImpl implements LiveSyste
         }
 
         @Override
-        public KubernetesWorkload build() {
+        public CaaSKubernetesWorkload build() {
             component.setType(K8S_WORKLOAD);
             return super.build();
         }

@@ -2,11 +2,11 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
 import org.junit.jupiter.api.Test;
 
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.KubernetesWorkload.*;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.CaaSKubernetesWorkload.*;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.K8S_WORKLOAD;
 import static org.assertj.core.api.Assertions.*;
 
-public class KubernetesWorkloadTest {
+public class CaaSKubernetesWorkloadTest {
 
   @Test
   public void exceptionThrown_when_workloadBuiltWithNullId() {
@@ -19,14 +19,14 @@ public class KubernetesWorkloadTest {
   public void exceptionThrown_when_workloadBuiltWithContainerPlatformBlank() {
     assertThatThrownBy(() -> generateBuilder().withContainerPlatform("").build()).
         isInstanceOf(IllegalArgumentException.class).
-        hasMessageContaining("ContainerPlatform is either empty or blank");
+        hasMessageContaining("ContainerPlatform defined was either empty or blank and it is required");
   }
 
   @Test
   public void exceptionThrown_when_workloadBuiltWithContainerPlatformEmpty() {
     assertThatThrownBy(() -> generateBuilder().withContainerPlatform("   ").build()).
         isInstanceOf(IllegalArgumentException.class).
-        hasMessageContaining("ContainerPlatform is either empty or blank");
+        hasMessageContaining("ContainerPlatform defined was either empty or blank and it is required");
   }
 
   @Test
@@ -34,7 +34,7 @@ public class KubernetesWorkloadTest {
     assertThatThrownBy(() -> generateBuilder().build()).
         isInstanceOf(IllegalArgumentException.class).
         hasMessageContainingAll(
-            "Namespace is either empty or blank",
+            "Namespace has not been defined and it is required",
             "privateSSHKeyPassphraseSecretId is either empty or blank",
             "privateSSHKeySecretId is either empty or blank",
             "sshRepositoryURI is either empty or blank",

@@ -8,14 +8,16 @@ import lombok.ToString;
 
 import java.util.Collection;
 
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.OCELOT;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PROMETHEUS;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
-public class Prometheus extends CaaSMonitoringImpl implements LiveSystemComponent {
-    private final static String API_GATEWAY_URL_IS_BLANK = "[Prometheus Validation] API Gateway URL has not been defined and it is required";
+public class CaaSPrometheus extends CaaSMonitoringImpl implements LiveSystemComponent {
+    public static final String TYPE = PROMETHEUS.getId();
+    private final static String API_GATEWAY_URL_IS_BLANK = "[CaaSPrometheus Validation] API Gateway URL has not been defined and it is required";
 
     private String apiGatewayUrl;
 
@@ -23,11 +25,11 @@ public class Prometheus extends CaaSMonitoringImpl implements LiveSystemComponen
         return new PrometheusBuilder();
     }
 
-    public static class PrometheusBuilder extends Builder<Prometheus, PrometheusBuilder> {
+    public static class PrometheusBuilder extends Builder<CaaSPrometheus, PrometheusBuilder> {
 
         @Override
-        protected Prometheus createComponent() {
-            return new Prometheus();
+        protected CaaSPrometheus createComponent() {
+            return new CaaSPrometheus();
         }
 
         @Override
@@ -56,7 +58,7 @@ public class Prometheus extends CaaSMonitoringImpl implements LiveSystemComponen
         }
 
         @Override
-        public Prometheus build() {
+        public CaaSPrometheus build() {
             component.setType(PROMETHEUS);
             return super.build();
         }

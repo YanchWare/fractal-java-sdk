@@ -10,35 +10,35 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.TRAEFIK;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class TraefikTest extends TestWithFixture {
+class CaaSTraefikTest extends TestWithFixture {
 
   @Test
   public void exceptionThrown_when_traefikCreatedWithNullId() {
-    assertThatThrownBy(() -> Traefik.builder().withId(""))
+    assertThatThrownBy(() -> CaaSTraefik.builder().withId(""))
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessageContainingAll("A valid component id cannot be null, empty or contain spaces");
   }
 
   @Test
   public void exceptionThrown_when_traefikCreatedWithNoNamespace() {
-    var traefikBuilder = Traefik.builder()
+    var traefikBuilder = CaaSTraefik.builder()
       .withId(ComponentId.from("traefik"));
 
     assertThatThrownBy(traefikBuilder::build)
       .isInstanceOf(IllegalArgumentException.class)
-      .hasMessageContaining("[CaaSAPIGateway Validation] Namespace has not been defined and it is required");
+      .hasMessageContaining("[CaaSTraefik Validation] Namespace has not been defined and it is required");
   }
 
   @Test
   public void exceptionThrown_when_traefikCreatedWithEmptyContainerPlatform() {
-    var traefikBuilder = Traefik.builder()
+    var traefikBuilder = CaaSTraefik.builder()
       .withId(ComponentId.from("traefik"))
       .withNamespace("traefik")
       .withContainerPlatform("");
 
     assertThatThrownBy(traefikBuilder::build)
       .isInstanceOf(IllegalArgumentException.class)
-      .hasMessageContaining("[CaaSAPIGateway Validation] ContainerPlatform defined was either empty or blank and it is required");
+      .hasMessageContaining("[CaaSTraefik Validation] ContainerPlatform defined was either empty or blank and it is required");
   }
 
   @Test
@@ -132,15 +132,15 @@ class TraefikTest extends TestWithFixture {
     assertThat(ambassador.getType()).isEqualTo(TRAEFIK);
   }
 
-  private Traefik.TraefikBuilder traefikBuilder() {
-    return Traefik.builder()
+  private CaaSTraefik.TraefikBuilder traefikBuilder() {
+    return CaaSTraefik.builder()
       .withId("traefik")
       .withNamespace(a(String.class))
       .withHostname(a(String.class))
       .withEntryPoints(aListOf(TraefikEntryPoint.class));
   }
 
-  private Traefik.TraefikBuilder traefikBuilderWithForwardAuth() {
+  private CaaSTraefik.TraefikBuilder traefikBuilderWithForwardAuth() {
     return traefikBuilder()
       .withForwardAuth(new ForwardAuthSettings(
         a(String.class),
