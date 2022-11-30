@@ -8,5 +8,5 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.POSTGRESQLDB;
 
 @ToString(callSuper = true)
 public class PaaSPostgreSQLDB extends Component implements BlueprintComponent {
-    public static final String TYPE = POSTGRESQLDB.getId();
+  public static final String TYPE = POSTGRESQLDB.getId();
 }
