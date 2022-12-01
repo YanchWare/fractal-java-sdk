@@ -12,7 +12,9 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureKubernetesService.AzureKubernetesServiceBuilder;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureNodePool;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzurePostgreSQL;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.*;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.GcpNodePool;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.GcpProgreSQL;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.GoogleKubernetesEngine;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.GoogleKubernetesEngine.GoogleKubernetesEngineBuilder;
 import com.yanchware.fractal.sdk.services.contracts.ComponentDto;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
@@ -163,7 +165,7 @@ public class TestUtils {
         .withRoles(List.of(
             CustomWorkloadRole.builder().withName("datastore").withScope("user").build(),
             CustomWorkloadRole.builder().withName("pubsub").withScope("editor").build(),
-            CustomWorkloadRole.builder().withName("ocelot").withScope("user").withIsOcelotRole(true).build()))
+            CustomWorkloadRole.builder().withName("ocelot").withScope("user").withRoleType(RoleType.OCELOT_ROLE).build()))
         .build();
   }
 
