@@ -1,21 +1,21 @@
 package com.yanchware.fractal.sdk.utils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yanchware.fractal.sdk.aggregates.Environment;
 import com.yanchware.fractal.sdk.aggregates.LiveSystem;
 import com.yanchware.fractal.sdk.domain.entities.Component;
 import com.yanchware.fractal.sdk.domain.entities.ComponentLink;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.*;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureAddonProfile;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureKubernetesService;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureKubernetesService.AzureKubernetesServiceBuilder;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureNodePool;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzurePostgreSQL;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.GcpNodePool;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.GcpProgreSQL;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.GoogleKubernetesEngine;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.GoogleKubernetesEngine.GoogleKubernetesEngineBuilder;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PodManagedIdentity;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PostgreSQLDB;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureAddonProfile;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureKubernetesService;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureKubernetesService.AzureKubernetesServiceBuilder;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureNodePool;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzurePostgreSQL;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpNodePool;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpProgreSQL;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GoogleKubernetesEngine;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GoogleKubernetesEngine.GoogleKubernetesEngineBuilder;
 import com.yanchware.fractal.sdk.services.contracts.ComponentDto;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import lombok.extern.slf4j.Slf4j;
@@ -25,17 +25,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PreemptionPolicy.NEVER;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PreemptionPolicy.PREEMPT_LOWER_PRIORITY;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureMachineType.STANDARD_B2S;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureOsType.LINUX;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureRegion.EUROPE_WEST;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureSkuName.B_GEN5_1;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.azure.AzureStorageAutoGrow.ENABLED;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.GcpMachine.E2_STANDARD2;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.providers.gcp.GcpRegion.EU_WEST1;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureMachineType.STANDARD_B2S;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureOsType.LINUX;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion.EUROPE_WEST;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureSkuName.B_GEN5_1;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureStorageAutoGrow.ENABLED;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpMachine.E2_STANDARD2;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpRegion.EU_WEST1;
 import static java.util.stream.Collectors.toSet;
 
 @Slf4j
@@ -151,8 +150,8 @@ public class TestUtils {
         .build();
   }
 
-  public static KubernetesWorkload getK8sWorkloadExample() {
-    return KubernetesWorkload.builder()
+  public static CaaSKubernetesWorkload getK8sWorkloadExample() {
+    return CaaSKubernetesWorkload.builder()
         .withId("fractal-svc")
         .withDescription("Fractal Service on K8S")
         .withDisplayName("Fractal SVC")
@@ -169,8 +168,8 @@ public class TestUtils {
         .build();
   }
 
-  public static Prometheus getPrometheusExample() {
-    return Prometheus.builder()
+  public static CaaSPrometheus getPrometheusExample() {
+    return CaaSPrometheus.builder()
         .withId("prometheus")
         .withDescription("Prometheus monitoring")
         .withDisplayName("Prometheus")
@@ -179,8 +178,8 @@ public class TestUtils {
         .build();
   }
 
-  public static Ambassador getAmbassadorExample() {
-    return Ambassador.builder()
+  public static CaaSAmbassador getAmbassadorExample() {
+    return CaaSAmbassador.builder()
         .withId("ambassador")
         .withDescription("Ambassador")
         .withDisplayName("Ambassador")
@@ -192,8 +191,8 @@ public class TestUtils {
         .build();
   }
 
-  public static Ocelot getOcelotExample() {
-    return Ocelot.builder()
+  public static CaaSOcelot getOcelotExample() {
+    return CaaSOcelot.builder()
         .withId("ocelot")
         .withDescription("Security with Ocelot")
         .withDisplayName("Ocelot")
@@ -209,8 +208,8 @@ public class TestUtils {
         .build();
   }
 
-  public static ElasticLogging getElasticLoggingExample() {
-    return ElasticLogging.builder()
+  public static CaaSElasticLogging getElasticLoggingExample() {
+    return CaaSElasticLogging.builder()
         .withId("elastic-logging")
         .withDescription("Elastic Logging")
         .withDisplayName("Elastic Logging")
@@ -226,8 +225,8 @@ public class TestUtils {
         .build();
   }
 
-  public static ElasticDataStore getElasticDataStoreExample() {
-    return ElasticDataStore.builder()
+  public static CaaSElasticDataStore getElasticDataStoreExample() {
+    return CaaSElasticDataStore.builder()
         .withId("elastic-data")
         .withDescription("Elastic Data Store")
         .withDisplayName("Elastic Data Store")
@@ -241,34 +240,6 @@ public class TestUtils {
         .withCpu(3)
         .build();
   }
-
-  /*public static Jaeger getJaegerExample() {
-    return Jaeger.builder()
-        .withId("jaeger")
-        .withDescription("Jaeger Tracing")
-        .withDisplayName("Jaeger")
-        .withNamespace("tracing")
-        .withStorageCpu(1)
-        .withStorageMemory(2)
-        .withStorageInstances(1)
-        .withStorageStorageClassName("standard")
-        .build();
-  }*/
-
-  /*public static KafkaCluster getKafkaClusterExample() {
-    return KafkaCluster.builder()
-        .withId("azure-kafka")
-        .withDescription("Kafka for Azure")
-        .withDisplayName("AzureKafka #1")
-        .withNamespace("namespace")
-        .withKafkaTopics(List.of(
-            KafkaTopic.builder().withId("topic").withDisplayName("kafka-topic").build(),
-            KafkaTopic.builder().withId("topic-2").withDisplayName("kafka-topic-2").build()))
-        .withKafkaUsers(List.of(
-            KafkaUser.builder().withId("user-1").withDisplayName("kafka-user").withTopicReadACL("svcName").build(),
-            KafkaUser.builder().withId("user-2").withDisplayName("kafka-user-2").build()))
-        .build();
-  }*/
 
   public static AzurePostgreSQL getAzurePostgresExample() {
     return AzurePostgreSQL.builder()
@@ -362,36 +333,6 @@ public class TestUtils {
             .withName("gke")
             .withMachineType(E2_STANDARD2)
             .build());
-  }
-
-  public static void printJsonRepresentation(Object obj) {
-    try {
-      log.debug(new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(obj));
-    } catch (JsonProcessingException e) {
-      log.error("Error when trying to process: {}", obj, e);
-    }
-  }
-
-  public static void stubWireMockForLiveSystem(String url) {
-    stubFor(post(urlPathMatching(url))
-        .willReturn(aResponse()
-            .withStatus(200)
-            .withHeader("Content-Type", "application/json")));
-  }
-
-  public static void stubWireMockForBlueprints(String url) {
-    stubFor(get(urlPathMatching(url))
-        .willReturn(aResponse()
-            .withStatus(200)
-            .withHeader("Content-Type", "application/json")));
-    stubFor(put(urlPathMatching(url))
-        .willReturn(aResponse()
-            .withStatus(200)
-            .withHeader("Content-Type", "application/json")));
-    stubFor(post(urlPathMatching(url))
-        .willReturn(aResponse()
-            .withStatus(202)
-            .withHeader("Content-Type", "application/json")));
   }
 
   public static void assertGenericComponent(ComponentDto componentDto, Component comp, String type) {
