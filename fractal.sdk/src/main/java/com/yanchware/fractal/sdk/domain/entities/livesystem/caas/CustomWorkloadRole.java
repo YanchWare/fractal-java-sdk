@@ -8,5 +8,5 @@ import lombok.Data;
 public class CustomWorkloadRole {
   private String name;
   private String scope;
-  private boolean isOcelotRole;
+  private RoleType roleType;
 }

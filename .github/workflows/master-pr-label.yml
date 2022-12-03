@@ -1,0 +1,52 @@
+name: 'Master - PR Label Checker'
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - reopened
+      - labeled
+      - unlabeled
+      - synchronize
+jobs:
+  check_labels:
+    if: github.event.action != 'synchronize'
+    name: 'Check PR Labels'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
+      - uses: mheap/github-action-required-labels@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.HalAccessToken }}
+        with:
+          mode: exactly
+          count: 1
+          labels: 'major, minor, patch'
+      - name: Git config
+        run: |
+          git config --global user.email "hello@yanchware.com"
+          git config --global user.name "HAL9000-2"
+      - name: Apply version bump (major)
+        if: contains(github.event.pull_request.labels.*.name, 'major')
+        run: |
+          cd fractal.sdk 
+          mvn build-helper:parse-version versions:set -DnewVersion=\${parsedVersion.nextMajorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.incrementalVersion} versions:commit
+          git commit -am "Bump major pom version"
+          git push
+      - name: Apply version bump (minor)
+        if: contains(github.event.pull_request.labels.*.name, 'minor')
+        run: |
+          cd fractal.sdk 
+          mvn build-helper:parse-version versions:set -DnewVersion=\${parsedVersion.majorVersion}.\${parsedVersion.nextMinorVersion}.\${parsedVersion.incrementalVersion} versions:commit
+          git commit -am "Bump minor pom version"
+          git push
+      - name: Apply version bump (patch)
+        if: contains(github.event.pull_request.labels.*.name, 'patch')
+        run: |
+          cd fractal.sdk 
+          mvn build-helper:parse-version versions:set -DnewVersion=\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion} versions:commit
+          git commit -am "Bump patch (incremental) pom version"
+          git push
