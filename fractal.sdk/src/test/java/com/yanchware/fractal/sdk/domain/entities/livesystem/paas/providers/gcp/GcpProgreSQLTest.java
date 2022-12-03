@@ -1,4 +1,4 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.gcp;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp;
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpProgreSQL;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;

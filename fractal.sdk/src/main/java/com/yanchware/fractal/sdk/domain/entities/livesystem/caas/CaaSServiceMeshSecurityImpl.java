@@ -26,10 +26,10 @@ public abstract class CaaSServiceMeshSecurityImpl extends CaaSServiceMeshSecurit
     private int cookieMaxAgeSec;
     private String pathPrefix;
 
-
-    @Getter
-    @Setter
-    private ProviderType provider;
+    @Override
+    public ProviderType getProvider(){
+        return ProviderType.CAAS;
+    }
 
     @Override
     public Collection<String> validate() {

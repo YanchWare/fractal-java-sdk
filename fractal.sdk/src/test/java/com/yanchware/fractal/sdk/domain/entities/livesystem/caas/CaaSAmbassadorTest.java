@@ -1,4 +1,4 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.CaaSAmbassador;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;

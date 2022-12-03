@@ -21,9 +21,10 @@ public abstract class CaaSLoggingImpl extends CaaSLogging implements LiveSystemC
     private int memory;
     private int cpu;
 
-    @Setter
-    @Getter
-    private ProviderType provider;
+    @Override
+    public ProviderType getProvider(){
+        return ProviderType.CAAS;
+    }
 
     @Override
     public Collection<String> validate() {

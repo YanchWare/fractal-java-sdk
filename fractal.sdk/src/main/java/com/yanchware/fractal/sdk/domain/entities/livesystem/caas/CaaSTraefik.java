@@ -1,6 +1,5 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
-import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -66,7 +65,6 @@ public class CaaSTraefik extends CaaSAPIGatewayImpl {
         }
 
         public TraefikBuilder withContainerPlatform(String containerPlatform) {
-            component.setProvider(ProviderType.CAAS);
             component.setContainerPlatform(containerPlatform);
             return builder;
         }

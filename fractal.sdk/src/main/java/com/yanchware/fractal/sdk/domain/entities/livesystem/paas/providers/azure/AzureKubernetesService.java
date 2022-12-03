@@ -39,9 +39,6 @@ public class AzureKubernetesService extends KubernetesCluster {
     return ProviderType.AZURE;
   }
 
-  @Override
-  public void setProvider(ProviderType providerType) { }
-
   public static AzureKubernetesServiceBuilder builder() {
     return new AzureKubernetesServiceBuilder();
   }

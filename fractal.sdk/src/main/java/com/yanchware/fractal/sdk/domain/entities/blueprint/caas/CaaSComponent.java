@@ -4,6 +4,7 @@ import com.yanchware.fractal.sdk.domain.entities.Component;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Collection;
 
@@ -11,6 +12,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Getter
 @Setter(AccessLevel.PUBLIC)
+@ToString(callSuper = true)
 public abstract class CaaSComponent extends Component {
 
   private String containerPlatform;

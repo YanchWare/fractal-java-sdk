@@ -20,9 +20,10 @@ public abstract class CaaSDocumentDBImpl extends CaaSDocumentDB implements LiveS
     private Integer memory;
     private Integer cpu;
 
-    @Setter
-    @Getter
-    private ProviderType provider;
+    @Override
+    public ProviderType getProvider(){
+        return ProviderType.CAAS;
+    }
 
     @Override
     public Collection<String> validate() {

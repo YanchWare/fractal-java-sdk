@@ -33,9 +33,10 @@ public abstract class CaaSWorkloadImpl extends CaaSWorkload implements LiveSyste
     private String workloadSecretIdKey;
     private String workloadSecretPasswordKey;
 
-    @Getter
-    @Setter
-    private ProviderType provider;
+    @Override
+    public ProviderType getProvider(){
+        return ProviderType.CAAS;
+    }
 
     protected CaaSWorkloadImpl() {
         roles = new ArrayList<>();

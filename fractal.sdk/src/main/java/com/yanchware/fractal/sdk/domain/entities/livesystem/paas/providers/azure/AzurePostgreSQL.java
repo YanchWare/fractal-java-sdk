@@ -40,8 +40,6 @@ public class AzurePostgreSQL extends PostgreSQL {
   public ProviderType getProvider() {
     return ProviderType.AZURE;
   }
-  @Override
-  public void setProvider(ProviderType providerType) { }
 
   public static class AzurePostgreSQLBuilder extends Builder<AzurePostgreSQL, AzurePostgreSQLBuilder> {
 

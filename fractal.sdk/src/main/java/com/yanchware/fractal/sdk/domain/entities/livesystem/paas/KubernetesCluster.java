@@ -36,8 +36,6 @@ public abstract class KubernetesCluster extends PaaSContainerPlatform implements
   private List<CaaSDocumentDBImpl> documentDBInstances;
   private PodManagedIdentity podManagedIdentity;
   private String windowsAdminUsername;
-  //private List<CaaSMessageBrokerImpl> messageBrokerInstances;
-  //private List<CaaSTracingImpl> tracingInstances;
 
   public KubernetesCluster() {
     super();
@@ -48,8 +46,6 @@ public abstract class KubernetesCluster extends PaaSContainerPlatform implements
     serviceMeshSecurityInstances = new ArrayList<>();
     loggingInstances = new ArrayList<>();
     documentDBInstances = new ArrayList<>();
-    //messageBrokerInstances = new ArrayList<>();
-    //tracingInstances = new ArrayList<>();
   }
 
   public static abstract class Builder<T extends KubernetesCluster, B extends Builder<T, B>> extends Component.Builder<T, B> {
@@ -95,31 +91,12 @@ public abstract class KubernetesCluster extends PaaSContainerPlatform implements
       }
 
       workloads.forEach(workload -> {
-        workload.setProvider(component.getProvider());
         workload.setContainerPlatform(component.getId().getValue());
         workload.getDependencies().add(component.getId());
       });
       component.getK8sWorkloadInstances().addAll(workloads);
       return builder;
     }
-
-    /*public B withMessageBroker(CaaSMessageBrokerImpl messageBroker) {
-      return withMessageBroker(List.of(messageBroker));
-    }
-
-    public B withMessageBroker(Collection<? extends CaaSMessageBrokerImpl> messageBrokers) {
-      if (isBlank(messageBrokers)) {
-        return builder;
-      }
-
-      if (isBlank(component.getMessageBrokerInstances())) {
-        component.setMessageBrokerInstances(new ArrayList<>());
-      }
-
-      messageBrokers.forEach(messageBroker -> messageBroker.initialiseParameters(component.getProvider(), component));
-      component.getMessageBrokerInstances().addAll(messageBrokers);
-      return builder;
-    }*/
 
     public B withMonitoring(CaaSMonitoringImpl monitoring) {
       return withMonitoring(List.of(monitoring));
@@ -135,7 +112,6 @@ public abstract class KubernetesCluster extends PaaSContainerPlatform implements
       }
 
       monitoringInstances.forEach(monitoring -> {
-        monitoring.setProvider(component.getProvider());
         monitoring.setContainerPlatform(component.getId().getValue());
         monitoring.getDependencies().add(component.getId());
       });
@@ -157,7 +133,6 @@ public abstract class KubernetesCluster extends PaaSContainerPlatform implements
       }
 
       apiGatewayInstances.forEach(apiGateway -> {
-        apiGateway.setProvider(component.getProvider());
         apiGateway.setContainerPlatform(component.getId().getValue());
         apiGateway.getDependencies().add(component.getId());
       });
@@ -177,33 +152,12 @@ public abstract class KubernetesCluster extends PaaSContainerPlatform implements
         component.setServiceMeshSecurityInstances(new ArrayList<>());
       }
       serviceMeshSecurityInstances.forEach(serviceMeshSecurity -> {
-        serviceMeshSecurity.setProvider(component.getProvider());
         serviceMeshSecurity.setContainerPlatform(component.getId().getValue());
         serviceMeshSecurity.getDependencies().add(component.getId());
       });
       component.getServiceMeshSecurityInstances().addAll(serviceMeshSecurityInstances);
       return builder;
     }
-
-    /*public B withTracing(CaaSTracingImpl tracing) {
-      return withTracing(List.of(tracing));
-    }
-
-    public B withTracing(Collection<? extends CaaSTracingImpl> tracingInstances) {
-      if (isBlank(tracingInstances)) {
-        return builder;
-      }
-      if (isBlank(component.getTracingInstances())) {
-        component.setTracingInstances(new ArrayList<>());
-      }
-      tracingInstances.forEach(tracing -> {
-        tracing.setProvider(component.getProvider());
-        tracing.setContainerPlatform(component.getId().getValue());
-        tracing.getDependencies().add(component.getId());
-      });
-      component.getTracingInstances().addAll(tracingInstances);
-      return builder;
-    }*/
 
     public B withLogging(CaaSLoggingImpl logging) {
       return withLogging(List.of(logging));
@@ -217,7 +171,6 @@ public abstract class KubernetesCluster extends PaaSContainerPlatform implements
         component.setLoggingInstances(new ArrayList<>());
       }
       loggingInstances.forEach(logging -> {
-        logging.setProvider(component.getProvider());
         logging.setContainerPlatform(component.getId().getValue());
         logging.getDependencies().add(component.getId());
       });
@@ -239,7 +192,6 @@ public abstract class KubernetesCluster extends PaaSContainerPlatform implements
         component.setDocumentDBInstances(new ArrayList<>());
       }
       documentDBInstances.forEach(documentDB -> {
-        documentDB.setProvider(component.getProvider());
         documentDB.setContainerPlatform(component.getId().getValue());
         documentDB.getDependencies().add(component.getId());
       });
@@ -282,9 +234,6 @@ public abstract class KubernetesCluster extends PaaSContainerPlatform implements
     k8sWorkloadInstances.stream()
         .map(CaaSWorkload::validate)
         .forEach(errors::addAll);
-    /*messageBrokerInstances.stream()
-        .map(CaaSMessageBroker::validate)
-        .forEach(errors::addAll);*/
     monitoringInstances.stream()
         .map(CaaSMonitoring::validate)
         .forEach(errors::addAll);
@@ -294,9 +243,6 @@ public abstract class KubernetesCluster extends PaaSContainerPlatform implements
     serviceMeshSecurityInstances.stream()
         .map(CaaSServiceMeshSecurity::validate)
         .forEach(errors::addAll);
-    /*tracingInstances.stream()
-        .map(CaaSTracing::validate)
-        .forEach(errors::addAll);*/
     loggingInstances.stream()
         .map(CaaSLogging::validate)
         .forEach(errors::addAll);

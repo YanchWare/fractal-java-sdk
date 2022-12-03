@@ -4,6 +4,4 @@ import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.Prov
 
 public interface LiveSystemComponent {
     ProviderType getProvider();
-    void setProvider(ProviderType providerType);
-
 }

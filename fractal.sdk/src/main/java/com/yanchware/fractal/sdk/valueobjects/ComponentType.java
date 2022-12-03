@@ -24,7 +24,8 @@ public enum ComponentType {
     CAAS_LOGGING("Observability.CaaS.Logging"),
     ELASTIC_LOGGING("Observability.CaaS.Elastic"),
     SERVICE_MESH_SECURITY("Security.CaaS.ServiceMeshSecurity"),
-    OCELOT("Security.CaaS.Ocelot");
+    OCELOT("Security.CaaS.Ocelot"),
+    SAAS_UNMANAGED_STORAGE("Storage.SaaS.Unmanaged");
 
     private final String id;
 

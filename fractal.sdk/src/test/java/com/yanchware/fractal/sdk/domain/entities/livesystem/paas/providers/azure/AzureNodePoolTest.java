@@ -1,4 +1,4 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
 
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.NodeTaint;

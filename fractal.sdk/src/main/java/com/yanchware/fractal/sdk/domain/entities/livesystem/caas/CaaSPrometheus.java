@@ -50,11 +50,6 @@ public class CaaSPrometheus extends CaaSMonitoringImpl implements LiveSystemComp
             return builder;
         }
 
-        public PrometheusBuilder withProvider(ProviderType providerType) {
-            component.setProvider(providerType);
-            return builder;
-        }
-
         @Override
         public CaaSPrometheus build() {
             component.setType(PROMETHEUS);

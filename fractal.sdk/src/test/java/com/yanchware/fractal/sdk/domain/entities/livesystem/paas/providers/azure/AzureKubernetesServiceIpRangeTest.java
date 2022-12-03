@@ -1,4 +1,4 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem.caas.azure;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;

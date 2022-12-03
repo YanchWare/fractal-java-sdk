@@ -1,6 +1,5 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
-import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -51,7 +50,6 @@ public class CaaSAmbassador extends CaaSAPIGatewayImpl {
         }
 
         public AmbassadorBuilder withContainerPlatform(String containerPlatform) {
-            component.setProvider(ProviderType.CAAS);
             component.setContainerPlatform(containerPlatform);
             return builder;
         }
@@ -78,11 +76,6 @@ public class CaaSAmbassador extends CaaSAPIGatewayImpl {
 
         public AmbassadorBuilder withTlsSecretName(String tlsSecretName) {
             component.setTlsSecretName(tlsSecretName);
-            return builder;
-        }
-
-        public AmbassadorBuilder withProvider(ProviderType providerType) {
-            component.setProvider(providerType);
             return builder;
         }
 
