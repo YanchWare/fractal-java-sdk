@@ -1,6 +1,7 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.KubernetesCluster;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.RoleAssignment;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -29,6 +30,7 @@ public class AzureKubernetesService extends KubernetesCluster {
   private Collection<String> externalLoadBalancerOutboundIps;
   private String externalWorkspaceResourceId;
   private Collection<AzureAddonProfile> addonProfiles;
+  private Collection<RoleAssignment> roles;
 
   protected AzureKubernetesService() {
     nodePools = new ArrayList<>();
@@ -123,6 +125,21 @@ public class AzureKubernetesService extends KubernetesCluster {
       }
 
       component.getAddonProfiles().addAll(addonProfiles);
+      return builder;
+    }
+
+    public AzureKubernetesServiceBuilder withRole(RoleAssignment role) {
+      return withRoles(List.of(role));
+    }
+
+    public AzureKubernetesServiceBuilder withRoles(List<RoleAssignment> roles) {
+      if (isBlank(roles)) {
+        return builder;
+      }
+      if (component.getRoles() == null) {
+        component.setRoles(new ArrayList<>());
+      }
+      component.getRoles().addAll(roles);
       return builder;
     }
   }

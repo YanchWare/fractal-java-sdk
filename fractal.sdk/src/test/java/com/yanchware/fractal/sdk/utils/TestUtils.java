@@ -7,6 +7,7 @@ import com.yanchware.fractal.sdk.domain.entities.ComponentLink;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.*;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PodManagedIdentity;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PostgreSQLDB;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.RoleAssignment;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureAddonProfile;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureKubernetesService;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureKubernetesService.AzureKubernetesServiceBuilder;
@@ -84,6 +85,10 @@ public class TestUtils {
             .withExceptionPodLabels(Map.of("app", "mic", "component", "mic"))
             .withEnable(true)
             .withAllowNetworkPluginKubeNet(true)
+            .build())
+        .withRole(RoleAssignment.builder()
+            .withRoleName("AcrPull")
+            .withScope("Role scope to ACR")
             .build());
   }
 
