@@ -1,6 +1,5 @@
 package com.yanchware.fractal.sdk.services.contracts.blueprintcontract.dtos;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.*;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSContainerPlatform;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSPostgreSQL;
@@ -9,13 +8,11 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.*;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.KubernetesCluster;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PostgreSQLDB;
 import com.yanchware.fractal.sdk.utils.TestUtils;
-import lombok.extern.java.Log;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Optional;
 
-import static com.yanchware.fractal.sdk.utils.SerializationUtils.serialize;
 import static com.yanchware.fractal.sdk.utils.TestUtils.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.SoftAssertions.assertSoftly;
@@ -258,7 +255,8 @@ public class BlueprintComponentDtoTest {
             aks.getExternalWorkspaceResourceId(),
             aks.getExternalLoadBalancerOutboundIps(),
             aks.getAddonProfiles(),
-            aks.getRoles()
+            aks.getRoles(),
+            aks.getAzureActiveDirectoryProfile()
         ));
   }
 
