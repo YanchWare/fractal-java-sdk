@@ -8,11 +8,8 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.*;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PodManagedIdentity;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PostgreSQLDB;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.RoleAssignment;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureAddonProfile;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureKubernetesService;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.*;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureKubernetesService.AzureKubernetesServiceBuilder;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureNodePool;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzurePostgreSQL;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpNodePool;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpProgreSQL;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GoogleKubernetesEngine;
@@ -25,6 +22,7 @@ import org.assertj.core.api.SoftAssertions;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PreemptionPolicy.NEVER;
@@ -89,6 +87,11 @@ public class TestUtils {
         .withRole(RoleAssignment.builder()
             .withRoleName("AcrPull")
             .withScope("Role scope to ACR")
+            .build())
+        .withExternalLoadBalancerOutboundIp("ExternalLoadBalancerOutboundIp")
+        .withAddonProfile(AzureAddonProfile.MONITORING)
+        .withActiveDirectoryProfile(AzureActiveDirectoryProfile.builder()
+            .withAdminGroupObjectIDs(List.of(UUID.randomUUID().toString()))
             .build());
   }
 

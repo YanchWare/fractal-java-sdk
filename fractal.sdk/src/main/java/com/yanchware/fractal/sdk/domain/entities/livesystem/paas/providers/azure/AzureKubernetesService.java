@@ -31,6 +31,7 @@ public class AzureKubernetesService extends KubernetesCluster {
   private String externalWorkspaceResourceId;
   private Collection<AzureAddonProfile> addonProfiles;
   private Collection<RoleAssignment> roles;
+  private AzureActiveDirectoryProfile azureActiveDirectoryProfile;
 
   protected AzureKubernetesService() {
     nodePools = new ArrayList<>();
@@ -140,6 +141,11 @@ public class AzureKubernetesService extends KubernetesCluster {
         component.setRoles(new ArrayList<>());
       }
       component.getRoles().addAll(roles);
+      return builder;
+    }
+    
+    public AzureKubernetesServiceBuilder withActiveDirectoryProfile(AzureActiveDirectoryProfile aadProfile) {
+      component.setAzureActiveDirectoryProfile(aadProfile);
       return builder;
     }
   }
