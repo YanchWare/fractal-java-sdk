@@ -33,14 +33,14 @@ jobs:
         if: contains(github.event.pull_request.labels.*.name, 'major')
         run: |
           cd fractal.sdk 
-          mvn build-helper:parse-version versions:set -DnewVersion=\${parsedVersion.nextMajorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.incrementalVersion} versions:commit
+          mvn build-helper:parse-version versions:set -DnewVersion=\${parsedVersion.nextMajorVersion}.0.0 versions:commit
           git commit -am "Bump major pom version"
           git push
       - name: Apply version bump (minor)
         if: contains(github.event.pull_request.labels.*.name, 'minor')
         run: |
           cd fractal.sdk 
-          mvn build-helper:parse-version versions:set -DnewVersion=\${parsedVersion.majorVersion}.\${parsedVersion.nextMinorVersion}.\${parsedVersion.incrementalVersion} versions:commit
+          mvn build-helper:parse-version versions:set -DnewVersion=\${parsedVersion.majorVersion}.\${parsedVersion.nextMinorVersion}.0 versions:commit
           git commit -am "Bump minor pom version"
           git push
       - name: Apply version bump (patch)
