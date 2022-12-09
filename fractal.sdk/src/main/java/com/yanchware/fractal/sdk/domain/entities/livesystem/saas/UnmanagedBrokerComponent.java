@@ -16,8 +16,10 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
 public class UnmanagedBrokerComponent extends com.yanchware.fractal.sdk.domain.entities.blueprint.saas.UnmanagedStorageComponent implements LiveSystemComponent {
+  private final static String SECRET_NAME_IS_BLANK = "[SaaSUnmanagedBrokerComponent Validation] Secret Name has not been defined and it is required";
   private final static String SECRET_VALUE_IS_BLANK = "[SaaSUnmanagedBrokerComponent Validation] Secret Value has not been defined and it is required";
 
+  private String secretName;
   private String secretValue;
 
   @Override
@@ -41,6 +43,11 @@ public class UnmanagedBrokerComponent extends com.yanchware.fractal.sdk.domain.e
       return this;
     }
 
+    public UnmanagedStorageComponentBuilder withSecretName(String secretName) {
+      component.setSecretName(secretName);
+      return builder;
+    }
+
     public UnmanagedStorageComponentBuilder withSecretValue(String secretValue) {
       component.setSecretValue(secretValue);
       return builder;
@@ -56,6 +63,10 @@ public class UnmanagedBrokerComponent extends com.yanchware.fractal.sdk.domain.e
   @Override
   public Collection<String> validate() {
     Collection<String> errors = super.validate();
+
+    if (isBlank(secretName)) {
+      errors.add(SECRET_NAME_IS_BLANK);
+    }
 
     if (isBlank(secretValue)) {
       errors.add(SECRET_VALUE_IS_BLANK);
