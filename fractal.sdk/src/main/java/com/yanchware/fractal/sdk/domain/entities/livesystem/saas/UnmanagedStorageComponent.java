@@ -17,7 +17,6 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
 public class UnmanagedStorageComponent extends com.yanchware.fractal.sdk.domain.entities.blueprint.saas.UnmanagedStorageComponent implements LiveSystemComponent {
-  private final static String SECRET_NAME_IS_BLANK = "[SaaSUnmanagedStorageComponent Validation] Secret Name has not been defined and it is required";
   private final static String SECRET_VALUE_IS_BLANK = "[SaaSUnmanagedStorageComponent Validation] Secret Value has not been defined and it is required";
 
   private String secretName;
@@ -64,10 +63,6 @@ public class UnmanagedStorageComponent extends com.yanchware.fractal.sdk.domain.
   @Override
   public Collection<String> validate() {
     Collection<String> errors = super.validate();
-
-    if (isBlank(secretName)) {
-      errors.add(SECRET_NAME_IS_BLANK);
-    }
 
     if (isBlank(secretValue)) {
       errors.add(SECRET_VALUE_IS_BLANK);

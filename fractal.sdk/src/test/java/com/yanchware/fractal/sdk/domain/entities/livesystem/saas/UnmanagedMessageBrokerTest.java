@@ -22,17 +22,19 @@ class UnmanagedMessageBrokerTest {
   }
 
   @Test
-  public void exceptionThrown_when_componentBuiltWithEmptyName() {
-    assertThatThrownBy(() -> UnmanagedBrokerComponent.builder()
+  public void typeIsUnmanagedBrokerComponent_when_BuiltWithAllRequiredValues() {
+    var secretValue = "aSecretValue";
+    var builder = UnmanagedBrokerComponent.builder()
         .withId("unmanaged-storage")
-        .withSecretValue("Secret")
-        .build()).
-        isInstanceOf(IllegalArgumentException.class).
-        hasMessageContaining("Secret Name has not been defined and it is required");
+        .withSecretValue(secretValue);
+    assertThatCode(builder::build).doesNotThrowAnyException();
+    assertThat(builder.build().getType()).isEqualTo(SAAS_UNMANAGED_BROKER);
+    assertThat(builder.build().getSecretName()).isBlank();
+    assertThat(builder.build().getSecretValue()).isEqualTo(secretValue);
   }
 
   @Test
-  public void typeIsUnmanagedBrokerComponent_when_BuiltWithAllRequiredValues() {
+  public void secretName_IsNotEmpty_when_BuiltWithAllRequiredValues() {
     var secretName = "aSecretName";
     var secretValue = "aSecretValue";
     var builder = UnmanagedBrokerComponent.builder()
@@ -41,7 +43,10 @@ class UnmanagedMessageBrokerTest {
         .withSecretValue(secretValue);
     assertThatCode(builder::build).doesNotThrowAnyException();
     assertThat(builder.build().getType()).isEqualTo(SAAS_UNMANAGED_BROKER);
+    assertThat(builder.build().getSecretName()).isNotBlank();
     assertThat(builder.build().getSecretName()).isEqualTo(secretName);
     assertThat(builder.build().getSecretValue()).isEqualTo(secretValue);
   }
+  
+  
 }
