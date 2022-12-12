@@ -35,7 +35,7 @@ class CaaSPrometheusTest {
 
     assertThatThrownBy(prometheusBuilder::build)
       .isInstanceOf(IllegalArgumentException.class)
-      .hasMessageContaining("[CaaSPrometheus Validation] ContainerPlatform defined was either empty or blank and it is required");
+      .hasMessageContainingAll("[CaaSPrometheus Validation] ContainerPlatform defined was either empty or blank and it is required", "[CaaSPrometheus Validation] API Gateway URL has not been defined and it is required");
   }
 
   @Test
