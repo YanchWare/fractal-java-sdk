@@ -2,14 +2,12 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PreemptionPolicy;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PriorityClass;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureAgentPoolMode;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureKubernetesService;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureNodePool;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureOsType;
+import com.yanchware.fractal.sdk.utils.TestUtils;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import org.junit.jupiter.api.Test;
 
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureMachineType.STANDARD_B2S;
+import static com.yanchware.fractal.sdk.utils.TestUtils.getAksBuilder;
 import static com.yanchware.fractal.sdk.utils.TestUtils.getDefaultAks;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
 import static java.util.Collections.emptyList;
@@ -21,6 +19,17 @@ public class AzureKubernetesServiceTest {
   public void noValidationErrors_when_aksHasRequiredFields() {
     var aks = getDefaultAks().build();
     assertThat(aks.validate()).isEmpty();
+    assertThat(aks.getNodePools()).first()
+        .extracting(AzureNodePool::getAgentPoolMode, AzureNodePool::getOsType)
+        .containsExactly(AzureAgentPoolMode.SYSTEM, AzureOsType.LINUX);
+  }
+
+  @Test
+  public void noValidationErrors_when_getAksBuilderHasRequiredFields() {
+    var aks = getAksBuilder().build();
+    var json = TestUtils.getJsonRepresentation(aks);
+    assertThat(aks.validate()).isEmpty();
+    assertThat(json).isNotBlank();
     assertThat(aks.getNodePools()).first()
         .extracting(AzureNodePool::getAgentPoolMode, AzureNodePool::getOsType)
         .containsExactly(AzureAgentPoolMode.SYSTEM, AzureOsType.LINUX);
