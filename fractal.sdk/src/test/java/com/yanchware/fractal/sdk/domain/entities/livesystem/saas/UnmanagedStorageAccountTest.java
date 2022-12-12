@@ -65,6 +65,4 @@ class UnmanagedStorageAccountTest {
     assertThat(builder.build().getType()).isEqualTo(SAAS_UNMANAGED_STORAGE);
     assertThat(json).isNotBlank();
   }
-  
-  //printJsonRepresentation
 }
