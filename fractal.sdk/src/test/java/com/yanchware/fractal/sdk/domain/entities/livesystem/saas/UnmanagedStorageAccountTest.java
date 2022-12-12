@@ -1,6 +1,7 @@
 
 package com.yanchware.fractal.sdk.domain.entities.livesystem.saas;
 
+import com.yanchware.fractal.sdk.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.SAAS_UNMANAGED_STORAGE;
@@ -48,4 +49,22 @@ class UnmanagedStorageAccountTest {
     assertThat(builder.build().getSecretName()).isEqualTo(secretName);
     assertThat(builder.build().getSecretValue()).isEqualTo(secretValue);
   }
+
+  @Test
+  public void json_IsNotEmpty_when_componentBuilt() {
+    var secretName = "aSecretName";
+    var secretValue = "aSecretValue";
+    var builder = UnmanagedStorageComponent.builder()
+        .withId("unmanaged-storage")
+        .withSecretName(secretName)
+        .withSecretValue(secretValue);
+
+    var json = TestUtils.getJsonRepresentation(builder.build());
+    
+    assertThatCode(builder::build).doesNotThrowAnyException();
+    assertThat(builder.build().getType()).isEqualTo(SAAS_UNMANAGED_STORAGE);
+    assertThat(json).isNotBlank();
+  }
+  
+  //printJsonRepresentation
 }
