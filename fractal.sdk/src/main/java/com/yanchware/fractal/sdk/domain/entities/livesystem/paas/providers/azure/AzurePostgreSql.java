@@ -35,8 +35,8 @@ public class AzurePostgreSql extends PaaSPostgreSqlImpl {
 
   private Integer backupRetentionDays;
 
-  public static AzurePostgreSQLBuilder builder() {
-    return new AzurePostgreSQLBuilder();
+  public static AzurePostgreSqlBuilder builder() {
+    return new AzurePostgreSqlBuilder();
   }
 
   @Override
@@ -44,7 +44,7 @@ public class AzurePostgreSql extends PaaSPostgreSqlImpl {
     return ProviderType.AZURE;
   }
 
-  public static class AzurePostgreSQLBuilder extends Builder<AzurePostgreSql, AzurePostgreSQLBuilder> {
+  public static class AzurePostgreSqlBuilder extends Builder<AzurePostgreSql, AzurePostgreSqlBuilder> {
 
     @Override
     protected AzurePostgreSql createComponent() {
@@ -52,15 +52,15 @@ public class AzurePostgreSql extends PaaSPostgreSqlImpl {
     }
 
     @Override
-    protected AzurePostgreSQLBuilder getBuilder() {
+    protected AzurePostgreSqlBuilder getBuilder() {
       return this;
     }
 
-    public AzurePostgreSQLBuilder withDatabase(AzurePostgreSqlDb db) {
+    public AzurePostgreSqlBuilder withDatabase(AzurePostgreSqlDb db) {
       return withDatabases(List.of(db));
     }
 
-    public AzurePostgreSQLBuilder withDatabases(Collection<? extends AzurePostgreSqlDb> dbs) {
+    public AzurePostgreSqlBuilder withDatabases(Collection<? extends AzurePostgreSqlDb> dbs) {
       if (CollectionUtils.isBlank(dbs)) {
         return builder;
       }
@@ -76,32 +76,32 @@ public class AzurePostgreSql extends PaaSPostgreSqlImpl {
       return builder;
     }
 
-    public AzurePostgreSQLBuilder withRootUser(String rootUser) {
+    public AzurePostgreSqlBuilder withRootUser(String rootUser) {
       component.setRootUser(rootUser);
       return builder;
     }
 
-    public AzurePostgreSQLBuilder withRegion(AzureRegion region) {
+    public AzurePostgreSqlBuilder withRegion(AzureRegion region) {
       component.setRegion(region);
       return builder;
     }
 
-    public AzurePostgreSQLBuilder withSkuName(AzureSkuName skuName) {
+    public AzurePostgreSqlBuilder withSkuName(AzureSkuName skuName) {
       component.setSkuName(skuName);
       return builder;
     }
 
-    public AzurePostgreSQLBuilder withStorageAutoGrow(AzureStorageAutoGrow storageAutoGrow) {
+    public AzurePostgreSqlBuilder withStorageAutoGrow(AzureStorageAutoGrow storageAutoGrow) {
       component.setStorageAutoGrow(storageAutoGrow);
       return builder;
     }
 
-    public AzurePostgreSQLBuilder withStorageMB(int storageMB) {
+    public AzurePostgreSqlBuilder withStorageMB(int storageMB) {
       component.setStorageMB(storageMB);
       return builder;
     }
 
-    public AzurePostgreSQLBuilder withBackupRetentionDays(int backupRetentionDays) {
+    public AzurePostgreSqlBuilder withBackupRetentionDays(int backupRetentionDays) {
       component.setBackupRetentionDays(backupRetentionDays);
       return builder;
     }

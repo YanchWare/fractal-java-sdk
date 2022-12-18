@@ -7,7 +7,7 @@ import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.provider
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class GcpProgreSQLTest {
+class GcpProgreSqlTest {
 
     @Test
     public void exceptionThrown_when_gcpPgCreatedWithNoIdNoRegionNoNetwork() {
@@ -115,7 +115,7 @@ class GcpProgreSQLTest {
         assertThat(getGcpPostgresBuilder().build().validate()).isEmpty();
     }
 
-    private GcpPostgreSql.GcpPostgreSQLBuilder getGcpPostgresBuilder() {
+    private GcpPostgreSql.GcpPostgreSqlBuilder getGcpPostgresBuilder() {
         return GcpPostgreSql.builder()
                 .withId(ComponentId.from("postg"))
                 .withRegion(ASIA_SOUTH1)

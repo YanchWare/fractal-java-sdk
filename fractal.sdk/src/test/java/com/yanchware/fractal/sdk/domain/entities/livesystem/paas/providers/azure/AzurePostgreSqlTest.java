@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PostgreSQLCharset.UTF8;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PostgreSqlCharset.UTF8;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion.EUROPE_WEST;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureSkuName.B_GEN5_1;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureStorageAutoGrow.ENABLED;
@@ -14,7 +14,7 @@ import static com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dt
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_POSTGRESQL;
 import static org.assertj.core.api.Assertions.*;
 
-public class AzurePostgreSQLTest {
+public class AzurePostgreSqlTest {
 
   @Test
   public void exceptionThrown_when_azurePgCreatedWithNoIdNoRegionNoNetwork() {
@@ -61,7 +61,7 @@ public class AzurePostgreSQLTest {
 
   @Test
   public void propertiesAreSet_when_azurePostgresIsCreated() {
-    var azurePostgreSQL = AzurePostgreSql.builder()
+    var azurePostgreSql = AzurePostgreSql.builder()
         .withId(ComponentId.from("azure-psg"))
         .withRegion(EUROPE_WEST)
         .withRootUser("rootUser")
@@ -77,7 +77,7 @@ public class AzurePostgreSQLTest {
             .withSchema("schema")
             .build())
         .build();
-    assertThat(azurePostgreSQL)
+    assertThat(azurePostgreSql)
         .returns(PAAS_POSTGRESQL, from(AzurePostgreSql::getType))
         .returns(AZURE, from(AzurePostgreSql::getProvider))
         .returns(EUROPE_WEST, from(AzurePostgreSql::getRegion))
@@ -87,7 +87,7 @@ public class AzurePostgreSQLTest {
         .returns(5 * 1024, from(AzurePostgreSql::getStorageMB))
         .returns(12, from(AzurePostgreSql::getBackupRetentionDays))
         .returns(1, from(x -> x.getDatabases().size()));
-    Optional<PaaSPostgreSqlDbImpl> postgreSqlDbOptional = azurePostgreSQL.getDatabases().stream().findFirst();
+    Optional<PaaSPostgreSqlDbImpl> postgreSqlDbOptional = azurePostgreSql.getDatabases().stream().findFirst();
     assertThat(postgreSqlDbOptional).isPresent();
     assertThat(postgreSqlDbOptional.get())
         .returns("db", from(PaaSPostgreSqlDbImpl::getName))

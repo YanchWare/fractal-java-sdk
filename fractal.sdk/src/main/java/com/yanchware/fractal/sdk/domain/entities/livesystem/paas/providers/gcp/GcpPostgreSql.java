@@ -38,8 +38,8 @@ public class GcpPostgreSql extends PaaSPostgreSqlImpl {
   private String peeringNetworkName;
   private String peeringNetworkPrefix;
 
-  public static GcpPostgreSQLBuilder builder() {
-    return new GcpPostgreSQLBuilder();
+  public static GcpPostgreSqlBuilder builder() {
+    return new GcpPostgreSqlBuilder();
   }
 
   @Override
@@ -47,7 +47,7 @@ public class GcpPostgreSql extends PaaSPostgreSqlImpl {
     return ProviderType.GCP;
   }
 
-  public static class GcpPostgreSQLBuilder extends Builder<GcpPostgreSql, GcpPostgreSQLBuilder> {
+  public static class GcpPostgreSqlBuilder extends Builder<GcpPostgreSql, GcpPostgreSqlBuilder> {
 
     @Override
     protected GcpPostgreSql createComponent() {
@@ -55,15 +55,15 @@ public class GcpPostgreSql extends PaaSPostgreSqlImpl {
     }
 
     @Override
-    protected GcpPostgreSQLBuilder getBuilder() {
+    protected GcpPostgreSqlBuilder getBuilder() {
       return this;
     }
 
-    public GcpPostgreSQLBuilder withDatabase(GcpPostgreSqlDb db) {
+    public GcpPostgreSqlBuilder withDatabase(GcpPostgreSqlDb db) {
       return withDatabases(List.of(db));
     }
 
-    public GcpPostgreSQLBuilder withDatabases(Collection<? extends GcpPostgreSqlDb> dbs) {
+    public GcpPostgreSqlBuilder withDatabases(Collection<? extends GcpPostgreSqlDb> dbs) {
       if (CollectionUtils.isBlank(dbs)) {
         return builder;
       }
@@ -79,32 +79,32 @@ public class GcpPostgreSql extends PaaSPostgreSqlImpl {
       return builder;
     }
 
-    public GcpPostgreSQLBuilder withRegion(GcpRegion region) {
+    public GcpPostgreSqlBuilder withRegion(GcpRegion region) {
       component.setRegion(region);
       return builder;
     }
 
-    public GcpPostgreSQLBuilder withNetwork(String network) {
+    public GcpPostgreSqlBuilder withNetwork(String network) {
       component.setNetwork(network);
       return builder;
     }
 
-    public GcpPostgreSQLBuilder withPeeringNetworkAddress(String peeringNetworkAddress) {
+    public GcpPostgreSqlBuilder withPeeringNetworkAddress(String peeringNetworkAddress) {
       component.setPeeringNetworkAddress(peeringNetworkAddress);
       return builder;
     }
 
-    public GcpPostgreSQLBuilder withPeeringNetworkAddressDescription(String peeringNetworkAddressDescription) {
+    public GcpPostgreSqlBuilder withPeeringNetworkAddressDescription(String peeringNetworkAddressDescription) {
       component.setPeeringNetworkAddressDescription(peeringNetworkAddressDescription);
       return builder;
     }
 
-    public GcpPostgreSQLBuilder withPeeringNetworkName(String peeringNetworkName) {
+    public GcpPostgreSqlBuilder withPeeringNetworkName(String peeringNetworkName) {
       component.setPeeringNetworkName(peeringNetworkName);
       return builder;
     }
 
-    public GcpPostgreSQLBuilder withPeeringNetworkPrefix(String peeringNetworkPrefix) {
+    public GcpPostgreSqlBuilder withPeeringNetworkPrefix(String peeringNetworkPrefix) {
       component.setPeeringNetworkPrefix(peeringNetworkPrefix);
       return builder;
     }

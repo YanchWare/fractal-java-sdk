@@ -22,7 +22,7 @@ public abstract class PaaSPostgreSqlDbImpl extends PaaSPostgreSqlDb implements L
     private final static String SCHEMA_IS_BLANK = "PostgreSQLDB schema defined was either empty or blank and it is required";
 
     private String name;
-    private PostgreSQLCharset charset;
+    private PostgreSqlCharset charset;
     private String collation;
     private String schema;
 
@@ -37,7 +37,7 @@ public abstract class PaaSPostgreSqlDbImpl extends PaaSPostgreSqlDb implements L
             return builder;
         }
 
-        public B withCharset(PostgreSQLCharset charset) {
+        public B withCharset(PostgreSqlCharset charset) {
             component.setCharset(charset);
             return builder;
         }

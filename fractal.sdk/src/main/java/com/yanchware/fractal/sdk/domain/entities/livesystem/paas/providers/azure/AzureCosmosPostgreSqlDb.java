@@ -15,7 +15,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Getter
 @Setter(AccessLevel.PROTECTED)
 @ToString(callSuper = true)
-public class AzureCosmosPostgreSQLDB extends PaaSPostgreSqlDbImpl {
+public class AzureCosmosPostgreSqlDb extends PaaSPostgreSqlDbImpl {
     public static final String TYPE = PAAS_COSMOS_POSTGRESQLDB.getId();
     private final static String NAME_IS_BLANK = "Cosmos PostgreSQLDB name has not been defined and it is required";
     private final static String COSMOS_ACCOUNT_IS_BLANK = "Cosmos PostgreSQLDB defined no connection to a Cosmos Account, and it is required";
@@ -32,48 +32,48 @@ public class AzureCosmosPostgreSQLDB extends PaaSPostgreSqlDbImpl {
     @Setter
     private ProviderType provider;
 
-    protected AzureCosmosPostgreSQLDB() {
+    protected AzureCosmosPostgreSqlDb() {
     }
 
 
-    public static PostgreSQLDBBuilder builder() {
-        return new PostgreSQLDBBuilder();
+    public static PostgreSqlDbBuilder builder() {
+        return new PostgreSqlDbBuilder();
     }
 
-    public static class PostgreSQLDBBuilder extends Builder<AzureCosmosPostgreSQLDB, PostgreSQLDBBuilder> {
+    public static class PostgreSqlDbBuilder extends Builder<AzureCosmosPostgreSqlDb, PostgreSqlDbBuilder> {
 
         @Override
-        protected AzureCosmosPostgreSQLDB createComponent() {
-            return new AzureCosmosPostgreSQLDB();
+        protected AzureCosmosPostgreSqlDb createComponent() {
+            return new AzureCosmosPostgreSqlDb();
         }
 
         @Override
-        protected PostgreSQLDBBuilder getBuilder() {
+        protected PostgreSqlDbBuilder getBuilder() {
             return this;
         }
 
-        public PostgreSQLDBBuilder withName(String name) {
+        public PostgreSqlDbBuilder withName(String name) {
             component.setName(name);
             return builder;
         }
 
-        public PostgreSQLDBBuilder withCosmosAccount(String cosmosAccount) {
+        public PostgreSqlDbBuilder withCosmosAccount(String cosmosAccount) {
             component.setCosmosAccount(cosmosAccount);
             return builder;
         }
 
-        public PostgreSQLDBBuilder withThroughput(int throughput) {
+        public PostgreSqlDbBuilder withThroughput(int throughput) {
             component.setThroughput(throughput);
             return builder;
         }
 
-        public PostgreSQLDBBuilder withMaxThroughput(int maxThroughput) {
+        public PostgreSqlDbBuilder withMaxThroughput(int maxThroughput) {
             component.setMaxThroughput(maxThroughput);
             return builder;
         }
 
         @Override
-        public AzureCosmosPostgreSQLDB build() {
+        public AzureCosmosPostgreSqlDb build() {
             component.setType(PAAS_COSMOS_POSTGRESQLDB);
             return super.build();
         }

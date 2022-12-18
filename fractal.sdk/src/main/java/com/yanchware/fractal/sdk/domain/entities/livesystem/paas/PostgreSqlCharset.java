@@ -1,7 +1,7 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas;
 
 //https://www.postgresql.org/docs/14/multibyte.html
-public enum PostgreSQLCharset {
+public enum PostgreSqlCharset {
   BIG5,
   EUC_CN,
   EUC_JP,
