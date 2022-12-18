@@ -1,20 +1,23 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp;
 
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PostgreSQL;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PaaSPostgreSqlImpl;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
+import com.yanchware.fractal.sdk.utils.CollectionUtils;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
-public class GcpProgreSQL extends PostgreSQL {
+public class GcpPostgreSql extends PaaSPostgreSqlImpl {
 
   private final static String REGION_IS_NULL = "[GcpProgreSQL Validation] Region has not been defined and it is required";
 
@@ -44,16 +47,36 @@ public class GcpProgreSQL extends PostgreSQL {
     return ProviderType.GCP;
   }
 
-  public static class GcpPostgreSQLBuilder extends Builder<GcpProgreSQL, GcpPostgreSQLBuilder> {
+  public static class GcpPostgreSQLBuilder extends Builder<GcpPostgreSql, GcpPostgreSQLBuilder> {
 
     @Override
-    protected GcpProgreSQL createComponent() {
-      return new GcpProgreSQL();
+    protected GcpPostgreSql createComponent() {
+      return new GcpPostgreSql();
     }
 
     @Override
     protected GcpPostgreSQLBuilder getBuilder() {
       return this;
+    }
+
+    public GcpPostgreSQLBuilder withDatabase(GcpPostgreSqlDb db) {
+      return withDatabases(List.of(db));
+    }
+
+    public GcpPostgreSQLBuilder withDatabases(Collection<? extends GcpPostgreSqlDb> dbs) {
+      if (CollectionUtils.isBlank(dbs)) {
+        return builder;
+      }
+
+      if (component.getDatabases() == null) {
+        component.setDatabases(new ArrayList<>());
+      }
+
+      dbs.forEach(db -> {
+        db.getDependencies().add(component.getId());
+      });
+      component.getDatabases().addAll(dbs);
+      return builder;
     }
 
     public GcpPostgreSQLBuilder withRegion(GcpRegion region) {

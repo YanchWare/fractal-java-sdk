@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.K8S_WORKLOAD;
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.CAAS_K8S_WORKLOAD;
 
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
@@ -92,7 +92,7 @@ public class CaaSKubernetesWorkload extends CaaSWorkloadImpl implements LiveSyst
 
         @Override
         public CaaSKubernetesWorkload build() {
-            component.setType(K8S_WORKLOAD);
+            component.setType(CAAS_K8S_WORKLOAD);
             return super.build();
         }
     }

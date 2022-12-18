@@ -3,7 +3,7 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 import com.yanchware.fractal.sdk.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.ELASTIC_LOGGING;
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.CAAS_ELASTIC_LOGGING;
 import static org.assertj.core.api.Assertions.*;
 
 class CaaSElasticLoggingTest {
@@ -94,6 +94,6 @@ class CaaSElasticLoggingTest {
     @Test
     public void typeIsElasticLogging_when_WithAllRequiredValues() {
         assertThatCode(TestUtils::getElasticLoggingExample).doesNotThrowAnyException();
-        assertThat(TestUtils.getElasticLoggingExample().getType()).isEqualTo(ELASTIC_LOGGING);
+        assertThat(TestUtils.getElasticLoggingExample().getType()).isEqualTo(CAAS_ELASTIC_LOGGING);
     }
 }

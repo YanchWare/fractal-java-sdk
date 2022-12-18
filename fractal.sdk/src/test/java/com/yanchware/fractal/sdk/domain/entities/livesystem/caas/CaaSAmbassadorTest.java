@@ -1,10 +1,9 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.CaaSAmbassador;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import org.junit.jupiter.api.Test;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.AMBASSADOR;
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.CAAS_AMBASSADOR;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -81,7 +80,7 @@ class CaaSAmbassadorTest {
   @Test
   public void typeIsAmbassador_when_ambassadorIsBuilt() {
     var ambassador = ambassadorBuilder().build();
-    assertThat(ambassador.getType()).isEqualTo(AMBASSADOR);
+    assertThat(ambassador.getType()).isEqualTo(CAAS_AMBASSADOR);
   }
 
   private CaaSAmbassador.AmbassadorBuilder ambassadorBuilder() {

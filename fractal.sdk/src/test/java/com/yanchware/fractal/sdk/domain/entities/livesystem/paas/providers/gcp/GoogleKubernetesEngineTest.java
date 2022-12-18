@@ -2,13 +2,12 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp;
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PodManagedIdentity;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PriorityClass;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GoogleKubernetesEngine;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
 import static com.yanchware.fractal.sdk.utils.TestUtils.getDefaultGke;
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_KUBERNETES;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.*;
 
@@ -21,7 +20,7 @@ public class GoogleKubernetesEngineTest {
 
     @Test
     public void typeIsKubernetes_when_gkeIsBuilt() {
-        assertThat(getDefaultGke().build().getType()).isEqualTo(KUBERNETES);
+        assertThat(getDefaultGke().build().getType()).isEqualTo(PAAS_KUBERNETES);
     }
 
     @Test
@@ -33,7 +32,7 @@ public class GoogleKubernetesEngineTest {
     public void typeIsKubernetes_when_gkeIsBuiltWithoutSpecifyType() {
         var gkeBuilder = getDefaultGke();
         assertThatCode(gkeBuilder::build).doesNotThrowAnyException();
-        assertThat(gkeBuilder.build().getType()).isEqualTo(KUBERNETES);
+        assertThat(gkeBuilder.build().getType()).isEqualTo(PAAS_KUBERNETES);
     }
 
     @Test

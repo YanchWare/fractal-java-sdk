@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureMachineType.STANDARD_B2S;
 import static com.yanchware.fractal.sdk.utils.TestUtils.getAksBuilder;
 import static com.yanchware.fractal.sdk.utils.TestUtils.getDefaultAks;
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_KUBERNETES;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.*;
 
@@ -74,7 +74,7 @@ public class AzureKubernetesServiceTest {
   @Test
   public void typeIsKubernetes_when_aksIsBuiltWithoutSpecifyType() {
     var aksBuilder = getDefaultAks();
-    assertThat(aksBuilder.build().getType()).isEqualTo(KUBERNETES);
+    assertThat(aksBuilder.build().getType()).isEqualTo(PAAS_KUBERNETES);
     assertThatCode(aksBuilder::build).doesNotThrowAnyException();
   }
 

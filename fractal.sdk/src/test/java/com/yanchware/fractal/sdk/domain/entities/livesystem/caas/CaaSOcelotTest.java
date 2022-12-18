@@ -2,7 +2,7 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
 import org.junit.jupiter.api.Test;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.OCELOT;
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.CAAS_OCELOT;
 import static org.assertj.core.api.Assertions.*;
 
 class CaaSOcelotTest {
@@ -49,7 +49,7 @@ class CaaSOcelotTest {
                 .withCorsOrigins("https://fractal-arch.org,localhost:8080")
                 .withPathPrefix("/api/*");
         assertThatCode(builder::build).doesNotThrowAnyException();
-        assertThat(builder.build().getType()).isEqualTo(OCELOT);
+        assertThat(builder.build().getType()).isEqualTo(CAAS_OCELOT);
         assertThat(builder.build().getCorsOrigins()).hasSize(2);
         assertThat(builder.build().getCorsOrigins()).containsExactlyInAnyOrder("https://fractal-arch.org","localhost:8080");
     }

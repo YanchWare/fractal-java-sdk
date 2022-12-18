@@ -8,7 +8,7 @@ import lombok.ToString;
 import java.util.Collection;
 import java.util.List;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.TRAEFIK;
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.CAAS_TRAEFIK;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Getter
@@ -37,7 +37,7 @@ public class CaaSTraefik extends CaaSAPIGatewayImpl {
     }
 
     public static class TraefikBuilder extends Builder<CaaSTraefik, TraefikBuilder> {
-        public static final String TYPE = TRAEFIK.getId();
+        public static final String TYPE = CAAS_TRAEFIK.getId();
 
         @Override
         protected CaaSTraefik createComponent() {
@@ -89,7 +89,7 @@ public class CaaSTraefik extends CaaSAPIGatewayImpl {
 
         @Override
         public CaaSTraefik build() {
-            component.setType(TRAEFIK);
+            component.setType(CAAS_TRAEFIK);
             return super.build();
         }
     }

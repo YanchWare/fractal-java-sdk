@@ -4,9 +4,9 @@ import com.yanchware.fractal.sdk.domain.entities.Component;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.BlueprintComponent;
 import lombok.ToString;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.POSTGRESQLDB;
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_POSTGRESQL;
 
 @ToString(callSuper = true)
-public class PaaSPostgreSQLDB extends Component implements BlueprintComponent {
-  public static final String TYPE = POSTGRESQLDB.getId();
+public class PaaSPostgreSql extends Component implements BlueprintComponent {
+  public static final String TYPE = PAAS_POSTGRESQL.getId();
 }

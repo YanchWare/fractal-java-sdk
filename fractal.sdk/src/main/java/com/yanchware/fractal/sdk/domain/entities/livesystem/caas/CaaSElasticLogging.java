@@ -7,7 +7,7 @@ import lombok.ToString;
 
 import java.util.Collection;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.ELASTIC_LOGGING;
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.CAAS_ELASTIC_LOGGING;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Getter
@@ -95,7 +95,7 @@ public class CaaSElasticLogging extends CaaSLoggingImpl implements LiveSystemCom
 
         @Override
         public CaaSElasticLogging build() {
-            component.setType(ELASTIC_LOGGING);
+            component.setType(CAAS_ELASTIC_LOGGING);
             return super.build();
         }
     }

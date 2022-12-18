@@ -16,7 +16,7 @@ import java.util.List;
 
 import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 import static com.yanchware.fractal.sdk.utils.ValidationUtils.isPresentAndValidIpRange;
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.KUBERNETES;
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_KUBERNETES;
 
 @Getter
 @Setter(AccessLevel.PROTECTED)
@@ -215,7 +215,7 @@ public abstract class KubernetesCluster extends PaaSContainerPlatform implements
 
     @Override
     public T build() {
-      component.setType(KUBERNETES);
+      component.setType(PAAS_KUBERNETES);
       return super.build();
     }
 

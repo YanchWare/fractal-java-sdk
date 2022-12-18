@@ -3,7 +3,7 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 import org.junit.jupiter.api.Test;
 
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.CaaSKubernetesWorkload.*;
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.K8S_WORKLOAD;
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.CAAS_K8S_WORKLOAD;
 import static org.assertj.core.api.Assertions.*;
 
 public class CaaSKubernetesWorkloadTest {
@@ -50,7 +50,7 @@ public class CaaSKubernetesWorkloadTest {
         .withSSHRepositoryURI("ssh")
         .withRepoId("repo-id")
         .withBranchName("branch-name");
-    assertThat(builder.build().getType()).isEqualTo(K8S_WORKLOAD);
+    assertThat(builder.build().getType()).isEqualTo(CAAS_K8S_WORKLOAD);
     assertThatCode(builder::build).doesNotThrowAnyException();
   }
 

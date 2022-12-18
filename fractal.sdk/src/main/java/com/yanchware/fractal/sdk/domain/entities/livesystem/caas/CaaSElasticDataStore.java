@@ -7,7 +7,7 @@ import lombok.ToString;
 
 import java.util.Collection;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.ELASTIC_DATASTORE;
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.CAAS_ELASTIC_DATASTORE;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Getter
@@ -87,7 +87,7 @@ public class CaaSElasticDataStore extends CaaSDocumentDBImpl implements LiveSyst
 
         @Override
         public CaaSElasticDataStore build() {
-            component.setType(ELASTIC_DATASTORE);
+            component.setType(CAAS_ELASTIC_DATASTORE);
             return super.build();
         }
     }
