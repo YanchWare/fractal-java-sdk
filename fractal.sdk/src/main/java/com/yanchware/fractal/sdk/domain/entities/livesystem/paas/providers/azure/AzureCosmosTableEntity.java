@@ -1,0 +1,64 @@
+package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
+
+import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSRelationalDatabase;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.LiveSystemComponent;
+import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+import java.util.Collection;
+
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureCosmosUtilities.validateCosmosEntity;
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_COSMOS_POSTGRESQL_DATABASE;
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_COSMOS_TABLE;
+
+@Getter
+@Setter(AccessLevel.PROTECTED)
+@ToString(callSuper = true)
+public class AzureCosmosTableEntity extends PaaSRelationalDatabase implements LiveSystemComponent, AzureCosmosEntity {
+
+    public static final String TYPE = PAAS_COSMOS_TABLE.getId();
+
+    public static AzureCosmosTableEntityBuilder builder() {
+        return new AzureCosmosTableEntityBuilder();
+    }
+
+    private String name;
+    private String cosmosAccount;
+    private int throughput;
+    private int maxThroughput;
+
+    @Override
+    public ProviderType getProvider() {
+        return ProviderType.AZURE;
+    }
+
+
+    public static class AzureCosmosTableEntityBuilder extends AzureCosmosEntityBuilder<AzureCosmosTableEntity, AzureCosmosTableEntityBuilder> {
+        @Override
+        protected AzureCosmosTableEntity createComponent() {
+            return new AzureCosmosTableEntity();
+        }
+
+        @Override
+        protected AzureCosmosTableEntityBuilder getBuilder() {
+            return this;
+        }
+
+        @Override
+        public AzureCosmosTableEntity build() {
+            component.setType(PAAS_COSMOS_POSTGRESQL_DATABASE);
+            return super.build();
+        }
+
+    }
+
+    @Override
+    public Collection<String> validate() {
+        Collection<String> errors = super.validate();
+        errors.addAll(validateCosmosEntity(this, "Cosmos Table Entity"));
+        return errors;
+    }
+}

@@ -12,8 +12,8 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.RoleAssignment;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.*;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureKubernetesService.AzureKubernetesServiceBuilder;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpNodePool;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpPostgreSqlDb;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpPostgreSql;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpPostgreSqlDatabase;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpPostgreSqlDbms;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GoogleKubernetesEngine;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GoogleKubernetesEngine.GoogleKubernetesEngineBuilder;
 import com.yanchware.fractal.sdk.services.contracts.ComponentDto;
@@ -251,8 +251,8 @@ public class TestUtils {
         .build();
   }
 
-  public static AzurePostgreSql getAzurePostgresExample() {
-    return AzurePostgreSql.builder()
+  public static AzurePostgreSqlDbms getAzurePostgresExample() {
+    return AzurePostgreSqlDbms.builder()
         .withId("dbpg")
         .withDescription("PostgreSQL")
         .withDisplayName("PostgreSQL")
@@ -262,13 +262,13 @@ public class TestUtils {
         .withStorageAutoGrow(ENABLED)
         .withStorageMB(5 * 1024)
         .withBackupRetentionDays(12)
-        .withDatabase(AzurePostgreSqlDb.builder().withId("db-1").withDisplayName("db-1").withName("db").build())
+        .withDatabase(AzurePostgreSqlDatabase.builder().withId("db-1").withDisplayName("db-1").withName("db").build())
         .withDatabase(getAzurePostgresDbExample())
         .build();
   }
 
-  public static GcpPostgreSql getGcpPostgresExample() {
-    return GcpPostgreSql.builder()
+  public static GcpPostgreSqlDbms getGcpPostgresExample() {
+    return GcpPostgreSqlDbms.builder()
         .withId("dbpg")
         .withDescription("PostgreSQL")
         .withDisplayName("PostgreSQL")
@@ -282,8 +282,8 @@ public class TestUtils {
         .build();
   }
 
-  public static AzurePostgreSqlDb getAzurePostgresDbExample() {
-    return AzurePostgreSqlDb.builder()
+  public static AzurePostgreSqlDatabase getAzurePostgresDbExample() {
+    return AzurePostgreSqlDatabase.builder()
         .withId("db-2")
         .withDisplayName("db-2")
         .withName("db2")
@@ -291,8 +291,8 @@ public class TestUtils {
         .build();
   }
 
-  public static GcpPostgreSqlDb getGcpPostgresDbExample() {
-    return GcpPostgreSqlDb.builder()
+  public static GcpPostgreSqlDatabase getGcpPostgresDbExample() {
+    return GcpPostgreSqlDatabase.builder()
       .withId("db-2")
       .withDisplayName("db-2")
       .withName("db2")

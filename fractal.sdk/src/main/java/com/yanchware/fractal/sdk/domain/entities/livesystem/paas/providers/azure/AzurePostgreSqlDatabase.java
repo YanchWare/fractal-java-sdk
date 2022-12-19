@@ -1,9 +1,9 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
 
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PaaSPostgreSqlDbImpl;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PaaSPostgreSqlDatabase;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 
-public class AzurePostgreSqlDb extends PaaSPostgreSqlDbImpl {
+public class AzurePostgreSqlDatabase extends PaaSPostgreSqlDatabase {
   @Override
   public ProviderType getProvider() {
     return ProviderType.AZURE;
@@ -13,7 +13,7 @@ public class AzurePostgreSqlDb extends PaaSPostgreSqlDbImpl {
     return new AzurePostgreSqlDbBuilder();
   }
 
-  public static class AzurePostgreSqlDbBuilder extends PaaSPostgreSqlDbImpl.Builder<AzurePostgreSqlDb, AzurePostgreSqlDb.AzurePostgreSqlDbBuilder> {
+  public static class AzurePostgreSqlDbBuilder extends PaaSPostgreSqlDatabase.Builder<AzurePostgreSqlDatabase, AzurePostgreSqlDatabase.AzurePostgreSqlDbBuilder> {
 
       @Override
       protected AzurePostgreSqlDbBuilder getBuilder() {
@@ -21,8 +21,8 @@ public class AzurePostgreSqlDb extends PaaSPostgreSqlDbImpl {
       }
 
       @Override
-      protected AzurePostgreSqlDb createComponent() {
-        return new AzurePostgreSqlDb();
+      protected AzurePostgreSqlDatabase createComponent() {
+        return new AzurePostgreSqlDatabase();
       }
     }
 

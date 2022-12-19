@@ -33,7 +33,7 @@ public abstract class KubernetesCluster extends PaaSContainerPlatform implements
   private List<CaaSAPIGatewayImpl> apiGatewayInstances;
   private List<CaaSServiceMeshSecurityImpl> serviceMeshSecurityInstances;
   private List<CaaSLoggingImpl> loggingInstances;
-  private List<CaaSDocumentDBImpl> documentDBInstances;
+  private List<CaaSSearchImpl> documentDBInstances;
   private PodManagedIdentity podManagedIdentity;
   private String windowsAdminUsername;
 
@@ -180,11 +180,11 @@ public abstract class KubernetesCluster extends PaaSContainerPlatform implements
 
     //TODO: try to throw validation/comment out KubernetesCluster priority classes/taints
 
-    public B withDocumentDB(CaaSDocumentDBImpl documentDB) {
+    public B withDocumentDB(CaaSSearchImpl documentDB) {
       return withDocumentDB(List.of(documentDB));
     }
 
-    public B withDocumentDB(Collection<? extends CaaSDocumentDBImpl> documentDBInstances) {
+    public B withDocumentDB(Collection<? extends CaaSSearchImpl> documentDBInstances) {
       if (isBlank(documentDBInstances)) {
         return builder;
       }
@@ -247,7 +247,7 @@ public abstract class KubernetesCluster extends PaaSContainerPlatform implements
         .map(CaaSLogging::validate)
         .forEach(errors::addAll);
     documentDBInstances.stream()
-        .map(CaaSDocumentDB::validate)
+        .map(CaaSSearch::validate)
         .forEach(errors::addAll);
 
     if(podManagedIdentity != null) {

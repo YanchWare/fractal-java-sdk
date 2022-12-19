@@ -1,6 +1,6 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
 
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PaaSPostgreSqlImpl;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PaaSPostgreSqlDbms;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import com.yanchware.fractal.sdk.utils.CollectionUtils;
 import lombok.AccessLevel;
@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
-public class AzurePostgreSql extends PaaSPostgreSqlImpl {
+public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms {
 
   private final static String REGION_IS_NULL = "[AzurePostgreSQL Validation] Region has not been defined and it is required";
 
@@ -44,11 +44,11 @@ public class AzurePostgreSql extends PaaSPostgreSqlImpl {
     return ProviderType.AZURE;
   }
 
-  public static class AzurePostgreSqlBuilder extends Builder<AzurePostgreSql, AzurePostgreSqlBuilder> {
+  public static class AzurePostgreSqlBuilder extends Builder<AzurePostgreSqlDbms, AzurePostgreSqlBuilder> {
 
     @Override
-    protected AzurePostgreSql createComponent() {
-      return new AzurePostgreSql();
+    protected AzurePostgreSqlDbms createComponent() {
+      return new AzurePostgreSqlDbms();
     }
 
     @Override
@@ -56,11 +56,11 @@ public class AzurePostgreSql extends PaaSPostgreSqlImpl {
       return this;
     }
 
-    public AzurePostgreSqlBuilder withDatabase(AzurePostgreSqlDb db) {
+    public AzurePostgreSqlBuilder withDatabase(AzurePostgreSqlDatabase db) {
       return withDatabases(List.of(db));
     }
 
-    public AzurePostgreSqlBuilder withDatabases(Collection<? extends AzurePostgreSqlDb> dbs) {
+    public AzurePostgreSqlBuilder withDatabases(Collection<? extends AzurePostgreSqlDatabase> dbs) {
       if (CollectionUtils.isBlank(dbs)) {
         return builder;
       }

@@ -13,7 +13,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
-public class CaaSElasticDataStore extends CaaSDocumentDBImpl implements LiveSystemComponent {
+public class CaaSElasticDataStore extends CaaSSearchImpl implements LiveSystemComponent {
     private final static String ELASTIC_INSTANCES_NEGATIVE_OR_ZERO = "[CaaSElasticDataStore Validation] Elastic Instances defined was either 0 or negative and it needs to be greater than 0";
     private final static String VERSION_IS_BLANK = "[CaaSElasticDataStore Validation] Elastic Version has not been defined and it is required";
 

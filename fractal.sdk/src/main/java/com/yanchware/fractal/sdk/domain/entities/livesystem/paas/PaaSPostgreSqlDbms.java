@@ -1,7 +1,7 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas;
 
 import com.yanchware.fractal.sdk.domain.entities.Component;
-import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSPostgreSql;
+import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSRelationalDbms;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.LiveSystemComponent;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -10,26 +10,25 @@ import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
-import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_POSTGRESQL;
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_POSTGRESQL_DBMS;
 
 @Getter
 @Setter(AccessLevel.PROTECTED)
 @ToString(callSuper = true)
-public abstract class PaaSPostgreSqlImpl extends PaaSPostgreSql implements LiveSystemComponent {
-    private Collection<PaaSPostgreSqlDbImpl> databases;
+public abstract class PaaSPostgreSqlDbms extends PaaSRelationalDbms implements LiveSystemComponent {
+    public static final String TYPE = PAAS_POSTGRESQL_DBMS.getId();
+    private Collection<PaaSPostgreSqlDatabase> databases;
 
-    protected PaaSPostgreSqlImpl() {
+    protected PaaSPostgreSqlDbms() {
         databases = new ArrayList<>();
     }
 
-    public static abstract class Builder<T extends PaaSPostgreSqlImpl, B extends Builder<T, B>> extends Component.Builder<T, B> {
+    public static abstract class Builder<T extends PaaSPostgreSqlDbms, B extends Builder<T, B>> extends Component.Builder<T, B> {
 
         @Override
         public T build() {
-            component.setType(PAAS_POSTGRESQL);
+            component.setType(PAAS_POSTGRESQL_DBMS);
             return super.build();
         }
     }
@@ -39,7 +38,7 @@ public abstract class PaaSPostgreSqlImpl extends PaaSPostgreSql implements LiveS
         Collection<String> errors = super.validate();
 
         databases.stream()
-                .map(PaaSPostgreSqlDbImpl::validate)
+                .map(PaaSPostgreSqlDatabase::validate)
                 .forEach(errors::addAll);
 
         return errors;

@@ -2,7 +2,7 @@ package com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos;
 
 import com.yanchware.fractal.sdk.domain.entities.Component;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.KubernetesCluster;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PaaSPostgreSqlImpl;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PaaSPostgreSqlDbms;
 import com.yanchware.fractal.sdk.utils.TestUtils;
 import com.yanchware.fractal.sdk.valueobjects.ComponentType;
 import org.junit.jupiter.api.Test;
@@ -48,9 +48,9 @@ class LiveSystemComponentDtoTest {
         k8sCluster.getLoggingInstances().forEach(component -> assertLsComponent(lsDtoMap, component, CAAS_ELASTIC_LOGGING, provider));
     }
 
-    private void assertPostgres(PaaSPostgreSqlImpl postgres, Map<String, LiveSystemComponentDto> lsDtoMap) {
-        assertLsComponent(lsDtoMap, postgres, PAAS_POSTGRESQL, postgres.getProvider());
-        postgres.getDatabases().forEach(component -> assertLsComponent(lsDtoMap, component, PAAS_POSTGRESQLDB, postgres.getProvider()));
+    private void assertPostgres(PaaSPostgreSqlDbms postgres, Map<String, LiveSystemComponentDto> lsDtoMap) {
+        assertLsComponent(lsDtoMap, postgres, PAAS_POSTGRESQL_DBMS, postgres.getProvider());
+        postgres.getDatabases().forEach(component -> assertLsComponent(lsDtoMap, component, PAAS_POSTGRESQL_DATABASE, postgres.getProvider()));
     }
 
     private void assertLsComponent(Map<String, LiveSystemComponentDto> lsDtoMap, Component component, ComponentType type, ProviderType provider) {

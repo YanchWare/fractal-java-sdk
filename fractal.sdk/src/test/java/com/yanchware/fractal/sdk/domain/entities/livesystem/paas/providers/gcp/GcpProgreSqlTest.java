@@ -11,7 +11,7 @@ class GcpProgreSqlTest {
 
     @Test
     public void exceptionThrown_when_gcpPgCreatedWithNoIdNoRegionNoNetwork() {
-        var postgres = GcpPostgreSql.builder();
+        var postgres = GcpPostgreSqlDbms.builder();
         assertThatThrownBy(postgres::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
                 "Component id has not been defined and it is required",
                 "[GcpProgreSQL Validation] Region has not been defined and it is required",
@@ -21,7 +21,7 @@ class GcpProgreSqlTest {
 
     @Test
     public void exceptionThrown_when_gcpPgCreatedWithNoRegionNoNetwork() {
-        var postgres = GcpPostgreSql.builder().withId(ComponentId.from("postg"));
+        var postgres = GcpPostgreSqlDbms.builder().withId(ComponentId.from("postg"));
         assertThatThrownBy(postgres::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
                 "[GcpProgreSQL Validation] Region has not been defined and it is required",
                 "[GcpProgreSQL Validation] Network has not been defined and it is required]"
@@ -30,7 +30,7 @@ class GcpProgreSqlTest {
 
     @Test
     public void exceptionThrown_when_gcpPgCreatedWithNoNetwork() {
-        var postgres = GcpPostgreSql.builder()
+        var postgres = GcpPostgreSqlDbms.builder()
                 .withId(ComponentId.from("postg"))
                 .withRegion(ASIA_SOUTH1);
         assertThatThrownBy(postgres::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
@@ -115,8 +115,8 @@ class GcpProgreSqlTest {
         assertThat(getGcpPostgresBuilder().build().validate()).isEmpty();
     }
 
-    private GcpPostgreSql.GcpPostgreSqlBuilder getGcpPostgresBuilder() {
-        return GcpPostgreSql.builder()
+    private GcpPostgreSqlDbms.GcpPostgreSqlBuilder getGcpPostgresBuilder() {
+        return GcpPostgreSqlDbms.builder()
                 .withId(ComponentId.from("postg"))
                 .withRegion(ASIA_SOUTH1)
                 .withNetwork("network");

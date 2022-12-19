@@ -1,6 +1,6 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp;
 
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PaaSPostgreSqlImpl;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PaaSPostgreSqlDbms;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import com.yanchware.fractal.sdk.utils.CollectionUtils;
 import lombok.AccessLevel;
@@ -17,7 +17,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
-public class GcpPostgreSql extends PaaSPostgreSqlImpl {
+public class GcpPostgreSqlDbms extends PaaSPostgreSqlDbms {
 
   private final static String REGION_IS_NULL = "[GcpProgreSQL Validation] Region has not been defined and it is required";
 
@@ -47,11 +47,11 @@ public class GcpPostgreSql extends PaaSPostgreSqlImpl {
     return ProviderType.GCP;
   }
 
-  public static class GcpPostgreSqlBuilder extends Builder<GcpPostgreSql, GcpPostgreSqlBuilder> {
+  public static class GcpPostgreSqlBuilder extends Builder<GcpPostgreSqlDbms, GcpPostgreSqlBuilder> {
 
     @Override
-    protected GcpPostgreSql createComponent() {
-      return new GcpPostgreSql();
+    protected GcpPostgreSqlDbms createComponent() {
+      return new GcpPostgreSqlDbms();
     }
 
     @Override
@@ -59,11 +59,11 @@ public class GcpPostgreSql extends PaaSPostgreSqlImpl {
       return this;
     }
 
-    public GcpPostgreSqlBuilder withDatabase(GcpPostgreSqlDb db) {
+    public GcpPostgreSqlBuilder withDatabase(GcpPostgreSqlDatabase db) {
       return withDatabases(List.of(db));
     }
 
-    public GcpPostgreSqlBuilder withDatabases(Collection<? extends GcpPostgreSqlDb> dbs) {
+    public GcpPostgreSqlBuilder withDatabases(Collection<? extends GcpPostgreSqlDatabase> dbs) {
       if (CollectionUtils.isBlank(dbs)) {
         return builder;
       }
