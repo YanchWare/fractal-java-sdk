@@ -25,11 +25,12 @@ public abstract class CosmosEntityTest<T extends AzureCosmosEntityBuilder<?,?>> 
   public void exceptionThrown_when_throughputLargerThanMaxThroughput() {
     var throughput = a(Integer.class);
     assertThatThrownBy(() -> getBuilder()
+      .withId("a-legal-id")
       .withMaxThroughput(throughput - 1)
       .withThroughput(throughput)
-      .withId("a-legal-id").build()).
-      isInstanceOf(IllegalArgumentException.class).
-      hasMessageContaining("has max throughput defined, but it is less than base throughput");
+    .build())
+    .isInstanceOf(IllegalArgumentException.class)
+    .hasMessageContaining("has max throughput defined, but it is less than base throughput");
   }
 
   @Test
@@ -37,10 +38,10 @@ public abstract class CosmosEntityTest<T extends AzureCosmosEntityBuilder<?,?>> 
     var cosmosAccount = a(String.class);
     var throughput = a(Integer.class);
     var builder = getBuilder()
-        .withMaxThroughput(throughput + 1)
-        .withThroughput(throughput)
-        .withCosmosAccount(cosmosAccount)
-        .withId("a-legal-id");
+      .withId("a-legal-id")
+      .withMaxThroughput(throughput + 1)
+      .withThroughput(throughput)
+      .withCosmosAccount(cosmosAccount);
 
     var component = builder.build();
 

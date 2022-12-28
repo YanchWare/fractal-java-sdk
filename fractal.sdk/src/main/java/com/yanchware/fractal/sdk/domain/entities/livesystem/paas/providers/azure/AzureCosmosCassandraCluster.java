@@ -9,24 +9,21 @@ import lombok.ToString;
 
 import java.util.Collection;
 
-import static org.apache.commons.lang3.StringUtils.isBlank;
-
 @Getter
 @Setter(AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 public class AzureCosmosCassandraCluster extends PaaSCassandra {
-    private final static String NAME_IS_BLANK = "Cosmos Cassandra Cluster name has not been defined and it is required";
     private final static String ILLEGAL_AMOUNT_OF_HOURS_BETWEEN_BACKUP = "Cosmos Cassandra Cluster periodic backup feature needs a value of hours between backups that is larger or equal to 1";
 
-    private String name;
     private String cassandraVersion;
-    private boolean useCassandraAuthentication = true;
+    private boolean useCassandraAuthentication;
     private boolean isDeallocated;
     private String delegatedManagementSubnetId;
     private boolean isCassandraAuditLoggingEnabled;
     private int hoursBetweenBackups;
 
     protected AzureCosmosCassandraCluster() {
+        useCassandraAuthentication = true;
     }
 
     public static AzureCosmosCassandraClusterBuilder builder() {
@@ -48,11 +45,6 @@ public class AzureCosmosCassandraCluster extends PaaSCassandra {
         @Override
         protected AzureCosmosCassandraClusterBuilder getBuilder() {
             return this;
-        }
-
-        public AzureCosmosCassandraClusterBuilder withName(String name) {
-            component.setName(name);
-            return builder;
         }
 
         public AzureCosmosCassandraClusterBuilder withCassandraVersion(String cassandraVersion) {
@@ -89,10 +81,6 @@ public class AzureCosmosCassandraCluster extends PaaSCassandra {
     @Override
     public Collection<String> validate() {
         Collection<String> errors = super.validate();
-
-        if (isBlank(name)) {
-            errors.add(NAME_IS_BLANK);
-        }
 
         if(hoursBetweenBackups <= 0) {
             errors.add(ILLEGAL_AMOUNT_OF_HOURS_BETWEEN_BACKUP);

@@ -3,6 +3,7 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 
 import com.yanchware.fractal.sdk.TestWithFixture;
 import com.yanchware.fractal.sdk.domain.entities.Component;
+import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import com.yanchware.fractal.sdk.valueobjects.ComponentType;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.Test;
@@ -31,9 +32,9 @@ public abstract class CosmosAccountTest<T extends AzureCosmosAccountBuilder<?,?>
   @Test
   public void exceptionThrown_when_entityIsInvalid() {
     assertThatThrownBy(() -> getBuilder()
+      .withId("a-legal-id")
       .withMaxTotalThroughput(a(Integer.class))
       .withCosmosEntity(getInvalidCosmosEntity())
-      .withId("a-legal-id")
     .build())
     .isInstanceOf(IllegalArgumentException.class)
     .hasMessageContaining("defined no connection to a Cosmos Account");
@@ -43,8 +44,8 @@ public abstract class CosmosAccountTest<T extends AzureCosmosAccountBuilder<?,?>
   public void typeIsAsExpected_when_BuiltWithoutEntities() {
     var throughput = a(Integer.class);
     var builder = getBuilder()
-        .withMaxTotalThroughput(throughput)
-        .withId("a-legal-id");
+      .withId("a-legal-id")
+      .withMaxTotalThroughput(throughput);
 
     var component = builder.build();
 
@@ -57,12 +58,13 @@ public abstract class CosmosAccountTest<T extends AzureCosmosAccountBuilder<?,?>
 
   @Test
   public void typeIsAsExpected_when_BuiltWithEntities() {
+    var accountId = "a-legal-id";
     var entities = getValidCosmosEntities();
     var throughput = a(Integer.class);
     var builder = getBuilder()
+      .withId(accountId)
       .withMaxTotalThroughput(throughput)
-      .withCosmosEntities(entities)
-      .withId("a-legal-id");
+      .withCosmosEntities(entities);
 
     var component = builder.build();
 
@@ -71,6 +73,10 @@ public abstract class CosmosAccountTest<T extends AzureCosmosAccountBuilder<?,?>
       .asInstanceOf(InstanceOfAssertFactories.type(AzureCosmosAccount.class))
       .extracting(AzureCosmosAccount::getCosmosEntities, AzureCosmosAccount::getMaxTotalThroughput)
       .containsExactly(entities, throughput);
+
+    assertThat(component.getCosmosEntities().stream().allMatch(x -> x.getDependencies().contains(ComponentId.from(accountId))))
+      .isTrue();
+
   }
 
   @Test
@@ -78,9 +84,9 @@ public abstract class CosmosAccountTest<T extends AzureCosmosAccountBuilder<?,?>
     var entity = getValidCosmosEntities().stream().findFirst().get();
     var throughput = a(Integer.class);
     var builder = getBuilder()
+      .withId("a-legal-id")
       .withMaxTotalThroughput(throughput)
-      .withCosmosEntity(entity)
-      .withId("a-legal-id");
+      .withCosmosEntity(entity);
 
     var component = builder.build();
 
