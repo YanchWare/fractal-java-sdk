@@ -24,8 +24,10 @@ public enum ComponentType {
     CAAS_OCELOT("Security.CaaS.Ocelot"),
 
     PAAS_CONTAINER_PLATFORM("NetworkAndCompute.PaaS.ContainerPlatform"),
+    PAAS_COLUMN_ORIENTED_DBMS("Storage.PaaS.ColumnOrientedDbms"),
     PAAS_KUBERNETES("NetworkAndCompute.PaaS.Kubernetes"),
     PAAS_POSTGRESQL_DBMS("Storage.PaaS.PostgreSqlDbms"),
+    PAAS_CASANDRA_DBMS ("Storage.PaaS.Cassandra"),
     PAAS_POSTGRESQL_DATABASE("Storage.PaaS.PostgreSqlDatabase"),
     PAAS_RELATIONAL_DATABASE("Storage.PaaS.RelationalDatabase"),
     PAAS_RELATIONAL_DBMS("Storage.PaaS.RelationalDbms"),

@@ -1,7 +1,6 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
 
-import com.yanchware.fractal.sdk.domain.entities.Component;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PaaSPostgreSqlDatabase;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PaaSCassandra;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -15,16 +14,13 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Getter
 @Setter(AccessLevel.PROTECTED)
 @ToString(callSuper = true)
-public class AzureCosmosCassandraCluster extends PaaSPostgreSqlDatabase {
-    private final static String NAME_IS_BLANK = "Cosmos PostgreSQLDB name has not been defined and it is required";
-    private final static String COSMOS_ACCOUNT_IS_BLANK = "Cosmos PostgreSQLDB defined no connection to a Cosmos Account, and it is required";
-    private final static String THROUGHPUT_IS_BLANK = "Cosmos PostgreSQLDB defined no throughput, and it is required";
-    private final static String MAX_THROUGHPUT_IS_BLANK = "Cosmos PostgreSQLDB defined no max throughput defined, and it is required";
-    private final static String MAX_THROUGHPUT_IS_SMALLER = "Cosmos PostgreSQLDB defined has max throughput defined, but it is less than base throughput";
+public class AzureCosmosCassandraCluster extends PaaSCassandra {
+    private final static String NAME_IS_BLANK = "Cosmos Cassandra Cluster name has not been defined and it is required";
+    private final static String ILLEGAL_AMOUNT_OF_HOURS_BETWEEN_BACKUP = "Cosmos Cassandra Cluster periodic backup feature needs a value of hours between backups that is larger or equal to 1";
 
     private String name;
     private String cassandraVersion;
-    private boolean useCassandraAuthentication;
+    private boolean useCassandraAuthentication = true;
     private boolean isDeallocated;
     private String delegatedManagementSubnetId;
     private boolean isCassandraAuditLoggingEnabled;
@@ -33,30 +29,59 @@ public class AzureCosmosCassandraCluster extends PaaSPostgreSqlDatabase {
     protected AzureCosmosCassandraCluster() {
     }
 
+    public static AzureCosmosCassandraClusterBuilder builder() {
+        return new AzureCosmosCassandraClusterBuilder();
+    }
+
     @Override
     public ProviderType getProvider() {
         return ProviderType.AZURE;
     }
 
-    public static class Builder<T extends AzureCosmosCassandraCluster, B extends AzureCosmosCassandraCluster.Builder<T, B>> extends Component.Builder<T, B> {
+    public static class AzureCosmosCassandraClusterBuilder extends PaaSCassandra.Builder<AzureCosmosCassandraCluster, AzureCosmosCassandraClusterBuilder> {
 
-        public B withName(String name) {
+        @Override
+        protected AzureCosmosCassandraCluster createComponent() {
+            return new AzureCosmosCassandraCluster();
+        }
+
+        @Override
+        protected AzureCosmosCassandraClusterBuilder getBuilder() {
+            return this;
+        }
+
+        public AzureCosmosCassandraClusterBuilder withName(String name) {
             component.setName(name);
             return builder;
         }
 
-        public B withCosmosAccount(String cosmosAccount) {
-            component.setCosmosAccount(cosmosAccount);
+        public AzureCosmosCassandraClusterBuilder withCassandraVersion(String cassandraVersion) {
+            component.setCassandraVersion(cassandraVersion);
             return builder;
         }
 
-        public B withThroughput(int throughput) {
-            component.setThroughput(throughput);
+        public AzureCosmosCassandraClusterBuilder withCassandraAuthentication(boolean useCassandraAuthentication) {
+            component.setUseCassandraAuthentication(useCassandraAuthentication);
             return builder;
         }
 
-        public B withMaxThroughput(int maxThroughput) {
-            component.setMaxThroughput(maxThroughput);
+        public AzureCosmosCassandraClusterBuilder withDeallocated(boolean deallocated) {
+            component.setDeallocated(deallocated);
+            return builder;
+        }
+
+        public AzureCosmosCassandraClusterBuilder withDelegatedManagementSubnetId(String delegatedManagementSubnetId) {
+            component.setDelegatedManagementSubnetId(delegatedManagementSubnetId);
+            return builder;
+        }
+
+        public AzureCosmosCassandraClusterBuilder withAuditLoggingEnabled(boolean auditLoggingEnabled) {
+            component.setCassandraAuditLoggingEnabled(auditLoggingEnabled);
+            return builder;
+        }
+
+        public AzureCosmosCassandraClusterBuilder withHoursBetweenBackups(int hoursBetweenBackups){
+            component.setHoursBetweenBackups(hoursBetweenBackups);
             return builder;
         }
     }
@@ -69,20 +94,8 @@ public class AzureCosmosCassandraCluster extends PaaSPostgreSqlDatabase {
             errors.add(NAME_IS_BLANK);
         }
 
-        if(isBlank(cosmosAccount)) {
-            errors.add(COSMOS_ACCOUNT_IS_BLANK);
-        }
-
-        if(throughput <= 0) {
-            errors.add(THROUGHPUT_IS_BLANK);
-        }
-
-        if(maxThroughput <= 0) {
-            errors.add(MAX_THROUGHPUT_IS_BLANK);
-        }
-
-        if(maxThroughput < throughput) {
-            errors.add(MAX_THROUGHPUT_IS_SMALLER);
+        if(hoursBetweenBackups <= 0) {
+            errors.add(ILLEGAL_AMOUNT_OF_HOURS_BETWEEN_BACKUP);
         }
 
         return errors;
