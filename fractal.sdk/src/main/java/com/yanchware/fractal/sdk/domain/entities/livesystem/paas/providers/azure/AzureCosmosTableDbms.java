@@ -3,7 +3,6 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSRelationalDbms;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.LiveSystemComponent;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -15,21 +14,22 @@ import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.provider
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_COSMOS_ACCOUNT;
 
 @Getter
-@Setter(AccessLevel.PRIVATE)
+@Setter
 @ToString(callSuper = true)
 public class AzureCosmosTableDbms extends PaaSRelationalDbms implements LiveSystemComponent, AzureCosmosAccount {
 
   public static final String TYPE = PAAS_COSMOS_ACCOUNT.getId();
 
   private int maxTotalThroughput;
+
   private String publicNetworkAccess;
+  private Collection<AzureCosmosTableEntity> cosmosEntities;
 
   @Override
   public ProviderType getProvider() {
     return ProviderType.AZURE;
   }
 
-  private Collection<AzureCosmosTableEntity> cosmosEntities;
 
   protected AzureCosmosTableDbms() {
     cosmosEntities = new ArrayList<>();
@@ -54,7 +54,7 @@ public class AzureCosmosTableDbms extends PaaSRelationalDbms implements LiveSyst
 
   public Collection<String> validate() {
     Collection<String> errors = super.validate();
-    errors.addAll(validateCosmosAccount(this, "Cosmos Table DBMS"));
+    errors.addAll(validateCosmosAccount(this));
     return errors;
   }
 

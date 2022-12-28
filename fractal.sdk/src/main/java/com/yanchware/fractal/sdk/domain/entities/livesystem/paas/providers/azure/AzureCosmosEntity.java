@@ -5,10 +5,6 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.LiveSystemCompo
 import java.util.Collection;
 
 public interface AzureCosmosEntity {
-
-  String getName();
-  void setName(String name);
-
   String getCosmosAccount();
   void setCosmosAccount(String cosmosAccount);
 

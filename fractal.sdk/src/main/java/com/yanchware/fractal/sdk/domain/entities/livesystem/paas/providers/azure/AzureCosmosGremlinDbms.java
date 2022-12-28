@@ -3,7 +3,6 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSGraphDbms;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.LiveSystemComponent;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -15,7 +14,7 @@ import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.provider
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_COSMOS_ACCOUNT;
 
 @Getter
-@Setter(AccessLevel.PRIVATE)
+@Setter
 @ToString(callSuper = true)
 public class AzureCosmosGremlinDbms extends PaaSGraphDbms implements LiveSystemComponent, AzureCosmosAccount {
 
@@ -54,7 +53,7 @@ public class AzureCosmosGremlinDbms extends PaaSGraphDbms implements LiveSystemC
 
   public Collection<String> validate() {
     Collection<String> errors = super.validate();
-    errors.addAll(validateCosmosAccount(this, "Cosmos Gremlin DBMS"));
+    errors.addAll(validateCosmosAccount(this));
     return errors;
   }
 

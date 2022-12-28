@@ -3,7 +3,6 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSRelationalDatabase;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.LiveSystemComponent;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,7 +13,7 @@ import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.provider
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_COSMOS_POSTGRESQL_DATABASE;
 
 @Getter
-@Setter(AccessLevel.PROTECTED)
+@Setter
 @ToString(callSuper = true)
 public class AzureCosmosPostgreSqlDatabase extends PaaSRelationalDatabase implements LiveSystemComponent, AzureCosmosEntity {
 
@@ -24,7 +23,7 @@ public class AzureCosmosPostgreSqlDatabase extends PaaSRelationalDatabase implem
         return new AzureCosmosPostgreSqlDatabaseBuilder();
     }
 
-    private String name;
+
     private String cosmosAccount;
     private int throughput;
     private int maxThroughput;
@@ -57,7 +56,7 @@ public class AzureCosmosPostgreSqlDatabase extends PaaSRelationalDatabase implem
     @Override
     public Collection<String> validate() {
         Collection<String> errors = super.validate();
-        errors.addAll(validateCosmosEntity(this, "Cosmos PostgreSql Database"));
+        errors.addAll(validateCosmosEntity(this, "PostgreSql Database"));
         return errors;
     }
 }

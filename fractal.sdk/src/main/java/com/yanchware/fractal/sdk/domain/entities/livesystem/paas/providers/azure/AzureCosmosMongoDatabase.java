@@ -3,7 +3,6 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSDocumentDatabase;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.LiveSystemComponent;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,7 +13,7 @@ import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.provider
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_COSMOS_MONGO_DATABASE;
 
 @Getter
-@Setter(AccessLevel.PROTECTED)
+@Setter
 @ToString(callSuper = true)
 public class AzureCosmosMongoDatabase extends PaaSDocumentDatabase implements LiveSystemComponent, AzureCosmosEntity {
 
@@ -24,7 +23,6 @@ public class AzureCosmosMongoDatabase extends PaaSDocumentDatabase implements Li
         return new AzureCosmosMongoDatabaseBuilder();
     }
 
-    private String name;
     private String cosmosAccount;
     private int throughput;
     private int maxThroughput;
@@ -57,7 +55,7 @@ public class AzureCosmosMongoDatabase extends PaaSDocumentDatabase implements Li
     @Override
     public Collection<String> validate() {
         Collection<String> errors = super.validate();
-        errors.addAll(validateCosmosEntity(this, "Cosmos Gremlin Database"));
+        errors.addAll(validateCosmosEntity(this, "Mongo Database"));
         return errors;
     }
 }

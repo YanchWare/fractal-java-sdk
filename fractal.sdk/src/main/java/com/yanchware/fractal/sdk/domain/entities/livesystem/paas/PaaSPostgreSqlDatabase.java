@@ -17,8 +17,6 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Setter(AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 public abstract class PaaSPostgreSqlDatabase extends PaaSRelationalDatabase implements LiveSystemComponent {
-    public static final String TYPE = PAAS_POSTGRESQL_DATABASE.getId();
-
     private final static String NAME_IS_BLANK = "PostgreSQLDB name has not been defined and it is required";
     private final static String COLLATION_IS_BLANK = "PostgreSQLDB collation defined was either empty or blank and it is required";
     private final static String SCHEMA_IS_BLANK = "PostgreSQLDB schema defined was either empty or blank and it is required";

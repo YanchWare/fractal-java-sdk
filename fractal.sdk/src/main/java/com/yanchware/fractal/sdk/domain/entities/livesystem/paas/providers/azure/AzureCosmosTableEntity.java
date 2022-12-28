@@ -3,7 +3,6 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSRelationalDatabase;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.LiveSystemComponent;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -15,7 +14,7 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_COSMOS_P
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_COSMOS_TABLE;
 
 @Getter
-@Setter(AccessLevel.PROTECTED)
+@Setter
 @ToString(callSuper = true)
 public class AzureCosmosTableEntity extends PaaSRelationalDatabase implements LiveSystemComponent, AzureCosmosEntity {
 
@@ -25,9 +24,10 @@ public class AzureCosmosTableEntity extends PaaSRelationalDatabase implements Li
         return new AzureCosmosTableEntityBuilder();
     }
 
-    private String name;
     private String cosmosAccount;
+
     private int throughput;
+
     private int maxThroughput;
 
     @Override
@@ -49,7 +49,7 @@ public class AzureCosmosTableEntity extends PaaSRelationalDatabase implements Li
 
         @Override
         public AzureCosmosTableEntity build() {
-            component.setType(PAAS_COSMOS_POSTGRESQL_DATABASE);
+            component.setType(PAAS_COSMOS_TABLE);
             return super.build();
         }
 
@@ -58,7 +58,7 @@ public class AzureCosmosTableEntity extends PaaSRelationalDatabase implements Li
     @Override
     public Collection<String> validate() {
         Collection<String> errors = super.validate();
-        errors.addAll(validateCosmosEntity(this, "Cosmos Table Entity"));
+        errors.addAll(validateCosmosEntity(this, "Table Entity"));
         return errors;
     }
 }

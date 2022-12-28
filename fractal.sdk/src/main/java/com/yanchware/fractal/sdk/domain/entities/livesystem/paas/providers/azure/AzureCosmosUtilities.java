@@ -7,17 +7,13 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class AzureCosmosUtilities {
 
-  private final static String NAME_IS_BLANK_TEMPLATE = "Cosmos %s name has not been defined and it is required";
   private final static String COSMOS_ACCOUNT_IS_BLANK_TEMPLATE = "Cosmos %s defined no connection to a Cosmos Account, and it is required";
   private final static String THROUGHPUT_IS_BLANK_TEMPLATE = "Cosmos %s defined no throughput, and it is required";
   private final static String MAX_THROUGHPUT_IS_BLANK_TEMPLATE = "Cosmos %s defined no max throughput defined, and it is required";
-  private final static String MAX_THROUGHPUT_IS_SMALLER_TEMPLATE = "Cosmos %s defined has max throughput defined, but it is less than base throughput";
+  private final static String MAX_THROUGHPUT_IS_SMALLER_TEMPLATE = "Cosmos %s has max throughput defined, but it is less than base throughput";
 
   public static Collection<String> validateCosmosEntity(AzureCosmosEntity cosmosEntity, String entityName) {
     var errors = new ArrayList<String>();
-    if (isBlank(cosmosEntity.getName())) {
-      errors.add(String.format(NAME_IS_BLANK_TEMPLATE, entityName));
-    }
 
     if (isBlank(cosmosEntity.getCosmosAccount())) {
       errors.add(String.format(COSMOS_ACCOUNT_IS_BLANK_TEMPLATE, entityName));
@@ -40,7 +36,7 @@ public class AzureCosmosUtilities {
     return errors;
   }
 
-  public static Collection<String> validateCosmosAccount(AzureCosmosAccount cosmosAccount, String accountTypeName) {
+  public static Collection<String> validateCosmosAccount(AzureCosmosAccount cosmosAccount) {
     var errors = new ArrayList<String>();
 
     cosmosAccount.getCosmosEntities().stream()

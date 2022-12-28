@@ -17,7 +17,6 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_POSTGRES
 @Setter(AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 public abstract class PaaSPostgreSqlDbms extends PaaSRelationalDbms implements LiveSystemComponent {
-    public static final String TYPE = PAAS_POSTGRESQL_DBMS.getId();
     private Collection<PaaSPostgreSqlDatabase> databases;
 
     protected PaaSPostgreSqlDbms() {
