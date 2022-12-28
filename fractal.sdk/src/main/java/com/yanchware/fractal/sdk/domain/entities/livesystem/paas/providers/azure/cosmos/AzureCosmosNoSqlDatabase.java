@@ -1,7 +1,9 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos;
 
 import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSDocumentDatabase;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.LiveSystemComponent;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +11,6 @@ import lombok.ToString;
 
 import java.util.Collection;
 
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureCosmosUtilities.validateCosmosEntity;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_COSMOS_NOSQL_DATABASE;
 
 @Getter
@@ -26,6 +27,9 @@ public class AzureCosmosNoSqlDatabase extends PaaSDocumentDatabase implements Li
     private String cosmosAccount;
     private int throughput;
     private int maxThroughput;
+    private AzureRegion region;
+    private AzureResourceGroup azureResourceGroup;
+
 
     @Override
     public ProviderType getProvider() {
@@ -55,7 +59,7 @@ public class AzureCosmosNoSqlDatabase extends PaaSDocumentDatabase implements Li
     @Override
     public Collection<String> validate() {
         Collection<String> errors = super.validate();
-        errors.addAll(validateCosmosEntity(this, "NoSql Database"));
+        errors.addAll(AzureCosmosEntity.validateCosmosEntity(this, "NoSql Database"));
         return errors;
     }
 }

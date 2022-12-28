@@ -1,5 +1,6 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
 
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.aks.AzureActiveDirectoryProfile;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

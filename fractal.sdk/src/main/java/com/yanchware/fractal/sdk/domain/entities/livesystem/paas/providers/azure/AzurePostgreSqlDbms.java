@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
-public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms {
+public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms implements AzureEntity {
 
   private final static String REGION_IS_NULL = "[AzurePostgreSQL Validation] Region has not been defined and it is required";
 
@@ -25,7 +25,10 @@ public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms {
 
   private String rootUser;
 
+  @Setter
   private AzureRegion region;
+  @Setter
+  private AzureResourceGroup azureResourceGroup;
 
   private AzureSkuName skuName;
 
@@ -71,6 +74,8 @@ public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms {
 
       dbs.forEach(db -> {
         db.getDependencies().add(component.getId());
+        db.setRegion(component.getRegion());
+        db.setAzureResourceGroup(component.getAzureResourceGroup());
       });
       component.getDatabases().addAll(dbs);
       return builder;

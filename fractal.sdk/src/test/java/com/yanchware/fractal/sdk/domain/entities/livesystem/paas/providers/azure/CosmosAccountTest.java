@@ -3,6 +3,9 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 
 import com.yanchware.fractal.sdk.TestWithFixture;
 import com.yanchware.fractal.sdk.domain.entities.Component;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos.AzureCosmosAccount;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos.AzureCosmosAccountBuilder;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos.AzureCosmosEntity;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import com.yanchware.fractal.sdk.valueobjects.ComponentType;
 import org.assertj.core.api.InstanceOfAssertFactories;
@@ -26,7 +29,7 @@ public abstract class CosmosAccountTest<T extends AzureCosmosAccountBuilder<?,?>
   public void exceptionThrown_when_componentBuiltWithEmptyValues() {
     assertThatThrownBy(() -> getBuilder().withId("a-legal-id").build())
       .isInstanceOf(IllegalArgumentException.class)
-      .hasMessageContaining("Cosmos Account defined no max total throughput defined, and it is required");
+      .hasMessageContaining("Defined no max total throughput defined, and it is required");
   }
 
   @Test
@@ -37,7 +40,7 @@ public abstract class CosmosAccountTest<T extends AzureCosmosAccountBuilder<?,?>
       .withCosmosEntity(getInvalidCosmosEntity())
     .build())
     .isInstanceOf(IllegalArgumentException.class)
-    .hasMessageContaining("defined no connection to a Cosmos Account");
+    .hasMessageContaining("Defined no connection to a Cosmos Account");
   }
 
   @Test
