@@ -15,13 +15,6 @@ public abstract class CosmosEntityTest<T extends AzureCosmosEntityBuilder<?,?>> 
   abstract ComponentType getExpectedType();
 
   @Test
-  public void exceptionThrown_when_componentBuiltWithNullId() {
-    assertThatThrownBy(() -> getBuilder().withId("").build()).
-        isInstanceOf(IllegalArgumentException.class).
-        hasMessageContaining("Component Id is illegal");
-  }
-
-  @Test
   public void exceptionThrown_when_componentBuiltWithEmptyValues() {
     assertThatThrownBy(() -> getBuilder().withId("a-legal-id").build()).
         isInstanceOf(IllegalArgumentException.class).

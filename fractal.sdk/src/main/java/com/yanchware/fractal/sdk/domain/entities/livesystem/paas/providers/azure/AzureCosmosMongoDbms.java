@@ -34,11 +34,11 @@ public class AzureCosmosMongoDbms extends PaaSDocumentDbms implements LiveSystem
     cosmosEntities = new ArrayList<>();
   }
 
-  public static AzureCosmosMongoDbBuilderBuilder builder() {
-    return new AzureCosmosMongoDbBuilderBuilder();
+  public static AzureCosmosMongoDbmsBuilder builder() {
+    return new AzureCosmosMongoDbmsBuilder();
   }
 
-  public static class AzureCosmosMongoDbBuilderBuilder extends AzureCosmosAccountBuilder<AzureCosmosMongoDbms, AzureCosmosMongoDbBuilderBuilder> {
+  public static class AzureCosmosMongoDbmsBuilder extends AzureCosmosAccountBuilder<AzureCosmosMongoDbms, AzureCosmosMongoDbmsBuilder> {
 
     @Override
     protected AzureCosmosMongoDbms createComponent() {
@@ -46,7 +46,7 @@ public class AzureCosmosMongoDbms extends PaaSDocumentDbms implements LiveSystem
     }
 
     @Override
-    protected AzureCosmosMongoDbBuilderBuilder getBuilder() {
+    protected AzureCosmosMongoDbmsBuilder getBuilder() {
       return this;
     }
   }

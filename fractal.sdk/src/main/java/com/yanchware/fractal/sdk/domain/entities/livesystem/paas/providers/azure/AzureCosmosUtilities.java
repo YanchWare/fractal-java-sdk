@@ -11,6 +11,7 @@ public class AzureCosmosUtilities {
   private final static String THROUGHPUT_IS_BLANK_TEMPLATE = "Cosmos %s defined no throughput, and it is required";
   private final static String MAX_THROUGHPUT_IS_BLANK_TEMPLATE = "Cosmos %s defined no max throughput defined, and it is required";
   private final static String MAX_THROUGHPUT_IS_SMALLER_TEMPLATE = "Cosmos %s has max throughput defined, but it is less than base throughput";
+  private final static String MAX_TOTAL_THROUGHPUT_IS_BLANK = "Cosmos Account defined no max total throughput defined, and it is required";
 
   public static Collection<String> validateCosmosEntity(AzureCosmosEntity cosmosEntity, String entityName) {
     var errors = new ArrayList<String>();
@@ -38,6 +39,11 @@ public class AzureCosmosUtilities {
 
   public static Collection<String> validateCosmosAccount(AzureCosmosAccount cosmosAccount) {
     var errors = new ArrayList<String>();
+
+    var maxTotalThroughput = cosmosAccount.getMaxTotalThroughput();
+    if (maxTotalThroughput <= 0) {
+      errors.add(String.format(MAX_TOTAL_THROUGHPUT_IS_BLANK));
+    }
 
     cosmosAccount.getCosmosEntities().stream()
       .map(AzureCosmosEntity::validate)

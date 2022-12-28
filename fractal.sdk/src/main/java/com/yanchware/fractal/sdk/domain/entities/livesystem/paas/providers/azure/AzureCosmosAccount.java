@@ -7,6 +7,7 @@ import java.util.Collection;
 public interface AzureCosmosAccount {
 
   <C extends Component & AzureCosmosEntity> Collection<C> getCosmosEntities();
+  int getMaxTotalThroughput();
 
   void setMaxTotalThroughput(int maxTotalThroughput);
   void setPublicNetworkAccess(String publicNetworkAccessMode);

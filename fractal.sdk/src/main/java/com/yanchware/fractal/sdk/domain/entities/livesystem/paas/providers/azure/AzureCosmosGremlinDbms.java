@@ -34,11 +34,11 @@ public class AzureCosmosGremlinDbms extends PaaSGraphDbms implements LiveSystemC
     cosmosEntities = new ArrayList<>();
   }
 
-  public static AzureCosmosGremlinDatabaseBuilder builder() {
-    return new AzureCosmosGremlinDatabaseBuilder();
+  public static AzureCosmosGremlinDbmsBuilder builder() {
+    return new AzureCosmosGremlinDbmsBuilder();
   }
 
-  public static class AzureCosmosGremlinDatabaseBuilder extends AzureCosmosAccountBuilder<AzureCosmosGremlinDbms, AzureCosmosGremlinDatabaseBuilder> {
+  public static class AzureCosmosGremlinDbmsBuilder extends AzureCosmosAccountBuilder<AzureCosmosGremlinDbms, AzureCosmosGremlinDbmsBuilder> {
 
     @Override
     protected AzureCosmosGremlinDbms createComponent() {
@@ -46,7 +46,7 @@ public class AzureCosmosGremlinDbms extends PaaSGraphDbms implements LiveSystemC
     }
 
     @Override
-    protected AzureCosmosGremlinDatabaseBuilder getBuilder() {
+    protected AzureCosmosGremlinDbmsBuilder getBuilder() {
       return this;
     }
   }

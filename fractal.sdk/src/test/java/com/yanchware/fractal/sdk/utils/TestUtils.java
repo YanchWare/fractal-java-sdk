@@ -119,29 +119,14 @@ public class TestUtils {
             .withMaxSurge(1)
             .withMinNodeCount(1)
             .build());
-        /*.withPriorityClass(PriorityClass.builder()
-            .withName("fractal-critical")
-            .withDescription("Used for Fractal Components")
-            .withPreemptionPolicy(PREEMPT_LOWER_PRIORITY)
-            .withValue(1_000_000_000)
-            .build())
-        .withPodManagedIdentity(PodManagedIdentity.builder()
-            .withName("azure-pod-identity")
-            .withNamespace("kube-system")
-            .withExceptionPodLabels(Map.of("app", "mic", "component", "mic"))
-            .withEnable(true)
-            .withAllowNetworkPluginKubeNet(true)
-            .build());*/
   }
 
   public static AzureKubernetesService getAksExample() {
     return getAksBuilder()
         .withK8sWorkload(getK8sWorkloadExample())
-        //.withMessageBroker(getKafkaClusterExample())
         .withMonitoring(getPrometheusExample())
         .withAPIGateway(getAmbassadorExample())
         .withServiceMeshSecurity(getOcelotExample())
-        //.withTracing(getJaegerExample())
         .withLogging(getElasticLoggingExample())
         .withDocumentDB(getElasticDataStoreExample())
         .build();
@@ -150,11 +135,9 @@ public class TestUtils {
   public static GoogleKubernetesEngine getGkeExample() {
     return getGkeBuilder()
         .withK8sWorkload(getK8sWorkloadExample())
-        //.withMessageBroker(getKafkaClusterExample())
         .withMonitoring(getPrometheusExample())
         .withAPIGateway(getAmbassadorExample())
         .withServiceMeshSecurity(getOcelotExample())
-        //.withTracing(getJaegerExample())
         .withLogging(getElasticLoggingExample())
         .withDocumentDB(getElasticDataStoreExample())
         .build();
