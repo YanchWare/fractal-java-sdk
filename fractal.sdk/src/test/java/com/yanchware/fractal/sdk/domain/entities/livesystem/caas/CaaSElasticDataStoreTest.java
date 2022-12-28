@@ -3,7 +3,7 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 import com.yanchware.fractal.sdk.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.ELASTIC_DATASTORE;
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.CAAS_ELASTIC_DATASTORE;
 import static org.assertj.core.api.Assertions.*;
 
 class CaaSElasticDataStoreTest {
@@ -94,7 +94,7 @@ class CaaSElasticDataStoreTest {
     @Test
     public void typeIsElasticDataStore_when_WithAllRequiredValues() {
         assertThatCode(TestUtils::getElasticDataStoreExample).doesNotThrowAnyException();
-        assertThat(TestUtils.getElasticDataStoreExample().getType()).isEqualTo(ELASTIC_DATASTORE);
+        assertThat(TestUtils.getElasticDataStoreExample().getType()).isEqualTo(CAAS_ELASTIC_DATASTORE);
     }
 
     private static CaaSElasticDataStore.ElasticDataStoreBuilder getElasticDataStoreBuilder() {

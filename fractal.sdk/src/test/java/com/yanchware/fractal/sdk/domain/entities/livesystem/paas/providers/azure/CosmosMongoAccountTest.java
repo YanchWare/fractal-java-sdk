@@ -1,0 +1,46 @@
+
+package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
+
+import com.yanchware.fractal.sdk.valueobjects.ComponentType;
+
+import java.util.Collection;
+import java.util.List;
+
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_COSMOS_ACCOUNT;
+
+public class CosmosMongoAccountTest extends CosmosAccountTest<AzureCosmosMongoDbms.AzureCosmosMongoDbmsBuilder> {
+
+
+  @Override
+  AzureCosmosMongoDbms.AzureCosmosMongoDbmsBuilder getBuilder() {
+    return new AzureCosmosMongoDbms.AzureCosmosMongoDbmsBuilder();
+  }
+
+  @Override
+  ComponentType getExpectedType() {
+    return PAAS_COSMOS_ACCOUNT;
+  }
+
+  @Override
+  AzureCosmosMongoDatabase getInvalidCosmosEntity() {
+    return new AzureCosmosMongoDatabase();
+  }
+
+  @Override
+  Collection<AzureCosmosMongoDatabase> getValidCosmosEntities() {
+    return List.of(
+      aMongoDb("db-a"),
+      aMongoDb("db-b"),
+      aMongoDb("db-c"));
+  }
+
+  private AzureCosmosMongoDatabase aMongoDb(String id) {
+    var throughput = a(Integer.class);
+
+    return AzureCosmosMongoDatabase.builder()
+      .withCosmosAccount(a(String.class))
+      .withThroughput(throughput)
+      .withMaxThroughput(throughput + 1)
+      .withId(id).build();
+  }
+}

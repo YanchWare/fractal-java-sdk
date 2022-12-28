@@ -1,20 +1,23 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp;
 
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PostgreSQL;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PaaSPostgreSqlDbms;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
+import com.yanchware.fractal.sdk.utils.CollectionUtils;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
-public class GcpProgreSQL extends PostgreSQL {
+public class GcpPostgreSqlDbms extends PaaSPostgreSqlDbms {
 
   private final static String REGION_IS_NULL = "[GcpProgreSQL Validation] Region has not been defined and it is required";
 
@@ -35,8 +38,8 @@ public class GcpProgreSQL extends PostgreSQL {
   private String peeringNetworkName;
   private String peeringNetworkPrefix;
 
-  public static GcpPostgreSQLBuilder builder() {
-    return new GcpPostgreSQLBuilder();
+  public static GcpPostgreSqlBuilder builder() {
+    return new GcpPostgreSqlBuilder();
   }
 
   @Override
@@ -44,44 +47,64 @@ public class GcpProgreSQL extends PostgreSQL {
     return ProviderType.GCP;
   }
 
-  public static class GcpPostgreSQLBuilder extends Builder<GcpProgreSQL, GcpPostgreSQLBuilder> {
+  public static class GcpPostgreSqlBuilder extends Builder<GcpPostgreSqlDbms, GcpPostgreSqlBuilder> {
 
     @Override
-    protected GcpProgreSQL createComponent() {
-      return new GcpProgreSQL();
+    protected GcpPostgreSqlDbms createComponent() {
+      return new GcpPostgreSqlDbms();
     }
 
     @Override
-    protected GcpPostgreSQLBuilder getBuilder() {
+    protected GcpPostgreSqlBuilder getBuilder() {
       return this;
     }
 
-    public GcpPostgreSQLBuilder withRegion(GcpRegion region) {
+    public GcpPostgreSqlBuilder withDatabase(GcpPostgreSqlDatabase db) {
+      return withDatabases(List.of(db));
+    }
+
+    public GcpPostgreSqlBuilder withDatabases(Collection<? extends GcpPostgreSqlDatabase> dbs) {
+      if (CollectionUtils.isBlank(dbs)) {
+        return builder;
+      }
+
+      if (component.getDatabases() == null) {
+        component.setDatabases(new ArrayList<>());
+      }
+
+      dbs.forEach(db -> {
+        db.getDependencies().add(component.getId());
+      });
+      component.getDatabases().addAll(dbs);
+      return builder;
+    }
+
+    public GcpPostgreSqlBuilder withRegion(GcpRegion region) {
       component.setRegion(region);
       return builder;
     }
 
-    public GcpPostgreSQLBuilder withNetwork(String network) {
+    public GcpPostgreSqlBuilder withNetwork(String network) {
       component.setNetwork(network);
       return builder;
     }
 
-    public GcpPostgreSQLBuilder withPeeringNetworkAddress(String peeringNetworkAddress) {
+    public GcpPostgreSqlBuilder withPeeringNetworkAddress(String peeringNetworkAddress) {
       component.setPeeringNetworkAddress(peeringNetworkAddress);
       return builder;
     }
 
-    public GcpPostgreSQLBuilder withPeeringNetworkAddressDescription(String peeringNetworkAddressDescription) {
+    public GcpPostgreSqlBuilder withPeeringNetworkAddressDescription(String peeringNetworkAddressDescription) {
       component.setPeeringNetworkAddressDescription(peeringNetworkAddressDescription);
       return builder;
     }
 
-    public GcpPostgreSQLBuilder withPeeringNetworkName(String peeringNetworkName) {
+    public GcpPostgreSqlBuilder withPeeringNetworkName(String peeringNetworkName) {
       component.setPeeringNetworkName(peeringNetworkName);
       return builder;
     }
 
-    public GcpPostgreSQLBuilder withPeeringNetworkPrefix(String peeringNetworkPrefix) {
+    public GcpPostgreSqlBuilder withPeeringNetworkPrefix(String peeringNetworkPrefix) {
       component.setPeeringNetworkPrefix(peeringNetworkPrefix);
       return builder;
     }

@@ -7,7 +7,7 @@ import lombok.ToString;
 
 import java.util.Collection;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PROMETHEUS;
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.CAAS_PROMETHEUS;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Getter
@@ -51,7 +51,7 @@ public class CaaSPrometheus extends CaaSMonitoringImpl implements LiveSystemComp
 
     @Override
     public CaaSPrometheus build() {
-      component.setType(PROMETHEUS);
+      component.setType(CAAS_PROMETHEUS);
       return super.build();
     }
   }

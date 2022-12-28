@@ -2,11 +2,11 @@ package com.yanchware.fractal.sdk.services.contracts.blueprintcontract.dtos;
 
 import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.*;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSContainerPlatform;
-import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSPostgreSQL;
-import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSPostgreSQLDB;
+import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSRelationalDbms;
+import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSRelationalDatabase;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.*;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.KubernetesCluster;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PostgreSQLDB;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PaaSPostgreSqlDatabase;
 import com.yanchware.fractal.sdk.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 
@@ -144,7 +144,7 @@ public class BlueprintComponentDtoTest {
     var elasticDataStoreDto = getBlueprintComponentDto(blueprintComponentDtoList, elasticDataStore.getId().getValue());
     var aksId = aks.getId().getValue();
 
-    assertGenericComponent(elasticDataStoreDto, elasticDataStore, CaaSDocumentDB.TYPE);
+    assertGenericComponent(elasticDataStoreDto, elasticDataStore, CaaSSearch.TYPE);
     assertSoftly(softly -> softly
         .assertThat(elasticDataStoreDto.getParameters().values())
         .as("Component Parameters")
@@ -295,7 +295,7 @@ public class BlueprintComponentDtoTest {
 
     //assert postgres server
     var azurePgBlueprintCompDto = blueprintComponentDtoList.get(0);
-    assertGenericComponent(azurePgBlueprintCompDto, apg, PaaSPostgreSQL.TYPE);
+    assertGenericComponent(azurePgBlueprintCompDto, apg, PaaSRelationalDbms.TYPE);
     assertSoftly(softly -> {
       softly.assertThat(azurePgBlueprintCompDto.getParameters().values()).as("Component Parameters")
           .containsExactlyInAnyOrder(
@@ -312,10 +312,10 @@ public class BlueprintComponentDtoTest {
 
     //assert postgres db#1
     var azurePgDbBlueprintCompDto = blueprintComponentDtoList.get(1);
-    Optional<PostgreSQLDB> db1Optional = apg.getDatabases().stream().filter(x -> x.getId().getValue().equals(azurePgDbBlueprintCompDto.getId())).findFirst();
+    Optional<PaaSPostgreSqlDatabase> db1Optional = apg.getDatabases().stream().filter(x -> x.getId().getValue().equals(azurePgDbBlueprintCompDto.getId())).findFirst();
     assertThat(db1Optional).isPresent();
     var db1 = db1Optional.get();
-    assertGenericComponent(azurePgDbBlueprintCompDto, db1, PaaSPostgreSQLDB.TYPE);
+    assertGenericComponent(azurePgDbBlueprintCompDto, db1, PaaSRelationalDatabase.TYPE);
     assertSoftly(softly -> {
       softly.assertThat(azurePgDbBlueprintCompDto.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(db1.getName());
       softly.assertThat(azurePgDbBlueprintCompDto.getDependencies()).as("Component Dependencies").containsExactly(apg.getId().getValue());
@@ -324,10 +324,10 @@ public class BlueprintComponentDtoTest {
 
     //assert postgres db#2
     var azurePgDbBlueprintCompDto2 = blueprintComponentDtoList.get(2);
-    Optional<PostgreSQLDB> db2Optional = apg.getDatabases().stream().filter(x -> x.getId().getValue().equals(azurePgDbBlueprintCompDto2.getId())).findFirst();
+    Optional<PaaSPostgreSqlDatabase> db2Optional = apg.getDatabases().stream().filter(x -> x.getId().getValue().equals(azurePgDbBlueprintCompDto2.getId())).findFirst();
     assertThat(db2Optional).isPresent();
     var db2 = db2Optional.get();
-    assertGenericComponent(azurePgDbBlueprintCompDto2, db2, PaaSPostgreSQLDB.TYPE);
+    assertGenericComponent(azurePgDbBlueprintCompDto2, db2, PaaSRelationalDatabase.TYPE);
     assertSoftly(softly -> {
       softly.assertThat(azurePgDbBlueprintCompDto2.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(db2.getName());
       softly.assertThat(azurePgDbBlueprintCompDto2.getDependencies()).as("Component Dependencies").containsExactly(apg.getId().getValue());
@@ -343,7 +343,7 @@ public class BlueprintComponentDtoTest {
     assertThat(blueprintComponentDtoList).hasSize(2);
 
     var gcpPgBlueprintCompDto = blueprintComponentDtoList.get(0);
-    assertGenericComponent(gcpPgBlueprintCompDto, gcpPostgres, PaaSPostgreSQL.TYPE);
+    assertGenericComponent(gcpPgBlueprintCompDto, gcpPostgres, PaaSRelationalDbms.TYPE);
     assertSoftly(softly -> {
       softly.assertThat(gcpPgBlueprintCompDto.getParameters().values()).as("Component Parameters")
           .containsExactlyInAnyOrder(

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.TRAEFIK;
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.CAAS_TRAEFIK;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -129,7 +129,7 @@ class CaaSTraefikTest extends TestWithFixture {
   @Test
   public void typeIsTraefik_when_traefikIsBuilt() {
     var ambassador = traefikBuilder().build();
-    assertThat(ambassador.getType()).isEqualTo(TRAEFIK);
+    assertThat(ambassador.getType()).isEqualTo(CAAS_TRAEFIK);
   }
 
   private CaaSTraefik.TraefikBuilder traefikBuilder() {

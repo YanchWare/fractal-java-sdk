@@ -3,7 +3,7 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import org.junit.jupiter.api.Test;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PROMETHEUS;
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.CAAS_PROMETHEUS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -55,7 +55,7 @@ class CaaSPrometheusTest {
   @Test
   public void typeIsPrometheus_when_prometheusIsBuilt() {
     var ambassador = prometheusBuilder().build();
-    assertThat(ambassador.getType()).isEqualTo(PROMETHEUS);
+    assertThat(ambassador.getType()).isEqualTo(CAAS_PROMETHEUS);
   }
 
   private CaaSPrometheus.PrometheusBuilder prometheusBuilder() {

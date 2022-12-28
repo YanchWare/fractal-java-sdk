@@ -1,6 +1,5 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp;
 
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpProgreSQL;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import org.junit.jupiter.api.Test;
 
@@ -8,11 +7,11 @@ import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.provider
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class GcpProgreSQLTest {
+class GcpProgreSqlTest {
 
     @Test
     public void exceptionThrown_when_gcpPgCreatedWithNoIdNoRegionNoNetwork() {
-        var postgres = GcpProgreSQL.builder();
+        var postgres = GcpPostgreSqlDbms.builder();
         assertThatThrownBy(postgres::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
                 "Component id has not been defined and it is required",
                 "[GcpProgreSQL Validation] Region has not been defined and it is required",
@@ -22,7 +21,7 @@ class GcpProgreSQLTest {
 
     @Test
     public void exceptionThrown_when_gcpPgCreatedWithNoRegionNoNetwork() {
-        var postgres = GcpProgreSQL.builder().withId(ComponentId.from("postg"));
+        var postgres = GcpPostgreSqlDbms.builder().withId(ComponentId.from("postg"));
         assertThatThrownBy(postgres::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
                 "[GcpProgreSQL Validation] Region has not been defined and it is required",
                 "[GcpProgreSQL Validation] Network has not been defined and it is required]"
@@ -31,7 +30,7 @@ class GcpProgreSQLTest {
 
     @Test
     public void exceptionThrown_when_gcpPgCreatedWithNoNetwork() {
-        var postgres = GcpProgreSQL.builder()
+        var postgres = GcpPostgreSqlDbms.builder()
                 .withId(ComponentId.from("postg"))
                 .withRegion(ASIA_SOUTH1);
         assertThatThrownBy(postgres::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
@@ -116,8 +115,8 @@ class GcpProgreSQLTest {
         assertThat(getGcpPostgresBuilder().build().validate()).isEmpty();
     }
 
-    private GcpProgreSQL.GcpPostgreSQLBuilder getGcpPostgresBuilder() {
-        return GcpProgreSQL.builder()
+    private GcpPostgreSqlDbms.GcpPostgreSqlBuilder getGcpPostgresBuilder() {
+        return GcpPostgreSqlDbms.builder()
                 .withId(ComponentId.from("postg"))
                 .withRegion(ASIA_SOUTH1)
                 .withNetwork("network");

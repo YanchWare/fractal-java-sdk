@@ -1,18 +1,21 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
 
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PostgreSQL;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PaaSPostgreSqlDbms;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
+import com.yanchware.fractal.sdk.utils.CollectionUtils;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
-public class AzurePostgreSQL extends PostgreSQL {
+public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms {
 
   private final static String REGION_IS_NULL = "[AzurePostgreSQL Validation] Region has not been defined and it is required";
 
@@ -32,8 +35,8 @@ public class AzurePostgreSQL extends PostgreSQL {
 
   private Integer backupRetentionDays;
 
-  public static AzurePostgreSQLBuilder builder() {
-    return new AzurePostgreSQLBuilder();
+  public static AzurePostgreSqlBuilder builder() {
+    return new AzurePostgreSqlBuilder();
   }
 
   @Override
@@ -41,44 +44,64 @@ public class AzurePostgreSQL extends PostgreSQL {
     return ProviderType.AZURE;
   }
 
-  public static class AzurePostgreSQLBuilder extends Builder<AzurePostgreSQL, AzurePostgreSQLBuilder> {
+  public static class AzurePostgreSqlBuilder extends Builder<AzurePostgreSqlDbms, AzurePostgreSqlBuilder> {
 
     @Override
-    protected AzurePostgreSQL createComponent() {
-      return new AzurePostgreSQL();
+    protected AzurePostgreSqlDbms createComponent() {
+      return new AzurePostgreSqlDbms();
     }
 
     @Override
-    protected AzurePostgreSQLBuilder getBuilder() {
+    protected AzurePostgreSqlBuilder getBuilder() {
       return this;
     }
 
-    public AzurePostgreSQLBuilder withRootUser(String rootUser) {
+    public AzurePostgreSqlBuilder withDatabase(AzurePostgreSqlDatabase db) {
+      return withDatabases(List.of(db));
+    }
+
+    public AzurePostgreSqlBuilder withDatabases(Collection<? extends AzurePostgreSqlDatabase> dbs) {
+      if (CollectionUtils.isBlank(dbs)) {
+        return builder;
+      }
+
+      if (component.getDatabases() == null) {
+        component.setDatabases(new ArrayList<>());
+      }
+
+      dbs.forEach(db -> {
+        db.getDependencies().add(component.getId());
+      });
+      component.getDatabases().addAll(dbs);
+      return builder;
+    }
+
+    public AzurePostgreSqlBuilder withRootUser(String rootUser) {
       component.setRootUser(rootUser);
       return builder;
     }
 
-    public AzurePostgreSQLBuilder withRegion(AzureRegion region) {
+    public AzurePostgreSqlBuilder withRegion(AzureRegion region) {
       component.setRegion(region);
       return builder;
     }
 
-    public AzurePostgreSQLBuilder withSkuName(AzureSkuName skuName) {
+    public AzurePostgreSqlBuilder withSkuName(AzureSkuName skuName) {
       component.setSkuName(skuName);
       return builder;
     }
 
-    public AzurePostgreSQLBuilder withStorageAutoGrow(AzureStorageAutoGrow storageAutoGrow) {
+    public AzurePostgreSqlBuilder withStorageAutoGrow(AzureStorageAutoGrow storageAutoGrow) {
       component.setStorageAutoGrow(storageAutoGrow);
       return builder;
     }
 
-    public AzurePostgreSQLBuilder withStorageMB(int storageMB) {
+    public AzurePostgreSqlBuilder withStorageMB(int storageMB) {
       component.setStorageMB(storageMB);
       return builder;
     }
 
-    public AzurePostgreSQLBuilder withBackupRetentionDays(int backupRetentionDays) {
+    public AzurePostgreSqlBuilder withBackupRetentionDays(int backupRetentionDays) {
       component.setBackupRetentionDays(backupRetentionDays);
       return builder;
     }

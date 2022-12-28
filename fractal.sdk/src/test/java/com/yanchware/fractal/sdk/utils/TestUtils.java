@@ -8,12 +8,12 @@ import com.yanchware.fractal.sdk.domain.entities.Component;
 import com.yanchware.fractal.sdk.domain.entities.ComponentLink;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.*;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PodManagedIdentity;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PostgreSQLDB;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.RoleAssignment;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.*;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureKubernetesService.AzureKubernetesServiceBuilder;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpNodePool;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpProgreSQL;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpPostgreSqlDatabase;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpPostgreSqlDbms;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GoogleKubernetesEngine;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GoogleKubernetesEngine.GoogleKubernetesEngineBuilder;
 import com.yanchware.fractal.sdk.services.contracts.ComponentDto;
@@ -119,29 +119,14 @@ public class TestUtils {
             .withMaxSurge(1)
             .withMinNodeCount(1)
             .build());
-        /*.withPriorityClass(PriorityClass.builder()
-            .withName("fractal-critical")
-            .withDescription("Used for Fractal Components")
-            .withPreemptionPolicy(PREEMPT_LOWER_PRIORITY)
-            .withValue(1_000_000_000)
-            .build())
-        .withPodManagedIdentity(PodManagedIdentity.builder()
-            .withName("azure-pod-identity")
-            .withNamespace("kube-system")
-            .withExceptionPodLabels(Map.of("app", "mic", "component", "mic"))
-            .withEnable(true)
-            .withAllowNetworkPluginKubeNet(true)
-            .build());*/
   }
 
   public static AzureKubernetesService getAksExample() {
     return getAksBuilder()
         .withK8sWorkload(getK8sWorkloadExample())
-        //.withMessageBroker(getKafkaClusterExample())
         .withMonitoring(getPrometheusExample())
         .withAPIGateway(getAmbassadorExample())
         .withServiceMeshSecurity(getOcelotExample())
-        //.withTracing(getJaegerExample())
         .withLogging(getElasticLoggingExample())
         .withDocumentDB(getElasticDataStoreExample())
         .build();
@@ -150,11 +135,9 @@ public class TestUtils {
   public static GoogleKubernetesEngine getGkeExample() {
     return getGkeBuilder()
         .withK8sWorkload(getK8sWorkloadExample())
-        //.withMessageBroker(getKafkaClusterExample())
         .withMonitoring(getPrometheusExample())
         .withAPIGateway(getAmbassadorExample())
         .withServiceMeshSecurity(getOcelotExample())
-        //.withTracing(getJaegerExample())
         .withLogging(getElasticLoggingExample())
         .withDocumentDB(getElasticDataStoreExample())
         .build();
@@ -251,8 +234,8 @@ public class TestUtils {
         .build();
   }
 
-  public static AzurePostgreSQL getAzurePostgresExample() {
-    return AzurePostgreSQL.builder()
+  public static AzurePostgreSqlDbms getAzurePostgresExample() {
+    return AzurePostgreSqlDbms.builder()
         .withId("dbpg")
         .withDescription("PostgreSQL")
         .withDisplayName("PostgreSQL")
@@ -262,13 +245,13 @@ public class TestUtils {
         .withStorageAutoGrow(ENABLED)
         .withStorageMB(5 * 1024)
         .withBackupRetentionDays(12)
-        .withDatabase(PostgreSQLDB.builder().withId("db-1").withDisplayName("db-1").withName("db").build())
-        .withDatabase(getPostgresDbExample())
+        .withDatabase(AzurePostgreSqlDatabase.builder().withId("db-1").withDisplayName("db-1").withName("db").build())
+        .withDatabase(getAzurePostgresDbExample())
         .build();
   }
 
-  public static GcpProgreSQL getGcpPostgresExample() {
-    return GcpProgreSQL.builder()
+  public static GcpPostgreSqlDbms getGcpPostgresExample() {
+    return GcpPostgreSqlDbms.builder()
         .withId("dbpg")
         .withDescription("PostgreSQL")
         .withDisplayName("PostgreSQL")
@@ -278,17 +261,26 @@ public class TestUtils {
         .withPeeringNetworkAddressDescription("address-desc")
         .withPeeringNetworkName("network-name")
         .withPeeringNetworkPrefix("network-prefix")
-        .withDatabase(getPostgresDbExample())
+        .withDatabase(getGcpPostgresDbExample())
         .build();
   }
 
-  public static PostgreSQLDB getPostgresDbExample() {
-    return PostgreSQLDB.builder()
+  public static AzurePostgreSqlDatabase getAzurePostgresDbExample() {
+    return AzurePostgreSqlDatabase.builder()
         .withId("db-2")
         .withDisplayName("db-2")
         .withName("db2")
         .withLink(getComponentLink())
         .build();
+  }
+
+  public static GcpPostgreSqlDatabase getGcpPostgresDbExample() {
+    return GcpPostgreSqlDatabase.builder()
+      .withId("db-2")
+      .withDisplayName("db-2")
+      .withName("db2")
+      .withLink(getComponentLink())
+      .build();
   }
 
   public static Environment getEnvExample() {

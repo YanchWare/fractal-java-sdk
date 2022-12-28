@@ -22,6 +22,7 @@ public abstract class Component implements Validatable {
   private final static String COMPONENT_TYPE_NOT_DEFINED = "Component type has not been defined and it is required";
 
   private String displayName;
+  @Setter(AccessLevel.PUBLIC)
   private ComponentType type;
   private ComponentId id;
   private String version;

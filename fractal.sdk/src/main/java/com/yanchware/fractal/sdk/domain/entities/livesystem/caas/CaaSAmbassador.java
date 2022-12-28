@@ -7,7 +7,7 @@ import lombok.ToString;
 
 import java.util.Collection;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.AMBASSADOR;
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.CAAS_AMBASSADOR;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Getter
@@ -81,7 +81,7 @@ public class CaaSAmbassador extends CaaSAPIGatewayImpl {
 
         @Override
         public CaaSAmbassador build() {
-            component.setType(AMBASSADOR);
+            component.setType(CAAS_AMBASSADOR);
             return super.build();
         }
     }

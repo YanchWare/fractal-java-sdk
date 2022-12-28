@@ -6,7 +6,7 @@ import lombok.ToString;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.OCELOT;
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.CAAS_OCELOT;
 
 @ToString(callSuper = true)
 public class CaaSOcelot extends CaaSServiceMeshSecurityImpl implements LiveSystemComponent {
@@ -75,7 +75,7 @@ public class CaaSOcelot extends CaaSServiceMeshSecurityImpl implements LiveSyste
 
         @Override
         public CaaSOcelot build() {
-            component.setType(OCELOT);
+            component.setType(CAAS_OCELOT);
             return super.build();
         }
     }

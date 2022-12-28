@@ -1,6 +1,6 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
-import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSDocumentDB;
+import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSSearch;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -14,7 +14,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Getter
 @Setter(AccessLevel.PROTECTED)
 @ToString(callSuper = true)
-public abstract class CaaSDocumentDBImpl extends CaaSDocumentDB implements LiveSystemComponent {
+public abstract class CaaSSearchImpl extends CaaSSearch implements LiveSystemComponent {
     private String storage;
     private String storageClassName;
     private Integer memory;
