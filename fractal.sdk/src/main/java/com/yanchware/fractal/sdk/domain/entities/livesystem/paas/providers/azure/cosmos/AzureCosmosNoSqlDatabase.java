@@ -25,7 +25,6 @@ public class AzureCosmosNoSqlDatabase extends PaaSDocumentDatabase implements Li
         return new AzureCosmosNoSqlDatabaseBuilder();
     }
 
-    private String cosmosAccount;
     private int throughput;
     private int maxThroughput;
     private AzureRegion azureRegion;

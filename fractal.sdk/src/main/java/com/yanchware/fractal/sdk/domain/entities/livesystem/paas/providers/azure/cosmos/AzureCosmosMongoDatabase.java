@@ -25,7 +25,6 @@ public class AzureCosmosMongoDatabase extends PaaSDocumentDatabase implements Li
         return new AzureCosmosMongoDatabaseBuilder();
     }
 
-    private String cosmosAccount;
     private int throughput;
     private int maxThroughput;
     private AzureRegion azureRegion;

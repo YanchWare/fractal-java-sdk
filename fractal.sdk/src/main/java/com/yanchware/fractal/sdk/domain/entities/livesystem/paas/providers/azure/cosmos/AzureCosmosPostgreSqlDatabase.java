@@ -25,8 +25,6 @@ public class AzureCosmosPostgreSqlDatabase extends PaaSRelationalDatabase implem
         return new AzureCosmosPostgreSqlDatabaseBuilder();
     }
 
-
-    private String cosmosAccount;
     private int throughput;
     private int maxThroughput;
     private AzureRegion azureRegion;

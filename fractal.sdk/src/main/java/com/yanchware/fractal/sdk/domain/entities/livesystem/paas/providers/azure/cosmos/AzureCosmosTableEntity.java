@@ -25,8 +25,6 @@ public class AzureCosmosTableEntity extends PaaSRelationalDatabase implements Li
         return new AzureCosmosTableEntityBuilder();
     }
 
-    private String cosmosAccount;
-
     private int throughput;
 
     private int maxThroughput;

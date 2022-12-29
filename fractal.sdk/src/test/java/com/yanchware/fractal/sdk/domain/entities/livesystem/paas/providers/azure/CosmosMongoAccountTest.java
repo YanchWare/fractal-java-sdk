@@ -40,7 +40,6 @@ public class CosmosMongoAccountTest extends CosmosAccountTest<AzureCosmosMongoDb
     var throughput = a(Integer.class);
 
     return AzureCosmosMongoDatabase.builder()
-      .withCosmosAccount(a(String.class))
       .withId(id).build();
   }
 }

@@ -19,7 +19,7 @@ public abstract class CosmosEntityTest<T extends AzureCosmosEntityBuilder<? exte
   public void exceptionThrown_when_componentBuiltWithEmptyValues() {
     assertThat(AzureCosmosEntity.validateCosmosEntity(getBuilder().withId("a-legal-id").build()))
       .isNotEmpty()
-      .anyMatch(x -> x.contains("Defined no connection to a Cosmos Account, and it is required"));
+      .anyMatch(x -> x.contains("Region has not been defined and it is required"));
   }
 
   @Test
@@ -40,15 +40,14 @@ public abstract class CosmosEntityTest<T extends AzureCosmosEntityBuilder<? exte
     var builder = getBuilder()
       .withId("a-legal-id")
       .withMaxThroughput(throughput + 1)
-      .withThroughput(throughput)
-      .withCosmosAccount(cosmosAccount);
+      .withThroughput(throughput);
 
     var component = builder.build();
 
     assertThat(component.getType()).isEqualTo(getExpectedType());
     assertThat(component)
       .asInstanceOf(InstanceOfAssertFactories.type(AzureCosmosEntity.class))
-      .extracting(AzureCosmosEntity::getCosmosAccount, AzureCosmosEntity::getMaxThroughput, AzureCosmosEntity::getThroughput)
-      .containsExactly(cosmosAccount, throughput + 1, throughput);
+      .extracting(AzureCosmosEntity::getMaxThroughput, AzureCosmosEntity::getThroughput)
+      .containsExactly(throughput + 1, throughput);
   }
 }

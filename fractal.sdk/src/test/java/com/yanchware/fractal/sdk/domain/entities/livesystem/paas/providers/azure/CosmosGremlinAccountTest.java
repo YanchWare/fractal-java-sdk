@@ -38,7 +38,6 @@ public class CosmosGremlinAccountTest extends CosmosAccountTest<AzureCosmosGreml
 
   private AzureCosmosGremlinDatabase aGremlinDb(String id) {
     return AzureCosmosGremlinDatabase.builder()
-      .withCosmosAccount(a(String.class))
       .withId(id).build();
   }
 }

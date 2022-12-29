@@ -40,7 +40,6 @@ public class CosmosNoSqlAccountTest extends CosmosAccountTest<AzureCosmosNoSqlDb
     var throughput = a(Integer.class);
 
     return AzureCosmosNoSqlDatabase.builder()
-      .withCosmosAccount(a(String.class))
       .withId(id).build();
   }
 }
