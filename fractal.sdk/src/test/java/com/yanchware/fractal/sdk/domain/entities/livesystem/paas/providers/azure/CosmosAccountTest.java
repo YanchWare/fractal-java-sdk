@@ -3,6 +3,9 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 
 import com.yanchware.fractal.sdk.TestWithFixture;
 import com.yanchware.fractal.sdk.domain.entities.Component;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos.AzureCosmosAccount;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos.AzureCosmosAccountBuilder;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos.AzureCosmosEntity;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import com.yanchware.fractal.sdk.valueobjects.ComponentType;
 import org.assertj.core.api.InstanceOfAssertFactories;
@@ -26,7 +29,7 @@ public abstract class CosmosAccountTest<T extends AzureCosmosAccountBuilder<?,?>
   public void exceptionThrown_when_componentBuiltWithEmptyValues() {
     assertThatThrownBy(() -> getBuilder().withId("a-legal-id").build())
       .isInstanceOf(IllegalArgumentException.class)
-      .hasMessageContaining("Cosmos Account defined no max total throughput defined, and it is required");
+      .hasMessageContaining("Region has not been defined and it is required");
   }
 
   @Test
@@ -37,14 +40,66 @@ public abstract class CosmosAccountTest<T extends AzureCosmosAccountBuilder<?,?>
       .withCosmosEntity(getInvalidCosmosEntity())
     .build())
     .isInstanceOf(IllegalArgumentException.class)
-    .hasMessageContaining("defined no connection to a Cosmos Account");
+    .hasMessageContaining("Region has not been defined and it is required");
   }
 
   @Test
-  public void typeIsAsExpected_when_BuiltWithoutEntities() {
+  public void exceptionThrown_when_bothRegionAndResourceGroupAreNotDefined() {
+    var accountId = "a-legal-id";
+    var entities = getValidCosmosEntities();
+    var throughput = a(Integer.class);
+    var builder = getBuilder()
+      .withId(accountId)
+      .withMaxTotalThroughput(throughput)
+      .withCosmosEntities(entities);
+
+    assertThatThrownBy(() -> builder.build())
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("Region has not been defined and it is required");
+  }
+
+  @Test
+  public void typeIsAsExpected_when_BuiltWithoutEntitiesInRegion() {
     var throughput = a(Integer.class);
     var builder = getBuilder()
       .withId("a-legal-id")
+      .withRegion(AzureRegion.ASIA_EAST)
+      .withMaxTotalThroughput(throughput);
+
+    var component = builder.build();
+
+    assertThat(component.getType()).isEqualTo(getExpectedType());
+    assertThat(component)
+      .asInstanceOf(InstanceOfAssertFactories.type(AzureCosmosAccount.class))
+      .extracting(AzureCosmosAccount::getCosmosEntities, AzureCosmosAccount::getMaxTotalThroughput)
+      .containsExactly(Collections.EMPTY_LIST, throughput);
+  }
+
+  @Test
+  public void typeIsAsExpected_when_BuiltWithoutEntitiesInResourceGroup() {
+    var throughput = a(Integer.class);
+    var builder = getBuilder()
+      .withId("a-legal-id")
+      .withAzureResourceGroup(new AzureResourceGroup(AzureRegion.ASIA_SOUTHEAST, a(String.class)))
+      .withMaxTotalThroughput(throughput);
+
+    var component = builder.build();
+
+    assertThat(component.getType()).isEqualTo(getExpectedType());
+    assertThat(component)
+      .asInstanceOf(InstanceOfAssertFactories.type(AzureCosmosAccount.class))
+      .extracting(AzureCosmosAccount::getCosmosEntities, AzureCosmosAccount::getMaxTotalThroughput)
+      .containsExactly(Collections.EMPTY_LIST, throughput);
+  }
+
+
+  @Test
+  public void typeIsAsExpected_when_BuiltWithoutEntitiesInRegionAndResourceGroup() {
+    var throughput = a(Integer.class);
+    var builder = getBuilder()
+      .withId("a-legal-id")
+      .withRegion(AzureRegion.ASIA_EAST)
+      .withAzureResourceGroup(new AzureResourceGroup(AzureRegion.ASIA_SOUTHEAST, a(String.class)))
       .withMaxTotalThroughput(throughput);
 
     var component = builder.build();
@@ -63,6 +118,7 @@ public abstract class CosmosAccountTest<T extends AzureCosmosAccountBuilder<?,?>
     var throughput = a(Integer.class);
     var builder = getBuilder()
       .withId(accountId)
+      .withRegion(AzureRegion.ASIA_EAST)
       .withMaxTotalThroughput(throughput)
       .withCosmosEntities(entities);
 
@@ -85,6 +141,7 @@ public abstract class CosmosAccountTest<T extends AzureCosmosAccountBuilder<?,?>
     var throughput = a(Integer.class);
     var builder = getBuilder()
       .withId("a-legal-id")
+      .withRegion(AzureRegion.ASIA_EAST)
       .withMaxTotalThroughput(throughput)
       .withCosmosEntity(entity);
 

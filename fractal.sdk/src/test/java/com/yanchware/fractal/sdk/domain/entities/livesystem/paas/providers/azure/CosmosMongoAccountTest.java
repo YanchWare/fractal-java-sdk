@@ -1,6 +1,8 @@
 
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
 
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos.AzureCosmosMongoDatabase;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos.AzureCosmosMongoDbms;
 import com.yanchware.fractal.sdk.valueobjects.ComponentType;
 
 import java.util.Collection;
@@ -38,9 +40,6 @@ public class CosmosMongoAccountTest extends CosmosAccountTest<AzureCosmosMongoDb
     var throughput = a(Integer.class);
 
     return AzureCosmosMongoDatabase.builder()
-      .withCosmosAccount(a(String.class))
-      .withThroughput(throughput)
-      .withMaxThroughput(throughput + 1)
       .withId(id).build();
   }
 }

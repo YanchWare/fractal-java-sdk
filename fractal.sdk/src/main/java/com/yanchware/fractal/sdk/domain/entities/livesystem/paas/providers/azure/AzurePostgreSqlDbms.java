@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
-public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms {
+public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms implements AzureEntity {
 
   private final static String REGION_IS_NULL = "[AzurePostgreSQL Validation] Region has not been defined and it is required";
 
@@ -25,7 +25,10 @@ public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms {
 
   private String rootUser;
 
-  private AzureRegion region;
+  @Setter
+  private AzureRegion azureRegion;
+  @Setter
+  private AzureResourceGroup azureResourceGroup;
 
   private AzureSkuName skuName;
 
@@ -71,6 +74,8 @@ public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms {
 
       dbs.forEach(db -> {
         db.getDependencies().add(component.getId());
+        db.setAzureRegion(component.getAzureRegion());
+        db.setAzureResourceGroup(component.getAzureResourceGroup());
       });
       component.getDatabases().addAll(dbs);
       return builder;
@@ -82,7 +87,7 @@ public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms {
     }
 
     public AzurePostgreSqlBuilder withRegion(AzureRegion region) {
-      component.setRegion(region);
+      component.setAzureRegion(region);
       return builder;
     }
 
@@ -111,7 +116,7 @@ public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms {
   public Collection<String> validate() {
     Collection<String> errors = super.validate();
 
-    if (region == null) {
+    if (azureRegion == null && azureResourceGroup == null) {
       errors.add(REGION_IS_NULL);
     }
 
@@ -122,6 +127,11 @@ public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms {
     if (backupRetentionDays != null && (backupRetentionDays < 7 || backupRetentionDays > 35)) {
       errors.add(INVALID_BACKUP_RETENTION_DAYS);
     }
+
+    getDatabases().stream()
+      .map(x -> AzureEntity.validateAzureEntity((AzureEntity) x, "PostgreSql Database"))
+      .forEach(errors::addAll);
+
 
     return errors;
   }

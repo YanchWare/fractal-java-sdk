@@ -1,7 +1,9 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos;
 
 import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSDocumentDbms;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.LiveSystemComponent;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +12,6 @@ import lombok.ToString;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureCosmosUtilities.validateCosmosAccount;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_COSMOS_ACCOUNT;
 
 @Getter
@@ -22,6 +23,8 @@ public class AzureCosmosNoSqlDbms extends PaaSDocumentDbms implements LiveSystem
 
   private int maxTotalThroughput;
   private String publicNetworkAccess;
+  private AzureRegion azureRegion;
+  private AzureResourceGroup azureResourceGroup;
 
   @Override
   public ProviderType getProvider() {
@@ -53,7 +56,7 @@ public class AzureCosmosNoSqlDbms extends PaaSDocumentDbms implements LiveSystem
 
   public Collection<String> validate() {
     Collection<String> errors = super.validate();
-    errors.addAll(validateCosmosAccount(this));
+    errors.addAll(AzureCosmosAccount.validateCosmosAccount(this, "NoSql DBMS"));
     return errors;
   }
 

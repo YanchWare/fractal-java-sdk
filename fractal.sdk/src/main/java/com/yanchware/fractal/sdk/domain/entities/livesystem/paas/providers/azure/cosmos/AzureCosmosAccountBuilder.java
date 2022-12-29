@@ -1,6 +1,8 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos;
 
 import com.yanchware.fractal.sdk.domain.entities.Component;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
 import com.yanchware.fractal.sdk.utils.CollectionUtils;
 
 import java.util.Collection;
@@ -29,6 +31,8 @@ public abstract class AzureCosmosAccountBuilder<T extends Component & AzureCosmo
 
     azureCosmosEntities.forEach(entity -> {
       entity.getDependencies().add(component.getId());
+      entity.setAzureRegion(component.getAzureRegion());
+      entity.setAzureResourceGroup(component.getAzureResourceGroup());
     });
     component.getCosmosEntities().addAll(azureCosmosEntities);
     return builder;
@@ -42,6 +46,16 @@ public abstract class AzureCosmosAccountBuilder<T extends Component & AzureCosmo
 
   public B disablePublicNetworkAccess() {
     component.setPublicNetworkAccess(PUBLIC_NETWORK_ACCESS_DISABLED_MODE);
+    return builder;
+  }
+
+  public B withAzureResourceGroup(AzureResourceGroup azureResourceGroup) {
+    component.setAzureResourceGroup(azureResourceGroup);
+    return builder;
+  }
+
+  public B withRegion(AzureRegion region) {
+    component.setAzureRegion(region);
     return builder;
   }
 

@@ -80,7 +80,7 @@ public class AzurePostgreSqlTest {
     assertThat(azurePostgreSql)
         .returns(PAAS_POSTGRESQL_DBMS, from(AzurePostgreSqlDbms::getType))
         .returns(AZURE, from(AzurePostgreSqlDbms::getProvider))
-        .returns(EUROPE_WEST, from(AzurePostgreSqlDbms::getRegion))
+        .returns(EUROPE_WEST, from(AzurePostgreSqlDbms::getAzureRegion))
         .returns("rootUser", from(AzurePostgreSqlDbms::getRootUser))
         .returns(B_GEN5_1, from(AzurePostgreSqlDbms::getSkuName))
         .returns(ENABLED, from(AzurePostgreSqlDbms::getStorageAutoGrow))

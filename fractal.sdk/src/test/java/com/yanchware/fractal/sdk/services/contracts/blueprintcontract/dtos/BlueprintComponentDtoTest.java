@@ -7,6 +7,7 @@ import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSRelationalDa
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.*;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.KubernetesCluster;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PaaSPostgreSqlDatabase;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureEntity;
 import com.yanchware.fractal.sdk.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 
@@ -244,7 +245,8 @@ public class BlueprintComponentDtoTest {
         .assertThat(aksDto.getParameters().values())
         .as("Component Parameters")
         .containsExactlyInAnyOrder(
-            aks.getRegion().getId(),
+            aks.getAzureRegion().toString(),
+            aks.getAzureActiveDirectoryProfile(),
             aks.getNodePools(),
             aks.getServiceIpRange(),
             aks.getPodIpRange(),
@@ -255,8 +257,7 @@ public class BlueprintComponentDtoTest {
             aks.getExternalWorkspaceResourceId(),
             aks.getExternalLoadBalancerOutboundIps(),
             aks.getAddonProfiles(),
-            aks.getRoles(),
-            aks.getAzureActiveDirectoryProfile()
+            aks.getRoles()
         ));
   }
 
@@ -299,7 +300,7 @@ public class BlueprintComponentDtoTest {
     assertSoftly(softly -> {
       softly.assertThat(azurePgBlueprintCompDto.getParameters().values()).as("Component Parameters")
           .containsExactlyInAnyOrder(
-              apg.getRegion().getId(),
+              apg.getAzureRegion().toString(),
               apg.getRootUser(),
               apg.getSkuName().getId(),
               apg.getStorageAutoGrow().getId(),
@@ -317,7 +318,9 @@ public class BlueprintComponentDtoTest {
     var db1 = db1Optional.get();
     assertGenericComponent(azurePgDbBlueprintCompDto, db1, PaaSRelationalDatabase.TYPE);
     assertSoftly(softly -> {
-      softly.assertThat(azurePgDbBlueprintCompDto.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(db1.getName());
+      softly.assertThat(azurePgDbBlueprintCompDto.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(
+        db1.getName(),
+        ((AzureEntity)db1).getAzureRegion().toString());
       softly.assertThat(azurePgDbBlueprintCompDto.getDependencies()).as("Component Dependencies").containsExactly(apg.getId().getValue());
       softly.assertThat(azurePgDbBlueprintCompDto.getLinks()).as("Component Links").isEmpty();
     });
@@ -329,7 +332,9 @@ public class BlueprintComponentDtoTest {
     var db2 = db2Optional.get();
     assertGenericComponent(azurePgDbBlueprintCompDto2, db2, PaaSRelationalDatabase.TYPE);
     assertSoftly(softly -> {
-      softly.assertThat(azurePgDbBlueprintCompDto2.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(db2.getName());
+      softly.assertThat(azurePgDbBlueprintCompDto2.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(
+        db2.getName(),
+        ((AzureEntity)db1).getAzureRegion().toString());
       softly.assertThat(azurePgDbBlueprintCompDto2.getDependencies()).as("Component Dependencies").containsExactly(apg.getId().getValue());
       softly.assertThat(azurePgDbBlueprintCompDto2.getLinks()).as("Component Links").containsAll(apg.getLinks());
     });
@@ -371,11 +376,6 @@ public class BlueprintComponentDtoTest {
     componentSize += kubernetesCluster.getServiceMeshSecurityInstances().size();
     componentSize += kubernetesCluster.getLoggingInstances().size();
     componentSize += kubernetesCluster.getDocumentDBInstances().size();
-    /*componentSize += kubernetesCluster.getTracingInstances().size();
-    componentSize += kubernetesCluster.getMessageBrokerInstances().size();
-    var messageBrokerInstance = (KafkaCluster) kubernetesCluster.getMessageBrokerInstances().get(0);
-    componentSize += messageBrokerInstance.getKafkaTopics().size();
-    componentSize += messageBrokerInstance.getKafkaUsers().size();*/
 
     assertThat(blueprintComponentDtos).hasSize(componentSize);
   }

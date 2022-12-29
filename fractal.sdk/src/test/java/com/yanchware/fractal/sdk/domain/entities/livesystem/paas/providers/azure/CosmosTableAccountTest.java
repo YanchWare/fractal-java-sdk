@@ -1,6 +1,9 @@
 
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
 
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos.AzureCosmosTableDbms;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos.AzureCosmosTableEntity;
+import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import com.yanchware.fractal.sdk.valueobjects.ComponentType;
 
 import java.util.Collection;
@@ -38,9 +41,6 @@ public class CosmosTableAccountTest extends CosmosAccountTest<AzureCosmosTableDb
     var throughput = a(Integer.class);
 
     return AzureCosmosTableEntity.builder()
-      .withCosmosAccount(a(String.class))
-      .withThroughput(throughput)
-      .withMaxThroughput(throughput + 1)
       .withId(id).build();
   }
 }

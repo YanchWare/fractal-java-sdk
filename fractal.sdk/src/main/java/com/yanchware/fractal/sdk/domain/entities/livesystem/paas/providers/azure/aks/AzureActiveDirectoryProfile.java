@@ -1,4 +1,4 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.aks;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.yanchware.fractal.sdk.domain.entities.Validatable;

@@ -1,7 +1,10 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.aks;
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.KubernetesCluster;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.RoleAssignment;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureEntity;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -18,14 +21,18 @@ import static com.yanchware.fractal.sdk.utils.ValidationUtils.isPresentAndValidI
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
-public class AzureKubernetesService extends KubernetesCluster {
+public class AzureKubernetesService extends KubernetesCluster implements AzureEntity {
   private final static String EMPTY_NODE_POOL = "[AzureKubernetesService Validation] Node pool list is null or empty and at least one node pool is required";
   private final static String REGION_IS_NULL = "[AzureKubernetesService Validation] Region is not specified and it is required";
   private final static String VNET_ADDRESS_SPACE_RANGE_NOT_VALID = "[KubernetesCluster Validation] VNet Address Space IP Range does not contain a valid ip with mask";
   private final static String VNET_SUBNET_ADDRESS_IP_RANGE_NOT_VALID = "[KubernetesCluster Validation] VNet Subnet Address IP Range does not contain a valid ip with mask";
   private String vnetAddressSpaceIpRange;
   private String vnetSubnetAddressIpRange;
-  private AzureRegion region;
+  @Setter
+  private AzureRegion azureRegion;
+  @Setter
+  private AzureResourceGroup azureResourceGroup;
+
   private Collection<AzureNodePool> nodePools;
   private Collection<String> externalLoadBalancerOutboundIps;
   private String externalWorkspaceResourceId;
@@ -69,7 +76,7 @@ public class AzureKubernetesService extends KubernetesCluster {
     }
 
     public AzureKubernetesServiceBuilder withRegion(AzureRegion region) {
-      component.setRegion(region);
+      component.setAzureRegion(region);
       return builder;
     }
 
@@ -153,8 +160,9 @@ public class AzureKubernetesService extends KubernetesCluster {
   @Override
   public Collection<String> validate() {
     Collection<String> errors = super.validate();
+    errors.addAll(AzureEntity.validateAzureEntity(this, "Azure Kubernetes Service"));
 
-    if (region == null) {
+    if (azureRegion == null) {
       errors.add(REGION_IS_NULL);
     }
     

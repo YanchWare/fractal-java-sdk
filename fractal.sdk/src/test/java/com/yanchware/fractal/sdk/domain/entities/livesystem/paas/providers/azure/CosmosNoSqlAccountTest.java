@@ -1,6 +1,8 @@
 
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
 
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos.AzureCosmosNoSqlDatabase;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos.AzureCosmosNoSqlDbms;
 import com.yanchware.fractal.sdk.valueobjects.ComponentType;
 
 import java.util.Collection;
@@ -38,9 +40,6 @@ public class CosmosNoSqlAccountTest extends CosmosAccountTest<AzureCosmosNoSqlDb
     var throughput = a(Integer.class);
 
     return AzureCosmosNoSqlDatabase.builder()
-      .withCosmosAccount(a(String.class))
-      .withThroughput(throughput)
-      .withMaxThroughput(throughput + 1)
       .withId(id).build();
   }
 }

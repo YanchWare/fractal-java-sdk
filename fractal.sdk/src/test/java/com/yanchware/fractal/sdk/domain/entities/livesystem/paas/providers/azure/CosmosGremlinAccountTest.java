@@ -1,6 +1,8 @@
 
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
 
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos.AzureCosmosGremlinDatabase;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos.AzureCosmosGremlinDbms;
 import com.yanchware.fractal.sdk.valueobjects.ComponentType;
 
 import java.util.Collection;
@@ -35,12 +37,7 @@ public class CosmosGremlinAccountTest extends CosmosAccountTest<AzureCosmosGreml
   }
 
   private AzureCosmosGremlinDatabase aGremlinDb(String id) {
-    var throughput = a(Integer.class);
-
     return AzureCosmosGremlinDatabase.builder()
-      .withCosmosAccount(a(String.class))
-      .withThroughput(throughput)
-      .withMaxThroughput(throughput + 1)
       .withId(id).build();
   }
 }

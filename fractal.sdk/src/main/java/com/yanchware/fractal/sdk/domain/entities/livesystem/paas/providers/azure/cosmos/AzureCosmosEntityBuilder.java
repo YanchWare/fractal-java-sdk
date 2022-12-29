@@ -1,12 +1,13 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos;
 
 import com.yanchware.fractal.sdk.domain.entities.Component;
+import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 
 public abstract class AzureCosmosEntityBuilder<T extends Component, B extends AzureCosmosEntityBuilder<T, B>> extends Component.Builder<T, B>{
 
-  public B withCosmosAccount(String cosmosAccount) {
+  public B withCosmosAccount(ComponentId cosmosAccount) {
     if (component instanceof AzureCosmosEntity){
-      ((AzureCosmosEntity) component).setCosmosAccount(cosmosAccount);
+      component.getDependencies().add(cosmosAccount);
     }
 
     return builder;
