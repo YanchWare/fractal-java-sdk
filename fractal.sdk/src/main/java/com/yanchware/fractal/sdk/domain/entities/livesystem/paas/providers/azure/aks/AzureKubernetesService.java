@@ -160,7 +160,7 @@ public class AzureKubernetesService extends KubernetesCluster implements AzureEn
   @Override
   public Collection<String> validate() {
     Collection<String> errors = super.validate();
-    errors.addAll(AzureEntity.validateAzureEntity(this, "Azure Kubernetes Service"));
+    errors.addAll(AzureEntity.validateAzureEntity(this, "Kubernetes Service"));
 
     if (azureRegion == null) {
       errors.add(REGION_IS_NULL);
