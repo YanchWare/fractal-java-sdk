@@ -41,8 +41,6 @@ public class CosmosTableAccountTest extends CosmosAccountTest<AzureCosmosTableDb
 
     return AzureCosmosTableEntity.builder()
       .withCosmosAccount(a(String.class))
-      .withThroughput(throughput)
-      .withMaxThroughput(throughput + 1)
       .withId(id).build();
   }
 }

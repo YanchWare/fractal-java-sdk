@@ -23,7 +23,7 @@ public class AzureCosmosGremlinDbms extends PaaSGraphDbms implements LiveSystemC
 
   private int maxTotalThroughput;
   private String publicNetworkAccess;
-  private AzureRegion region;
+  private AzureRegion azureRegion;
   private AzureResourceGroup azureResourceGroup;
 
   @Override
@@ -56,7 +56,7 @@ public class AzureCosmosGremlinDbms extends PaaSGraphDbms implements LiveSystemC
 
   public Collection<String> validate() {
     Collection<String> errors = super.validate();
-    errors.addAll(AzureCosmosAccount.validateCosmosAccount(this));
+    errors.addAll(AzureCosmosAccount.validateCosmosAccount(this, "Gremlin DBMS"));
     return errors;
   }
 

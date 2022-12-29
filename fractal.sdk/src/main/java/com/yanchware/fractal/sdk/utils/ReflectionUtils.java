@@ -158,11 +158,13 @@ public class ReflectionUtils {
             log.trace("Field '{}' is private-static-final, so will be ignored.", f.getName());
             return;
         }
+
         if (componentObject.getClass().isEnum()) {
             parametersMap.put(f.getName(), componentObject.toString());
-        } else {
-            parametersMap.put(f.getName(), componentObject);
+            return;
         }
+
+        parametersMap.put(f.getName(), componentObject);
     }
 
     /**

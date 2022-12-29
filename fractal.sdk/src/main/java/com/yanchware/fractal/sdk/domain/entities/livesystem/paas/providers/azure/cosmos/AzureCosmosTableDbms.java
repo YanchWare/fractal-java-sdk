@@ -25,7 +25,7 @@ public class AzureCosmosTableDbms extends PaaSRelationalDbms implements LiveSyst
 
   private String publicNetworkAccess;
   private Collection<AzureCosmosTableEntity> cosmosEntities;
-  private AzureRegion region;
+  private AzureRegion azureRegion;
   private AzureResourceGroup azureResourceGroup;
 
 
@@ -58,7 +58,7 @@ public class AzureCosmosTableDbms extends PaaSRelationalDbms implements LiveSyst
 
   public Collection<String> validate() {
     Collection<String> errors = super.validate();
-    errors.addAll(AzureCosmosAccount.validateCosmosAccount(this));
+    errors.addAll(AzureCosmosAccount.validateCosmosAccount(this, "Table DBMS"));
     return errors;
   }
 

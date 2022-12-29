@@ -29,6 +29,7 @@ public class CosmosCassandraTest extends TestWithFixture {
 
     var component = AzureCosmosCassandraCluster.builder()
       .withId("a-legal-id")
+      .withRegion(AzureRegion.AUSTRALIA_CENTRAL)
       .withDeallocated(isDeallocated)
       .withCassandraAuthentication(useCassandraAuth)
       .withCassandraVersion(cassandraVersion)

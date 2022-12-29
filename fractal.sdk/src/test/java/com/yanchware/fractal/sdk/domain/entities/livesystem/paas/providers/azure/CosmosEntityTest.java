@@ -9,30 +9,28 @@ import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public abstract class CosmosEntityTest<T extends AzureCosmosEntityBuilder<?,?>> extends TestWithFixture {
+public abstract class CosmosEntityTest<T extends AzureCosmosEntityBuilder<? extends AzureCosmosEntity,?>> extends TestWithFixture {
 
   abstract T getBuilder();
   abstract ComponentType getExpectedType();
 
   @Test
   public void exceptionThrown_when_componentBuiltWithEmptyValues() {
-    assertThatThrownBy(() -> getBuilder().withId("a-legal-id").build()).
-        isInstanceOf(IllegalArgumentException.class).
-        hasMessageContaining("Defined no connection to a Cosmos Account, and it is required");
+    assertThat(AzureCosmosEntity.validateCosmosEntity(getBuilder().withId("a-legal-id").build()))
+      .isNotEmpty()
+      .anyMatch(x -> x.contains("Defined no connection to a Cosmos Account, and it is required"));
   }
 
   @Test
   public void exceptionThrown_when_throughputLargerThanMaxThroughput() {
-    var throughput = a(Integer.class);
-    assertThatThrownBy(() -> getBuilder()
+    assertThat(AzureCosmosEntity.validateCosmosEntity(getBuilder()
       .withId("a-legal-id")
-      .withMaxThroughput(throughput - 1)
-      .withThroughput(throughput)
-    .build())
-    .isInstanceOf(IllegalArgumentException.class)
-    .hasMessageContaining("has max throughput defined, but it is less than base throughput");
+      .withMaxThroughput(a(Integer.class))
+      .withThroughput(a(Integer.class))
+    .build()))
+    .isNotEmpty()
+    .anyMatch(x -> x.contains("Defined both throughput and max throughput. Only one of them can be defined and not both"));
   }
 
   @Test

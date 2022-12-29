@@ -5,6 +5,7 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.LiveSystemCompo
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -29,9 +30,11 @@ public class AzureCosmosTableEntity extends PaaSRelationalDatabase implements Li
     private int throughput;
 
     private int maxThroughput;
-    private AzureRegion region;
+    private AzureRegion azureRegion;
     private AzureResourceGroup azureResourceGroup;
 
+    @Setter(AccessLevel.PRIVATE)
+    private String entityName = "Table Entity";
 
     @Override
     public ProviderType getProvider() {
@@ -55,13 +58,10 @@ public class AzureCosmosTableEntity extends PaaSRelationalDatabase implements Li
             component.setType(PAAS_COSMOS_TABLE);
             return super.build();
         }
-
     }
 
     @Override
     public Collection<String> validate() {
-        Collection<String> errors = super.validate();
-        errors.addAll(AzureCosmosEntity.validateCosmosEntity(this, "Table Entity"));
-        return errors;
+        return super.validate();
     }
 }

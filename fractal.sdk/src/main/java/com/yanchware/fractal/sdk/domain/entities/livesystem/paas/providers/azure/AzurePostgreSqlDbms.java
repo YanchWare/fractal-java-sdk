@@ -26,7 +26,7 @@ public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms implements AzureEnti
   private String rootUser;
 
   @Setter
-  private AzureRegion region;
+  private AzureRegion azureRegion;
   @Setter
   private AzureResourceGroup azureResourceGroup;
 
@@ -74,7 +74,7 @@ public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms implements AzureEnti
 
       dbs.forEach(db -> {
         db.getDependencies().add(component.getId());
-        db.setRegion(component.getRegion());
+        db.setAzureRegion(component.getAzureRegion());
         db.setAzureResourceGroup(component.getAzureResourceGroup());
       });
       component.getDatabases().addAll(dbs);
@@ -87,7 +87,7 @@ public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms implements AzureEnti
     }
 
     public AzurePostgreSqlBuilder withRegion(AzureRegion region) {
-      component.setRegion(region);
+      component.setAzureRegion(region);
       return builder;
     }
 
@@ -116,7 +116,7 @@ public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms implements AzureEnti
   public Collection<String> validate() {
     Collection<String> errors = super.validate();
 
-    if (region == null) {
+    if (azureRegion == null && azureResourceGroup == null) {
       errors.add(REGION_IS_NULL);
     }
 
@@ -127,6 +127,11 @@ public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms implements AzureEnti
     if (backupRetentionDays != null && (backupRetentionDays < 7 || backupRetentionDays > 35)) {
       errors.add(INVALID_BACKUP_RETENTION_DAYS);
     }
+
+    getDatabases().stream()
+      .map(x -> AzureEntity.validateAzureEntity((AzureEntity) x, "PostgreSql Database"))
+      .forEach(errors::addAll);
+
 
     return errors;
   }

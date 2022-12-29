@@ -5,6 +5,7 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.LiveSystemCompo
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -27,8 +28,11 @@ public class AzureCosmosGremlinDatabase extends PaaSGraphDatabase implements Liv
     private String cosmosAccount;
     private int throughput;
     private int maxThroughput;
-    private AzureRegion region;
+    private AzureRegion azureRegion;
     private AzureResourceGroup azureResourceGroup;
+
+    @Setter(AccessLevel.PRIVATE)
+    private String entityName = "Gremlin Database";
 
 
     @Override
@@ -58,8 +62,6 @@ public class AzureCosmosGremlinDatabase extends PaaSGraphDatabase implements Liv
 
     @Override
     public Collection<String> validate() {
-        Collection<String> errors = super.validate();
-        errors.addAll(AzureCosmosEntity.validateCosmosEntity(this, "Gremlin Database"));
-        return errors;
+        return super.validate();
     }
 }

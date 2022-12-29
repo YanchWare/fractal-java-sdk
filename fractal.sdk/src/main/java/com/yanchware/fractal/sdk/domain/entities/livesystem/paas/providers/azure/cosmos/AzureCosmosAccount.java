@@ -12,18 +12,11 @@ public interface AzureCosmosAccount extends AzureEntity {
   void setMaxTotalThroughput(int maxTotalThroughput);
   void setPublicNetworkAccess(String publicNetworkAccessMode);
 
-  static Collection<String> validateCosmosAccount(AzureCosmosAccount cosmosAccount) {
-    final var MAX_TOTAL_THROUGHPUT_IS_BLANK = "[Cosmos Account Validation] Defined no max total throughput defined, and it is required";
-
-    var errors = AzureEntity.validateAzureEntity(cosmosAccount, "Cosmos Account");
-
-    var maxTotalThroughput = cosmosAccount.getMaxTotalThroughput();
-    if (maxTotalThroughput <= 0) {
-      errors.add(String.format(MAX_TOTAL_THROUGHPUT_IS_BLANK));
-    }
+  static Collection<String> validateCosmosAccount(AzureCosmosAccount cosmosAccount, String accountType) {
+    var errors = AzureEntity.validateAzureEntity(cosmosAccount, accountType);
 
     cosmosAccount.getCosmosEntities().stream()
-      .map(AzureCosmosEntity::validate)
+      .map(AzureCosmosEntity::validateCosmosEntity)
       .forEach(errors::addAll);
 
     return errors;

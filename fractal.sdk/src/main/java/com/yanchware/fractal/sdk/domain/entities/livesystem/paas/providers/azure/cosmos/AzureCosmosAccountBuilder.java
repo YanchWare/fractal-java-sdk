@@ -31,9 +31,9 @@ public abstract class AzureCosmosAccountBuilder<T extends Component & AzureCosmo
 
     azureCosmosEntities.forEach(entity -> {
       entity.getDependencies().add(component.getId());
-      entity.setRegion(component.getRegion());
+      entity.setCosmosAccount(component.getId().toString());
+      entity.setAzureRegion(component.getAzureRegion());
       entity.setAzureResourceGroup(component.getAzureResourceGroup());
-
     });
     component.getCosmosEntities().addAll(azureCosmosEntities);
     return builder;
@@ -56,7 +56,7 @@ public abstract class AzureCosmosAccountBuilder<T extends Component & AzureCosmo
   }
 
   public B withRegion(AzureRegion region) {
-    component.setRegion(region);
+    component.setAzureRegion(region);
     return builder;
   }
 

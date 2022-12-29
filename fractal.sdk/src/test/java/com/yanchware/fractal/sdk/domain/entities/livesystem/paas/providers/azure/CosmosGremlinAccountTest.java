@@ -37,12 +37,8 @@ public class CosmosGremlinAccountTest extends CosmosAccountTest<AzureCosmosGreml
   }
 
   private AzureCosmosGremlinDatabase aGremlinDb(String id) {
-    var throughput = a(Integer.class);
-
     return AzureCosmosGremlinDatabase.builder()
       .withCosmosAccount(a(String.class))
-      .withThroughput(throughput)
-      .withMaxThroughput(throughput + 1)
       .withId(id).build();
   }
 }

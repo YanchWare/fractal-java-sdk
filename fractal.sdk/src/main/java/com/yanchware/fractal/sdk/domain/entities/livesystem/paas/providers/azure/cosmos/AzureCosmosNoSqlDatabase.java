@@ -5,6 +5,7 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.LiveSystemCompo
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -27,9 +28,11 @@ public class AzureCosmosNoSqlDatabase extends PaaSDocumentDatabase implements Li
     private String cosmosAccount;
     private int throughput;
     private int maxThroughput;
-    private AzureRegion region;
+    private AzureRegion azureRegion;
     private AzureResourceGroup azureResourceGroup;
 
+    @Setter(AccessLevel.PRIVATE)
+    private String entityName = "NoSql Database";
 
     @Override
     public ProviderType getProvider() {
@@ -53,13 +56,10 @@ public class AzureCosmosNoSqlDatabase extends PaaSDocumentDatabase implements Li
             component.setType(PAAS_COSMOS_NOSQL_DATABASE);
             return super.build();
         }
-
     }
 
     @Override
     public Collection<String> validate() {
-        Collection<String> errors = super.validate();
-        errors.addAll(AzureCosmosEntity.validateCosmosEntity(this, "NoSql Database"));
-        return errors;
+        return super.validate();
     }
 }

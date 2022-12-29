@@ -29,7 +29,7 @@ public class AzureKubernetesService extends KubernetesCluster implements AzureEn
   private String vnetAddressSpaceIpRange;
   private String vnetSubnetAddressIpRange;
   @Setter
-  private AzureRegion region;
+  private AzureRegion azureRegion;
   @Setter
   private AzureResourceGroup azureResourceGroup;
 
@@ -76,7 +76,7 @@ public class AzureKubernetesService extends KubernetesCluster implements AzureEn
     }
 
     public AzureKubernetesServiceBuilder withRegion(AzureRegion region) {
-      component.setRegion(region);
+      component.setAzureRegion(region);
       return builder;
     }
 
@@ -162,7 +162,7 @@ public class AzureKubernetesService extends KubernetesCluster implements AzureEn
     Collection<String> errors = super.validate();
     errors.addAll(AzureEntity.validateAzureEntity(this, "Azure Kubernetes Service"));
 
-    if (region == null) {
+    if (azureRegion == null) {
       errors.add(REGION_IS_NULL);
     }
     

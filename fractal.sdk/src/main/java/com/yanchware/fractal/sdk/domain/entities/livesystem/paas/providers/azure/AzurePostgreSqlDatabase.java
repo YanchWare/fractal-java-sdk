@@ -19,7 +19,7 @@ public class AzurePostgreSqlDatabase extends PaaSPostgreSqlDatabase implements A
     return ProviderType.AZURE;
   }
 
-  private AzureRegion region;
+  private AzureRegion azureRegion;
   private AzureResourceGroup azureResourceGroup;
 
   public static class AzurePostgreSqlDbBuilder extends PaaSPostgreSqlDatabase.Builder<AzurePostgreSqlDatabase, AzurePostgreSqlDatabase.AzurePostgreSqlDbBuilder> {
@@ -37,9 +37,7 @@ public class AzurePostgreSqlDatabase extends PaaSPostgreSqlDatabase implements A
 
   @Override
   public Collection<String> validate() {
-    Collection<String> errors = super.validate();
-    errors.addAll(AzureEntity.validateAzureEntity(this, "PostgreSql DBMS"));
-    return errors;
+    return super.validate();
   }
 
 }

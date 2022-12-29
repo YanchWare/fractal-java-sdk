@@ -41,8 +41,6 @@ public class CosmosPostgreSqlAccountTest extends CosmosAccountTest<AzureCosmosPo
 
     return AzureCosmosPostgreSqlDatabase.builder()
       .withCosmosAccount(a(String.class))
-      .withThroughput(throughput)
-      .withMaxThroughput(throughput + 1)
       .withId(id).build();
   }
 }

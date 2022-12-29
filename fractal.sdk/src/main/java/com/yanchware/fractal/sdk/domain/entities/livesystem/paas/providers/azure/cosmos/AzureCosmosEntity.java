@@ -2,7 +2,6 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureEntity;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -17,30 +16,22 @@ public interface AzureCosmosEntity extends AzureEntity {
   int getMaxThroughput();
   void setMaxThroughput(int maxThroughput);
 
-  static Collection<String> validateCosmosEntity(AzureCosmosEntity cosmosEntity, String entityName) {
-    final var COSMOS_ACCOUNT_IS_BLANK_TEMPLATE = "[Cosmos %s Validation] Defined no connection to a Cosmos Account, and it is required";
-    final var THROUGHPUT_IS_BLANK_TEMPLATE = "[Cosmos %s Validation] Defined no throughput, and it is required";
-    final var MAX_THROUGHPUT_IS_BLANK_TEMPLATE = "[Cosmos %s Validation] Defined no max throughput, and it is required";
-    final var MAX_THROUGHPUT_IS_SMALLER_TEMPLATE = "[Cosmos %s Validation] Defined max throughput defined, but it is less than base throughput";
+  String getEntityName();
 
-    var errors = AzureEntity.validateAzureEntity(cosmosEntity, entityName);
+  static Collection<String> validateCosmosEntity(AzureCosmosEntity cosmosEntity) {
+    final var COSMOS_ACCOUNT_IS_BLANK_TEMPLATE = "[Cosmos %s Validation] Defined no connection to a Cosmos Account, and it is required";
+    final var MAX_THROUGHPUT_AND_THROUGHPUT_ARE_DEFINED_TEMPLATE = "[Cosmos %s Validation] Defined both throughput and max throughput. Only one of them can be defined and not both";
+
+    var errors = AzureEntity.validateAzureEntity(cosmosEntity, cosmosEntity.getEntityName());
 
     if (isBlank(cosmosEntity.getCosmosAccount())) {
-      errors.add(String.format(COSMOS_ACCOUNT_IS_BLANK_TEMPLATE, entityName));
+      errors.add(String.format(COSMOS_ACCOUNT_IS_BLANK_TEMPLATE, cosmosEntity.getEntityName()));
     }
 
     var throughput = cosmosEntity.getThroughput();
-    if (throughput <= 0) {
-      errors.add(String.format(THROUGHPUT_IS_BLANK_TEMPLATE, entityName));
-    }
-
     var maxThroughput = cosmosEntity.getMaxThroughput();
-    if (maxThroughput <= 0) {
-      errors.add(String.format(MAX_THROUGHPUT_IS_BLANK_TEMPLATE, entityName));
-    }
-
-    if (maxThroughput < throughput) {
-      errors.add(String.format(MAX_THROUGHPUT_IS_SMALLER_TEMPLATE, entityName));
+    if (maxThroughput > 0 && throughput > 0) {
+      errors.add(String.format(MAX_THROUGHPUT_AND_THROUGHPUT_ARE_DEFINED_TEMPLATE, cosmosEntity.getEntityName()));
     }
 
     return errors;

@@ -25,7 +25,7 @@ public class AzureCosmosCassandraCluster extends PaaSCassandra implements AzureE
     private boolean isCassandraAuditLoggingEnabled;
     private int hoursBetweenBackups;
     @Setter
-    private AzureRegion region;
+    private AzureRegion azureRegion;
     @Setter
     private AzureResourceGroup azureResourceGroup;
 
@@ -86,7 +86,7 @@ public class AzureCosmosCassandraCluster extends PaaSCassandra implements AzureE
         }
 
         public AzureCosmosCassandraClusterBuilder withRegion(AzureRegion region) {
-            component.setRegion(region);
+            component.setAzureRegion(region);
             return builder;
         }
 
