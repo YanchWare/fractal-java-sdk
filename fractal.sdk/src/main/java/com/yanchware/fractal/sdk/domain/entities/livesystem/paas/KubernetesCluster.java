@@ -28,7 +28,7 @@ public abstract class KubernetesCluster extends PaaSContainerPlatform implements
   private String podIpRange;
 
   private Collection<PriorityClass> priorityClasses;
-  private List<CaaSWorkloadImpl> k8sWorkloadInstances;
+  private List<CaaSKubernetesWorkload> k8sWorkloadInstances;
   private List<CaaSMonitoringImpl> monitoringInstances;
   private List<CaaSAPIGatewayImpl> apiGatewayInstances;
   private List<CaaSServiceMeshSecurityImpl> serviceMeshSecurityInstances;
