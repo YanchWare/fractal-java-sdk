@@ -19,7 +19,7 @@ import java.util.List;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_AZURE_WEBAPP;
 
 @Getter
-@Setter(AccessLevel.PRIVATE)
+@Setter
 @ToString(callSuper = true)
 public class AzureWebApp extends PaaSWorkload implements AzureEntity, LiveSystemComponent, CustomWorkload {
 

@@ -16,7 +16,7 @@ import java.util.List;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.CAAS_K8S_WORKLOAD;
 
 @Getter
-@Setter(AccessLevel.PRIVATE)
+@Setter
 @ToString(callSuper = true)
 public class CaaSKubernetesWorkload extends CaaSWorkload implements LiveSystemComponent, CustomWorkload {
     private String privateSSHKeyPassphraseSecretId;
