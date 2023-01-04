@@ -7,7 +7,6 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.CaaSKubernetesW
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.CustomWorkloadRole;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.LiveSystemComponent;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -46,12 +45,12 @@ public class AzureWebApp extends PaaSWorkload implements AzureEntity, LiveSystem
   @Override
   public Collection<String> validate() {
     Collection<String> errors = super.validate();
-    errors.addAll(CustomWorkload.validateCustomWorkload(this));
+    errors.addAll(CustomWorkload.validateCustomWorkload(this, "Azure Web App"));
     return errors;
   }
 
-  public static CaaSKubernetesWorkload.KubernetesWorkloadBuilder builder() {
-    return new CaaSKubernetesWorkload.KubernetesWorkloadBuilder();
+  public static AzureWebAppBuilder builder() {
+    return new AzureWebAppBuilder();
   }
 
   public static class AzureWebAppBuilder extends CustomWorkloadBuilder<AzureWebApp, AzureWebAppBuilder> {

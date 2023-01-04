@@ -4,7 +4,6 @@ import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSWorkload;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.CustomWorkload;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.CustomWorkloadBuilder;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -40,7 +39,7 @@ public class CaaSKubernetesWorkload extends CaaSWorkload implements LiveSystemCo
     @Override
     public Collection<String> validate() {
         Collection<String> errors = super.validate();
-        errors.addAll(CustomWorkload.validateCustomWorkload(this));
+        errors.addAll(CustomWorkload.validateCustomWorkload(this, "Kubernetes Workload"));
         return errors;
     }
 
