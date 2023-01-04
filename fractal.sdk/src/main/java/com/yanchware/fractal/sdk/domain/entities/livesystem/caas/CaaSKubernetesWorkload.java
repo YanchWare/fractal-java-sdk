@@ -1,24 +1,54 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
-import lombok.AccessLevel;
+import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSWorkload;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.CustomWorkload;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.CustomWorkloadBuilder;
+import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
+import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.CAAS_K8S_WORKLOAD;
 
-@Setter(AccessLevel.PRIVATE)
+@Getter
+@Setter
 @ToString(callSuper = true)
-public class CaaSKubernetesWorkload extends CaaSWorkloadImpl implements LiveSystemComponent {
+public class CaaSKubernetesWorkload extends CaaSWorkload implements LiveSystemComponent, CustomWorkload {
+    private String privateSSHKeyPassphraseSecretId;
+    private String privateSSHKeySecretId;
+    private String sshRepositoryURI;
+    private String repoId;
+    private String branchName;
+    private List<CustomWorkloadRole> roles;
+    private String workloadSecretIdKey;
+    private String workloadSecretPasswordKey;
+
+    @Override
+    public ProviderType getProvider(){
+        return ProviderType.CAAS;
+    }
+
+    protected CaaSKubernetesWorkload() {
+        roles = new ArrayList<>();
+    }
+
+    @Override
+    public Collection<String> validate() {
+        Collection<String> errors = super.validate();
+        errors.addAll(CustomWorkload.validateCustomWorkload(this, "Kubernetes Workload"));
+        return errors;
+    }
+
     public static KubernetesWorkloadBuilder builder() {
         return new KubernetesWorkloadBuilder();
     }
 
 
-    public static class KubernetesWorkloadBuilder extends Builder<CaaSKubernetesWorkload, KubernetesWorkloadBuilder> {
+    public static class KubernetesWorkloadBuilder extends CustomWorkloadBuilder<CaaSKubernetesWorkload, KubernetesWorkloadBuilder> {
 
         @Override
         protected CaaSKubernetesWorkload createComponent() {
@@ -37,56 +67,6 @@ public class CaaSKubernetesWorkload extends CaaSWorkloadImpl implements LiveSyst
 
         public KubernetesWorkloadBuilder withContainerPlatform(String containerPlatform) {
             component.setContainerPlatform(containerPlatform);
-            return builder;
-        }
-
-        public KubernetesWorkloadBuilder withPrivateSSHKeyPassphraseSecretId(String privateSSHKeyPassphraseSecretId) {
-            component.setPrivateSSHKeyPassphraseSecretId(privateSSHKeyPassphraseSecretId);
-            return builder;
-        }
-
-        public KubernetesWorkloadBuilder withPrivateSSHKeySecretId(String privateSSHKeySecretId) {
-            component.setPrivateSSHKeySecretId(privateSSHKeySecretId);
-            return builder;
-        }
-
-        public KubernetesWorkloadBuilder withSSHRepositoryURI(String sshRepositoryURI) {
-            component.setSshRepositoryURI(sshRepositoryURI);
-            return builder;
-        }
-
-        public KubernetesWorkloadBuilder withRepoId(String repoId) {
-            component.setRepoId(repoId);
-            return builder;
-        }
-
-        public KubernetesWorkloadBuilder withRole(CustomWorkloadRole role) {
-            return withRoles(List.of(role));
-        }
-
-        public KubernetesWorkloadBuilder withRoles(List<CustomWorkloadRole> roles) {
-            if (isBlank(roles)) {
-                return builder;
-            }
-            if (component.getRoles() == null) {
-                component.setRoles(new ArrayList<>());
-            }
-            component.getRoles().addAll(roles);
-            return builder;
-        }
-
-        public KubernetesWorkloadBuilder withSecretIdKey(String workloadSecretIdKey) {
-            component.setWorkloadSecretIdKey(workloadSecretIdKey);
-            return builder;
-        }
-
-        public KubernetesWorkloadBuilder withSecretPasswordKey(String workloadSecretPasswordKey) {
-            component.setWorkloadSecretPasswordKey(workloadSecretPasswordKey);
-            return builder;
-        }
-
-        public KubernetesWorkloadBuilder withBranchName(String branchName) {
-            component.setBranchName(branchName);
             return builder;
         }
 

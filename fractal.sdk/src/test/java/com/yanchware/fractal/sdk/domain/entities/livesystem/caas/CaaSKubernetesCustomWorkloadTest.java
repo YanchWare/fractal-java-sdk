@@ -6,7 +6,7 @@ import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.CaaSKube
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.CAAS_K8S_WORKLOAD;
 import static org.assertj.core.api.Assertions.*;
 
-public class CaaSKubernetesWorkloadTest {
+public class CaaSKubernetesCustomWorkloadTest {
 
   @Test
   public void exceptionThrown_when_workloadBuiltWithNullId() {
