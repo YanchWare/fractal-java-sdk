@@ -180,7 +180,7 @@ public class ProviderService {
       String mutationId)
   {
     if (isBlank(providerName)) {
-      throw new IllegalArgumentException("In order to use certain SDK features the provider name needs to be provided " +
+      throw new IllegalArgumentException("In order to use certain SDK features the provider name needs to be set " +
         "through SDK configuration");
     }
     return URI.create(String.format("%s/%s/%s/livesystems/%s/mutations/%s",
