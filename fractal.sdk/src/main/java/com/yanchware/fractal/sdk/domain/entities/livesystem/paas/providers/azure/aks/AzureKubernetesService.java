@@ -34,7 +34,7 @@ public class AzureKubernetesService extends KubernetesCluster implements AzureEn
   private AzureResourceGroup azureResourceGroup;
 
   private Collection<AzureNodePool> nodePools;
-  private Collection<String> externalLoadBalancerOutboundIps;
+  private Collection<AzureOutboundIp> outboundIps;
   private String externalWorkspaceResourceId;
   private Collection<AzureAddonProfile> addonProfiles;
   private Collection<RoleAssignment> roles;
@@ -43,6 +43,7 @@ public class AzureKubernetesService extends KubernetesCluster implements AzureEn
 
   protected AzureKubernetesService() {
     nodePools = new ArrayList<>();
+    outboundIps = new ArrayList<>();
   }
 
   @Override
@@ -98,23 +99,23 @@ public class AzureKubernetesService extends KubernetesCluster implements AzureEn
       return builder;
     }
 
-    public AzureKubernetesServiceBuilder withExternalLoadBalancerOutboundIp(String externalLoadBalancerOutboundIp) {
-      return withExternalLoadBalancerOutboundIps(List.of(externalLoadBalancerOutboundIp));
-    }
-
-    public AzureKubernetesServiceBuilder withExternalLoadBalancerOutboundIps(List<String> externalLoadBalancerOutboundIps) {
-      if (isBlank(externalLoadBalancerOutboundIps)) {
+    public AzureKubernetesServiceBuilder withOutboundIps(List<AzureOutboundIp> outboundIps) {
+      if (isBlank(outboundIps)) {
         return builder;
       }
 
-      if (component.getExternalLoadBalancerOutboundIps() == null) {
-        component.setExternalLoadBalancerOutboundIps(new ArrayList<>());
+      if (component.getOutboundIps() == null) {
+        component.setOutboundIps(new ArrayList<>());
       }
 
-      component.getExternalLoadBalancerOutboundIps().addAll(externalLoadBalancerOutboundIps);
+      component.getOutboundIps().addAll(outboundIps);
       return builder;
     }
 
+    public AzureKubernetesServiceBuilder withOutboundIp(AzureOutboundIp outboundIp) {
+      return withOutboundIps(List.of(outboundIp));
+    }
+    
     public AzureKubernetesServiceBuilder withExternalWorkspaceResourceId(String externalWorkspaceResourceId) {
       component.setExternalWorkspaceResourceId(externalWorkspaceResourceId);
       return builder;
@@ -181,6 +182,10 @@ public class AzureKubernetesService extends KubernetesCluster implements AzureEn
 
     nodePools.stream()
         .map(AzureNodePool::validate)
+        .forEach(errors::addAll);
+    
+    outboundIps.stream()
+        .map(AzureOutboundIp::validate)
         .forEach(errors::addAll);
 
     return errors;
