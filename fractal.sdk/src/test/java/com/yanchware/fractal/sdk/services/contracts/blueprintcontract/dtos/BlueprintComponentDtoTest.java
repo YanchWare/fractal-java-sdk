@@ -257,7 +257,8 @@ public class BlueprintComponentDtoTest {
             aks.getExternalWorkspaceResourceId(),
             aks.getExternalLoadBalancerOutboundIps(),
             aks.getAddonProfiles(),
-            aks.getRoles()
+            aks.getRoles(),
+            aks.getKubernetesVersion()
         ));
   }
 

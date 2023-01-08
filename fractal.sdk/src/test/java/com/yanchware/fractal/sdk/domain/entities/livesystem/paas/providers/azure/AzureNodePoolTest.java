@@ -113,8 +113,8 @@ public class AzureNodePoolTest {
         .withMaxNodeCount(2)
         .build();
     assertThat(nodePool)
-        .extracting("name", "diskSizeGb", "autoscalingEnabled", "kubernetesVersion", "minNodeCount", "maxNodeCount")
-        .contains("linux", 50, true, "1.1.1", 1, 2);
+        .extracting("name", "diskSizeGb", "autoscalingEnabled", "minNodeCount", "maxNodeCount")
+        .contains("linux", 50, true, 1, 2);
   }
 
   private AzureNodePool.AzureNodePoolBuilder getAzureNodePoolBuilder(String name, int diskSizeGb, boolean autoscalingEnabled) {
@@ -124,7 +124,6 @@ public class AzureNodePoolTest {
         .withMachineType(STANDARD_B2S)
         .withInitialNodeCount(1)
         .withMaxNodeCount(3)
-        .withKubernetesVersion("1.1.1")
         .withNodeTaint(NodeTaint.builder()
             .withKey("testKey")
             .withValue("testValue")
