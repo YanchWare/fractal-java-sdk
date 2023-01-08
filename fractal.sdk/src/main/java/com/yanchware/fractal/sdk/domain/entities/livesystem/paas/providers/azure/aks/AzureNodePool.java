@@ -44,7 +44,6 @@ public class AzureNodePool implements Validatable {
   private Integer maxSurge;
   private Integer minNodeCount;
   private String name;
-  private String kubernetesVersion;
 
   private Integer maxPodsPerNode;
 

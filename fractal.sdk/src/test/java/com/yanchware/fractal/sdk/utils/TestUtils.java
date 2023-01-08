@@ -69,7 +69,6 @@ public class TestUtils {
             .withMaxPodsPerNode(100)
             .withOsType(LINUX)
             .withAutoscalingEnabled(true)
-            .withKubernetesVersion("1.1.1")
             .build())
         .withPriorityClass(PriorityClass.builder()
             .withName("fractal-critical")
@@ -96,6 +95,7 @@ public class TestUtils {
             .build())
         .withExternalLoadBalancerOutboundIp("ExternalLoadBalancerOutboundIp")
         .withAddonProfile(AzureAddonProfile.MONITORING)
+        .withKubernetesVersion("1.1.1")
         .withActiveDirectoryProfile(AzureActiveDirectoryProfile.builder()
             .withAdminGroupObjectIDs(List.of(UUID.randomUUID().toString()))
             .build());
