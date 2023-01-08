@@ -39,6 +39,7 @@ public class AzureKubernetesService extends KubernetesCluster implements AzureEn
   private Collection<AzureAddonProfile> addonProfiles;
   private Collection<RoleAssignment> roles;
   private AzureActiveDirectoryProfile azureActiveDirectoryProfile;
+  private String kubernetesVersion;
 
   protected AzureKubernetesService() {
     nodePools = new ArrayList<>();
@@ -153,6 +154,11 @@ public class AzureKubernetesService extends KubernetesCluster implements AzureEn
     
     public AzureKubernetesServiceBuilder withActiveDirectoryProfile(AzureActiveDirectoryProfile aadProfile) {
       component.setAzureActiveDirectoryProfile(aadProfile);
+      return builder;
+    }
+
+    public AzureKubernetesServiceBuilder withKubernetesVersion(String kubernetesVersion) {
+      component.setKubernetesVersion(kubernetesVersion);
       return builder;
     }
   }
