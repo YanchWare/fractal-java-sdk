@@ -23,12 +23,22 @@ public class EnvVarSdkConfiguration implements SdkConfiguration {
 
     @Override
     public String getClientId() {
-        return System.getenv(CLIENT_ID_KEY);
+        var clientId = System.getenv(CLIENT_ID_KEY);
+        if(isBlank(clientId)) {
+            throw new IllegalArgumentException(
+              String.format("The environment variable %s is required and it has not been defined", CLIENT_ID_KEY));
+        }
+        return clientId;
     }
 
     @Override
     public String getClientSecret() {
-        return System.getenv(CLIENT_SECRET_KEY);
+        var clientSecret = System.getenv(CLIENT_SECRET_KEY);
+        if(isBlank(clientSecret)) {
+            throw new IllegalArgumentException(
+              String.format("The environment variable %s is required and it has not been defined", CLIENT_SECRET_KEY));
+        }
+        return clientSecret;
     }
 
     @Override
