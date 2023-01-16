@@ -15,11 +15,8 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 
-import static com.yanchware.fractal.sdk.configuration.Constants.X_CLIENT_ID_HEADER;
-import static com.yanchware.fractal.sdk.configuration.Constants.X_CLIENT_SECRET_HEADER;
 import static com.yanchware.fractal.sdk.utils.ResiliencyUtils.executeRequestWithRetries;
 import static com.yanchware.fractal.sdk.utils.SerializationUtils.serialize;
-import static java.net.http.HttpRequest.BodyPublishers.ofString;
 
 @Slf4j
 @AllArgsConstructor

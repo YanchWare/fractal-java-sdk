@@ -71,10 +71,10 @@ public class Automaton {
         LiveSystemMutationDto mutation,
         InstantiationWaitConfiguration config)
         throws InstantiatorException {
-            providerService.checkLiveSystemMutationStatus(liveSystem, mutation, liveSystemService, config);
+            providerService.checkLiveSystemMutationStatus(liveSystem, mutation, config);
         }
 
-    private static LiveSystemMutationDto instantiateLiveSystem(LiveSystem liveSystem, InstantiationConfiguration config)
+    private static LiveSystemMutationDto instantiateLiveSystem(LiveSystem liveSystem)
         throws InstantiatorException {
         log.info("Starting to instantiate live system with id: {}", liveSystem.getLiveSystemId());
         var blueprintCommand = CreateBlueprintCommandRequest.fromLiveSystem(
@@ -97,7 +97,7 @@ public class Automaton {
         }
 
         for (LiveSystem liveSystem : liveSystems) {
-            instantiateLiveSystem(liveSystem, null);
+            instantiateLiveSystem(liveSystem);
         }
     }
 
@@ -116,7 +116,7 @@ public class Automaton {
         
         var liveSystemsMutations = new ArrayList<ImmutablePair<LiveSystem, LiveSystemMutationDto>>();
         for (LiveSystem liveSystem : liveSystems) {
-            liveSystemsMutations.add(new ImmutablePair<>(liveSystem, instantiateLiveSystem(liveSystem, config)));
+            liveSystemsMutations.add(new ImmutablePair<>(liveSystem, instantiateLiveSystem(liveSystem)));
         }
 
         if(config != null && config.waitConfiguration != null && config.getWaitConfiguration().waitForInstantiation)
@@ -135,32 +135,4 @@ public class Automaton {
             }
         }
     }
-
-    private static boolean isRunningAgainstTestEnvironment(SdkConfiguration configuration) {
-        return TEST_ENVIRONMENT.equalsIgnoreCase(configuration.getBlueprintEndpoint().getHost())
-          && TEST_ENVIRONMENT.equalsIgnoreCase(configuration.getLiveSystemEndpoint().getHost());
-    }
-
-    private static SSLContext getTestSSLContext() {
-        var trustAllCerts = new TrustManager[] {
-          new X509TrustManager() {
-              public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                  return new X509Certificate[0];
-              }
-              public void checkClientTrusted(java.security.cert.X509Certificate[] certs, String authType) {}
-              public void checkServerTrusted(java.security.cert.X509Certificate[] certs, String authType) {}
-          }
-        };
-
-        try {
-            SSLContext sc = SSLContext.getInstance("SSL");
-            sc.init(null, trustAllCerts, new SecureRandom());
-            return sc;
-        } catch (GeneralSecurityException e) {
-            log.warn("Error installing test trust manager", e);
-        }
-
-        return null;
-    }
-
 }
