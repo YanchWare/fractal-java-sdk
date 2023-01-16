@@ -35,7 +35,10 @@ public class WebAppTest {
         .withPrivateSSHKeySecretId("svc-private-ssh-key-secret")
         .withSSHRepositoryURI("ssh")
         .withRepoId("repo-id")
-        .withBranchName("branch-name");
+        .withBranchName("branch-name")
+        .withHosting(
+            AzureWebAppHosting.builder().withDotnetVersion("DOTNET:***"
+        ).build());
     assertThat(builder.build().getType()).isEqualTo(PAAS_AZURE_WEBAPP);
     assertThatCode(builder::build).doesNotThrowAnyException();
   }
