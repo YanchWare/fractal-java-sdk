@@ -1,11 +1,14 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice;
 
 import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSWorkload;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.CustomWorkload;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.CustomWorkloadBuilder;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.CaaSKubernetesWorkload;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.CustomWorkloadRole;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.LiveSystemComponent;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureEntity;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzurePostgreSqlDbms;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,6 +35,10 @@ public class AzureWebApp extends PaaSWorkload implements AzureEntity, LiveSystem
   private String workloadSecretPasswordKey;
   private AzureRegion azureRegion;
   private AzureResourceGroup azureResourceGroup;
+  private AzureWebAppApplication application;
+  private AzureWebAppHosting hosting;
+  private AzureWebAppConnectivity connectivity;
+  private AzureWebAppInfrastructure infrastructure;
 
   @Override
   public ProviderType getProvider(){
@@ -46,6 +53,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureEntity, LiveSystem
   public Collection<String> validate() {
     Collection<String> errors = super.validate();
     errors.addAll(CustomWorkload.validateCustomWorkload(this, "Azure Web App"));
+    errors.addAll(hosting.validate());
     return errors;
   }
 
@@ -70,7 +78,26 @@ public class AzureWebApp extends PaaSWorkload implements AzureEntity, LiveSystem
       component.setType(PAAS_AZURE_WEBAPP);
       return super.build();
     }
-  }
+    
+    public AzureWebAppBuilder withApplication(AzureWebAppApplication application) {
+      component.setApplication(application);
+      return builder;
+    }
 
+    public AzureWebAppBuilder withHosting(AzureWebAppHosting hosting) {
+      component.setHosting(hosting);
+      return builder;
+    }
+
+    public AzureWebAppBuilder withConnectivity(AzureWebAppConnectivity connectivity) {
+      component.setConnectivity(connectivity);
+      return builder;
+    }
+
+    public AzureWebAppBuilder withInfrastructure(AzureWebAppInfrastructure infrastructure) {
+      component.setInfrastructure(infrastructure);
+      return builder;
+    }
+  }
 
 }
