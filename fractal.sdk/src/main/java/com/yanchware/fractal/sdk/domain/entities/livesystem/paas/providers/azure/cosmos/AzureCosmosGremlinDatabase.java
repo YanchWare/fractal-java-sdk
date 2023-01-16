@@ -25,6 +25,7 @@ public class AzureCosmosGremlinDatabase extends PaaSGraphDatabase implements Liv
         return new AzureCosmosGremlinDatabaseBuilder();
     }
 
+    private String name;
     private int throughput;
     private int maxThroughput;
     private AzureRegion azureRegion;

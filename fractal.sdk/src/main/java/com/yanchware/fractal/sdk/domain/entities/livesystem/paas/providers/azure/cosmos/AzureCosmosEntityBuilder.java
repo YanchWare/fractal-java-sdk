@@ -13,6 +13,14 @@ public abstract class AzureCosmosEntityBuilder<T extends Component, B extends Az
     return builder;
   }
 
+  public B withName(String name) {
+    if (component instanceof AzureCosmosEntity){
+      ((AzureCosmosEntity) component).setName(name);
+    }
+
+    return builder;
+  }
+
   public B withThroughput(int throughput) {
     if (component instanceof AzureCosmosEntity){
       ((AzureCosmosEntity) component).setThroughput(throughput);
