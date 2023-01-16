@@ -1,7 +1,5 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice;
 
-import jakarta.validation.constraints.AssertFalse;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

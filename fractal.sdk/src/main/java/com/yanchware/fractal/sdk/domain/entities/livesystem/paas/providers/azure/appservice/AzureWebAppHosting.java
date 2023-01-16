@@ -1,16 +1,13 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.yanchware.fractal.sdk.domain.entities.Validatable;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.CustomWorkload;
-import jakarta.validation.constraints.AssertFalse;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -20,8 +17,6 @@ import java.util.Collection;
 public class AzureWebAppHosting implements Validatable {
   String linuxFxVersion;
   String windowsFxVersion;
-  
-  ////////////////////////
   String javaContainer;
   String javaContainerVersion;
   String javaVersion;
@@ -120,8 +115,7 @@ public class AzureWebAppHosting implements Validatable {
     if(selectedHosting == null) {
       errors.add(String.format(NO_HOSTING_TYPES, "hosting"));
     }
-
     return errors;
   }
-  
+
 }

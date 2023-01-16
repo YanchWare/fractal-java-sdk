@@ -6,7 +6,6 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.CustomWorkloadBuilde
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.CustomWorkloadRole;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.LiveSystemComponent;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureEntity;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzurePostgreSqlDbms;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
@@ -84,13 +83,13 @@ public class AzureWebApp extends PaaSWorkload implements AzureEntity, LiveSystem
       return builder;
     }
 
-    public AzureWebAppBuilder withHosting(AzureWebAppHosting hosting) {
-      component.setHosting(hosting);
+    public AzureWebAppBuilder withConnectivity(AzureWebAppConnectivity connectivity) {
+      component.setConnectivity(connectivity);
       return builder;
     }
 
-    public AzureWebAppBuilder withConnectivity(AzureWebAppConnectivity connectivity) {
-      component.setConnectivity(connectivity);
+    public AzureWebAppBuilder withHosting(AzureWebAppHosting hosting) {
+      component.setHosting(hosting);
       return builder;
     }
 

@@ -2,7 +2,6 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureAppServiceRedundancyMode;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureFTPSState;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
