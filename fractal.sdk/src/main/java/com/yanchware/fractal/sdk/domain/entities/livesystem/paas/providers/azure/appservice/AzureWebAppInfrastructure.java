@@ -1,5 +1,7 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice;
 
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureAppServiceRedundancyMode;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureFTPSState;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,7 +14,7 @@ public class AzureWebAppInfrastructure {
   boolean acrUseManagedIdentityCreds;
   String acrUserManagedIdentityId;
   boolean detailedErrorLoggingEnabled;
-  String documentRoot; // Todo : FTPS enum
+  AzureFTPSState ftpsState;
   int functionAppScaleLimit;
   boolean functionsRuntimeScaleMonitoringEnabled;
   String healthCheckPath;
@@ -38,7 +40,7 @@ public class AzureWebAppInfrastructure {
   boolean hostnamesDisabled;
   boolean useHyperV;
   boolean isXenon;
-  String redundancyMode; // TODO: use RedundancyMode enum
+  AzureAppServiceRedundancyMode redundancyMode;
   boolean isReserved;
   String serverFarmId;
   boolean isStorageAccountRequired;

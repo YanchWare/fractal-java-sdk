@@ -1,5 +1,7 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice;
 
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureAppServiceClientCertMode;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureTlsVersion;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,13 +19,13 @@ public class AzureWebAppConnectivity {
   boolean corsAllowCredentials;
   boolean http2Enabled;
   boolean httpLoggingEnabled;
-  boolean minimumTlsVersion; // TODO supported TLS versions enum
+  AzureTlsVersion minimumTlsVersion;
   boolean requestTracingEnabled;
   String tracingOptions;
   boolean websocketEnabled;
   boolean clientAffinityEnabled;
   boolean clientCertEnabled;
   String clientCertExclusionPaths;
-  String clientCertMode; // TODO cert mode enum
+  AzureAppServiceClientCertMode clientCertMode;
   boolean httpsOnly;
 }

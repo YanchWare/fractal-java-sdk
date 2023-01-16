@@ -117,7 +117,7 @@ public class WebAppTest {
   }
 
   @Test
-  public void hostingIsDotnet_when_settingPhpHosting() {
+  public void hostingIsPhp_when_settingPhpHosting() {
     var builder = generateSampleBuilder()
         .withHosting(AzureWebAppHosting.builder()
             .withPhpVersion("PHP:8.1")
@@ -126,6 +126,57 @@ public class WebAppTest {
     assertThat(builder.build().getHosting().getPhpVersion()).isEqualTo("PHP:8.1");
     assertThat(builder.build().getHosting().getPythonVersion()).isEqualTo(null);
     assertThatCode(builder::build).doesNotThrowAnyException();
+  }
+
+  @Test
+  public void hostingIsJavaContainer_when_settingJavaContainerHosting() {
+    var builder = generateSampleBuilder()
+        .withHosting(AzureWebAppHosting.builder()
+            .withJavaContainer("xxx")
+            .withJavaContainerVersion("yyy")
+            .build()
+        );
+    assertThat(builder.build().getHosting().getJavaContainer()).isEqualTo("xxx");
+    assertThat(builder.build().getHosting().getJavaContainerVersion()).isEqualTo("yyy");
+    assertThat(builder.build().getHosting().getDotnetVersion()).isEqualTo(null);
+    assertThat(builder.build().getHosting().getJavaVersion()).isEqualTo(null);
+    assertThat(builder.build().getHosting().getPhpVersion()).isEqualTo(null);
+    assertThat(builder.build().getHosting().getNodeVersion()).isEqualTo(null);
+    assertThatCode(builder::build).doesNotThrowAnyException();
+  }
+
+  @Test
+  public void exceptionThrown_when_missingJavaContainerVersionHosting() {
+    var builder = generateSampleBuilder()
+        .withHosting(AzureWebAppHosting.builder()
+            .withJavaContainer("xxx")
+            .build()
+        );
+    assertThatThrownBy(builder::build).
+        isInstanceOf(IllegalArgumentException.class).
+        hasMessageContaining("[javaContainerVersion Validation] Incomplete hosting types definition. Both [javaContainer] and [javaContainerVersion] must be set");
+  }
+
+  @Test
+  public void exceptionThrown_when_missingJavaContainerHosting() {
+    var builder = generateSampleBuilder()
+        .withHosting(AzureWebAppHosting.builder()
+            .withJavaContainerVersion("yyy")
+            .build()
+        );
+    assertThatThrownBy(builder::build).
+        isInstanceOf(IllegalArgumentException.class).
+        hasMessageContaining("[javaContainer Validation] Incomplete hosting types definition. Both [javaContainer] and [javaContainerVersion] must be set");
+  }
+
+  @Test
+  public void exceptionThrown_when_missingHostingConfiguration() {
+    var builder = generateSampleBuilder()
+        .withHosting(AzureWebAppHosting.builder().build()
+        );
+    assertThatThrownBy(builder::build).
+        isInstanceOf(IllegalArgumentException.class).
+        hasMessageContaining("[hosting Validation] No hosting types (dotnet, java, java container, nodejs, python, php) have been set");
   }
   
   private AzureWebApp.AzureWebAppBuilder generateBuilder() {
