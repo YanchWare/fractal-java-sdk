@@ -50,9 +50,16 @@ public class AzureWebApp extends PaaSWorkload implements AzureEntity, LiveSystem
 
   @Override
   public Collection<String> validate() {
+    final var NO_HOSTING_DEFINED = "[hosting Validation] Hosting has not been defined and it's mandatory";
+    
     Collection<String> errors = super.validate();
     errors.addAll(CustomWorkload.validateCustomWorkload(this, "Azure Web App"));
-    errors.addAll(hosting.validate());
+    if(hosting != null) {
+      errors.addAll(hosting.validate());  
+    }
+    else {
+      errors.add(NO_HOSTING_DEFINED);
+    }
     return errors;
   }
 
