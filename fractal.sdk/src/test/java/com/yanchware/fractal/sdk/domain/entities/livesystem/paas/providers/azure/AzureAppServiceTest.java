@@ -1,11 +1,9 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
 
-import com.github.tomakehurst.wiremock.common.ListOrSingle;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.AzureWebApp.builder;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_AZURE_WEBAPP;
@@ -290,7 +288,7 @@ public class AzureAppServiceTest {
             .withAcrUseManagedIdentityCreds(true)
             .withAcrUserManagedIdentityId("acrUserManagedIdentityId")
             .withDetailedErrorLoggingEnabled(true)
-            .withFtpsState(AzureFTPSState.FTPS_ONLY)
+            .withFtpsState(AzureFtpsState.FTPS_ONLY)
             .withFunctionAppScaleLimit(1)
             .withFunctionsRuntimeScaleMonitoringEnabled(true)
             .withHealthCheckPath("healthCheckPath")
@@ -329,7 +327,7 @@ public class AzureAppServiceTest {
     assertTrue(webApp.getInfrastructure().isAcrUseManagedIdentityCreds());
     assertThat(webApp.getInfrastructure().getAcrUserManagedIdentityId()).isEqualTo("acrUserManagedIdentityId");
     assertTrue(webApp.getInfrastructure().isDetailedErrorLoggingEnabled());
-    assertThat(webApp.getInfrastructure().getFtpsState()).isEqualTo(AzureFTPSState.FTPS_ONLY);
+    assertThat(webApp.getInfrastructure().getFtpsState()).isEqualTo(AzureFtpsState.FTPS_ONLY);
     assertThat(webApp.getInfrastructure().getFunctionAppScaleLimit()).isEqualTo(1);
     assertTrue(webApp.getInfrastructure().isFunctionsRuntimeScaleMonitoringEnabled());
     assertThat(webApp.getInfrastructure().getHealthCheckPath()).isEqualTo("healthCheckPath");

@@ -2,14 +2,14 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum AzureFTPSState {
+public enum AzureFtpsState {
     ALL_ALLOWED("AllAllowed"),
     FTPS_ONLY("FtpsOnly"),
     DISABLED("Disabled");
 
     private final String id;
 
-    AzureFTPSState(final String id) {
+    AzureFtpsState(final String id) {
         this.id = id;
     }
 

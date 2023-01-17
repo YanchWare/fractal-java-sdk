@@ -1,7 +1,7 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice;
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureAppServiceRedundancyMode;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureFTPSState;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureFtpsState;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +13,7 @@ public class AzureWebAppInfrastructure {
   boolean acrUseManagedIdentityCreds;
   String acrUserManagedIdentityId;
   boolean detailedErrorLoggingEnabled;
-  AzureFTPSState ftpsState;
+  AzureFtpsState ftpsState;
   int functionAppScaleLimit;
   boolean functionsRuntimeScaleMonitoringEnabled;
   String healthCheckPath;
