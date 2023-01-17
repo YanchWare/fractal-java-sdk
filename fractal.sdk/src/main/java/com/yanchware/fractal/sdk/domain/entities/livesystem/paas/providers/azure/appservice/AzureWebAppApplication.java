@@ -24,4 +24,5 @@ public class AzureWebAppApplication {
   boolean remoteDebuggingEnabled;
   String remoteDebuggingVersion;
   String websiteTimezone;
+
 }

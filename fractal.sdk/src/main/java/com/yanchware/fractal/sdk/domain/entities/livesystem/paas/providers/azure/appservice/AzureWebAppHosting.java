@@ -51,7 +51,7 @@ public class AzureWebAppHosting implements Validatable {
   }
   
   @Override
-  public Collection<String> validate(){
+  public Collection<String> validate() {
     final var DUPLICATED_HOSTING_TYPES = "[%s Validation] Only one hosting configuration can be set. [%s] has already been set";
     final var INCOMPLETE_JAVA_CONTAINER = "[%s Validation] Incomplete hosting types definition. Both [javaContainer] and [javaContainerVersion] must be set";
     final var NO_HOSTING_TYPES = "[%s Validation] No hosting types (dotnet, java, java container, nodejs, python, php) have been set";
