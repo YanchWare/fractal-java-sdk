@@ -43,7 +43,7 @@ public enum ComponentType {
     PAAS_DOCUMENT_DATABASE("Storage.PaaS.DocumentDatabase"),
     PAAS_KEY_VALUE_DBMS("Storage.PaaS.KeyValueDbms"),
     PAAS_KEY_VALUE_ENTITY("Storage.PaaS.KeyValueEntity"),
-    PAAS_WORKLOAD("CustomWorkloads.PaaS.Workload"),
+    PAAS_WORKLOAD("CustomWorkloads.PaaS.Workloads"),
     PAAS_AZURE_WEBAPP("CustomWorkload.PaaS.WebApp"),
 
     SAAS_UNMANAGED_STORAGE("Storage.SaaS.Unmanaged"),
