@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureMachineType.STANDARD_B2S;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -89,7 +88,7 @@ public class AzureNodePoolTest {
   public void noValidationErrors_when_azureNodePoolMinimalFields() {
     var builder = AzureNodePool.builder()
         .withName("azurenode")
-        .withMachineType(STANDARD_B2S);
+        .withMachineType(AzureMachineType.STANDARD_B2S);
     assertThat(builder.build().validate()).isEmpty();
   }
 
@@ -121,7 +120,7 @@ public class AzureNodePoolTest {
     return AzureNodePool.builder()
         .withName(name)
         .withDiskSizeGb(diskSizeGb)
-        .withMachineType(STANDARD_B2S)
+        .withMachineType(AzureMachineType.STANDARD_B2S)
         .withInitialNodeCount(1)
         .withMaxNodeCount(3)
         .withNodeTaint(NodeTaint.builder()
