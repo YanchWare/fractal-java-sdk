@@ -1,6 +1,7 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp;
 
 import com.fasterxml.jackson.annotation.JsonValue;
+import org.apache.commons.lang3.NotImplementedException;
 
 import java.util.Collection;
 
@@ -42,7 +43,7 @@ public enum GcpRegion {
 
   public Collection<GcpZone> getZones() {
     // TODO: Implement
-    throw new IllegalArgumentException("Not implemented");
+    throw new NotImplementedException("GcpZone.getZones() - Not implemented");
   }
 
   @JsonValue

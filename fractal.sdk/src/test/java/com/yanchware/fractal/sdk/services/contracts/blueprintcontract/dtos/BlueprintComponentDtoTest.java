@@ -255,9 +255,10 @@ public class BlueprintComponentDtoTest {
             aks.getPriorityClasses(),
             aks.getPodManagedIdentity(),
             aks.getExternalWorkspaceResourceId(),
-            aks.getExternalLoadBalancerOutboundIps(),
+            aks.getOutboundIps(),
             aks.getAddonProfiles(),
-            aks.getRoles()
+            aks.getRoles(),
+            aks.getKubernetesVersion()
         ));
   }
 

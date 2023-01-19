@@ -9,12 +9,11 @@ import com.yanchware.fractal.sdk.domain.entities.ComponentLink;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.*;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PodManagedIdentity;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.RoleAssignment;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.*;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.aks.AzureActiveDirectoryProfile;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.aks.AzureKubernetesService;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzurePostgreSqlDatabase;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzurePostgreSqlDbms;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.aks.*;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.aks.AzureKubernetesService.AzureKubernetesServiceBuilder;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.aks.AzureAddonProfile;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.aks.AzureNodePool;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpNodePool;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpPostgreSqlDatabase;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpPostgreSqlDbms;
@@ -56,7 +55,10 @@ public class TestUtils {
         .withVnetAddressSpaceIpRange("10.1.0.0/22")
         .withVnetSubnetAddressIpRange("10.1.0.0/22")
         .withExternalWorkspaceResourceId("workplaceResourceId")
-        .withExternalLoadBalancerOutboundIps(List.of("ip1", "ip2"))
+        .withOutboundIp(AzureOutboundIp.builder()
+            .withName("fractal")
+            .withAzureResourceGroup(new AzureResourceGroup(EUROPE_WEST, "group"))
+            .build())
         .withAddonProfiles(List.of(AzureAddonProfile.AZURE_POLICY, AzureAddonProfile.AZURE_KEYVAULT_SECRETS_PROVIDER))
         .withNodePool(AzureNodePool.builder()
             .withName("akslinux")
@@ -69,7 +71,6 @@ public class TestUtils {
             .withMaxPodsPerNode(100)
             .withOsType(LINUX)
             .withAutoscalingEnabled(true)
-            .withKubernetesVersion("1.1.1")
             .build())
         .withPriorityClass(PriorityClass.builder()
             .withName("fractal-critical")
@@ -94,8 +95,8 @@ public class TestUtils {
             .withRoleName("AcrPull")
             .withScope("Role scope to ACR")
             .build())
-        .withExternalLoadBalancerOutboundIp("ExternalLoadBalancerOutboundIp")
         .withAddonProfile(AzureAddonProfile.MONITORING)
+        .withKubernetesVersion("1.1.1")
         .withActiveDirectoryProfile(AzureActiveDirectoryProfile.builder()
             .withAdminGroupObjectIDs(List.of(UUID.randomUUID().toString()))
             .build());
@@ -280,11 +281,11 @@ public class TestUtils {
 
   public static GcpPostgreSqlDatabase getGcpPostgresDbExample() {
     return GcpPostgreSqlDatabase.builder()
-      .withId("db-2")
-      .withDisplayName("db-2")
-      .withName("db2")
-      .withLink(getComponentLink())
-      .build();
+        .withId("db-2")
+        .withDisplayName("db-2")
+        .withName("db2")
+        .withLink(getComponentLink())
+        .build();
   }
 
   public static Environment getEnvExample() {
@@ -357,7 +358,7 @@ public class TestUtils {
     try {
       var json = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(obj);
       log.debug(json);
-      
+
       return json;
     } catch (JsonProcessingException e) {
       log.error("Error when trying to process: {}", obj, e);

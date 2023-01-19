@@ -42,11 +42,11 @@ public class ProviderService {
   private final HttpClient client;
   private final SdkConfiguration sdkConfiguration;
 
-  public void checkLiveSystemMutationStatus(LiveSystem liveSystem,
-                                            LiveSystemMutationDto liveSystemMutation,
-                                            InstantiationWaitConfiguration config)
-      throws InstantiatorException {
-    log.info("Starting operation [checkLiveSystemMutationStatus] for LiveSystem [id: {}] and mutation ['{}']",
+  public void checkLiveSystemMutationStatus(
+    LiveSystem liveSystem,
+    LiveSystemMutationDto liveSystemMutation,
+    InstantiationWaitConfiguration config) throws InstantiatorException {
+    log.info("Starting operation [checkLiveSystemMutationStatus] for livesystem [{}] and mutation [{}]",
         liveSystem.getLiveSystemId(), liveSystemMutation.getId());
 
     var requestName = "checkLiveSystemMutationStatus";
@@ -231,7 +231,12 @@ public class ProviderService {
       String resourceGroupId,
       String providerName,
       String liveSystemName,
-      String mutationId) {
+      String mutationId)
+  {
+    if (isBlank(providerName)) {
+      throw new IllegalArgumentException("In order to use certain SDK features the provider name needs to be set " +
+        "through SDK configuration");
+    }
     return URI.create(String.format("%s/%s/%s/livesystems/%s/mutations/%s",
         sdkConfiguration.getProviderEndpoint(), resourceGroupId, providerName, liveSystemName, mutationId));
   }
