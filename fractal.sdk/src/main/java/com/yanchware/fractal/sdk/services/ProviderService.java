@@ -43,10 +43,10 @@ public class ProviderService {
   private final SdkConfiguration sdkConfiguration;
 
   public void checkLiveSystemMutationStatus(
-    LiveSystem liveSystem,
-    LiveSystemMutationDto liveSystemMutation,
-    InstantiationWaitConfiguration config) throws InstantiatorException {
-    log.info("Starting operation [checkLiveSystemMutationStatus] for livesystem [{}] and mutation [{}]",
+      LiveSystem liveSystem,
+      LiveSystemMutationDto liveSystemMutation,
+      InstantiationWaitConfiguration config) throws InstantiatorException {
+    log.info("Starting operation [checkLiveSystemMutationStatus] for LiveSystem [id: '{}'] and mutation ['{}']",
         liveSystem.getLiveSystemId(), liveSystemMutation.getId());
 
     var requestName = "checkLiveSystemMutationStatus";
@@ -68,12 +68,12 @@ public class ProviderService {
         .build();
     var retry = RetryRegistry.of(retryConfig).retry(requestName);
 
-    var callWithRetry = Retry.decorateCheckedSupplier(retry, () -> 
-        getLiveSystemMutationResponse(liveSystem, 
-            liveSystemMutation, 
-            config, 
-            requestName, 
-            acceptedResponses, 
+    var callWithRetry = Retry.decorateCheckedSupplier(retry, () ->
+        getLiveSystemMutationResponse(liveSystem,
+            liveSystemMutation,
+            config,
+            requestName,
+            acceptedResponses,
             request));
 
     Try<LiveSystemMutationResponse> result = Try.of(callWithRetry);
@@ -117,7 +117,7 @@ public class ProviderService {
       log.info(message);
       throw new InstantiatorException(message);
     }
-    
+
     var liveSystemId = liveSystem.getLiveSystemId();
     var liveSystemMutationResponseComponents = liveSystemMutationResponse.getComponents();
     var liveSystemMutationId = liveSystemMutation.getId();
@@ -219,7 +219,7 @@ public class ProviderService {
           .map(ComponentDto::getId)
           .sorted()
           .toList();
-      
+
       log.info("LiveSystem [id: '{}'] - Failed components [{}] -> {}",
           liveSystemId,
           failedComponentsIdsSorted.size(),
@@ -231,11 +231,10 @@ public class ProviderService {
       String resourceGroupId,
       String providerName,
       String liveSystemName,
-      String mutationId)
-  {
+      String mutationId) {
     if (isBlank(providerName)) {
       throw new IllegalArgumentException("In order to use certain SDK features the provider name needs to be set " +
-        "through SDK configuration");
+          "through SDK configuration");
     }
     return URI.create(String.format("%s/%s/%s/livesystems/%s/mutations/%s",
         sdkConfiguration.getProviderEndpoint(), resourceGroupId, providerName, liveSystemName, mutationId));
