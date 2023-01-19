@@ -71,7 +71,7 @@ public class Automaton {
         LiveSystemMutationDto mutation,
         InstantiationWaitConfiguration config)
         throws InstantiatorException {
-            providerService.checkLiveSystemMutationStatus(liveSystem, mutation, liveSystemService, config);
+            providerService.checkLiveSystemMutationStatus(liveSystem, mutation, config);
         }
 
     private static LiveSystemMutationDto instantiateLiveSystem(LiveSystem liveSystem, InstantiationConfiguration config)
