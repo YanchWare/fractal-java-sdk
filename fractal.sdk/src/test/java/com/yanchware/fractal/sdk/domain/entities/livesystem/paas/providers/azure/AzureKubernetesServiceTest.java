@@ -9,7 +9,7 @@ import com.yanchware.fractal.sdk.utils.TestUtils;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import org.junit.jupiter.api.Test;
 
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureMachineType.STANDARD_B2S;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion.EUROPE_WEST;
 import static com.yanchware.fractal.sdk.utils.TestUtils.getAksBuilder;
 import static com.yanchware.fractal.sdk.utils.TestUtils.getDefaultAks;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_KUBERNETES;
@@ -44,7 +44,7 @@ public class AzureKubernetesServiceTest {
             AzureNodePool.builder()
                 .withName("winds")
                 .withDiskSizeGb(30)
-                .withMachineType(STANDARD_B2S)
+                .withMachineType(AzureMachineType.STANDARD_B2S)
                 .withOsType(AzureOsType.WINDOWS)
                 .withAgentPoolMode(AzureAgentPoolMode.USER)
                 .withInitialNodeCount(1)
@@ -122,5 +122,37 @@ public class AzureKubernetesServiceTest {
         .validate())
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining("Pool Mode is set to SYSTEM");
+  }
+
+  @Test
+  public void noValidationErrors_when_aksHasRequiredFieldsAndMultipleNodePoolWithCustomMachineType() {
+    var machineType = "This_Not_Exist_For_Sure";
+    var aks = AzureKubernetesService.builder()
+        .withId(ComponentId.from("test"))
+        .withRegion(EUROPE_WEST)
+        .withNodePool(
+            AzureNodePool.builder()
+                .withName("winds")
+                .withDiskSizeGb(30)
+                .withMachineType(AzureMachineType.fromString(machineType))
+                .withOsType(AzureOsType.WINDOWS)
+                .withAgentPoolMode(AzureAgentPoolMode.USER)
+                .withInitialNodeCount(1)
+                .withAutoscalingEnabled(false)
+                .build())
+        .withPriorityClass(PriorityClass.builder()
+            .withName("priority-class")
+            .withDescription("description")
+            .withPreemptionPolicy(PreemptionPolicy.PREEMPT_LOWER_PRIORITY)
+            .withValue(1)
+            .build())
+        .build();
+
+    var json = TestUtils.getJsonRepresentation(aks);
+    assertThat(aks.validate()).isEmpty();
+    assertThat(json).isNotBlank();
+    assertThat(aks.getNodePools()).first()
+        .extracting(a -> a.getMachineType().toString())
+        .isEqualTo(machineType);
   }
 }
