@@ -22,14 +22,13 @@ public class AzureMachineTypeTest {
   }
 
   @Test
-  public void correctValues_when_Values() {
+  public void valuesContainsNewValue_when_CustomValueAdded() {
     var initialValues = AzureMachineType.values();
-    assertThat(initialValues.size()).isEqualTo(700);
     
     var newValue = AzureMachineType.fromString("This_Not_Exist_For_Sure");
 
     var valuesWithNewValue = AzureMachineType.values();
     assertThat(valuesWithNewValue).contains(newValue);
-    assertThat(valuesWithNewValue.size()).isEqualTo(701);
+    assertThat(valuesWithNewValue.size()).isEqualTo(initialValues.size() + 1);
   }
 }
