@@ -33,6 +33,8 @@ public class AzureCosmosGremlinDbms extends PaaSGraphDbms implements LiveSystemC
 
   private Collection<AzureCosmosGremlinDatabase> cosmosEntities;
 
+  private AzureCosmosBackupPolicy backupPolicy;
+
   protected AzureCosmosGremlinDbms() {
     cosmosEntities = new ArrayList<>();
   }

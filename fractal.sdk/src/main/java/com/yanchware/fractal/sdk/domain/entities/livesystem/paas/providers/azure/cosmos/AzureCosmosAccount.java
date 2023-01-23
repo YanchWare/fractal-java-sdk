@@ -10,6 +10,9 @@ public interface AzureCosmosAccount extends AzureEntity {
   <C extends Component & AzureCosmosEntity> Collection<C> getCosmosEntities();
   int getMaxTotalThroughput();
   void setMaxTotalThroughput(int maxTotalThroughput);
+  AzureCosmosBackupPolicy getBackupPolicy();
+  void setBackupPolicy(AzureCosmosBackupPolicy backupPolicy);
+  
   void setPublicNetworkAccess(String publicNetworkAccessMode);
 
   static Collection<String> validateCosmosAccount(AzureCosmosAccount cosmosAccount, String accountType) {

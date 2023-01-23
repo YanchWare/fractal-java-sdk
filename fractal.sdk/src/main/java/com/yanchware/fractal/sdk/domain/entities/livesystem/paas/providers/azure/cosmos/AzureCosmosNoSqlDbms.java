@@ -32,6 +32,7 @@ public class AzureCosmosNoSqlDbms extends PaaSDocumentDbms implements LiveSystem
   }
 
   private Collection<AzureCosmosNoSqlDatabase> cosmosEntities;
+  private AzureCosmosBackupPolicy backupPolicy;
 
   protected AzureCosmosNoSqlDbms() {
     cosmosEntities = new ArrayList<>();

@@ -32,11 +32,11 @@ import java.util.UUID;
 import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PreemptionPolicy.NEVER;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PreemptionPolicy.PREEMPT_LOWER_PRIORITY;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureMachineType.STANDARD_B2S;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureOsType.LINUX;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion.EUROPE_WEST;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureSkuName.B_GEN5_1;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureStorageAutoGrow.ENABLED;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureMachineType.STANDARD_B2S;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpMachine.E2_STANDARD2;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpRegion.EU_WEST1;
 import static java.util.stream.Collectors.toSet;
@@ -57,7 +57,10 @@ public class TestUtils {
         .withExternalWorkspaceResourceId("workplaceResourceId")
         .withOutboundIp(AzureOutboundIp.builder()
             .withName("fractal")
-            .withAzureResourceGroup(new AzureResourceGroup(EUROPE_WEST, "group"))
+            .withAzureResourceGroup(AzureResourceGroup.builder()
+                .withName("group")
+                .withRegion(EUROPE_WEST)
+                .build())
             .build())
         .withAddonProfiles(List.of(AzureAddonProfile.AZURE_POLICY, AzureAddonProfile.AZURE_KEYVAULT_SECRETS_PROVIDER))
         .withNodePool(AzureNodePool.builder()

@@ -27,6 +27,7 @@ public class AzureCosmosTableDbms extends PaaSRelationalDbms implements LiveSyst
   private Collection<AzureCosmosTableEntity> cosmosEntities;
   private AzureRegion azureRegion;
   private AzureResourceGroup azureResourceGroup;
+  private AzureCosmosBackupPolicy backupPolicy;
 
 
   @Override
