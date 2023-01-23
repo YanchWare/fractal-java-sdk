@@ -18,7 +18,7 @@ public class AzureResourceGroup implements Validatable {
   private String name;
   private AzureRegion region;
 
-  public AzureResourceGroup() {
+  private AzureResourceGroup() {
   }
 
   public static AzureResourceGroupBuilder builder() {
