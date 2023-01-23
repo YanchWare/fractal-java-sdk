@@ -32,11 +32,16 @@ public class AzureCosmosPeriodicModeBackupPolicy extends AzureCosmosBackupPolicy
   public Collection<String> validate() {
     Collection<String> errors = new ArrayList<>();
     
-    validateIntegerInRange("[AzureCosmosPeriodicModeBackupPolicy Validation] BackupIntervalInMinutes", this.backupIntervalInMinutes, 60, 1440, errors);
-    validateIntegerInRange("[AzureCosmosPeriodicModeBackupPolicy Validation] BackupRetentionIntervalInHours", this.backupIntervalInMinutes, 8, 720, errors);
+    if(this.backupIntervalInMinutes != null) {
+      validateIntegerInRange("[AzureCosmosPeriodicModeBackupPolicy Validation] BackupIntervalInMinutes", this.backupIntervalInMinutes, 60, 1440, errors);
 
-    if(this.backupStorageRedundancy == null) {
-      errors.add(BACKUP_STORAGE_REDUNDANCY_IS_BLANK);
+      if(this.backupStorageRedundancy == null) {
+        errors.add(BACKUP_STORAGE_REDUNDANCY_IS_BLANK);
+      }
+    }
+      
+    if(this.backupRetentionIntervalInHours != null) {
+      validateIntegerInRange("[AzureCosmosPeriodicModeBackupPolicy Validation] BackupRetentionIntervalInHours", this.backupRetentionIntervalInHours, 8, 720, errors);
     }
     
     return errors;

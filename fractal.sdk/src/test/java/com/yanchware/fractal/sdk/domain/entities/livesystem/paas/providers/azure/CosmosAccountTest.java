@@ -84,7 +84,7 @@ public abstract class CosmosAccountTest<T extends AzureCosmosAccountBuilder<?,?>
               .withRegion(AzureRegion.ASIA_SOUTHEAST)
               .build())
       .withMaxTotalThroughput(throughput)
-        .withBackupPolicy(new AzureCosmosPeriodicModeBackupPolicy.AzureCosmosPeriodicModeBackupPolicyBuilder()
+        .withBackupPolicy(AzureCosmosPeriodicModeBackupPolicy.builder()
                 .withBackupIntervalInMinutes(1440)
             .withBackupRetentionIntervalInHours(720)
             .withBackupStorageRedundancy(BackupStorageRedundancy.GEO)
