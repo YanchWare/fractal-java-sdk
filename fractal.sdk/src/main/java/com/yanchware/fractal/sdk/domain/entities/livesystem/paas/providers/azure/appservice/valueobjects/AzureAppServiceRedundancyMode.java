@@ -1,4 +1,4 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.valueobjects;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
