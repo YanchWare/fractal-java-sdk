@@ -71,7 +71,9 @@ public class AzureResourceGroup implements Validatable {
 
     if (StringUtils.isBlank(name) || name.length() > 90) {
       errors.add(NAME_IS_EMPTY_OR_TOO_LONG);
-    } else if(region == null) {
+    } 
+    
+    if(region == null) {
       errors.add(REGION_IS_BLANK);
     }
 
