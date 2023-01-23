@@ -44,7 +44,9 @@ public class AzureStorageAccount extends PaaSDataStorage implements AzureEntity,
   @Override
   public Collection<String> validate() {
     Collection<String> errors = super.validate();
-    // TODO: add validation if required
+    if(azureRegion == null) {
+      errors.add("Region cannot be empty");
+    }
     return errors;
   }
 
@@ -66,6 +68,16 @@ public class AzureStorageAccount extends PaaSDataStorage implements AzureEntity,
       return super.build();
     }
 
+    public AzureStorageAccountBuilder withRegion(AzureRegion region) {
+      component.setAzureRegion(region);
+      return builder;
+    }
+
+    public AzureStorageAccountBuilder withResourceGroup(AzureResourceGroup resourceGroup) {
+      component.setAzureResourceGroup(resourceGroup);
+      return builder;
+    }
+    
     public AzureStorageAccountBuilder withBackup(AzureStorageAccountBackup backup) {
       component.setBackup(backup);
       return builder;
