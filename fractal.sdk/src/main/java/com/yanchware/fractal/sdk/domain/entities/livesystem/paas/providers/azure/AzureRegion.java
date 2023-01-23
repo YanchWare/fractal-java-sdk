@@ -2,6 +2,8 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import java.util.Arrays;
+
 public enum AzureRegion {
   US_EAST("eastus"),
   US_EAST2("eastus2"),
@@ -57,19 +59,23 @@ public enum AzureRegion {
   GOV_US_DOD_EAST("usdodeast"),
   GOV_US_DOD_CENTRAL("usdodcentral");
 
-  private final String id;
+  private final String name;
 
-  AzureRegion(final String id) {
-    this.id = id;
+  AzureRegion(final String name) {
+    this.name = name;
   }
 
   @JsonValue
-  public String getId() {
-    return id;
+  public String getName() {
+    return name;
   }
 
   @Override
   public String toString() {
-    return id;
+    return name;
+  }
+
+  public static AzureRegion fromString(String region) {
+    return Arrays.stream(values()).filter(azureRegion -> azureRegion.name.equals(region)).findFirst().orElse(null);
   }
 }
