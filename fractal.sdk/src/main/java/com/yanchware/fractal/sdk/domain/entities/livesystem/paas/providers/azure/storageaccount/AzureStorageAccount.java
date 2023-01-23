@@ -5,9 +5,6 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PaaSDataStorage
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureEntity;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.aks.AzureKubernetesService;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.*;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.valueobjects.AzureUserAssignedIdentity;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +13,6 @@ import lombok.ToString;
 import java.util.Collection;
 
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_AZURE_STORAGE;
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_AZURE_WEBAPP;
 
 @Getter
 @Setter
@@ -44,9 +40,6 @@ public class AzureStorageAccount extends PaaSDataStorage implements AzureEntity,
   @Override
   public Collection<String> validate() {
     Collection<String> errors = super.validate();
-    if(azureRegion == null) {
-      errors.add("Region cannot be empty");
-    }
     return errors;
   }
 
