@@ -15,7 +15,7 @@ public class AzureStorageAccountInfrastructure {
   HashMap<String, Object> userAssignedIdentities; // TODO: type to used instead of Object
   AzureIdentityType identityType;
   String extendedLocationName;
-  String extendedLocationType; // TODO: this is not probably required since it only has a single value
+  // String extendedLocationType; // TODO: this is not probably required since it only has a single value
   AzureDnsEndpointType dnsEndpointType;
   AzureStorageAccessTier accessTier;
   String customDomainName;

@@ -9,11 +9,11 @@ import lombok.Setter;
 @Setter
 @Builder(setterPrefix = "with")
 public class AzureStorageAccountSettings {
-  String largeFileSharesState; // TODO: enum
-  String kind; // TODO: enum
+  AzureLargeFileSharesState largeFileSharesState;
+  AzureStorageKind kind;
   boolean isHnsEnabled;
   boolean accountImmutabilityEnabled;
-  String accountImmutabilityPolicyState; // TODO: enum
+  AzureAccountImmutabilityPolicyState accountImmutabilityPolicyState;
   int accountImmutabilityPeriodSinceCreationInDays;
   boolean accountImmutabilityAllowProtectedAppendWrites;
   boolean fileEncryptionEnabled;
@@ -34,5 +34,4 @@ public class AzureStorageAccountSettings {
   AzureStorageAllowedCopyScope allowedCopyScope;
   boolean allowCrossTenantReplication;
   boolean allowSharedKeyAccess;
-  
 }
