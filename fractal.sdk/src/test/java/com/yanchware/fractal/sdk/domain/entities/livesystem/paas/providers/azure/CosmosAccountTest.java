@@ -3,9 +3,7 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 
 import com.yanchware.fractal.sdk.TestWithFixture;
 import com.yanchware.fractal.sdk.domain.entities.Component;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos.AzureCosmosAccount;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos.AzureCosmosAccountBuilder;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos.AzureCosmosEntity;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos.*;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import com.yanchware.fractal.sdk.valueobjects.ComponentType;
 import org.assertj.core.api.InstanceOfAssertFactories;
@@ -53,7 +51,7 @@ public abstract class CosmosAccountTest<T extends AzureCosmosAccountBuilder<?,?>
       .withMaxTotalThroughput(throughput)
       .withCosmosEntities(entities);
 
-    assertThatThrownBy(() -> builder.build())
+    assertThatThrownBy(builder::build)
       .isInstanceOf(IllegalArgumentException.class)
       .hasMessageContaining("Region has not been defined and it is required");
   }
@@ -80,8 +78,17 @@ public abstract class CosmosAccountTest<T extends AzureCosmosAccountBuilder<?,?>
     var throughput = a(Integer.class);
     var builder = getBuilder()
       .withId("a-legal-id")
-      .withAzureResourceGroup(new AzureResourceGroup(AzureRegion.ASIA_SOUTHEAST, a(String.class)))
-      .withMaxTotalThroughput(throughput);
+      .withAzureResourceGroup(
+          AzureResourceGroup.builder()
+              .withName(a(String.class))
+              .withRegion(AzureRegion.ASIA_SOUTHEAST)
+              .build())
+      .withMaxTotalThroughput(throughput)
+        .withBackupPolicy(new AzureCosmosPeriodicModeBackupPolicy.AzureCosmosPeriodicModeBackupPolicyBuilder()
+                .withBackupIntervalInMinutes(1440)
+            .withBackupRetentionIntervalInHours(720)
+            .withBackupStorageRedundancy(BackupStorageRedundancy.GEO)
+            .build());
 
     var component = builder.build();
 
@@ -99,7 +106,11 @@ public abstract class CosmosAccountTest<T extends AzureCosmosAccountBuilder<?,?>
     var builder = getBuilder()
       .withId("a-legal-id")
       .withRegion(AzureRegion.ASIA_EAST)
-      .withAzureResourceGroup(new AzureResourceGroup(AzureRegion.ASIA_SOUTHEAST, a(String.class)))
+      .withAzureResourceGroup(
+          AzureResourceGroup.builder()
+              .withName(a(String.class))
+              .withRegion(AzureRegion.ASIA_SOUTHEAST)
+              .build())
       .withMaxTotalThroughput(throughput);
 
     var component = builder.build();
