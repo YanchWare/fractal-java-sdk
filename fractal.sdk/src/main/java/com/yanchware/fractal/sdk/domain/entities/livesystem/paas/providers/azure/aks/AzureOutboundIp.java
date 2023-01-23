@@ -49,7 +49,7 @@ public class AzureOutboundIp implements Validatable {
       return builder;
     }
     
-    public AzureOutboundIpBuilder withResourceGroup(AzureResourceGroup azureResourceGroup) {
+    public AzureOutboundIpBuilder withAzureResourceGroup(AzureResourceGroup azureResourceGroup) {
       component.setAzureResourceGroup(azureResourceGroup);
       return builder;
     }

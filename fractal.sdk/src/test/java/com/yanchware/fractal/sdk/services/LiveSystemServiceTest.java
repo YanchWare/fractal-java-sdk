@@ -21,10 +21,7 @@ import java.util.List;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
 public class LiveSystemServiceTest {
-
-//    @Rule
-//    public WireMockRule wireMockRule = new WireMockRule(8090);
-
+    
     private LiveSystemService liveSystemService;
 
     @BeforeEach
@@ -57,7 +54,11 @@ public class LiveSystemServiceTest {
                 .blueprintMap(LiveSystemComponentDto.fromLiveSystemComponents(List.of(AzureCosmosGremlinDbms.builder()
                     .withId("cosmos-graph-1")
                     .withMaxTotalThroughput(500)
-                    .withAzureResourceGroup(new AzureResourceGroup(AzureRegion.ASIA_EAST, "MyRg"))
+                    .withAzureResourceGroup(
+                        AzureResourceGroup.builder()
+                            .withName("MyRg")
+                            .withRegion(AzureRegion.ASIA_EAST)
+                            .build())
                     .withCosmosEntity(AzureCosmosGremlinDatabase.builder()
                       .withId("graph-db-1")
                       .build())

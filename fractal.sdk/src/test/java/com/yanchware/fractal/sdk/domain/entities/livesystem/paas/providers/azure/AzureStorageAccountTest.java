@@ -31,16 +31,6 @@ public class AzureStorageAccountTest {
   }
 
   @Test
-  public void resourceGroupNameValid_when_resourceGroupNameIsSet() {
-    var storageAccount = generateBuilder()
-      .withResourceGroup(new AzureResourceGroup(AzureRegion.CANADA_EAST, "rgName"))
-      .build();
-
-    assertEquals(storageAccount.getAzureResourceGroup().getName(), storageAccount.getAzureResourceGroup().getName());
-    assertEquals(storageAccount.getAzureResourceGroup().getRegion(), storageAccount.getAzureResourceGroup().getRegion());
-  }
-
-  @Test
   public void backupIsValid_when_backupIsSet() {
     var storageAccountBackup = generateBuilder()
       .withBackup(
@@ -77,26 +67,26 @@ public class AzureStorageAccountTest {
     var storageAccountConnectivity = generateBuilder()
       .withConnectivity(
         AzureStorageAccountConnectivity.builder()
-            .withAllowBlobPublicAccess(true)
-            .withAzureIdentityBasedAuthAzureDirectoryAccountType(AzureActiveDirectoryAccountType.USER)
-            .withDefaultToOAuthAuthentication(true)
-            .withMinimumTlsVersion(AzureTlsVersion.TLS1_2)
-            .withEnableHttpsTrafficOnly(true)
-            .withEnableNfsV3(true)
-            .withIsLocalUserEnabled(true)
-            .withIsSftpEnabled(true)
-            .withKeyPolicyExpirationInDays(10)
-            .withNetworkRuleSetBypass(AzureStorageBypass.NONE)
-            .withNetworkRuleSetDefaultAction(AzureStorageDefaultAction.ALLOW)
-            .withNetworkRuleSetIpRules(new ArrayList<>())
-            .withPublicNetworkAccess(AzureStoragePublicNetworkAccess.ENABLED)
-            .withPublishInternetEndpoints(true)
-            .withPublishMicrosoftEndpoints(true)
-            .withRoutingChoise("routingChoise")
-            .withSasPolicyExpirationAction("sasPolicyExpirationAction")
-            .withSasPolicyExpirationPeriod("sasPolicyExpirationPeriod")
-            .withNetworkRuleSetBypass(AzureStorageBypass.NONE)
-            .withIsLocalUserEnabled(true)
+          .withAllowBlobPublicAccess(true)
+          .withAzureIdentityBasedAuthAzureDirectoryAccountType(AzureActiveDirectoryAccountType.USER)
+          .withDefaultToOAuthAuthentication(true)
+          .withMinimumTlsVersion(AzureTlsVersion.TLS1_2)
+          .withEnableHttpsTrafficOnly(true)
+          .withEnableNfsV3(true)
+          .withIsLocalUserEnabled(true)
+          .withIsSftpEnabled(true)
+          .withKeyPolicyExpirationInDays(10)
+          .withNetworkRuleSetBypass(AzureStorageBypass.NONE)
+          .withNetworkRuleSetDefaultAction(AzureStorageDefaultAction.ALLOW)
+          .withNetworkRuleSetIpRules(new ArrayList<>())
+          .withPublicNetworkAccess(AzureStoragePublicNetworkAccess.ENABLED)
+          .withPublishInternetEndpoints(true)
+          .withPublishMicrosoftEndpoints(true)
+          .withRoutingChoise("routingChoise")
+          .withSasPolicyExpirationAction("sasPolicyExpirationAction")
+          .withSasPolicyExpirationPeriod("sasPolicyExpirationPeriod")
+          .withNetworkRuleSetBypass(AzureStorageBypass.NONE)
+          .withIsLocalUserEnabled(true)
           .build()
         )
         .build()

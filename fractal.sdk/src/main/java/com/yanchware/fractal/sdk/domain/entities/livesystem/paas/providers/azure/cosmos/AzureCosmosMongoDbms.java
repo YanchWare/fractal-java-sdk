@@ -33,6 +33,8 @@ public class AzureCosmosMongoDbms extends PaaSDocumentDbms implements LiveSystem
 
   private Collection<AzureCosmosMongoDatabase> cosmosEntities;
 
+  private AzureCosmosBackupPolicy backupPolicy;
+
   protected AzureCosmosMongoDbms() {
     cosmosEntities = new ArrayList<>();
   }

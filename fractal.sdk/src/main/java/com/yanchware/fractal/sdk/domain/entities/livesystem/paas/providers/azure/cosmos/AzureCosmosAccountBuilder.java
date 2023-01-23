@@ -59,6 +59,11 @@ public abstract class AzureCosmosAccountBuilder<T extends Component & AzureCosmo
     return builder;
   }
 
+  public B withBackupPolicy(AzureCosmosBackupPolicy backupPolicy) {
+    component.setBackupPolicy(backupPolicy);
+    return builder;
+  }
+
   @Override
   public T build() {
     component.setType(PAAS_COSMOS_ACCOUNT);
