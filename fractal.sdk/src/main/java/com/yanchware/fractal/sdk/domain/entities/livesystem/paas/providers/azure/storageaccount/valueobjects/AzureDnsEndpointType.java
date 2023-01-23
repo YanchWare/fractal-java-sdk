@@ -1,14 +1,14 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.valueobjects;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum AzureRecoveryServicesSkuName {
+public enum AzureDnsEndpointType {
   STANDARD ("Standard"),
-  RS0 ("RS0");
-
+  AZURE_DNS_ZONE ("AzureDnsZone");
+  
   private final String id;
 
-  AzureRecoveryServicesSkuName(final String id) {
+  AzureDnsEndpointType(final String id) {
     this.id = id;
   }
 

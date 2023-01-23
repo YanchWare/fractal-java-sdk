@@ -1,6 +1,7 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount;
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.*;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.valueobjects.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,9 +20,9 @@ public class AzureStorageAccountConnectivity {
   AzureStoragePublicNetworkAccess publicNetworkAccess;
   AzureStorageDefaultAction networkRuleSetDefaultAction;
   AzureStorageBypass networkRuleSetBypass;
-  List<Object> networkRuleSetVirtualNetworkRules; // TODO: type to use instead of Object
-  List<Object> networkRuleSetResourceAccessRules; // TODO: type to use instead of Object
-  List<Object> networkRuleSetIpRules; // TODO: type to use instead of Object
+  List<AzureVirtualNetworkRule> networkRuleSetVirtualNetworkRules;
+  List<AzureResourceAccessRule> networkRuleSetResourceAccessRules;
+  List<AzureStorageIpRule> networkRuleSetIpRules;
   AzureTlsVersion minimumTlsVersion;
   int keyPolicyExpirationInDays;
   boolean isSftpEnabled;

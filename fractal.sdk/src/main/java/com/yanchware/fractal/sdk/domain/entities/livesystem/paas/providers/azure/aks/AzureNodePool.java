@@ -2,7 +2,6 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 
 import com.yanchware.fractal.sdk.domain.entities.Validatable;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.NodeTaint;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureMachineType;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureOsType;
 import com.yanchware.fractal.sdk.utils.CollectionUtils;
 import lombok.AccessLevel;
@@ -39,7 +38,7 @@ public class AzureNodePool implements Validatable {
 
   private Integer initialNodeCount;
 
-  private AzureMachineType machineType;
+  private AzureOsType.AzureMachineType machineType;
   private Integer maxNodeCount;
   private Integer maxSurge;
   private Integer minNodeCount;

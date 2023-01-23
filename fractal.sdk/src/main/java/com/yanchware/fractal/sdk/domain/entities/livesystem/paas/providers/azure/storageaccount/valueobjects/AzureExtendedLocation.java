@@ -1,14 +1,13 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.valueobjects;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum AzureDnsEndpointType {
-  STANDARD ("Standard"),
-  AZURE_DNS_ZONE ("AzureDnsZone");
+public enum AzureExtendedLocation {
+  EDGE_ZONE ("EdgeZone");
   
   private final String id;
 
-  AzureDnsEndpointType(final String id) {
+  AzureExtendedLocation(final String id) {
     this.id = id;
   }
 

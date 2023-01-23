@@ -88,7 +88,7 @@ public class AzureNodePoolTest {
   public void noValidationErrors_when_azureNodePoolMinimalFields() {
     var builder = AzureNodePool.builder()
         .withName("azurenode")
-        .withMachineType(AzureMachineType.STANDARD_B2S);
+        .withMachineType(AzureOsType.AzureMachineType.STANDARD_B2S);
     assertThat(builder.build().validate()).isEmpty();
   }
 
@@ -120,7 +120,7 @@ public class AzureNodePoolTest {
     return AzureNodePool.builder()
         .withName(name)
         .withDiskSizeGb(diskSizeGb)
-        .withMachineType(AzureMachineType.STANDARD_B2S)
+        .withMachineType(AzureOsType.AzureMachineType.STANDARD_B2S)
         .withInitialNodeCount(1)
         .withMaxNodeCount(3)
         .withNodeTaint(NodeTaint.builder()

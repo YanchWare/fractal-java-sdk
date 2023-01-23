@@ -1,6 +1,6 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount;
 
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.*;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.valueobjects.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,10 +12,10 @@ import java.util.HashMap;
 @Builder(setterPrefix = "with")
 public class AzureStorageAccountInfrastructure {
   AzureStorageSkuName sku;
-  HashMap<String, Object> userAssignedIdentities; // TODO: type to used instead of Object
+  HashMap<String, AzureUserAssignedIdentity> userAssignedIdentities;
   AzureIdentityType identityType;
   String extendedLocationName;
-  // String extendedLocationType; // TODO: this is not probably required since it only has a single value
+  String extendedLocationType;
   AzureDnsEndpointType dnsEndpointType;
   AzureStorageAccessTier accessTier;
   String customDomainName;

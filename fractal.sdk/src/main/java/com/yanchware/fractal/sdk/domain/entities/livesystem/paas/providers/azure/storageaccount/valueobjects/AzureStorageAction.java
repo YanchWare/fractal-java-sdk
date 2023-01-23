@@ -1,13 +1,13 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.valueobjects;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum AzureExtendedLocation {
-  EDGE_ZONE ("EdgeZone");
+public enum AzureStorageAction {
+  ALLOW ("Allow");
   
   private final String id;
 
-  AzureExtendedLocation(final String id) {
+  AzureStorageAction(final String id) {
     this.id = id;
   }
 

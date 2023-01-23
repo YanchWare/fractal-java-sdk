@@ -1,6 +1,5 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice;
 
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureAppServiceRedundancyMode;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureFtpsState;
 import lombok.Builder;
 import lombok.Getter;

@@ -7,6 +7,7 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.aks.AzureKubernetesService;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.*;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.valueobjects.AzureUserAssignedIdentity;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.Getter;
 import lombok.Setter;
@@ -43,11 +44,10 @@ public class AzureStorageAccount extends PaaSDataStorage implements AzureEntity,
   @Override
   public Collection<String> validate() {
     Collection<String> errors = super.validate();
-    // TODO: check if we need any validation
+    // TODO: add validation if required
     return errors;
   }
 
-  // TODO: implement builder
   public static class AzureStorageAccountBuilder extends PaaSDataStorage.Builder<AzureStorageAccount, AzureStorageAccountBuilder> {
 
     @Override
