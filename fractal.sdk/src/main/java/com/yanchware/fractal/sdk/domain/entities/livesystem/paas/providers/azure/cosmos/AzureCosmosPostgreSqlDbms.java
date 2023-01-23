@@ -32,6 +32,7 @@ public class AzureCosmosPostgreSqlDbms extends PaaSRelationalDbms implements Liv
   }
 
   private Collection<AzureCosmosPostgreSqlDatabase> cosmosEntities;
+  private AzureCosmosBackupPolicy backupPolicy;
 
   protected AzureCosmosPostgreSqlDbms() {
     cosmosEntities = new ArrayList<>();

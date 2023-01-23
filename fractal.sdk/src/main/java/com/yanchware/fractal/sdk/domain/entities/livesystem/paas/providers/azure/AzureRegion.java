@@ -76,6 +76,9 @@ public enum AzureRegion {
   }
 
   public static AzureRegion fromString(String region) {
-    return Arrays.stream(values()).filter(azureRegion -> azureRegion.name.equals(region)).findFirst().orElse(null);
+    return Arrays.stream(values())
+        .filter(r -> r.name.equalsIgnoreCase(region))
+        .findFirst()
+        .orElse(null);
   }
 }

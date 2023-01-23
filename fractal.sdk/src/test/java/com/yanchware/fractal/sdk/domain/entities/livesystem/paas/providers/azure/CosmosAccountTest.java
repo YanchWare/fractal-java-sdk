@@ -105,6 +105,11 @@ public abstract class CosmosAccountTest<T extends AzureCosmosAccountBuilder<?,?>
     var throughput = a(Integer.class);
     var builder = getBuilder()
       .withId("a-legal-id")
+        .withBackupPolicy(AzureCosmosPeriodicModeBackupPolicy.builder()
+            .withBackupIntervalInMinutes(60)
+            .withBackupRetentionIntervalInHours(8)
+            .withBackupStorageRedundancy(BackupStorageRedundancy.GEO)
+            .build())
       .withRegion(AzureRegion.ASIA_EAST)
       .withAzureResourceGroup(
           AzureResourceGroup.builder()
