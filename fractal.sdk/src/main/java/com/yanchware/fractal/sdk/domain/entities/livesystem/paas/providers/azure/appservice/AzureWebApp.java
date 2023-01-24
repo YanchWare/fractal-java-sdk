@@ -8,6 +8,7 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.LiveSystemCompo
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureEntity;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.AzureStorageAccount;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.Getter;
 import lombok.Setter;
@@ -83,6 +84,16 @@ public class AzureWebApp extends PaaSWorkload implements AzureEntity, LiveSystem
     public AzureWebApp build() {
       component.setType(PAAS_AZURE_WEBAPP);
       return super.build();
+    }
+    
+    public AzureWebAppBuilder withRegion(AzureRegion region) {
+      component.setAzureRegion(region);
+      return builder;
+    }
+
+    public AzureWebAppBuilder withResourceGroup(AzureResourceGroup resourceGroup) {
+      component.setAzureResourceGroup(resourceGroup);
+      return builder;
     }
     
     public AzureWebAppBuilder withApplication(AzureWebAppApplication application) {

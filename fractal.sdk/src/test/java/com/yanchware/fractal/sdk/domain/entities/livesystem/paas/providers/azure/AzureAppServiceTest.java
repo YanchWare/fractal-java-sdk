@@ -1,6 +1,9 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.*;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.valueobjects.AzureAppServiceClientCertMode;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.valueobjects.AzureAppServiceRedundancyMode;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.valueobjects.AzureFtpsState;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -260,22 +263,6 @@ public class AzureAppServiceTest {
     assertTrue(webApp.getApplication().isRemoteDebuggingEnabled());
     assertThat(webApp.getApplication().getRemoteDebuggingVersion()).isEqualTo("remoteDebuggingVersion");
     assertThat(webApp.getApplication().getWebsiteTimezone()).isEqualTo("websiteTimezone");
-    
-//    assertThat(webApp.getConnectivity().getApiManagementConfigId()).isEqualTo("withApiManagementConfigId");
-//    assertThat(webApp.getConnectivity().getApiDefinitionUrl()).isEqualTo("apiDefinitionUrl");
-//    assertThat(webApp.getConnectivity().getCorsAllowedOrigins()).isEqualTo(new ArrayList<>());
-//    assertTrue(webApp.getConnectivity().isCorsAllowCredentials());
-//    assertTrue(webApp.getConnectivity().isHttp2Enabled());
-//    assertTrue(webApp.getConnectivity().isHttpLoggingEnabled());
-//    assertThat(webApp.getConnectivity().getMinimumTlsVersion()).isEqualTo(AzureTlsVersion.TLS1_1);
-//    assertTrue(webApp.getConnectivity().isRequestTracingEnabled());
-//    assertThat(webApp.getConnectivity().getTracingOptions()).isEqualTo("withTracingOptions");
-//    assertTrue(webApp.getConnectivity().isWebsocketEnabled());
-//    assertTrue(webApp.getConnectivity().isClientAffinityEnabled());
-//    assertTrue(webApp.getConnectivity().isClientCertEnabled());
-//    assertThat(webApp.getConnectivity().getClientCertExclusionPaths()).isEqualTo("withClientCertExclusionPaths");
-//    assertThat(webApp.getConnectivity().getClientCertMode()).isEqualTo(AzureAppServiceClientCertMode.REQUIRED);
-//    assertTrue(webApp.getConnectivity().isHttpsOnly());
   }
 
   @Test
@@ -360,7 +347,6 @@ public class AzureAppServiceTest {
     assertThat(webApp.getInfrastructure().getVirtualNetworkSubnetId()).isEqualTo("virtualNetworkSubnetId");
     assertTrue(webApp.getInfrastructure().isVnetContentSharedEnabled());
     assertTrue(webApp.getInfrastructure().isVnetImagePullEnabled());
-
   }
 
   private AzureWebApp.AzureWebAppBuilder generateBuilder() {

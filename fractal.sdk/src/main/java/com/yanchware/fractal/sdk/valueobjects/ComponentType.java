@@ -31,6 +31,7 @@ public enum ComponentType {
     PAAS_POSTGRESQL_DATABASE("Storage.PaaS.PostgreSqlDatabase"),
     PAAS_RELATIONAL_DATABASE("Storage.PaaS.RelationalDatabase"),
     PAAS_RELATIONAL_DBMS("Storage.PaaS.RelationalDbms"),
+    PAAS_DATA_STORAGE("Storage.PaaS.DataStorage"),
     PAAS_COSMOS_POSTGRESQL_DATABASE("Storage.PaaS.CosmosDbPostgreSqlDatabase"),
     PAAS_GRAPH_DATABASE("Storage.PaaS.GraphDatabase"),
     PAAS_GRAPH_DBMS("Storage.PaaS.GraphDbms"),
@@ -45,6 +46,7 @@ public enum ComponentType {
     PAAS_KEY_VALUE_ENTITY("Storage.PaaS.KeyValueEntity"),
     PAAS_WORKLOAD("CustomWorkloads.PaaS.Workload"),
     PAAS_AZURE_WEBAPP("CustomWorkloads.PaaS.WebApp"),
+    PAAS_AZURE_STORAGE("Storage.PaaS.StorageAccount"),
 
     SAAS_UNMANAGED_STORAGE("Storage.SaaS.Unmanaged"),
     SAAS_UNMANAGED_BROKER("Messaging.SaaS.Unmanaged");
