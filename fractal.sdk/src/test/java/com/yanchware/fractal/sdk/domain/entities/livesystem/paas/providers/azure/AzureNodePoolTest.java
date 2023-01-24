@@ -1,6 +1,5 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
 
-
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.NodeTaint;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.TaintEffect;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.aks.AzureNodePool;
@@ -88,7 +87,7 @@ public class AzureNodePoolTest {
   public void noValidationErrors_when_azureNodePoolMinimalFields() {
     var builder = AzureNodePool.builder()
         .withName("azurenode")
-        .withMachineType(AzureOsType.AzureMachineType.STANDARD_B2S);
+        .withMachineType(AzureMachineType.STANDARD_B2S);
     assertThat(builder.build().validate()).isEmpty();
   }
 
@@ -120,7 +119,7 @@ public class AzureNodePoolTest {
     return AzureNodePool.builder()
         .withName(name)
         .withDiskSizeGb(diskSizeGb)
-        .withMachineType(AzureOsType.AzureMachineType.STANDARD_B2S)
+        .withMachineType(AzureMachineType.STANDARD_B2S)
         .withInitialNodeCount(1)
         .withMaxNodeCount(3)
         .withNodeTaint(NodeTaint.builder()
