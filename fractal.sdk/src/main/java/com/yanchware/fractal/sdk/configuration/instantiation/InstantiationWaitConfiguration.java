@@ -9,7 +9,7 @@ public class InstantiationWaitConfiguration
 {
 
   /**
-   * Wait for the the instantiation, instead of terminate the execution right after the instantiation.
+   * Wait for the instantiation, instead of terminate the execution right after the instantiation.
    */
   public boolean waitForInstantiation;
 
