@@ -1,9 +1,11 @@
 
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
 
+import com.jayway.jsonpath.JsonPath;
 import com.yanchware.fractal.sdk.TestWithFixture;
 import com.yanchware.fractal.sdk.domain.entities.Component;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos.*;
+import com.yanchware.fractal.sdk.utils.TestUtils;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import com.yanchware.fractal.sdk.valueobjects.ComponentType;
 import org.assertj.core.api.InstanceOfAssertFactories;
@@ -12,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -168,6 +171,34 @@ public abstract class CosmosAccountTest<T extends AzureCosmosAccountBuilder<?, ?
 
     var component = builder.build();
 
+    assertThat(component.getType()).isEqualTo(getExpectedType());
+    assertThat(component)
+        .asInstanceOf(InstanceOfAssertFactories.type(AzureCosmosAccount.class))
+        .extracting(AzureCosmosAccount::getCosmosEntities, AzureCosmosAccount::getMaxTotalThroughput)
+        .containsExactly(List.of(entity), throughput);
+  }
+
+  @Test
+  public void typeIsAsExpected_when_BuiltWithBackupPolicyAndSingleEntity() {
+    var entity = getValidCosmosEntities().stream().findFirst().get();
+    var throughput = a(Integer.class);
+    var builder = getBuilder()
+        .withId("a-legal-id")
+        .withRegion(AzureRegion.ASIA_EAST)
+        .withMaxTotalThroughput(throughput)
+        .withBackupPolicy(AzureCosmosBackupPolicy.builder()
+            .withBackupPolicyType(AzureCosmosBackupPolicyType.PERIODIC)
+            .withBackupStorageRedundancy(BackupStorageRedundancy.GEO)
+            .withBackupIntervalInMinutes(1440)
+            .withBackupRetentionIntervalInHours(720)
+            .build())
+        .withCosmosEntity(entity);
+
+    var component = builder.build();
+
+    Map<String, Object> jsonMap = JsonPath.read(TestUtils.getJsonRepresentation(component), "$");
+
+    assertThat(jsonMap.keySet()).contains("backupPolicy");
     assertThat(component.getType()).isEqualTo(getExpectedType());
     assertThat(component)
         .asInstanceOf(InstanceOfAssertFactories.type(AzureCosmosAccount.class))
