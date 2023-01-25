@@ -1,7 +1,10 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.*;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.valueobjects.*;
+import com.yanchware.fractal.sdk.utils.SerializationUtils;
+
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -220,8 +223,34 @@ public class AzureStorageAccountTest {
     assertEquals("customDomainName", storageAccountSettings.getCustomDomainName());
     assertEquals("extendedLocationName", storageAccountSettings.getExtendedLocationName());
     assertEquals("extendedLocationType", storageAccountSettings.getExtendedLocationType());
-  }    
+  }
 
+
+  @Test
+  public void booleanWithoutValueAreNotPresent_when_serialisingTheComponent() throws JsonProcessingException {
+    var storageAccountSettings = generateBuilder()
+        .withSettings(
+            AzureStorageAccountSettings.builder()
+                .withKind(AzureStorageKind.FILE_STORAGE)
+                .build()
+        ).build();
+
+    String result = SerializationUtils.serialize(storageAccountSettings.getSettings());
+    assertEquals("{\"kind\":\"FileStorage\"}", result);
+  }
+
+  @Test
+  public void booleanWithValueArePresent_when_serialisingTheComponent() throws JsonProcessingException {
+    var storageAccountSettings = generateBuilder()
+        .withSettings(
+            AzureStorageAccountSettings.builder()
+                .withBlobEncryptionEnabled(true)
+                .build()
+        ).build();
+
+    String result = SerializationUtils.serialize(storageAccountSettings.getSettings());
+    assertEquals("{\"blobEncryptionEnabled\":true}", result);
+  }
   
   private AzureStorageAccount.AzureStorageAccountBuilder generateBuilder() {
     return builder().withId("storage-account");
