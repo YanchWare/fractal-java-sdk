@@ -9,8 +9,7 @@ import java.util.HashMap;
 
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.AzureStorageAccount.builder;
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class AzureStorageAccountTest {
 
@@ -81,7 +80,6 @@ public class AzureStorageAccountTest {
           .withDefaultToOAuthAuthentication(true)
           .withMinimumTlsVersion(AzureTlsVersion.TLS1_2)
           .withEnableHttpsTrafficOnly(true)
-          .withEnableNfsV3(true)
           .withIsLocalUserEnabled(true)
           .withIsSftpEnabled(true)
           .withKeyPolicyExpirationInDays(10)
@@ -101,18 +99,18 @@ public class AzureStorageAccountTest {
         .build()
         .getConnectivity();
 
-      assertTrue(storageAccountConnectivity.isAllowBlobPublicAccess());
+      assertNull(storageAccountConnectivity.getEnableNfsV3());
+      assertTrue(storageAccountConnectivity.getAllowBlobPublicAccess());
       assertEquals(AzureActiveDirectoryAccountType.USER, storageAccountConnectivity.getAzureIdentityBasedAuthAzureDirectoryAccountType());
-      assertTrue(storageAccountConnectivity.isDefaultToOAuthAuthentication());
+      assertTrue(storageAccountConnectivity.getDefaultToOAuthAuthentication());
       assertEquals(AzureTlsVersion.TLS1_2, storageAccountConnectivity.getMinimumTlsVersion());
-      assertTrue(storageAccountConnectivity.isAllowBlobPublicAccess());
-      assertTrue(storageAccountConnectivity.isEnableHttpsTrafficOnly());
-      assertTrue(storageAccountConnectivity.isEnableNfsV3());
-      assertTrue(storageAccountConnectivity.isLocalUserEnabled());
+      assertTrue(storageAccountConnectivity.getAllowBlobPublicAccess());
+      assertTrue(storageAccountConnectivity.getEnableHttpsTrafficOnly());
+      assertTrue(storageAccountConnectivity.getIsLocalUserEnabled());
       assertTrue(storageAccountConnectivity.isSftpEnabled());
       assertTrue(storageAccountConnectivity.isPublishInternetEndpoints());
       assertTrue(storageAccountConnectivity.isPublishMicrosoftEndpoints());
-      assertTrue(storageAccountConnectivity.isLocalUserEnabled());
+      assertTrue(storageAccountConnectivity.getIsLocalUserEnabled());
       assertEquals(10, storageAccountConnectivity.getKeyPolicyExpirationInDays());
       assertEquals(AzureStorageBypass.NONE, storageAccountConnectivity.getNetworkRuleSetBypass());
       assertEquals(AzureStorageDefaultAction.ALLOW, storageAccountConnectivity.getNetworkRuleSetDefaultAction());
@@ -168,16 +166,16 @@ public class AzureStorageAccountTest {
       .build()
       .getSettings();
 
-      assertTrue(storageAccountSettings.isAccountImmutabilityAllowProtectedAppendWrites());
-      assertTrue(storageAccountSettings.isAccountImmutabilityEnabled());
-      assertTrue(storageAccountSettings.isAllowCrossTenantReplication());
-      assertTrue(storageAccountSettings.isAllowSharedKeyAccess());
-      assertTrue(storageAccountSettings.isBlobEncryptionEnabled());
-      assertTrue(storageAccountSettings.isFileEncryptionEnabled());
-      assertTrue(storageAccountSettings.isHnsEnabled());
-      assertTrue(storageAccountSettings.isQueueEncryptionEnabled());
-      assertTrue(storageAccountSettings.isTableEncryptionEnabled());
-      assertTrue(storageAccountSettings.isRequireInfrastructureEncryption());
+      assertTrue(storageAccountSettings.getAccountImmutabilityAllowProtectedAppendWrites());
+      assertTrue(storageAccountSettings.getAccountImmutabilityEnabled());
+      assertTrue(storageAccountSettings.getAllowCrossTenantReplication());
+      assertTrue(storageAccountSettings.getAllowSharedKeyAccess());
+      assertTrue(storageAccountSettings.getBlobEncryptionEnabled());
+      assertTrue(storageAccountSettings.getFileEncryptionEnabled());
+      assertTrue(storageAccountSettings.getIsHnsEnabled());
+      assertTrue(storageAccountSettings.getQueueEncryptionEnabled());
+      assertTrue(storageAccountSettings.getTableEncryptionEnabled());
+      assertTrue(storageAccountSettings.getRequireInfrastructureEncryption());
       assertEquals(10, storageAccountSettings.getAccountImmutabilityPeriodSinceCreationInDays());
       assertEquals(AzureStorageAllowedCopyScope.AAD, storageAccountSettings.getAllowedCopyScope());
       assertEquals(AzureStorageKeyType.ACCOUNT, storageAccountSettings.getBlobEncryptionType());
@@ -213,7 +211,7 @@ public class AzureStorageAccountTest {
       ).build()
       .getInfrastructure();
 
-    assertTrue(storageAccountSettings.isCustomDomainUseSubName());
+    assertTrue(storageAccountSettings.getCustomDomainUseSubName());
     assertEquals(new HashMap<>(), storageAccountSettings.getUserAssignedIdentities());
     assertEquals(AzureStorageAccessTier.HOT, storageAccountSettings.getAccessTier());
     assertEquals(AzureStorageSkuName.PREMIUM_LRS, storageAccountSettings.getSku());

@@ -31,11 +31,11 @@ public class AzureStorageAccountConnectivity {
   boolean isSftpEnabled;
 
   @JsonProperty(value = "isLocalUserEnabled")
-  boolean isLocalUserEnabled;
-  boolean enableNfsV3;
-  boolean enableHttpsTrafficOnly;
-  boolean defaultToOAuthAuthentication;
-  boolean allowBlobPublicAccess;
+  Boolean isLocalUserEnabled;
+  Boolean enableNfsV3;
+  Boolean enableHttpsTrafficOnly;
+  Boolean defaultToOAuthAuthentication;
+  Boolean allowBlobPublicAccess;
   AzureActiveDirectoryAccountType azureIdentityBasedAuthAzureDirectoryAccountType;
   String azureIdentityBasedAuthAzureDirectoryStorageSid;
   String azureIdentityBasedAuthAzureDirectoryDomainGuid;
