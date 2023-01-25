@@ -147,7 +147,7 @@ public abstract class CosmosAccountTest<T extends AzureCosmosAccountBuilder<?, ?
         .withCosmosEntities(entities);
 
     var component = builder.build();
-
+    
     assertThat(component.getType()).isEqualTo(getExpectedType());
     assertThat(component)
         .asInstanceOf(InstanceOfAssertFactories.type(AzureCosmosAccount.class))
