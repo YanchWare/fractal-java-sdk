@@ -121,16 +121,15 @@ public class AzureStorageAccountTest {
       assertEquals("sasPolicyExpirationAction", storageAccountConnectivity.getSasPolicyExpirationAction());
       assertEquals("sasPolicyExpirationPeriod", storageAccountConnectivity.getSasPolicyExpirationPeriod());
       assertEquals(new ArrayList<>(), storageAccountConnectivity.getNetworkRuleSetIpRules());
-
-    assertEquals("domainGuid", storageAccountConnectivity.getAzureIdentityBasedAuthAzureDirectoryDomainGuid());
-    assertEquals("domainName", storageAccountConnectivity.getAzureIdentityBasedAuthAzureDirectoryDomainName());
-    assertEquals("domainSid", storageAccountConnectivity.getAzureIdentityBasedAuthAzureDirectoryDomainSid());
-    assertEquals("forestName", storageAccountConnectivity.getAzureIdentityBasedAuthAzureDirectoryForestName());
-    assertEquals("samAccount", storageAccountConnectivity.getAzureIdentityBasedAuthAzureDirectorySamAccount());
-    assertEquals("netBiosDomainName", storageAccountConnectivity.getAzureIdentityBasedAuthAzureDirectoryNetBiosDomainName());
-    assertEquals("storageSid", storageAccountConnectivity.getAzureIdentityBasedAuthAzureDirectoryStorageSid());
-    assertEquals(AzureDefaultSharePermission.NONE, storageAccountConnectivity.getAzureIdentityBasedDefaultSharePermission());
-    assertEquals(AzureDirectoryServiceOptions.NONE, storageAccountConnectivity.getAzureIdentityBasedDirectoryServiceOptions());
+      assertEquals("domainGuid", storageAccountConnectivity.getAzureIdentityBasedAuthAzureDirectoryDomainGuid());
+      assertEquals("domainName", storageAccountConnectivity.getAzureIdentityBasedAuthAzureDirectoryDomainName());
+      assertEquals("domainSid", storageAccountConnectivity.getAzureIdentityBasedAuthAzureDirectoryDomainSid());
+      assertEquals("forestName", storageAccountConnectivity.getAzureIdentityBasedAuthAzureDirectoryForestName());
+      assertEquals("samAccount", storageAccountConnectivity.getAzureIdentityBasedAuthAzureDirectorySamAccount());
+      assertEquals("netBiosDomainName", storageAccountConnectivity.getAzureIdentityBasedAuthAzureDirectoryNetBiosDomainName());
+      assertEquals("storageSid", storageAccountConnectivity.getAzureIdentityBasedAuthAzureDirectoryStorageSid());
+      assertEquals(AzureDefaultSharePermission.NONE, storageAccountConnectivity.getAzureIdentityBasedDefaultSharePermission());
+      assertEquals(AzureDirectoryServiceOptions.NONE, storageAccountConnectivity.getAzureIdentityBasedDirectoryServiceOptions());
   }
 
   @Test

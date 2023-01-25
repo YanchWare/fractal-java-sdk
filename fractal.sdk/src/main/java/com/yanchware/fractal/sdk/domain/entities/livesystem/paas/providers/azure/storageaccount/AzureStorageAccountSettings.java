@@ -1,5 +1,6 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.valueobjects.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,6 +12,7 @@ import lombok.Setter;
 public class AzureStorageAccountSettings {
   AzureLargeFileSharesState largeFileSharesState;
   AzureStorageKind kind;
+  @JsonProperty(value = "isHnsEnabled")
   boolean isHnsEnabled;
   boolean accountImmutabilityEnabled;
   AzureAccountImmutabilityPolicyState accountImmutabilityPolicyState;
