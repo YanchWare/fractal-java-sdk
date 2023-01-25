@@ -1,5 +1,6 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.*;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.valueobjects.*;
 import lombok.Builder;
@@ -25,7 +26,11 @@ public class AzureStorageAccountConnectivity {
   List<AzureStorageIpRule> networkRuleSetIpRules;
   AzureTlsVersion minimumTlsVersion;
   int keyPolicyExpirationInDays;
+
+  @JsonProperty(value = "isSftpEnabled")
   boolean isSftpEnabled;
+
+  @JsonProperty(value = "isLocalUserEnabled")
   boolean isLocalUserEnabled;
   boolean enableNfsV3;
   boolean enableHttpsTrafficOnly;
