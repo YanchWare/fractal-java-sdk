@@ -32,4 +32,13 @@ public class AzureStorageAccountConnectivity {
   boolean defaultToOAuthAuthentication;
   boolean allowBlobPublicAccess;
   AzureActiveDirectoryAccountType azureIdentityBasedAuthAzureDirectoryAccountType;
+  String azureIdentityBasedAuthAzureDirectoryStorageSid;
+  String azureIdentityBasedAuthAzureDirectoryDomainGuid;
+  String azureIdentityBasedAuthAzureDirectoryDomainName;
+  String azureIdentityBasedAuthAzureDirectoryForestName;
+  String azureIdentityBasedAuthAzureDirectoryDomainSid;
+  String azureIdentityBasedAuthAzureDirectoryNetBiosDomainName;
+  String azureIdentityBasedAuthAzureDirectorySamAccount;
+  AzureDefaultSharePermission azureIdentityBasedDefaultSharePermission;
+  AzureDirectoryServiceOptions azureIdentityBasedDirectoryServiceOptions;
 }
