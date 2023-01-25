@@ -19,5 +19,5 @@ public class AzureStorageAccountInfrastructure {
   AzureDnsEndpointType dnsEndpointType;
   AzureStorageAccessTier accessTier;
   String customDomainName;
-  boolean customDomainUseSubName;
+  Boolean customDomainUseSubName;
 }

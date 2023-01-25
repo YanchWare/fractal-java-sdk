@@ -1,6 +1,5 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.valueobjects.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,28 +11,27 @@ import lombok.Setter;
 public class AzureStorageAccountSettings {
   AzureLargeFileSharesState largeFileSharesState;
   AzureStorageKind kind;
-  @JsonProperty(value = "isHnsEnabled")
-  boolean isHnsEnabled;
-  boolean accountImmutabilityEnabled;
+  Boolean isHnsEnabled;
+  Boolean accountImmutabilityEnabled;
   AzureAccountImmutabilityPolicyState accountImmutabilityPolicyState;
-  int accountImmutabilityPeriodSinceCreationInDays;
-  boolean accountImmutabilityAllowProtectedAppendWrites;
-  boolean fileEncryptionEnabled;
+  Integer accountImmutabilityPeriodSinceCreationInDays;
+  Boolean accountImmutabilityAllowProtectedAppendWrites;
+  Boolean fileEncryptionEnabled;
   AzureStorageKeySource fileEncryptionType;
-  boolean blobEncryptionEnabled;
+  Boolean blobEncryptionEnabled;
   AzureStorageKeyType blobEncryptionType;
-  boolean queueEncryptionEnabled;
+  Boolean queueEncryptionEnabled;
   AzureStorageKeyType queueEncryptionType;
-  boolean tableEncryptionEnabled;
+  Boolean tableEncryptionEnabled;
   AzureStorageKeyType tableEncryptionType;
   AzureStorageKeySource encryptionKeySource;
   String encryptionUserAssignedIdentity;
-  String encryptionFederatedIdentityClientId; 
-  boolean requireInfrastructureEncryption;
+  String encryptionFederatedIdentityClientId;
+  Boolean requireInfrastructureEncryption;
   String encryptionKeyVaultUri;
   String encryptionKeyName;
   String encryptionKeyVersion;
   AzureStorageAllowedCopyScope allowedCopyScope;
-  boolean allowCrossTenantReplication;
-  boolean allowSharedKeyAccess;
+  Boolean allowCrossTenantReplication;
+  Boolean allowSharedKeyAccess;
 }
