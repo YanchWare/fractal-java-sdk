@@ -110,9 +110,9 @@ public class AzureStorageAccountTest {
       assertTrue(storageAccountConnectivity.getAllowBlobPublicAccess());
       assertTrue(storageAccountConnectivity.getEnableHttpsTrafficOnly());
       assertTrue(storageAccountConnectivity.getIsLocalUserEnabled());
-      assertTrue(storageAccountConnectivity.isSftpEnabled());
-      assertTrue(storageAccountConnectivity.isPublishInternetEndpoints());
-      assertTrue(storageAccountConnectivity.isPublishMicrosoftEndpoints());
+      assertTrue(storageAccountConnectivity.getIsSftpEnabled());
+      assertTrue(storageAccountConnectivity.getPublishInternetEndpoints());
+      assertTrue(storageAccountConnectivity.getPublishMicrosoftEndpoints());
       assertTrue(storageAccountConnectivity.getIsLocalUserEnabled());
       assertEquals(10, storageAccountConnectivity.getKeyPolicyExpirationInDays());
       assertEquals(AzureStorageBypass.NONE, storageAccountConnectivity.getNetworkRuleSetBypass());
