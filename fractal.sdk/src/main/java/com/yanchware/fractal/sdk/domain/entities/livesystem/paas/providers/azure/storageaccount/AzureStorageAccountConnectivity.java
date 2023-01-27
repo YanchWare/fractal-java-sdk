@@ -15,8 +15,8 @@ public class AzureStorageAccountConnectivity {
   String sasPolicyExpirationPeriod;
   String sasPolicyExpirationAction;
   String routingChoise;
-  boolean publishInternetEndpoints;
-  boolean publishMicrosoftEndpoints;
+  Boolean publishInternetEndpoints;
+  Boolean publishMicrosoftEndpoints;
   AzureStoragePublicNetworkAccess publicNetworkAccess;
   AzureStorageDefaultAction networkRuleSetDefaultAction;
   AzureStorageBypass networkRuleSetBypass;
@@ -24,8 +24,8 @@ public class AzureStorageAccountConnectivity {
   List<AzureResourceAccessRule> networkRuleSetResourceAccessRules;
   List<AzureStorageIpRule> networkRuleSetIpRules;
   AzureTlsVersion minimumTlsVersion;
-  int keyPolicyExpirationInDays;
-  boolean isSftpEnabled;
+  Integer keyPolicyExpirationInDays;
+  Boolean isSftpEnabled;
   Boolean isLocalUserEnabled;
   Boolean enableNfsV3;
   Boolean enableHttpsTrafficOnly;
