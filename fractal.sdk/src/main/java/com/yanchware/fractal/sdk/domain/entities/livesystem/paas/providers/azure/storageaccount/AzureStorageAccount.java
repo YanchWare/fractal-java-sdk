@@ -21,7 +21,7 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_AZURE_ST
 public class AzureStorageAccount extends PaaSDataStorage implements AzureEntity, LiveSystemComponent {
 
   private final static Pattern valueValidation = Pattern.compile("^[a-z0-9]{3,24}$");
-  protected final static String ILLEGAL_NAME_TEMPLATE = "Component id '%s' is illegal. Storage account names must be between 3 and 24 characters in length and may contain numbers and lowercase letters only";
+  private final static String ILLEGAL_NAME_TEMPLATE = "Component id '%s' is illegal. Storage account names must be between 3 and 24 characters in length and may contain numbers and lowercase letters only";
   
   private AzureStorageAccountConnectivity connectivity;
   private AzureStorageAccountSettings settings;
