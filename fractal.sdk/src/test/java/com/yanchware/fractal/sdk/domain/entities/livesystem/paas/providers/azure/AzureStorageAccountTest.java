@@ -287,7 +287,7 @@ public class AzureStorageAccountTest {
   }
   
   private AzureStorageAccount.AzureStorageAccountBuilder generateBuilder() {
-    return builder().withId("storage-account");
+    return builder().withId("storageaccount");
   }
   
 }
