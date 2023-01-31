@@ -251,9 +251,43 @@ public class AzureStorageAccountTest {
     String result = SerializationUtils.serialize(storageAccountSettings.getSettings());
     assertEquals("{\"blobEncryptionEnabled\":true}", result);
   }
+
+  @Test
+  public void storageAccountBuildShouldFail_when_tooShortName() {
+    assertThatThrownBy(() -> builder().withId("a").build()).
+        isInstanceOf(IllegalArgumentException.class).
+        hasMessageContaining("Component Id is illegal");
+    assertThatThrownBy(() -> builder().withId("ac").build()).
+        isInstanceOf(IllegalArgumentException.class).
+        hasMessageContaining("Component Id is illegal");
+  }
+
+  @Test
+  public void storageAccountBuildShouldFail_when_tooLongName() {
+    assertThatThrownBy(() -> builder().withId("aaaaaaaaaaaaaaaaaaaaaaaaaa").build()).
+        isInstanceOf(IllegalArgumentException.class);
+  }
+
+  @Test
+  public void storageAccountBuildShouldFail_when_HyphensOrUnderscoreInName() {
+    assertThatThrownBy(() -> builder().withId("this-is-a-test").build()).
+        isInstanceOf(IllegalArgumentException.class);
+
+    assertThatThrownBy(() -> builder().withId("this_is_a_test").build()).
+        isInstanceOf(IllegalArgumentException.class);
+  }
+
+  @Test
+  public void storageAccountBuildShouldFail_when_UppercaseCharactersInName() {
+    assertThatThrownBy(() -> builder().withId("thisIsATest").build()).
+        isInstanceOf(IllegalArgumentException.class);
+
+    assertThatThrownBy(() -> builder().withId("Thisisatest").build()).
+        isInstanceOf(IllegalArgumentException.class);
+  }
   
   private AzureStorageAccount.AzureStorageAccountBuilder generateBuilder() {
-    return builder().withId("storage-account");
+    return builder().withId("storageaccount");
   }
   
 }

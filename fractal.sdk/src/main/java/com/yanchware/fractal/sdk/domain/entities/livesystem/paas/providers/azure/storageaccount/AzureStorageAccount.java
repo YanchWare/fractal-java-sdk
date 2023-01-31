@@ -11,6 +11,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.Collection;
+import java.util.regex.Pattern;
 
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_AZURE_STORAGE;
 
@@ -19,6 +20,9 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_AZURE_ST
 @ToString(callSuper = true)
 public class AzureStorageAccount extends PaaSDataStorage implements AzureEntity, LiveSystemComponent {
 
+  private final static Pattern valueValidation = Pattern.compile("^[a-z0-9]{3,24}$");
+  protected final static String ILLEGAL_NAME_TEMPLATE = "Component id '%s' is illegal. Storage account names must be between 3 and 24 characters in length and may contain numbers and lowercase letters only";
+  
   private AzureStorageAccountConnectivity connectivity;
   private AzureStorageAccountSettings settings;
   private AzureStorageAccountInfrastructure infrastructure;
@@ -40,6 +44,11 @@ public class AzureStorageAccount extends PaaSDataStorage implements AzureEntity,
   @Override
   public Collection<String> validate() {
     Collection<String> errors = super.validate();
+
+    if (!valueValidation.matcher(getId().getValue()).matches()) {
+      errors.add(String.format(ILLEGAL_NAME_TEMPLATE, getId().getValue()));
+    }
+    
     return errors;
   }
 
