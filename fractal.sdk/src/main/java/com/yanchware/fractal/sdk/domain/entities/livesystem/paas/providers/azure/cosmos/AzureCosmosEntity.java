@@ -5,10 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collection;
 
-public interface AzureCosmosEntity extends AzureEntity {
-  String getName();
-  void setName(String name);
-  
+public interface AzureCosmosEntity extends AzureEntity {  
   int getThroughput();
   void setThroughput(int throughput);
 

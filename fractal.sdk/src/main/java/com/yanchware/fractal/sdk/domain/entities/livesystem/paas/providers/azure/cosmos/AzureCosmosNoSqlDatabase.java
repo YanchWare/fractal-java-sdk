@@ -11,6 +11,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.Collection;
+import java.util.Map;
 
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_COSMOS_NOSQL_DATABASE;
 
@@ -30,6 +31,9 @@ public class AzureCosmosNoSqlDatabase extends PaaSDocumentDatabase implements Li
     private int maxThroughput;
     private AzureRegion azureRegion;
     private AzureResourceGroup azureResourceGroup;
+    
+    @Setter
+    private Map<String, String> tags;
 
     @Setter(AccessLevel.PRIVATE)
     private String entityName = "NoSql Database";

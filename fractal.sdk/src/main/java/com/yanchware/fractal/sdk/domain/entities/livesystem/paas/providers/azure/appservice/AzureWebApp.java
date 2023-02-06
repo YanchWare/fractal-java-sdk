@@ -8,16 +8,16 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.LiveSystemCompo
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureEntity;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.AzureStorageAccount;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
+import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidAlphanumericsHyphens;
+import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLength;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_AZURE_WEBAPP;
 
 @Getter
@@ -25,6 +25,9 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_AZURE_WE
 @ToString(callSuper = true)
 public class AzureWebApp extends PaaSWorkload implements AzureEntity, LiveSystemComponent, CustomWorkload {
 
+  private final static String NAME_NOT_VALID = "[AzureWebApp Validation] The name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen, and must be less than or equal to 60 characters";
+
+  private String name;
   private String privateSSHKeyPassphraseSecretId;
   private String privateSSHKeySecretId;
   private String sshRepositoryURI;
@@ -39,6 +42,8 @@ public class AzureWebApp extends PaaSWorkload implements AzureEntity, LiveSystem
   private AzureWebAppHosting hosting;
   private AzureWebAppConnectivity connectivity;
   private AzureWebAppInfrastructure infrastructure;
+  private Map<String, String> tags;
+  private AzureAppServicePlan appServicePlan;
 
   @Override
   public ProviderType getProvider(){
@@ -55,6 +60,15 @@ public class AzureWebApp extends PaaSWorkload implements AzureEntity, LiveSystem
     
     Collection<String> errors = super.validate();
     errors.addAll(CustomWorkload.validateCustomWorkload(this, "Azure Web App"));
+
+    if(StringUtils.isNotBlank(name)) {
+      var hasValidCharacters = isValidAlphanumericsHyphens(name);
+      var hasValidLengths = isValidStringLength(name, 3, 60);
+      if(!hasValidCharacters || !hasValidLengths) {
+        errors.add(NAME_NOT_VALID);
+      }
+    }
+    
     if(hosting != null) {
       errors.addAll(hosting.validate());  
     }
@@ -113,6 +127,30 @@ public class AzureWebApp extends PaaSWorkload implements AzureEntity, LiveSystem
 
     public AzureWebAppBuilder withInfrastructure(AzureWebAppInfrastructure infrastructure) {
       component.setInfrastructure(infrastructure);
+      return builder;
+    }
+
+    public AzureWebAppBuilder withName(String name) {
+      component.setName(name);
+      return builder;
+    }
+
+    public AzureWebAppBuilder withTags(Map<String, String> tags) {
+      component.setTags(tags);
+      return builder;
+    }
+
+    public AzureWebAppBuilder withTag(String key, String value) {
+      if (component.getTags() == null) {
+        withTags(new HashMap<>());
+      }
+
+      component.getTags().put(key, value);
+      return builder;
+    }
+    
+    public AzureWebAppBuilder withAppServicePlan (AzureAppServicePlan appServicePlan) {
+      component.setAppServicePlan(appServicePlan);
       return builder;
     }
   }

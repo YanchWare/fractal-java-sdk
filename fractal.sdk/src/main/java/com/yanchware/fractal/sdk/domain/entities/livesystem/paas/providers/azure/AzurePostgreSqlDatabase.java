@@ -1,11 +1,17 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PaaSPostgreSqlDatabase;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos.AzureCosmosAccount;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collection;
+import java.util.Map;
+
+import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidLowercaseLettersNumbersAndHyphens;
+import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLength;
 
 @Getter
 @Setter
@@ -13,7 +19,11 @@ public class AzurePostgreSqlDatabase extends PaaSPostgreSqlDatabase implements A
   public static AzurePostgreSqlDbBuilder builder() {
     return new AzurePostgreSqlDbBuilder();
   }
+  private final static String NAME_IS_BLANK = "[AzurePostgreSqlDatabase Validation] name has not been defined and it is required";
 
+  private String name;
+  
+  
   @Override
   public ProviderType getProvider() {
     return ProviderType.AZURE;
@@ -21,6 +31,7 @@ public class AzurePostgreSqlDatabase extends PaaSPostgreSqlDatabase implements A
 
   private AzureRegion azureRegion;
   private AzureResourceGroup azureResourceGroup;
+  private Map<String, String> tags;
 
   public static class AzurePostgreSqlDbBuilder extends PaaSPostgreSqlDatabase.Builder<AzurePostgreSqlDatabase, AzurePostgreSqlDatabase.AzurePostgreSqlDbBuilder> {
 
@@ -37,7 +48,13 @@ public class AzurePostgreSqlDatabase extends PaaSPostgreSqlDatabase implements A
 
   @Override
   public Collection<String> validate() {
-    return super.validate();
+    Collection<String> errors = super.validate();
+
+    if(StringUtils.isBlank(name)) {
+        errors.add(NAME_IS_BLANK);
+    }
+
+    return errors;
   }
 
 }

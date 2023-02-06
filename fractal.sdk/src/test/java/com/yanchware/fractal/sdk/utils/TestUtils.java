@@ -102,7 +102,9 @@ public class TestUtils {
         .withKubernetesVersion("1.1.1")
         .withActiveDirectoryProfile(AzureActiveDirectoryProfile.builder()
             .withAdminGroupObjectIDs(List.of(UUID.randomUUID().toString()))
-            .build());
+            .build())
+        .withTag("tag1", "tag1Value")
+        .withTag("tag2", "tag2Value");
   }
 
   public static GoogleKubernetesEngineBuilder getGkeBuilder() {
@@ -243,8 +245,16 @@ public class TestUtils {
   }
 
   public static AzurePostgreSqlDbms getAzurePostgresExample() {
+    var postgreSqlDatabase = AzurePostgreSqlDatabase.builder()
+        .withId("db-1")
+        .withDisplayName("db-1")
+        .withName("db")
+        .withSchema("test")
+        .build();
+    
     return AzurePostgreSqlDbms.builder()
         .withId("dbpg")
+        .withName("db-name")
         .withDescription("PostgreSQL")
         .withDisplayName("PostgreSQL")
         .withRegion(EUROPE_WEST)
@@ -253,7 +263,7 @@ public class TestUtils {
         .withStorageAutoGrow(ENABLED)
         .withStorageMB(5 * 1024)
         .withBackupRetentionDays(12)
-        .withDatabase(AzurePostgreSqlDatabase.builder().withId("db-1").withDisplayName("db-1").withName("db").build())
+        .withDatabase(postgreSqlDatabase)
         .withDatabase(getAzurePostgresDbExample())
         .build();
   }

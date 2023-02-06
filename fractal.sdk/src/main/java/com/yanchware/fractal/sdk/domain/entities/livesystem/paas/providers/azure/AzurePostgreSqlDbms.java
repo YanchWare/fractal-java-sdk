@@ -2,16 +2,20 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PaaSPostgreSqlDbms;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.valueobjects.AzureSkuName;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos.AzureCosmosCassandraCluster;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import com.yanchware.fractal.sdk.utils.CollectionUtils;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+
+import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidAlphanumericsUnderscoresHyphens;
+import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidLowercaseLettersNumbersAndHyphens;
+import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLength;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
@@ -23,6 +27,8 @@ public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms implements AzureEnti
   private final static String INVALID_STORAGE_MB = "[AzurePostgreSQL Validation] Storage MB is less than minimum requirement of 5 GB";
 
   private final static String INVALID_BACKUP_RETENTION_DAYS = "[AzurePostgreSQL Validation] Backup Retention Days must be between 7 and 35 days";
+
+  private final static String NAME_NOT_VALID = "[AzurePostgreSQL Validation] The name must only contain lowercase letters, numbers, and hyphens. It must not start or end in a hyphen and must be between 3 and 63 characters long";
 
   private String rootUser;
 
@@ -38,6 +44,12 @@ public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms implements AzureEnti
   private Integer storageMB;
 
   private Integer backupRetentionDays;
+
+  @Setter
+  private Map<String, String> tags;
+
+  @Setter
+  private String name;
 
   public static AzurePostgreSqlBuilder builder() {
     return new AzurePostgreSqlBuilder();
@@ -111,11 +123,38 @@ public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms implements AzureEnti
       component.setBackupRetentionDays(backupRetentionDays);
       return builder;
     }
+
+    public AzurePostgreSqlBuilder withName(String name) {
+      component.setName(name);
+      return builder;
+    }
+
+    public AzurePostgreSqlBuilder withTags(Map<String, String> tags) {
+      component.setTags(tags);
+      return builder;
+    }
+
+    public AzurePostgreSqlBuilder withTag(String key, String value) {
+      if (component.getTags() == null) {
+        withTags(new HashMap<>());
+      }
+
+      component.getTags().put(key, value);
+      return builder;
+    }
   }
 
   @Override
   public Collection<String> validate() {
     Collection<String> errors = super.validate();
+
+    if (StringUtils.isNotBlank(name)) {
+      var hasValidCharacters = isValidLowercaseLettersNumbersAndHyphens(name);
+      var hasValidLengths = isValidStringLength(name, 3, 63);
+      if (!hasValidCharacters || !hasValidLengths) {
+        errors.add(NAME_NOT_VALID);
+      }
+    }
 
     if (azureRegion == null && azureResourceGroup == null) {
       errors.add(REGION_IS_NULL);
@@ -130,8 +169,8 @@ public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms implements AzureEnti
     }
 
     getDatabases().stream()
-      .map(x -> AzureEntity.validateAzureEntity((AzureEntity) x, "PostgreSql Database"))
-      .forEach(errors::addAll);
+        .map(x -> AzureEntity.validateAzureEntity((AzureEntity) x, "PostgreSql Database"))
+        .forEach(errors::addAll);
 
 
     return errors;

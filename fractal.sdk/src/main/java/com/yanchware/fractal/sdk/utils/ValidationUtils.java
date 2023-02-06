@@ -22,4 +22,9 @@ public class ValidationUtils {
       errors.add(errorMessage);
     }
   }
+
+  public static boolean isValidStringLength(String input, Integer minLength, Integer maxLength) {
+    var inputLengths = input.length();
+    return inputLengths >= minLength && inputLengths <= maxLength;
+  }
 }

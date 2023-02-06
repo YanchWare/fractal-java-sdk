@@ -3,16 +3,22 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.LiveSystemComponent;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PaaSDataStorage;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureEntity;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzurePostgreSqlDbms;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
+import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidLowercaseLettersAndNumbers;
+import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLength;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_AZURE_STORAGE;
 
 @Getter
@@ -22,16 +28,21 @@ public class AzureStorageAccount extends PaaSDataStorage implements AzureEntity,
 
   private final static Pattern valueValidation = Pattern.compile("^[a-z0-9]{3,24}$");
   private final static String ILLEGAL_NAME_TEMPLATE = "Component id '%s' is illegal. Storage account names must be between 3 and 24 characters in length and may contain numbers and lowercase letters only";
-  
+  private final static String NAME_NOT_VALID = "[AzureStorageAccount Validation] The name can contain only lowercase letters and numbers. Name must be between 3 and 24 characters.";
+
+
   private AzureStorageAccountConnectivity connectivity;
   private AzureStorageAccountSettings settings;
   private AzureStorageAccountInfrastructure infrastructure;
   private AzureStorageAccountBackup backup;
   private AzureRegion azureRegion;
   private AzureResourceGroup azureResourceGroup;
-  
-  protected AzureStorageAccount() {}
-  
+  private Map<String, String> tags;
+  private String name;
+
+  protected AzureStorageAccount() {
+  }
+
   @Override
   public ProviderType getProvider() {
     return ProviderType.AZURE;
@@ -48,7 +59,15 @@ public class AzureStorageAccount extends PaaSDataStorage implements AzureEntity,
     if (!valueValidation.matcher(getId().getValue()).matches()) {
       errors.add(String.format(ILLEGAL_NAME_TEMPLATE, getId().getValue()));
     }
-    
+
+    if (StringUtils.isNotBlank(name)) {
+      var hasValidCharacters = isValidLowercaseLettersAndNumbers(name);
+      var hasValidLengths = isValidStringLength(name, 3, 60);
+      if (!hasValidCharacters || !hasValidLengths) {
+        errors.add(NAME_NOT_VALID);
+      }
+    }
+
     return errors;
   }
 
@@ -79,7 +98,7 @@ public class AzureStorageAccount extends PaaSDataStorage implements AzureEntity,
       component.setAzureResourceGroup(resourceGroup);
       return builder;
     }
-    
+
     public AzureStorageAccountBuilder withBackup(AzureStorageAccountBackup backup) {
       component.setBackup(backup);
       return builder;
@@ -97,6 +116,25 @@ public class AzureStorageAccount extends PaaSDataStorage implements AzureEntity,
 
     public AzureStorageAccountBuilder withSettings(AzureStorageAccountSettings settings) {
       component.setSettings(settings);
+      return builder;
+    }
+
+    public AzureStorageAccountBuilder withName(String name) {
+      component.setName(name);
+      return builder;
+    }
+
+    public AzureStorageAccountBuilder withTags(Map<String, String> tags) {
+      component.setTags(tags);
+      return builder;
+    }
+
+    public AzureStorageAccountBuilder withTag(String key, String value) {
+      if (component.getTags() == null) {
+        withTags(new HashMap<>());
+      }
+
+      component.getTags().put(key, value);
       return builder;
     }
 
