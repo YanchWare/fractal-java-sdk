@@ -18,18 +18,10 @@ import io.github.resilience4j.retry.RetryRegistry;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
-import java.security.GeneralSecurityException;
-import java.security.SecureRandom;
-import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.yanchware.fractal.sdk.configuration.Constants.TEST_ENVIRONMENT;
 
 @Slf4j
 public class Automaton {

@@ -8,10 +8,14 @@ import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.Prov
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
+import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidLowercaseLettersNumbersAndHyphens;
+import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLength;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_COSMOS_ACCOUNT;
 
 @Getter
@@ -21,10 +25,15 @@ public class AzureCosmosPostgreSqlDbms extends PaaSRelationalDbms implements Liv
 
   public static final String TYPE = PAAS_COSMOS_ACCOUNT.getId();
 
+  private final static String NAME_NOT_VALID = "[AzureCosmosPostgreSqlDbms Validation] The name must only contains lowercase letters, numbers, and hyphens. The name must not start or end in a hyphen and must be between 3 and 40 characters long";
+
+
+  private String name;
   private int maxTotalThroughput;
   private String publicNetworkAccess;
   private AzureRegion azureRegion;
   private AzureResourceGroup azureResourceGroup;
+  private Map<String, String> tags;
 
   @Override
   public ProviderType getProvider() {
@@ -58,6 +67,15 @@ public class AzureCosmosPostgreSqlDbms extends PaaSRelationalDbms implements Liv
   public Collection<String> validate() {
     Collection<String> errors = super.validate();
     errors.addAll(AzureCosmosAccount.validateCosmosAccount(this, "PostgreSql DBMS"));
+
+    if(StringUtils.isNotBlank(name)) {
+      var hasValidCharacters = isValidLowercaseLettersNumbersAndHyphens(name);
+      var hasValidLengths = isValidStringLength(name, 3, 40);
+      if(!hasValidCharacters || !hasValidLengths) {
+        errors.add(NAME_NOT_VALID);
+      }
+    }
+    
     return errors;
   }
 

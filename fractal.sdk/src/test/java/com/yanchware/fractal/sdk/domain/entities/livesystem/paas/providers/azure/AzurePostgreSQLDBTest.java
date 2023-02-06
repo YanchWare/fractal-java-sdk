@@ -11,19 +11,19 @@ class AzurePostgreSQLDBTest {
     @Test
     public void validationError_when_dbWithNullName() {
         var db = AzurePostgreSqlDatabase.builder();
-        assertThatThrownBy(db::build).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("PostgreSQLDB name has not been defined and it is required");
+        assertThatThrownBy(db::build).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("[AzurePostgreSqlDatabase Validation] name has not been defined and it is required");
     }
 
     @Test
     public void validationError_when_dbWithEmptyName() {
         var db = AzurePostgreSqlDatabase.builder().withName("");
-        assertThatThrownBy(db::build).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("PostgreSQLDB name has not been defined and it is required");
+        assertThatThrownBy(db::build).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("[AzurePostgreSqlDatabase Validation] name has not been defined and it is required");
     }
 
     @Test
     public void validationError_when_dbWithBlankName() {
         var db = AzurePostgreSqlDatabase.builder().withName("   ");
-        assertThatThrownBy(db::build).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("PostgreSQLDB name has not been defined and it is required");
+        assertThatThrownBy(db::build).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("[AzurePostgreSqlDatabase Validation] name has not been defined and it is required");
     }
 
     @Test

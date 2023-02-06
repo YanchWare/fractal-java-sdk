@@ -1,7 +1,7 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp;
 
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PodManagedIdentity;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PriorityClass;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PodManagedIdentity;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;

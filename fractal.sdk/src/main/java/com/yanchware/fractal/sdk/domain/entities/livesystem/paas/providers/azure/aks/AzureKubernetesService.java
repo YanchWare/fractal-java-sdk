@@ -10,13 +10,14 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
+import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidAlphanumericsUnderscoresHyphens;
 import static com.yanchware.fractal.sdk.utils.ValidationUtils.isPresentAndValidIpRange;
+import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLength;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
@@ -26,6 +27,7 @@ public class AzureKubernetesService extends KubernetesCluster implements AzureEn
   private final static String REGION_IS_NULL = "[AzureKubernetesService Validation] Region is not specified and it is required";
   private final static String VNET_ADDRESS_SPACE_RANGE_NOT_VALID = "[KubernetesCluster Validation] VNet Address Space IP Range does not contain a valid ip with mask";
   private final static String VNET_SUBNET_ADDRESS_IP_RANGE_NOT_VALID = "[KubernetesCluster Validation] VNet Subnet Address IP Range does not contain a valid ip with mask";
+  private final static String NAME_NOT_VALID = "[KubernetesCluster Validation] The name can contain only letters, numbers, underscores, and hyphens. The name must start and end with a letter or number and must be between 1 and 63 characters long";
   private String vnetAddressSpaceIpRange;
   private String vnetSubnetAddressIpRange;
   @Setter
@@ -40,6 +42,12 @@ public class AzureKubernetesService extends KubernetesCluster implements AzureEn
   private Collection<RoleAssignment> roles;
   private AzureActiveDirectoryProfile azureActiveDirectoryProfile;
   private String kubernetesVersion;
+
+  @Setter
+  private Map<String, String> tags;
+
+  @Setter
+  private String name;
 
   protected AzureKubernetesService() {
     nodePools = new ArrayList<>();
@@ -152,6 +160,25 @@ public class AzureKubernetesService extends KubernetesCluster implements AzureEn
       component.getRoles().addAll(roles);
       return builder;
     }
+
+    public AzureKubernetesServiceBuilder withName(String name) {
+      component.setName(name);
+      return builder;
+    }
+
+    public AzureKubernetesServiceBuilder withTags(Map<String, String> tags) {
+      component.setTags(tags);
+      return builder;
+    }
+
+    public AzureKubernetesServiceBuilder withTag(String key, String value) {
+      if (component.getTags() == null) {
+        withTags(new HashMap<>());
+      }
+      
+      component.getTags().put(key, value);
+      return builder;
+    }
     
     public AzureKubernetesServiceBuilder withActiveDirectoryProfile(AzureActiveDirectoryProfile aadProfile) {
       component.setAzureActiveDirectoryProfile(aadProfile);
@@ -166,9 +193,18 @@ public class AzureKubernetesService extends KubernetesCluster implements AzureEn
 
   @Override
   public Collection<String> validate() {
+
     Collection<String> errors = super.validate();
     errors.addAll(AzureEntity.validateAzureEntity(this, "Kubernetes Service"));
 
+    if(StringUtils.isNotBlank(name)) {
+      var isAlphaNumerics = isValidAlphanumericsUnderscoresHyphens(name);
+      var hasValidLengths = isValidStringLength(name, 1, 63);
+      if(!isAlphaNumerics || !hasValidLengths) {
+        errors.add(NAME_NOT_VALID);
+      }
+    }
+    
     if (azureRegion == null) {
       errors.add(REGION_IS_NULL);
     }

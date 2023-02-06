@@ -2,8 +2,8 @@ package com.yanchware.fractal.sdk.services.contracts.blueprintcontract.dtos;
 
 import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.*;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSContainerPlatform;
-import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSRelationalDbms;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSRelationalDatabase;
+import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSRelationalDbms;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.*;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.KubernetesCluster;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PaaSPostgreSqlDatabase;
@@ -258,7 +258,8 @@ public class BlueprintComponentDtoTest {
             aks.getOutboundIps(),
             aks.getAddonProfiles(),
             aks.getRoles(),
-            aks.getKubernetesVersion()
+            aks.getKubernetesVersion(),
+            aks.getTags()
         ));
   }
 
@@ -306,7 +307,8 @@ public class BlueprintComponentDtoTest {
               apg.getSkuName().getId(),
               apg.getStorageAutoGrow().getId(),
               apg.getStorageMB(),
-              apg.getBackupRetentionDays()
+              apg.getBackupRetentionDays(),
+              apg.getName()
           );
       softly.assertThat(azurePgBlueprintCompDto.getDependencies()).as("Component Dependencies").isEmpty();
       softly.assertThat(azurePgBlueprintCompDto.getLinks()).as("Component Links").isEmpty();
@@ -321,6 +323,7 @@ public class BlueprintComponentDtoTest {
     assertSoftly(softly -> {
       softly.assertThat(azurePgDbBlueprintCompDto.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(
         db1.getName(),
+        db1.getSchema(),
         ((AzureEntity)db1).getAzureRegion().toString());
       softly.assertThat(azurePgDbBlueprintCompDto.getDependencies()).as("Component Dependencies").containsExactly(apg.getId().getValue());
       softly.assertThat(azurePgDbBlueprintCompDto.getLinks()).as("Component Links").isEmpty();

@@ -7,6 +7,7 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.AzureWebApp.builder;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_AZURE_WEBAPP;
@@ -43,7 +44,7 @@ public class AzureAppServiceTest {
         .withBranchName("branch-name")
         .withHosting(
             AzureWebAppHosting.builder().withDotnetVersion("DOTNET:***"
-        ).build());
+            ).build());
     assertThat(builder.build().getType()).isEqualTo(PAAS_AZURE_WEBAPP);
     assertThatCode(builder::build).doesNotThrowAnyException();
   }
@@ -349,6 +350,46 @@ public class AzureAppServiceTest {
     assertTrue(webApp.getInfrastructure().isVnetImagePullEnabled());
   }
 
+  @Test
+  public void returns_without_errors_when_appServiceBuiltWithProperAppServicePlan() {
+    var appServicePlanName = "name-test";
+    var selectedRegion = AzureRegion.US_EAST;
+    var selectedOperatingSystem = AzureOsType.LINUX;
+    var selectedPricingPlan = AzurePricingPlan.BASIC_B1;
+    var tags = Map.of("tagKey", "tagValue");
+
+
+    var resourceGroup = AzureResourceGroup.builder()
+        .withName("new-resource-group")
+        .withRegion(selectedRegion)
+        .build();
+
+    var appServicePlan = AzureAppServicePlan.builder()
+        .withName(appServicePlanName)
+        .withAzureResourceGroup(resourceGroup)
+        .withAzureRegion(selectedRegion)
+        .withOperatingSystem(selectedOperatingSystem)
+        .withPricingPlan(selectedPricingPlan)
+        .withZoneRedundancyEnabled()
+        .withTags(tags)
+        .build();
+
+    var webApp = generateSampleBuilder()
+        .withAppServicePlan(appServicePlan)
+        .withHosting(AzureWebAppHosting.builder()
+            .withJavaVersion("java version")
+            .build())
+        .withTags(tags)
+        .build();
+
+    assertThat(appServicePlan.getName()).isEqualTo(appServicePlanName);
+    assertThat(appServicePlan.getTags().size()).isEqualTo(1);
+    assertThat(appServicePlan.getTags()).isEqualTo(tags);
+    assertThat(webApp.getAppServicePlan()).isEqualTo(appServicePlan);
+    assertThat(webApp.getTags().size()).isEqualTo(1);
+    assertThat(webApp.getTags()).isEqualTo(tags);
+  }
+
   private AzureWebApp.AzureWebAppBuilder generateBuilder() {
     return builder().withId("webapp");
   }
@@ -362,5 +403,5 @@ public class AzureAppServiceTest {
         .withBranchName("env/test")
         .withSecretPasswordKey("***");
   }
-  
+
 }

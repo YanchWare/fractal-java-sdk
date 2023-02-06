@@ -11,6 +11,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.Collection;
+import java.util.Map;
 
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_COSMOS_MONGO_DATABASE;
 
@@ -33,6 +34,8 @@ public class AzureCosmosMongoDatabase extends PaaSDocumentDatabase implements Li
 
     @Setter(AccessLevel.PRIVATE)
     private String entityName = "Mongo Database";
+    
+    private Map<String, String> tags;
 
 
     @Override

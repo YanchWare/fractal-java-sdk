@@ -32,11 +32,11 @@ import java.util.UUID;
 import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PreemptionPolicy.NEVER;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PreemptionPolicy.PREEMPT_LOWER_PRIORITY;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureMachineType.STANDARD_B2S;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureOsType.LINUX;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion.EUROPE_WEST;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.valueobjects.AzureSkuName.B_GEN5_1;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureStorageAutoGrow.ENABLED;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureMachineType.STANDARD_B2S;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.valueobjects.AzureSkuName.B_GEN5_1;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpMachine.E2_STANDARD2;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpRegion.EU_WEST1;
 import static java.util.stream.Collectors.toSet;
@@ -102,7 +102,9 @@ public class TestUtils {
         .withKubernetesVersion("1.1.1")
         .withActiveDirectoryProfile(AzureActiveDirectoryProfile.builder()
             .withAdminGroupObjectIDs(List.of(UUID.randomUUID().toString()))
-            .build());
+            .build())
+        .withTag("tag1", "tag1Value")
+        .withTag("tag2", "tag2Value");
   }
 
   public static GoogleKubernetesEngineBuilder getGkeBuilder() {
@@ -243,8 +245,16 @@ public class TestUtils {
   }
 
   public static AzurePostgreSqlDbms getAzurePostgresExample() {
+    var postgreSqlDatabase = AzurePostgreSqlDatabase.builder()
+        .withId("db-1")
+        .withDisplayName("db-1")
+        .withName("db")
+        .withSchema("test")
+        .build();
+    
     return AzurePostgreSqlDbms.builder()
         .withId("dbpg")
+        .withName("db-name")
         .withDescription("PostgreSQL")
         .withDisplayName("PostgreSQL")
         .withRegion(EUROPE_WEST)
@@ -253,7 +263,7 @@ public class TestUtils {
         .withStorageAutoGrow(ENABLED)
         .withStorageMB(5 * 1024)
         .withBackupRetentionDays(12)
-        .withDatabase(AzurePostgreSqlDatabase.builder().withId("db-1").withDisplayName("db-1").withName("db").build())
+        .withDatabase(postgreSqlDatabase)
         .withDatabase(getAzurePostgresDbExample())
         .build();
   }

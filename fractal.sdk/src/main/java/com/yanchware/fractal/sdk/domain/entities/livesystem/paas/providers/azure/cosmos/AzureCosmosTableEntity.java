@@ -11,6 +11,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.Collection;
+import java.util.Map;
 
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_COSMOS_TABLE;
 
@@ -31,6 +32,7 @@ public class AzureCosmosTableEntity extends PaaSRelationalDatabase implements Li
     private int maxThroughput;
     private AzureRegion azureRegion;
     private AzureResourceGroup azureResourceGroup;
+    private Map<String, String> tags;
 
     @Setter(AccessLevel.PRIVATE)
     private String entityName = "Table Entity";

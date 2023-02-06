@@ -3,7 +3,6 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos.AzureCosmosTableDbms;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos.AzureCosmosTableEntity;
-import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import com.yanchware.fractal.sdk.valueobjects.ComponentType;
 
 import java.util.Collection;

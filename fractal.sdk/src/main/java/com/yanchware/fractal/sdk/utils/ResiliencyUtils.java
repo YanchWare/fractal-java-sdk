@@ -11,7 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import static com.yanchware.fractal.sdk.utils.HttpUtils.*;
+
+import static com.yanchware.fractal.sdk.utils.HttpUtils.ensureAcceptableResponse;
 import static com.yanchware.fractal.sdk.utils.SerializationUtils.deserialize;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
