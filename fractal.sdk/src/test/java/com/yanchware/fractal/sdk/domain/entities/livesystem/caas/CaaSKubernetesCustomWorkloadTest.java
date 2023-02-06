@@ -2,7 +2,8 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
 import org.junit.jupiter.api.Test;
 
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.CaaSKubernetesWorkload.*;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.CaaSKubernetesWorkload.KubernetesWorkloadBuilder;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.CaaSKubernetesWorkload.builder;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.CAAS_K8S_WORKLOAD;
 import static org.assertj.core.api.Assertions.*;
 

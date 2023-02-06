@@ -2,7 +2,6 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 
 import com.yanchware.fractal.sdk.domain.entities.Validatable;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.*;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.aks.AzureActiveDirectoryProfile;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,32 +18,21 @@ import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLengt
  * testing environment you can share a plan across multiple apps.
  */
 @Getter
-@Setter
+@Setter(AccessLevel.PRIVATE)
 public class AzureAppServicePlan implements AzureEntity, Validatable {
 
   private final static String NAME_NOT_VALID = "[AzureAppServicePlan Validation] The name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen, and must be less than or equal to 40 characters";
 
+  @Setter
   private String name;
-  
-  /**
-   * A resource group is a collection of resources that share the same lifecycle, permissions, and policies.
-   */
+  @Setter
   private AzureResourceGroup azureResourceGroup;
+  @Setter
   private AzureRegion azureRegion;
   private AzureOsType operatingSystem;
   private AzurePricingPlan pricingPlan;
-
-  /**
-   * An App Service plan can be deployed as a zone redundant service in the regions that support it. 
-   * This is a deployment time only decision. You can't make an App Service plan zone redundant after 
-   * it has been deployed
-   */
-  private Boolean enableZoneRedundancy;
-
-  /**
-   * Tags are name/value pairs that enable you to categorize resources and view consolidated billing by 
-   * applying the same tag to multiple resources and resource groups.
-   */
+  private Boolean zoneRedundancyEnabled;
+  @Setter
   private Map<String, String> tags;
 
   public static AzureAppServicePlanBuilder builder() {
@@ -74,6 +62,9 @@ public class AzureAppServicePlan implements AzureEntity, Validatable {
       return builder;
     }
 
+    /**
+     * A resource group is a collection of resources that share the same lifecycle, permissions, and policies.
+     */
     public AzureAppServicePlanBuilder withAzureResourceGroup(AzureResourceGroup resourceGroup) {
       appServicePlan.setAzureResourceGroup(resourceGroup);
       return builder;
@@ -94,16 +85,29 @@ public class AzureAppServicePlan implements AzureEntity, Validatable {
       return builder;
     }
 
-    public AzureAppServicePlanBuilder enableZoneRedundancy() {
-      appServicePlan.setEnableZoneRedundancy(true);
+    /**
+     * An App Service plan can be deployed as a zone redundant service in the regions that support it. 
+     * This is a deployment time only decision. You can't make an App Service plan zone redundant after 
+     * it has been deployed
+     */
+    public AzureAppServicePlanBuilder withZoneRedundancyEnabled() {
+      appServicePlan.setZoneRedundancyEnabled(true);
       return builder;
     }
 
+    /**
+     * Tags are name/value pairs that enable you to categorize resources and view consolidated billing by 
+     * applying the same tag to multiple resources and resource groups.
+     */
     public AzureAppServicePlanBuilder withTags(Map<String, String> tags) {
       appServicePlan.setTags(tags);
       return builder;
     }
 
+    /**
+     * Tag is name/value pairs that enable you to categorize resources and view consolidated billing by 
+     * applying the same tag to multiple resources and resource groups.
+     */
     public AzureAppServicePlanBuilder withTag(String key, String value) {
       if (appServicePlan.getTags() == null) {
         withTags(new HashMap<>());

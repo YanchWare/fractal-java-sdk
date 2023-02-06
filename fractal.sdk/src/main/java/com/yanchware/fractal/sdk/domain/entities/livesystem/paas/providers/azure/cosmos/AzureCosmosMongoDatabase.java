@@ -34,8 +34,7 @@ public class AzureCosmosMongoDatabase extends PaaSDocumentDatabase implements Li
 
     @Setter(AccessLevel.PRIVATE)
     private String entityName = "Mongo Database";
-
-    @Setter
+    
     private Map<String, String> tags;
 
 

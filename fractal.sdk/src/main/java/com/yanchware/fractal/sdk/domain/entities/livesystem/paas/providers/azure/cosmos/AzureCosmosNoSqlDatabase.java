@@ -31,8 +31,6 @@ public class AzureCosmosNoSqlDatabase extends PaaSDocumentDatabase implements Li
     private int maxThroughput;
     private AzureRegion azureRegion;
     private AzureResourceGroup azureResourceGroup;
-    
-    @Setter
     private Map<String, String> tags;
 
     @Setter(AccessLevel.PRIVATE)

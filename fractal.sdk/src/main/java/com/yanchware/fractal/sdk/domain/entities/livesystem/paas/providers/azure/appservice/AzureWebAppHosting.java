@@ -2,7 +2,6 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.yanchware.fractal.sdk.domain.entities.Validatable;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

@@ -370,7 +370,7 @@ public class AzureAppServiceTest {
         .withAzureRegion(selectedRegion)
         .withOperatingSystem(selectedOperatingSystem)
         .withPricingPlan(selectedPricingPlan)
-        .enableZoneRedundancy()
+        .withZoneRedundancyEnabled()
         .withTags(tags)
         .build();
 

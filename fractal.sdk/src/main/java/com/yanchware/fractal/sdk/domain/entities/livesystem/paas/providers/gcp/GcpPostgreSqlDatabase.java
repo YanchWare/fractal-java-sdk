@@ -4,7 +4,7 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PaaSPostgreSqlD
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 
 public class GcpPostgreSqlDatabase extends PaaSPostgreSqlDatabase {
-  private final static String SCHEMA_IS_BLANK = "PostgreSQLDB schema defined was either empty or blank and it is required";
+  private final static String SCHEMA_IS_BLANK = "[GcpPostgreSqlDatabase ] schema defined was either empty or blank and it is required";
 
   private String name;
   

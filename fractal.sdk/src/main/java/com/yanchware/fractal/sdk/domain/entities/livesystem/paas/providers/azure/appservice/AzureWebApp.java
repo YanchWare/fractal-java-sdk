@@ -25,7 +25,7 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_AZURE_WE
 @ToString(callSuper = true)
 public class AzureWebApp extends PaaSWorkload implements AzureEntity, LiveSystemComponent, CustomWorkload {
 
-  private final static String NAME_NOT_VALID = "[AzureWebApp Validation] The name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen, and must be less than or equal to 60 characters";
+  private final static String NAME_NOT_VALID = "[AzureWebApp Validation] The name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen, and must be between 2 and 60 characters";
 
   private String name;
   private String privateSSHKeyPassphraseSecretId;
@@ -56,14 +56,14 @@ public class AzureWebApp extends PaaSWorkload implements AzureEntity, LiveSystem
 
   @Override
   public Collection<String> validate() {
-    final var NO_HOSTING_DEFINED = "[hosting Validation] Hosting has not been defined and it's mandatory";
+    final var NO_HOSTING_DEFINED = "[AzureWebApp Validation] Hosting has not been defined and it's mandatory";
     
     Collection<String> errors = super.validate();
     errors.addAll(CustomWorkload.validateCustomWorkload(this, "Azure Web App"));
 
     if(StringUtils.isNotBlank(name)) {
       var hasValidCharacters = isValidAlphanumericsHyphens(name);
-      var hasValidLengths = isValidStringLength(name, 3, 60);
+      var hasValidLengths = isValidStringLength(name, 2, 60);
       if(!hasValidCharacters || !hasValidLengths) {
         errors.add(NAME_NOT_VALID);
       }

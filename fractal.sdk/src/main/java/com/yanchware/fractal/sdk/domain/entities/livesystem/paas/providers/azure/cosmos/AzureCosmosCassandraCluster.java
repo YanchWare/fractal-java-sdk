@@ -4,7 +4,6 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PaaSCassandra;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureEntity;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.aks.AzureKubernetesService;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -37,13 +36,10 @@ public class AzureCosmosCassandraCluster extends PaaSCassandra implements AzureE
   private AzureRegion azureRegion;
   @Setter
   private AzureResourceGroup azureResourceGroup;
-
   @Setter
   private String name;
-
   @Setter
   private Map<String, String> tags;
-
 
   protected AzureCosmosCassandraCluster() {
     useCassandraAuthentication = true;

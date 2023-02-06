@@ -2,8 +2,8 @@ package com.yanchware.fractal.sdk.services.contracts.blueprintcontract.dtos;
 
 import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.*;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSContainerPlatform;
-import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSRelationalDbms;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSRelationalDatabase;
+import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSRelationalDbms;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.*;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.KubernetesCluster;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PaaSPostgreSqlDatabase;
