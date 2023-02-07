@@ -7,6 +7,7 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.AzureWebApp.builder;
@@ -237,11 +238,11 @@ public class AzureAppServiceTest {
             .withJavaVersion("java version")
             .build())
         .withApplication(AzureWebAppApplication.builder()
-            .withAppSettings(new ArrayList<>())
+            .withAppSettings(new HashMap<>())
             .withAlwaysOn(true)
             .withAppCommandLine("appCommandLine")
             .withAutoSwapSlotName("autoSwapSlotName")
-            .withConnectionStrings(new ArrayList<>())
+            .withConnectionStrings(new HashMap<>())
             .withDefaultDocuments(new ArrayList<>())
             .withDocumentRoot("documentRoot")
             .withNumberOfWorkers(1)
@@ -252,11 +253,11 @@ public class AzureAppServiceTest {
             .build()
         ).build();
 
-    assertThat(webApp.getApplication().getAppSettings()).isEqualTo(new ArrayList<>());
+    assertThat(webApp.getApplication().getAppSettings()).isEqualTo(new HashMap<>());
     assertTrue(webApp.getApplication().isAlwaysOn());
     assertThat(webApp.getApplication().getAppCommandLine()).isEqualTo("appCommandLine");
     assertThat(webApp.getApplication().getAutoSwapSlotName()).isEqualTo("autoSwapSlotName");
-    assertThat(webApp.getApplication().getConnectionStrings()).isEqualTo(new ArrayList<>());
+    assertThat(webApp.getApplication().getConnectionStrings()).isEqualTo(new HashMap<>());
     assertThat(webApp.getApplication().getDefaultDocuments()).isEqualTo(new ArrayList<>());
     assertThat(webApp.getApplication().getDocumentRoot()).isEqualTo("documentRoot");
     assertThat(webApp.getApplication().getNumberOfWorkers()).isEqualTo(1);
@@ -304,7 +305,6 @@ public class AzureAppServiceTest {
             .withIsXenon(true)
             .withRedundancyMode(AzureAppServiceRedundancyMode.GEO_REDUNDANT)
             .withIsReserved(true)
-            .withServerFarmId("serverFarmId")
             .withIsStorageAccountRequired(true)
             .withVirtualNetworkSubnetId("virtualNetworkSubnetId")
             .withVnetContentSharedEnabled(true)
@@ -343,7 +343,6 @@ public class AzureAppServiceTest {
     assertTrue(webApp.getInfrastructure().isXenon());
     assertThat(webApp.getInfrastructure().getRedundancyMode()).isEqualTo(AzureAppServiceRedundancyMode.GEO_REDUNDANT);
     assertTrue(webApp.getInfrastructure().isReserved());
-    assertThat(webApp.getInfrastructure().getServerFarmId()).isEqualTo("serverFarmId");
     assertTrue(webApp.getInfrastructure().isStorageAccountRequired());
     assertThat(webApp.getInfrastructure().getVirtualNetworkSubnetId()).isEqualTo("virtualNetworkSubnetId");
     assertTrue(webApp.getInfrastructure().isVnetContentSharedEnabled());
@@ -389,7 +388,7 @@ public class AzureAppServiceTest {
     assertThat(webApp.getTags().size()).isEqualTo(1);
     assertThat(webApp.getTags()).isEqualTo(tags);
   }
-
+  
   private AzureWebApp.AzureWebAppBuilder generateBuilder() {
     return builder().withId("webapp");
   }
