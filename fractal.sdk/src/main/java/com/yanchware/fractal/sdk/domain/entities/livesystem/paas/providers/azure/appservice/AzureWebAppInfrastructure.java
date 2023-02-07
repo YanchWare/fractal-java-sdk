@@ -41,7 +41,6 @@ public class AzureWebAppInfrastructure {
   boolean isXenon;
   AzureAppServiceRedundancyMode redundancyMode;
   boolean isReserved;
-  String serverFarmId;
   boolean isStorageAccountRequired;
   String virtualNetworkSubnetId;
   boolean vnetContentSharedEnabled;
