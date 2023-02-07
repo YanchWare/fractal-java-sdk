@@ -12,11 +12,11 @@ import java.util.Map;
 @Builder(setterPrefix = "with")
 public class AzureWebAppApplication {
 
-  ArrayList<Map<String, String>> appSettings;
+  Map<String, String> appSettings;
   boolean alwaysOn;
   String appCommandLine;
   String autoSwapSlotName;
-  ArrayList<Map<String, String>> connectionStrings;
+  Map<String, String> connectionStrings;
   ArrayList<String> defaultDocuments;
   String documentRoot;
   int numberOfWorkers;
