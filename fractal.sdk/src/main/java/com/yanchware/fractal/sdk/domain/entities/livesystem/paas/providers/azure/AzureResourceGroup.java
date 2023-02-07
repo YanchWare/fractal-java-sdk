@@ -7,9 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.*;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
@@ -20,6 +18,7 @@ public class AzureResourceGroup implements Validatable {
 
   private String name;
   private AzureRegion region;
+  private Map<String, String> tags;
 
   private AzureResourceGroup() {
   }
@@ -52,6 +51,20 @@ public class AzureResourceGroup implements Validatable {
 
     public AzureResourceGroupBuilder withRegion(AzureRegion region) {
       component.setRegion(region);
+      return builder;
+    }
+
+    public AzureResourceGroupBuilder withTags(Map<String, String> tags) {
+      component.setTags(tags);
+      return builder;
+    }
+
+    public AzureResourceGroupBuilder withTag(String key, String value) {
+      if (component.getTags() == null) {
+        withTags(new HashMap<>());
+      }
+
+      component.getTags().put(key, value);
       return builder;
     }
 
