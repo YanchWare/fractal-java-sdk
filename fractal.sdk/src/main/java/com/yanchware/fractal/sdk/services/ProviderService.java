@@ -282,16 +282,18 @@ public class ProviderService {
   }
 
   private void logDeletingComponents(String liveSystemId, List<LiveSystemComponentDto> deletingComponents) {
-    var deletingComponentsIdsSorted = deletingComponents
-        .stream()
-        .map(LiveSystemComponentDto::getId)
-        .sorted()
-        .toList();
+    if (deletingComponents.size() > 0) {
+      var deletingComponentsIdsSorted = deletingComponents
+          .stream()
+          .map(LiveSystemComponentDto::getId)
+          .sorted()
+          .toList();
 
-    log.info("LiveSystem [id: '{}'] - Components to delete [{}] -> {}",
-        liveSystemId,
-        deletingComponentsIdsSorted.size(),
-        String.join(", ", deletingComponentsIdsSorted));
+      log.info("LiveSystem [id: '{}'] - Components to delete [{}] -> {}",
+          liveSystemId,
+          deletingComponentsIdsSorted.size(),
+          String.join(", ", deletingComponentsIdsSorted));
+    }
   }
 
   private void logDeletedComponents(String liveSystemId, ArrayList<String> deletedComponents) {
