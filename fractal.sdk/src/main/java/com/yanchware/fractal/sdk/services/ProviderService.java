@@ -8,6 +8,7 @@ import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.domain.exceptions.ProviderException;
 import com.yanchware.fractal.sdk.services.contracts.ComponentDto;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.InstantiationStepDto;
+import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemComponentDto;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemMutationDto;
 import com.yanchware.fractal.sdk.services.contracts.providerscontract.dtos.ProviderLiveSystemComponentDto;
 import com.yanchware.fractal.sdk.services.contracts.providerscontract.responses.LiveSystemMutationResponse;
@@ -46,7 +47,11 @@ public class ProviderService {
   private static String componentIdWithStatus(InstantiationStepDto instantiationStep) {
     var component = instantiationStep.getComponent();
     return String.format("%s [action: '%s']", component.getId(),
-       component.getStatus().name());
+        component.getStatus().name());
+  }
+
+  private static boolean deletingComponents(InstantiationStepDto c) {
+    return c.getComponent().getStatus() == Deleting;
   }
 
   public void checkLiveSystemMutationStatus(
@@ -94,11 +99,11 @@ public class ProviderService {
     }
   }
 
-  private LiveSystemMutationResponse getLiveSystemMutationResponse(LiveSystem liveSystem, 
-                                                                   LiveSystemMutationDto liveSystemMutation, 
-                                                                   InstantiationWaitConfiguration config, 
-                                                                   String requestName, 
-                                                                   int[] acceptedResponses, 
+  private LiveSystemMutationResponse getLiveSystemMutationResponse(LiveSystem liveSystem,
+                                                                   LiveSystemMutationDto liveSystemMutation,
+                                                                   InstantiationWaitConfiguration config,
+                                                                   String requestName,
+                                                                   int[] acceptedResponses,
                                                                    HttpRequest request) throws IOException, InterruptedException, InstantiatorException, ProviderException {
     var response = client.send(request, HttpResponse.BodyHandlers.ofString());
     ensureAcceptableResponse(response, requestName, acceptedResponses);
@@ -124,14 +129,16 @@ public class ProviderService {
     }
 
     var liveSystemId = liveSystem.getLiveSystemId();
+
     var liveSystemMutationResponseComponents = liveSystemMutationResponse.getComponents();
+
     var liveSystemMutationId = liveSystemMutation.getId();
+
     var liveSystemMutationStepsById = liveSystemMutation.getStepsById();
 
     var activeComponents = new ArrayList<ProviderLiveSystemComponentDto>();
-    var deletedComponents = getDeletedComponents(liveSystemMutationStepsById, liveSystemMutationResponseComponents);
     var failedComponents = new ArrayList<ProviderLiveSystemComponentDto>();
-    
+
     for (var component : liveSystemMutationResponseComponents) {
       var componentStatus = component.getStatus();
       if (componentStatus == Active) {
@@ -139,19 +146,28 @@ public class ProviderService {
       } else if (componentStatus == Failed) {
         failedComponents.add(component);
       }
-    }    
+    }
 
     activeComponents.sort(Comparator.comparing(ProviderLiveSystemComponentDto::getId));
     failedComponents.sort(Comparator.comparing(ProviderLiveSystemComponentDto::getId));
 
+    var allComponentIdsAndStatuses = getAllComponentIdsAndStatuses(liveSystemMutationStepsById);
+
+    var deletingComponents = getDeletingComponents(liveSystemMutationStepsById);
+
+    var deletedComponents = getDeletedComponents(deletingComponents,
+        liveSystemMutationResponseComponents,
+        allComponentIdsAndStatuses.size());
+
+
     logAllComponents(liveSystemId, liveSystemMutationStepsById);
-    logDeletingComponents(liveSystemId, liveSystemMutationStepsById);
+    logDeletingComponents(liveSystemId, deletingComponents);
     logDeletedComponents(liveSystemId, deletedComponents);
     logActiveComponents(liveSystemId, activeComponents);
     logFailedComponents(liveSystemId, failedComponents);
-    
+
     var successfullyProcessedComponentsCount = activeComponents.size() + deletedComponents.size();
-    
+
     // All components processed:
     if (successfullyProcessedComponentsCount == liveSystemMutationStepsById.size()) {
       log.info("LiveSystem [id: '{}'] instantiated for mutation ['{}']. All components [{}] successfully processed",
@@ -192,20 +208,56 @@ public class ProviderService {
     throw new InstantiatorException(timeoutExceptionMessage);
   }
 
-  private ArrayList<String> getDeletedComponents(Map<String, InstantiationStepDto> liveSystemMutationStepsById, List<ProviderLiveSystemComponentDto> liveSystemMutationResponseComponents) {
-    
+  private static List<String> getAllComponentIdsAndStatuses(Map<String, InstantiationStepDto> liveSystemMutationStepsById) {
+    return liveSystemMutationStepsById
+        .values()
+        .stream()
+        .map(ProviderService::componentIdWithStatus)
+        .sorted()
+        .toList();
+  }
+
+  private List<LiveSystemComponentDto> getDeletingComponents(Map<String, InstantiationStepDto> liveSystemMutationStepsById) {
+
+    return liveSystemMutationStepsById
+        .values()
+        .stream()
+        .filter(ProviderService::deletingComponents)
+        .map(InstantiationStepDto::getComponent)
+        .toList();
+  }
+
+
+  private ArrayList<String> getDeletedComponents(List<LiveSystemComponentDto> deletingComponents,
+                                                 List<ProviderLiveSystemComponentDto> liveSystemMutationResponseComponents,
+                                                 int numberOfAllComponents) {
+
+
     var deletedComponentIds = new ArrayList<String>();
-    for(var componentId : liveSystemMutationStepsById.keySet()) {
+
+    var numberOfComponentsToDelete = deletingComponents.size();
+
+    var numberOfExpectedNonDeletingComponents = numberOfAllComponents - numberOfComponentsToDelete;
+
+    if (numberOfComponentsToDelete == 0 ||
+        liveSystemMutationResponseComponents.size() < numberOfExpectedNonDeletingComponents) {
+      return deletedComponentIds;
+    }
+
+    for (var component : deletingComponents) {
+      var componentId = component.getId();
+
       var existInResponse = liveSystemMutationResponseComponents
           .stream()
           .filter(c -> c.getId().equals(componentId))
           .findFirst();
-      
-      if(existInResponse.isEmpty()) {
+
+      if (existInResponse.isEmpty()) {
         deletedComponentIds.add(componentId);
       }
+      
     }
-    
+
     return deletedComponentIds;
   }
 
@@ -220,26 +272,19 @@ public class ProviderService {
   }
 
   private static void logAllComponents(String liveSystemId, Map<String, InstantiationStepDto> liveSystemMutationStepsById) {
-    var allComponentsIdsSorted = liveSystemMutationStepsById
-        .values()
-        .stream()
-        .map(ProviderService::componentIdWithStatus)
-        .sorted()
-        .toList();
+    var allComponentsIdsSorted = getAllComponentIdsAndStatuses(liveSystemMutationStepsById);
 
     log.info("LiveSystem [id: '{}'] - All Components [{}] -> {}",
         liveSystemId,
         allComponentsIdsSorted.size(),
         String.join(", ", allComponentsIdsSorted));
-    
+
   }
 
-  private void logDeletingComponents(String liveSystemId, Map<String, InstantiationStepDto> liveSystemMutationStepsById) {
-    var deletingComponentsIdsSorted = liveSystemMutationStepsById
-        .values()
+  private void logDeletingComponents(String liveSystemId, List<LiveSystemComponentDto> deletingComponents) {
+    var deletingComponentsIdsSorted = deletingComponents
         .stream()
-        .filter(c -> c.getComponent().getStatus() == Deleting)
-        .map(InstantiationStepDto::getId)
+        .map(LiveSystemComponentDto::getId)
         .sorted()
         .toList();
 
@@ -250,15 +295,17 @@ public class ProviderService {
   }
 
   private void logDeletedComponents(String liveSystemId, ArrayList<String> deletedComponents) {
-    var deletedComponentsIdsSorted = deletedComponents
-        .stream()
-        .sorted()
-        .toList();
+    if (deletedComponents.size() > 0) {
+      var deletedComponentsIdsSorted = deletedComponents
+          .stream()
+          .sorted()
+          .toList();
 
-    log.info("LiveSystem [id: '{}'] - Deleted components [{}] -> {}",
-        liveSystemId,
-        deletedComponentsIdsSorted.size(),
-        String.join(", ", deletedComponentsIdsSorted));
+      log.info("LiveSystem [id: '{}'] - Deleted components [{}] -> {}",
+          liveSystemId,
+          deletedComponentsIdsSorted.size(),
+          String.join(", ", deletedComponentsIdsSorted));
+    }
   }
 
   private static void logActiveComponents(String liveSystemId, ArrayList<ProviderLiveSystemComponentDto> processedComponents) {
