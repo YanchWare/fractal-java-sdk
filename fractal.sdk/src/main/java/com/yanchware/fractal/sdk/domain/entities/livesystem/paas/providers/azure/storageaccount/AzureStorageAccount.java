@@ -34,6 +34,7 @@ public class AzureStorageAccount extends PaaSDataStorage implements AzureEntity,
   private AzureStorageAccountSettings settings;
   private AzureStorageAccountInfrastructure infrastructure;
   private AzureStorageAccountBackup backup;
+  private AzureStorageAccountFileService fileService;  
   private AzureRegion azureRegion;
   private AzureResourceGroup azureResourceGroup;
   private Map<String, String> tags;
@@ -115,6 +116,11 @@ public class AzureStorageAccount extends PaaSDataStorage implements AzureEntity,
 
     public AzureStorageAccountBuilder withSettings(AzureStorageAccountSettings settings) {
       component.setSettings(settings);
+      return builder;
+    }
+
+    public AzureStorageAccountBuilder withFileService(AzureStorageAccountFileService fileService) {
+      component.setFileService(fileService);
       return builder;
     }
 

@@ -64,6 +64,22 @@ public class AzureStorageAccountTest {
   }
 
   @Test
+  public void fileServiceIsValid_when_fileServiceIsSet() {
+    var storageAccountFileService = generateBuilder()
+        .withFileService(
+            AzureStorageAccountFileService.builder()
+                .withDeleteRetentionDays(10)
+                .withDeleteRetentionEnabled(true)
+                .build()
+        )
+        .build()
+        .getFileService();
+
+    assertTrue(storageAccountFileService.getDeleteRetentionEnabled());
+    assertEquals(10, storageAccountFileService.getDeleteRetentionDays());
+  }
+  
+  @Test
   public void connectivityIsValid_when_connectivityIsSet() {
     var storageAccountConnectivity = generateBuilder()
       .withConnectivity(
