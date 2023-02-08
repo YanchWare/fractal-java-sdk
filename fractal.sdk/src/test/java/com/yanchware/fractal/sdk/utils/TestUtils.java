@@ -2,6 +2,7 @@ package com.yanchware.fractal.sdk.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.yanchware.fractal.sdk.aggregates.Environment;
 import com.yanchware.fractal.sdk.aggregates.LiveSystem;
 import com.yanchware.fractal.sdk.domain.entities.Component;
@@ -369,7 +370,9 @@ public class TestUtils {
 
   public static String getJsonRepresentation(Object obj) {
     try {
-      var json = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(obj);
+      ObjectMapper objectMapper = new ObjectMapper();
+      objectMapper.registerModule(new JavaTimeModule());
+      var json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(obj);
       log.debug(json);
 
       return json;
