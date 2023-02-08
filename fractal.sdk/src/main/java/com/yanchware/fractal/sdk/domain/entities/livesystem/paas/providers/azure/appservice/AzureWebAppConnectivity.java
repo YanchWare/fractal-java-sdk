@@ -15,16 +15,16 @@ public class AzureWebAppConnectivity {
   String apiManagementConfigId;
   String apiDefinitionUrl;
   ArrayList<String> corsAllowedOrigins;
-  boolean corsAllowCredentials;
-  boolean http2Enabled;
-  boolean httpLoggingEnabled;
+  Boolean corsAllowCredentials;
+  Boolean http2Enabled;
+  Boolean httpLoggingEnabled;
   AzureTlsVersion minimumTlsVersion;
-  boolean requestTracingEnabled;
+  Boolean requestTracingEnabled;
   String tracingOptions;
-  boolean websocketEnabled;
-  boolean clientAffinityEnabled;
-  boolean clientCertEnabled;
+  Boolean websocketEnabled;
+  Boolean clientAffinityEnabled;
+  Boolean clientCertEnabled;
   String clientCertExclusionPaths;
   AzureAppServiceClientCertMode clientCertMode;
-  boolean httpsOnly;
+  Boolean httpsOnly;
 }

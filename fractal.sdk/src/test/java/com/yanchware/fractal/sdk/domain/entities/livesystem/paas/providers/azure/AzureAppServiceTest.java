@@ -217,18 +217,18 @@ public class AzureAppServiceTest {
     assertThat(webApp.getConnectivity().getApiManagementConfigId()).isEqualTo("withApiManagementConfigId");
     assertThat(webApp.getConnectivity().getApiDefinitionUrl()).isEqualTo("apiDefinitionUrl");
     assertThat(webApp.getConnectivity().getCorsAllowedOrigins()).isEqualTo(new ArrayList<>());
-    assertTrue(webApp.getConnectivity().isCorsAllowCredentials());
-    assertTrue(webApp.getConnectivity().isHttp2Enabled());
-    assertTrue(webApp.getConnectivity().isHttpLoggingEnabled());
+    assertTrue(webApp.getConnectivity().getCorsAllowCredentials());
+    assertTrue(webApp.getConnectivity().getHttp2Enabled());
+    assertTrue(webApp.getConnectivity().getHttpLoggingEnabled());
     assertThat(webApp.getConnectivity().getMinimumTlsVersion()).isEqualTo(AzureTlsVersion.TLS1_1);
-    assertTrue(webApp.getConnectivity().isRequestTracingEnabled());
+    assertTrue(webApp.getConnectivity().getRequestTracingEnabled());
     assertThat(webApp.getConnectivity().getTracingOptions()).isEqualTo("withTracingOptions");
-    assertTrue(webApp.getConnectivity().isWebsocketEnabled());
-    assertTrue(webApp.getConnectivity().isClientAffinityEnabled());
-    assertTrue(webApp.getConnectivity().isClientCertEnabled());
+    assertTrue(webApp.getConnectivity().getWebsocketEnabled());
+    assertTrue(webApp.getConnectivity().getClientAffinityEnabled());
+    assertTrue(webApp.getConnectivity().getClientCertEnabled());
     assertThat(webApp.getConnectivity().getClientCertExclusionPaths()).isEqualTo("withClientCertExclusionPaths");
     assertThat(webApp.getConnectivity().getClientCertMode()).isEqualTo(AzureAppServiceClientCertMode.REQUIRED);
-    assertTrue(webApp.getConnectivity().isHttpsOnly());
+    assertTrue(webApp.getConnectivity().getHttpsOnly());
   }
 
   @Test
@@ -254,15 +254,15 @@ public class AzureAppServiceTest {
         ).build();
 
     assertThat(webApp.getApplication().getAppSettings()).isEqualTo(new HashMap<>());
-    assertTrue(webApp.getApplication().isAlwaysOn());
+    assertTrue(webApp.getApplication().getAlwaysOn());
     assertThat(webApp.getApplication().getAppCommandLine()).isEqualTo("appCommandLine");
     assertThat(webApp.getApplication().getAutoSwapSlotName()).isEqualTo("autoSwapSlotName");
     assertThat(webApp.getApplication().getConnectionStrings()).isEqualTo(new HashMap<>());
     assertThat(webApp.getApplication().getDefaultDocuments()).isEqualTo(new ArrayList<>());
     assertThat(webApp.getApplication().getDocumentRoot()).isEqualTo("documentRoot");
     assertThat(webApp.getApplication().getNumberOfWorkers()).isEqualTo(1);
-    assertTrue(webApp.getApplication().isUse32BitWorkerProcess());
-    assertTrue(webApp.getApplication().isRemoteDebuggingEnabled());
+    assertTrue(webApp.getApplication().getUse32BitWorkerProcess());
+    assertTrue(webApp.getApplication().getRemoteDebuggingEnabled());
     assertThat(webApp.getApplication().getRemoteDebuggingVersion()).isEqualTo("remoteDebuggingVersion");
     assertThat(webApp.getApplication().getWebsiteTimezone()).isEqualTo("websiteTimezone");
   }
@@ -312,18 +312,18 @@ public class AzureAppServiceTest {
             .build()
         ).build();
 
-    assertTrue(webApp.getInfrastructure().isAcrUseManagedIdentityCreds());
+    assertTrue(webApp.getInfrastructure().getAcrUseManagedIdentityCreds());
     assertThat(webApp.getInfrastructure().getAcrUserManagedIdentityId()).isEqualTo("acrUserManagedIdentityId");
-    assertTrue(webApp.getInfrastructure().isDetailedErrorLoggingEnabled());
+    assertTrue(webApp.getInfrastructure().getDetailedErrorLoggingEnabled());
     assertThat(webApp.getInfrastructure().getFtpsState()).isEqualTo(AzureFtpsState.FTPS_ONLY);
     assertThat(webApp.getInfrastructure().getFunctionAppScaleLimit()).isEqualTo(1);
-    assertTrue(webApp.getInfrastructure().isFunctionsRuntimeScaleMonitoringEnabled());
+    assertTrue(webApp.getInfrastructure().getFunctionsRuntimeScaleMonitoringEnabled());
     assertThat(webApp.getInfrastructure().getHealthCheckPath()).isEqualTo("healthCheckPath");
     assertThat(webApp.getInfrastructure().getKeyVaultReferenceIdentity()).isEqualTo("keyVaultReferenceIdentity");
     assertThat(webApp.getInfrastructure().getMaxDiskSizeInMb()).isEqualTo(100L);
     assertThat(webApp.getInfrastructure().getMaxMemoryInMb()).isEqualTo(128L);
     assertThat(webApp.getInfrastructure().getMaxPercentageCpu()).isEqualTo(50.0);
-    assertTrue(webApp.getInfrastructure().isLocalMySqlEnabled());
+    assertTrue(webApp.getInfrastructure().getLocalMySqlEnabled());
     assertThat(webApp.getInfrastructure().getLogsDirectorySizeLimit()).isEqualTo(100);
     assertThat(webApp.getInfrastructure().getManagedServiceIdentityId()).isEqualTo(1);
     assertThat(webApp.getInfrastructure().getMinimumElasticInstanceCount()).isEqualTo(1);
@@ -331,22 +331,22 @@ public class AzureAppServiceTest {
     assertThat(webApp.getInfrastructure().getPublicNetworkAccess()).isEqualTo("publicNetworkAccess");
     assertThat(webApp.getInfrastructure().getPublishingUsername()).isEqualTo("publishingUsername");
     assertThat(webApp.getInfrastructure().getVnetName()).isEqualTo("vnetName");
-    assertTrue(webApp.getInfrastructure().isVnetRouteAllEnabled());
+    assertTrue(webApp.getInfrastructure().getVnetRouteAllEnabled());
     assertThat(webApp.getInfrastructure().getVnetPrivatePortsCount()).isEqualTo(1);
     assertThat(webApp.getInfrastructure().getXServiceIdentityId()).isEqualTo(1);
     assertThat(webApp.getInfrastructure().getContainerSize()).isEqualTo(100);
     assertThat(webApp.getInfrastructure().getCustomDomainVerificationId()).isEqualTo("customDomainVerificationId");
     assertThat(webApp.getInfrastructure().getDailyMemoryTimeQuota()).isEqualTo(100);
-    assertTrue(webApp.getInfrastructure().isEnabled());
-    assertTrue(webApp.getInfrastructure().isHostnamesDisabled());
-    assertTrue(webApp.getInfrastructure().isUseHyperV());
-    assertTrue(webApp.getInfrastructure().isXenon());
+    assertTrue(webApp.getInfrastructure().getEnabled());
+    assertTrue(webApp.getInfrastructure().getHostnamesDisabled());
+    assertTrue(webApp.getInfrastructure().getUseHyperV());
+    assertTrue(webApp.getInfrastructure().getIsXenon());
     assertThat(webApp.getInfrastructure().getRedundancyMode()).isEqualTo(AzureAppServiceRedundancyMode.GEO_REDUNDANT);
-    assertTrue(webApp.getInfrastructure().isReserved());
-    assertTrue(webApp.getInfrastructure().isStorageAccountRequired());
+    assertTrue(webApp.getInfrastructure().getIsReserved());
+    assertTrue(webApp.getInfrastructure().getIsStorageAccountRequired());
     assertThat(webApp.getInfrastructure().getVirtualNetworkSubnetId()).isEqualTo("virtualNetworkSubnetId");
-    assertTrue(webApp.getInfrastructure().isVnetContentSharedEnabled());
-    assertTrue(webApp.getInfrastructure().isVnetImagePullEnabled());
+    assertTrue(webApp.getInfrastructure().getVnetContentSharedEnabled());
+    assertTrue(webApp.getInfrastructure().getVnetImagePullEnabled());
   }
 
   @Test

@@ -13,15 +13,15 @@ import java.util.Map;
 public class AzureWebAppApplication {
 
   Map<String, String> appSettings;
-  boolean alwaysOn;
+  Boolean alwaysOn;
   String appCommandLine;
   String autoSwapSlotName;
   Map<String, String> connectionStrings;
   ArrayList<String> defaultDocuments;
   String documentRoot;
-  int numberOfWorkers;
-  boolean use32BitWorkerProcess;
-  boolean remoteDebuggingEnabled;
+  Integer numberOfWorkers;
+  Boolean use32BitWorkerProcess;
+  Boolean remoteDebuggingEnabled;
   String remoteDebuggingVersion;
   String websiteTimezone;
 
