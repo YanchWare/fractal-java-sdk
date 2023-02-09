@@ -7,6 +7,7 @@ import com.yanchware.fractal.sdk.utils.CollectionUtils;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_COSMOS_ACCOUNT;
 
@@ -61,6 +62,16 @@ public abstract class AzureCosmosAccountBuilder<T extends Component & AzureCosmo
 
   public B withBackupPolicy(AzureCosmosBackupPolicy backupPolicy) {
     component.setBackupPolicy(backupPolicy);
+    return builder;
+  }
+
+  public B withTags(Map<String, String> tags) {
+    component.setTags(tags);
+    return builder;
+  }
+
+  public B withTag(String name, String value) {
+    component.setTags(Map.of(name, value));
     return builder;
   }
 

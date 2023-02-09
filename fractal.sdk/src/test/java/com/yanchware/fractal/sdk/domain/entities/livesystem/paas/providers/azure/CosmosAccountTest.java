@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.Map.entry;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -77,6 +78,40 @@ public abstract class CosmosAccountTest<T extends AzureCosmosAccountBuilder<?, ?
         .asInstanceOf(InstanceOfAssertFactories.type(AzureCosmosAccount.class))
         .extracting(AzureCosmosAccount::getCosmosEntities, AzureCosmosAccount::getMaxTotalThroughput)
         .containsExactly(Collections.EMPTY_LIST, throughput);
+  }
+
+  @Test
+  public void tagsAreAsExpected_when_TagsAreSet() {
+    var builder = getBuilder()
+        .withId("a-legal-id")
+        .withRegion(AzureRegion.ASIA_EAST)
+        .withTags(Map.ofEntries(
+            entry("a", "tag A"),
+            entry("b", "tag B")
+        ));
+
+    var component = builder.build();
+
+    assertThat(component.getType()).isEqualTo(getExpectedType());
+    assert(component.getTags()).equals(Map.ofEntries(
+        entry("a", "tag A"),
+        entry("b", "tag B")
+    ));
+  }
+
+  @Test
+  public void tagsAreAsExpected_when_ASingleTagIsSet() {
+    var builder = getBuilder()
+        .withId("a-legal-id")
+        .withRegion(AzureRegion.ASIA_EAST)
+        .withTag("a", "tag A");
+
+    var component = builder.build();
+
+    assertThat(component.getType()).isEqualTo(getExpectedType());
+    assert(component.getTags()).equals(Map.ofEntries(
+        entry("a", "tag A")
+    ));
   }
 
   @Test
