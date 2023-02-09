@@ -6,7 +6,9 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure
 import com.yanchware.fractal.sdk.utils.CollectionUtils;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_COSMOS_ACCOUNT;
 
@@ -61,6 +63,20 @@ public abstract class AzureCosmosAccountBuilder<T extends Component & AzureCosmo
 
   public B withBackupPolicy(AzureCosmosBackupPolicy backupPolicy) {
     component.setBackupPolicy(backupPolicy);
+    return builder;
+  }
+
+  public B withTags(Map<String, String> tags) {
+    component.setTags(tags);
+    return builder;
+  }
+
+  public B withTag(String key, String value) {
+    if (component.getTags() == null) {
+      withTags(new HashMap<>());
+    }
+
+    component.getTags().put(key, value);
     return builder;
   }
 
