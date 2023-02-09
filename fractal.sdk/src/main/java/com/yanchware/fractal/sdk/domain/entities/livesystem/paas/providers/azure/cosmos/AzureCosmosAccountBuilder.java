@@ -6,6 +6,7 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure
 import com.yanchware.fractal.sdk.utils.CollectionUtils;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -70,8 +71,12 @@ public abstract class AzureCosmosAccountBuilder<T extends Component & AzureCosmo
     return builder;
   }
 
-  public B withTag(String name, String value) {
-    component.setTags(Map.of(name, value));
+  public B withTag(String key, String value) {
+    if (component.getTags() == null) {
+      withTags(new HashMap<>());
+    }
+
+    component.getTags().put(key, value);
     return builder;
   }
 
