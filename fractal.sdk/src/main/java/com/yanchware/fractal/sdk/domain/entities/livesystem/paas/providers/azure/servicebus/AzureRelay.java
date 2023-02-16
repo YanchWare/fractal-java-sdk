@@ -23,53 +23,53 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_SERVICE_
 @Getter
 @Setter
 @ToString(callSuper = true)
-public class AzureServiceRelay extends PaaSMessaging implements AzureEntity, LiveSystemComponent {
+public class AzureRelay extends PaaSMessaging implements AzureEntity, LiveSystemComponent {
   private static final Integer ID_MIN_LENGTH = 6;
   private static final Integer ID_MAX_LENGTH = 50;
   private final static String NAME_LENGTH_MISMATCH_TEMPLATE =
-      "[AzureServiceRelayNamespace validation] Relay name is illegal. A valid Relay name must be between " +  ID_MIN_LENGTH +
+      "[AzureRelay validation] Relay name is illegal. A valid Relay name must be between " +  ID_MIN_LENGTH +
           " and " + ID_MAX_LENGTH + " characters of length";
   private String name;
   private AzureRegion azureRegion;
   private AzureResourceGroup azureResourceGroup;
   private Map<String, String> tags;
 
-  protected AzureServiceRelay() {
+  protected AzureRelay() {
   }
 
-  public static class AzureServiceRelayBuilder extends Component.Builder<AzureServiceRelay, AzureServiceRelayBuilder> {
+  public static class AzureRelayBuilder extends Component.Builder<AzureRelay, AzureRelayBuilder> {
 
     @Override
-    protected AzureServiceRelay createComponent() {
-      return new AzureServiceRelay();
+    protected AzureRelay createComponent() {
+      return new AzureRelay();
     }
 
     @Override
-    protected AzureServiceRelayBuilder getBuilder() {
+    protected AzureRelayBuilder getBuilder() {
       return this;
     }
 
-    public AzureServiceRelayBuilder withName(String name) {
+    public AzureRelayBuilder withName(String name) {
       component.setName(name);
       return builder;
     }
 
-    public AzureServiceRelayBuilder withRegion(AzureRegion region) {
+    public AzureRelayBuilder withRegion(AzureRegion region) {
       component.setAzureRegion(region);
       return builder;
     }
 
-    public AzureServiceRelayBuilder withAzureResourceGroup(AzureResourceGroup azureResourceGroup) {
+    public AzureRelayBuilder withAzureResourceGroup(AzureResourceGroup azureResourceGroup) {
       component.setAzureResourceGroup(azureResourceGroup);
       return builder;
     }
 
-    public AzureServiceRelayBuilder withTags(Map<String, String> tags) {
+    public AzureRelayBuilder withTags(Map<String, String> tags) {
       component.setTags(tags);
       return builder;
     }
 
-    public AzureServiceRelayBuilder withTag(String key, String value) {
+    public AzureRelayBuilder withTag(String key, String value) {
       if (component.getTags() == null) {
         withTags(new HashMap<>());
       }
@@ -79,7 +79,7 @@ public class AzureServiceRelay extends PaaSMessaging implements AzureEntity, Liv
     }
 
     @Override
-    public AzureServiceRelay build() {
+    public AzureRelay build() {
       component.setType(PAAS_SERVICE_BUS_RELAY);
       return super.build();
     }
@@ -104,7 +104,7 @@ public class AzureServiceRelay extends PaaSMessaging implements AzureEntity, Liv
     return ProviderType.AZURE;
   }
 
-  public static AzureServiceRelayBuilder builder() {
-    return new AzureServiceRelayBuilder();
+  public static AzureRelayBuilder builder() {
+    return new AzureRelayBuilder();
   }
 }

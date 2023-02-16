@@ -10,18 +10,18 @@ import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.provider
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class AzureServiceBusNamespaceTest {
+public class AzureServiceBusTest {
 
   @Test
   public void exceptionThrown_when_idIsLessThan6Characters() {
-    assertThatThrownBy(() -> AzureServiceBusNamespace.builder().withId("comp-id").withName("test").build())
+    assertThatThrownBy(() -> AzureServiceBus.builder().withId("comp-id").withName("test").build())
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining("valid Service Bus name must be between 6 and 50 characters of length");
   }
 
   @Test
   public void exceptionThrown_when_idIsMoreThan50Characters() {
-    assertThatThrownBy(() -> AzureServiceBusNamespace.builder().withId("comp-id").withName("ttttttttttttttttttttttttttttttttttttttttttttttttttt").build())
+    assertThatThrownBy(() -> AzureServiceBus.builder().withId("comp-id").withName("ttttttttttttttttttttttttttttttttttttttttttttttttttt").build())
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining("valid Service Bus name must be between 6 and 50 characters of length");
   }
@@ -29,16 +29,15 @@ public class AzureServiceBusNamespaceTest {
   @Test
   public void noValidationErrors_when_serviceBusHasRequiredFields() {
     AzureResourceGroup azureResourceGroup = AzureResourceGroup.builder().withName("az-group").withRegion(EUROPE_WEST).build();
-    var serviceBusNamespace = AzureServiceBusNamespace.builder()
-        .withId("sb-test-flavian-x")
-        .withName("sb-test-flavian-x")
+    var serviceBus = AzureServiceBus.builder()
+        .withId("sb-test-x")
+        .withName("sb-test-x")
         .withRegion(AzureRegion.EUROPE_WEST)
         .withAzureResourceGroup(azureResourceGroup)
         .withSku(ServiceBusSku.builder()
-            .withCapacity(1)
             .withTier(ServiceBusSkuTier.BASIC)
             .build())
         .build();
-    assertThat(serviceBusNamespace.validate()).isEmpty();
+    assertThat(serviceBus.validate()).isEmpty();
   }
 }

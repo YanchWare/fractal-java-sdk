@@ -25,11 +25,11 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_SERVICE_
 @Getter
 @Setter
 @ToString(callSuper = true)
-public class AzureServiceBusNamespace extends PaaSMessaging implements AzureEntity, LiveSystemComponent {
+public class AzureServiceBus extends PaaSMessaging implements AzureEntity, LiveSystemComponent {
   private static final Integer ID_MIN_LENGTH = 6;
   private static final Integer ID_MAX_LENGTH = 50;
   private final static String NAME_LENGTH_MISMATCH_TEMPLATE =
-      "[AzureServiceBusNamespace validation] Service Bus name is illegal. A valid Service Bus name must be between " +  ID_MIN_LENGTH +
+      "[AzureServiceBus validation] Service Bus name is illegal. A valid Service Bus name must be between " + ID_MIN_LENGTH +
           " and " + ID_MAX_LENGTH + " characters of length";
   private String name;
   private AzureRegion azureRegion;
@@ -43,42 +43,42 @@ public class AzureServiceBusNamespace extends PaaSMessaging implements AzureEnti
   private Collection<AzureServiceBusQueue> queues;
   private Collection<AzureServiceBusTopic> topics;
 
-  protected AzureServiceBusNamespace() {
+  protected AzureServiceBus() {
   }
 
-  public static class AzureServiceBusNamespaceBuilder extends Component.Builder<AzureServiceBusNamespace, AzureServiceBusNamespaceBuilder> {
+  public static class AzureServiceBusBuilder extends Component.Builder<AzureServiceBus, AzureServiceBusBuilder> {
 
     @Override
-    protected AzureServiceBusNamespace createComponent() {
-      return new AzureServiceBusNamespace();
+    protected AzureServiceBus createComponent() {
+      return new AzureServiceBus();
     }
 
     @Override
-    protected AzureServiceBusNamespaceBuilder getBuilder() {
+    protected AzureServiceBusBuilder getBuilder() {
       return this;
     }
 
-    public AzureServiceBusNamespaceBuilder withName(String name) {
+    public AzureServiceBusBuilder withName(String name) {
       component.setName(name);
       return builder;
     }
 
-    public AzureServiceBusNamespaceBuilder withRegion(AzureRegion region) {
+    public AzureServiceBusBuilder withRegion(AzureRegion region) {
       component.setAzureRegion(region);
       return builder;
     }
 
-    public AzureServiceBusNamespaceBuilder withAzureResourceGroup(AzureResourceGroup azureResourceGroup) {
+    public AzureServiceBusBuilder withAzureResourceGroup(AzureResourceGroup azureResourceGroup) {
       component.setAzureResourceGroup(azureResourceGroup);
       return builder;
     }
 
-    public AzureServiceBusNamespaceBuilder withTags(Map<String, String> tags) {
+    public AzureServiceBusBuilder withTags(Map<String, String> tags) {
       component.setTags(tags);
       return builder;
     }
 
-    public AzureServiceBusNamespaceBuilder withTag(String key, String value) {
+    public AzureServiceBusBuilder withTag(String key, String value) {
       if (component.getTags() == null) {
         withTags(new HashMap<>());
       }
@@ -87,36 +87,36 @@ public class AzureServiceBusNamespace extends PaaSMessaging implements AzureEnti
       return builder;
     }
 
-    public AzureServiceBusNamespaceBuilder withSku(ServiceBusSku sku) {
+    public AzureServiceBusBuilder withSku(ServiceBusSku sku) {
       component.setSku(sku);
       return builder;
     }
 
-    public AzureServiceBusNamespaceBuilder withIdentity(AzureIdentityType identity) {
+    public AzureServiceBusBuilder withIdentity(AzureIdentityType identity) {
       component.setIdentity(identity);
       return builder;
     }
 
-    public AzureServiceBusNamespaceBuilder withEncryption(Encryption encryption) {
+    public AzureServiceBusBuilder withEncryption(Encryption encryption) {
       component.setEncryption(encryption);
       return builder;
     }
 
-    public AzureServiceBusNamespaceBuilder withZoneRedundant(Boolean zoneRedundant) {
+    public AzureServiceBusBuilder withZoneRedundant(Boolean zoneRedundant) {
       component.setZoneRedundant(zoneRedundant);
       return builder;
     }
 
-    public AzureServiceBusNamespaceBuilder withDisableLocalAuth(Boolean disableLocalAuth) {
+    public AzureServiceBusBuilder withDisableLocalAuth(Boolean disableLocalAuth) {
       component.setDisableLocalAuth(disableLocalAuth);
       return builder;
     }
 
-    public AzureServiceBusNamespaceBuilder withQueue(AzureServiceBusQueue queue) {
+    public AzureServiceBusBuilder withQueue(AzureServiceBusQueue queue) {
       return withQueues(List.of(queue));
     }
 
-    public AzureServiceBusNamespaceBuilder withQueues(Collection<AzureServiceBusQueue> queues) {
+    public AzureServiceBusBuilder withQueues(Collection<AzureServiceBusQueue> queues) {
       if (isBlank(queues)) {
         return builder;
       }
@@ -130,11 +130,11 @@ public class AzureServiceBusNamespace extends PaaSMessaging implements AzureEnti
       return builder;
     }
 
-    public AzureServiceBusNamespaceBuilder withTopic(AzureServiceBusTopic topic) {
+    public AzureServiceBusBuilder withTopic(AzureServiceBusTopic topic) {
       return withTopics(List.of(topic));
     }
 
-    public AzureServiceBusNamespaceBuilder withTopics(Collection<AzureServiceBusTopic> topics) {
+    public AzureServiceBusBuilder withTopics(Collection<AzureServiceBusTopic> topics) {
       if (isBlank(topics)) {
         return builder;
       }
@@ -149,7 +149,7 @@ public class AzureServiceBusNamespace extends PaaSMessaging implements AzureEnti
     }
 
     @Override
-    public AzureServiceBusNamespace build() {
+    public AzureServiceBus build() {
       component.setType(PAAS_SERVICE_BUS_NAMESPACE);
       return super.build();
     }
@@ -166,7 +166,7 @@ public class AzureServiceBusNamespace extends PaaSMessaging implements AzureEnti
         errors.add(NAME_LENGTH_MISMATCH_TEMPLATE);
       }
     }
-    
+
     return errors;
   }
 
@@ -175,7 +175,7 @@ public class AzureServiceBusNamespace extends PaaSMessaging implements AzureEnti
     return ProviderType.AZURE;
   }
 
-  public static AzureServiceBusNamespaceBuilder builder() {
-    return new AzureServiceBusNamespaceBuilder();
+  public static AzureServiceBusBuilder builder() {
+    return new AzureServiceBusBuilder();
   }
 }
