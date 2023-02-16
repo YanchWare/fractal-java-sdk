@@ -1,6 +1,6 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.servicebus;
 
-import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSTopic;
+import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSMessageEntity;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.LiveSystemComponent;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.Getter;
@@ -16,7 +16,7 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_SERVICE_
 @Getter
 @Setter
 @ToString(callSuper = true)
-public class AzureServiceBusTopic extends PaaSTopic implements LiveSystemComponent {
+public class AzureServiceBusTopic extends PaaSMessageEntity implements LiveSystemComponent {
   private Duration autoDeleteOnIdle;
   private Duration defaultMessageTimeToLive;
   private Duration duplicateDetectionHistoryTimeWindow;
