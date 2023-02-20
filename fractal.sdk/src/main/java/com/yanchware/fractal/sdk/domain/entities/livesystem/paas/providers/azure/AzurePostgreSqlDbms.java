@@ -18,7 +18,7 @@ import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLengt
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
-public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms implements AzureEntity {
+public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms implements AzureResourceEntity {
 
   private final static String REGION_IS_NULL = "[AzurePostgreSQL Validation] Region has not been defined and it is required";
 
@@ -167,7 +167,7 @@ public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms implements AzureEnti
     }
 
     getDatabases().stream()
-        .map(x -> AzureEntity.validateAzureEntity((AzureEntity) x, "PostgreSql Database"))
+        .map(x -> AzureResourceEntity.validateAzureResourceEntity((AzureResourceEntity) x, "PostgreSql Database"))
         .forEach(errors::addAll);
 
 

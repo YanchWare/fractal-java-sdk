@@ -1,6 +1,6 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice;
 
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.*;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.*;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.valueobjects.AzureAppServiceClientCertMode;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.valueobjects.AzureAppServiceRedundancyMode;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.valueobjects.AzureFtpsState;
@@ -366,11 +366,17 @@ public class AzureAppServiceTest {
     var appServicePlan = AzureAppServicePlan.builder()
         .withName(appServicePlanName)
         .withAzureResourceGroup(resourceGroup)
-        .withAzureRegion(selectedRegion)
+        .withRegion(selectedRegion)
         .withOperatingSystem(selectedOperatingSystem)
         .withPricingPlan(selectedPricingPlan)
         .withZoneRedundancyEnabled()
         .withTags(tags)
+        .build();
+    
+    var certificate = AzureKeyVaultCertificate.builder()
+        .withKeyVaultId("key-vault-id")
+        .withName("certificate-name")
+        .withFriendlyName("friendly-name")
         .build();
 
     var webApp = generateSampleBuilder()
@@ -378,6 +384,8 @@ public class AzureAppServiceTest {
         .withHosting(AzureWebAppHosting.builder()
             .withJavaVersion("java version")
             .build())
+        .withCertificate(certificate)
+        .withResourceGroup(resourceGroup)
         .withTags(tags)
         .build();
 

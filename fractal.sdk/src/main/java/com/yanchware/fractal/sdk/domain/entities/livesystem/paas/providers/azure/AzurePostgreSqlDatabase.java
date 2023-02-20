@@ -11,7 +11,7 @@ import java.util.Map;
 
 @Getter
 @Setter
-public class AzurePostgreSqlDatabase extends PaaSPostgreSqlDatabase implements AzureEntity {
+public class AzurePostgreSqlDatabase extends PaaSPostgreSqlDatabase implements AzureResourceEntity {
   public static AzurePostgreSqlDbBuilder builder() {
     return new AzurePostgreSqlDbBuilder();
   }

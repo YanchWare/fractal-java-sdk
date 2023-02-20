@@ -1,8 +1,8 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos;
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PaaSCassandra;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureEntity;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceEntity;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.AccessLevel;
@@ -21,7 +21,7 @@ import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLengt
 @Getter
 @Setter(AccessLevel.PROTECTED)
 @ToString(callSuper = true)
-public class AzureCosmosCassandraCluster extends PaaSCassandra implements AzureEntity {
+public class AzureCosmosCassandraCluster extends PaaSCassandra implements AzureResourceEntity {
   private final static String ILLEGAL_AMOUNT_OF_HOURS_BETWEEN_BACKUP = "Cosmos Cassandra Cluster periodic backup feature needs a value of hours between backups that is larger or equal to 1";
   private final static String NAME_NOT_VALID = "[AzureCosmosCassandraCluster Validation] The name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen, and must be between 3 and 44 characters long";
 
@@ -130,7 +130,7 @@ public class AzureCosmosCassandraCluster extends PaaSCassandra implements AzureE
   @Override
   public Collection<String> validate() {
     Collection<String> errors = super.validate();
-    errors.addAll(AzureEntity.validateAzureEntity(this, "Cassandra Cluster"));
+    errors.addAll(AzureResourceEntity.validateAzureResourceEntity(this, "Cassandra Cluster"));
 
     if (StringUtils.isNotBlank(name)) {
       var hasValidCharacters = isValidLowercaseLettersNumbersAndHyphens(name);

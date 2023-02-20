@@ -1,6 +1,9 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice;
 
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.AzureAppServicePlan;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureOsType;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzurePricingPlan;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -92,7 +95,7 @@ public class AzureAppServicePlanTest {
 
     assertThat(appServicePlan.getName()).isEqualTo(APP_SERVICE_PLAN_NAME);
     assertThat(appServicePlan.getAzureResourceGroup()).isEqualTo(AZURE_RESOURCE_GROUP);
-    assertThat(appServicePlan.getAzureRegion()).isEqualTo(SELECTED_REGION);
+    assertThat(appServicePlan.getRegion()).isEqualTo(SELECTED_REGION);
   }
 
   @Test
@@ -102,7 +105,7 @@ public class AzureAppServicePlanTest {
 
     assertThat(appServicePlan.getName()).isEqualTo(APP_SERVICE_PLAN_NAME);
     assertThat(appServicePlan.getAzureResourceGroup()).isEqualTo(AZURE_RESOURCE_GROUP);
-    assertThat(appServicePlan.getAzureRegion()).isEqualTo(SELECTED_REGION);
+    assertThat(appServicePlan.getRegion()).isEqualTo(SELECTED_REGION);
     assertThat(appServicePlan.getOperatingSystem()).isEqualTo(SELECTED_OPERATING_SYSTEM);
   }
 
@@ -113,7 +116,7 @@ public class AzureAppServicePlanTest {
 
     assertThat(appServicePlan.getName()).isEqualTo(APP_SERVICE_PLAN_NAME);
     assertThat(appServicePlan.getAzureResourceGroup()).isEqualTo(AZURE_RESOURCE_GROUP);
-    assertThat(appServicePlan.getAzureRegion()).isEqualTo(SELECTED_REGION);
+    assertThat(appServicePlan.getRegion()).isEqualTo(SELECTED_REGION);
     assertThat(appServicePlan.getOperatingSystem()).isEqualTo(SELECTED_OPERATING_SYSTEM);
     assertThat(appServicePlan.getPricingPlan()).isEqualTo(SELECTED_PRICING_PLAN);
   }
@@ -126,7 +129,7 @@ public class AzureAppServicePlanTest {
 
     assertThat(appServicePlan.getName()).isEqualTo(APP_SERVICE_PLAN_NAME);
     assertThat(appServicePlan.getAzureResourceGroup()).isEqualTo(AZURE_RESOURCE_GROUP);
-    assertThat(appServicePlan.getAzureRegion()).isEqualTo(SELECTED_REGION);
+    assertThat(appServicePlan.getRegion()).isEqualTo(SELECTED_REGION);
     assertThat(appServicePlan.getOperatingSystem()).isEqualTo(SELECTED_OPERATING_SYSTEM);
     assertThat(appServicePlan.getPricingPlan()).isEqualTo(SELECTED_PRICING_PLAN);
     assertThat(appServicePlan.getZoneRedundancyEnabled()).isEqualTo(true);
@@ -142,7 +145,7 @@ public class AzureAppServicePlanTest {
 
     assertThat(appServicePlan.getName()).isEqualTo(APP_SERVICE_PLAN_NAME);
     assertThat(appServicePlan.getAzureResourceGroup()).isEqualTo(AZURE_RESOURCE_GROUP);
-    assertThat(appServicePlan.getAzureRegion()).isEqualTo(SELECTED_REGION);
+    assertThat(appServicePlan.getRegion()).isEqualTo(SELECTED_REGION);
     assertThat(appServicePlan.getOperatingSystem()).isEqualTo(SELECTED_OPERATING_SYSTEM);
     assertThat(appServicePlan.getPricingPlan()).isEqualTo(SELECTED_PRICING_PLAN);
     assertThat(appServicePlan.getZoneRedundancyEnabled()).isEqualTo(true);
@@ -162,7 +165,7 @@ public class AzureAppServicePlanTest {
 
     assertThat(appServicePlan.getName()).isEqualTo(APP_SERVICE_PLAN_NAME);
     assertThat(appServicePlan.getAzureResourceGroup()).isEqualTo(AZURE_RESOURCE_GROUP);
-    assertThat(appServicePlan.getAzureRegion()).isEqualTo(SELECTED_REGION);
+    assertThat(appServicePlan.getRegion()).isEqualTo(SELECTED_REGION);
     assertThat(appServicePlan.getOperatingSystem()).isEqualTo(SELECTED_OPERATING_SYSTEM);
     assertThat(appServicePlan.getPricingPlan()).isEqualTo(SELECTED_PRICING_PLAN);
     assertThat(appServicePlan.getZoneRedundancyEnabled()).isEqualTo(true);
@@ -174,7 +177,7 @@ public class AzureAppServicePlanTest {
     return AzureAppServicePlan.builder()
         .withName(APP_SERVICE_PLAN_NAME)
         .withAzureResourceGroup(AZURE_RESOURCE_GROUP)
-        .withAzureRegion(SELECTED_REGION)
+        .withRegion(SELECTED_REGION)
         .withOperatingSystem(SELECTED_OPERATING_SYSTEM)
         .withPricingPlan(SELECTED_PRICING_PLAN);
   }

@@ -7,7 +7,7 @@ import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSRelationalDb
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.*;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.KubernetesCluster;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PaaSPostgreSqlDatabase;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureEntity;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceEntity;
 import com.yanchware.fractal.sdk.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 
@@ -89,26 +89,6 @@ public class BlueprintComponentDtoTest {
         ));
   }
 
-  /*@Test
-  public void blueprintComponentValid_when_aksWithJaeger() {
-    var aks = getAksBuilder().withTracing(getJaegerExample()).build();
-    var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(aks));
-
-    var jaeger = (Jaeger) aks.getTracingInstances().get(0);
-    var jaegerDto = getBlueprintComponentDto(blueprintComponentDtoList, jaeger.getId().getValue());
-    var aksId = aks.getId().getValue();
-
-    assertGenericComponent(jaegerDto, jaeger, CaaSTracing.TYPE);
-    assertSoftly(softly -> softly
-        .assertThat(jaegerDto.getParameters().values())
-        .as("Component Parameters")
-        .containsExactlyInAnyOrder(
-            jaeger.getNamespace(),
-            jaeger.getStorageSettings(),
-            aksId
-        ));
-  }*/
-
   @Test
   public void blueprintComponentValid_when_aksWithElasticLogging() {
     var aks = getAksBuilder().withLogging(getElasticLoggingExample()).build();
@@ -186,52 +166,6 @@ public class BlueprintComponentDtoTest {
             aksId
         ));
   }
-
-  /*@Test
-  public void blueprintComponentValid_when_aksWithMessageBroker() {
-    var aks = getAksBuilder().withMessageBroker(getKafkaClusterExample()).build();
-    var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(aks));
-
-    var messageBroker = (KafkaCluster) aks.getMessageBrokerInstances().get(0);
-    var messageBrokerDto = getBlueprintComponentDto(blueprintComponentDtoList, messageBroker.getId().getValue());
-    var aksId = aks.getId().getValue();
-
-    assertGenericComponent(messageBrokerDto, messageBroker, CaaSMessageBroker.TYPE);
-    assertSoftly(softly -> softly
-        .assertThat(messageBrokerDto.getParameters().values())
-        .as("Component Parameters")
-        .containsExactlyInAnyOrder(
-            messageBroker.getNamespace(),
-            aksId
-        ));
-
-    List<String> kafkaTopicIds = messageBroker.getKafkaTopics().stream().map(topic -> topic.getId().getValue()).toList();
-    var kafkaTopicDto = getBlueprintComponentDto(blueprintComponentDtoList, kafkaTopicIds.get(0));
-    var kafkaTopicComp = messageBroker.getKafkaTopics().stream().filter(x -> x.getId().getValue().equals(kafkaTopicDto.getId())).findFirst().get();
-    assertGenericComponent(kafkaTopicDto, kafkaTopicComp, CaaSKafkaTopic.TYPE);
-    assertSoftly(softly -> softly
-        .assertThat(kafkaTopicDto.getParameters().values())
-        .as("Component Parameters")
-        .containsExactlyInAnyOrder(
-            kafkaTopicComp.getNamespace(),
-            aksId,
-            kafkaTopicComp.getClusterName()
-        ));
-
-    List<String> kafkaUserIds = messageBroker.getKafkaUsers().stream().map(user -> user.getId().getValue()).toList();
-    var kafkaUserDto = getBlueprintComponentDto(blueprintComponentDtoList, kafkaUserIds.get(0));
-    var kafkaUserComp = messageBroker.getKafkaUsers().stream().filter(x -> x.getId().getValue().equals(kafkaUserDto.getId())).findFirst().get();
-    assertGenericComponent(kafkaUserDto, kafkaUserComp, CaaSKafkaUser.TYPE);
-    assertSoftly(softly -> softly
-        .assertThat(kafkaUserDto.getParameters().values())
-        .as("Component Parameters")
-        .containsExactlyInAnyOrder(
-            kafkaUserComp.getNamespace(),
-            aksId,
-            kafkaUserComp.getClusterName(),
-            kafkaUserComp.getAcls()
-        ));
-  }*/
 
   @Test
   public void blueprintComponentValid_when_AksLiveSystemComponentConverted() {
@@ -324,7 +258,7 @@ public class BlueprintComponentDtoTest {
       softly.assertThat(azurePgDbBlueprintCompDto.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(
         db1.getName(),
         db1.getSchema(),
-        ((AzureEntity)db1).getAzureRegion().toString());
+        ((AzureResourceEntity)db1).getAzureRegion().toString());
       softly.assertThat(azurePgDbBlueprintCompDto.getDependencies()).as("Component Dependencies").containsExactly(apg.getId().getValue());
       softly.assertThat(azurePgDbBlueprintCompDto.getLinks()).as("Component Links").isEmpty();
     });
@@ -338,7 +272,7 @@ public class BlueprintComponentDtoTest {
     assertSoftly(softly -> {
       softly.assertThat(azurePgDbBlueprintCompDto2.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(
         db2.getName(),
-        ((AzureEntity)db1).getAzureRegion().toString());
+        ((AzureResourceEntity)db1).getAzureRegion().toString());
       softly.assertThat(azurePgDbBlueprintCompDto2.getDependencies()).as("Component Dependencies").containsExactly(apg.getId().getValue());
       softly.assertThat(azurePgDbBlueprintCompDto2.getLinks()).as("Component Links").containsAll(apg.getLinks());
     });
@@ -369,7 +303,7 @@ public class BlueprintComponentDtoTest {
   }
 
   private BlueprintComponentDto getBlueprintComponentDto(List<BlueprintComponentDto> blueprintComponentDtoList, String compId) {
-    return blueprintComponentDtoList.stream().filter(dto -> dto.getId().equals(compId)).findFirst().get();
+    return blueprintComponentDtoList.stream().filter(dto -> dto.getId().equals(compId)).findFirst().orElse(null);
   }
 
   private void assertComponentSize(KubernetesCluster kubernetesCluster, List<BlueprintComponentDto> blueprintComponentDtos) {

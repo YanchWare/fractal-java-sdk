@@ -1,75 +1,32 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
 
 import com.yanchware.fractal.sdk.domain.entities.Validatable;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Map;
 
-@Getter
-@Setter(AccessLevel.PRIVATE)
-@Builder(setterPrefix = "with")
-public class AzureResourceGroup implements Validatable {
+public class AzureResourceGroup extends AzureProxyResource implements Validatable {
   private static final String NAME_IS_EMPTY_OR_TOO_LONG = "[AzureResourceGroup Validation] name is empty or it exceeds 90 characters";
   private final static String REGION_IS_BLANK = "[AzureResourceGroup Validation] Region has not been defined and it is required";
 
-  private String name;
-  private AzureRegion region;
-  private Map<String, String> tags;
-
-  private AzureResourceGroup() {
+  public AzureResourceGroup(String name, AzureRegion region, Map<String, String> tags) {
+    super(name, region, tags);
   }
 
   public static AzureResourceGroupBuilder builder() {
     return new AzureResourceGroupBuilder();
   }
 
-  public static class AzureResourceGroupBuilder {
-    private final AzureResourceGroup component;
-    private final AzureResourceGroupBuilder builder;
+  public static class AzureResourceGroupBuilder extends AzureProxyResource.Builder<AzureResourceGroupBuilder>  {
 
-    public AzureResourceGroupBuilder () {
-      component = createComponent();
-      builder = getBuilder();
-    }
-
-    protected AzureResourceGroup createComponent() {
-      return new AzureResourceGroup();
-    }
-
-    protected AzureResourceGroupBuilder getBuilder() {
-      return this;
-    }
-
-    public AzureResourceGroupBuilder withName(String name) {
-      component.setName(name);
-      return builder;
-    }
-
-    public AzureResourceGroupBuilder withRegion(AzureRegion region) {
-      component.setRegion(region);
-      return builder;
-    }
-
-    public AzureResourceGroupBuilder withTags(Map<String, String> tags) {
-      component.setTags(tags);
-      return builder;
-    }
-
-    public AzureResourceGroupBuilder withTag(String key, String value) {
-      if (component.getTags() == null) {
-        withTags(new HashMap<>());
-      }
-
-      component.getTags().put(key, value);
-      return builder;
-    }
-
+    @Override
     public AzureResourceGroup build(){
-      Collection<String> errors = component.validate();
+      var azureResourceGroup = new AzureResourceGroup(name, region, tags);
+      
+      var errors = azureResourceGroup.validate();
 
       if (!errors.isEmpty()) {
         throw new IllegalArgumentException(String.format(
@@ -77,19 +34,19 @@ public class AzureResourceGroup implements Validatable {
             Arrays.toString(errors.toArray())));
       }
 
-      return component;
+      return azureResourceGroup;
     }
   }
 
   @Override
   public Collection<String> validate() {
     Collection<String> errors = new ArrayList<>();
-
+    var name = this.getName();
     if (StringUtils.isBlank(name) || name.length() > 90) {
       errors.add(NAME_IS_EMPTY_OR_TOO_LONG);
     } 
     
-    if(region == null) {
+    if(getRegion() == null) {
       errors.add(REGION_IS_BLANK);
     }
 

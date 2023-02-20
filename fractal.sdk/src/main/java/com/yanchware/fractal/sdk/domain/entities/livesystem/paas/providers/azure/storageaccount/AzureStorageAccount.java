@@ -2,7 +2,7 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.LiveSystemComponent;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PaaSDataStorage;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureEntity;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceEntity;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
@@ -23,7 +23,7 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_AZURE_ST
 @Getter
 @Setter
 @ToString(callSuper = true)
-public class AzureStorageAccount extends PaaSDataStorage implements AzureEntity, LiveSystemComponent {
+public class AzureStorageAccount extends PaaSDataStorage implements AzureResourceEntity, LiveSystemComponent {
 
   private final static Pattern valueValidation = Pattern.compile("^[a-z0-9]{3,24}$");
   private final static String ILLEGAL_NAME_TEMPLATE = "Component id '%s' is illegal. Storage account names must be between 3 and 24 characters in length and may contain numbers and lowercase letters only";

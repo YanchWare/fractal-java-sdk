@@ -3,8 +3,8 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 import com.yanchware.fractal.sdk.domain.entities.Component;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSMessaging;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.LiveSystemComponent;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureEntity;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceEntity;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.servicebus.valueobjects.Encryption;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.servicebus.valueobjects.ServiceBusSku;
@@ -25,7 +25,7 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_SERVICE_
 @Getter
 @Setter
 @ToString(callSuper = true)
-public class AzureServiceBus extends PaaSMessaging implements AzureEntity, LiveSystemComponent {
+public class AzureServiceBus extends PaaSMessaging implements AzureResourceEntity, LiveSystemComponent {
   private static final Integer ID_MIN_LENGTH = 6;
   private static final Integer ID_MAX_LENGTH = 50;
   private final static String NAME_LENGTH_MISMATCH_TEMPLATE =

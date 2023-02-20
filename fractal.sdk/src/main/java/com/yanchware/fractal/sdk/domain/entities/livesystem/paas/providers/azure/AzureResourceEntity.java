@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
-public interface AzureEntity {
+public interface AzureResourceEntity {
   AzureResourceGroup getAzureResourceGroup();
   void setAzureResourceGroup(AzureResourceGroup azureResourceGroup);
   AzureRegion getAzureRegion();
@@ -16,12 +16,12 @@ public interface AzureEntity {
   String getName();
   void setName(String Name);
 
-  static Collection<String> validateAzureEntity(AzureEntity azureEntity, String entityName) {
+  static Collection<String> validateAzureResourceEntity(AzureResourceEntity resourceEntity, String entityName) {
     final var REGION_IS_NULL_TEMPLATE = "[Azure %s Validation] Region has not been defined and it is required";
 
     var errors = new ArrayList<String>();
 
-    if (azureEntity.getAzureRegion() == null && azureEntity.getAzureResourceGroup() == null) {
+    if (resourceEntity.getAzureRegion() == null && resourceEntity.getAzureResourceGroup() == null) {
       errors.add(String.format(REGION_IS_NULL_TEMPLATE, entityName));
     }
 

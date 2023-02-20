@@ -5,8 +5,8 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.CustomWorkload;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.CustomWorkloadBuilder;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.CustomWorkloadRole;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.LiveSystemComponent;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureEntity;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceEntity;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.Getter;
@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
+import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidAlphanumericsHyphens;
 import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLength;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_AZURE_WEBAPP;
@@ -23,7 +24,7 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_AZURE_WE
 @Getter
 @Setter
 @ToString(callSuper = true)
-public class AzureWebApp extends PaaSWorkload implements AzureEntity, LiveSystemComponent, CustomWorkload {
+public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, LiveSystemComponent, CustomWorkload {
 
   private final static String NAME_NOT_VALID = "[AzureWebApp Validation] The name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen, and must be between 2 and 60 characters";
 
@@ -44,6 +45,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureEntity, LiveSystem
   private AzureWebAppInfrastructure infrastructure;
   private Map<String, String> tags;
   private AzureAppServicePlan appServicePlan;
+  private Collection<AzureKeyVaultCertificate> certificates;
 
   @Override
   public ProviderType getProvider(){
@@ -151,6 +153,23 @@ public class AzureWebApp extends PaaSWorkload implements AzureEntity, LiveSystem
     
     public AzureWebAppBuilder withAppServicePlan (AzureAppServicePlan appServicePlan) {
       component.setAppServicePlan(appServicePlan);
+      return builder;
+    }
+
+    public AzureWebAppBuilder withCertificate(AzureKeyVaultCertificate certificate) {
+      return withCertificates(List.of(certificate));
+    }
+
+    public AzureWebAppBuilder withCertificates(Collection<? extends AzureKeyVaultCertificate> certificates) {
+      if (isBlank(certificates)) {
+        return builder;
+      }
+
+      if (component.getCertificates() == null) {
+        component.setCertificates(new ArrayList<>());
+      }
+
+      component.getCertificates().addAll(certificates);
       return builder;
     }
   }

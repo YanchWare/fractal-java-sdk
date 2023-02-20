@@ -2,9 +2,17 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.servicebus.valueobjects.Encryption;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.servicebus.valueobjects.KeySource;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.servicebus.valueobjects.ServiceBusSku;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.servicebus.valueobjects.ServiceBusSkuTier;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.valueobjects.AzureIdentityType;
+import com.yanchware.fractal.sdk.valueobjects.ComponentId;
+import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+import java.util.Map;
 
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion.EUROPE_WEST;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,16 +36,74 @@ public class AzureServiceBusTest {
 
   @Test
   public void noValidationErrors_when_serviceBusHasRequiredFields() {
-    AzureResourceGroup azureResourceGroup = AzureResourceGroup.builder().withName("az-group").withRegion(EUROPE_WEST).build();
+    var azureResourceGroup = AzureResourceGroup.builder().withName("az-group").withRegion(EUROPE_WEST).build();
+    
+    var idOrName = "sb-test-x";
+    
+    var tags = Map.of("tagKey1", "tagValue1");
+    
+    var sku = ServiceBusSku.builder()
+        .withTier(ServiceBusSkuTier.BASIC)
+        .build();
+    
+    var encryption = Encryption.builder()
+        .withKeySource(KeySource.MICROSOFT_KEYVAULT)
+        .build();
+    
+    var queue = AzureServiceBusQueue.builder()
+        .withId("queue-id")
+        .withDisplayName("queue1")
+        .build();
+    
+    var topic = AzureServiceBusTopic.builder()
+        .withId("topic-id")
+        .withDisplayName("topic1")
+        .build();
+    
     var serviceBus = AzureServiceBus.builder()
-        .withId("sb-test-x")
-        .withName("sb-test-x")
+        .withId(idOrName)
+        .withName(idOrName)
         .withRegion(AzureRegion.EUROPE_WEST)
         .withAzureResourceGroup(azureResourceGroup)
-        .withSku(ServiceBusSku.builder()
-            .withTier(ServiceBusSkuTier.BASIC)
-            .build())
+        .withTags(tags)
+        .withSku(sku)
+        .withIdentity(AzureIdentityType.USER_ASSIGNED)
+        .withEncryption(encryption)
+        .withDisableLocalAuth(Boolean.FALSE)
+        .withZoneRedundant(Boolean.FALSE)
+        .withQueue(queue)
+        .withTopic(topic)
         .build();
+    
     assertThat(serviceBus.validate()).isEmpty();
+    
+    assertThat(serviceBus)
+        .asInstanceOf(InstanceOfAssertFactories.type(AzureServiceBus.class))
+        .extracting(
+            AzureServiceBus::getId,
+            AzureServiceBus::getName,
+            AzureServiceBus::getAzureRegion,
+            AzureServiceBus::getAzureResourceGroup,
+            AzureServiceBus::getTags,
+            AzureServiceBus::getSku,
+            AzureServiceBus::getIdentity,
+            AzureServiceBus::getEncryption,
+            AzureServiceBus::getDisableLocalAuth,
+            AzureServiceBus::getZoneRedundant,
+            AzureServiceBus::getQueues,
+            AzureServiceBus::getTopics)
+        
+        .containsExactly(ComponentId.from(idOrName),
+            idOrName,
+            AzureRegion.EUROPE_WEST,
+            azureResourceGroup,
+            tags,
+            sku,
+            AzureIdentityType.USER_ASSIGNED,
+            encryption,
+            Boolean.FALSE,
+            Boolean.FALSE,
+            List.of(queue),
+            List.of(topic));
   }
 }
