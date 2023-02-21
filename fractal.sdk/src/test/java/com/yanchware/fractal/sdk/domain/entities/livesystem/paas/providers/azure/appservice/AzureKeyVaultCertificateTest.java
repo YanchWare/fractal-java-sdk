@@ -54,14 +54,12 @@ class AzureKeyVaultCertificateTest {
   public void noValidationErrors_when_certificateHasRequiredFields() {
     var keyVaultId = "key-vault-id";
     var certificateName = "certificate-name";
-    var certificateFriendlyName = "certificate-friendly-name";
     var certificatePassword = "password";
     var tags = Map.of("key3", "value3", "key4", "value4");
     
     var certificate = AzureKeyVaultCertificate.builder()
         .withKeyVaultId(keyVaultId)
         .withName(certificateName)
-        .withFriendlyName(certificateFriendlyName)
         .withPassword(certificatePassword)
         .withRegion(AzureRegion.EUROPE_WEST)
         .withTags(tags)
@@ -75,13 +73,11 @@ class AzureKeyVaultCertificateTest {
         .asInstanceOf(InstanceOfAssertFactories.type(AzureKeyVaultCertificate.class))
         .extracting(AzureKeyVaultCertificate::getKeyVaultId,
             AzureKeyVaultCertificate::getName,
-            AzureKeyVaultCertificate::getFriendlyName,
             AzureKeyVaultCertificate::getPassword,
             AzureKeyVaultCertificate::getRegion,
             AzureKeyVaultCertificate::getTags)
         .containsExactly(keyVaultId, 
-            certificateName, 
-            certificateFriendlyName,
+            certificateName,
             certificatePassword, 
             AzureRegion.EUROPE_WEST,
             Map.of("key1", "value1", "key2", "value2", "key3", "value3", "key4", "value4"));

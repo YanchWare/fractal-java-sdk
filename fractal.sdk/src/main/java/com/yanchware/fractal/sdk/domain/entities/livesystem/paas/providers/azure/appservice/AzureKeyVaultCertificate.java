@@ -3,6 +3,7 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 import com.yanchware.fractal.sdk.domain.entities.Validatable;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureProxyResource;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,35 +15,21 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 /*
   Private key certificates (.pfx) can be used for TLS/SSL bindings and can be loaded to the certificate store for your app to consume. 
  */
+@Getter
 public class AzureKeyVaultCertificate extends AzureProxyResource implements Validatable {
   private final static String KEY_VAULT_ID_IS_BLANK = "[AzureKeyVaultCertificate Validation] KeyVaultId has not been defined and it is required";
   private final static String NAME_IS_BLANK = "[AzureKeyVaultCertificate Validation] Name has not been defined and it is required";
   private final String keyVaultId;
-  private final String friendlyName;
   private final String password;
-
-  public String getKeyVaultId() {
-    return keyVaultId;
-  }
-
-  public String getFriendlyName() {
-    return friendlyName;
-  }
-
-  public String getPassword() {
-    return password;
-  }
 
   public AzureKeyVaultCertificate(String name,
                                   AzureRegion region,
                                   Map<String, String> tags,
                                   String keyVaultId,
-                                  String friendlyName,
                                   String password) {
     super(name, region, tags);
     
     this.keyVaultId = keyVaultId;
-    this.friendlyName = friendlyName;
     this.password = password;
   }
 
@@ -52,16 +39,10 @@ public class AzureKeyVaultCertificate extends AzureProxyResource implements Vali
 
   public static class Builder extends AzureProxyResource.Builder<Builder> {
     protected String keyVaultId;
-    protected String friendlyName;
     protected String password;
 
     public Builder withKeyVaultId(String keyVaultId) {
       this.keyVaultId = keyVaultId;
-      return this;
-    }
-
-    public Builder withFriendlyName(String friendlyName) {
-      this.friendlyName = friendlyName;
       return this;
     }
 
@@ -72,7 +53,7 @@ public class AzureKeyVaultCertificate extends AzureProxyResource implements Vali
 
     @Override
     public AzureKeyVaultCertificate build(){
-      var certificate = new AzureKeyVaultCertificate(name, region, tags, keyVaultId, friendlyName, password);
+      var certificate = new AzureKeyVaultCertificate(name, region, tags, keyVaultId, password);
       Collection<String> errors = certificate.validate();
 
       if (!errors.isEmpty()) {

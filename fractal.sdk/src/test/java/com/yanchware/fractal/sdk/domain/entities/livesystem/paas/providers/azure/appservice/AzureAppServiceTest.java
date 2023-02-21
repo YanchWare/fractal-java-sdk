@@ -191,6 +191,15 @@ public class AzureAppServiceTest {
   }
 
   @Test
+  public void exceptionThrown_when_wrongCustomDomain() {
+    var builder = generateSampleBuilder()
+        .withCustomDomain("wrong");
+    assertThatThrownBy(builder::build).
+        isInstanceOf(IllegalArgumentException.class).
+        hasMessageContaining("[AzureWebApp Validation] The CustomDomain must contain at least one period, cannot start or end with a period. CustomDomain are made up of letters, numbers, periods, and dashes");
+  }
+
+  @Test
   public void connectivityIsProperlySet_when_settingConnectivity() {
     var webApp = generateSampleBuilder()
         .withHosting(AzureWebAppHosting.builder()
@@ -377,7 +386,6 @@ public class AzureAppServiceTest {
     var certificate = AzureKeyVaultCertificate.builder()
         .withKeyVaultId("key-vault-id")
         .withName("certificate-name")
-        .withFriendlyName("friendly-name")
         .build();
 
     var webApp = generateSampleBuilder()
@@ -386,6 +394,8 @@ public class AzureAppServiceTest {
             .withJavaVersion("java version")
             .build())
         .withCertificate(certificate)
+        .withCustomDomain("custom.domain.com")
+        .withCustomDomain("custom1.domain.com")
         .withResourceGroup(resourceGroup)
         .withTags(tags)
         .build();
