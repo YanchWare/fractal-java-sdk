@@ -2,6 +2,7 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 
 import com.yanchware.fractal.sdk.domain.entities.Validatable;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.*;
+import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLengt
  * testing environment you can share a plan across multiple apps.
  */
 
+@Getter
 public class AzureAppServicePlan extends AzureResource implements Validatable {
 
   private final static String NAME_NOT_VALID = "[AzureAppServicePlan Validation] The name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen, and must be less than or equal to 40 characters";
@@ -39,23 +41,9 @@ public class AzureAppServicePlan extends AzureResource implements Validatable {
     this.zoneRedundancyEnabled = zoneRedundancyEnabled;
   }
 
-  public AzureOsType getOperatingSystem() {
-    return operatingSystem;
-  }
-
-  public AzurePricingPlan getPricingPlan() {
-    return pricingPlan;
-  }
-
-  public Boolean getZoneRedundancyEnabled() {
-    return zoneRedundancyEnabled;
-  }
-
   public static AzureAppServicePlanBuilder builder() {
     return new AzureAppServicePlanBuilder();
   }
-  
-  
   
   public static class AzureAppServicePlanBuilder extends AzureResource.Builder<AzureAppServicePlanBuilder> {
     

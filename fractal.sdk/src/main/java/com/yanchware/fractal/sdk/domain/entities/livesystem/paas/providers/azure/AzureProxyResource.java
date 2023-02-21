@@ -1,31 +1,18 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings("unchecked")
+@Getter
+@AllArgsConstructor
 public class AzureProxyResource {
   private final String name;
   private final AzureRegion region;
   private final Map<String, String> tags;
-
-  public AzureProxyResource(String name, AzureRegion region, Map<String, String> tags) {
-    this.name = name;
-    this.region = region;
-    this.tags = tags;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public AzureRegion getRegion() {
-    return region;
-  }
-
-  public Map<String, String> getTags() {
-    return tags;
-  }
   
   public static Builder<? extends Builder<?>> builder() {
     return new Builder<>();

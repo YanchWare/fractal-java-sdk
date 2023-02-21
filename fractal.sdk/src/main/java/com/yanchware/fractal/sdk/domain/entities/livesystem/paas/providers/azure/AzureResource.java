@@ -1,7 +1,11 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
 
+import lombok.Getter;
+
 import java.util.Map;
 
+
+@Getter
 public class AzureResource extends AzureProxyResource {
   private final AzureResourceGroup azureResourceGroup;
 
@@ -10,12 +14,8 @@ public class AzureResource extends AzureProxyResource {
                      Map<String, String> tags, 
                      AzureResourceGroup azureResourceGroup) {
     super(name, region, tags);
-    
-    this.azureResourceGroup = azureResourceGroup;
-  }
 
-  public AzureResourceGroup getAzureResourceGroup() {
-    return azureResourceGroup;
+    this.azureResourceGroup = azureResourceGroup;
   }
 
   public static Builder<? extends Builder<?>> builder() {

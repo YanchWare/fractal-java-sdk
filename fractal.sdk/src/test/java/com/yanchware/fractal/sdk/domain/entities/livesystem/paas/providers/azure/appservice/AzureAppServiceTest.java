@@ -4,6 +4,7 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.valueobjects.AzureAppServiceClientCertMode;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.valueobjects.AzureAppServiceRedundancyMode;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.valueobjects.AzureFtpsState;
+import com.yanchware.fractal.sdk.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -389,9 +390,14 @@ public class AzureAppServiceTest {
         .withTags(tags)
         .build();
 
+    var json = TestUtils.getJsonRepresentation(webApp);
+    
+    assertThat(json).isNotBlank();
+    
     assertThat(appServicePlan.getName()).isEqualTo(appServicePlanName);
     assertThat(appServicePlan.getTags().size()).isEqualTo(1);
     assertThat(appServicePlan.getTags()).isEqualTo(tags);
+    
     assertThat(webApp.getAppServicePlan()).isEqualTo(appServicePlan);
     assertThat(webApp.getTags().size()).isEqualTo(1);
     assertThat(webApp.getTags()).isEqualTo(tags);
