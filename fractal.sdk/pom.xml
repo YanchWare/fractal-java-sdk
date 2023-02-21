@@ -5,7 +5,7 @@
 
     <groupId>com.yanchware</groupId>
     <artifactId>fractal.sdk</artifactId>
-    <version>3.5.0</version>
+    <version>3.6.0</version>
 
     <name>${project.groupId}.${project.artifactId}</name>
     <url>https://yanchware.com/</url>
