@@ -2,12 +2,13 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 
 import com.yanchware.fractal.sdk.domain.entities.Validatable;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.*;
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Map;
 
 import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidAlphanumericsHyphens;
 import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLength;
@@ -17,72 +18,58 @@ import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLengt
  * and further optimize your Azure resource utilization. This way, if you want to save money on your 
  * testing environment you can share a plan across multiple apps.
  */
+
 @Getter
-@Setter(AccessLevel.PRIVATE)
-public class AzureAppServicePlan implements AzureEntity, Validatable {
+public class AzureAppServicePlan extends AzureResource implements Validatable {
 
   private final static String NAME_NOT_VALID = "[AzureAppServicePlan Validation] The name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen, and must be less than or equal to 40 characters";
+  private final AzureOsType operatingSystem;
+  private final AzurePricingPlan pricingPlan;
+  private final Boolean zoneRedundancyEnabled;
 
-  @Setter
-  private String name;
-  @Setter
-  private AzureResourceGroup azureResourceGroup;
-  @Setter
-  private AzureRegion azureRegion;
-  private AzureOsType operatingSystem;
-  private AzurePricingPlan pricingPlan;
-  private Boolean zoneRedundancyEnabled;
-  @Setter
-  private Map<String, String> tags;
+  public AzureAppServicePlan(String name, 
+                             AzureRegion region, 
+                             Map<String, String> tags, 
+                             AzureResourceGroup azureResourceGroup, 
+                             AzureOsType operatingSystem, 
+                             AzurePricingPlan pricingPlan, 
+                             Boolean zoneRedundancyEnabled) {
+    super(name, region, tags, azureResourceGroup);
+    
+    this.operatingSystem = operatingSystem;
+    this.pricingPlan = pricingPlan;
+    this.zoneRedundancyEnabled = zoneRedundancyEnabled;
+  }
 
   public static AzureAppServicePlanBuilder builder() {
     return new AzureAppServicePlanBuilder();
   }
   
-  public static class AzureAppServicePlanBuilder {
-
-    private final AzureAppServicePlan appServicePlan;
-    private final AzureAppServicePlanBuilder builder;
-
-    public AzureAppServicePlanBuilder () {
-      appServicePlan = createComponent();
-      builder = getBuilder();
-    }
-
-    protected AzureAppServicePlan createComponent() {
-      return new AzureAppServicePlan();
-    }
-
-    protected AzureAppServicePlanBuilder getBuilder() {
-      return this;
-    }
-
-    public AzureAppServicePlanBuilder withName(String name) {
-      appServicePlan.setName(name);
-      return builder;
-    }
+  public static class AzureAppServicePlanBuilder extends AzureResource.Builder<AzureAppServicePlanBuilder> {
+    
+    protected AzureResourceGroup azureResourceGroup;
+    protected AzureOsType operatingSystem;
+    protected AzurePricingPlan pricingPlan;
+    protected Boolean zoneRedundancyEnabled;
+    
 
     /**
      * A resource group is a collection of resources that share the same lifecycle, permissions, and policies.
      */
     public AzureAppServicePlanBuilder withAzureResourceGroup(AzureResourceGroup resourceGroup) {
-      appServicePlan.setAzureResourceGroup(resourceGroup);
-      return builder;
+      this.azureResourceGroup = resourceGroup;
+      return this;
     }
-
-    public AzureAppServicePlanBuilder withAzureRegion(AzureRegion region) {
-      appServicePlan.setAzureRegion(region);
-      return builder;
-    }
+    
 
     public AzureAppServicePlanBuilder withOperatingSystem(AzureOsType operatingSystem) {
-      appServicePlan.setOperatingSystem(operatingSystem);
-      return builder;
+      this.operatingSystem = operatingSystem;
+      return this;
     }
 
     public AzureAppServicePlanBuilder withPricingPlan(AzurePricingPlan pricingPlan) {
-      appServicePlan.setPricingPlan(pricingPlan);
-      return builder;
+      this.pricingPlan = pricingPlan;
+      return this;
     }
 
     /**
@@ -91,34 +78,20 @@ public class AzureAppServicePlan implements AzureEntity, Validatable {
      * it has been deployed
      */
     public AzureAppServicePlanBuilder withZoneRedundancyEnabled() {
-      appServicePlan.setZoneRedundancyEnabled(true);
-      return builder;
-    }
-
-    /**
-     * Tags are name/value pairs that enable you to categorize resources and view consolidated billing by 
-     * applying the same tag to multiple resources and resource groups.
-     */
-    public AzureAppServicePlanBuilder withTags(Map<String, String> tags) {
-      appServicePlan.setTags(tags);
-      return builder;
-    }
-
-    /**
-     * Tag is name/value pairs that enable you to categorize resources and view consolidated billing by 
-     * applying the same tag to multiple resources and resource groups.
-     */
-    public AzureAppServicePlanBuilder withTag(String key, String value) {
-      if (appServicePlan.getTags() == null) {
-        withTags(new HashMap<>());
-      }
-
-      appServicePlan.getTags().put(key, value);
-      return builder;
+      this.zoneRedundancyEnabled = true;
+      return this;
     }
 
     public AzureAppServicePlan build(){
-      Collection<String> errors = appServicePlan.validate();
+      var appServicePlan = new AzureAppServicePlan(name,
+          region,
+          tags,
+          azureResourceGroup,
+          operatingSystem,
+          pricingPlan,
+          zoneRedundancyEnabled);
+      
+      var errors = appServicePlan.validate();
 
       if (!errors.isEmpty()) {
         throw new IllegalArgumentException(String.format(
@@ -135,6 +108,7 @@ public class AzureAppServicePlan implements AzureEntity, Validatable {
   public Collection<String> validate() {
     Collection<String> errors = new ArrayList<>();
 
+    var name = getName();
     if(StringUtils.isBlank(name)) {
       errors.add(NAME_NOT_VALID);
     } else {

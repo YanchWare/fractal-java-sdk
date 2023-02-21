@@ -5,27 +5,31 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.CustomWorkload;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.CustomWorkloadBuilder;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.CustomWorkloadRole;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.LiveSystemComponent;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureEntity;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceEntity;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
+import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidAlphanumericsHyphens;
+import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidLettersNumbersPeriodsAndHyphens;
 import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLength;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_AZURE_WEBAPP;
 
 @Getter
 @Setter
 @ToString(callSuper = true)
-public class AzureWebApp extends PaaSWorkload implements AzureEntity, LiveSystemComponent, CustomWorkload {
+public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, LiveSystemComponent, CustomWorkload {
 
   private final static String NAME_NOT_VALID = "[AzureWebApp Validation] The name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen, and must be between 2 and 60 characters";
+  private final static String CUSTOM_DOMAIN_NOT_VALID = "[AzureWebApp Validation] The CustomDomain must contain at least one period, cannot start or end with a period. CustomDomain are made up of letters, numbers, periods, and dashes.";
 
   private String name;
   private String privateSSHKeyPassphraseSecretId;
@@ -44,6 +48,9 @@ public class AzureWebApp extends PaaSWorkload implements AzureEntity, LiveSystem
   private AzureWebAppInfrastructure infrastructure;
   private Map<String, String> tags;
   private AzureAppServicePlan appServicePlan;
+  private Collection<AzureKeyVaultCertificate> certificates;
+  private Collection<String> customDomains;
+
 
   @Override
   public ProviderType getProvider(){
@@ -69,12 +76,24 @@ public class AzureWebApp extends PaaSWorkload implements AzureEntity, LiveSystem
       }
     }
     
+    if(ObjectUtils.isNotEmpty(customDomains)) {
+      for (var customDomain : customDomains) {
+        if(StringUtils.isNotBlank(customDomain)) {
+          var hasValidCharacters = isValidLettersNumbersPeriodsAndHyphens(customDomain);
+          if(!hasValidCharacters) {
+            errors.add(CUSTOM_DOMAIN_NOT_VALID);
+          }
+        }
+      }
+    }
+    
     if(hosting != null) {
       errors.addAll(hosting.validate());  
     }
     else {
       errors.add(NO_HOSTING_DEFINED);
     }
+    
     return errors;
   }
 
@@ -151,6 +170,48 @@ public class AzureWebApp extends PaaSWorkload implements AzureEntity, LiveSystem
     
     public AzureWebAppBuilder withAppServicePlan (AzureAppServicePlan appServicePlan) {
       component.setAppServicePlan(appServicePlan);
+      return builder;
+    }
+
+    public AzureWebAppBuilder withCertificate(AzureKeyVaultCertificate certificate) {
+      return withCertificates(List.of(certificate));
+    }
+
+    public AzureWebAppBuilder withCertificates(Collection<? extends AzureKeyVaultCertificate> certificates) {
+      if (isBlank(certificates)) {
+        return builder;
+      }
+
+      if (component.getCertificates() == null) {
+        component.setCertificates(new ArrayList<>());
+      }
+
+      component.getCertificates().addAll(certificates);
+      return builder;
+    }
+
+    /**
+     * The CustomDomain must contain at least one period, cannot start or end with a period. 
+     * CustomDomain are made up of letters, numbers, periods, and dashes.
+     */
+    public AzureWebAppBuilder withCustomDomain(String customDomain) {
+      return withCustomDomains(List.of(customDomain));
+    }
+
+    /**
+     * The CustomDomains list must contain CustomDomain that has at least one period, cannot start or end with a period. 
+     * CustomDomain are made up of letters, numbers, periods, and dashes.
+     */
+    public AzureWebAppBuilder withCustomDomains(Collection<? extends String> customDomains) {
+      if (isBlank(customDomains)) {
+        return builder;
+      }
+
+      if (component.getCustomDomains() == null) {
+        component.setCustomDomains(new ArrayList<>());
+      }
+
+      component.getCustomDomains().addAll(customDomains);
       return builder;
     }
   }

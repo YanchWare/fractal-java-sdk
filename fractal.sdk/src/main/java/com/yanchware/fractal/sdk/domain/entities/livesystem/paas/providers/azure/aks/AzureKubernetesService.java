@@ -2,8 +2,8 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.KubernetesCluster;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.RoleAssignment;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureEntity;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceEntity;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.AccessLevel;
@@ -22,7 +22,7 @@ import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLengt
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
-public class AzureKubernetesService extends KubernetesCluster implements AzureEntity {
+public class AzureKubernetesService extends KubernetesCluster implements AzureResourceEntity {
   private final static String EMPTY_NODE_POOL = "[AzureKubernetesService Validation] Node pool list is null or empty and at least one node pool is required";
   private final static String REGION_IS_NULL = "[AzureKubernetesService Validation] Region is not specified and it is required";
   private final static String VNET_ADDRESS_SPACE_RANGE_NOT_VALID = "[KubernetesCluster Validation] VNet Address Space IP Range does not contain a valid ip with mask";
@@ -195,7 +195,7 @@ public class AzureKubernetesService extends KubernetesCluster implements AzureEn
   public Collection<String> validate() {
 
     Collection<String> errors = super.validate();
-    errors.addAll(AzureEntity.validateAzureEntity(this, "Kubernetes Service"));
+    errors.addAll(AzureResourceEntity.validateAzureResourceEntity(this, "Kubernetes Service"));
 
     if(StringUtils.isNotBlank(name)) {
       var isAlphaNumerics = isValidAlphanumericsUnderscoresHyphens(name);

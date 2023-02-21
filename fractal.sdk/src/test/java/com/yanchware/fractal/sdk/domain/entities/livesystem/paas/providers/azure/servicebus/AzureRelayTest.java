@@ -9,7 +9,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class AzureRelayTest {
-
   @Test
   public void exceptionThrown_when_idIsLessThan6Characters() {
     assertThatThrownBy(() -> AzureRelay.builder().withId("comp-id").withName("test").build())

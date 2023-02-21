@@ -1,9 +1,10 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice;
 
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.*;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.*;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.valueobjects.AzureAppServiceClientCertMode;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.valueobjects.AzureAppServiceRedundancyMode;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.valueobjects.AzureFtpsState;
+import com.yanchware.fractal.sdk.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -190,6 +191,15 @@ public class AzureAppServiceTest {
   }
 
   @Test
+  public void exceptionThrown_when_wrongCustomDomain() {
+    var builder = generateSampleBuilder()
+        .withCustomDomain("wrong");
+    assertThatThrownBy(builder::build).
+        isInstanceOf(IllegalArgumentException.class).
+        hasMessageContaining("[AzureWebApp Validation] The CustomDomain must contain at least one period, cannot start or end with a period. CustomDomain are made up of letters, numbers, periods, and dashes");
+  }
+
+  @Test
   public void connectivityIsProperlySet_when_settingConnectivity() {
     var webApp = generateSampleBuilder()
         .withHosting(AzureWebAppHosting.builder()
@@ -366,11 +376,16 @@ public class AzureAppServiceTest {
     var appServicePlan = AzureAppServicePlan.builder()
         .withName(appServicePlanName)
         .withAzureResourceGroup(resourceGroup)
-        .withAzureRegion(selectedRegion)
+        .withRegion(selectedRegion)
         .withOperatingSystem(selectedOperatingSystem)
         .withPricingPlan(selectedPricingPlan)
         .withZoneRedundancyEnabled()
         .withTags(tags)
+        .build();
+    
+    var certificate = AzureKeyVaultCertificate.builder()
+        .withKeyVaultId("key-vault-id")
+        .withName("certificate-name")
         .build();
 
     var webApp = generateSampleBuilder()
@@ -378,12 +393,21 @@ public class AzureAppServiceTest {
         .withHosting(AzureWebAppHosting.builder()
             .withJavaVersion("java version")
             .build())
+        .withCertificate(certificate)
+        .withCustomDomain("custom.domain.com")
+        .withCustomDomain("custom1.domain.com")
+        .withResourceGroup(resourceGroup)
         .withTags(tags)
         .build();
 
+    var json = TestUtils.getJsonRepresentation(webApp);
+    
+    assertThat(json).isNotBlank();
+    
     assertThat(appServicePlan.getName()).isEqualTo(appServicePlanName);
     assertThat(appServicePlan.getTags().size()).isEqualTo(1);
     assertThat(appServicePlan.getTags()).isEqualTo(tags);
+    
     assertThat(webApp.getAppServicePlan()).isEqualTo(appServicePlan);
     assertThat(webApp.getTags().size()).isEqualTo(1);
     assertThat(webApp.getTags()).isEqualTo(tags);

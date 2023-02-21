@@ -196,7 +196,8 @@ public abstract class CosmosAccountTest<T extends AzureCosmosAccountBuilder<?, ?
 
   @Test
   public void typeIsAsExpected_when_BuiltWithSingleEntity() {
-    var entity = getValidCosmosEntities().stream().findFirst().get();
+    var entity = getValidCosmosEntities().stream().findFirst().orElse(null);
+    assertThat(entity).isNotNull();
     var throughput = a(Integer.class);
     var builder = getBuilder()
         .withId("a-legal-id")
@@ -215,18 +216,21 @@ public abstract class CosmosAccountTest<T extends AzureCosmosAccountBuilder<?, ?
 
   @Test
   public void typeIsAsExpected_when_BuiltWithBackupPolicyAndSingleEntity() {
-    var entity = getValidCosmosEntities().stream().findFirst().get();
+    var entity = getValidCosmosEntities().stream().findFirst().orElse(null);
+    assertThat(entity).isNotNull();
     var throughput = a(Integer.class);
+    var backupPolicy = AzureCosmosBackupPolicy.builder()
+        .withBackupPolicyType(AzureCosmosBackupPolicyType.PERIODIC)
+        .withBackupStorageRedundancy(BackupStorageRedundancy.GEO)
+        .withBackupIntervalInMinutes(1440)
+        .withBackupRetentionIntervalInHours(720)
+        .build();
+    
     var builder = getBuilder()
         .withId("a-legal-id")
         .withRegion(AzureRegion.ASIA_EAST)
         .withMaxTotalThroughput(throughput)
-        .withBackupPolicy(AzureCosmosBackupPolicy.builder()
-            .withBackupPolicyType(AzureCosmosBackupPolicyType.PERIODIC)
-            .withBackupStorageRedundancy(BackupStorageRedundancy.GEO)
-            .withBackupIntervalInMinutes(1440)
-            .withBackupRetentionIntervalInHours(720)
-            .build())
+        .withBackupPolicy(backupPolicy)
         .withCosmosEntity(entity);
 
     var component = builder.build();
@@ -237,7 +241,9 @@ public abstract class CosmosAccountTest<T extends AzureCosmosAccountBuilder<?, ?
     assertThat(component.getType()).isEqualTo(getExpectedType());
     assertThat(component)
         .asInstanceOf(InstanceOfAssertFactories.type(AzureCosmosAccount.class))
-        .extracting(AzureCosmosAccount::getCosmosEntities, AzureCosmosAccount::getMaxTotalThroughput)
-        .containsExactly(List.of(entity), throughput);
+        .extracting(AzureCosmosAccount::getCosmosEntities, 
+            AzureCosmosAccount::getMaxTotalThroughput,
+            AzureCosmosAccount::getBackupPolicy)
+        .containsExactly(List.of(entity), throughput, backupPolicy);
   }
 }
