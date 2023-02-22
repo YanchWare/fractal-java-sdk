@@ -2,8 +2,8 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.LiveSystemComponent;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PaaSDataStorage;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceEntity;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceEntity;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.Getter;

@@ -1,14 +1,14 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.valueobjects;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum AzureStorageDefaultAction {
+public enum AzureAction {
   ALLOW ("Allow"),
   DENY ("Deny");
 
   private final String id;
 
-  AzureStorageDefaultAction(final String id) {
+  AzureAction(final String id) {
     this.id = id;
   }
 

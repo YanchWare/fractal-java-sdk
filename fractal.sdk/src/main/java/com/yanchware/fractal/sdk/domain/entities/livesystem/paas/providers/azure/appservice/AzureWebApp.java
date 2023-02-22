@@ -5,9 +5,12 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.CustomWorkload;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.CustomWorkloadBuilder;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.CustomWorkloadRole;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.LiveSystemComponent;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureOsType;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceEntity;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.valueobjects.AzureAppServiceClientCertMode;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.valueobjects.AzureAppServiceRedundancyMode;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,9 +30,11 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_AZURE_WE
 @Setter
 @ToString(callSuper = true)
 public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, LiveSystemComponent, CustomWorkload {
-
+  private final static String RUNTIME_STACK_AND_OPERATING_SYSTEM_MISMATCH_PATTERN = "[AzureWebApp Validation] The Runtime Stack and Operating System mismatches. Please choose %s or change Operating System to %s";
   private final static String NAME_NOT_VALID = "[AzureWebApp Validation] The name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen, and must be between 2 and 60 characters";
   private final static String CUSTOM_DOMAIN_NOT_VALID = "[AzureWebApp Validation] The CustomDomain must contain at least one period, cannot start or end with a period. CustomDomain are made up of letters, numbers, periods, and dashes.";
+  private final static String RUNTIME_STACK_IS_EMPTY = "[AzureWebApp Validation] The Runtime Stack is either empty or blank and it is required";
+  private final static String OPERATING_SYSTEM_IS_EMPTY = "[AzureWebApp Validation] The Operating System is either empty or blank and it is required";
 
   private String name;
   private String privateSSHKeyPassphraseSecretId;
@@ -42,18 +47,39 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
   private String workloadSecretPasswordKey;
   private AzureRegion azureRegion;
   private AzureResourceGroup azureResourceGroup;
-  private AzureWebAppApplication application;
-  private AzureWebAppHosting hosting;
-  private AzureWebAppConnectivity connectivity;
-  private AzureWebAppInfrastructure infrastructure;
+  private Boolean clientAffinityEnabled;
+  private Boolean clientCertEnabled;
+  private String clientCertExclusionPaths;
+  private AzureAppServiceClientCertMode clientCertMode;
+  private AzureWebAppCloningInfo cloningInfo;
+  private Integer containerSize;
+  private String customDomainVerificationId;
+  private Integer dailyMemoryTimeQuota;
+
+  private Boolean enabled;
+  private Boolean hostNamesDisabled;
+
+  private String hostingEnvironmentProfileId;
+  private Boolean httpsOnly;
+  private Boolean hyperV;
+  private AzureAppServiceRedundancyMode redundancyMode;
+  private Boolean reserved;
+  private Boolean scmSiteAlsoStopped;
+  private Boolean storageAccountRequired;
+  private String virtualNetworkSubnetId;
+  private Boolean vnetContentShareEnabled;
+  private Boolean vnetImagePullEnabled;
+  private AzureWebAppConfiguration configuration;
   private Map<String, String> tags;
   private AzureAppServicePlan appServicePlan;
   private Collection<AzureKeyVaultCertificate> certificates;
   private Collection<String> customDomains;
+  private AzureOsType operatingSystem;
+  private AzureWebAppRuntimeStack runtimeStack;
 
 
   @Override
-  public ProviderType getProvider(){
+  public ProviderType getProvider() {
     return ProviderType.AZURE;
   }
 
@@ -63,37 +89,71 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
 
   @Override
   public Collection<String> validate() {
-    final var NO_HOSTING_DEFINED = "[AzureWebApp Validation] Hosting has not been defined and it's mandatory";
-    
     Collection<String> errors = super.validate();
-    errors.addAll(CustomWorkload.validateCustomWorkload(this, "Azure Web App"));
+    errors.addAll(CustomWorkload.validateCustomWorkload(this, "AzureWebApp"));
 
-    if(StringUtils.isNotBlank(name)) {
+
+    if (configuration == null && operatingSystem == null) {
+      errors.add(OPERATING_SYSTEM_IS_EMPTY);
+    }
+
+    if (configuration == null && runtimeStack == null) {
+      errors.add(RUNTIME_STACK_IS_EMPTY);
+    }
+
+    if (configuration != null
+        && StringUtils.isBlank(configuration.getDotnetVersion())
+        && StringUtils.isBlank(configuration.getJavaVersion())
+        && StringUtils.isBlank(configuration.getJavaContainerVersion())
+        && StringUtils.isBlank(configuration.getLinuxFxVersion())
+        && StringUtils.isBlank(configuration.getNodeVersion())
+        && StringUtils.isBlank(configuration.getPhpVersion())
+        && StringUtils.isBlank(configuration.getPythonVersion())
+        && StringUtils.isBlank(configuration.getWindowsFxVersion())) {
+      
+      if (operatingSystem == null) {
+        errors.add(OPERATING_SYSTEM_IS_EMPTY);
+      }
+
+      if (runtimeStack == null) {
+        errors.add(RUNTIME_STACK_IS_EMPTY);
+      }
+    }
+
+    if (operatingSystem == AzureOsType.LINUX
+        && runtimeStack instanceof AzureWebAppWindowsRuntimeStack) {
+      errors.add(String.format(RUNTIME_STACK_AND_OPERATING_SYSTEM_MISMATCH_PATTERN, "AzureWebAppLinuxRuntimeStack", "WINDOWS"));
+    }
+
+    if (operatingSystem == AzureOsType.WINDOWS
+        && runtimeStack instanceof AzureWebAppLinuxRuntimeStack) {
+      errors.add(String.format(RUNTIME_STACK_AND_OPERATING_SYSTEM_MISMATCH_PATTERN, "AzureWebAppWindowsRuntimeStack", "LINUX"));
+    }
+
+
+    if (StringUtils.isNotBlank(name)) {
       var hasValidCharacters = isValidAlphanumericsHyphens(name);
       var hasValidLengths = isValidStringLength(name, 2, 60);
-      if(!hasValidCharacters || !hasValidLengths) {
+      if (!hasValidCharacters || !hasValidLengths) {
         errors.add(NAME_NOT_VALID);
       }
     }
-    
-    if(ObjectUtils.isNotEmpty(customDomains)) {
+
+    if (ObjectUtils.isNotEmpty(customDomains)) {
       for (var customDomain : customDomains) {
-        if(StringUtils.isNotBlank(customDomain)) {
+        if (StringUtils.isNotBlank(customDomain)) {
           var hasValidCharacters = isValidLettersNumbersPeriodsAndHyphens(customDomain);
-          if(!hasValidCharacters) {
+          if (!hasValidCharacters) {
             errors.add(CUSTOM_DOMAIN_NOT_VALID);
           }
         }
       }
     }
-    
-    if(hosting != null) {
-      errors.addAll(hosting.validate());  
+
+    if (configuration != null) {
+      errors.addAll(configuration.validate());
     }
-    else {
-      errors.add(NO_HOSTING_DEFINED);
-    }
-    
+
     return errors;
   }
 
@@ -118,7 +178,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
       component.setType(PAAS_AZURE_WEBAPP);
       return super.build();
     }
-    
+
     public AzureWebAppBuilder withRegion(AzureRegion region) {
       component.setAzureRegion(region);
       return builder;
@@ -128,24 +188,9 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
       component.setAzureResourceGroup(resourceGroup);
       return builder;
     }
-    
-    public AzureWebAppBuilder withApplication(AzureWebAppApplication application) {
-      component.setApplication(application);
-      return builder;
-    }
 
-    public AzureWebAppBuilder withConnectivity(AzureWebAppConnectivity connectivity) {
-      component.setConnectivity(connectivity);
-      return builder;
-    }
-
-    public AzureWebAppBuilder withHosting(AzureWebAppHosting hosting) {
-      component.setHosting(hosting);
-      return builder;
-    }
-
-    public AzureWebAppBuilder withInfrastructure(AzureWebAppInfrastructure infrastructure) {
-      component.setInfrastructure(infrastructure);
+    public AzureWebAppBuilder withConfiguration(AzureWebAppConfiguration configuration) {
+      component.setConfiguration(configuration);
       return builder;
     }
 
@@ -167,8 +212,8 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
       component.getTags().put(key, value);
       return builder;
     }
-    
-    public AzureWebAppBuilder withAppServicePlan (AzureAppServicePlan appServicePlan) {
+
+    public AzureWebAppBuilder withAppServicePlan(AzureAppServicePlan appServicePlan) {
       component.setAppServicePlan(appServicePlan);
       return builder;
     }
@@ -191,7 +236,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
     }
 
     /**
-     * The CustomDomain must contain at least one period, cannot start or end with a period. 
+     * The CustomDomain must contain at least one period, cannot start or end with a period.
      * CustomDomain are made up of letters, numbers, periods, and dashes.
      */
     public AzureWebAppBuilder withCustomDomain(String customDomain) {
@@ -199,7 +244,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
     }
 
     /**
-     * The CustomDomains list must contain CustomDomain that has at least one period, cannot start or end with a period. 
+     * The CustomDomains list must contain CustomDomain that has at least one period, cannot start or end with a period.
      * CustomDomain are made up of letters, numbers, periods, and dashes.
      */
     public AzureWebAppBuilder withCustomDomains(Collection<? extends String> customDomains) {
@@ -212,6 +257,116 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
       }
 
       component.getCustomDomains().addAll(customDomains);
+      return builder;
+    }
+
+    public AzureWebAppBuilder withClientAffinityEnabled(Boolean clientAffinityEnabled) {
+      component.setClientAffinityEnabled(clientAffinityEnabled);
+      return builder;
+    }
+
+    public AzureWebAppBuilder withClientCertEnabled(Boolean clientCertEnabled) {
+      component.setClientCertEnabled(clientCertEnabled);
+      return builder;
+    }
+
+    public AzureWebAppBuilder withClientCertExclusionPaths(String clientCertExclusionPaths) {
+      component.setClientCertExclusionPaths(clientCertExclusionPaths);
+      return builder;
+    }
+
+    public AzureWebAppBuilder withClientCertMode(AzureAppServiceClientCertMode clientCertMode) {
+      component.setClientCertMode(clientCertMode);
+      return builder;
+    }
+
+    public AzureWebAppBuilder withCloningInfo(AzureWebAppCloningInfo cloningInfo) {
+      component.setCloningInfo(cloningInfo);
+      return builder;
+    }
+
+    public AzureWebAppBuilder withContainerSize(Integer containerSize) {
+      component.setContainerSize(containerSize);
+      return builder;
+    }
+
+    public AzureWebAppBuilder withCustomDomainVerificationId(String customDomainVerificationId) {
+      component.setCustomDomainVerificationId(customDomainVerificationId);
+      return builder;
+    }
+
+    public AzureWebAppBuilder withDailyMemoryTimeQuota(Integer dailyMemoryTimeQuota) {
+      component.setDailyMemoryTimeQuota(dailyMemoryTimeQuota);
+      return builder;
+    }
+
+    public AzureWebAppBuilder withEnabled(Boolean enabled) {
+      component.setEnabled(enabled);
+      return builder;
+    }
+
+    public AzureWebAppBuilder withHostNamesDisabled(Boolean hostNamesDisabled) {
+      component.setHostNamesDisabled(hostNamesDisabled);
+      return builder;
+    }
+
+    public AzureWebAppBuilder withHostingEnvironmentProfileId(String hostingEnvironmentProfileId) {
+      component.setHostingEnvironmentProfileId(hostingEnvironmentProfileId);
+      return builder;
+    }
+
+    public AzureWebAppBuilder withHttpsOnly(Boolean httpsOnly) {
+      component.setHttpsOnly(httpsOnly);
+      return builder;
+    }
+
+    public AzureWebAppBuilder withHyperV(Boolean hyperV) {
+      component.setHyperV(hyperV);
+      return builder;
+    }
+
+    public AzureWebAppBuilder withRedundancyMode(AzureAppServiceRedundancyMode redundancyMode) {
+      component.setRedundancyMode(redundancyMode);
+      return builder;
+    }
+
+    public AzureWebAppBuilder withReserved(Boolean reserved) {
+      component.setReserved(reserved);
+      return builder;
+    }
+
+    public AzureWebAppBuilder withScmSiteAlsoStopped(Boolean scmSiteAlsoStopped) {
+      component.setScmSiteAlsoStopped(scmSiteAlsoStopped);
+      return builder;
+    }
+
+    public AzureWebAppBuilder withStorageAccountRequired(Boolean storageAccountRequired) {
+      component.setStorageAccountRequired(storageAccountRequired);
+      return builder;
+    }
+
+    public AzureWebAppBuilder withVirtualNetworkSubnetId(String virtualNetworkSubnetId) {
+      component.setVirtualNetworkSubnetId(virtualNetworkSubnetId);
+      return builder;
+    }
+
+    public AzureWebAppBuilder withVnetContentShareEnabled(Boolean vnetContentShareEnabled) {
+      component.setVnetContentShareEnabled(vnetContentShareEnabled);
+      return builder;
+    }
+
+    public AzureWebAppBuilder withVnetImagePullEnabled(Boolean vnetImagePullEnabled) {
+      component.setVnetImagePullEnabled(vnetImagePullEnabled);
+      return builder;
+    }
+
+    public AzureWebAppBuilder withOperatingSystem(AzureOsType operatingSystem) {
+      component.setOperatingSystem(operatingSystem);
+      return builder;
+    }
+
+    public AzureWebAppBuilder withRuntimeStack(AzureWebAppRuntimeStack runtimeStack) {
+      component.setRuntimeStack(runtimeStack);
       return builder;
     }
   }
