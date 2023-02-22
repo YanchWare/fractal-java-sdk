@@ -102,7 +102,7 @@ public class AzureStorageAccountTest {
           .withIsSftpEnabled(true)
           .withKeyPolicyExpirationInDays(10)
           .withNetworkRuleSetBypass(AzureStorageBypass.NONE)
-          .withNetworkRuleSetDefaultAction(AzureStorageDefaultAction.ALLOW)
+          .withNetworkRuleSetDefaultAction(AzureAction.ALLOW)
           .withNetworkRuleSetIpRules(new ArrayList<>())
           .withPublicNetworkAccess(AzureStoragePublicNetworkAccess.ENABLED)
           .withPublishInternetEndpoints(true)
@@ -131,7 +131,7 @@ public class AzureStorageAccountTest {
       assertTrue(storageAccountConnectivity.getIsLocalUserEnabled());
       assertEquals(10, storageAccountConnectivity.getKeyPolicyExpirationInDays());
       assertEquals(AzureStorageBypass.NONE, storageAccountConnectivity.getNetworkRuleSetBypass());
-      assertEquals(AzureStorageDefaultAction.ALLOW, storageAccountConnectivity.getNetworkRuleSetDefaultAction());
+      assertEquals(AzureAction.ALLOW, storageAccountConnectivity.getNetworkRuleSetDefaultAction());
       assertEquals(AzureStoragePublicNetworkAccess.ENABLED, storageAccountConnectivity.getPublicNetworkAccess());
       assertEquals("routingChoise", storageAccountConnectivity.getRoutingChoise());
       assertEquals("sasPolicyExpirationAction", storageAccountConnectivity.getSasPolicyExpirationAction());

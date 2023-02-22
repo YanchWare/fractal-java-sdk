@@ -1,5 +1,6 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount;
 
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureAction;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureTlsVersion;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.valueobjects.*;
 import lombok.Builder;
@@ -18,7 +19,7 @@ public class AzureStorageAccountConnectivity {
   Boolean publishInternetEndpoints;
   Boolean publishMicrosoftEndpoints;
   AzureStoragePublicNetworkAccess publicNetworkAccess;
-  AzureStorageDefaultAction networkRuleSetDefaultAction;
+  AzureAction networkRuleSetDefaultAction;
   AzureStorageBypass networkRuleSetBypass;
   List<AzureVirtualNetworkRule> networkRuleSetVirtualNetworkRules;
   List<AzureResourceAccessRule> networkRuleSetResourceAccessRules;

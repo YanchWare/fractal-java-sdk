@@ -1,25 +1,25 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.valueobjects;
 
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.ExtendableEnum;
 
-public enum AzureFtpsState {
-    ALL_ALLOWED("AllAllowed"),
-    FTPS_ONLY("FtpsOnly"),
-    DISABLED("Disabled");
+import java.util.Collection;
 
-    private final String id;
-
-    AzureFtpsState(final String id) {
-        this.id = id;
+public final class AzureFtpsState extends ExtendableEnum<AzureFtpsState> {
+    public static final AzureFtpsState ALL_ALLOWED = fromString("AllAllowed");
+    public static final AzureFtpsState DISABLED = fromString("Disabled");
+    public static final AzureFtpsState FTPS_ONLY = fromString("FtpsOnly");
+    
+    public AzureFtpsState() {
     }
 
-    @JsonValue
-    public String getId() {
-        return id;
+    @JsonCreator
+    public static AzureFtpsState fromString(String name) {
+        return fromString(name, AzureFtpsState.class);
     }
 
-    @Override
-    public String toString() {
-        return id;
+    public static Collection<AzureFtpsState> values() {
+
+        return values(AzureFtpsState.class);
     }
 }
