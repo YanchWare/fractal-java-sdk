@@ -11,6 +11,6 @@ import java.util.Collection;
 @Setter
 @Builder(setterPrefix = "with")
 public class AzureWebAppCorsSettings {
-  Collection<String> allowedOrigins;
-  Boolean supportCredentials;
+  private Collection<String> allowedOrigins;
+  private Boolean supportCredentials;
 }

@@ -13,16 +13,16 @@ public class AzureVirtualApplication {
   /**
    * Physical path.
    */
-  String physicalPath;
-  Boolean preloadEnabled;
+  private String physicalPath;
+  private Boolean preloadEnabled;
 
   /**
    * Virtual directories for virtual application.
    */
-  Collection<AzureVirtualDirectory> virtualDirectories;
+  private Collection<AzureVirtualDirectory> virtualDirectories;
 
   /**
    * Virtual path.
    */
-  String virtualPath;
+  private String virtualPath;
 }

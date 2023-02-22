@@ -11,15 +11,15 @@ public class AzureSiteLimits {
   /**
    * Maximum allowed disk size usage in MB.
    */
-  Integer maxDiskSizeInMb;
+  private Integer maxDiskSizeInMb;
 
   /**
    * Maximum allowed memory usage in MB.
    */
-  Integer maxMemoryInMb;
+  private Integer maxMemoryInMb;
 
   /**
    * Maximum allowed CPU usage percentage.
    */
-  Double maxPercentageCpu;
+  private Double maxPercentageCpu;
 }

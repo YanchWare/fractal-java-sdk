@@ -254,7 +254,7 @@ public class AzureAppServiceTest {
             .withRemoteDebuggingVersion("remoteDebuggingVersion")
             .withWebsiteTimeZone("websiteTimezone")
             .withJavaVersion("java version")
-            .withAcrUseManagedIdentityCreds(true)
+            .withAcrUseManagedIdentityCredentials(true)
             .withAcrUserManagedIdentityId("acrUserManagedIdentityId")
             .withDetailedErrorLoggingEnabled(true)
             .withFtpsState(AzureFtpsState.FTPS_ONLY)
@@ -325,7 +325,7 @@ public class AzureAppServiceTest {
     assertTrue(webApp.getConfiguration().getRemoteDebuggingEnabled());
     assertThat(webApp.getConfiguration().getRemoteDebuggingVersion()).isEqualTo("remoteDebuggingVersion");
     assertThat(webApp.getConfiguration().getWebsiteTimeZone()).isEqualTo("websiteTimezone");
-    assertTrue(webApp.getConfiguration().getAcrUseManagedIdentityCreds());
+    assertTrue(webApp.getConfiguration().getAcrUseManagedIdentityCredentials());
     assertThat(webApp.getConfiguration().getAcrUserManagedIdentityId()).isEqualTo("acrUserManagedIdentityId");
     assertTrue(webApp.getConfiguration().getDetailedErrorLoggingEnabled());
     assertThat(webApp.getConfiguration().getFtpsState()).isEqualTo(AzureFtpsState.FTPS_ONLY);

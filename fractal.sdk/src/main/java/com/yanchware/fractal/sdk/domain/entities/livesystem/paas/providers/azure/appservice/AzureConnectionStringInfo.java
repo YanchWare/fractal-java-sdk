@@ -11,14 +11,14 @@ public class AzureConnectionStringInfo {
   /**
    * Connection string value.
    */
-  String connectionString;
+  private String connectionString;
   /**
    * Name of connection string.
    */
-  String name;
+  private String name;
 
   /**
    * Type of database.
    */
-  AzureConnectionStringType databaseType;
+  private AzureConnectionStringType databaseType;
 }

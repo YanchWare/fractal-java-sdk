@@ -11,14 +11,14 @@ public class AzureWebAppHandlerMappings {
   /**
    * Command-line arguments to be passed to the script processor.
    */
-  String arguments;
+  private String arguments;
   /**
    * Requests with this extension will be handled using the specified FastCGI application.
    */
-  String extension;
+  private String extension;
 
   /**
    * The absolute path to the FastCGI application.
    */
-  String scriptProcessor;
+  private String scriptProcessor;
 }
