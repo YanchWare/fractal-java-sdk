@@ -27,7 +27,7 @@ public class AzureWebAppConfiguration implements Validatable {
   String appCommandLine;
   Map<String, String> appSettings;
   String autoSwapSlotName;
-  Collection<AzureConnStringInfo> connectionStrings;
+  Collection<AzureConnectionStringInfo> connectionStrings;
   AzureWebAppCorsSettings corsSettings;
   Collection<String> defaultDocuments;
   Boolean detailedErrorLoggingEnabled;

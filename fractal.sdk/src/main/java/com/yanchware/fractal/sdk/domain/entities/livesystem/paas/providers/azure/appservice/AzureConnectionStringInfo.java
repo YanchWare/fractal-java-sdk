@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder(setterPrefix = "with")
-public class AzureConnStringInfo {
+public class AzureConnectionStringInfo {
   /**
    * Connection string value.
    */
