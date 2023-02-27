@@ -44,36 +44,64 @@ public class CaaSAmbassador extends CaaSAPIGatewayImpl {
             return this;
         }
 
+        /**
+         * Namespace where ambassador will be instantiated
+         * @param namespace
+         */
         public AmbassadorBuilder withNamespace(String namespace) {
             component.setNamespace(namespace);
             return builder;
         }
 
+        /**
+         * The name of the container platform where ambassador will be instantiated
+         * @param containerPlatform
+         */
         public AmbassadorBuilder withContainerPlatform(String containerPlatform) {
             component.setContainerPlatform(containerPlatform);
             return builder;
         }
 
+        /**
+         * Ambassador host
+         * @param host
+         */
         public AmbassadorBuilder withHost(String host) {
             component.setHost(host);
             return builder;
         }
 
+        /**
+         * Owner email of ambassador host
+         * @param hostOwnerEmail
+         */
         public AmbassadorBuilder withHostOwnerEmail(String hostOwnerEmail) {
             component.setHostOwnerEmail(hostOwnerEmail);
             return builder;
         }
 
+        /**
+         * ACME provider authority for Ambassador
+         * @param acmeProviderAuthority
+         */
         public AmbassadorBuilder withAcmeProviderAuthority(String acmeProviderAuthority) {
             component.setAcmeProviderAuthority(acmeProviderAuthority);
             return builder;
         }
 
+        /**
+         * Ambassador license key
+         * @param licenseKey
+         */
         public AmbassadorBuilder withLicenseKey(String licenseKey) {
             component.setLicenseKey(licenseKey);
             return builder;
         }
 
+        /**
+         * Ambassador's TLS secret name
+         * @param tlsSecretName
+         */
         public AmbassadorBuilder withTlsSecretName(String tlsSecretName) {
             component.setTlsSecretName(tlsSecretName);
             return builder;

@@ -60,11 +60,19 @@ public class CaaSKubernetesWorkload extends CaaSWorkload implements LiveSystemCo
             return this;
         }
 
+        /**
+         * Namespace where the workload will be instantiated
+         * @param namespace
+         */
         public KubernetesWorkloadBuilder withNamespace(String namespace) {
             component.setNamespace(namespace);
             return builder;
         }
 
+        /**
+         * The name of the container platform where the workload will be instantiated
+         * @param containerPlatform
+         */
         public KubernetesWorkloadBuilder withContainerPlatform(String containerPlatform) {
             component.setContainerPlatform(containerPlatform);
             return builder;

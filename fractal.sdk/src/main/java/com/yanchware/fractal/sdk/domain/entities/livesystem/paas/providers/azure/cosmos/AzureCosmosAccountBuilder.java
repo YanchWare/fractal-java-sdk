@@ -51,11 +51,21 @@ public abstract class AzureCosmosAccountBuilder<T extends Component & AzureCosmo
     return builder;
   }
 
+  /**
+   * The resource group in which the component will be created
+   *
+   * @param azureResourceGroup Azure Resource Group reference
+   */
   public B withAzureResourceGroup(AzureResourceGroup azureResourceGroup) {
     component.setAzureResourceGroup(azureResourceGroup);
     return builder;
   }
 
+  /**
+   * The region in which the component will be created
+   *
+   * @param region Azure region
+   */
   public B withRegion(AzureRegion region) {
     component.setAzureRegion(region);
     return builder;
@@ -66,11 +76,19 @@ public abstract class AzureCosmosAccountBuilder<T extends Component & AzureCosmo
     return builder;
   }
 
+  /**
+   * Tags are name/value pairs that enable you to categorize resources and view consolidated billing by
+   * applying the same tag to multiple resources and resource groups.
+   */
   public B withTags(Map<String, String> tags) {
     component.setTags(tags);
     return builder;
   }
 
+  /**
+   * Tag is name/value pairs that enable you to categorize resources and view consolidated billing by
+   * applying the same tag to multiple resources and resource groups.
+   */
   public B withTag(String key, String value) {
     if (component.getTags() == null) {
       withTags(new HashMap<>());

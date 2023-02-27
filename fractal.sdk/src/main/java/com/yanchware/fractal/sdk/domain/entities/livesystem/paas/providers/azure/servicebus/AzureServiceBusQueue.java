@@ -49,76 +49,136 @@ public class AzureServiceBusQueue extends PaaSMessageEntity implements LiveSyste
       return this;
     }
 
+    /**
+     * Idle after which the queue is automatically deleted
+     * @param autoDeleteOnIdle
+     */
     public AzureServiceBusQueueBuilder withAutoDeleteOnIdle(Duration autoDeleteOnIdle) {
       component.setAutoDeleteOnIdle(autoDeleteOnIdle);
       return builder;
     }
 
+    /**
+     * If enabled, dead letter support is available when a message expires
+     * @param deadLetteringOnMessageExpiration
+     */
     public AzureServiceBusQueueBuilder withDeadLetteringOnMessageExpiration(Boolean deadLetteringOnMessageExpiration) {
       component.setDeadLetteringOnMessageExpiration(deadLetteringOnMessageExpiration);
       return builder;
     }
 
+    /**
+     * Duration after which the message expires
+     * @param defaultMessageTimeToLive
+     */
     public AzureServiceBusQueueBuilder withDefaultMessageTimeToLive(Duration defaultMessageTimeToLive) {
       component.setDefaultMessageTimeToLive(defaultMessageTimeToLive);
       return builder;
     }
 
+    /**
+     * Duration of duplicate detection history
+     * @param duplicateDetectionHistoryTimeWindow
+     */
     public AzureServiceBusQueueBuilder withDuplicateDetectionHistoryTimeWindow(Duration duplicateDetectionHistoryTimeWindow) {
       component.setDuplicateDetectionHistoryTimeWindow(duplicateDetectionHistoryTimeWindow);
       return builder;
     }
 
+    /**
+     * Indicates if Express Entities are enabled
+     * @param enableExpress
+     */
     public AzureServiceBusQueueBuilder withEnableExpress(Boolean enableExpress) {
       component.setEnableExpress(enableExpress);
       return builder;
     }
 
+    /**
+     * Indicates if batched operations are enabled 
+     * @param enableBatchedOperations
+     */
     public AzureServiceBusQueueBuilder withEnableBatchedOperations(Boolean enableBatchedOperations) {
       component.setEnableBatchedOperations(enableBatchedOperations);
       return builder;
     }
 
+    /**
+     * Indicates if the queue will be partitioned across multiple message brokers
+     * @param enablePartitioning
+     */
     public AzureServiceBusQueueBuilder withEnablePartitioning(Boolean enablePartitioning) {
       component.setEnablePartitioning(enablePartitioning);
       return builder;
     }
 
+    /**
+     * Name of the queue where to forward messages
+     * @param forwardTo
+     */
     public AzureServiceBusQueueBuilder withForwardTo(String forwardTo) {
       component.setForwardTo(forwardTo);
       return builder;
     }
 
+    /**
+     * Name of the queue where to forward dead letter messages
+     * @param forwardDeadLetteredMessagesTo
+     */
     public AzureServiceBusQueueBuilder withForwardDeadLetteredMessagesTo(String forwardDeadLetteredMessagesTo) {
       component.setForwardDeadLetteredMessagesTo(forwardDeadLetteredMessagesTo);
       return builder;
     }
 
+    /**
+     * Duration of a peek-lock (amount of time that a message is locked for other receivers)
+     * @param lockDuration
+     */
     public AzureServiceBusQueueBuilder withLockDuration(Duration lockDuration) {
       component.setLockDuration(lockDuration);
       return builder;
     }
 
+    /**
+     * Maximum delivery count
+     * @param maxDeliveryCount
+     */
     public AzureServiceBusQueueBuilder withMaxDeliveryCount(Integer maxDeliveryCount) {
       component.setMaxDeliveryCount(maxDeliveryCount);
       return builder;
     }
 
+    /**
+     * Maximum size of the queue in megabytes
+     * @param maxSizeInMegabytes
+     */
     public AzureServiceBusQueueBuilder withMaxSizeInMegabytes(Integer maxSizeInMegabytes) {
       component.setMaxSizeInMegabytes(maxSizeInMegabytes);
       return builder;
     }
 
+    /**
+     * Maximum size of message payload in kilobytes
+     * @param maxMessageSizeInKilobytes
+     */
     public AzureServiceBusQueueBuilder withMaxMessageSizeInKilobytes(Long maxMessageSizeInKilobytes) {
       component.setMaxMessageSizeInKilobytes(maxMessageSizeInKilobytes);
       return builder;
     }
 
+    /**
+     * Indicates if the queue supports the concept of sessions
+     * @param requiresSession
+     */
     public AzureServiceBusQueueBuilder withRequiresSession(Boolean requiresSession) {
       component.setRequiresSession(requiresSession);
       return builder;
     }
 
+    /**
+     * Indicates if the queue requires duplicate detection
+     * @param requiresDuplicateDetection
+     */
     public AzureServiceBusQueueBuilder withRequiresDuplicateDetection(Boolean requiresDuplicateDetection) {
       component.setRequiresDuplicateDetection(requiresDuplicateDetection);
       return builder;

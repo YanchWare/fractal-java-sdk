@@ -42,11 +42,19 @@ public class UnmanagedBrokerComponent extends com.yanchware.fractal.sdk.domain.e
       return this;
     }
 
+    /**
+     * Name of the secret
+     * @param secretName
+     */
     public UnmanagedStorageComponentBuilder withSecretName(String secretName) {
       component.setSecretName(secretName);
       return builder;
     }
 
+    /**
+     * Value of the secret
+     * @param secretValue
+     */
     public UnmanagedStorageComponentBuilder withSecretValue(String secretValue) {
       component.setSecretValue(secretValue);
       return builder;

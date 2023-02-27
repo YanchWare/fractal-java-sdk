@@ -43,51 +43,91 @@ public class AzureServiceBusTopic extends PaaSMessageEntity implements LiveSyste
       return this;
     }
 
+    /**
+     * Idle after which the topic is automatically deleted
+     * @param autoDeleteOnIdle
+     */
     public AzureServiceBusQueueBuilder withAutoDeleteOnIdle(Duration autoDeleteOnIdle) {
       component.setAutoDeleteOnIdle(autoDeleteOnIdle);
       return builder;
     }
 
+    /**
+     * Duration after which the message expires
+     * @param defaultMessageTimeToLive
+     */
     public AzureServiceBusQueueBuilder withDefaultMessageTimeToLive(Duration defaultMessageTimeToLive) {
       component.setDefaultMessageTimeToLive(defaultMessageTimeToLive);
       return builder;
     }
 
+    /**
+     * Duration of duplicate detection history
+     * @param duplicateDetectionHistoryTimeWindow
+     */
     public AzureServiceBusQueueBuilder withDuplicateDetectionHistoryTimeWindow(Duration duplicateDetectionHistoryTimeWindow) {
       component.setDuplicateDetectionHistoryTimeWindow(duplicateDetectionHistoryTimeWindow);
       return builder;
     }
 
+    /**
+     * Indicates if Express Entities are enabled
+     * @param enableExpress
+     */
     public AzureServiceBusQueueBuilder withEnableExpress(Boolean enableExpress) {
       component.setEnableExpress(enableExpress);
       return builder;
     }
 
+    /**
+     * Indicates if batched operations are enabled
+     * @param enableBatchedOperations
+     */
     public AzureServiceBusQueueBuilder withEnableBatchedOperations(Boolean enableBatchedOperations) {
       component.setEnableBatchedOperations(enableBatchedOperations);
       return builder;
     }
 
+    /**
+     * Indicates if the topic will be partitioned across multiple message brokers
+     * @param enablePartitioning
+     */
     public AzureServiceBusQueueBuilder withEnablePartitioning(Boolean enablePartitioning) {
       component.setEnablePartitioning(enablePartitioning);
       return builder;
     }
 
+    /**
+     * Maximum size of the topic in megabytes
+     * @param maxSizeInMegabytes
+     */
     public AzureServiceBusQueueBuilder withMaxSizeInMegabytes(Integer maxSizeInMegabytes) {
       component.setMaxSizeInMegabytes(maxSizeInMegabytes);
       return builder;
     }
 
+    /**
+     * Maximum size of message payload in kilobytes
+     * @param maxMessageSizeInKilobytes
+     */
     public AzureServiceBusQueueBuilder withMaxMessageSizeInKilobytes(Long maxMessageSizeInKilobytes) {
       component.setMaxMessageSizeInKilobytes(maxMessageSizeInKilobytes);
       return builder;
     }
 
+    /**
+     * Indicates if the topic requires duplicate detection
+     * @param requiresDuplicateDetection
+     */
     public AzureServiceBusQueueBuilder withRequiresDuplicateDetection(Boolean requiresDuplicateDetection) {
       component.setRequiresDuplicateDetection(requiresDuplicateDetection);
       return builder;
     }
 
+    /**
+     * Indicates if the topic supports ordering
+     * @param supportOrdering
+     */
     public AzureServiceBusQueueBuilder withSupportOrdering(Boolean supportOrdering) {
       component.setSupportOrdering(supportOrdering);
       return builder;

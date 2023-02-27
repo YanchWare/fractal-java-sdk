@@ -31,21 +31,37 @@ public abstract class PaaSPostgreSqlDatabase extends PaaSRelationalDatabase impl
 
     public static abstract class Builder<T extends PaaSPostgreSqlDatabase, B extends PaaSPostgreSqlDatabase.Builder<T, B>> extends Component.Builder<T, B> {
 
+        /**
+         * Name of the database
+         * @param name
+         */
         public B withName(String name) {
             component.setName(name);
             return builder;
         }
 
+        /**
+         * Charset of the database
+         * @param charset
+         */
         public B withCharset(PostgreSqlCharset charset) {
             component.setCharset(charset);
             return builder;
         }
 
+        /**
+         * Collation of the database
+         * @param collation
+         */
         public B withCollation(String collation) {
             component.setCollation(collation);
             return builder;
         }
 
+        /**
+         * Schema of the database
+         * @param schema
+         */
         public B withSchema(String schema) {
             component.setSchema(schema);
             return builder;

@@ -34,16 +34,28 @@ public class CaaSPrometheus extends CaaSMonitoringImpl implements LiveSystemComp
       return this;
     }
 
+    /**
+     * Namespace where prometheus will be instantiated
+     * @param namespace
+     */
     public PrometheusBuilder withNamespace(String namespace) {
       component.setNamespace(namespace);
       return builder;
     }
 
+    /**
+     * The name of the container platform where prometheus will be instantiated
+     * @param containerPlatform
+     */
     public PrometheusBuilder withContainerPlatform(String containerPlatform) {
       component.setContainerPlatform(containerPlatform);
       return builder;
     }
 
+    /**
+     * API Gateway URL for Prometheus
+     * @param apiGatewayUrl
+     */
     public PrometheusBuilder withApiGatewayUrl(String apiGatewayUrl) {
       component.setApiGatewayUrl(apiGatewayUrl);
       return builder;

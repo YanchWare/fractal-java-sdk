@@ -27,31 +27,57 @@ public class CaaSOcelot extends CaaSServiceMeshSecurityImpl implements LiveSyste
             return this;
         }
 
+        /**
+         * Namespace where Ocelot will be instantiated
+         *
+         * @param namespace
+         */
         public OcelotBuilder withNamespace(String namespace) {
             component.setNamespace(namespace);
             return builder;
         }
 
+        /**
+         * The name of the container platform where Ocelot will be instantiated
+         *
+         * @param containerPlatform
+         */
         public OcelotBuilder withContainerPlatform(String containerPlatform) {
             component.setContainerPlatform(containerPlatform);
             return builder;
         }
 
+        /**
+         * The host URL that will be configured
+         * @param host
+         */
         public OcelotBuilder withHost(String host) {
             component.setHost(host);
             return builder;
         }
 
+        /**
+         * Host's owner email
+         * @param hostOwnerEmail
+         */
         public OcelotBuilder withHostOwnerEmail(String hostOwnerEmail) {
             component.setHostOwnerEmail(hostOwnerEmail);
             return builder;
         }
 
+        /**
+         * URL for CORS
+         * @param corsOrigins
+         */
         public OcelotBuilder withCorsOrigins(String corsOrigins) {
             String[] corsOriginsSplit = corsOrigins.split(",");
             return withCorsOrigins(List.of(corsOriginsSplit));
         }
 
+        /**
+         * URLs for CORS
+         * @param corsOrigins
+         */
         public OcelotBuilder withCorsOrigins(List<String> corsOrigins) {
             if (CollectionUtils.isBlank(corsOrigins)) {
                 return builder;
@@ -63,11 +89,21 @@ public class CaaSOcelot extends CaaSServiceMeshSecurityImpl implements LiveSyste
             return builder;
         }
 
+        /**
+         * Maximum age for cookies in seconds
+         * Must be greater than 0
+         * @param cookieMaxAgeSec
+         */
         public OcelotBuilder withCookieMaxAgeSec(int cookieMaxAgeSec) {
             component.setCookieMaxAgeSec(cookieMaxAgeSec);
             return builder;
         }
 
+        /**
+         * Path prefix of the host to be configured
+         * Default: '/*'
+         * @param pathPrefix
+         */
         public OcelotBuilder withPathPrefix(String pathPrefix) {
             component.setPathPrefix(pathPrefix);
             return builder;
