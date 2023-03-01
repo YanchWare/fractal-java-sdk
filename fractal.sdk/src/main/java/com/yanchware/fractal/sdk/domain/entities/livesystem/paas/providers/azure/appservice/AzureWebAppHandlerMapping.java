@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder(setterPrefix = "with")
-public class AzureWebAppHandlerMappings {
+public class AzureWebAppHandlerMapping {
   /**
    * Command-line arguments to be passed to the script processor.
    */

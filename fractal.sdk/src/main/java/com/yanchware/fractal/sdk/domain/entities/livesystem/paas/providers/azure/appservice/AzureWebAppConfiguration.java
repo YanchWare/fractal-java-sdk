@@ -35,7 +35,7 @@ public class AzureWebAppConfiguration implements Validatable {
   private AzureFtpsState ftpsState;
   private Integer functionAppScaleLimit;
   private Boolean functionsRuntimeScaleMonitoringEnabled;
-  private AzureWebAppHandlerMappings handlerMappings;
+  private Collection<AzureWebAppHandlerMapping> handlerMappings;
   private String healthCheckPath;
   private Boolean http20Enabled;
   private Boolean httpLoggingEnabled;

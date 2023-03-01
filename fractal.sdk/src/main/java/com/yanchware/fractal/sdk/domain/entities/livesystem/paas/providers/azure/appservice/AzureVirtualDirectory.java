@@ -11,10 +11,10 @@ public class AzureVirtualDirectory {
   /**
    * Physical path.
    */
-  String physicalPath;
+  private String physicalPath;
 
   /**
    * Path to virtual application.
    */
-  String virtualPath;
+  private String virtualPath;
 }
