@@ -26,6 +26,7 @@ public class AzureAppServicePlan extends AzureResource implements Validatable {
   private final AzureOsType operatingSystem;
   private final AzurePricingPlan pricingPlan;
   private final Boolean zoneRedundancyEnabled;
+  private final Integer numberOfWorkers;
 
   public AzureAppServicePlan(String name, 
                              AzureRegion region, 
@@ -33,12 +34,14 @@ public class AzureAppServicePlan extends AzureResource implements Validatable {
                              AzureResourceGroup azureResourceGroup, 
                              AzureOsType operatingSystem, 
                              AzurePricingPlan pricingPlan, 
-                             Boolean zoneRedundancyEnabled) {
+                             Boolean zoneRedundancyEnabled,
+                             Integer numberOfWorkers) {
     super(name, region, tags, azureResourceGroup);
     
     this.operatingSystem = operatingSystem;
     this.pricingPlan = pricingPlan;
     this.zoneRedundancyEnabled = zoneRedundancyEnabled;
+    this.numberOfWorkers = numberOfWorkers;
   }
 
   public static AzureAppServicePlanBuilder builder() {
@@ -51,6 +54,7 @@ public class AzureAppServicePlan extends AzureResource implements Validatable {
     protected AzureOsType operatingSystem;
     protected AzurePricingPlan pricingPlan;
     protected Boolean zoneRedundancyEnabled;
+    protected Integer numberOfWorkers;
     
 
     /**
@@ -67,6 +71,9 @@ public class AzureAppServicePlan extends AzureResource implements Validatable {
       return this;
     }
 
+    /**
+     * App Service plan pricing tier determines the location, features, cost and compute resources associated with your app.
+     */
     public AzureAppServicePlanBuilder withPricingPlan(AzurePricingPlan pricingPlan) {
       this.pricingPlan = pricingPlan;
       return this;
@@ -82,6 +89,14 @@ public class AzureAppServicePlan extends AzureResource implements Validatable {
       return this;
     }
 
+    /**
+     * Current number of instances assigned to the resource.
+     */
+    public AzureAppServicePlanBuilder withNumberOfWorkers(Integer numberOfWorkers) {
+      this.numberOfWorkers = numberOfWorkers;
+      return this;
+    }
+
     public AzureAppServicePlan build(){
       var appServicePlan = new AzureAppServicePlan(name,
           region,
@@ -89,7 +104,8 @@ public class AzureAppServicePlan extends AzureResource implements Validatable {
           azureResourceGroup,
           operatingSystem,
           pricingPlan,
-          zoneRedundancyEnabled);
+          zoneRedundancyEnabled,
+          numberOfWorkers);
       
       var errors = appServicePlan.validate();
 

@@ -160,6 +160,7 @@ public class AzureAppServicePlanTest {
 
     var appServicePlan = getAppServicePlanBuilder()
         .withZoneRedundancyEnabled()
+        .withNumberOfWorkers(3)
         .withTag(tagKey, tagValue)
         .build();
 
@@ -169,6 +170,7 @@ public class AzureAppServicePlanTest {
     assertThat(appServicePlan.getOperatingSystem()).isEqualTo(SELECTED_OPERATING_SYSTEM);
     assertThat(appServicePlan.getPricingPlan()).isEqualTo(SELECTED_PRICING_PLAN);
     assertThat(appServicePlan.getZoneRedundancyEnabled()).isEqualTo(true);
+    assertThat(appServicePlan.getNumberOfWorkers()).isEqualTo(3);
     assertThat(appServicePlan.getTags().size()).isEqualTo(1);
     assertThat(appServicePlan.getTags()).isEqualTo(Map.of(tagKey, tagValue));
   }

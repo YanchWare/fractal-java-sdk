@@ -400,7 +400,7 @@ public class AzureAppServiceTest {
 
     var webApp = generateSampleBuilder()
         .withOperatingSystem(AzureOsType.WINDOWS)
-        .withRuntimeStack(AzureWebAppWindowsRuntimeStack.JAVA_1_8_TOMCAT_10_0)
+        .withRuntimeStack(AzureWebAppWindowsRuntimeStack.JAVA_8_TOMCAT_10_0)
         .withAppServicePlan(appServicePlan)
         .withConfiguration(AzureWebAppConfiguration.builder()
             .withJavaVersion("java version")
@@ -436,7 +436,8 @@ public class AzureAppServiceTest {
         .withSSHRepositoryURI("ssh")
         .withRepoId("repo-id")
         .withBranchName("env/test")
-        .withSecretPasswordKey("***");
+        .withSecretPasswordKey("***")
+        .withRegion(AzureRegion.EUROPE_WEST);
   }
 
 }
