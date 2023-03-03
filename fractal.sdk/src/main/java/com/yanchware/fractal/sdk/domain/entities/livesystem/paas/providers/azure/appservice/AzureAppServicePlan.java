@@ -66,7 +66,7 @@ public class AzureAppServicePlan extends AzureResource implements Validatable {
     }
 
     /**
-     * App Service operating system, either Windows or Linux
+     * App Service Plan operating system, either Windows or Linux
      * @param operatingSystem
      */
     public AzureAppServicePlanBuilder withOperatingSystem(AzureOsType operatingSystem) {
