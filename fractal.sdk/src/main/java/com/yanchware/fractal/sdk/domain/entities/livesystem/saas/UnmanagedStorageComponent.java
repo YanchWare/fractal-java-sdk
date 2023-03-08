@@ -42,12 +42,20 @@ public class UnmanagedStorageComponent extends com.yanchware.fractal.sdk.domain.
     protected UnmanagedStorageComponentBuilder getBuilder() {
       return this;
     }
-
+    
+    /**
+     * Name of the secret
+     * @param secretName
+     */
     public UnmanagedStorageComponentBuilder withSecretName(String secretName) {
       component.setSecretName(secretName);
       return builder;
     }
-
+    
+    /**
+     * Value of the secret
+     * @param secretValue
+     */
     public UnmanagedStorageComponentBuilder withSecretValue(String secretValue) {
       component.setSecretValue(secretValue);
       return builder;

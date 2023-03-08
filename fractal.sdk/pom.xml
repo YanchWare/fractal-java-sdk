@@ -5,10 +5,21 @@
 
     <groupId>com.yanchware</groupId>
     <artifactId>fractal.sdk</artifactId>
-    <version>3.8.0</version>
+    <version>4.0.0</version>
+    <packaging>jar</packaging>
 
-    <name>${project.groupId}.${project.artifactId}</name>
-    <url>https://yanchware.com/</url>
+    <name>${project.groupId}:${project.artifactId}</name>
+    <description>SDK project for Fractal Cloud</description>
+    <url>https://github.com/YanchWare/fractal-java-sdk</url>
+
+    <developers>
+        <developer>
+            <name>YanchWare</name>
+            <email>hello@yanchware.com</email>
+            <organization>YanchWare</organization>
+            <organizationUrl>https://yanchware.com/</organizationUrl>
+        </developer>
+    </developers>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -151,6 +162,31 @@
                 <plugin>
                     <artifactId>maven-project-info-reports-plugin</artifactId>
                     <version>3.1.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>3.2.0</version>
+                    <executions>
+                        <execution>
+                            <id>attach-javadoc</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>attach-source</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
             </plugins>
         </pluginManagement>

@@ -89,11 +89,18 @@ public class AzureStorageAccount extends PaaSDataStorage implements AzureResourc
       return super.build();
     }
 
+    /**
+     * Choose the Azure region that's right for you and your customers
+     */
     public AzureStorageAccountBuilder withRegion(AzureRegion region) {
       component.setAzureRegion(region);
       return builder;
     }
 
+    /**
+     * A resource group is a collection of resources that share the same lifecycle, permissions, and policies.
+     * The resource group can include all the resources for the solution, or only those resources that you want to manage as a group.
+     */
     public AzureStorageAccountBuilder withResourceGroup(AzureResourceGroup resourceGroup) {
       component.setAzureResourceGroup(resourceGroup);
       return builder;
@@ -129,11 +136,19 @@ public class AzureStorageAccount extends PaaSDataStorage implements AzureResourc
       return builder;
     }
 
+    /**
+     * Tags are name/value pairs that enable you to categorize resources and view consolidated billing by
+     * applying the same tag to multiple resources and resource groups.
+     */
     public AzureStorageAccountBuilder withTags(Map<String, String> tags) {
       component.setTags(tags);
       return builder;
     }
-
+    
+    /**
+     * Tag is name/value pairs that enable you to categorize resources and view consolidated billing by
+     * applying the same tag to multiple resources and resource groups.
+     */
     public AzureStorageAccountBuilder withTag(String key, String value) {
       if (component.getTags() == null) {
         withTags(new HashMap<>());

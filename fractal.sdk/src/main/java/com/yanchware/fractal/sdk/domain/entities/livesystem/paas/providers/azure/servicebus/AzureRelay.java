@@ -27,7 +27,7 @@ public class AzureRelay extends PaaSMessaging implements AzureResourceEntity, Li
   private static final Integer ID_MIN_LENGTH = 6;
   private static final Integer ID_MAX_LENGTH = 50;
   private final static String NAME_LENGTH_MISMATCH_TEMPLATE =
-      "[AzureRelay validation] Relay name is illegal. A valid Relay name must be between " +  ID_MIN_LENGTH +
+      "[AzureRelay validation] Relay name is illegal. A valid Relay name must be between " + ID_MIN_LENGTH +
           " and " + ID_MAX_LENGTH + " characters of length";
   private String name;
   private AzureRegion azureRegion;
@@ -49,26 +49,50 @@ public class AzureRelay extends PaaSMessaging implements AzureResourceEntity, Li
       return this;
     }
 
+    /**
+     * Name of the component
+     * Must be between 6 and 50 characters
+     *
+     * @param name
+     */
     public AzureRelayBuilder withName(String name) {
       component.setName(name);
       return builder;
     }
 
+    /**
+     * The region in which the component will be created
+     *
+     * @param region Azure region
+     */
     public AzureRelayBuilder withRegion(AzureRegion region) {
       component.setAzureRegion(region);
       return builder;
     }
 
+    /**
+     * The resource group in which the component will be created
+     *
+     * @param azureResourceGroup Azure Resource Group reference
+     */
     public AzureRelayBuilder withAzureResourceGroup(AzureResourceGroup azureResourceGroup) {
       component.setAzureResourceGroup(azureResourceGroup);
       return builder;
     }
 
+    /**
+     * Tags are name/value pairs that enable you to categorize resources and view consolidated billing by
+     * applying the same tag to multiple resources and resource groups.
+     */
     public AzureRelayBuilder withTags(Map<String, String> tags) {
       component.setTags(tags);
       return builder;
     }
 
+    /**
+     * Tag is name/value pairs that enable you to categorize resources and view consolidated billing by
+     * applying the same tag to multiple resources and resource groups.
+     */
     public AzureRelayBuilder withTag(String key, String value) {
       if (component.getTags() == null) {
         withTags(new HashMap<>());

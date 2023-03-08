@@ -8,7 +8,13 @@ import lombok.Setter;
 @Setter
 @Builder(setterPrefix = "with")
 public class ServiceBusSku {
+  /**
+   * Service Bus Sku capacity
+   */
   private Integer capacity;
+  /**
+   * Service Bus Sku Tier
+   */
   private ServiceBusSkuTier tier;
 }
 

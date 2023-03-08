@@ -49,36 +49,66 @@ public class CaaSTraefik extends CaaSAPIGatewayImpl {
             return this;
         }
 
+        /**
+         * Namespace where Traefik will be instantiated
+         * @param namespace
+         */
         public TraefikBuilder withNamespace(String namespace) {
             component.setNamespace(namespace);
             return builder;
         }
 
+        /**
+         * List of TLS certificates for Traefik
+         * @param tlsCertificates
+         */
         public TraefikBuilder withCertificates(List<TraefikTlsCertificate> tlsCertificates) {
             component.setTlsCertificates(tlsCertificates);
             return builder;
         }
 
+        /**
+         * Hostname for Traefik
+         * @param hostname
+         */
         public TraefikBuilder withHostname(String hostname) {
             component.setHostname(hostname);
             return builder;
         }
 
+        /**
+         * The id of the container platform where Traefik will be instantiated
+         * @param containerPlatform
+         */
         public TraefikBuilder withContainerPlatform(String containerPlatform) {
             component.setContainerPlatform(containerPlatform);
             return builder;
         }
 
+        /**
+         * Jaeger host for Traefik
+         * @param host
+         */
         public TraefikBuilder withJaegerHost(String host) {
             component.setJaegerHost(host);
             return builder;
         }
 
+        /**
+         * List of Traefik entry points
+         * @param entryPoints
+         */
         public TraefikBuilder withEntryPoints(List<TraefikEntryPoint> entryPoints) {
             component.setEntryPoints(entryPoints);
             return builder;
         }
 
+        /**
+         * Forward Auth settings for Traefik
+         * 
+         * For more details check <a href="https://doc.traefik.io/traefik/middlewares/http/forwardauth/">Traefik documentation</a>
+         * @param forwardAuthSettings
+         */
         public TraefikBuilder withForwardAuth(ForwardAuthSettings forwardAuthSettings) {
             component.setOidcClientId(forwardAuthSettings.getOidcClientId());
             component.setOidcIssuerUrl(forwardAuthSettings.getOidcIssuer());

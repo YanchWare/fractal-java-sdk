@@ -179,11 +179,21 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
       return super.build();
     }
 
+    /**
+     * The region in which the component will be created
+     *
+     * @param region Azure region
+     */
     public AzureWebAppBuilder withRegion(AzureRegion region) {
       component.setAzureRegion(region);
       return builder;
     }
 
+    /**
+     * The resource group in which the component will be created
+     *
+     * @param resourceGroup Azure Resource Group reference
+     */
     public AzureWebAppBuilder withResourceGroup(AzureResourceGroup resourceGroup) {
       component.setAzureResourceGroup(resourceGroup);
       return builder;
@@ -194,16 +204,28 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
       return builder;
     }
 
+    /**
+     * Chosen name for the web app
+     * @param name
+     */
     public AzureWebAppBuilder withName(String name) {
       component.setName(name);
       return builder;
     }
 
+    /**
+     * Tags are name/value pairs that enable you to categorize resources and view consolidated billing by
+     * applying the same tag to multiple resources and resource groups.
+     */
     public AzureWebAppBuilder withTags(Map<String, String> tags) {
       component.setTags(tags);
       return builder;
     }
 
+    /**
+     * Tag is name/value pairs that enable you to categorize resources and view consolidated billing by
+     * applying the same tag to multiple resources and resource groups.
+     */
     public AzureWebAppBuilder withTag(String key, String value) {
       if (component.getTags() == null) {
         withTags(new HashMap<>());
@@ -218,10 +240,18 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
       return builder;
     }
 
+    /**
+     * Azure Key Vault certificate to be used by the web app
+     * @param certificate
+     */
     public AzureWebAppBuilder withCertificate(AzureKeyVaultCertificate certificate) {
       return withCertificates(List.of(certificate));
     }
 
+    /**
+     * List of Azure Key Vault certificates
+     * @param certificates
+     */
     public AzureWebAppBuilder withCertificates(Collection<? extends AzureKeyVaultCertificate> certificates) {
       if (isBlank(certificates)) {
         return builder;

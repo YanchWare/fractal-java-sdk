@@ -70,10 +70,18 @@ public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms implements AzureReso
       return this;
     }
 
+    /**
+     * Database definition to be created part of this DBMS
+     * @param db
+     */
     public AzurePostgreSqlBuilder withDatabase(AzurePostgreSqlDatabase db) {
       return withDatabases(List.of(db));
     }
 
+    /**
+     * List of databases to be created part of this DBMS
+     * @param dbs
+     */
     public AzurePostgreSqlBuilder withDatabases(Collection<? extends AzurePostgreSqlDatabase> dbs) {
       if (CollectionUtils.isBlank(dbs)) {
         return builder;
@@ -92,46 +100,83 @@ public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms implements AzureReso
       return builder;
     }
 
+    /**
+     * Name of the root user to be set for the PostgreSql DBMS
+     * @param rootUser
+     */
     public AzurePostgreSqlBuilder withRootUser(String rootUser) {
       component.setRootUser(rootUser);
       return builder;
     }
 
+    /**
+     * The region in which the component will be created
+     *
+     * @param region Azure region
+     */
     public AzurePostgreSqlBuilder withRegion(AzureRegion region) {
       component.setAzureRegion(region);
       return builder;
     }
 
+    /**
+     * SKU name for PostgreSql DBMS
+     * @param skuName
+     */
     public AzurePostgreSqlBuilder withSkuName(AzureSkuName skuName) {
       component.setSkuName(skuName);
       return builder;
     }
 
+    /**
+     * Enable/Disable storage auto grow
+     * @param storageAutoGrow
+     */
     public AzurePostgreSqlBuilder withStorageAutoGrow(AzureStorageAutoGrow storageAutoGrow) {
       component.setStorageAutoGrow(storageAutoGrow);
       return builder;
     }
 
+    /**
+     * PostgreSql DBMS storage in MB
+     * @param storageMB
+     */
     public AzurePostgreSqlBuilder withStorageMB(int storageMB) {
       component.setStorageMB(storageMB);
       return builder;
     }
 
+    /**
+     * Setting for backup retention days
+     * @param backupRetentionDays
+     */
     public AzurePostgreSqlBuilder withBackupRetentionDays(int backupRetentionDays) {
       component.setBackupRetentionDays(backupRetentionDays);
       return builder;
     }
 
+    /**
+     * Name of the PostgreSql DBms
+     * @param name
+     */
     public AzurePostgreSqlBuilder withName(String name) {
       component.setName(name);
       return builder;
     }
 
+    /**
+     * Tags are name/value pairs that enable you to categorize resources and view consolidated billing by
+     * applying the same tag to multiple resources and resource groups.
+     */
     public AzurePostgreSqlBuilder withTags(Map<String, String> tags) {
       component.setTags(tags);
       return builder;
     }
 
+    /**
+     * Tag is name/value pairs that enable you to categorize resources and view consolidated billing by
+     * applying the same tag to multiple resources and resource groups.
+     */
     public AzurePostgreSqlBuilder withTag(String key, String value) {
       if (component.getTags() == null) {
         withTags(new HashMap<>());
