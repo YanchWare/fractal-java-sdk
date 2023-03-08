@@ -103,7 +103,6 @@ public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms implements AzureReso
     /**
      * Name of the root user to be set for the PostgreSql DBMS
      * @param rootUser
-     * @return
      */
     public AzurePostgreSqlBuilder withRootUser(String rootUser) {
       component.setRootUser(rootUser);

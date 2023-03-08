@@ -70,7 +70,7 @@ public class CaaSKubernetesWorkload extends CaaSWorkload implements LiveSystemCo
         }
 
         /**
-         * The name of the container platform where the workload will be instantiated
+         * The id of the container platform where the workload will be instantiated
          * @param containerPlatform
          */
         public KubernetesWorkloadBuilder withContainerPlatform(String containerPlatform) {

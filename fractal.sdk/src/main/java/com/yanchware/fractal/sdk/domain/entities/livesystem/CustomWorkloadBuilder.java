@@ -8,10 +8,21 @@ import java.util.List;
 
 import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 
+/**
+ * <p>
+ * Builder class to represent a Custom Workload in Fractal Cloud.
+ * </p>
+ * <br>
+ * <p>
+ * For more details about creating a custom workload using Fractal Cloud check out
+ * our <a href="https://fractal.cloud/docs/docs-ht-create-kubernetes-workload">documentation page</a>
+ * </p>
+ */
 public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload, B extends CustomWorkloadBuilder<T, B>> extends Component.Builder<T, B> {
 
   /**
-   * The private passphrase secret ID used to read from the value from secret manager/key vault
+   * The id of the vault secret containing the passphrase protecting the SSH private key used to access the code repository
+   *
    * @param privateSSHKeyPassphraseSecretId
    */
   public B withPrivateSSHKeyPassphraseSecretId(String privateSSHKeyPassphraseSecretId) {
@@ -20,9 +31,9 @@ public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload
   }
 
   /**
-   * The passphrase SSH key secret ID used to read from the value from secret manager/key vault
+   * The id of the vault secret containing the SSH private key used to access the code repository
+   *
    * @param privateSSHKeySecretId
-   * @return
    */
   public B withPrivateSSHKeySecretId(String privateSSHKeySecretId) {
     component.setPrivateSSHKeySecretId(privateSSHKeySecretId);
@@ -31,8 +42,8 @@ public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload
 
   /**
    * The SSH uri of the repository
+   *
    * @param sshRepositoryURI
-   * @return
    */
   public B withSSHRepositoryURI(String sshRepositoryURI) {
     component.setSshRepositoryURI(sshRepositoryURI);
@@ -40,7 +51,9 @@ public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload
   }
 
   /**
-   * The id of the repository
+   * The ID of the repository as it is in the version control solution of your choice. The repoId needs to match the
+   * repository id that is being sent by the webhook
+   *
    * @param repoId
    */
   public B withRepoId(String repoId) {
@@ -49,7 +62,11 @@ public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload
   }
 
   /**
-   * Custom role for the workload to be applied
+   * This role will be applied to the Custom Workload. It can vary from a specific Cloud Vendor BuiltIn role to an
+   * AppRoleAssignment or other custom role.
+   * <p>
+   * See {@link com.yanchware.fractal.sdk.domain.entities.livesystem.caas.RoleType RoleType} for all role types supported
+   *
    * @param role
    */
   public B withRole(CustomWorkloadRole role) {
@@ -57,7 +74,11 @@ public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload
   }
 
   /**
-   * Custom roles for the workload to be applied
+   * This list of roles will be applied to the Custom Workload. It can vary from a specific Cloud Vendor BuiltIn role to an
+   * AppRoleAssignment or other custom role.
+   * <p>
+   * See {@link com.yanchware.fractal.sdk.domain.entities.livesystem.caas.RoleType RoleType} for all role types supported
+   *
    * @param roles
    */
   public B withRoles(List<CustomWorkloadRole> roles) {
@@ -72,7 +93,10 @@ public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload
   }
 
   /**
-   * Workload secret id key. Used for internal communication.
+   * The id of the vault secret containing the Ocelot client id for this workload
+   * This is used for internal communication when <a href="https://fractal.cloud/docs/docs-ocelot">Ocelot</a> is also used in the environment
+   * If it is not provided, Fractal Cloud will generate it
+   *
    * @param workloadSecretIdKey
    */
   public B withSecretIdKey(String workloadSecretIdKey) {
@@ -81,8 +105,10 @@ public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload
   }
 
   /**
+   * The id of the vault secret containing the Ocelot client secret for this workload
+   * This is used for internal communication when <a href="https://fractal.cloud/docs/docs-ocelot">Ocelot</a> is also used in the environment
+   * If it is not provided, Fractal Cloud will generate it
    *
-   * Workload secret password key. Used for internal communication.
    * @param workloadSecretPasswordKey
    */
   public B withSecretPasswordKey(String workloadSecretPasswordKey) {
@@ -91,7 +117,8 @@ public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload
   }
 
   /**
-   * Branch name from which to deploy
+   * The branch name to indicate from where to clone the repository that will be deployed
+   *
    * @param branchName
    */
   public B withBranchName(String branchName) {

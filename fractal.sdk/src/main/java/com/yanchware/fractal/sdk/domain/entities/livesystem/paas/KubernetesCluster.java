@@ -18,6 +18,16 @@ import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 import static com.yanchware.fractal.sdk.utils.ValidationUtils.isPresentAndValidIpRange;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_KUBERNETES;
 
+/**
+ * <p>
+ *   Builder class to represent a Kubernetes cluster.
+ * </p>
+ * <br>
+ * <p>
+ *  For more details about creating a Kubernetes cluster using Fractal Cloud check out 
+ *  our <a href="https://fractal.cloud/docs/docs-ht-create-kubernetes-cluster">documentation page</a>
+ * </p>
+ */
 @Getter
 @Setter(AccessLevel.PROTECTED)
 @ToString(callSuper = true)

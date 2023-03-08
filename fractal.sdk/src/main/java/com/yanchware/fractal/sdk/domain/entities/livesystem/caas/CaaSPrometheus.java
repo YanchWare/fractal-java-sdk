@@ -10,6 +10,16 @@ import java.util.Collection;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.CAAS_PROMETHEUS;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
+/**
+ * <p>
+ * Builder class to represent a Prometheus component.
+ * </p>
+ * <br>
+ * <p>
+ * For more details about creating a Prometheus component using Fractal Cloud check out
+ * our <a href="https://fractal.cloud/docs/docs-ht-create-prometheus">documentation page</a>
+ * </p>
+ */
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
@@ -36,6 +46,7 @@ public class CaaSPrometheus extends CaaSMonitoringImpl implements LiveSystemComp
 
     /**
      * Namespace where prometheus will be instantiated
+     *
      * @param namespace
      */
     public PrometheusBuilder withNamespace(String namespace) {
@@ -44,7 +55,8 @@ public class CaaSPrometheus extends CaaSMonitoringImpl implements LiveSystemComp
     }
 
     /**
-     * The name of the container platform where prometheus will be instantiated
+     * The id of the container platform where prometheus will be instantiated
+     *
      * @param containerPlatform
      */
     public PrometheusBuilder withContainerPlatform(String containerPlatform) {
@@ -53,7 +65,11 @@ public class CaaSPrometheus extends CaaSMonitoringImpl implements LiveSystemComp
     }
 
     /**
-     * API Gateway URL for Prometheus
+     * If specified, Prometheus will be made available at the URL specified below. For example, if the parameter is set to
+     * <i>api.yourdomain.com</i>, then Prometheus can be accessed at <i>api.yourdomain.com/prometheus</i>.
+     * <p>
+     * This applies for all components available (Kibana, Grafana, Alert Manager)
+     *
      * @param apiGatewayUrl
      */
     public PrometheusBuilder withApiGatewayUrl(String apiGatewayUrl) {

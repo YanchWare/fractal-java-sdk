@@ -77,7 +77,7 @@ public class CaaSTraefik extends CaaSAPIGatewayImpl {
         }
 
         /**
-         * The name of the container platform where Traefik will be instantiated
+         * The id of the container platform where Traefik will be instantiated
          * @param containerPlatform
          */
         public TraefikBuilder withContainerPlatform(String containerPlatform) {
@@ -106,7 +106,6 @@ public class CaaSTraefik extends CaaSAPIGatewayImpl {
         /**
          * Forward Auth settings for Traefik
          * @param forwardAuthSettings
-         * @return
          */
         public TraefikBuilder withForwardAuth(ForwardAuthSettings forwardAuthSettings) {
             component.setOidcClientId(forwardAuthSettings.getOidcClientId());

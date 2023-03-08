@@ -10,6 +10,16 @@ import java.util.Collection;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.CAAS_ELASTIC_DATASTORE;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
+/**
+ * <p>
+ * Builder class to represent an Elastic Datastore component.
+ * </p>
+ * <br>
+ * <p>
+ * For more details about creating an Elastic Datastore component using Fractal Cloud check out
+ * our <a href="https://fractal.cloud/docs/docs-ht-create-elastic-datastore">documentation page</a>
+ * </p>
+ */
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
@@ -41,7 +51,7 @@ public class CaaSElasticDataStore extends CaaSSearchImpl implements LiveSystemCo
     }
 
     /**
-     * The name of the container platform where the elastic datastore will be instantiated
+     * The id of the container platform where the elastic datastore will be instantiated
      *
      * @param containerPlatform
      */
@@ -92,7 +102,9 @@ public class CaaSElasticDataStore extends CaaSSearchImpl implements LiveSystemCo
     }
 
     /**
-     * Elastic Datastore storage
+     * Storage that will be used for PersistentVolumeClaim
+     * <p>
+     * For more details check <a href="https://www.elastic.co/guide/en/cloud-on-k8s/master/k8s-volume-claim-templates.html">Elastic documentation</a>
      *
      * @param storage
      */
@@ -102,8 +114,11 @@ public class CaaSElasticDataStore extends CaaSSearchImpl implements LiveSystemCo
     }
 
     /**
-     * Storage class name
+     * Storage class name that will be used for PersistentVolumeClaim
+     * <p>
      * Default: 'standard'
+     * <p>
+     * For more details check <a href="https://www.elastic.co/guide/en/cloud-on-k8s/master/k8s-volume-claim-templates.html">Elastic documentation</a>
      *
      * @param storageClassName
      */
@@ -113,8 +128,10 @@ public class CaaSElasticDataStore extends CaaSSearchImpl implements LiveSystemCo
     }
 
     /**
-     * Number of memory units
+     * Amount of memory, in gigabytes, that will be used for requests and limits
      * Default: '8'
+     * <p>
+     * For more details check <a href="https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-managing-compute-resources.html#k8s-compute-resources-elasticsearch">Elastic documentation</a>
      *
      * @param memory
      */
@@ -124,8 +141,10 @@ public class CaaSElasticDataStore extends CaaSSearchImpl implements LiveSystemCo
     }
 
     /**
-     * Number of CPU units
+     * CPU resources that will be used for requests and limits
      * Default: '8'
+     * <p>
+     * For more details check <a href="https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-managing-compute-resources.html#k8s-compute-resources-elasticsearch">Elastic documentation</a>
      *
      * @param cpu
      */

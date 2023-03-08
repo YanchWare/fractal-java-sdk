@@ -10,6 +10,16 @@ import java.util.Collection;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.CAAS_ELASTIC_LOGGING;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
+/**
+ * <p>
+ * Builder class to represent an Elastic Logging component.
+ * </p>
+ * <br>
+ * <p>
+ * For more details about creating an Elastic Logging component using Fractal Cloud check out
+ * our <a href="https://fractal.cloud/docs/docs-ht-create-elastic-logging">documentation page</a>
+ * </p>
+ */
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
@@ -44,7 +54,7 @@ public class CaaSElasticLogging extends CaaSLoggingImpl implements LiveSystemCom
     }
 
     /**
-     * The name of the container platform where the elastic logging will be instantiated
+     * The id of the container platform where the elastic logging will be instantiated
      *
      * @param containerPlatform
      */
@@ -63,83 +73,98 @@ public class CaaSElasticLogging extends CaaSLoggingImpl implements LiveSystemCom
       return builder;
     }
 
-      /**
-       * If true, APM will be instantiated part of the elastic logging solution
-       * @param isApmRequired
-       */
+    /**
+     * If true, APM will be instantiated part of the elastic logging solution
+     * <p>
+     * For more details check <a href="https://www.elastic.co/guide/en/apm/guide/current/index.html">APM documentation</a>
+     *
+     * @param isApmRequired
+     */
     public ElasticLoggingBuilder withAPM(boolean isApmRequired) {
       component.setApmRequired(isApmRequired);
       return builder;
     }
 
-      /**
-       * If true, Kibana will be instantiated part of the elastic logging solution
-       * @param isKibanaRequired
-       */
+    /**
+     * If true, Kibana will be instantiated part of the elastic logging solution
+     * <p>
+     * For more details check <a href="https://www.elastic.co/guide/en/kibana/index.html">Kibana documentation</a>
+     *
+     * @param isKibanaRequired
+     */
     public ElasticLoggingBuilder withKibana(boolean isKibanaRequired) {
       component.setKibanaRequired(isKibanaRequired);
       return builder;
     }
 
-      /**
-       * Elastic version to be used
-       *
-       * @param elasticVersion
-       */
+    /**
+     * Elastic version to be used
+     *
+     * @param elasticVersion
+     */
     public ElasticLoggingBuilder withElasticVersion(String elasticVersion) {
       component.setElasticVersion(elasticVersion);
       return builder;
     }
 
-      /**
-       * Number of elastic datastore instances
-       * Must be a value greater than 0
-       *
-       * @param elasticInstances
-       */
+    /**
+     * Number of elastic datastore instances
+     * Must be a value greater than 0
+     *
+     * @param elasticInstances
+     */
     public ElasticLoggingBuilder withInstances(int elasticInstances) {
       component.setElasticInstances(elasticInstances);
       return builder;
     }
 
-      /**
-       * Elastic Datastore storage
-       *
-       * @param storage
-       */
+    /**
+     * Storage that will be used for PersistentVolumeClaim
+     * <p>
+     * For more details check <a href="https://www.elastic.co/guide/en/cloud-on-k8s/master/k8s-volume-claim-templates.html">Elastic documentation</a>
+     *
+     * @param storage
+     */
     public ElasticLoggingBuilder withStorage(String storage) {
       component.setStorage(storage);
       return builder;
     }
 
-      /**
-       * Storage class name
-       * Default: 'standard'
-       *
-       * @param storageClassName
-       */
+    /**
+     * Storage class name that will be used for PersistentVolumeClaim
+     * <p>
+     * Default: 'standard'
+     * <p>
+     * For more details check <a href="https://www.elastic.co/guide/en/cloud-on-k8s/master/k8s-volume-claim-templates.html">Elastic documentation</a>
+     *
+     * @param storageClassName
+     */
     public ElasticLoggingBuilder withStorageClassName(String storageClassName) {
       component.setStorageClassName(storageClassName);
       return builder;
     }
 
-      /**
-       * Number of memory units
-       * Default: '8'
-       *
-       * @param memory
-       */
+    /**
+     * Amount of memory, in gigabytes, that will be used for requests and limits
+     * Default: '8'
+     * <p>
+     * For more details check <a href="https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-managing-compute-resources.html#k8s-compute-resources-elasticsearch">Elastic documentation</a>
+     *
+     * @param memory
+     */
     public ElasticLoggingBuilder withMemory(int memory) {
       component.setMemory(memory);
       return builder;
     }
 
-      /**
-       * Number of CPU units
-       * Default: '8'
-       *
-       * @param cpu
-       */
+    /**
+     * CPU resources that will be used for requests and limits
+     * Default: '8'
+     * <p>
+     * For more details check <a href="https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-managing-compute-resources.html#k8s-compute-resources-elasticsearch">Elastic documentation</a>
+     *
+     * @param cpu
+     */
     public ElasticLoggingBuilder withCpu(int cpu) {
       component.setCpu(cpu);
       return builder;
