@@ -12,13 +12,6 @@
     <description>SDK project for Fractal Cloud</description>
     <url>https://github.com/YanchWare/fractal-java-sdk</url>
 
-    <licenses>
-        <license>
-            <name>GPL-v3.0</name>
-            <url>http://www.gnu.org/licenses/gpl-3.0.txt</url>
-        </license>
-    </licenses>
-
     <developers>
         <developer>
             <name>YanchWare</name>
@@ -27,20 +20,6 @@
             <organizationUrl>https://yanchware.com/</organizationUrl>
         </developer>
     </developers>
-
-    <scm>
-        <connection>scm:git:git://github.com/YanchWare/fractal-java-sdk.git</connection>
-        <developerConnection>scm:git:ssh://github.com:YanchWare/fractal-java-sdk.git</developerConnection>
-        <url>https://github.com/YanchWare/fractal-java-sdk/tree/main</url>
-    </scm>
-
-    <distributionManagement>
-        <repository>
-            <id>ossrh</id>
-            <name>Central Repository OSSRH</name>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -183,26 +162,6 @@
                 <plugin>
                     <artifactId>maven-project-info-reports-plugin</artifactId>
                     <version>3.1.2</version>
-                </plugin>
-                <!-- plugin to sign the artifact-->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-gpg-plugin</artifactId>
-                    <executions>
-                        <execution>
-                            <id>sign-artifacts</id>
-                            <phase>verify</phase>
-                            <goals>
-                                <goal>sign</goal>
-                            </goals>
-                            <configuration>
-                                <gpgArguments>
-                                    <arg>--pinentry-mode</arg>
-                                    <arg>loopback</arg>
-                                </gpgArguments>
-                            </configuration>
-                        </execution>
-                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
