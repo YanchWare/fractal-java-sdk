@@ -119,7 +119,9 @@ public class CaaSAmbassador extends CaaSAPIGatewayImpl {
     }
 
     /**
-     * Ambassador's TLS secret name
+     * The name of the TLS secret that Ambassador will look for to use.
+     * 
+     * For more details check <a href="https://www.getambassador.io/docs/edge-stack/latest/topics/running/tls#bring-your-own-certificate">Ambassador documentation</a>
      *
      * @param tlsSecretName
      */
