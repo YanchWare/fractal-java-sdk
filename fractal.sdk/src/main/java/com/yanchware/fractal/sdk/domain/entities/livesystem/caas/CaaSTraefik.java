@@ -105,6 +105,8 @@ public class CaaSTraefik extends CaaSAPIGatewayImpl {
 
         /**
          * Forward Auth settings for Traefik
+         * 
+         * For more details check <a href="https://doc.traefik.io/traefik/middlewares/http/forwardauth/">Traefik documentation</a>
          * @param forwardAuthSettings
          */
         public TraefikBuilder withForwardAuth(ForwardAuthSettings forwardAuthSettings) {

@@ -70,7 +70,7 @@ public class CaaSOcelot extends CaaSServiceMeshSecurityImpl implements LiveSyste
     }
 
     /**
-     * URL for CORS
+     * Origins for CORS
      *
      * @param corsOrigins
      */
