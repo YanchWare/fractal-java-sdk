@@ -15,8 +15,17 @@ public enum RoleType {
   }
 
   @JsonValue
-  public String getId() {
+  public String getRoleType() {
     return roleType;
+  }
+
+  public static RoleType fromString(String text) {
+    for (var item : RoleType.values()) {
+      if (item.roleType.equalsIgnoreCase(text)) {
+        return item;
+      }
+    }
+    return null;
   }
 
   @Override
