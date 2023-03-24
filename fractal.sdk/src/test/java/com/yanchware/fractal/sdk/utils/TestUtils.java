@@ -274,6 +274,7 @@ public class TestUtils {
         .withId("dbpg")
         .withDescription("PostgreSQL")
         .withDisplayName("PostgreSQL")
+        .withIsLocked(true)
         .withRegion(EU_WEST1)
         .withNetwork("network")
         .withPeeringNetworkAddress("address")
@@ -363,6 +364,7 @@ public class TestUtils {
       softly.assertThat(componentDto.getDescription()).as("Component Description").contains(comp.getDescription());
       softly.assertThat(componentDto.getType()).as("Component Type").isEqualTo(type);
       softly.assertThat(componentDto.getVersion()).as("Component Version").isEqualTo(DEFAULT_VERSION);
+      softly.assertThat(componentDto.isLocked()).as("Component isLocked").isEqualTo(comp.isLocked());
       softly.assertThat(componentDto.getDependencies()).as("Component Dependencies").containsAll(comp.getDependencies().stream().map(ComponentId::getValue).collect(toSet()));
       softly.assertThat(componentDto.getLinks()).as("Component Links").containsAll(comp.getLinks());
     });

@@ -25,6 +25,7 @@ public abstract class Component implements Validatable {
   private ComponentType type;
   private ComponentId id;
   private String version;
+  private boolean isLocked;
   private Set<ComponentId> dependencies;
   private Set<ComponentLink> links;
   private String description;
@@ -78,6 +79,11 @@ public abstract class Component implements Validatable {
 
     public B withVersion(String version) {
       component.setVersion(version);
+      return builder;
+    }
+
+    public B withIsLocked(boolean isLocked) {
+      component.setLocked(isLocked);
       return builder;
     }
 

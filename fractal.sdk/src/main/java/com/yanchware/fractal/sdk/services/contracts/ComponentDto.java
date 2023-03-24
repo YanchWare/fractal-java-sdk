@@ -23,6 +23,7 @@ public class ComponentDto {
   private String description;
   private String type;
   private String version;
+  private boolean isLocked;
   private Map<String, Object> parameters;
   private Set<String> dependencies;
   private Set<ComponentLink> links;
@@ -65,6 +66,11 @@ public class ComponentDto {
       return builder;
     }
 
+    public B withIsLocked(boolean isLocked) {
+      componentDto.setLocked(isLocked);
+      return builder;
+    }
+
     public B withParameters(Map<String, Object> parameters) {
       if (componentDto.getParameters() == null) {
         componentDto.setParameters(new HashMap<>());
@@ -96,6 +102,7 @@ public class ComponentDto {
       withDisplayName(String.valueOf(allFields.get(DISPLAY_NAME_KEY)));
       withDescription(String.valueOf(allFields.get(DESCRIPTION_KEY)));
       withVersion(String.valueOf(allFields.get(VERSION_KEY)));
+      withIsLocked((Boolean) allFields.get(IS_LOCKED_KEY));
       withParameters((Map<String, Object>) allFields.get(PARAMETERS_KEY));
       withDependencies(componentIds.stream().map(ComponentId::getValue).collect(toSet()));
       withLinks((Set<ComponentLink>) allFields.get(Constants.LINKS_KEY));

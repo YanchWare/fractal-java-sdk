@@ -25,6 +25,7 @@ public class Constants {
     public static final String DISPLAY_NAME_KEY = "displayName";
 
     public static final String VERSION_KEY = "version";
+    public static final String IS_LOCKED_KEY = "isLocked";
 
     public static final String PARAMETERS_KEY = "parameters";
 
