@@ -15,7 +15,6 @@ import com.yanchware.fractal.sdk.utils.HttpUtils;
 import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryConfig;
 import io.github.resilience4j.retry.RetryRegistry;
-import io.vavr.control.Try;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -78,22 +77,20 @@ public class ProviderService {
         .build();
     var retry = RetryRegistry.of(retryConfig).retry(requestName);
 
-    var callWithRetry = Retry.decorateCheckedSupplier(retry, () ->
+    try {
+      Retry.decorateCheckedSupplier(retry, () ->
         getLiveSystemMutationResponse(liveSystem,
-            liveSystemMutation,
-            config,
-            requestName,
-            acceptedResponses,
-            request));
-
-    Try<LiveSystemMutationResponse> result = Try.of(callWithRetry);
-
-    if (result.isFailure()) {
+          liveSystemMutation,
+          config,
+          requestName,
+          acceptedResponses,
+          request));
+    } catch (Exception ex) {
       throw new InstantiatorException(
-          String.format("LiveSystem [%s] - all attempts for request %s failed with cause: %s",
-              liveSystem.getLiveSystemId(),
-              requestName,
-              result.getCause()));
+        String.format("LiveSystem [%s] - all attempts for request %s failed with cause: %s",
+          liveSystem.getLiveSystemId(),
+          requestName,
+          ex.getCause()));
     }
   }
 

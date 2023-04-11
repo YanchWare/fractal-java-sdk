@@ -100,8 +100,7 @@ public class LiveSystemService {
         }
 
         try {
-            var mutation = deserialize(response.body(), LiveSystemMutationDto.class);
-            return mutation;
+            return deserialize(response.body(), LiveSystemMutationDto.class);
         }
         catch (Exception e) {
             throw new InstantiatorException("Could not deserialize the mutation on LiveSystem update", e);

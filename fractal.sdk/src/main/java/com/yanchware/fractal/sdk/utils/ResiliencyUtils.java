@@ -4,8 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryRegistry;
-import io.vavr.CheckedFunction0;
-import io.vavr.control.Try;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.http.HttpClient;
@@ -14,6 +12,7 @@ import java.net.http.HttpResponse;
 
 import static com.yanchware.fractal.sdk.utils.HttpUtils.ensureAcceptableResponse;
 import static com.yanchware.fractal.sdk.utils.SerializationUtils.deserialize;
+import static com.yanchware.fractal.sdk.utils.SerializationUtils.serialize;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Slf4j
@@ -28,19 +27,19 @@ public class ResiliencyUtils {
 
     Retry retry = retryRegistry.retry(requestName);
 
-    CheckedFunction0<Throwable> callWithRetry = Retry.decorateCheckedSupplier(retry, () -> {
-      HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-      ensureAcceptableResponse(response, requestName, acceptedResponses);
+    try {
+      var result = Retry.decorateCheckedSupplier(retry, () -> {
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        ensureAcceptableResponse(response, requestName, acceptedResponses);
 
-      return null;
-    });
+        return null;
+      });
 
-    Try<Throwable> result = Try.of(callWithRetry);
-
-    if (result.isFailure()) {
+      log.debug(serialize(result.get()));
+    } catch (Throwable ex) {
       throw new InstantiatorException(
-          String.format("All attempts for request %s failed", requestName),
-          result.get());
+        String.format("All attempts for request %s failed", requestName),
+        ex);
     }
   }
 
@@ -54,39 +53,35 @@ public class ResiliencyUtils {
 
     Retry retry = retryRegistry.retry(requestName);
 
-    CheckedFunction0<T> callWithRetry = Retry.decorateCheckedSupplier(retry, () -> {
-      HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-      ensureAcceptableResponse(response, requestName, acceptedResponses);
+    try {
+      var result = Retry.decorateCheckedSupplier(retry, () -> {
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        ensureAcceptableResponse(response, requestName, acceptedResponses);
 
-      if (response.statusCode() == 404) {
-        log.info("Attempted {} has come up with a 404 Not Found. Will attempt to create it.", requestName);
-        return null;
-      }
+        if (response.statusCode() == 404) {
+          log.info("Attempted {} has come up with a 404 Not Found. Will attempt to create it.", requestName);
+          return null;
+        }
 
-      String bodyContents = response.body();
-      if (isBlank(bodyContents)) {
-        log.error("Attempted {} has come up with empty or null body contents: {}", requestName, bodyContents);
-        return null;
-      }
+        String bodyContents = response.body();
+        if (isBlank(bodyContents)) {
+          log.error("Attempted {} has come up with empty or null body contents: {}", requestName, bodyContents);
+          return null;
+        }
 
-      try {
-        return deserialize(bodyContents, classRef);
-      } catch (JsonProcessingException e) {
-        log.error("Attempted {} failed. Deserialization of {} failed.", requestName, bodyContents);
-        return null;
-      }
-
-    });
-
-    Try<T> result = Try.of(callWithRetry);
-
-    if (result.isFailure()) {
-      log.error("Attempted {} failed all attempts", requestName, result.getCause());
+        try {
+          return deserialize(bodyContents, classRef);
+        } catch (JsonProcessingException e) {
+          log.error("Attempted {} failed. Deserialization of {} failed.", requestName, bodyContents);
+          return null;
+        }
+      });
+      return result.get();
+    } catch (Throwable ex) {
+      log.error("Attempted {} failed all attempts", requestName, ex.getCause());
       throw new InstantiatorException(
-          String.format("All attempts for request %s failed with cause: %s", requestName, result.getCause()));
+        String.format("All attempts for request %s failed with cause: %s", requestName, ex));
     }
-
-    return result.get();
   }
 
 }

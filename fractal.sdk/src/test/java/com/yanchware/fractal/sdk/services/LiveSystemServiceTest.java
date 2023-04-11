@@ -1,5 +1,7 @@
 package com.yanchware.fractal.sdk.services;
 
+import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo;
+import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
@@ -11,8 +13,6 @@ import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.Envi
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemComponentDto;
 import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
 import io.github.resilience4j.retry.RetryRegistry;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.net.http.HttpClient;
@@ -20,30 +20,25 @@ import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 
+@WireMockTest
 public class LiveSystemServiceTest {
-    
-    private LiveSystemService liveSystemService;
-
-    @BeforeEach
-    public void setUp() {
-        SdkConfiguration sdkConfiguration = new LocalSdkConfiguration();
-        HttpClient httpClient = HttpClient.newBuilder()
-                .version(HttpClient.Version.HTTP_2)
-                .build();
-        liveSystemService = new LiveSystemService(httpClient, sdkConfiguration, RetryRegistry.ofDefaults());
-    }
 
     @Test
-    @Disabled
-    public void urlPathMatching_when_postRequestToLiveSystem() throws InstantiatorException {
-        stubFor(post(urlPathMatching("/livesystem/resource-group/livesystems"))
+    public void urlPathMatching_when_postRequestToLiveSystem(WireMockRuntimeInfo wmRuntimeInfo) throws InstantiatorException {
+        HttpClient httpClient = HttpClient.newBuilder()
+          .version(HttpClient.Version.HTTP_2)
+          .build();
+        SdkConfiguration sdkConfiguration = new LocalSdkConfiguration(wmRuntimeInfo.getHttpBaseUrl());
+        var liveSystemService = new LiveSystemService(httpClient, sdkConfiguration, RetryRegistry.ofDefaults());
+
+        stubFor(post(urlPathMatching("/livesystems/"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")));
 
         liveSystemService.instantiate(buildLiveSystemCommand());
 
-        verify(postRequestedFor(urlPathEqualTo("/livesystem/resource-group/livesystems")));
+        verify(postRequestedFor(urlPathEqualTo("/livesystems/")));
     }
 
     private InstantiateLiveSystemCommandRequest buildLiveSystemCommand() {
