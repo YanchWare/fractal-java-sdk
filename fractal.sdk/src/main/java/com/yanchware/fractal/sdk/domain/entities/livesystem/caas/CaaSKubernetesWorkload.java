@@ -3,6 +3,7 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSWorkload;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.CustomWorkload;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.CustomWorkloadBuilder;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.Getter;
 import lombok.Setter;

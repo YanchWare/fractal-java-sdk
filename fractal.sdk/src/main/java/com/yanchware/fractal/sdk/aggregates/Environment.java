@@ -1,13 +1,12 @@
 package com.yanchware.fractal.sdk.aggregates;
 
 import com.yanchware.fractal.sdk.domain.entities.Validatable;
+import com.yanchware.fractal.sdk.domain.entities.environment.DnsZone;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
+import java.util.*;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -15,19 +14,24 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Setter(AccessLevel.PRIVATE)
 public class Environment implements Validatable {
     private final static String ID_IS_NULL = "Environment id has not been defined and it is required";
+    private final static String DNS_ZONES_PARAM_KEY = "dnsZones";
+    private final static String IS_PRIVATE_PARAM_KEY = "isPrivate";
+    private final static String RECORDS_PARAM_KEY = "records";
+    private final static String PARAMETERS_PARAM_KEY = "parameters";
 
     private String id;
     private String displayName;
     private String parentId;
     private String parentType;
+    private Map<String, Object> parameters;
 
     public static EnvironmentBuilder builder() {
         return new EnvironmentBuilder();
     }
 
     public static class EnvironmentBuilder {
-        private Environment environment;
-        private EnvironmentBuilder builder;
+        private final Environment environment;
+        private final EnvironmentBuilder builder;
 
         public EnvironmentBuilder() {
             environment = createComponent();
@@ -60,6 +64,26 @@ public class Environment implements Validatable {
         public EnvironmentBuilder withParentType(String parentType) {
             environment.setParentType(parentType);
             return builder;
+        }
+
+        public EnvironmentBuilder withDnsZone(DnsZone dnsZone) {
+            return withDnsZones(List.of(dnsZone));
+        }
+
+        public EnvironmentBuilder withDnsZones(List<DnsZone> dnsZones) {
+            for(var dnsZone: dnsZones) {
+                if (!environment.parameters.containsKey(DNS_ZONES_PARAM_KEY)) {
+                    environment.parameters.put(DNS_ZONES_PARAM_KEY, new HashMap<String, Object>());
+                }
+
+                var dnsZonesMap = (Map<String, Object>)environment.parameters.get(DNS_ZONES_PARAM_KEY);
+                if (!dnsZonesMap.containsKey(dnsZone)) {
+                    dnsZonesMap.put(dnsZone.name(), new HashMap<String, Map<String, Object>>());
+                }
+
+                var dnsZoneMap = (HashMap<String, Map<String, Object>>)dnsZonesMap.get(dnsZone.name());
+
+            }
         }
 
         public Environment build() {
