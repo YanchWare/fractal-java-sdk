@@ -2,7 +2,6 @@ package com.yanchware.fractal.sdk.services;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
-import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.commands.CreateBlueprintCommandRequest;
 import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.dtos.BlueprintComponentDto;
@@ -22,16 +21,31 @@ public class BlueprintServiceTest {
 
     @Test
     public void urlPathMatching_when_postRequestToBlueprint(WireMockRuntimeInfo wmRuntimeInfo) throws InstantiatorException {
-        HttpClient httpClient = HttpClient.newBuilder()
+        var httpClient = HttpClient.newBuilder()
           .version(HttpClient.Version.HTTP_2)
           .build();
-        SdkConfiguration sdkConfiguration = new LocalSdkConfiguration(wmRuntimeInfo.getHttpBaseUrl());
+        var sdkConfiguration = new LocalSdkConfiguration(wmRuntimeInfo.getHttpBaseUrl());
         var blueprintService = new BlueprintService(httpClient, sdkConfiguration, RetryRegistry.ofDefaults());
 
         stubFor(post(urlPathMatching("/blueprints/resource-group/fr/fr"))
-                .willReturn(aResponse()
-                        .withStatus(202)
-                        .withHeader("Content-Type", "application/json")));
+          .withRequestBody(equalToJson("{" +
+            "\"description\" : \"desc\"," +
+            "\"components\" : [ {" +
+              "\"id\" : \"0001\"," +
+              "\"displayName\" : \"blueprint basic\"," +
+              "\"description\" : \"blueprint basic desc\"," +
+              "\"type\" : \"type\"," +
+              "\"version\" : \"V0.1\"," +
+              "\"parameters\" : { }," +
+              "\"dependencies\" : [ ]," +
+              "\"links\" : [ ]," +
+              "\"outputFields\" : [ ]" +
+            "} ]," +
+            "\"private\" : true" +
+          "}"))
+          .willReturn(aResponse()
+            .withStatus(202)
+            .withHeader("Content-Type", "application/json")));
 
         blueprintService.createBlueprint(buildBlueprintRequest(), "resource-group/fr:fr");
 

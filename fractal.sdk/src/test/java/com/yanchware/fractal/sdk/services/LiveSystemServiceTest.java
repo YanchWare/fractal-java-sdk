@@ -32,9 +32,64 @@ public class LiveSystemServiceTest {
         var liveSystemService = new LiveSystemService(httpClient, sdkConfiguration, RetryRegistry.ofDefaults());
 
         stubFor(post(urlPathMatching("/livesystems/"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/json")));
+          .withRequestBody(equalToJson("{" +
+            "\"fractalId\" :\"resourceGroupId/fractalName:fractalVersion\"," +
+            "\"description\" : \"prod\"," +
+            "\"blueprintMap\" : {" +
+              "\"graph-db-1\" : {" +
+                "\"id\" : \"graph-db-1\"," +
+                "\"displayName\" : \"null\"," +
+                "\"description\" :\"Storage.PaaS.CosmosDbGremlinDatabase generated via SDK\"," +
+                "\"type\" :\"Storage.PaaS.CosmosDbGremlinDatabase\"," +
+                "\"version\" :\"1.0\"," +
+                "\"parameters\" : {" +
+                  "\"azureResourceGroup\" : {" +
+                    "\"name\" : \"MyRg\"," +
+                    "\"region\" : \"eastasia\"" +
+                  "}," +
+                  "\"throughput\" : 0," +
+                  "\"TYPE\" :\"Storage.PaaS.CosmosDbGremlinDatabase\"," +
+                  "\"entityName\" : \"Gremlin Database\"," +
+                  "\"maxThroughput\" : 0" +
+                "}," +
+                "\"dependencies\" : [\"cosmos-graph-1\"]," +
+                "\"links\" : [ ]," +
+                "\"status\" :\"Instantiating\"," +
+                "\"outputFields\" : { }," +
+                "\"lastUpdated\" : \"${json-unit.any-string}\"," +
+                "\"provider\" : \"AZURE\"" +
+              "}," +
+              "\"cosmos-graph-1\" : {" +
+                "\"id\" : \"cosmos-graph-1\"," +
+                "\"displayName\" : \"null\"," +
+                "\"description\" : \"Storage.PaaS.CosmosDbAccount generated via SDK\"," +
+                "\"type\" : \"Storage.PaaS.CosmosDbAccount\"," +
+                "\"version\" : \"1.0\"," +
+                "\"parameters\" : {" +
+                  "\"azureResourceGroup\" : {" +
+                    "\"name\" : \"MyRg\"," +
+                    "\"region\" : \"eastasia\"" +
+                  "}," +
+                  "\"maxTotalThroughput\" : 500," +
+                  "\"TYPE\" :\"Storage.PaaS.CosmosDbAccount\"" +
+                "}," +
+               "\"dependencies\" : [ ]," +
+               "\"links\" : [ ]," +
+               "\"status\": \"Instantiating\"," +
+               "\"outputFields\" : { }," +
+               "\"lastUpdated\" : \"${json-unit.any-string}\"," +
+               "\"provider\" : \"AZURE\"" +
+              "}" +
+            "}," +
+            "\"environment\" : {" +
+            "\"id\" : \"prod\"," +
+            "\"displayName\" : \"parent-id\"," +
+            "\"parentId\" : \"folder\"," +
+            "\"parentType\" : \"PROD\"" +
+          "}}", true, false))
+          .willReturn(aResponse()
+            .withStatus(200)
+            .withHeader("Content-Type", "application/json")));
 
         liveSystemService.instantiate(buildLiveSystemCommand());
 
