@@ -26,7 +26,7 @@ public class LocalSdkConfiguration implements SdkConfiguration {
 
   @Override
   public String getProviderName() {
-    return "test-client-id";
+    return "provider-name";
   }
 
   @SneakyThrows

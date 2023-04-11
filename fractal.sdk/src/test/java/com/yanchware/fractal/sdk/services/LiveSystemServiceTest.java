@@ -82,10 +82,10 @@ public class LiveSystemServiceTest {
               "}" +
             "}," +
             "\"environment\" : {" +
-            "\"id\" : \"prod\"," +
-            "\"displayName\" : \"parent-id\"," +
-            "\"parentId\" : \"folder\"," +
-            "\"parentType\" : \"PROD\"" +
+              "\"id\" : \"prod\"," +
+              "\"displayName\" : \"parent-id\"," +
+              "\"parentId\" : \"folder\"," +
+              "\"parentType\" : \"PROD\"" +
           "}}", true, false))
           .willReturn(aResponse()
             .withStatus(200)
