@@ -15,6 +15,6 @@ public class LiveSystemMutationDto {
   private Set<String> stepsReadyIds;
   private Set<String> stepsCompletedIds;
   private Set<String> stepsFailedIds;
-  private Map<String, InstantiationStepDto> stepsById;
+  private Map<String, LiveSystemComponentDto> componentsById;
   private Map<String, Set<String>> stepsBlockedIdsByStepBlockingId;
 }

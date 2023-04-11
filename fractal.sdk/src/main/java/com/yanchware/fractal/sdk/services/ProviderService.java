@@ -7,7 +7,6 @@ import com.yanchware.fractal.sdk.configuration.instantiation.InstantiationWaitCo
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.domain.exceptions.ProviderException;
 import com.yanchware.fractal.sdk.services.contracts.ComponentDto;
-import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.InstantiationStepDto;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemComponentDto;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemMutationDto;
 import com.yanchware.fractal.sdk.services.contracts.providerscontract.dtos.ProviderLiveSystemComponentDto;
@@ -44,14 +43,13 @@ public class ProviderService {
   private final HttpClient client;
   private final SdkConfiguration sdkConfiguration;
 
-  private static String componentIdWithStatus(InstantiationStepDto instantiationStep) {
-    var component = instantiationStep.getComponent();
-    return String.format("%s [action: '%s']", component.getId(),
-        component.getStatus().name());
+  private static String componentIdWithStatus(LiveSystemComponentDto instantiationComponent) {
+    return String.format("%s [action: '%s']", instantiationComponent.getId(),
+        instantiationComponent.getStatus().name());
   }
 
-  private static boolean deletingComponents(InstantiationStepDto c) {
-    return c.getComponent().getStatus() == Deleting;
+  private static boolean deletingComponents(LiveSystemComponentDto c) {
+    return c.getStatus() == Deleting;
   }
 
   public void checkLiveSystemMutationStatus(
@@ -134,7 +132,7 @@ public class ProviderService {
 
     var liveSystemMutationId = liveSystemMutation.getId();
 
-    var liveSystemMutationStepsById = liveSystemMutation.getStepsById();
+    var liveSystemMutationStepsById = liveSystemMutation.getComponentsById();
 
     var activeComponents = new ArrayList<ProviderLiveSystemComponentDto>();
     var failedComponents = new ArrayList<ProviderLiveSystemComponentDto>();
@@ -208,8 +206,8 @@ public class ProviderService {
     throw new InstantiatorException(timeoutExceptionMessage);
   }
 
-  private static List<String> getAllComponentIdsAndStatuses(Map<String, InstantiationStepDto> liveSystemMutationStepsById) {
-    return liveSystemMutationStepsById
+  private static List<String> getAllComponentIdsAndStatuses(Map<String, LiveSystemComponentDto> liveSystemMutationComponentsById) {
+    return liveSystemMutationComponentsById
         .values()
         .stream()
         .map(ProviderService::componentIdWithStatus)
@@ -217,13 +215,12 @@ public class ProviderService {
         .toList();
   }
 
-  private List<LiveSystemComponentDto> getDeletingComponents(Map<String, InstantiationStepDto> liveSystemMutationStepsById) {
+  private List<LiveSystemComponentDto> getDeletingComponents(Map<String, LiveSystemComponentDto> liveSystemMutationComponentsById) {
 
-    return liveSystemMutationStepsById
+    return liveSystemMutationComponentsById
         .values()
         .stream()
         .filter(ProviderService::deletingComponents)
-        .map(InstantiationStepDto::getComponent)
         .toList();
   }
 
@@ -271,8 +268,8 @@ public class ProviderService {
     }
   }
 
-  private static void logAllComponents(String liveSystemId, Map<String, InstantiationStepDto> liveSystemMutationStepsById) {
-    var allComponentsIdsSorted = getAllComponentIdsAndStatuses(liveSystemMutationStepsById);
+  private static void logAllComponents(String liveSystemId, Map<String, LiveSystemComponentDto> liveSystemMutationComponentsById) {
+    var allComponentsIdsSorted = getAllComponentIdsAndStatuses(liveSystemMutationComponentsById);
 
     log.info("LiveSystem [id: '{}'] - All Components [{}] -> {}",
         liveSystemId,
