@@ -84,8 +84,8 @@ public class ProviderService {
           config,
           requestName,
           acceptedResponses,
-          request));
-    } catch (Exception ex) {
+          request)).get();
+    } catch (Throwable ex) {
       throw new InstantiatorException(
         String.format("LiveSystem [%s] - all attempts for request %s failed with cause: %s",
           liveSystem.getLiveSystemId(),
@@ -94,12 +94,14 @@ public class ProviderService {
     }
   }
 
-  private LiveSystemMutationResponse getLiveSystemMutationResponse(LiveSystem liveSystem,
-                                                                   LiveSystemMutationDto liveSystemMutation,
-                                                                   InstantiationWaitConfiguration config,
-                                                                   String requestName,
-                                                                   int[] acceptedResponses,
-                                                                   HttpRequest request) throws IOException, InterruptedException, InstantiatorException, ProviderException {
+  private LiveSystemMutationResponse getLiveSystemMutationResponse(
+    LiveSystem liveSystem,
+    LiveSystemMutationDto liveSystemMutation,
+    InstantiationWaitConfiguration config,
+    String requestName,
+    int[] acceptedResponses,
+    HttpRequest request) throws IOException, InterruptedException, InstantiatorException, ProviderException
+  {
     var response = client.send(request, HttpResponse.BodyHandlers.ofString());
     ensureAcceptableResponse(response, requestName, acceptedResponses);
 

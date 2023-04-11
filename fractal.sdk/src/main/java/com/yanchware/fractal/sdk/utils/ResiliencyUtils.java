@@ -12,7 +12,6 @@ import java.net.http.HttpResponse;
 
 import static com.yanchware.fractal.sdk.utils.HttpUtils.ensureAcceptableResponse;
 import static com.yanchware.fractal.sdk.utils.SerializationUtils.deserialize;
-import static com.yanchware.fractal.sdk.utils.SerializationUtils.serialize;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Slf4j
@@ -28,14 +27,12 @@ public class ResiliencyUtils {
     Retry retry = retryRegistry.retry(requestName);
 
     try {
-      var result = Retry.decorateCheckedSupplier(retry, () -> {
+      Retry.decorateCheckedSupplier(retry, () -> {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         ensureAcceptableResponse(response, requestName, acceptedResponses);
 
         return null;
-      });
-
-      log.debug(serialize(result.get()));
+      }).get();
     } catch (Throwable ex) {
       throw new InstantiatorException(
         String.format("All attempts for request %s failed", requestName),
