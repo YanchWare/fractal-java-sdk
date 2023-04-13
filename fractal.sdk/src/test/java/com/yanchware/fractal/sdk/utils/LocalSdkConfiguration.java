@@ -24,11 +24,6 @@ public class LocalSdkConfiguration implements SdkConfiguration {
     return "test-client-secret";
   }
 
-  @Override
-  public String getProviderName() {
-    return "provider-name";
-  }
-
   @SneakyThrows
   @Override
   public URI getBlueprintEndpoint() {
@@ -39,11 +34,5 @@ public class LocalSdkConfiguration implements SdkConfiguration {
   @Override
   public URI getLiveSystemEndpoint() {
     return new URI(httpBaseUrl + "/livesystems");
-  }
-
-  @SneakyThrows
-  @Override
-  public URI getProviderEndpoint() {
-    return new URI(httpBaseUrl + "/providers");
   }
 }

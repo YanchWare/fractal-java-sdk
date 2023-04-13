@@ -33,6 +33,7 @@ public class LiveSystemServiceTest {
 
         stubFor(post(urlPathMatching("/livesystems/"))
           .withRequestBody(equalToJson("{" +
+            "\"liveSystemId\" : \"resourceGroupId/livesystem-name\"," +
             "\"fractalId\" :\"resourceGroupId/fractalName:fractalVersion\"," +
             "\"description\" : \"prod\"," +
             "\"blueprintMap\" : {" +
@@ -98,22 +99,23 @@ public class LiveSystemServiceTest {
 
     private InstantiateLiveSystemCommandRequest buildLiveSystemCommand() {
         return InstantiateLiveSystemCommandRequest.builder()
-                .description("prod")
-                .fractalId("resourceGroupId/fractalName:fractalVersion")
-                .environment(getEnvironment())
-                .blueprintMap(LiveSystemComponentDto.fromLiveSystemComponents(List.of(AzureCosmosGremlinDbms.builder()
-                    .withId("cosmos-graph-1")
-                    .withMaxTotalThroughput(500)
-                    .withAzureResourceGroup(
-                        AzureResourceGroup.builder()
-                            .withName("MyRg")
-                            .withRegion(AzureRegion.ASIA_EAST)
-                            .build())
-                    .withCosmosEntity(AzureCosmosGremlinDatabase.builder()
-                      .withId("graph-db-1")
-                      .build())
-                    .build())))
-                .build();
+          .description("prod")
+          .liveSystemId("resourceGroupId/livesystem-name")
+          .fractalId("resourceGroupId/fractalName:fractalVersion")
+          .environment(getEnvironment())
+          .blueprintMap(LiveSystemComponentDto.fromLiveSystemComponents(List.of(AzureCosmosGremlinDbms.builder()
+            .withId("cosmos-graph-1")
+            .withMaxTotalThroughput(500)
+            .withAzureResourceGroup(
+              AzureResourceGroup.builder()
+                .withName("MyRg")
+                .withRegion(AzureRegion.ASIA_EAST)
+                .build())
+            .withCosmosEntity(AzureCosmosGremlinDatabase.builder()
+              .withId("graph-db-1")
+              .build())
+            .build())))
+        .build();
     }
 
 

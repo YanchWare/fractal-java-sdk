@@ -75,7 +75,7 @@ public class ResiliencyUtils {
       });
       return result.get();
     } catch (Throwable ex) {
-      log.error("Attempted {} failed all attempts", requestName, ex.getCause());
+      log.error("Attempted {} failed all attempts", requestName, ex);
       throw new InstantiatorException(
         String.format("All attempts for request %s failed with cause: %s", requestName, ex));
     }

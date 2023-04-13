@@ -4,11 +4,10 @@ import com.yanchware.fractal.sdk.aggregates.LiveSystem;
 import com.yanchware.fractal.sdk.configuration.EnvVarSdkConfiguration;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.configuration.instantiation.InstantiationConfiguration;
-import com.yanchware.fractal.sdk.configuration.instantiation.InstantiationWaitConfiguration;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemId;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.services.BlueprintService;
 import com.yanchware.fractal.sdk.services.LiveSystemService;
-import com.yanchware.fractal.sdk.services.ProviderService;
 import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.commands.CreateBlueprintCommandRequest;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands.InstantiateLiveSystemCommandRequest;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemMutationDto;
@@ -28,14 +27,12 @@ public class Automaton {
     private static Automaton instance;
     private static BlueprintService blueprintService;
     private static LiveSystemService liveSystemService;
-    private static ProviderService providerService;
     private static RetryRegistry serviceRetryRegistry;
 
     private Automaton(HttpClient httpClient, SdkConfiguration sdkConfiguration) {
         Automaton.serviceRetryRegistry = getDefaultRetryRegistry();
         Automaton.blueprintService = new BlueprintService(httpClient, sdkConfiguration, Automaton.serviceRetryRegistry);
         Automaton.liveSystemService = new LiveSystemService(httpClient, sdkConfiguration, Automaton.serviceRetryRegistry);
-        Automaton.providerService = new ProviderService(httpClient, sdkConfiguration);
     }
 
     // Used for unit testing:
@@ -60,10 +57,11 @@ public class Automaton {
 
     private static void waitForMutationInstantiation(
         LiveSystem liveSystem,
-        LiveSystemMutationDto mutation,
-        InstantiationWaitConfiguration config)
+        LiveSystemMutationDto mutation)
         throws InstantiatorException {
-            providerService.checkLiveSystemMutationStatus(liveSystem, mutation, config);
+            liveSystemService.checkLiveSystemMutationStatus(
+              new LiveSystemId(liveSystem.getLiveSystemId()),
+              mutation.getId());
         }
 
     private static LiveSystemMutationDto instantiateLiveSystem(LiveSystem liveSystem)
@@ -113,17 +111,10 @@ public class Automaton {
 
         if(config != null && config.waitConfiguration != null && config.getWaitConfiguration().waitForInstantiation)
         {
-            if (config.getWaitConfiguration().isFailFast()) {
-                log.warn("The instantiation waiting configuration is set to \"fail fast\": " +
-                    "the pipeline will fail as soon as a single component instantiation fails. " +
-                    "Please note that this won't stop the instantiation process for the other components");
-            }
-            
             for (var liveSystemMutation : liveSystemsMutations) {
                 waitForMutationInstantiation(
                     liveSystemMutation.getKey(),
-                    liveSystemMutation.getValue(),
-                    config.getWaitConfiguration());
+                    liveSystemMutation.getValue());
             }
         }
     }

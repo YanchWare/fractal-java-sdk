@@ -2,12 +2,16 @@ package com.yanchware.fractal.sdk.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemId;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
+import com.yanchware.fractal.sdk.domain.exceptions.ProviderException;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands.InstantiateLiveSystemCommandRequest;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands.UpdateLiveSystemCommandRequest;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemDto;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemMutationDto;
 import com.yanchware.fractal.sdk.utils.HttpUtils;
+import io.github.resilience4j.retry.Retry;
+import io.github.resilience4j.retry.RetryConfig;
 import io.github.resilience4j.retry.RetryRegistry;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,10 +21,13 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Duration;
 
+import static com.yanchware.fractal.sdk.utils.HttpUtils.ensureAcceptableResponse;
 import static com.yanchware.fractal.sdk.utils.ResiliencyUtils.executeRequestWithRetries;
 import static com.yanchware.fractal.sdk.utils.SerializationUtils.deserialize;
 import static com.yanchware.fractal.sdk.utils.SerializationUtils.serialize;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Slf4j
 @AllArgsConstructor
@@ -33,13 +40,139 @@ public class LiveSystemService {
     public LiveSystemMutationDto instantiate(InstantiateLiveSystemCommandRequest command) throws InstantiatorException {
         log.info("Starting to instantiate live system: {}", command);
 
-        if (retrieveLiveSystem(command.getLiveSystemId()) != null) {
+        if (retrieveLiveSystem(new LiveSystemId(command.getLiveSystemId())) != null) {
             return updateLiveSystem(UpdateLiveSystemCommandRequest.fromInstantiateCommand(command));
         }
         return instantiateLiveSystem(command);
     }
 
-    public LiveSystemDto retrieveLiveSystem(String liveSystemId) throws InstantiatorException {
+    public void checkLiveSystemMutationStatus(
+      LiveSystemId liveSystemId,
+      String liveSystemMutationId) throws InstantiatorException
+    {
+        log.info("Starting operation [checkLiveSystemMutationStatus] for LiveSystem [id: '{}'] and mutation ['{}']",
+          liveSystemId.toString(), liveSystemMutationId);
+
+        var requestName = "checkLiveSystemMutationStatus";
+        var acceptedResponses = new int[]{200, 404};
+        var request = HttpUtils.buildGetRequest(
+          getLiveSystemMutationUri(liveSystemId, liveSystemMutationId),
+          sdkConfiguration);
+
+        var retryConfig = RetryConfig.custom()
+          .ignoreExceptions(ProviderException.class)
+          .maxAttempts(5)
+          .waitDuration(Duration.ofMinutes(3L))
+          .build();
+        var retry = RetryRegistry.of(retryConfig).retry(requestName);
+
+        try {
+            Retry.decorateCheckedSupplier(retry, () ->
+              checkLiveSystemMutationStatus(
+                liveSystemId,
+                liveSystemMutationId,
+                requestName,
+                acceptedResponses,
+                request)).get();
+        } catch (Throwable ex) {
+            throw new InstantiatorException(
+              String.format("LiveSystem [%s] - all attempts for request %s failed with cause: %s",
+                liveSystemId,
+                requestName,
+                ex));
+        }
+    }
+
+    private LiveSystemMutationDto checkLiveSystemMutationStatus(
+      LiveSystemId liveSystemId,
+      String liveSystemMutationId,
+      String requestName,
+      int[] acceptedResponses,
+      HttpRequest request) throws IOException, InterruptedException, InstantiatorException, ProviderException
+    {
+        var livesystemIdStr = liveSystemId.toString();
+        var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        ensureAcceptableResponse(response, requestName, acceptedResponses);
+
+        if (response.statusCode() == 404) {
+            log.info("Attempted {} has come up with a 404 Not Found. Will attempt to create it.", requestName);
+            return null;
+        }
+
+        String bodyContents = response.body();
+        if (isBlank(bodyContents)) {
+            log.error("Attempted {} has come up with empty or null body contents: {}", requestName, bodyContents);
+            return null;
+        }
+
+        var liveSystemMutationResponse = getLiveSystemMutationResponse(requestName, bodyContents);
+
+        if (liveSystemMutationResponse == null) {
+            String message = String.format("The LiveSystem [%s] exists, but the LiveSystem's provider LiveSystem is still empty or not fully updated for mutation [%s]",
+              livesystemIdStr, liveSystemMutationId);
+            log.info(message);
+            throw new InstantiatorException(message);
+        }
+
+        var liveSystemMutationResponseComponents = liveSystemMutationResponse.getComponentsById();
+        if (liveSystemMutationResponseComponents == null) {
+            throw new ProviderException(String.format("LiveSystem [%s] instantiation failed for mutation [%s] as component list is null",
+              livesystemIdStr,
+              liveSystemMutationId));
+        }
+
+        switch(liveSystemMutationResponse.getStatus()){
+            case COMPLETED -> {
+                log.info("LiveSystem [id: '{}'] instantiated for mutation ['{}']. All components [{}] successfully processed",
+                  livesystemIdStr,
+                  liveSystemMutationId,
+                  liveSystemMutationResponseComponents.size());
+                return liveSystemMutationResponse;
+            }
+            case FAILED -> {
+                var failedInstantiationMessage = String.format(
+                  "LiveSystem [%s] instantiation failed for mutation [%s]. Failed components [%s] -> %s",
+                  liveSystemId,
+                  liveSystemMutationId,
+                  liveSystemMutationResponse.getStepsFailedIds().size(),
+                  serialize(liveSystemMutationResponse.getStepsFailedIds())
+                );
+                throw new ProviderException(liveSystemMutationResponse.getStepsFailedIds(), failedInstantiationMessage);
+            }
+            case CANCELLED -> {
+                var cancelledInstantiationMessage = String.format(
+                  "LiveSystem [%s] instantiation did not complete for mutation [%s] as the latter has been cancelled by an operator",
+                  liveSystemId,
+                  liveSystemMutationId);
+                throw new ProviderException(cancelledInstantiationMessage);
+            }
+            case INPROGRESS -> {
+                log.info("LiveSystem [id: '{}'] instantiation is still in progress ...", liveSystemId);
+
+                String timeoutExceptionMessage = String.format(
+                  "LiveSystem [%s] instantiation wait timeout. Response is %s",
+                  livesystemIdStr,
+                  response.body());
+                throw new InstantiatorException(timeoutExceptionMessage);
+            }
+            default -> throw new ProviderException(String.format("LiveSystem [%s] instantiation has an unknown state for mutation [%s]: [%s]",
+              livesystemIdStr,
+              liveSystemMutationId,
+              liveSystemMutationResponse.getStatus()));
+        }
+    }
+
+    private static LiveSystemMutationDto getLiveSystemMutationResponse(String requestName, String bodyContents) throws ProviderException {
+        try {
+            return deserialize(bodyContents, LiveSystemMutationDto.class);
+        } catch (JsonProcessingException e) {
+            String message = String.format("Attempted %s failed. Deserialization of %s failed.", requestName, bodyContents);
+            log.error(message);
+            throw new ProviderException(message);
+        }
+    }
+
+    public LiveSystemDto retrieveLiveSystem(LiveSystemId liveSystemId) throws InstantiatorException {
         HttpResponse<String> response;
         try {
             response = client.send(
@@ -79,7 +212,7 @@ public class LiveSystemService {
             String serializedCommand = serialize(command);
             log.debug("Update LiveSystem message: {}", serializedCommand);
             request = HttpUtils.buildPutRequest(
-                getLiveSystemUri(command.getLiveSystemId()), sdkConfiguration, serializedCommand);
+                getLiveSystemUri(new LiveSystemId(command.getLiveSystemId())), sdkConfiguration, serializedCommand);
         } catch (JsonProcessingException e) {
             throw new InstantiatorException("Error processing UpdateLiveSystemCommandRequest because of JsonProcessing", e);
         }
@@ -127,11 +260,15 @@ public class LiveSystemService {
             LiveSystemMutationDto.class);
     }
 
-    private URI getLiveSystemUri(String liveSystemId) {
-        return URI.create(String.format("%s%s", getLiveSystemUri(), liveSystemId));
+    private URI getLiveSystemUri(LiveSystemId liveSystemId) {
+        return URI.create(String.format("%s%s", getLiveSystemUri(), liveSystemId.toString()));
     }
 
     private URI getLiveSystemUri() {
         return URI.create(sdkConfiguration.getLiveSystemEndpoint() + "/");
+    }
+
+    private URI getLiveSystemMutationUri(LiveSystemId liveSystemId, String mutationId) {
+        return URI.create(String.format("%s/mutations/%s", getLiveSystemUri(liveSystemId), mutationId));
     }
 }

@@ -10,8 +10,6 @@ public class Constants {
 
     public static final String CLIENT_ID_KEY = "CLIENT_ID";
     public static final String CLIENT_SECRET_KEY = "CLIENT_SECRET";
-    public static final String PROVIDER_NAME_KEY = "PROVIDER_NAME";
-
     public static final String BLUEPRINT_TYPE = "blueprintType";
 
     public static final String COMPONENT_TYPE = "type";
