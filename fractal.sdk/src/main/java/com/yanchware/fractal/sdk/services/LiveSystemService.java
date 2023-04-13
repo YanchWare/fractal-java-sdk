@@ -7,6 +7,7 @@ import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.domain.exceptions.ProviderException;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands.InstantiateLiveSystemCommandRequest;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands.UpdateLiveSystemCommandRequest;
+import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemComponentDto;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemDto;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemMutationDto;
 import com.yanchware.fractal.sdk.utils.HttpUtils;
@@ -22,6 +23,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.util.Map;
 
 import static com.yanchware.fractal.sdk.utils.HttpUtils.ensureAcceptableResponse;
 import static com.yanchware.fractal.sdk.utils.ResiliencyUtils.executeRequestWithRetries;
@@ -147,7 +149,7 @@ public class LiveSystemService {
                 throw new ProviderException(cancelledInstantiationMessage);
             }
             case INPROGRESS -> {
-                log.info("LiveSystem [id: '{}'] instantiation is still in progress ...", liveSystemId);
+                log.info("LiveSystem [id: '{}'] instantiation is in progress: {}", liveSystemId, getStatusFromComponents(liveSystemMutationResponseComponents));
 
                 String timeoutExceptionMessage = String.format(
                   "LiveSystem [%s] instantiation wait timeout. Response is %s",
@@ -160,6 +162,15 @@ public class LiveSystemService {
               liveSystemMutationId,
               liveSystemMutationResponse.getStatus()));
         }
+    }
+
+    private String getStatusFromComponents(Map<String, LiveSystemComponentDto> liveSystemMutationResponseComponents) {
+        var sb = new StringBuilder();
+        for(var component: liveSystemMutationResponseComponents.values()){
+            sb.append(String.format("%s[%s] - ", component.getId(), component.getStatus()));
+        }
+        var status = sb.toString();
+        return status.substring(0, status.length() - 3);
     }
 
     private static LiveSystemMutationDto getLiveSystemMutationResponse(String requestName, String bodyContents) throws ProviderException {
