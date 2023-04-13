@@ -81,9 +81,11 @@ public class Environment implements Validatable {
                     dnsZonesMap.put(dnsZone.name(), new HashMap<String, Map<String, Object>>());
                 }
 
+                //TODO: finalize
                 var dnsZoneMap = (HashMap<String, Map<String, Object>>)dnsZonesMap.get(dnsZone.name());
 
             }
+            return builder;
         }
 
         public Environment build() {
