@@ -71,6 +71,9 @@ public class Environment implements Validatable {
         }
 
         public EnvironmentBuilder withDnsZones(List<DnsZone> dnsZones) {
+            if (environment.parameters == null) {
+                environment.parameters = new HashMap<>();
+            }
             for(var dnsZone: dnsZones) {
                 if (!environment.parameters.containsKey(DNS_ZONES_PARAM_KEY)) {
                     environment.parameters.put(DNS_ZONES_PARAM_KEY, new HashMap<String, Object>());
@@ -78,11 +81,14 @@ public class Environment implements Validatable {
 
                 var dnsZonesMap = (Map<String, Object>)environment.parameters.get(DNS_ZONES_PARAM_KEY);
                 if (!dnsZonesMap.containsKey(dnsZone)) {
-                    dnsZonesMap.put(dnsZone.name(), new HashMap<String, Map<String, Object>>());
+                    dnsZonesMap.put(dnsZone.name(), new HashMap<String, Object>());
                 }
 
                 //TODO: finalize
-                var dnsZoneMap = (HashMap<String, Map<String, Object>>)dnsZonesMap.get(dnsZone.name());
+                var dnsZoneMap = (HashMap<String, Object>)dnsZonesMap.get(dnsZone.name());
+                dnsZoneMap.put(IS_PRIVATE_PARAM_KEY, dnsZone.isPrivate());
+                dnsZoneMap.put(RECORDS_PARAM_KEY, dnsZone.records());
+                dnsZoneMap.put(PARAMETERS_PARAM_KEY, dnsZone.parameters());
 
             }
             return builder;
