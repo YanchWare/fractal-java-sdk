@@ -3,7 +3,6 @@ package com.yanchware.fractal.sdk.configuration;
 public class Constants {
     public static final String LIVESYSTEM_ENDPOINT_KEY = "LIVESYSTEM_ENDPOINT";
     public static final String BLUEPRINT_ENDPOINT_KEY = "BLUEPRINT_ENDPOINT";
-    public static final String PROVIDER_ENDPOINT_KEY = "PROVIDER_ENDPOINT";
 
     public static final String X_CLIENT_ID_HEADER = "X-ClientID";
     public static final String X_CLIENT_SECRET_HEADER = "X-ClientSecret";
