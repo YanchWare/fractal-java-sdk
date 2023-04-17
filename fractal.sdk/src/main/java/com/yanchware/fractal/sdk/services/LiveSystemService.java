@@ -35,6 +35,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @AllArgsConstructor
 public class LiveSystemService {
 
+    private static final int CHECK_LIVE_SYSTEM_MUTATION_STATUS_MAX_ATTEMPTS = 20;
     private final HttpClient client;
     private final SdkConfiguration sdkConfiguration;
     private final RetryRegistry retryRegistry;
@@ -63,7 +64,7 @@ public class LiveSystemService {
 
         var retryConfig = RetryConfig.custom()
           .ignoreExceptions(ProviderException.class)
-          .maxAttempts(5)
+          .maxAttempts(CHECK_LIVE_SYSTEM_MUTATION_STATUS_MAX_ATTEMPTS)
           .waitDuration(Duration.ofMinutes(3L))
           .build();
         var retry = RetryRegistry.of(retryConfig).retry(requestName);
