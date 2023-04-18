@@ -23,7 +23,7 @@ public class ComponentDto {
   private String description;
   private String type;
   private String version;
-  private boolean isLocked;
+  private boolean locked;
   private Map<String, Object> parameters;
   private Set<String> dependencies;
   private Set<ComponentLink> links;
