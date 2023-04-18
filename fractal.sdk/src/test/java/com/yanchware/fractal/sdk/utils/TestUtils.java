@@ -282,7 +282,6 @@ public class TestUtils {
         .withId("dbpg")
         .withDescription("PostgreSQL")
         .withDisplayName("PostgreSQL")
-        .withIsLocked(true)
         .withRegion(EU_WEST1)
         .withNetwork("network")
         .withPeeringNetworkAddress("address")
@@ -290,6 +289,7 @@ public class TestUtils {
         .withPeeringNetworkName("network-name")
         .withPeeringNetworkPrefix("network-prefix")
         .withDatabase(getGcpPostgresDbExample())
+        .locked()
         .build();
   }
 

@@ -82,8 +82,13 @@ public abstract class Component implements Validatable {
       return builder;
     }
 
-    public B withIsLocked(boolean isLocked) {
-      component.setLocked(isLocked);
+    public B locked() {
+      component.setLocked(true);
+      return builder;
+    }
+
+    public B unlocked() {
+      component.setLocked(false);
       return builder;
     }
 
