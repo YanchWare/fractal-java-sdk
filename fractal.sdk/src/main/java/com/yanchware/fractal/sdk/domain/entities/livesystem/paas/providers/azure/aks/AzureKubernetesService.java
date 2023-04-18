@@ -38,7 +38,7 @@ public class AzureKubernetesService extends KubernetesCluster implements AzureRe
   private Collection<AzureNodePool> nodePools;
   private Collection<AzureOutboundIp> outboundIps;
   private String externalWorkspaceResourceId;
-  private Collection<AzureAddonProfile> addonProfiles;
+  private Collection<AzureKubernetesAddonProfile> addonProfiles;
   private Collection<RoleAssignment> roles;
   private AzureActiveDirectoryProfile azureActiveDirectoryProfile;
   private String kubernetesVersion;
@@ -129,11 +129,11 @@ public class AzureKubernetesService extends KubernetesCluster implements AzureRe
       return builder;
     }
     
-    public AzureKubernetesServiceBuilder withAddonProfile(AzureAddonProfile addonProfile) {
+    public AzureKubernetesServiceBuilder withAddonProfile(AzureKubernetesAddonProfile addonProfile) {
       return withAddonProfiles(List.of(addonProfile));
     }
 
-    public AzureKubernetesServiceBuilder withAddonProfiles(Collection<? extends AzureAddonProfile> addonProfiles) {
+    public AzureKubernetesServiceBuilder withAddonProfiles(Collection<? extends AzureKubernetesAddonProfile> addonProfiles) {
       if (isBlank(addonProfiles)) {
         return builder;
       }
