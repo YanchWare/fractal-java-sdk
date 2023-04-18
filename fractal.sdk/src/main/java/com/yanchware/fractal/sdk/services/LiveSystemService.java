@@ -63,7 +63,7 @@ public class LiveSystemService {
           sdkConfiguration);
 
         var retryConfig = RetryConfig.custom()
-          .ignoreExceptions(ProviderException.class)
+          .retryExceptions(InstantiatorException.class)
           .maxAttempts(CHECK_LIVE_SYSTEM_MUTATION_STATUS_MAX_ATTEMPTS)
           .waitDuration(Duration.ofMinutes(3L))
           .build();
@@ -133,14 +133,22 @@ public class LiveSystemService {
                 return liveSystemMutationResponse;
             }
             case FAILED -> {
-                var failedInstantiationMessage = String.format(
-                  "LiveSystem [%s] instantiation failed for mutation [%s]. Failed components [%s] -> %s",
-                  liveSystemId,
-                  liveSystemMutationId,
-                  liveSystemMutationResponse.getStepsFailedIds().size(),
-                  serialize(liveSystemMutationResponse.getStepsFailedIds())
-                );
-                throw new ProviderException(liveSystemMutationResponse.getStepsFailedIds(), failedInstantiationMessage);
+                if(liveSystemMutationResponse.getStepsFailedIds() != null) {
+
+                    var failedInstantiationMessage = String.format(
+                        "LiveSystem [%s] instantiation failed for mutation [%s]. Failed components [%s] -> %s",
+                        liveSystemId,
+                        liveSystemMutationId,
+                        liveSystemMutationResponse.getStepsFailedIds().size(),
+                        serialize(liveSystemMutationResponse.getStepsFailedIds())
+                    );
+                    log.warn(failedInstantiationMessage);
+                    throw new ProviderException(liveSystemMutationResponse.getStepsFailedIds(), failedInstantiationMessage);
+                } else {
+                    throw new ProviderException(
+                        String.format("LiveSystem [%s] instantiation failed for mutation [%s]", 
+                            liveSystemId, liveSystemMutationId));
+                }
             }
             case CANCELLED -> {
                 var cancelledInstantiationMessage = String.format(
@@ -168,7 +176,7 @@ public class LiveSystemService {
     private String getStatusFromComponents(Map<String, LiveSystemComponentDto> liveSystemMutationResponseComponents) {
         var sb = new StringBuilder();
         for(var component: liveSystemMutationResponseComponents.values()){
-            sb.append(String.format("%s[%s] - ", component.getId(), component.getStatus()));
+            sb.append(String.format("%s [%s] - ", component.getId(), component.getStatus()));
         }
         var status = sb.toString();
         return status.substring(0, status.length() - 3);
@@ -196,7 +204,7 @@ public class LiveSystemService {
         }
 
         if (response.statusCode() == 404) {
-            log.info("LiveSystem with id {} does not exist. Will attempt to instantiate it.", liveSystemId);
+            log.info("LiveSystem [id: '{}'] does not exist. Adding it ...", liveSystemId);
             return null;
         }
 

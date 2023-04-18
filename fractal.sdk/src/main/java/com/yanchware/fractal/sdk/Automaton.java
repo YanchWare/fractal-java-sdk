@@ -66,7 +66,7 @@ public class Automaton {
 
     private static LiveSystemMutationDto instantiateLiveSystem(LiveSystem liveSystem)
         throws InstantiatorException {
-        log.info("Starting to instantiate live system with id: {}", liveSystem.getLiveSystemId());
+        log.info("Starting to instantiate live system [id: '{}']", liveSystem.getLiveSystemId());
         var blueprintCommand = CreateBlueprintCommandRequest.fromLiveSystem(
             liveSystem.getComponents(), liveSystem.getFractalId());
         var liveSystemCommand = InstantiateLiveSystemCommandRequest.fromLiveSystem(liveSystem);
@@ -77,13 +77,7 @@ public class Automaton {
 
     public static void instantiate(List<LiveSystem> liveSystems) throws InstantiatorException {
         if (instance == null) {
-            EnvVarSdkConfiguration configuration;
-            try {
-                configuration = new EnvVarSdkConfiguration();
-            } catch (URISyntaxException e) {
-                throw new InstantiatorException("Error with Sdk configuration", e);
-            }
-            initializeAutomaton(configuration);
+            initializeAutomaton(getSdkConfiguration());
         }
 
         for (LiveSystem liveSystem : liveSystems) {
@@ -95,13 +89,7 @@ public class Automaton {
         throws InstantiatorException {
 
         if (instance == null) {
-            EnvVarSdkConfiguration configuration;
-            try {
-                configuration = new EnvVarSdkConfiguration();
-            } catch (URISyntaxException e) {
-                throw new InstantiatorException("Error with Sdk configuration", e);
-            }
-            initializeAutomaton(configuration);
+            initializeAutomaton(getSdkConfiguration());
         }
         
         var liveSystemsMutations = new ArrayList<ImmutablePair<LiveSystem, LiveSystemMutationDto>>();
@@ -117,5 +105,15 @@ public class Automaton {
                     liveSystemMutation.getValue());
             }
         }
+    }
+
+    private static EnvVarSdkConfiguration getSdkConfiguration() throws InstantiatorException {
+        EnvVarSdkConfiguration configuration;
+        try {
+            configuration = new EnvVarSdkConfiguration();
+        } catch (URISyntaxException e) {
+            throw new InstantiatorException("Error with Sdk configuration", e);
+        }
+        return configuration;
     }
 }

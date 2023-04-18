@@ -5,6 +5,7 @@ public enum LiveSystemStatusDto {
   Instantiating,
   Active,
   Failed,
+  FailedMutation,
   Mutating,
   Deleting,
   Deleted,
