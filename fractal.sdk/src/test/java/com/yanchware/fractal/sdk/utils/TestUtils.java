@@ -289,7 +289,7 @@ public class TestUtils {
         .withPeeringNetworkName("network-name")
         .withPeeringNetworkPrefix("network-prefix")
         .withDatabase(getGcpPostgresDbExample())
-        .locked()
+        .lock()
         .build();
   }
 
