@@ -1,0 +1,18 @@
+{
+  "description": "desc",
+  "components": [
+    {
+      "id": "0001",
+      "displayName": "blueprint basic",
+      "description": "blueprint basic desc",
+      "type": "type",
+      "version": "V0.1",
+      "locked" : false,
+      "parameters": {},
+      "dependencies": [],
+      "links": [],
+      "outputFields": []
+    }
+  ],
+  "private": true
+}

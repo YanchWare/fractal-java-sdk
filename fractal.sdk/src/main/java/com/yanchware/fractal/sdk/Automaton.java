@@ -4,11 +4,10 @@ import com.yanchware.fractal.sdk.aggregates.LiveSystem;
 import com.yanchware.fractal.sdk.configuration.EnvVarSdkConfiguration;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.configuration.instantiation.InstantiationConfiguration;
-import com.yanchware.fractal.sdk.configuration.instantiation.InstantiationWaitConfiguration;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemId;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.services.BlueprintService;
 import com.yanchware.fractal.sdk.services.LiveSystemService;
-import com.yanchware.fractal.sdk.services.ProviderService;
 import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.commands.CreateBlueprintCommandRequest;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands.InstantiateLiveSystemCommandRequest;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemMutationDto;
@@ -28,14 +27,12 @@ public class Automaton {
     private static Automaton instance;
     private static BlueprintService blueprintService;
     private static LiveSystemService liveSystemService;
-    private static ProviderService providerService;
     private static RetryRegistry serviceRetryRegistry;
 
     private Automaton(HttpClient httpClient, SdkConfiguration sdkConfiguration) {
         Automaton.serviceRetryRegistry = getDefaultRetryRegistry();
         Automaton.blueprintService = new BlueprintService(httpClient, sdkConfiguration, Automaton.serviceRetryRegistry);
         Automaton.liveSystemService = new LiveSystemService(httpClient, sdkConfiguration, Automaton.serviceRetryRegistry);
-        Automaton.providerService = new ProviderService(httpClient, sdkConfiguration);
     }
 
     // Used for unit testing:
@@ -60,32 +57,32 @@ public class Automaton {
 
     private static void waitForMutationInstantiation(
         LiveSystem liveSystem,
-        LiveSystemMutationDto mutation,
-        InstantiationWaitConfiguration config)
+        LiveSystemMutationDto mutation)
         throws InstantiatorException {
-            providerService.checkLiveSystemMutationStatus(liveSystem, mutation, config);
+            liveSystemService.checkLiveSystemMutationStatus(
+              new LiveSystemId(liveSystem.getLiveSystemId()),
+              mutation.getId());
         }
 
     private static LiveSystemMutationDto instantiateLiveSystem(LiveSystem liveSystem)
         throws InstantiatorException {
-        log.info("Starting to instantiate live system with id: {}", liveSystem.getLiveSystemId());
+        log.info("Starting to instantiate live system [id: '{}']", liveSystem.getLiveSystemId());
+
+        createOrUpdateBlueprint(liveSystem);
+        
+        return liveSystemService.instantiate(InstantiateLiveSystemCommandRequest.fromLiveSystem(liveSystem));
+    }
+    
+    private static void createOrUpdateBlueprint(LiveSystem liveSystem) throws InstantiatorException {
         var blueprintCommand = CreateBlueprintCommandRequest.fromLiveSystem(
             liveSystem.getComponents(), liveSystem.getFractalId());
-        var liveSystemCommand = InstantiateLiveSystemCommandRequest.fromLiveSystem(liveSystem);
 
         blueprintService.createOrUpdateBlueprint(blueprintCommand, liveSystem.getFractalId());
-        return liveSystemService.instantiate(liveSystemCommand);
     }
 
     public static void instantiate(List<LiveSystem> liveSystems) throws InstantiatorException {
         if (instance == null) {
-            EnvVarSdkConfiguration configuration;
-            try {
-                configuration = new EnvVarSdkConfiguration();
-            } catch (URISyntaxException e) {
-                throw new InstantiatorException("Error with Sdk configuration", e);
-            }
-            initializeAutomaton(configuration);
+            initializeAutomaton(getSdkConfiguration());
         }
 
         for (LiveSystem liveSystem : liveSystems) {
@@ -97,34 +94,32 @@ public class Automaton {
         throws InstantiatorException {
 
         if (instance == null) {
-            EnvVarSdkConfiguration configuration;
-            try {
-                configuration = new EnvVarSdkConfiguration();
-            } catch (URISyntaxException e) {
-                throw new InstantiatorException("Error with Sdk configuration", e);
-            }
-            initializeAutomaton(configuration);
+            initializeAutomaton(getSdkConfiguration());
         }
         
         var liveSystemsMutations = new ArrayList<ImmutablePair<LiveSystem, LiveSystemMutationDto>>();
+        
         for (LiveSystem liveSystem : liveSystems) {
             liveSystemsMutations.add(new ImmutablePair<>(liveSystem, instantiateLiveSystem(liveSystem)));
         }
 
         if(config != null && config.waitConfiguration != null && config.getWaitConfiguration().waitForInstantiation)
         {
-            if (config.getWaitConfiguration().isFailFast()) {
-                log.warn("The instantiation waiting configuration is set to \"fail fast\": " +
-                    "the pipeline will fail as soon as a single component instantiation fails. " +
-                    "Please note that this won't stop the instantiation process for the other components");
-            }
-            
             for (var liveSystemMutation : liveSystemsMutations) {
                 waitForMutationInstantiation(
                     liveSystemMutation.getKey(),
-                    liveSystemMutation.getValue(),
-                    config.getWaitConfiguration());
+                    liveSystemMutation.getValue());
             }
         }
+    }
+
+    private static EnvVarSdkConfiguration getSdkConfiguration() throws InstantiatorException {
+        EnvVarSdkConfiguration configuration;
+        try {
+            configuration = new EnvVarSdkConfiguration();
+        } catch (URISyntaxException e) {
+            throw new InstantiatorException("Error with Sdk configuration", e);
+        }
+        return configuration;
     }
 }
