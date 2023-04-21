@@ -25,7 +25,7 @@ public abstract class Component implements Validatable {
   private ComponentType type;
   private ComponentId id;
   private String version;
-  private boolean isLocked;
+  private boolean locked;
   private Set<ComponentId> dependencies;
   private Set<ComponentLink> links;
   private String description;

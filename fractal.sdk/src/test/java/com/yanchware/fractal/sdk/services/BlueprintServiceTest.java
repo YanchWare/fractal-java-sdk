@@ -6,6 +6,7 @@ import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.commands.CreateBlueprintCommandRequest;
 import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.dtos.BlueprintComponentDto;
 import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
+import com.yanchware.fractal.sdk.utils.StringHandler;
 import io.github.resilience4j.retry.RetryRegistry;
 import org.junit.jupiter.api.Test;
 
@@ -15,6 +16,7 @@ import java.util.List;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static java.util.Collections.emptyMap;
 import static java.util.Collections.emptySet;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @WireMockTest
 public class BlueprintServiceTest {
@@ -27,22 +29,15 @@ public class BlueprintServiceTest {
         var sdkConfiguration = new LocalSdkConfiguration(wmRuntimeInfo.getHttpBaseUrl());
         var blueprintService = new BlueprintService(httpClient, sdkConfiguration, RetryRegistry.ofDefaults());
 
+        var inputStream = getClass().getClassLoader()
+            .getResourceAsStream("test-resources/postRequestToBlueprintBody.json");
+
+        assertThat(inputStream).isNotNull();
+
+        var postRequestToBlueprintBody = StringHandler.getStringFromInputStream(inputStream);
+        
         stubFor(post(urlPathMatching("/blueprints/resource-group/fr/fr"))
-          .withRequestBody(equalToJson("{" +
-            "\"description\" : \"desc\"," +
-            "\"components\" : [ {" +
-              "\"id\" : \"0001\"," +
-              "\"displayName\" : \"blueprint basic\"," +
-              "\"description\" : \"blueprint basic desc\"," +
-              "\"type\" : \"type\"," +
-              "\"version\" : \"V0.1\"," +
-              "\"parameters\" : { }," +
-              "\"dependencies\" : [ ]," +
-              "\"links\" : [ ]," +
-              "\"outputFields\" : [ ]" +
-            "} ]," +
-            "\"private\" : true" +
-          "}"))
+          .withRequestBody(equalToJson(postRequestToBlueprintBody))
           .willReturn(aResponse()
             .withStatus(202)
             .withHeader("Content-Type", "application/json")));

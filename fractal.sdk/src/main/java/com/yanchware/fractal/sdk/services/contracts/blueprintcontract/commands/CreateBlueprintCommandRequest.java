@@ -16,10 +16,11 @@ public class CreateBlueprintCommandRequest {
     List<BlueprintComponentDto> components;
 
     public static CreateBlueprintCommandRequest fromLiveSystem(Collection<LiveSystemComponent> components, String fractalId) {
-        CreateBlueprintCommandRequest command = new CreateBlueprintCommandRequest();
+        var command = new CreateBlueprintCommandRequest();
         command.setPrivate(true);
         command.setDescription(String.format("Blueprint created via SDK from LiveSystem with Fractal ID: %s", fractalId));
         command.setComponents(BlueprintComponentDto.fromLiveSystemComponents(components));
+
         return command;
     }
 }

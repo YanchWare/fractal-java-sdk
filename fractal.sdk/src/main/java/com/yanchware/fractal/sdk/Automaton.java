@@ -67,12 +67,17 @@ public class Automaton {
     private static LiveSystemMutationDto instantiateLiveSystem(LiveSystem liveSystem)
         throws InstantiatorException {
         log.info("Starting to instantiate live system [id: '{}']", liveSystem.getLiveSystemId());
+
+        createOrUpdateBlueprint(liveSystem);
+        
+        return liveSystemService.instantiate(InstantiateLiveSystemCommandRequest.fromLiveSystem(liveSystem));
+    }
+    
+    private static void createOrUpdateBlueprint(LiveSystem liveSystem) throws InstantiatorException {
         var blueprintCommand = CreateBlueprintCommandRequest.fromLiveSystem(
             liveSystem.getComponents(), liveSystem.getFractalId());
-        var liveSystemCommand = InstantiateLiveSystemCommandRequest.fromLiveSystem(liveSystem);
 
         blueprintService.createOrUpdateBlueprint(blueprintCommand, liveSystem.getFractalId());
-        return liveSystemService.instantiate(liveSystemCommand);
     }
 
     public static void instantiate(List<LiveSystem> liveSystems) throws InstantiatorException {
@@ -93,6 +98,7 @@ public class Automaton {
         }
         
         var liveSystemsMutations = new ArrayList<ImmutablePair<LiveSystem, LiveSystemMutationDto>>();
+        
         for (LiveSystem liveSystem : liveSystems) {
             liveSystemsMutations.add(new ImmutablePair<>(liveSystem, instantiateLiveSystem(liveSystem)));
         }

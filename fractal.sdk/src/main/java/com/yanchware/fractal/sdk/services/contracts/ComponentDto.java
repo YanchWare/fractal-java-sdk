@@ -19,7 +19,7 @@ import static java.util.stream.Collectors.toSet;
 @NoArgsConstructor
 public class ComponentDto {
   private String id;
-  public String displayName;
+  private String displayName;
   private String description;
   private String type;
   private String version;
@@ -107,7 +107,7 @@ public class ComponentDto {
       withDisplayName(String.valueOf(allFields.get(DISPLAY_NAME_KEY)));
       withDescription(String.valueOf(allFields.get(DESCRIPTION_KEY)));
       withVersion(String.valueOf(allFields.get(VERSION_KEY)));
-      if ((Boolean)allFields.get(IS_LOCKED_KEY)) {
+      if ((Boolean)allFields.get(LOCKED_KEY)) {
         lock();
       }
       withParameters((Map<String, Object>) allFields.get(PARAMETERS_KEY));

@@ -8,6 +8,7 @@ import com.yanchware.fractal.sdk.domain.exceptions.ProviderException;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands.InstantiateLiveSystemCommandRequest;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands.UpdateLiveSystemCommandRequest;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemComponentDto;
+import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemComponentStatusDto;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemDto;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemMutationDto;
 import com.yanchware.fractal.sdk.utils.HttpUtils;
@@ -35,13 +36,13 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @AllArgsConstructor
 public class LiveSystemService {
 
-    private static final int CHECK_LIVE_SYSTEM_MUTATION_STATUS_MAX_ATTEMPTS = 20;
+    private static final int CHECK_LIVE_SYSTEM_MUTATION_STATUS_MAX_ATTEMPTS = 55;
     private final HttpClient client;
     private final SdkConfiguration sdkConfiguration;
     private final RetryRegistry retryRegistry;
 
     public LiveSystemMutationDto instantiate(InstantiateLiveSystemCommandRequest command) throws InstantiatorException {
-        log.info("Starting to instantiate live system: {}", command);
+        log.info("Starting to instantiate live system: {}", getCommandAsJsonString(command));
 
         if (retrieveLiveSystem(new LiveSystemId(command.getLiveSystemId())) != null) {
             return updateLiveSystem(UpdateLiveSystemCommandRequest.fromInstantiateCommand(command));
@@ -65,7 +66,7 @@ public class LiveSystemService {
         var retryConfig = RetryConfig.custom()
           .retryExceptions(InstantiatorException.class)
           .maxAttempts(CHECK_LIVE_SYSTEM_MUTATION_STATUS_MAX_ATTEMPTS)
-          .waitDuration(Duration.ofMinutes(3L))
+          .waitDuration(Duration.ofMinutes(1L))
           .build();
         var retry = RetryRegistry.of(retryConfig).retry(requestName);
 
@@ -133,22 +134,11 @@ public class LiveSystemService {
                 return liveSystemMutationResponse;
             }
             case FAILED -> {
-                if(liveSystemMutationResponse.getStepsFailedIds() != null) {
-
-                    var failedInstantiationMessage = String.format(
-                        "LiveSystem [%s] instantiation failed for mutation [%s]. Failed components [%s] -> %s",
-                        liveSystemId,
-                        liveSystemMutationId,
-                        liveSystemMutationResponse.getStepsFailedIds().size(),
-                        serialize(liveSystemMutationResponse.getStepsFailedIds())
-                    );
-                    log.warn(failedInstantiationMessage);
-                    throw new ProviderException(liveSystemMutationResponse.getStepsFailedIds(), failedInstantiationMessage);
-                } else {
-                    throw new ProviderException(
-                        String.format("LiveSystem [%s] instantiation failed for mutation [%s]", 
-                            liveSystemId, liveSystemMutationId));
-                }
+                var messageToThrow = getFailedComponentsMessageToThrow(livesystemIdStr,
+                    liveSystemMutationId,
+                    liveSystemMutationResponseComponents);
+                log.error(messageToThrow);
+                throw new ProviderException(messageToThrow);
             }
             case CANCELLED -> {
                 var cancelledInstantiationMessage = String.format(
@@ -159,7 +149,7 @@ public class LiveSystemService {
             }
             case INPROGRESS -> {
                 log.info("LiveSystem [id: '{}'] instantiation is in progress: {}", liveSystemId, getStatusFromComponents(liveSystemMutationResponseComponents));
-
+                
                 String timeoutExceptionMessage = String.format(
                   "LiveSystem [%s] instantiation wait timeout. Response is %s",
                   livesystemIdStr,
@@ -173,8 +163,39 @@ public class LiveSystemService {
         }
     }
 
+    private String getFailedComponentsMessageToThrow(String liveSystemId,
+                                        String liveSystemMutationId,
+                                        Map<String, LiveSystemComponentDto> mutation) {
+        var failedComponents = mutation.values()
+            .stream()
+            .filter(c -> c.getStatus() == LiveSystemComponentStatusDto.Failed)
+            .toList();
+        
+        if(failedComponents.isEmpty()) {
+            return String.format("LiveSystem [%s] instantiation failed for mutation [%s]",
+                    liveSystemId, liveSystemMutationId);
+        } else {
+            var messageToThrow = new StringBuilder();
+            messageToThrow.append(
+                String.format("LiveSystem [id: '%s'] instantiation failed for mutation [id: '%s']. " +
+                    "Failed components -> ",
+                    liveSystemId, liveSystemMutationId));
+            for(var component: failedComponents){
+                messageToThrow.append(String.format("id: '%s', status: '%s', errorMessage: '%s' - ", 
+                    component.getId(), 
+                    component.getStatus(),
+                    component.getLastOperationStatusMessage()));
+            }
+            
+            return messageToThrow.substring(0, messageToThrow.length() - 3);
+        }
+        
+        
+    }
+
     private String getStatusFromComponents(Map<String, LiveSystemComponentDto> liveSystemMutationResponseComponents) {
         var sb = new StringBuilder();
+        
         for(var component: liveSystemMutationResponseComponents.values()){
             sb.append(String.format("%s [%s] - ", component.getId(), component.getStatus()));
         }
@@ -215,8 +236,11 @@ public class LiveSystemService {
                             response.statusCode(),
                             response.body()));
         }
+        
+        return getDeserializedResponseBody(response.body());
+    }
 
-        String bodyContents = response.body();
+    private static LiveSystemDto getDeserializedResponseBody(String bodyContents) throws InstantiatorException {
         try {
             return deserialize(bodyContents, LiveSystemDto.class);
         } catch (JsonProcessingException e) {
@@ -290,5 +314,17 @@ public class LiveSystemService {
 
     private URI getLiveSystemMutationUri(LiveSystemId liveSystemId, String mutationId) {
         return URI.create(String.format("%s/mutations/%s", getLiveSystemUri(liveSystemId), mutationId));
+    }
+
+    private String getCommandAsJsonString(InstantiateLiveSystemCommandRequest command) throws InstantiatorException {
+        try {
+            return serialize(command);
+        } catch (JsonProcessingException e) {
+            var errorMessage = String.format("Unable to serialize Instantiate LiveSystem Command Request. %s",
+                e.getLocalizedMessage());
+
+            log.error(errorMessage, e);
+            throw new InstantiatorException(errorMessage, e);
+        }
     }
 }
