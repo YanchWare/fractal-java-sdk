@@ -58,7 +58,9 @@ public class LiveSystemService {
           liveSystemId.toString(), liveSystemMutationId);
 
         var requestName = "checkLiveSystemMutationStatus";
+        
         var acceptedResponses = new int[]{200, 404};
+        
         var request = HttpUtils.buildGetRequest(
           getLiveSystemMutationUri(liveSystemId, liveSystemMutationId),
           sdkConfiguration);
@@ -68,6 +70,7 @@ public class LiveSystemService {
           .maxAttempts(CHECK_LIVE_SYSTEM_MUTATION_STATUS_MAX_ATTEMPTS)
           .waitDuration(Duration.ofMinutes(1L))
           .build();
+        
         var retry = RetryRegistry.of(retryConfig).retry(requestName);
 
         try {
@@ -79,11 +82,7 @@ public class LiveSystemService {
                 acceptedResponses,
                 request)).get();
         } catch (Throwable ex) {
-            throw new InstantiatorException(
-              String.format("LiveSystem [%s] - all attempts for request %s failed with cause: %s",
-                liveSystemId,
-                requestName,
-                ex));
+            throw new InstantiatorException(ex.getLocalizedMessage());
         }
     }
 
@@ -127,20 +126,21 @@ public class LiveSystemService {
 
         switch(liveSystemMutationResponse.getStatus()){
             case COMPLETED -> {
-                log.info("LiveSystem [id: '{}'] instantiated for mutation ['{}']. All components [{}] successfully processed",
-                  livesystemIdStr,
-                  liveSystemMutationId,
-                  liveSystemMutationResponseComponents.size());
+                log.info("LiveSystem [id: '{}'] instantiation completed: {}", liveSystemId, getStatusFromComponents(liveSystemMutationResponseComponents));
+                
                 return liveSystemMutationResponse;
             }
             case FAILED -> {
+                log.warn("LiveSystem [id: '{}'] instantiation failed: {}", liveSystemId, getStatusFromComponents(liveSystemMutationResponseComponents));
+
                 var messageToThrow = getFailedComponentsMessageToThrow(livesystemIdStr,
                     liveSystemMutationId,
                     liveSystemMutationResponseComponents);
-                log.error(messageToThrow);
                 throw new ProviderException(messageToThrow);
             }
             case CANCELLED -> {
+                log.warn("LiveSystem [id: '{}'] instantiation cancelled: {}", liveSystemId, getStatusFromComponents(liveSystemMutationResponseComponents));
+
                 var cancelledInstantiationMessage = String.format(
                   "LiveSystem [%s] instantiation did not complete for mutation [%s] as the latter has been cancelled by an operator",
                   liveSystemId,
