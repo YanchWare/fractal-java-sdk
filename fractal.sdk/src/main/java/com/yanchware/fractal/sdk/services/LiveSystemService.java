@@ -149,7 +149,7 @@ public class LiveSystemService {
                 throw new ProviderException(cancelledInstantiationMessage);
             }
             case INPROGRESS -> {
-                if(allComponentsActive(liveSystemMutationResponseComponents)) {
+                if(allComponentsProcessed(liveSystemMutationResponseComponents)) {
                     log.info("LiveSystem [id: '{}'] instantiation completed: {}", liveSystemId, getStatusFromComponents(liveSystemMutationResponseComponents));
 
                     return liveSystemMutationResponse;
@@ -169,14 +169,16 @@ public class LiveSystemService {
         }
     }
 
-    private boolean allComponentsActive(Map<String, LiveSystemComponentDto> liveSystemMutationResponseComponents) {
+    private boolean allComponentsProcessed(Map<String, LiveSystemComponentDto> liveSystemMutationResponseComponents) {
         var uniqueStatuses = liveSystemMutationResponseComponents.values()
             .stream()
             .map(c -> c.getStatus().toString())
             .distinct()
             .collect(Collectors.joining(","));
 
-        return uniqueStatuses.equals("Active");
+        return uniqueStatuses.equals("Active") 
+            || uniqueStatuses.equals("Active,Deleted")
+            || uniqueStatuses.equals("Deleted");
     }
 
     private String getFailedComponentsMessageToThrow(String liveSystemId,
