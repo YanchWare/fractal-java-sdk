@@ -149,7 +149,16 @@ public class LiveSystemService {
                 throw new ProviderException(cancelledInstantiationMessage);
             }
             case INPROGRESS -> {
-                if(allComponentsProcessed(liveSystemMutationResponseComponents)) {
+                var uniqueStatuses = getUniqueStatusesFromComponents(liveSystemMutationResponseComponents);
+                
+                if(atLeastOneComponentFailed(uniqueStatuses)) {
+                    log.warn("LiveSystem [id: '{}'] instantiation failed: {}", liveSystemId, getStatusFromComponents(liveSystemMutationResponseComponents));
+
+                    var messageToThrow = getFailedComponentsMessageToThrow(livesystemIdStr,
+                        liveSystemMutationId,
+                        liveSystemMutationResponseComponents);
+                    throw new ProviderException(messageToThrow);
+                } else if(allComponentsProcessed(uniqueStatuses)) {
                     log.info("LiveSystem [id: '{}'] instantiation completed: {}", liveSystemId, getStatusFromComponents(liveSystemMutationResponseComponents));
 
                     return liveSystemMutationResponse;
@@ -169,16 +178,22 @@ public class LiveSystemService {
         }
     }
 
-    private boolean allComponentsProcessed(Map<String, LiveSystemComponentDto> liveSystemMutationResponseComponents) {
-        var uniqueStatuses = liveSystemMutationResponseComponents.values()
+    private boolean atLeastOneComponentFailed(String uniqueStatuses) {
+        return uniqueStatuses.contains("Failed");
+    }
+
+    private boolean allComponentsProcessed(String uniqueStatuses) {
+        return uniqueStatuses.equals("Active") 
+            || uniqueStatuses.equals("Active,Deleted")
+            || uniqueStatuses.equals("Deleted");
+    }
+    
+    private String getUniqueStatusesFromComponents(Map<String, LiveSystemComponentDto> mutationComponents) {
+        return mutationComponents.values()
             .stream()
             .map(c -> c.getStatus().toString())
             .distinct()
             .collect(Collectors.joining(","));
-
-        return uniqueStatuses.equals("Active") 
-            || uniqueStatuses.equals("Active,Deleted")
-            || uniqueStatuses.equals("Deleted");
     }
 
     private String getFailedComponentsMessageToThrow(String liveSystemId,
