@@ -25,6 +25,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.yanchware.fractal.sdk.utils.HttpUtils.ensureAcceptableResponse;
 import static com.yanchware.fractal.sdk.utils.ResiliencyUtils.executeRequestWithRetries;
@@ -148,19 +149,34 @@ public class LiveSystemService {
                 throw new ProviderException(cancelledInstantiationMessage);
             }
             case INPROGRESS -> {
-                log.info("LiveSystem [id: '{}'] instantiation is in progress: {}", liveSystemId, getStatusFromComponents(liveSystemMutationResponseComponents));
-                
-                String timeoutExceptionMessage = String.format(
-                  "LiveSystem [%s] instantiation wait timeout. Response is %s",
-                  livesystemIdStr,
-                  response.body());
-                throw new InstantiatorException(timeoutExceptionMessage);
+                if(allComponentsActive(liveSystemMutationResponseComponents)) {
+                    log.info("LiveSystem [id: '{}'] instantiation completed: {}", liveSystemId, getStatusFromComponents(liveSystemMutationResponseComponents));
+
+                    return liveSystemMutationResponse;
+                } else {
+                    log.info("LiveSystem [id: '{}'] instantiation is in progress: {}", liveSystemId, getStatusFromComponents(liveSystemMutationResponseComponents));
+                    String timeoutExceptionMessage = String.format(
+                        "LiveSystem [%s] instantiation wait timeout. Response is %s",
+                        livesystemIdStr,
+                        response.body());
+                    throw new InstantiatorException(timeoutExceptionMessage);
+                }
             }
             default -> throw new ProviderException(String.format("LiveSystem [%s] instantiation has an unknown state for mutation [%s]: [%s]",
               livesystemIdStr,
               liveSystemMutationId,
               liveSystemMutationResponse.getStatus()));
         }
+    }
+
+    private boolean allComponentsActive(Map<String, LiveSystemComponentDto> liveSystemMutationResponseComponents) {
+        var uniqueStatuses = liveSystemMutationResponseComponents.values()
+            .stream()
+            .map(c -> c.getStatus().toString())
+            .distinct()
+            .collect(Collectors.joining(","));
+
+        return uniqueStatuses.equals("Active");
     }
 
     private String getFailedComponentsMessageToThrow(String liveSystemId,
