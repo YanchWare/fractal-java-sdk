@@ -149,14 +149,16 @@ public class LiveSystemService {
                 throw new ProviderException(cancelledInstantiationMessage);
             }
             case INPROGRESS -> {
-                if(atLeastOneComponentFailed(liveSystemMutationResponseComponents)) {
+                var uniqueStatuses = getUniqueStatusesFromComponents(liveSystemMutationResponseComponents);
+                
+                if(atLeastOneComponentFailed(uniqueStatuses)) {
                     log.warn("LiveSystem [id: '{}'] instantiation failed: {}", liveSystemId, getStatusFromComponents(liveSystemMutationResponseComponents));
 
                     var messageToThrow = getFailedComponentsMessageToThrow(livesystemIdStr,
                         liveSystemMutationId,
                         liveSystemMutationResponseComponents);
                     throw new ProviderException(messageToThrow);
-                } else if(allComponentsProcessed(liveSystemMutationResponseComponents)) {
+                } else if(allComponentsProcessed(uniqueStatuses)) {
                     log.info("LiveSystem [id: '{}'] instantiation completed: {}", liveSystemId, getStatusFromComponents(liveSystemMutationResponseComponents));
 
                     return liveSystemMutationResponse;
@@ -176,14 +178,11 @@ public class LiveSystemService {
         }
     }
 
-    private boolean atLeastOneComponentFailed(Map<String, LiveSystemComponentDto> mutationComponents) {
-        return getUniqueStatusesFromComponents(mutationComponents)
-            .contains("Failed");
+    private boolean atLeastOneComponentFailed(String uniqueStatuses) {
+        return uniqueStatuses.contains("Failed");
     }
 
-    private boolean allComponentsProcessed(Map<String, LiveSystemComponentDto> mutationComponents) {
-        var uniqueStatuses = getUniqueStatusesFromComponents(mutationComponents);
-
+    private boolean allComponentsProcessed(String uniqueStatuses) {
         return uniqueStatuses.equals("Active") 
             || uniqueStatuses.equals("Active,Deleted")
             || uniqueStatuses.equals("Deleted");
