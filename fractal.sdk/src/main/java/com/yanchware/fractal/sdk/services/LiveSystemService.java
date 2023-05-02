@@ -99,14 +99,14 @@ public class LiveSystemService {
         ensureAcceptableResponse(response, requestName, acceptedResponses);
 
         if (response.statusCode() == 404) {
-            log.info("Attempted {} has come up with a 404 Not Found. Will attempt to create it.", requestName);
-            return null;
+            throw new InstantiatorException(
+              String.format("Attempted %s has come up with a 404 Not Found. Will attempt to create it", requestName));
         }
 
         String bodyContents = response.body();
         if (isBlank(bodyContents)) {
-            log.error("Attempted {} has come up with empty or null body contents: {}", requestName, bodyContents);
-            return null;
+            throw new InstantiatorException(
+              String.format("Attempted %s has come up with empty or null body contents", requestName));
         }
 
         var liveSystemMutationResponse = getLiveSystemMutationResponse(requestName, bodyContents);

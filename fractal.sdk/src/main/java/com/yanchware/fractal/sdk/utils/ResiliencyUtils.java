@@ -56,20 +56,20 @@ public class ResiliencyUtils {
         ensureAcceptableResponse(response, requestName, acceptedResponses);
 
         if (response.statusCode() == 404) {
-          log.info("Attempted {} has come up with a 404 Not Found. Will attempt to create it.", requestName);
+          log.info("Attempted {} has come up with a 404 Not Found", requestName);
           return null;
         }
 
         String bodyContents = response.body();
         if (isBlank(bodyContents)) {
-          log.error("Attempted {} has come up with empty or null body contents: {}", requestName, bodyContents);
+          log.error("Attempted {} has come up with empty or null body contents", requestName);
           return null;
         }
 
         try {
           return deserialize(bodyContents, classRef);
         } catch (JsonProcessingException e) {
-          log.error("Attempted {} failed. Deserialization of {} failed.", requestName, bodyContents);
+          log.error("Attempted {} failed. Deserialization of {} failed", requestName, bodyContents);
           return null;
         }
       });
