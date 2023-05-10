@@ -7,7 +7,11 @@ import java.net.URI;
 
 public class LocalSdkConfiguration implements SdkConfiguration {
 
-  private final String FRACTAL_ENDPOINT = "https://api.local.fractal.cloud:8443";
+  private final String httpBaseUrl;
+
+  public LocalSdkConfiguration(String httpBaseUrl) {
+    this.httpBaseUrl = httpBaseUrl;
+  }
 
   @Override
   public String getClientId() {
@@ -20,26 +24,15 @@ public class LocalSdkConfiguration implements SdkConfiguration {
     return "test-client-secret";
   }
 
-  @Override
-  public String getProviderName() {
-    return "test-client-id";
-  }
-
   @SneakyThrows
   @Override
   public URI getBlueprintEndpoint() {
-    return new URI(FRACTAL_ENDPOINT + "/blueprints");
+    return new URI(httpBaseUrl + "/blueprints");
   }
 
   @SneakyThrows
   @Override
   public URI getLiveSystemEndpoint() {
-    return new URI(FRACTAL_ENDPOINT + "/livesystems");
-  }
-
-  @SneakyThrows
-  @Override
-  public URI getProviderEndpoint() {
-    return new URI(FRACTAL_ENDPOINT + "/providers");
+    return new URI(httpBaseUrl + "/livesystems");
   }
 }

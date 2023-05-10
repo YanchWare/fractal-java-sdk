@@ -23,6 +23,7 @@ public class LiveSystemComponentDto extends ComponentDto {
     private Map<String, Object> outputFields;
     private Date lastUpdated;
     private ProviderType provider;
+    private String lastOperationStatusMessage;
 
     public static LiveSystemComponentDtoBuilder builder() {
         return new LiveSystemComponentDtoBuilder();

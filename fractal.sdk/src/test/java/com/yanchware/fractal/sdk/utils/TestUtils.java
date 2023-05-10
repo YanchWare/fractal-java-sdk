@@ -63,7 +63,13 @@ public class TestUtils {
                 .withRegion(EUROPE_WEST)
                 .build())
             .build())
-        .withAddonProfiles(List.of(AzureAddonProfile.AZURE_POLICY, AzureAddonProfile.AZURE_KEYVAULT_SECRETS_PROVIDER))
+        .withAddonProfiles(List.of(
+            AzureKubernetesAddonProfile.builder()
+                .withAddonToEnable(AzureKubernetesAddon.AZURE_POLICY)
+                .build(),
+            AzureKubernetesAddonProfile.builder()
+                .withAddonToEnable(AzureKubernetesAddon.AZURE_KEYVAULT_SECRETS_PROVIDER)
+                .build()))
         .withNodePool(AzureNodePool.builder()
             .withName("akslinux")
             .withDiskSizeGb(35)
@@ -99,7 +105,9 @@ public class TestUtils {
             .withRoleName("AcrPull")
             .withScope("Role scope to ACR")
             .build())
-        .withAddonProfile(AzureAddonProfile.MONITORING)
+        .withAddonProfile(AzureKubernetesAddonProfile.builder()
+            .withAddonToEnable(AzureKubernetesAddon.MONITORING)
+            .build())
         .withKubernetesVersion("1.1.1")
         .withActiveDirectoryProfile(AzureActiveDirectoryProfile.builder()
             .withAdminGroupObjectIDs(List.of(UUID.randomUUID().toString()))
@@ -281,6 +289,7 @@ public class TestUtils {
         .withPeeringNetworkName("network-name")
         .withPeeringNetworkPrefix("network-prefix")
         .withDatabase(getGcpPostgresDbExample())
+        .lock()
         .build();
   }
 
@@ -363,6 +372,7 @@ public class TestUtils {
       softly.assertThat(componentDto.getDescription()).as("Component Description").contains(comp.getDescription());
       softly.assertThat(componentDto.getType()).as("Component Type").isEqualTo(type);
       softly.assertThat(componentDto.getVersion()).as("Component Version").isEqualTo(DEFAULT_VERSION);
+      softly.assertThat(componentDto.isLocked()).as("Component isLocked").isEqualTo(comp.isLocked());
       softly.assertThat(componentDto.getDependencies()).as("Component Dependencies").containsAll(comp.getDependencies().stream().map(ComponentId::getValue).collect(toSet()));
       softly.assertThat(componentDto.getLinks()).as("Component Links").containsAll(comp.getLinks());
     });

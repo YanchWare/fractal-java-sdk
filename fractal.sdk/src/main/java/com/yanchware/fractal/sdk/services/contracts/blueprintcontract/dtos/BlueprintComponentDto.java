@@ -49,12 +49,12 @@ public class BlueprintComponentDto extends ComponentDto {
         }
     }
 
-    public static List<BlueprintComponentDto> fromLiveSystemComponents(Collection<LiveSystemComponent> lsComponents) {
+    public static List<BlueprintComponentDto> fromLiveSystemComponents(Collection<LiveSystemComponent> components) {
         List<BlueprintComponentDto> blueprintComponentDtoList = new ArrayList<>();
-        for (LiveSystemComponent comp : lsComponents) {
-            List<Map<String, Object>> listOfComponents = ReflectionUtils.buildComponents(comp);
-            for (var component : listOfComponents) {
-                BlueprintComponentDto componentDto = BlueprintComponentDto.toBlueprintComponentDto(component);
+        for (LiveSystemComponent component : components) {
+            List<Map<String, Object>> listOfComponents = ReflectionUtils.buildComponents(component);
+            for (var componentMap : listOfComponents) {
+                BlueprintComponentDto componentDto = BlueprintComponentDto.toBlueprintComponentDto(componentMap);
                 blueprintComponentDtoList.add(componentDto);
             }
         }

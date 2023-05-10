@@ -12,9 +12,9 @@ public class LiveSystemMutationDto {
   private String liveSystemId;
   private String id;
   private LiveSystemMutationStatusDto status;
-  private Set<String> stepsReadyIds;
-  private Set<String> stepsCompletedIds;
-  private Set<String> stepsFailedIds;
-  private Map<String, InstantiationStepDto> stepsById;
-  private Map<String, Set<String>> stepsBlockedIdsByStepBlockingId;
+  private Set<String> componentsReadyIds;
+  private Set<String> componentsCompletedIds;
+  private Set<String> componentsFailedIds;
+  private Map<String, LiveSystemComponentDto> componentsById;
+  private Map<String, Set<String>> componentsBlocked;
 }

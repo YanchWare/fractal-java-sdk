@@ -22,53 +22,67 @@ import static com.yanchware.fractal.sdk.utils.SerializationUtils.serialize;
 @AllArgsConstructor
 public class BlueprintService {
 
-    private final HttpClient client;
-    private final SdkConfiguration sdkConfiguration;
-    private final RetryRegistry retryRegistry;
+  private final HttpClient client;
+  private final SdkConfiguration sdkConfiguration;
+  private final RetryRegistry retryRegistry;
 
-    public void createOrUpdateBlueprint(CreateBlueprintCommandRequest command, String fractalId) throws InstantiatorException {
-        log.debug("Create or update blueprint: {}", command);
-        if (retrieveBlueprint(fractalId) != null) {
-            updateBlueprint(UpdateBlueprintCommandRequest.fromCreateCommand(command, fractalId), fractalId);
-            return;
-        }
-        createBlueprint(command, fractalId);
+  public void createOrUpdateBlueprint(CreateBlueprintCommandRequest command, String fractalId) throws InstantiatorException {
+    log.debug("Create or update blueprint: {}", getCommandAsJsonString(command));
+
+    if (retrieveBlueprint(fractalId) != null) {
+      updateBlueprint(UpdateBlueprintCommandRequest.fromCreateCommand(command, fractalId), fractalId);
+      return;
     }
 
-    protected void createBlueprint(CreateBlueprintCommandRequest command, String fractalId) throws InstantiatorException {
-        HttpRequest request;
-        try {
-            request = HttpUtils.buildPostRequest(getBlueprintsUri(fractalId), sdkConfiguration, serialize(command));
-        } catch (JsonProcessingException e) {
-            throw new InstantiatorException("Error processing CreateBlueprintCommandRequest because of JsonProcessing", e);
-        }
+    createBlueprint(command, fractalId);
+  }
 
-        executeRequestWithRetries("createBlueprint", client, retryRegistry, request, new int[] { 202 });
+  protected void createBlueprint(CreateBlueprintCommandRequest command, String fractalId) throws InstantiatorException {
+    HttpRequest request;
+    try {
+      request = HttpUtils.buildPostRequest(getBlueprintsUri(fractalId), sdkConfiguration, serialize(command));
+    } catch (JsonProcessingException e) {
+      throw new InstantiatorException("Error processing CreateBlueprintCommandRequest because of JsonProcessing", e);
     }
 
-    protected void updateBlueprint(UpdateBlueprintCommandRequest command, String fractalId) throws InstantiatorException {
-        HttpRequest request;
-        try {
-            request = HttpUtils.buildPutRequest(getBlueprintsUri(fractalId), sdkConfiguration, serialize(command));
-        } catch (JsonProcessingException e) {
-            throw new InstantiatorException("Error processing UpdateBlueprintCommandRequest because of JsonProcessing", e);
-        }
+    executeRequestWithRetries("createBlueprint", client, retryRegistry, request, new int[]{202});
+  }
 
-        executeRequestWithRetries("updateBlueprint", client, retryRegistry, request, new int[] { 202 });
+  protected void updateBlueprint(UpdateBlueprintCommandRequest command, String fractalId) throws InstantiatorException {
+    HttpRequest request;
+    try {
+      request = HttpUtils.buildPutRequest(getBlueprintsUri(fractalId), sdkConfiguration, serialize(command));
+    } catch (JsonProcessingException e) {
+      throw new InstantiatorException("Error processing UpdateBlueprintCommandRequest because of JsonProcessing", e);
     }
 
-    protected BlueprintDto retrieveBlueprint(String fractalId) throws InstantiatorException {
+    executeRequestWithRetries("updateBlueprint", client, retryRegistry, request, new int[]{202});
+  }
 
-        return executeRequestWithRetries(
-          "retrieveBlueprint",
-          client,
-          retryRegistry,
-          HttpUtils.buildGetRequest(getBlueprintsUri(fractalId), sdkConfiguration),
-          new int[] { 200, 404 },
-          BlueprintDto.class);
-    }
+  protected BlueprintDto retrieveBlueprint(String fractalId) throws InstantiatorException {
 
-    private URI getBlueprintsUri(String fractalId) {
-        return URI.create(sdkConfiguration.getBlueprintEndpoint() + "/" + fractalId.replace(":", "/"));
+    return executeRequestWithRetries(
+        "retrieveBlueprint",
+        client,
+        retryRegistry,
+        HttpUtils.buildGetRequest(getBlueprintsUri(fractalId), sdkConfiguration),
+        new int[]{200, 404},
+        BlueprintDto.class);
+  }
+
+  private URI getBlueprintsUri(String fractalId) {
+    return URI.create(sdkConfiguration.getBlueprintEndpoint() + "/" + fractalId.replace(":", "/"));
+  }
+
+  private String getCommandAsJsonString(CreateBlueprintCommandRequest command) throws InstantiatorException {
+    try {
+      return serialize(command);
+    } catch (JsonProcessingException e) {
+      var errorMessage = String.format("Unable to serialize Create Blueprint Command Request. %s",
+          e.getLocalizedMessage());
+
+      log.error(errorMessage, e);
+      throw new InstantiatorException(errorMessage, e);
     }
+  }
 }

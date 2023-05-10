@@ -3,15 +3,12 @@ package com.yanchware.fractal.sdk.configuration;
 public class Constants {
     public static final String LIVESYSTEM_ENDPOINT_KEY = "LIVESYSTEM_ENDPOINT";
     public static final String BLUEPRINT_ENDPOINT_KEY = "BLUEPRINT_ENDPOINT";
-    public static final String PROVIDER_ENDPOINT_KEY = "PROVIDER_ENDPOINT";
 
     public static final String X_CLIENT_ID_HEADER = "X-ClientID";
     public static final String X_CLIENT_SECRET_HEADER = "X-ClientSecret";
 
     public static final String CLIENT_ID_KEY = "CLIENT_ID";
     public static final String CLIENT_SECRET_KEY = "CLIENT_SECRET";
-    public static final String PROVIDER_NAME_KEY = "PROVIDER_NAME";
-
     public static final String BLUEPRINT_TYPE = "blueprintType";
 
     public static final String COMPONENT_TYPE = "type";
@@ -25,6 +22,7 @@ public class Constants {
     public static final String DISPLAY_NAME_KEY = "displayName";
 
     public static final String VERSION_KEY = "version";
+    public static final String LOCKED_KEY = "locked";
 
     public static final String PARAMETERS_KEY = "parameters";
 

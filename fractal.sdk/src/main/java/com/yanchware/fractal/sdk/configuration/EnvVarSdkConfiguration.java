@@ -13,12 +13,10 @@ public class EnvVarSdkConfiguration implements SdkConfiguration {
 
     public final URI DEFAULT_BLUEPRINT_ENDPOINT;
     public final URI DEFAULT_LIVESYSTEM_ENDPOINT;
-    public final URI DEFAULT_PROVIDER_ENDPOINT;
 
     public EnvVarSdkConfiguration() throws URISyntaxException {
         DEFAULT_LIVESYSTEM_ENDPOINT = new URI("https://api.fractal.cloud/livesystems");
         DEFAULT_BLUEPRINT_ENDPOINT = new URI("https://api.fractal.cloud/blueprints");
-        DEFAULT_PROVIDER_ENDPOINT = new URI("https://api.fractal.cloud/providers");
     }
 
     @Override
@@ -42,9 +40,6 @@ public class EnvVarSdkConfiguration implements SdkConfiguration {
     }
 
     @Override
-    public String getProviderName() { return System.getenv(PROVIDER_NAME_KEY);  }
-
-    @Override
     public URI getBlueprintEndpoint() {
         return checkAndReturnUri(BLUEPRINT_ENDPOINT_KEY, DEFAULT_BLUEPRINT_ENDPOINT);
     }
@@ -52,11 +47,6 @@ public class EnvVarSdkConfiguration implements SdkConfiguration {
     @Override
     public URI getLiveSystemEndpoint() {
         return checkAndReturnUri(LIVESYSTEM_ENDPOINT_KEY, DEFAULT_LIVESYSTEM_ENDPOINT);
-    }
-
-    @Override
-    public URI getProviderEndpoint() {
-        return checkAndReturnUri(PROVIDER_ENDPOINT_KEY, DEFAULT_PROVIDER_ENDPOINT);
     }
 
     private URI checkAndReturnUri(String endpointEnvKey, URI defaultValue) {

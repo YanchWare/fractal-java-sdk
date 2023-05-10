@@ -1,16 +1,14 @@
 package com.yanchware.fractal.sdk.domain.exceptions;
 
-import com.yanchware.fractal.sdk.services.contracts.providerscontract.dtos.ProviderLiveSystemComponentDto;
-
 import java.io.Serial;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 public class ProviderException extends Exception {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private List<ProviderLiveSystemComponentDto> failedComponents = new ArrayList<>();
+    private Collection<String> failedComponents = new ArrayList<>();
 
     public ProviderException(String message) {
         super(message);
@@ -20,9 +18,9 @@ public class ProviderException extends Exception {
         super(message, cause);
     }
 
-    public ProviderException(List<ProviderLiveSystemComponentDto> failedComponents, String message) {
+    public ProviderException(Collection<String> failedComponentsIds, String message) {
         super(message);
-        this.failedComponents = failedComponents;
+        this.failedComponents = failedComponentsIds;
     }
 
 }
