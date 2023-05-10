@@ -1,6 +1,7 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
 import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSMonitoring;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.ToString;
 

@@ -1,6 +1,6 @@
 package com.yanchware.fractal.sdk.services.contracts.blueprintcontract.commands;
 
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.LiveSystemComponent;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.dtos.BlueprintComponentDto;
 import lombok.Data;
 import lombok.ToString;

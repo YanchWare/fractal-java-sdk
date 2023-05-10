@@ -3,6 +3,7 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas;
 import com.yanchware.fractal.sdk.domain.entities.Component;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.*;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSContainerPlatform;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.*;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.AccessLevel;

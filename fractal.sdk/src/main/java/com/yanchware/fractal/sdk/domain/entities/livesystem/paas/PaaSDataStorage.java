@@ -1,7 +1,7 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas;
 
 import com.yanchware.fractal.sdk.domain.entities.Component;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.LiveSystemComponent;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemComponent;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;

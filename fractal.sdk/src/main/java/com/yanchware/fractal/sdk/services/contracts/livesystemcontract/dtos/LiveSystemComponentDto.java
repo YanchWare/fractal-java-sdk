@@ -1,6 +1,6 @@
 package com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos;
 
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.LiveSystemComponent;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.services.contracts.ComponentDto;
 import com.yanchware.fractal.sdk.utils.ReflectionUtils;
 import lombok.Data;
