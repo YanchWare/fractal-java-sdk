@@ -51,7 +51,7 @@ public class Automaton {
     private static RetryRegistry getDefaultRetryRegistry() {
         return RetryRegistry.of(RetryConfig.custom()
             .maxAttempts(5)
-            .intervalFunction(IntervalFunction.ofExponentialBackoff())
+            .intervalFunction(IntervalFunction.ofExponentialBackoff(5000L))
             .build());
     }
 
