@@ -12,6 +12,9 @@ public class AzureResourceGroup extends AzureProxyResource implements Validatabl
   private static final String NAME_IS_EMPTY_OR_TOO_LONG = "[AzureResourceGroup Validation] name is empty or it exceeds 90 characters";
   private final static String REGION_IS_BLANK = "[AzureResourceGroup Validation] Region has not been defined and it is required";
 
+  public AzureResourceGroup() {
+  }
+
   public AzureResourceGroup(String name, AzureRegion region, Map<String, String> tags) {
     super(name, region, tags);
   }
@@ -20,12 +23,12 @@ public class AzureResourceGroup extends AzureProxyResource implements Validatabl
     return new AzureResourceGroupBuilder();
   }
 
-  public static class AzureResourceGroupBuilder extends AzureProxyResource.Builder<AzureResourceGroupBuilder>  {
+  public static class AzureResourceGroupBuilder extends AzureProxyResource.Builder<AzureResourceGroupBuilder> {
 
     @Override
-    public AzureResourceGroup build(){
+    public AzureResourceGroup build() {
       var azureResourceGroup = new AzureResourceGroup(name, region, tags);
-      
+
       var errors = azureResourceGroup.validate();
 
       if (!errors.isEmpty()) {
@@ -44,9 +47,9 @@ public class AzureResourceGroup extends AzureProxyResource implements Validatabl
     var name = this.getName();
     if (StringUtils.isBlank(name) || name.length() > 90) {
       errors.add(NAME_IS_EMPTY_OR_TOO_LONG);
-    } 
-    
-    if(getRegion() == null) {
+    }
+
+    if (getRegion() == null) {
       errors.add(REGION_IS_BLANK);
     }
 

@@ -10,20 +10,24 @@ import java.util.Map;
 @Getter
 @AllArgsConstructor
 public class AzureProxyResource {
-  private final String name;
-  private final AzureRegion region;
-  private final Map<String, String> tags;
-  
+  private String name;
+  private AzureRegion region;
+  private Map<String, String> tags;
+
+  public AzureProxyResource() {
+  }
+
   public static Builder<? extends Builder<?>> builder() {
     return new Builder<>();
   }
-  
+
   public static class Builder<S extends Builder<S>> {
     protected String name;
     protected AzureRegion region;
     protected Map<String, String> tags;
 
-    public Builder() {}
+    public Builder() {
+    }
 
     public S withName(String name) {
       this.name = name;
@@ -43,7 +47,7 @@ public class AzureProxyResource {
      * applying the same tag to multiple resources and resource groups.
      */
     public S withTags(Map<String, String> tags) {
-      if(this.tags == null) {
+      if (this.tags == null) {
         this.tags = new HashMap<>();
       }
       this.tags.putAll(tags);
@@ -62,7 +66,7 @@ public class AzureProxyResource {
       this.tags.put(key, value);
       return (S) this;
     }
-  
+
     public AzureProxyResource build() {
       return new AzureProxyResource(name, region, tags);
     }

@@ -27,7 +27,7 @@ public class BlueprintService {
   private final RetryRegistry retryRegistry;
 
   public void createOrUpdateBlueprint(CreateBlueprintCommandRequest command, String fractalId) throws InstantiatorException {
-    log.debug("Create or update blueprint: {}", getCommandAsJsonString(command));
+    log.info("Create or update blueprint: {}", getCommandAsJsonString(command));
 
     if (retrieveBlueprint(fractalId) != null) {
       updateBlueprint(UpdateBlueprintCommandRequest.fromCreateCommand(command, fractalId), fractalId);

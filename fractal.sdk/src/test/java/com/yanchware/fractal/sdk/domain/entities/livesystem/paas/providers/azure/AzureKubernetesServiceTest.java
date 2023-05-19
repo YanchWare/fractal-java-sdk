@@ -98,16 +98,14 @@ public class AzureKubernetesServiceTest {
 
   @Test
   public void exceptionThrown_when_aksCreatedWithPriorityClassValueNegative() {
-    var aks = getDefaultAks()
-        .withPriorityClass(PriorityClass.builder().withValue(-123).build());
-    assertThatThrownBy(aks::build).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Value must be between 1 and 1_000_000_000");
+    var priorityClass = PriorityClass.builder().withValue(-123);
+    assertThatThrownBy(priorityClass::build).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Value must be between 1 and 1_000_000_000");
   }
 
   @Test
   public void exceptionThrown_when_aksCreatedWithPriorityClassValueOverMax() {
-    var aks = getDefaultAks()
-        .withPriorityClass(PriorityClass.builder().withValue(2_000_000_001).build());
-    assertThatThrownBy(aks::build).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Value must be between 1 and 1_000_000_000");
+    var priorityClass = PriorityClass.builder().withValue(2_000_000_001);
+    assertThatThrownBy(priorityClass::build).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Value must be between 1 and 1_000_000_000");
   }
 
   @Test

@@ -14,9 +14,7 @@ import static com.yanchware.fractal.sdk.configuration.Constants.X_CLIENT_SECRET_
 import static java.net.http.HttpRequest.BodyPublishers.ofString;
 
 @Slf4j
-public class HttpUtils
-{
-
+public class HttpUtils {
   public static HttpRequest buildGetRequest(URI uri, SdkConfiguration sdkConfiguration) {
     return getHttpRequestBuilder(uri, sdkConfiguration)
         .GET()
@@ -36,11 +34,15 @@ public class HttpUtils
   }
 
   public static HttpRequest.Builder getHttpRequestBuilder(URI uri, SdkConfiguration sdkConfiguration) {
-    return HttpRequest.newBuilder()
-        .uri(uri)
-        .header(X_CLIENT_ID_HEADER, sdkConfiguration.getClientId())
-        .header(X_CLIENT_SECRET_HEADER, sdkConfiguration.getClientSecret())
-        .header("Content-Type", "application/json");
+    if (EnvVarUtils.isLocalDebug()) {
+      return LocalDebugUtils.getHttpRequestBuilder(uri, sdkConfiguration);
+    } else {
+      return HttpRequest.newBuilder()
+          .uri(uri)
+          .header(X_CLIENT_ID_HEADER, sdkConfiguration.getClientId())
+          .header(X_CLIENT_SECRET_HEADER, sdkConfiguration.getClientSecret())
+          .header("Content-Type", "application/json");
+    }
   }
 
   public static void ensureAcceptableResponse(HttpResponse<String> response, String requestName, int[] acceptedResponses)
@@ -55,5 +57,4 @@ public class HttpUtils
       throw new InstantiatorException(errorMessage);
     }
   }
-
 }
