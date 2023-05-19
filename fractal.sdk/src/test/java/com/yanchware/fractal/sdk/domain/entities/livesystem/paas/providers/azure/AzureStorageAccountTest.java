@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.AzureStorageAccount.builder;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -82,6 +83,21 @@ public class AzureStorageAccountTest {
 
   @Test
   public void connectivityIsValid_when_connectivityIsSet() {
+
+    var azureVirtualNetworkRule = new AzureVirtualNetworkRule(
+        "virtualNetworkResourceId",
+        AzureStorageAction.ALLOW,
+        AzureStorageProvisionState.PROVISIONING
+    );
+
+    var azureStorageIpRule = new AzureStorageIpRule(
+        "ipAddressOrRange", AzureStorageAction.ALLOW
+    );
+
+    var azureResourceAccessRule = new AzureResourceAccessRule(
+        "tenantId", "resourceId"
+    );
+    
     var storageAccountConnectivity = generateBuilder()
         .withConnectivity(
             AzureStorageAccountConnectivity.builder()
@@ -104,7 +120,6 @@ public class AzureStorageAccountTest {
                 .withKeyPolicyExpirationInDays(10)
                 .withNetworkRuleSetBypass(AzureStorageBypass.NONE)
                 .withNetworkRuleSetDefaultAction(AzureAction.ALLOW)
-                .withNetworkRuleSetIpRules(new ArrayList<>())
                 .withPublicNetworkAccess(AzureStoragePublicNetworkAccess.ENABLED)
                 .withPublishInternetEndpoints(true)
                 .withPublishMicrosoftEndpoints(true)
@@ -114,23 +129,15 @@ public class AzureStorageAccountTest {
                 .withEnableNfsV3(true)
                 .withNetworkRuleSetBypass(AzureStorageBypass.NONE)
                 .withIsLocalUserEnabled(true)
-                .withNetworkRuleSetVirtualNetworkRule(new AzureVirtualNetworkRule(
-                    "virtualNetworkResourceId",
-                    AzureStorageAction.ALLOW,
-                    AzureStorageProvisionState.PROVISIONING
-                ))
-                .withNetworkRuleSetResourceAccessRule(new AzureResourceAccessRule(
-                    "tenantId", "resourceId"
-                ))
-                .withNetworkRuleSetIpRule(new AzureStorageIpRule(
-                    "ipAddressOrRange", AzureStorageAction.ALLOW
-                ))
+                .withNetworkRuleSetVirtualNetworkRule(azureVirtualNetworkRule)
+                .withNetworkRuleSetResourceAccessRule(azureResourceAccessRule)
+                .withNetworkRuleSetIpRule(azureStorageIpRule)
                 .build()
         )
         .build()
         .getConnectivity();
 
-    assertNull(storageAccountConnectivity.getEnableNfsV3());
+    assertTrue(storageAccountConnectivity.getEnableNfsV3());
     assertTrue(storageAccountConnectivity.getAllowBlobPublicAccess());
     assertEquals(AzureActiveDirectoryAccountType.USER, storageAccountConnectivity.getAzureIdentityBasedAuthAzureDirectoryAccountType());
     assertTrue(storageAccountConnectivity.getDefaultToOAuthAuthentication());
@@ -146,10 +153,10 @@ public class AzureStorageAccountTest {
     assertEquals(AzureStorageBypass.NONE, storageAccountConnectivity.getNetworkRuleSetBypass());
     assertEquals(AzureAction.ALLOW, storageAccountConnectivity.getNetworkRuleSetDefaultAction());
     assertEquals(AzureStoragePublicNetworkAccess.ENABLED, storageAccountConnectivity.getPublicNetworkAccess());
-    assertEquals("routingChoise", storageAccountConnectivity.getRoutingChoice());
+    assertEquals("routingChoice", storageAccountConnectivity.getRoutingChoice());
     assertEquals("sasPolicyExpirationAction", storageAccountConnectivity.getSasPolicyExpirationAction());
     assertEquals("sasPolicyExpirationPeriod", storageAccountConnectivity.getSasPolicyExpirationPeriod());
-    assertEquals(new ArrayList<>(), storageAccountConnectivity.getNetworkRuleSetIpRules());
+    assertEquals(List.of(azureStorageIpRule), storageAccountConnectivity.getNetworkRuleSetIpRules());
     assertEquals("domainGuid", storageAccountConnectivity.getAzureIdentityBasedAuthAzureDirectoryDomainGuid());
     assertEquals("domainName", storageAccountConnectivity.getAzureIdentityBasedAuthAzureDirectoryDomainName());
     assertEquals("domainSid", storageAccountConnectivity.getAzureIdentityBasedAuthAzureDirectoryDomainSid());
@@ -159,9 +166,8 @@ public class AzureStorageAccountTest {
     assertEquals("storageSid", storageAccountConnectivity.getAzureIdentityBasedAuthAzureDirectoryStorageSid());
     assertEquals(AzureDefaultSharePermission.NONE, storageAccountConnectivity.getAzureIdentityBasedDefaultSharePermission());
     assertEquals(AzureDirectoryServiceOptions.NONE, storageAccountConnectivity.getAzureIdentityBasedDirectoryServiceOptions());
-    assertEquals("virtualNetworkResourceId", storageAccountConnectivity.getNetworkRuleSetVirtualNetworkRules().get(0).virtualNetworkResourceId());
-    assertEquals("tenantId", storageAccountConnectivity.getNetworkRuleSetResourceAccessRules().get(0).tenantId());
-    assertEquals("ipAddressOrRange", storageAccountConnectivity.getNetworkRuleSetIpRules().get(0).ipAddressOrRange());
+    assertEquals(List.of(azureVirtualNetworkRule), storageAccountConnectivity.getNetworkRuleSetVirtualNetworkRules());
+    assertEquals(List.of(azureResourceAccessRule), storageAccountConnectivity.getNetworkRuleSetResourceAccessRules());
   }
 
   @Test
