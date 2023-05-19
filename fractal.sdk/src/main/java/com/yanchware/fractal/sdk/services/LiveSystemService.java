@@ -11,7 +11,9 @@ import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.Live
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemComponentStatusDto;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemDto;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemMutationDto;
+import com.yanchware.fractal.sdk.utils.EnvVarUtils;
 import com.yanchware.fractal.sdk.utils.HttpUtils;
+import com.yanchware.fractal.sdk.utils.LocalDebugUtils;
 import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryConfig;
 import io.github.resilience4j.retry.RetryRegistry;
@@ -93,6 +95,12 @@ public class LiveSystemService {
       String requestName,
       int[] acceptedResponses,
       HttpRequest request) throws IOException, InterruptedException, InstantiatorException, ProviderException {
+
+    if (EnvVarUtils.isLocalDebug()) {
+      request = LocalDebugUtils.getHttpRequestBuilder(request.uri(), sdkConfiguration)
+          .build();
+    }
+
     var livesystemIdStr = liveSystemId.toString();
     var response = client.send(request, HttpResponse.BodyHandlers.ofString());
     ensureAcceptableResponse(response, requestName, acceptedResponses);
@@ -286,7 +294,7 @@ public class LiveSystemService {
     HttpRequest request;
     try {
       String serializedCommand = serialize(command);
-      log.debug("Update LiveSystem message: {}", serializedCommand);
+      log.info("Update LiveSystem message: {}", serializedCommand);
       request = HttpUtils.buildPutRequest(
           getLiveSystemUri(new LiveSystemId(command.getLiveSystemId())), sdkConfiguration, serializedCommand);
     } catch (JsonProcessingException e) {
@@ -320,7 +328,7 @@ public class LiveSystemService {
     HttpRequest request;
     try {
       String serializedCommand = serialize(command);
-      log.debug("Instantiate LiveSystem message: {}", serializedCommand);
+      log.info("Instantiate LiveSystem message: {}", serializedCommand);
       request = HttpUtils.buildPostRequest(getLiveSystemUri(), sdkConfiguration, serializedCommand);
     } catch (JsonProcessingException e) {
       throw new InstantiatorException("Error processing InstantiateLiveSystemCommandRequest because of JsonProcessing", e);

@@ -6,12 +6,13 @@ public class RegexValidationUtils {
   private static final String ALPHANUMERICS_HYPHENS_REGEX_PATTERN = "(^[a-zA-Z0-9])([a-zA-Z0-9\\-]+)([a-zA-Z0-9])$";
   private static final String LOWERCASE_LETTERS_NUMBERS_AND_HYPHENS_REGEX_PATTERN = "(^[a-z0-9])([a-z0-9\\-]+)([a-z0-9])$";
   private static final String LETTERS_NUMBERS_PERIODS_AND_HYPHENS_REGEX_PATTERN = "^(?=.*[.])([a-zA-Z0-9_.\\-]+)([a-z0-9])$";
+  private static final String LETTERS_NUMBERS_UNDERSCORES_DASHES_PERIODS_REGEX_PATTERN = "^(?=.*[.])([a-zA-Z0-9_.\\-]+)$";
   private static final String LOWERCASE_LETTERS_AND_NUMBERS_REGEX_PATTERN = "^[a-z0-9]+$";
 
   public static boolean isValidIpMask(String input) {
     return input.matches(IP_MASK_REGEX);
   }
-  
+
   public static boolean isValidAlphanumericsUnderscoresHyphens(String input) {
     return input.matches(ALPHANUMERICS_UNDERSCORES_HYPHENS_REGEX_PATTERN);
   }
@@ -30,5 +31,9 @@ public class RegexValidationUtils {
 
   public static boolean isValidLettersNumbersPeriodsAndHyphens(String input) {
     return input.matches(LETTERS_NUMBERS_PERIODS_AND_HYPHENS_REGEX_PATTERN);
+  }
+
+  public static boolean isValidLettersNumbersUnderscoresDashesAndPeriods(String input) {
+    return input.matches(LETTERS_NUMBERS_UNDERSCORES_DASHES_PERIODS_REGEX_PATTERN);
   }
 }

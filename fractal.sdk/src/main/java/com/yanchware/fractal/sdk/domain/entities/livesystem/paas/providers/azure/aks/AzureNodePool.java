@@ -6,7 +6,6 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureOsType;
 import com.yanchware.fractal.sdk.utils.CollectionUtils;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -17,7 +16,6 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
-@Builder(setterPrefix = "with")
 public class AzureNodePool implements Validatable {
   private final static String NAME_REGEX = "^[a-z\\d]+$";
   private final static String NAME_IS_BLANK = "[AzureNodePool Validation] Name has not been defined and it is required";
@@ -36,134 +34,124 @@ public class AzureNodePool implements Validatable {
   private final static Integer MAX_NUMBER_OF_PODS_PER_NODE = 255;
 
   private Integer diskSizeGb;
-
   private Integer initialNodeCount;
-
   private AzureMachineType machineType;
   private Integer maxNodeCount;
   private Integer maxSurge;
   private Integer minNodeCount;
   private String name;
-
   private Integer maxPodsPerNode;
-
   private AzureOsType osType;
-
   private AzureAgentPoolMode agentPoolMode;
-
   private SortedSet<String> nodeTaints;
-
   private boolean autoscalingEnabled;
 
   public static AzureNodePoolBuilder builder() {
-    return new AzureNodePoolBuilder() {
-      @Override
-      public AzureNodePool build() {
-
-        if (super.osType == null) {
-          super.osType = AzureOsType.LINUX;
-        }
-
-        if (super.agentPoolMode == null) {
-          super.agentPoolMode = AzureAgentPoolMode.SYSTEM;
-        }
-
-        Collection<String> errors = getValidationErrors();
-
-        if (!errors.isEmpty()) {
-          throw new IllegalArgumentException(String.join("; ", errors));
-        }
-
-        return super.build();
-      }
-
-      public Collection<String> getValidationErrors() {
-        Collection<String> errors = new ArrayList<>();
-
-        if (isBlank(super.name)) {
-          errors.add(NAME_IS_BLANK);
-        }
-
-        if (!isBlank(super.name) && !super.name.matches(NAME_REGEX)) {
-          errors.add(NAME_ONLY_LOWERCASE_ALPHANUMERIC);
-        }
-
-        if (!isBlank(super.name) && super.osType == AzureOsType.LINUX && super.name.length() > 12) {
-          errors.add(LINUX_NAME_IS_TOO_LONG);
-        }
-
-        if (!isBlank(super.name) && super.osType == AzureOsType.WINDOWS && super.name.length() > 6) {
-          errors.add(WINDOWS_NAME_IS_TOO_LONG);
-        }
-
-        if (super.machineType == null) {
-          errors.add(MACHINE_TYPE_IS_NULL);
-        }
-
-        if (super.diskSizeGb != null && super.diskSizeGb < 30) {
-          errors.add(DISK_SIZE_UNDER_30GB);
-        }
-
-        if (super.agentPoolMode == AzureAgentPoolMode.SYSTEM && super.osType == AzureOsType.WINDOWS) {
-          errors.add(SYSTEM_POOL_MODE_WINDOWS);
-        }
-
-        if (super.initialNodeCount != null) {
-          validateIntegerInRange("InitialNodeCount", super.initialNodeCount, MIN_NUMBER_OF_NODES, MAX_NUMBER_OF_NODES, errors);
-        }
-
-        if (super.maxNodeCount != null) {
-          validateIntegerInRange("MaxNodeCount", super.maxNodeCount, MIN_NUMBER_OF_NODES, MAX_NUMBER_OF_NODES, errors);
-        }
-
-        if (super.minNodeCount != null) {
-          validateIntegerInRange("MinNodeCount", super.minNodeCount, MIN_NUMBER_OF_NODES, MAX_NUMBER_OF_NODES, errors);
-        }
-
-        if (super.maxPodsPerNode != null) {
-          validateIntegerInRange("MaxPodsPerNode", super.maxPodsPerNode, MIN_NUMBER_OF_PODS_PER_NODE, MAX_NUMBER_OF_PODS_PER_NODE, errors);
-        }
-
-        if (super.autoscalingEnabled) {
-          if (super.maxNodeCount == null) {
-            errors.add(MAX_NODE_COUNT_IS_NULL);
-          }
-
-          if (super.minNodeCount == null) {
-            errors.add(MIN_NODE_COUNT_IS_NULL);
-          }
-        }
-
-        return errors;
-      }
-    };
+    return new AzureNodePoolBuilder();
   }
 
+
   public static class AzureNodePoolBuilder {
+    private final AzureNodePool nodePool;
+    private final AzureNodePoolBuilder builder;
 
-    private SortedSet<String> nodeTaints;
-
-    public AzureNodePoolBuilder withNodeTaint(NodeTaint nodeTaint) {
-      if (nodeTaints == null) {
-        nodeTaints = new TreeSet<>();
-      }
-      nodeTaints.add(nodeTaint.toString());
-      return this;
+    public AzureNodePoolBuilder() {
+      this.nodePool = new AzureNodePool();
+      this.builder = this;
     }
 
-    public AzureNodePoolBuilder withNodeTaints(List<NodeTaint> nodeTaintList) {
-      if (CollectionUtils.isBlank(nodeTaintList)) {
-        return this;
+    public AzureNodePoolBuilder withDiskSizeGb(Integer diskSizeGb) {
+      nodePool.setDiskSizeGb(diskSizeGb);
+      return builder;
+    }
+
+    public AzureNodePoolBuilder withInitialNodeCount(Integer initialNodeCount) {
+      nodePool.setInitialNodeCount(initialNodeCount);
+      return builder;
+    }
+
+    public AzureNodePoolBuilder withMachineType(AzureMachineType machineType) {
+      nodePool.setMachineType(machineType);
+      return builder;
+    }
+
+    public AzureNodePoolBuilder withMaxNodeCount(Integer maxNodeCount) {
+      nodePool.setMaxNodeCount(maxNodeCount);
+      return builder;
+    }
+
+    public AzureNodePoolBuilder withMaxSurge(Integer maxSurge) {
+      nodePool.setMaxSurge(maxSurge);
+      return builder;
+    }
+
+    public AzureNodePoolBuilder withMinNodeCount(Integer minNodeCount) {
+      nodePool.setMinNodeCount(minNodeCount);
+      return builder;
+    }
+
+    public AzureNodePoolBuilder withName(String name) {
+      nodePool.setName(name);
+      return builder;
+    }
+
+    public AzureNodePoolBuilder withMaxPodsPerNode(Integer maxPodsPerNode) {
+      nodePool.setMaxPodsPerNode(maxPodsPerNode);
+      return builder;
+    }
+
+    public AzureNodePoolBuilder withOsType(AzureOsType osType) {
+      nodePool.setOsType(osType);
+      return builder;
+    }
+
+    public AzureNodePoolBuilder withAgentPoolMode(AzureAgentPoolMode agentPoolMode) {
+      nodePool.setAgentPoolMode(agentPoolMode);
+      return builder;
+    }
+
+    public AzureNodePoolBuilder withNodeTaint(NodeTaint nodeTaint) {
+      return withNodeTaints(List.of(nodeTaint));
+    }
+
+    public AzureNodePoolBuilder withNodeTaints(List<NodeTaint> nodeTaints) {
+      if (CollectionUtils.isBlank(nodeTaints)) {
+        return builder;
       }
 
-      if (nodeTaints == null) {
-        nodeTaints = new TreeSet<>();
+      if (nodePool.getNodeTaints() == null) {
+        nodePool.setNodeTaints(new TreeSet<>());
       }
 
-      for (var nodeTaint : nodeTaintList) {
-        nodeTaints.add(nodeTaint.toString());
+      nodeTaints.forEach(nodeTaint -> nodePool.getNodeTaints()
+          .add(nodeTaint.toString()));
+
+      return builder;
+    }
+
+    public AzureNodePoolBuilder withAutoscalingEnabled(boolean autoscalingEnabled) {
+      nodePool.setAutoscalingEnabled(autoscalingEnabled);
+      return builder;
+    }
+
+    public AzureNodePool build() {
+
+      if (nodePool.getOsType() == null) {
+        nodePool.setOsType(AzureOsType.LINUX);
       }
-      return this;
+
+      if (nodePool.getAgentPoolMode() == null) {
+        nodePool.setAgentPoolMode(AzureAgentPoolMode.SYSTEM);
+      }
+
+      var errors = nodePool.validate();
+
+      if (!errors.isEmpty()) {
+        throw new IllegalArgumentException(String.format("AzureNodePool validation failed. Errors: %s",
+            Arrays.toString(errors.toArray())));
+      }
+
+      return nodePool;
     }
   }
 
@@ -174,6 +162,18 @@ public class AzureNodePool implements Validatable {
 
     if (isBlank(this.name)) {
       errors.add(NAME_IS_BLANK);
+    }
+
+    if (!isBlank(this.name) && !this.name.matches(NAME_REGEX)) {
+      errors.add(NAME_ONLY_LOWERCASE_ALPHANUMERIC);
+    }
+
+    if (!isBlank(this.name) && this.osType == AzureOsType.LINUX && this.name.length() > 12) {
+      errors.add(LINUX_NAME_IS_TOO_LONG);
+    }
+
+    if (!isBlank(this.name) && this.osType == AzureOsType.WINDOWS && this.name.length() > 6) {
+      errors.add(WINDOWS_NAME_IS_TOO_LONG);
     }
 
     if (this.machineType == null) {
@@ -217,4 +217,3 @@ public class AzureNodePool implements Validatable {
     return errors;
   }
 }
-
