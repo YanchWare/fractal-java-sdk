@@ -1,5 +1,6 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
+import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.DnsZoneConfig;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -105,7 +106,6 @@ public class CaaSTraefik extends CaaSAPIGatewayImpl {
 
         /**
          * Forward Auth settings for Traefik
-         * 
          * For more details check <a href="https://doc.traefik.io/traefik/middlewares/http/forwardauth/">Traefik documentation</a>
          * @param forwardAuthSettings
          */
@@ -114,6 +114,11 @@ public class CaaSTraefik extends CaaSAPIGatewayImpl {
             component.setOidcIssuerUrl(forwardAuthSettings.getOidcIssuer());
             component.setOidcClientSecretId(forwardAuthSettings.getOidcClientSecretId());
             component.setForwardAuthSecretId(forwardAuthSettings.getForwardAuthSecretId());
+            return builder;
+        }
+
+        public TraefikBuilder withDnsZoneConfig(DnsZoneConfig dnsZoneConfig) {
+            component.setDnsZoneConfig(dnsZoneConfig);
             return builder;
         }
 

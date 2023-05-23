@@ -57,8 +57,16 @@ class DnsZoneTest {
     var isDnsZonePrivate = true;
 
     var dnsRecords = List.of(
-        new AaaaRecord("aaaaRecord", "1.2.3.4", Duration.ofMinutes(1)),
-        new PtrRecord("name", List.of(""), Duration.ofMinutes(1))
+        DnsAaaaRecord.builder()
+            .withName("aaaaRecord")
+            .withIpV6Address("2001:db8:3333:4444:5555:6666:7777:8888")
+            .withTtl(Duration.ofMinutes(1))
+            .build(),
+        DnsPtrRecord.builder()
+            .withName("name")
+            .withDomainNames(List.of(""))
+            .withTtl(Duration.ofMinutes(1))
+            .build()
     );
 
     var parametersMap = new HashMap<String, Object>();

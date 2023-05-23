@@ -17,6 +17,7 @@ public abstract class CaaSComponent extends Component {
 
   private String containerPlatform;
   private String namespace;
+  private DnsZoneConfig dnsZoneConfig;
 
   private String getNamespaceIsNullOrEmptyErrorMessage() {
     return String.format("[%s Validation] Namespace has not been defined and it is required", this.getClass().getSimpleName());

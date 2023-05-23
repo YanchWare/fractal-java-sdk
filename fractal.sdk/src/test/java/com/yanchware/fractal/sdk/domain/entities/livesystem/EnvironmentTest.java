@@ -1,9 +1,9 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem;
 
 import com.yanchware.fractal.sdk.aggregates.Environment;
-import com.yanchware.fractal.sdk.domain.entities.environment.AaaaRecord;
+import com.yanchware.fractal.sdk.domain.entities.environment.DnsAaaaRecord;
+import com.yanchware.fractal.sdk.domain.entities.environment.DnsPtrRecord;
 import com.yanchware.fractal.sdk.domain.entities.environment.DnsZone;
-import com.yanchware.fractal.sdk.domain.entities.environment.PtrRecord;
 import com.yanchware.fractal.sdk.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 
@@ -47,8 +47,16 @@ public class EnvironmentTest {
             DnsZone.builder()
                 .withName("dns.name")
                 .withRecords(List.of(
-                    new AaaaRecord("name", "1.2.3.4", Duration.ofMinutes(1)),
-                    new PtrRecord("name", List.of(""), Duration.ofMinutes(1))
+                    DnsAaaaRecord.builder()
+                        .withName("name")
+                        .withIpV6Address("2001:db8:3333:4444:CCCC:DDDD:EEEE:FFFF")
+                        .withTtl(Duration.ofMinutes(1))
+                        .build(),
+                    DnsPtrRecord.builder()
+                        .withName("name")
+                        .withDomainName("")
+                        .withTtl(Duration.ofMinutes(1))
+                        .build()
                 ))
                 .withParameter("key", "value")
                 .isPrivate(false)

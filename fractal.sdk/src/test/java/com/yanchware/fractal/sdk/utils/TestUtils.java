@@ -1,6 +1,7 @@
 package com.yanchware.fractal.sdk.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.yanchware.fractal.sdk.aggregates.Environment;
@@ -386,6 +387,18 @@ public class TestUtils {
       log.debug(json);
 
       return json;
+    } catch (JsonProcessingException e) {
+      log.error("Error when trying to process: {}", obj, e);
+      return null;
+    }
+  }
+
+  public static JsonNode getJsonNodeRepresentation(Object obj) {
+    try {
+      ObjectMapper objectMapper = new ObjectMapper();
+      objectMapper.registerModule(new JavaTimeModule());
+      var json = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(obj);
+      return objectMapper.readTree(json);
     } catch (JsonProcessingException e) {
       log.error("Error when trying to process: {}", obj, e);
       return null;

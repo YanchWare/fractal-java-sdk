@@ -1,6 +1,5 @@
 package com.yanchware.fractal.sdk;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
