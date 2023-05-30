@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -56,7 +57,7 @@ class DnsZoneTest {
 
     var isDnsZonePrivate = true;
 
-    var dnsRecords = List.of(
+    var dnsRecords = Map.of("componentId", List.of(
         DnsAaaaRecord.builder()
             .withName("aaaaRecord")
             .withIpV6Address("2001:db8:3333:4444:5555:6666:7777:8888")
@@ -67,7 +68,7 @@ class DnsZoneTest {
             .withDomainNames(List.of(""))
             .withTtl(Duration.ofMinutes(1))
             .build()
-    );
+    ));
 
     var parametersMap = new HashMap<String, Object>();
     parametersMap.put("resourceGroup", "rg-dns-zone");

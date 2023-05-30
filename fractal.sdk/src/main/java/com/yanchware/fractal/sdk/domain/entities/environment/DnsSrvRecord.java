@@ -15,8 +15,8 @@ import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor
 public class DnsSrvRecord extends DnsRecord {
-  private final String DOMAIN_NAME_NOT_VALID_PATTERN = "The domainName value ['%s'], concatenated with its zone name, must contain no more than 253 characters, excluding a trailing period. It must be between 2 and 34 labels. Each label must only contain letters, numbers, underscores, and/or dashes. Each label should be separated from other labels by a period. Each label must contain between 1 and 63 characters.";
-  private final String DOMAIN_NAME_LABEL_NOT_VALID_PATTERN = "The domainName ['%s'] label must contain between 1 and 63 characters";
+  private final static String DOMAIN_NAME_NOT_VALID_PATTERN = "The domainName value ['%s'], concatenated with its zone name, must contain no more than 253 characters, excluding a trailing period. It must be between 2 and 34 labels. Each label must only contain letters, numbers, underscores, and/or dashes. Each label should be separated from other labels by a period. Each label must contain between 1 and 63 characters.";
+  private final static String DOMAIN_NAME_LABEL_NOT_VALID_PATTERN = "The domainName ['%s'] label must contain between 1 and 63 characters";
 
   private List<DnsSrvRecordData> recordData;
 

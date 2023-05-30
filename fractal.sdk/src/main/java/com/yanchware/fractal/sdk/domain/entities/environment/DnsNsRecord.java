@@ -11,14 +11,14 @@ import java.util.Collection;
 import java.util.List;
 
 import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
-import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidLettersNumbersUnderscoresDashesAndPeriods;
+import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidLettersNumbersUnderscoresDashesAndPeriodsAndPeriodIsNotRequired;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor
 public class DnsNsRecord extends DnsRecord {
-  private final String NAME_SERVER_NOT_VALID_PATTERN = "The nameServer value ['%s'], concatenated with its zone name, must contain no more than 253 characters, excluding a trailing period. It must be between 2 and 34 labels. Each label must only contain letters, numbers, underscores, and/or dashes. Each label should be separated from other labels by a period. Each label must contain between 1 and 63 characters.";
-  private final String NAME_SERVER_LABEL_NOT_VALID_PATTERN = "The nameServer ['%s'] label must contain between 1 and 63 characters";
+  private final static String NAME_SERVER_NOT_VALID_PATTERN = "The nameServer value ['%s'], concatenated with its zone name, must contain no more than 253 characters, excluding a trailing period. It must be between 2 and 34 labels. Each label must only contain letters, numbers, underscores, and/or dashes. Each label should be separated from other labels by a period. Each label must contain between 1 and 63 characters.";
+  private final static String NAME_SERVER_LABEL_NOT_VALID_PATTERN = "The nameServer ['%s'] label must contain between 1 and 63 characters";
 
   private List<String> nameServers;
 
@@ -66,7 +66,7 @@ public class DnsNsRecord extends DnsRecord {
 
     if (!isBlank(nameServers)) {
       for (var nameServer : nameServers) {
-        var hasValidCharacters = isValidLettersNumbersUnderscoresDashesAndPeriods(nameServer);
+        var hasValidCharacters = isValidLettersNumbersUnderscoresDashesAndPeriodsAndPeriodIsNotRequired(nameServer);
 
         if (nameServer.contains(".")) {
           for (String label : nameServer.split("\\.")) {

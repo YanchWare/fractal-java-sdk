@@ -1,13 +1,15 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Map;
 
 
 @Getter
+@NoArgsConstructor
 public class AzureResource extends AzureProxyResource {
-  private final AzureResourceGroup azureResourceGroup;
+  private AzureResourceGroup azureResourceGroup;
 
   public AzureResource(String name, 
                      AzureRegion region, 

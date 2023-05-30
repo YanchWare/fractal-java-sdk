@@ -1,6 +1,7 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.ExtendableEnum;
 
 import java.util.Collection;
@@ -30,6 +31,7 @@ public class AzureWebAppWindowsRuntimeStack extends ExtendableEnum<AzureWebAppWi
   }
 
   @JsonCreator
+  @JsonValue
   public static AzureWebAppWindowsRuntimeStack fromString(String name) {
     return fromString(name, AzureWebAppWindowsRuntimeStack.class);
   }

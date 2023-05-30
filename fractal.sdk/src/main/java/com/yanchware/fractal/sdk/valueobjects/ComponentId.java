@@ -1,6 +1,7 @@
 package com.yanchware.fractal.sdk.valueobjects;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +12,7 @@ import java.util.regex.Pattern;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Data
+@NoArgsConstructor
 public class ComponentId {
     
     protected final static Integer MIN_LENGTH = 3;
@@ -22,7 +24,8 @@ public class ComponentId {
     protected final static String ID_LENGTH_MISMATCH_TEMPLATE =
         "Component id '%s' is illegal. A valid component Id must be between " +  MIN_LENGTH + 
             " and " + MAX_LENGTH + " characters of length";
-    private final String value;
+    
+    private String value;
 
     protected ComponentId(String value) {
         Collection<String> validationErrors = validate(value);

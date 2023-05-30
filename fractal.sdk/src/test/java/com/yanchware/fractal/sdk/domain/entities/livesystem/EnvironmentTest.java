@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -46,7 +47,7 @@ public class EnvironmentTest {
         .withDnsZone(
             DnsZone.builder()
                 .withName("dns.name")
-                .withRecords(List.of(
+                .withRecords(Map.of("componentId", List.of(
                     DnsAaaaRecord.builder()
                         .withName("name")
                         .withIpV6Address("2001:db8:3333:4444:CCCC:DDDD:EEEE:FFFF")
@@ -57,7 +58,7 @@ public class EnvironmentTest {
                         .withDomainName("")
                         .withTtl(Duration.ofMinutes(1))
                         .build()
-                ))
+                )))
                 .withParameter("key", "value")
                 .isPrivate(false)
                 .build())

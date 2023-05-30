@@ -11,5 +11,7 @@ public final class DnsRecordConstants {
   public static final String PTR_DNS_RECORD_TYPE = "PTR";
   public static final String SRV_DNS_RECORD_TYPE = "SRV";
   public static final String TXT_DNS_RECORD_TYPE = "TXT";
+
+  public final static String DNS_ZONES_PARAM_KEY = "dnsZones";
 }
 

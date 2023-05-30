@@ -3,6 +3,7 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 import com.yanchware.fractal.sdk.domain.entities.Validatable;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -20,13 +21,14 @@ import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLengt
  */
 
 @Getter
+@NoArgsConstructor
 public class AzureAppServicePlan extends AzureResource implements Validatable {
 
   private final static String NAME_NOT_VALID = "[AzureAppServicePlan Validation] The name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen, and must be less than or equal to 40 characters";
-  private final AzureOsType operatingSystem;
-  private final AzurePricingPlan pricingPlan;
-  private final Boolean zoneRedundancyEnabled;
-  private final Integer numberOfWorkers;
+  private AzureOsType operatingSystem;
+  private AzurePricingPlan pricingPlan;
+  private Boolean zoneRedundancyEnabled;
+  private Integer numberOfWorkers;
 
   public AzureAppServicePlan(String name, 
                              AzureRegion region, 

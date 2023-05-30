@@ -25,7 +25,7 @@ import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidLetter
 @JsonSubTypes({
     @JsonSubTypes.Type(value = DnsAaaaRecord.class, name = AAAA_DNS_RECORD_TYPE),
     @JsonSubTypes.Type(value = DnsARecord.class, name = A_DNS_RECORD_TYPE),
-    @JsonSubTypes.Type(value = DnsCaaRecordData.class, name = CAA_DNS_RECORD_TYPE),
+    @JsonSubTypes.Type(value = DnsCaaRecord.class, name = CAA_DNS_RECORD_TYPE),
     @JsonSubTypes.Type(value = DnsCNameRecord.class, name = CNAME_DNS_RECORD_TYPE),
     @JsonSubTypes.Type(value = DnsMxRecord.class, name = MX_DNS_RECORD_TYPE),
     @JsonSubTypes.Type(value = DnsNsRecord.class, name = NS_DNS_RECORD_TYPE),

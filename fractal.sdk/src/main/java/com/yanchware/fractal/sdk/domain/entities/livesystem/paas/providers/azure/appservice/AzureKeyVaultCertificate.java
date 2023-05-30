@@ -4,6 +4,7 @@ import com.yanchware.fractal.sdk.domain.entities.Validatable;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureProxyResource;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,11 +17,13 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
   Private key certificates (.pfx) can be used for TLS/SSL bindings and can be loaded to the certificate store for your app to consume. 
  */
 @Getter
+@NoArgsConstructor
 public class AzureKeyVaultCertificate extends AzureProxyResource implements Validatable {
   private final static String KEY_VAULT_ID_IS_BLANK = "[AzureKeyVaultCertificate Validation] KeyVaultId has not been defined and it is required";
   private final static String NAME_IS_BLANK = "[AzureKeyVaultCertificate Validation] Name has not been defined and it is required";
-  private final String keyVaultId;
-  private final String password;
+  
+  private String keyVaultId;
+  private String password;
 
   public AzureKeyVaultCertificate(String name,
                                   AzureRegion region,

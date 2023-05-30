@@ -11,21 +11,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidLettersNumbersUnderscoresDashesAndPeriods;
+import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidLettersNumbersUnderscoresDashesAndPeriodsAndPeriodIsNotRequired;
 
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor
 public class DnsSrvRecordData implements Validatable {
-  private final String PRIORITY_NOT_VALID = "The priority value must be less than or equal to 65535";
-  private final String WEIGHT_NOT_VALID = "The weight value must be less than or equal to 65535";
-  private final String PORT_NOT_VALID = "The port value must be less than or equal to 65535";
-  private final String TARGET_NOT_VALID = "The target value, concatenated with its zone name, must contain no more than 253 characters, excluding a trailing period. It must be between 2 and 34 labels. Each label must only contain letters, numbers, underscores, and/or dashes. Each label should be separated from other labels by a period. Each label must contain between 1 and 63 characters.";
-  private final String TARGET_LABEL_NOT_VALID = "The target label must contain between 1 and 63 characters";
-  private final String SERVICE_NOT_DEFINED = "Service has not been defined and it is required";
-  private final String PROTOCOL_NAME_NOT_DEFINED= "ProtocolName has not been defined and it is required";
-  private final String TARGET_NOT_DEFINED= "Target has not been defined and it is required";
+  private final static String PRIORITY_NOT_VALID = "The priority value must be less than or equal to 65535";
+  private final static String WEIGHT_NOT_VALID = "The weight value must be less than or equal to 65535";
+  private final static String PORT_NOT_VALID = "The port value must be less than or equal to 65535";
+  private final static String TARGET_NOT_VALID = "The target value, concatenated with its zone name, must contain no more than 253 characters, excluding a trailing period. It must be between 2 and 34 labels. Each label must only contain letters, numbers, underscores, and/or dashes. Each label should be separated from other labels by a period. Each label must contain between 1 and 63 characters.";
+  private final static String TARGET_LABEL_NOT_VALID = "The target label must contain between 1 and 63 characters";
+  private final static String SERVICE_NOT_DEFINED = "Service has not been defined and it is required";
+  private final static String PROTOCOL_NAME_NOT_DEFINED= "ProtocolName has not been defined and it is required";
+  private final static String TARGET_NOT_DEFINED= "Target has not been defined and it is required";
 
   private String service; 
   private String protocolName; 
@@ -116,7 +116,7 @@ public class DnsSrvRecordData implements Validatable {
     if(StringUtils.isBlank(target)) {
       errors.add(TARGET_NOT_DEFINED);
     } else {
-      var hasValidCharacters = isValidLettersNumbersUnderscoresDashesAndPeriods(target);
+      var hasValidCharacters = isValidLettersNumbersUnderscoresDashesAndPeriodsAndPeriodIsNotRequired(target);
 
       if (target.contains(".")) {
         Arrays.stream(target.split("\\."))

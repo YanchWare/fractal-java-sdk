@@ -17,11 +17,11 @@ import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidLetter
 @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor
 public class DnsCaaRecordData implements Validatable {
-  private final String FLAGS_NOT_VALID = "The Flags value must be between 0 and 255";
-  private final String TAG_NOT_DEFINED = "The tag has not been defined and it is required";
-  private final String TAG_NOT_VALID = "The Tag value must have a length of at most 15. It must contain characters 'a' through 'z', 'A' through 'Z', and the numbers 0 through 9";
-  private final String VALUE_NOT_DEFINED = "The value has not been defined and it is required";
-  private final String VALUE_NOT_VALID = "The value must have a length of at most 1024";
+  private final static String FLAGS_NOT_VALID = "The Flags value must be between 0 and 255";
+  private final static String TAG_NOT_DEFINED = "The tag has not been defined and it is required";
+  private final static String TAG_NOT_VALID = "The Tag value must have a length of at most 15. It must contain characters 'a' through 'z', 'A' through 'Z', and the numbers 0 through 9";
+  private final static String VALUE_NOT_DEFINED = "The value has not been defined and it is required";
+  private final static String VALUE_NOT_VALID = "The value must have a length of at most 1024";
   
   public int flags;
   public String tag;

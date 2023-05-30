@@ -16,7 +16,7 @@ import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor
 public class DnsTxtRecord extends DnsRecord {
-  private final String VALUES_NOT_VALID = "The combined length of all TXT records in a record set may not exceed 1024 characters";
+  private final static String VALUES_NOT_VALID = "The combined length of all TXT records in a record set may not exceed 1024 characters";
 
   private List<String> values;
 

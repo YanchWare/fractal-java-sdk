@@ -1,5 +1,6 @@
 package com.yanchware.fractal.sdk.domain.entities.environment;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,11 +10,13 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import static com.yanchware.fractal.sdk.domain.entities.environment.DnsRecordConstants.AAAA_DNS_RECORD_TYPE;
 import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidIpV6Address;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @NoArgsConstructor
+@JsonTypeName(AAAA_DNS_RECORD_TYPE)
 public class DnsAaaaRecord extends DnsRecord {
   private final static String IP_V6_ADDRESS_NOT_VALID = "[DnsAaaaRecord Validation] ipV6Address does not contain a valid IP v6 address";
   
