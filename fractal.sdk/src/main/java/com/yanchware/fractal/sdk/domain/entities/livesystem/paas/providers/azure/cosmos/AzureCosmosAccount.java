@@ -8,8 +8,8 @@ import java.util.Collection;
 public interface AzureCosmosAccount extends AzureResourceEntity {
 
   <C extends Component & AzureCosmosEntity> Collection<C> getCosmosEntities();
-  int getMaxTotalThroughput();
-  void setMaxTotalThroughput(int maxTotalThroughput);
+  Integer getMaxTotalThroughput();
+  void setMaxTotalThroughput(Integer maxTotalThroughput);
   AzureCosmosBackupPolicy getBackupPolicy();
   void setBackupPolicy(AzureCosmosBackupPolicy backupPolicy);
   

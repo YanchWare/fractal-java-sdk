@@ -171,6 +171,32 @@ public abstract class CosmosAccountTest<T extends AzureCosmosAccountBuilder<?, ?
   }
 
   @Test
+  public void typeIsAsExpected_when_BuiltWithoutEntitiesAndMaxTotalThroughputInRegionAndResourceGroup() {
+    var builder = getBuilder()
+        .withId("a-legal-id")
+        .withBackupPolicy(AzureCosmosBackupPolicy.builder()
+            .withBackupPolicyType(AzureCosmosBackupPolicyType.PERIODIC)
+            .withBackupIntervalInMinutes(60)
+            .withBackupRetentionIntervalInHours(8)
+            .withBackupStorageRedundancy(BackupStorageRedundancy.GEO)
+            .build())
+        .withRegion(AzureRegion.ASIA_EAST)
+        .withAzureResourceGroup(
+            AzureResourceGroup.builder()
+                .withName(a(String.class))
+                .withRegion(AzureRegion.ASIA_SOUTHEAST)
+                .build());
+
+    var component = builder.build();
+
+    assertThat(component.getType()).isEqualTo(getExpectedType());
+    assertThat(component)
+        .asInstanceOf(InstanceOfAssertFactories.type(AzureCosmosAccount.class))
+        .extracting(AzureCosmosAccount::getCosmosEntities, AzureCosmosAccount::getMaxTotalThroughput)
+        .containsExactly(Collections.EMPTY_LIST, null);
+  }
+
+  @Test
   public void typeIsAsExpected_when_BuiltWithEntities() {
     var accountId = "a-legal-id";
     var entities = getValidCosmosEntities();

@@ -29,7 +29,7 @@ public class AzureCosmosPostgreSqlDbms extends PaaSRelationalDbms implements Liv
 
 
   private String name;
-  private int maxTotalThroughput;
+  private Integer maxTotalThroughput;
   private String publicNetworkAccess;
   private AzureRegion azureRegion;
   private AzureResourceGroup azureResourceGroup;
