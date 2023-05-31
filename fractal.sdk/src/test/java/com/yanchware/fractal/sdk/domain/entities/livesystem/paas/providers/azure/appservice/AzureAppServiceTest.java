@@ -114,12 +114,10 @@ public class AzureAppServiceTest {
 
   @Test
   public void exceptionThrown_when_mixingJavaAndDotnetHosting() {
-    var builder = generateSampleBuilder()
-        .withConfiguration(AzureWebAppConfiguration.builder()
+    var builder = AzureWebAppConfiguration.builder()
             .withDotnetVersion("DOTNETCORE:7.0")
-            .withJavaVersion("JAVA:17-java17")
-            .build()
-        );
+            .withJavaVersion("JAVA:17-java17");
+    
     assertThatThrownBy(builder::build).
         isInstanceOf(IllegalArgumentException.class).
         hasMessageContaining("Only one hosting configuration can be set. [DOTNET] has already been set");
@@ -127,12 +125,10 @@ public class AzureAppServiceTest {
 
   @Test
   public void exceptionThrown_when_mixingJavaAndPhpHosting() {
-    var builder = generateSampleBuilder()
-        .withConfiguration(AzureWebAppConfiguration.builder()
+    var builder = AzureWebAppConfiguration.builder()
             .withJavaVersion("JAVA:17-java17")
-            .withPhpVersion("PHP:8.1")
-            .build()
-        );
+            .withPhpVersion("PHP:8.1");
+    
     assertThatThrownBy(builder::build).
         isInstanceOf(IllegalArgumentException.class).
         hasMessageContaining("Only one hosting configuration can be set. [JAVA] has already been set]");
@@ -182,11 +178,9 @@ public class AzureAppServiceTest {
 
   @Test
   public void exceptionThrown_when_missingJavaContainerVersionHosting() {
-    var builder = generateSampleBuilder()
-        .withConfiguration(AzureWebAppConfiguration.builder()
-            .withJavaContainer("xxx")
-            .build()
-        );
+    var builder = AzureWebAppConfiguration.builder()
+            .withJavaContainer("xxx");
+    
     assertThatThrownBy(builder::build).
         isInstanceOf(IllegalArgumentException.class).
         hasMessageContaining("Incomplete hosting types definition. Both [javaContainer] and [javaContainerVersion] must be set");
@@ -194,11 +188,9 @@ public class AzureAppServiceTest {
 
   @Test
   public void exceptionThrown_when_missingJavaContainerHosting() {
-    var builder = generateSampleBuilder()
-        .withConfiguration(AzureWebAppConfiguration.builder()
-            .withJavaContainerVersion("yyy")
-            .build()
-        );
+    var builder = AzureWebAppConfiguration.builder()
+            .withJavaContainerVersion("yyy");
+    
     assertThatThrownBy(builder::build).
         isInstanceOf(IllegalArgumentException.class).
         hasMessageContaining("Incomplete hosting types definition. Both [javaContainer] and [javaContainerVersion] must be set");

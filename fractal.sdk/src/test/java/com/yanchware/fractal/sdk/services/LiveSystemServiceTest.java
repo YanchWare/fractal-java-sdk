@@ -2,7 +2,6 @@ package com.yanchware.fractal.sdk.services;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
-import com.yanchware.fractal.sdk.configuration.EnvVarSdkConfiguration;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemId;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
@@ -17,9 +16,7 @@ import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
 import com.yanchware.fractal.sdk.utils.StringHandler;
 import io.github.resilience4j.retry.RetryRegistry;
 import org.junit.jupiter.api.Test;
-import org.junitpioneer.jupiter.SetEnvironmentVariable;
 
-import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.util.List;
 
@@ -95,30 +92,7 @@ public class LiveSystemServiceTest {
             .build())))
         .build();
   }
-
-
-  @SetEnvironmentVariable(key = "IS_LOCAL_DEBUG", value = "false")
-  @SetEnvironmentVariable(key = "CLIENT_ID", value = "targit-cicd")
-  @SetEnvironmentVariable(key = "CLIENT_SECRET", value = "HoIgRJm6AEahBnO1RDlNrm0Ip7UZvHv")
-  @SetEnvironmentVariable(key = "BLUEPRINT_ENDPOINT", value = "https://api.fractal.cloud/blueprints")
-  @SetEnvironmentVariable(key = "LIVESYSTEM_ENDPOINT", value = "https://api.fractal.cloud/livesystems")
-  @Test
-  public void urlPathMatching_when_getRequestToLiveSystemMutation2() throws InstantiatorException, URISyntaxException {
-    HttpClient httpClient = HttpClient.newBuilder()
-        .version(HttpClient.Version.HTTP_2)
-        .build();
-    SdkConfiguration sdkConfiguration = new EnvVarSdkConfiguration();
-    var liveSystemService = new LiveSystemService(httpClient, sdkConfiguration, RetryRegistry.ofDefaults());
-    
-
-    liveSystemService.checkLiveSystemMutationStatus(
-        new LiveSystemId("targit-cloud-non-production/NonProduction-Environment"),
-        "98a086a8-dd72-4cce-bf6d-5a36b5379985");
-
-    verify(getRequestedFor(urlPathEqualTo("/livesystems/resourceGroupId/livesystem-name/mutations/mutation-id")));
-  }
-
-
+  
   private EnvironmentDto getEnvironment() {
     return new EnvironmentDto(
         "prod",

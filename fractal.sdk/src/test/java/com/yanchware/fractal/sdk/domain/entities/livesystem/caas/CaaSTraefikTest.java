@@ -43,7 +43,7 @@ class CaaSTraefikTest extends TestWithFixture {
 
   @Test
   public void exceptionThrown_when_ambassadorCreatedWithNullEntryPoints() {
-    var traefikBuilder = traefikBuilder().withEntryPoints(null);
+    var traefikBuilder = traefikBuilderWithoutEntryPoints().withEntryPoints(null);
     
     assertThatThrownBy(traefikBuilder::build)
       .isInstanceOf(IllegalArgumentException.class)
@@ -52,7 +52,8 @@ class CaaSTraefikTest extends TestWithFixture {
 
   @Test
   public void exceptionThrown_when_ambassadorCreatedWithEmptyEntryPoints() {
-    var traefikBuilder = traefikBuilder().withEntryPoints(new ArrayList<>());
+    var traefikBuilder = traefikBuilderWithoutEntryPoints()
+        .withEntryPoints(new ArrayList<>());
 
     assertThatThrownBy(traefikBuilder::build)
       .isInstanceOf(IllegalArgumentException.class)
@@ -133,13 +134,16 @@ class CaaSTraefikTest extends TestWithFixture {
   }
 
   private CaaSTraefik.TraefikBuilder traefikBuilder() {
-    return CaaSTraefik.builder()
-      .withId("traefik")
-      .withNamespace(a(String.class))
-      .withHostname(a(String.class))
+    return traefikBuilderWithoutEntryPoints()
       .withEntryPoints(aListOf(TraefikEntryPoint.class));
   }
 
+  private CaaSTraefik.TraefikBuilder traefikBuilderWithoutEntryPoints() {
+    return CaaSTraefik.builder()
+        .withId("traefik")
+        .withNamespace(a(String.class))
+        .withHostname(a(String.class));
+  }
   private CaaSTraefik.TraefikBuilder traefikBuilderWithForwardAuth() {
     return traefikBuilder()
       .withForwardAuth(new ForwardAuthSettings(
