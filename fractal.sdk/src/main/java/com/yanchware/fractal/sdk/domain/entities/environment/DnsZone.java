@@ -8,7 +8,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
-import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidLettersNumbersUnderscoresDashesAndPeriods;
 
 @Getter
@@ -18,7 +17,7 @@ public class DnsZone implements Validatable {
 
   private String name;
   private boolean isPrivate;
-  private Collection<DnsRecord> records;
+  private Map<String, Collection<DnsRecord>> records;
   private Map<String, Object> parameters;
 
   public static DnsZoneBuilder builder() {
@@ -44,35 +43,56 @@ public class DnsZone implements Validatable {
       return builder;
     }
 
-    public DnsZoneBuilder withRecord(DnsRecord dnsRecord) {
-      return withRecords(List.of(dnsRecord));
+    public DnsZoneBuilder withRecord(String componentId, DnsRecord dnsRecord) {
+      if (dnsZone.getRecords() == null) {
+        dnsZone.setRecords(new HashMap<>());
+      }
+
+      if (!dnsZone.getRecords().containsKey(componentId)) {
+        dnsZone.getRecords().put(componentId, new ArrayList<>());
+      }
+      
+      dnsZone.getRecords().get(componentId).add(dnsRecord);
+
+      return builder;
     }
 
-    public DnsZoneBuilder withRecords(Collection<? extends DnsRecord> dnsRecords) {
-      if (isBlank(dnsRecords)) {
+    public DnsZoneBuilder withRecord(String componentId, List<DnsRecord> dnsRecords) {
+      dnsRecords.forEach(dnsRecord -> withRecord(componentId, dnsRecord));
+
+      return builder;
+    }
+
+    public DnsZoneBuilder withRecords(Map<? extends String, ? extends Collection<DnsRecord>> dnsRecordsMap) {
+      if (dnsRecordsMap.isEmpty()) {
         return builder;
       }
 
-      if (dnsZone.getRecords() == null) {
-        dnsZone.setRecords(new ArrayList<>());
-      }
+      dnsRecordsMap.forEach((key, value) -> {
+        for (var dnsRecord : value) {
+          withRecord(key, dnsRecord);
+        }
+      });
 
-      dnsZone.getRecords().addAll(dnsRecords);
       return builder;
     }
 
     public DnsZoneBuilder withParameters(Map<String, Object> parameters) {
-      dnsZone.setParameters(parameters);
+      if (parameters.isEmpty()) {
+        return builder;
+      }
+
+      if (dnsZone.getParameters() == null) {
+        dnsZone.setParameters(new HashMap<>());
+      }
+
+      parameters.forEach((key, value) -> dnsZone.getParameters().put(key, value));
+
       return builder;
     }
 
     public DnsZoneBuilder withParameter(String key, Object value) {
-      if (dnsZone.getParameters() == null) {
-        withParameters(new HashMap<>());
-      }
-
-      dnsZone.getParameters().put(key, value);
-      return builder;
+      return withParameters(Map.of(key, value));
     }
 
     public DnsZone build() {
@@ -104,6 +124,8 @@ public class DnsZone implements Validatable {
       if (!hasValidCharacters || nameWithoutTrailingPeriod.length() > 253) {
         errors.add(NAME_NOT_VALID);
       }
+
+
     }
 
     return errors;

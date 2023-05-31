@@ -1,6 +1,7 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.ExtendableEnum;
 
 import java.util.Collection;
@@ -35,10 +36,12 @@ public final class AzureWebAppLinuxRuntimeStack extends ExtendableEnum<AzureWebA
   public static final AzureWebAppLinuxRuntimeStack TOMCAT_8_5_JRE_8 = fromString("TOMCAT|8.5-jre8");
   public static final AzureWebAppLinuxRuntimeStack GO_1_19 = fromString("GO|1.19");
   public static final AzureWebAppLinuxRuntimeStack GO_1_18 = fromString("GO|1.18");
+  
   public AzureWebAppLinuxRuntimeStack() {
   }
 
   @JsonCreator
+  @JsonValue
   public static AzureWebAppLinuxRuntimeStack fromString(String name) {
     return fromString(name, AzureWebAppLinuxRuntimeStack.class);
   }

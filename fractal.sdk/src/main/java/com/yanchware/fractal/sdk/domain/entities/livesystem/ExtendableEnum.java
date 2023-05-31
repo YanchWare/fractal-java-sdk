@@ -1,6 +1,8 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.Getter;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -9,9 +11,13 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Getter
 public abstract class ExtendableEnum<T extends ExtendableEnum<T>> {
   private static final Map<Class<?>, ConcurrentHashMap<String, ? extends ExtendableEnum<?>>> VALUES = new ConcurrentHashMap<>();
+
   private String name;
+  
+  @JsonIgnore
   private Class<T> clazz;
 
   protected static <T extends ExtendableEnum<T>> T fromString(String name, Class<T> clazz) {

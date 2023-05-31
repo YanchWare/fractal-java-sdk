@@ -3,8 +3,8 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSWorkload;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.CustomWorkload;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.CustomWorkloadBuilder;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.CustomWorkloadRole;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemComponent;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.CustomWorkloadRole;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureOsType;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceEntity;

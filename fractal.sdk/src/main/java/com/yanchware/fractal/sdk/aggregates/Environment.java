@@ -1,20 +1,22 @@
 package com.yanchware.fractal.sdk.aggregates;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.domain.entities.Validatable;
 import com.yanchware.fractal.sdk.domain.entities.environment.DnsZone;
+import com.yanchware.fractal.sdk.utils.SerializationUtils;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.*;
 
+import static com.yanchware.fractal.sdk.domain.entities.environment.DnsRecordConstants.DNS_ZONES_PARAM_KEY;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
 public class Environment implements Validatable {
   private final static String ID_IS_NULL = "Environment id has not been defined and it is required";
-  private final static String DNS_ZONES_PARAM_KEY = "dnsZones";
   private final static String IS_PRIVATE_PARAM_KEY = "isPrivate";
   private final static String RECORDS_PARAM_KEY = "records";
   private final static String PARAMETERS_PARAM_KEY = "parameters";
@@ -70,28 +72,23 @@ public class Environment implements Validatable {
       return withDnsZones(List.of(dnsZone));
     }
 
-    public EnvironmentBuilder withDnsZones(List<DnsZone> dnsZones) {
+    public EnvironmentBuilder withDnsZones(Collection<DnsZone> dnsZones) {
       if (environment.parameters == null) {
         environment.parameters = new HashMap<>();
       }
-      for (var dnsZone : dnsZones) {
+      try {
+
         if (!environment.parameters.containsKey(DNS_ZONES_PARAM_KEY)) {
-          environment.parameters.put(DNS_ZONES_PARAM_KEY, new HashMap<String, Object>());
+          environment.parameters.put(DNS_ZONES_PARAM_KEY, 
+              SerializationUtils.deserialize(
+                  SerializationUtils.serialize(dnsZones), 
+                  DnsZone[].class));
         }
 
-        var dnsZonesMap = (Map<String, Object>) environment.parameters.get(DNS_ZONES_PARAM_KEY);
-        var dnsZoneName = dnsZone.getName();
-        if (!dnsZonesMap.containsKey(dnsZoneName)) {
-          dnsZonesMap.put(dnsZoneName, new HashMap<String, Object>());
-        }
-
-        //TODO: finalize
-        var dnsZoneMap = (HashMap<String, Object>) dnsZonesMap.get(dnsZoneName);
-        dnsZoneMap.put(IS_PRIVATE_PARAM_KEY, dnsZone.isPrivate());
-        dnsZoneMap.put(RECORDS_PARAM_KEY, dnsZone.getRecords());
-        dnsZoneMap.put(PARAMETERS_PARAM_KEY, dnsZone.getParameters());
-
+      } catch (JsonProcessingException e) {
+        throw new RuntimeException(e);
       }
+      
       return builder;
     }
 

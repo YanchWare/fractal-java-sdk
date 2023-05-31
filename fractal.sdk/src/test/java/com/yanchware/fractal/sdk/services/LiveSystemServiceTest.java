@@ -92,8 +92,7 @@ public class LiveSystemServiceTest {
             .build())))
         .build();
   }
-
-
+  
   private EnvironmentDto getEnvironment() {
     return new EnvironmentDto(
         "prod",

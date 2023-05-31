@@ -27,7 +27,7 @@ public class AzureCosmosTableDbms extends PaaSRelationalDbms implements LiveSyst
   private final static String NAME_NOT_VALID = "[AzureCosmosTableDbms Validation] The name must only contains lowercase letters, numbers, and hyphens. The name must not start or end in a hyphen and must be between 3 and 44 characters long";
 
   private String name;
-  private int maxTotalThroughput;
+  private Integer maxTotalThroughput;
 
   private String publicNetworkAccess;
   private Collection<AzureCosmosTableEntity> cosmosEntities;
