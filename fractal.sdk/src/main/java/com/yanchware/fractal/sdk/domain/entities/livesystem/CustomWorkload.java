@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public interface CustomWorkload {
   String getPrivateSSHKeyPassphraseSecretId();
@@ -31,6 +32,9 @@ public interface CustomWorkload {
 
   List<CustomWorkloadRole> getRoles();
   void setRoles(List<CustomWorkloadRole> roles);
+
+  Map<String, List<Object>> getDnsZoneConfig();
+  void setDnsZoneConfig(Map<String, List<Object>> getDnsZoneConfig);
 
   static Collection<String> validateCustomWorkload(CustomWorkload customWorkload, String workloadType){
     final var SSH_KEY_PASS_SECRET_IS_EMPTY_TEMPLATE = "[%s Validation] privateSSHKeyPassphraseSecretId is either empty or blank and it is required";
