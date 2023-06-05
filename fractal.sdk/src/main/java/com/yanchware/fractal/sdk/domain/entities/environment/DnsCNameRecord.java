@@ -18,7 +18,6 @@ import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidLetter
 public class DnsCNameRecord extends DnsRecord {
   private final static String ALIAS_NOT_VALID = "The alias value, concatenated with its zone name, must contain no more than 253 characters, excluding a trailing period. It must be between 2 and 34 labels. Each label must only contain letters, numbers, underscores, and/or dashes. Each label should be separated from other labels by a period. Each label must contain between 1 and 63 characters.";
   private final static String ALIAS_LABEL_NOT_VALID = "The alias label must contain between 1 and 63 characters";
-  private final static String ALIAS_NOT_DEFINED = "The alias has not been defined and it is required";
   
   private String alias;
 
@@ -55,9 +54,7 @@ public class DnsCNameRecord extends DnsRecord {
   public Collection<String> validate() {
     var errors = super.validate();
 
-    if(StringUtils.isBlank(alias)) {
-      errors.add(ALIAS_NOT_DEFINED);
-    } else {
+    if(StringUtils.isNotBlank(alias)) {
       var hasValidCharacters = isValidLettersNumbersUnderscoresDashesAndPeriodsAndPeriodIsNotRequired(alias);
 
       if (alias.contains(".")) {

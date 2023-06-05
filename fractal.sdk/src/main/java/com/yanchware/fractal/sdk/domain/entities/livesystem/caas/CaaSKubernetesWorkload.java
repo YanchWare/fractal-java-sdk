@@ -1,17 +1,17 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
 import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSWorkload;
+import com.yanchware.fractal.sdk.domain.entities.environment.DnsRecord;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.CustomWorkload;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.CustomWorkloadBuilder;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
+import com.yanchware.fractal.sdk.utils.SerializationUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.CAAS_K8S_WORKLOAD;
 
@@ -76,6 +76,39 @@ public class CaaSKubernetesWorkload extends CaaSWorkload implements LiveSystemCo
          */
         public KubernetesWorkloadBuilder withContainerPlatform(String containerPlatform) {
             component.setContainerPlatform(containerPlatform);
+            return builder;
+        }
+
+        public KubernetesWorkloadBuilder withDnsZoneConfig(String dnsZoneName, DnsRecord dnsRecord) {
+            if (component.getDnsZoneConfig() == null) {
+                component.setDnsZoneConfig(new HashMap<>());
+            }
+
+            if (!component.getDnsZoneConfig().containsKey(dnsZoneName)) {
+                component.getDnsZoneConfig().put(dnsZoneName, new ArrayList<>());
+            }
+
+            component.getDnsZoneConfig().get(dnsZoneName).add(SerializationUtils.convertValueToMap(dnsRecord));
+
+            return builder;
+        }
+
+        public KubernetesWorkloadBuilder withDnsZoneConfig(String dnsZoneName, Collection<DnsRecord> dnsRecords) {
+            dnsRecords.forEach(dnsRecord -> withDnsZoneConfig(dnsZoneName, dnsRecord));
+            return builder;
+        }
+
+        public KubernetesWorkloadBuilder withDnsZoneConfig(Map<? extends String, ? extends Collection<DnsRecord>> dnsRecordsMap) {
+            if (dnsRecordsMap.isEmpty()) {
+                return builder;
+            }
+
+            dnsRecordsMap.forEach((key, value) -> {
+                for (var dnsRecord : value) {
+                    withDnsZoneConfig(key, dnsRecord);
+                }
+            });
+
             return builder;
         }
 

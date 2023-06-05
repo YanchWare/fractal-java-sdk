@@ -1,6 +1,7 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice;
 
 import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSWorkload;
+import com.yanchware.fractal.sdk.domain.entities.environment.DnsRecord;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.CustomWorkload;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.CustomWorkloadBuilder;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemComponent;
@@ -12,6 +13,7 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.valueobjects.AzureAppServiceClientCertMode;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.valueobjects.AzureAppServiceRedundancyMode;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
+import com.yanchware.fractal.sdk.utils.SerializationUtils;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -76,6 +78,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
   private Collection<String> customDomains;
   private AzureOsType operatingSystem;
   private AzureWebAppRuntimeStack runtimeStack;
+  private Map<String, List<Object>> dnsZoneConfig;
 
 
   @Override
@@ -397,6 +400,39 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
 
     public AzureWebAppBuilder withRuntimeStack(AzureWebAppRuntimeStack runtimeStack) {
       component.setRuntimeStack(runtimeStack);
+      return builder;
+    }
+
+    public AzureWebAppBuilder withDnsZoneConfig(String dnsZoneName, DnsRecord dnsRecord) {
+      if (component.getDnsZoneConfig() == null) {
+        component.setDnsZoneConfig(new HashMap<>());
+      }
+
+      if (!component.getDnsZoneConfig().containsKey(dnsZoneName)) {
+        component.getDnsZoneConfig().put(dnsZoneName, new ArrayList<>());
+      }
+
+      component.getDnsZoneConfig().get(dnsZoneName).add(SerializationUtils.convertValueToMap(dnsRecord));
+
+      return builder;
+    }
+
+    public AzureWebAppBuilder withDnsZoneConfig(String dnsZoneName, Collection<DnsRecord> dnsRecords) {
+      dnsRecords.forEach(dnsRecord -> withDnsZoneConfig(dnsZoneName, dnsRecord));
+      return builder;
+    }
+
+    public AzureWebAppBuilder withDnsZoneConfig(Map<? extends String, ? extends Collection<DnsRecord>> dnsRecordsMap) {
+      if (dnsRecordsMap.isEmpty()) {
+        return builder;
+      }
+
+      dnsRecordsMap.forEach((key, value) -> {
+        for (var dnsRecord : value) {
+          withDnsZoneConfig(key, dnsRecord);
+        }
+      });
+
       return builder;
     }
   }
