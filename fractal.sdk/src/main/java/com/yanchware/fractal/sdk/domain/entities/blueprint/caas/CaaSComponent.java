@@ -45,21 +45,21 @@ public abstract class CaaSComponent extends Component {
     }
 
     if (dnsZoneConfig != null) {
-      for (var dnsZoneName : dnsZoneConfig.keySet()) {
-        if (StringUtils.isBlank(dnsZoneName)) {
-          errors.add(DNS_ZONE_NAME_NOT_VALID);
-        }
+      dnsZoneConfig.keySet()
+          .forEach(dnsZoneName -> {
+            if (isBlank(dnsZoneName)) {
+              errors.add(DNS_ZONE_NAME_NOT_VALID);
+            }
+            if (StringUtils.isNotBlank(dnsZoneName)) {
+              var nameWithoutTrailingPeriod = StringUtils.stripEnd(dnsZoneName, ".");
 
-        if (StringUtils.isNotBlank(dnsZoneName)) {
-          var nameWithoutTrailingPeriod = StringUtils.stripEnd(dnsZoneName, ".");
+              var hasValidCharacters = isValidLettersNumbersUnderscoresDashesAndPeriods(dnsZoneName);
 
-          var hasValidCharacters = isValidLettersNumbersUnderscoresDashesAndPeriods(dnsZoneName);
-
-          if (!hasValidCharacters || nameWithoutTrailingPeriod.length() > 253) {
-            errors.add(DNS_ZONE_NAME_NOT_VALID);
-          }
-        }
-      }
+              if (!hasValidCharacters || nameWithoutTrailingPeriod.length() > 253) {
+                errors.add(DNS_ZONE_NAME_NOT_VALID);
+              }
+            }
+          });
     }
 
     return errors;

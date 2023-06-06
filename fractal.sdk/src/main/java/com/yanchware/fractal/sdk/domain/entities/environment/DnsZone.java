@@ -124,8 +124,6 @@ public class DnsZone implements Validatable {
       if (!hasValidCharacters || nameWithoutTrailingPeriod.length() > 253) {
         errors.add(NAME_NOT_VALID);
       }
-
-
     }
 
     return errors;

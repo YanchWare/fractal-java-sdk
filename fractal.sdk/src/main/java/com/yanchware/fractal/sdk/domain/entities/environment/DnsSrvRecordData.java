@@ -23,12 +23,8 @@ public class DnsSrvRecordData implements Validatable {
   private final static String PORT_NOT_VALID = "The port value must be less than or equal to 65535";
   private final static String TARGET_NOT_VALID = "The target value, concatenated with its zone name, must contain no more than 253 characters, excluding a trailing period. It must be between 2 and 34 labels. Each label must only contain letters, numbers, underscores, and/or dashes. Each label should be separated from other labels by a period. Each label must contain between 1 and 63 characters.";
   private final static String TARGET_LABEL_NOT_VALID = "The target label must contain between 1 and 63 characters";
-  private final static String SERVICE_NOT_DEFINED = "Service has not been defined and it is required";
-  private final static String PROTOCOL_NAME_NOT_DEFINED= "ProtocolName has not been defined and it is required";
   private final static String TARGET_NOT_DEFINED= "Target has not been defined and it is required";
-
-  private String service; 
-  private String protocolName; 
+  
   private int priority; 
   private int weight;
   private int port;
@@ -47,15 +43,7 @@ public class DnsSrvRecordData implements Validatable {
       builder = this;
     }
 
-    public DnsSrvRecordDataBuilder withService(String service) {
-      recordData.setService(service);
-      return builder;
-    }
     
-    public DnsSrvRecordDataBuilder withProtocolName(String protocolName) {
-      recordData.setProtocolName(protocolName);
-      return builder;
-    }
     
     public DnsSrvRecordDataBuilder withPriority(int priority) {
       recordData.setPriority(priority);
@@ -103,14 +91,6 @@ public class DnsSrvRecordData implements Validatable {
 
     if(port < 0 || port > 65535) {
       errors.add(PORT_NOT_VALID);
-    }
-
-    if(StringUtils.isBlank(service)) {
-      errors.add(SERVICE_NOT_DEFINED);
-    }
-
-    if(StringUtils.isBlank(protocolName)) {
-      errors.add(PROTOCOL_NAME_NOT_DEFINED);
     }
 
     if(StringUtils.isBlank(target)) {
