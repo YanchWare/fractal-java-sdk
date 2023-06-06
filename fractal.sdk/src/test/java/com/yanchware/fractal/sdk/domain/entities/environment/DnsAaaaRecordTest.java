@@ -8,7 +8,7 @@ import java.time.Duration;
 import static com.yanchware.fractal.sdk.domain.entities.environment.DnsRecordConstants.AAAA_DNS_RECORD_TYPE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class DnsAaaaRecordTest {
   @Test
@@ -32,7 +32,9 @@ class DnsAaaaRecordTest {
 
     assertThat(record.getName()).isEqualTo(recordName);
     assertThat(record.getTtl()).isEqualTo(duration);
-    assertThat(record.getIpV6Address()).isEqualTo(ipV6Address);
+    var optionalIpAddress = record.getIpV6Addresses().stream().findFirst();
+    assertTrue(optionalIpAddress.isPresent());
+    assertEquals(ipV6Address, optionalIpAddress.get());
 
     var jsonRecord = TestUtils.getJsonNodeRepresentation(record);
     assertThat(jsonRecord).isNotNull();

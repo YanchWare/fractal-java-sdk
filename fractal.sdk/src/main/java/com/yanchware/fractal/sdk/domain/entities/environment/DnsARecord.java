@@ -6,9 +6,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.Collection;
+import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidIpV4Address;
 
 @Getter
@@ -16,9 +17,9 @@ import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidIpV4Ad
 @NoArgsConstructor
 public class DnsARecord extends DnsRecord {
   private final static String IP_V4_ADDRESS_NOT_VALID = "ipV4Address does not contain a valid IP v4 address";
-  
-  private String ipV4Address;
-  
+
+  private Set<String> ipV4Addresses;
+
   public static DnsARecordBuilder builder() {
     return new DnsARecordBuilder();
   }
@@ -35,7 +36,19 @@ public class DnsARecord extends DnsRecord {
     }
 
     public DnsARecordBuilder withIpV4Address(String ipV4Address) {
-      record.setIpV4Address(ipV4Address);
+      return withIpV4Addresses(Collections.singleton(ipV4Address));
+    }
+
+    public DnsARecordBuilder withIpV4Addresses(Set<String> ipV4Addresses) {
+      if (isBlank(ipV4Addresses)) {
+        return builder;
+      }
+
+      if (record.getIpV4Addresses() == null) {
+        record.setIpV4Addresses(new HashSet<>());
+      }
+
+      record.getIpV4Addresses().addAll(ipV4Addresses);
       return builder;
     }
 
@@ -49,14 +62,17 @@ public class DnsARecord extends DnsRecord {
   public Collection<String> validate() {
     var errors = super.validate();
 
-    if (StringUtils.isNotBlank(ipV4Address)) {
-      var hasValidCharacters = isValidIpV4Address(ipV4Address);
-
-      if (!hasValidCharacters) {
-        errors.add(IP_V4_ADDRESS_NOT_VALID);
-      }
+    if (!isBlank(ipV4Addresses)) {
+      ipV4Addresses.stream()
+          .filter(StringUtils::isNotBlank)
+          .forEach(ipV4Address -> {
+            var hasValidCharacters = isValidIpV4Address(ipV4Address);
+            if (!hasValidCharacters) {
+              errors.add(IP_V4_ADDRESS_NOT_VALID);
+            }
+          });
     }
-
+    
     return errors.stream()
         .map(error -> "[DnsARecord Validation] " + error)
         .collect(Collectors.toList());
