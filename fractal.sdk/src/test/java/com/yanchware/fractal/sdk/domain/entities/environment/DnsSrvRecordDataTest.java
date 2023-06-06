@@ -62,38 +62,11 @@ class DnsSrvRecordDataTest {
   }
 
   @Test
-  public void validationError_when_ServiceIsNull() {
-    assertThatThrownBy(() -> DnsSrvRecordData.builder()
-        .withPriority(1)
-        .withWeight(1)
-        .withPort(1)
-        .withService(null)
-        .build())
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("Service has not been defined and it is required");
-  }
-
-  @Test
-  public void validationError_when_ProtocolNameIsNull() {
-    assertThatThrownBy(() -> DnsSrvRecordData.builder()
-        .withPriority(1)
-        .withWeight(1)
-        .withPort(1)
-        .withService("service")
-        .withProtocolName(null)
-        .build())
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("ProtocolName has not been defined and it is required");
-  }
-
-  @Test
   public void validationError_when_TargetIsNull() {
     assertThatThrownBy(() -> DnsSrvRecordData.builder()
         .withPriority(1)
         .withWeight(1)
         .withPort(1)
-        .withService("service")
-        .withProtocolName("ProtocolName")
         .withTarget(null)
         .build())
         .isInstanceOf(IllegalArgumentException.class)
