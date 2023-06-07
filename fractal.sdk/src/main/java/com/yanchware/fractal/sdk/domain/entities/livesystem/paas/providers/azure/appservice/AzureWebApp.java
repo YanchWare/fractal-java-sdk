@@ -423,7 +423,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
     }
 
     public AzureWebAppBuilder withDnsZoneConfig(Map<? extends String, ? extends Collection<DnsRecord>> dnsRecordsMap) {
-      if (dnsRecordsMap.isEmpty()) {
+      if (dnsRecordsMap == null || dnsRecordsMap.isEmpty()) {
         return builder;
       }
 
