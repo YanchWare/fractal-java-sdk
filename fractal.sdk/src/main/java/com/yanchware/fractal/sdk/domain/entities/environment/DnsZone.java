@@ -64,7 +64,7 @@ public class DnsZone implements Validatable {
     }
 
     public DnsZoneBuilder withRecords(Map<? extends String, ? extends Collection<DnsRecord>> dnsRecordsMap) {
-      if (dnsRecordsMap.isEmpty()) {
+      if (dnsRecordsMap == null || dnsRecordsMap.isEmpty()) {
         return builder;
       }
 
