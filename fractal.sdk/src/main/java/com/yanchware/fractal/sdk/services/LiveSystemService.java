@@ -158,14 +158,7 @@ public class LiveSystemService {
       case INPROGRESS -> {
         var uniqueStatuses = getUniqueStatusesFromComponents(liveSystemMutationResponseComponents);
 
-        if (atLeastOneComponentFailed(uniqueStatuses)) {
-          log.warn("LiveSystem [id: '{}'] instantiation failed: {}", liveSystemId, getStatusFromComponents(liveSystemMutationResponseComponents));
-
-          var messageToThrow = getFailedComponentsMessageToThrow(livesystemIdStr,
-              liveSystemMutationId,
-              liveSystemMutationResponseComponents);
-          throw new ProviderException(messageToThrow);
-        } else if (allComponentsProcessed(uniqueStatuses)) {
+        if (allComponentsProcessed(uniqueStatuses)) {
           log.info("LiveSystem [id: '{}'] instantiation completed: {}", liveSystemId, getStatusFromComponents(liveSystemMutationResponseComponents));
 
           return liveSystemMutationResponse;
@@ -184,10 +177,6 @@ public class LiveSystemService {
               liveSystemMutationId,
               liveSystemMutationResponse.getStatus()));
     }
-  }
-
-  private boolean atLeastOneComponentFailed(String uniqueStatuses) {
-    return uniqueStatuses.contains("Failed");
   }
 
   private boolean allComponentsProcessed(String uniqueStatuses) {
@@ -213,7 +202,7 @@ public class LiveSystemService {
         .toList();
 
     if (failedComponents.isEmpty()) {
-      return String.format("LiveSystem [%s] instantiation failed for mutation [%s]",
+      return String.format("LiveSystem [%s] instantiation failed for mutation [id: '%s']",
           liveSystemId, liveSystemMutationId);
     } else {
       var messageToThrow = new StringBuilder();
