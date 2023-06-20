@@ -19,6 +19,7 @@ import io.github.resilience4j.retry.RetryConfig;
 import io.github.resilience4j.retry.RetryRegistry;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.net.URI;
@@ -139,12 +140,21 @@ public class LiveSystemService {
         return liveSystemMutationResponse;
       }
       case FAILED -> {
-        log.warn("LiveSystem [id: '{}'] instantiation failed: {}", liveSystemId, getStatusFromComponents(liveSystemMutationResponseComponents));
-
         var messageToThrow = getFailedComponentsMessageToThrow(livesystemIdStr,
             liveSystemMutationId,
             liveSystemMutationResponseComponents);
-        throw new ProviderException(messageToThrow);
+        
+        if(StringUtils.isBlank(messageToThrow)) {
+          log.warn("LiveSystem [id: '{}'] instantiation failed but erorrMessage is not visible yet, retrying: {}", liveSystemId, getStatusFromComponents(liveSystemMutationResponseComponents));
+          String timeoutExceptionMessage = String.format(
+              "LiveSystem [%s] instantiation wait timeout. Response is %s",
+              livesystemIdStr,
+              response.body());
+          throw new InstantiatorException(timeoutExceptionMessage);
+        } else {
+          log.warn("LiveSystem [id: '{}'] instantiation failed: {}", liveSystemId, getStatusFromComponents(liveSystemMutationResponseComponents));
+          throw new ProviderException(messageToThrow);
+        }
       }
       case CANCELLED -> {
         log.warn("LiveSystem [id: '{}'] instantiation cancelled: {}", liveSystemId, getStatusFromComponents(liveSystemMutationResponseComponents));
@@ -202,8 +212,7 @@ public class LiveSystemService {
         .toList();
 
     if (failedComponents.isEmpty()) {
-      return String.format("LiveSystem [%s] instantiation failed for mutation [id: '%s']",
-          liveSystemId, liveSystemMutationId);
+      return "";
     } else {
       var messageToThrow = new StringBuilder();
       messageToThrow.append(
@@ -211,10 +220,16 @@ public class LiveSystemService {
                   "Failed components -> ",
               liveSystemId, liveSystemMutationId));
       for (var component : failedComponents) {
+        var errorMessage = component.getLastOperationStatusMessage();
+        
+        if(StringUtils.isBlank(errorMessage)) {
+          return "";
+        }
+        
         messageToThrow.append(String.format("id: '%s', status: '%s', errorMessage: '%s' - ",
             component.getId(),
             component.getStatus(),
-            component.getLastOperationStatusMessage()));
+            errorMessage));
       }
 
       return messageToThrow.substring(0, messageToThrow.length() - 3);
