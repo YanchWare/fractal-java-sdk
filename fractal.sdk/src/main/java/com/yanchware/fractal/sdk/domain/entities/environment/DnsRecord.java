@@ -89,10 +89,12 @@ public abstract class DnsRecord implements Validatable {
     }
 
     if (StringUtils.isNotBlank(name)) {
-      var hasValidCharacters = isValidLettersNumbersUnderscoresDashesAndPeriodsAndPeriodIsNotRequired(name);
+      if(!name.equals("@")) {
+        var hasValidCharacters = isValidLettersNumbersUnderscoresDashesAndPeriodsAndPeriodIsNotRequired(name);
 
-      if (!hasValidCharacters || name.length() > 63) {
-        errors.add(NAME_NOT_VALID);
+        if (!hasValidCharacters || name.length() > 63) {
+          errors.add(NAME_NOT_VALID);
+        }
       }
     }
 
