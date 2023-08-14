@@ -28,10 +28,9 @@ public class AzureNodePool implements Validatable {
   private final static String MIN_NODE_COUNT_IS_NULL = "[AzureNodePool Validation] MinNodeCount has not been defined and it is required when autoscaling is enabled";
   private final static String MAX_NODE_COUNT_IS_NULL = "[AzureNodePool Validation] MaxNodeCount has not been defined and it is required when autoscaling is enabled";
   private final static String MACHINE_TYPE_IS_NULL = "[AzureNodePool Validation] Machine Type has not been defined and it is required";
-  private final static Integer MIN_NUMBER_OF_USER_NODE_POOLS = 0;
-  private final static Integer MIN_NUMBER_OF_SYSTEM_NODE_POOLS = 1;
-  private final static Integer MAX_NUMBER_OF_NODE_POOLS = 1000;
-  private final static Integer MIN_NUMBER_OF_PODS_PER_NODE = 0;
+  private final static Integer MIN_NUMBER_OF_NODES = 1;
+  private final static Integer MAX_NUMBER_OF_NODES = 100;
+  private final static Integer MIN_NUMBER_OF_PODS_PER_NODE = MIN_NUMBER_OF_NODES;
   private final static Integer MAX_NUMBER_OF_PODS_PER_NODE = 255;
 
   private Integer diskSizeGb;
@@ -189,28 +188,16 @@ public class AzureNodePool implements Validatable {
       errors.add(SYSTEM_POOL_MODE_WINDOWS);
     }
 
-    if (this.initialNodeCount != null && this.agentPoolMode == AzureAgentPoolMode.USER) {
-      validateIntegerInRange("InitialNodeCount", this.initialNodeCount, MIN_NUMBER_OF_USER_NODE_POOLS, MAX_NUMBER_OF_NODE_POOLS, errors);
+    if (this.initialNodeCount != null) {
+      validateIntegerInRange("InitialNodeCount", this.initialNodeCount, MIN_NUMBER_OF_NODES, MAX_NUMBER_OF_NODES, errors);
     }
 
-    if (this.initialNodeCount != null && this.agentPoolMode == AzureAgentPoolMode.SYSTEM) {
-      validateIntegerInRange("InitialNodeCount", this.initialNodeCount, MIN_NUMBER_OF_SYSTEM_NODE_POOLS, MAX_NUMBER_OF_NODE_POOLS, errors);
+    if (this.maxNodeCount != null) {
+      validateIntegerInRange("MaxNodeCount", this.maxNodeCount, MIN_NUMBER_OF_NODES, MAX_NUMBER_OF_NODES, errors);
     }
 
-    if (this.maxNodeCount != null && this.agentPoolMode == AzureAgentPoolMode.USER) {
-      validateIntegerInRange("MaxNodeCount", this.maxNodeCount, MIN_NUMBER_OF_USER_NODE_POOLS, MAX_NUMBER_OF_NODE_POOLS, errors);
-    }
-
-    if (this.maxNodeCount != null && this.agentPoolMode == AzureAgentPoolMode.SYSTEM) {
-      validateIntegerInRange("MaxNodeCount", this.maxNodeCount, MIN_NUMBER_OF_SYSTEM_NODE_POOLS, MAX_NUMBER_OF_NODE_POOLS, errors);
-    }
-
-    if (this.minNodeCount != null && this.agentPoolMode == AzureAgentPoolMode.USER) {
-      validateIntegerInRange("MinNodeCount", this.minNodeCount, MIN_NUMBER_OF_USER_NODE_POOLS, MAX_NUMBER_OF_NODE_POOLS, errors);
-    }
-
-    if (this.minNodeCount != null && this.agentPoolMode == AzureAgentPoolMode.SYSTEM) {
-      validateIntegerInRange("MinNodeCount", this.minNodeCount, MIN_NUMBER_OF_SYSTEM_NODE_POOLS, MAX_NUMBER_OF_NODE_POOLS, errors);
+    if (this.minNodeCount != null) {
+      validateIntegerInRange("MinNodeCount", this.minNodeCount, MIN_NUMBER_OF_NODES, MAX_NUMBER_OF_NODES, errors);
     }
 
     if (this.maxPodsPerNode != null) {

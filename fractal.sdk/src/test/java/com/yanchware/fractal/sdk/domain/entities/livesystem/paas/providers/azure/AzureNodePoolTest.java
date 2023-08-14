@@ -2,7 +2,6 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.NodeTaint;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.TaintEffect;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.aks.AzureAgentPoolMode;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.aks.AzureNodePool;
 import org.junit.jupiter.api.Test;
 
@@ -77,36 +76,6 @@ public class AzureNodePoolTest {
     assertThatThrownBy(() -> getAzureNodePoolBuilder("name", 29, false).build())
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining("Disk size must be at least 30GB");
-  }
-
-  @Test
-  public void validationError_when_SystemNodePoolWithMinNodeCountEqualTo0() {
-    assertThatThrownBy(() ->
-        AzureNodePool.builder()
-            .withName("name")
-            .withDiskSizeGb(30)
-            .withMachineType(AzureMachineType.STANDARD_B2S)
-            .withAutoscalingEnabled(true)
-            .withMinNodeCount(0)
-            .withMaxNodeCount(3)
-            .build()
-        )
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("MinNodeCount must be between 1 and 1000, the value entered is: 0");
-  }
-
-  @Test
-  public void noValidationErrors_when_UserNodePoolWithMinNodeCountEqualTo0() {
-    assertThat(AzureNodePool.builder()
-            .withName("name")
-            .withDiskSizeGb(30)
-            .withMachineType(AzureMachineType.STANDARD_B2S)
-            .withAgentPoolMode(AzureAgentPoolMode.USER)
-            .withAutoscalingEnabled(true)
-            .withMinNodeCount(0)
-            .withMaxNodeCount(3)
-            .build()
-            .validate()).isEmpty();
   }
 
   @Test
