@@ -12,7 +12,12 @@ jobs:
     name: 'Add Comment'
     runs-on: ubuntu-latest
     steps:
-      - uses: mshick/add-pr-comment@v2
+      - uses: actions/github-script@v6
         with:
-          message: Please set a versioning label of either `major`, `minor`, or `patch` to the pull request as it is required to be able to update pom version.
+          script: |
+            github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: 'Please set a versioning label of either `major`, `minor`, or `patch` to the pull request as it is required to be able to update pom version.'})
           repo-token: ${{ secrets.HalAccessToken }}
