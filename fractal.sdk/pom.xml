@@ -29,6 +29,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.4.11</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.13.0</version>
@@ -139,6 +144,7 @@
                     <version>3.6.0</version>
                     <configuration>
                         <usedDependencies>
+                            <dependency>ch.qos.logback:logback-classic</dependency>
                             <dependency>org.junit.jupiter:junit-jupiter-engine</dependency>
                         </usedDependencies>
                     </configuration>
