@@ -2,8 +2,10 @@ package com.yanchware.fractal.sdk.services;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
+import com.yanchware.fractal.sdk.aggregates.Environment;
 import com.yanchware.fractal.sdk.aggregates.EnvironmentType;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
+import com.yanchware.fractal.sdk.domain.entities.environment.DnsZone;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemId;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
@@ -26,6 +28,33 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @WireMockTest
 public class LiveSystemServiceTest {
+
+  @Test
+  public void urlPathMatching_when_postRequestToLiveSystem2(WireMockRuntimeInfo wmRuntimeInfo) throws InstantiatorException {
+    HttpClient httpClient = HttpClient.newBuilder()
+        .version(HttpClient.Version.HTTP_2)
+        .build();
+    
+    SdkConfiguration sdkConfiguration = new LocalSdkConfiguration(wmRuntimeInfo.getHttpBaseUrl());
+    var liveSystemService = new LiveSystemService(httpClient, sdkConfiguration, RetryRegistry.ofDefaults());
+
+    var inputStream = getClass().getClassLoader()
+        .getResourceAsStream("test-resources/postRequestToLiveSystemBody.json");
+
+    assertThat(inputStream).isNotNull();
+
+    var postRequestToLiveSystemBody = StringHandler.getStringFromInputStream(inputStream);
+    
+
+    stubFor(post(urlPathMatching("/livesystems/"))
+        .withRequestBody(equalToJson(postRequestToLiveSystemBody, true, false))
+        .willReturn(aResponse()
+            .withStatus(200)
+            .withHeader("Content-Type", "application/json")));
+
+    liveSystemService.instantiate(buildLiveSystemCommand());
+    verify(postRequestedFor(urlPathEqualTo("/livesystems/")));
+  }
 
   @Test
   public void urlPathMatching_when_postRequestToLiveSystem(WireMockRuntimeInfo wmRuntimeInfo) throws InstantiatorException {
@@ -95,11 +124,28 @@ public class LiveSystemServiceTest {
   }
   
   private EnvironmentDto getEnvironment() {
-    return new EnvironmentDto(
-        "5d5bc38d-1d23-4d10-85ee-67461de4b104",
-        "b2bd7eab-ee3d-4603-86ac-3112ff6b2175",
-        EnvironmentType.PERSONAL,
-        null);
+//    return new EnvironmentDto(
+//        "5d5bc38d-1d23-4d10-85ee-67461de4b104",
+//        "b2bd7eab-ee3d-4603-86ac-3112ff6b2175",
+//        EnvironmentType.PERSONAL,
+//        Map.of("DnsZone") );
+    
+    var environment = Environment.builder()
+        .withEnvironmentType(EnvironmentType.ORGANIZATIONAL)
+        .withId("5d5bc38d-1d23-4d10-85ee-67461de4b104")
+        .withOwnerId("b2bd7eab-ee3d-4603-86ac-3112ff6b2175")
+        .withDnsZone(DnsZone.builder()
+            .withName("targit.cloud")
+            .withParameter("subscriptionId", "c99d9495-d55b-49fc-b45a-eb57ce5ef303")
+            .withParameter("azureResourceGroup",
+                AzureResourceGroup.builder()
+                    .withName("central")
+                    .withRegion(AzureRegion.US_CENTRAL)
+                    .build())
+            .build())
+        .build();
+    
+    return EnvironmentDto.fromEnvironment(environment);
   }
 
 }
