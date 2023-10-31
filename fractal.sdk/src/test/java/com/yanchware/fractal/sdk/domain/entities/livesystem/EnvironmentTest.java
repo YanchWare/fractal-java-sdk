@@ -1,6 +1,7 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem;
 
 import com.yanchware.fractal.sdk.aggregates.Environment;
+import com.yanchware.fractal.sdk.aggregates.EnvironmentType;
 import com.yanchware.fractal.sdk.domain.entities.environment.DnsAaaaRecord;
 import com.yanchware.fractal.sdk.domain.entities.environment.DnsPtrRecord;
 import com.yanchware.fractal.sdk.domain.entities.environment.DnsZone;
@@ -41,9 +42,8 @@ public class EnvironmentTest {
   public void noValidationErrors_when_environmentCreatedWithDnsZone() {
     var env = Environment.builder()
         .withId("production-001")
-        .withDisplayName("PROD")
-        .withParentId("123456789")
-        .withParentType("folder")
+        .withOwnerId("123456789")
+        .withEnvironmentType(EnvironmentType.PERSONAL)
         .withDnsZone(
             DnsZone.builder()
                 .withName("dns.name")
@@ -73,9 +73,8 @@ public class EnvironmentTest {
   private Environment generateBuilderWithInfo(String id) {
     return Environment.builder()
         .withId(id)
-        .withDisplayName("PROD")
-        .withParentId("123456789")
-        .withParentType("folder")
+        .withOwnerId("123456789")
+        .withEnvironmentType(EnvironmentType.PERSONAL)
         .build();
   }
 
