@@ -30,6 +30,7 @@ public class CaaSTraefik extends CaaSAPIGatewayImpl {
   private String hostname;
   private List<TraefikEntryPoint> entryPoints;
   private List<TraefikTlsCertificate> tlsCertificates;
+  private TraefikTracing tracing;
 
   protected CaaSTraefik() {
   }
@@ -52,9 +53,10 @@ public class CaaSTraefik extends CaaSAPIGatewayImpl {
     }
 
     /**
-     * Namespace where Traefik will be instantiated
+     * Specifies the namespace in which Traefik will be deployed.
      *
-     * @param namespace
+     * @param namespace the Kubernetes namespace for the Traefik deployment.
+     * @return the current builder instance
      */
     public TraefikBuilder withNamespace(String namespace) {
       component.setNamespace(namespace);
@@ -62,9 +64,10 @@ public class CaaSTraefik extends CaaSAPIGatewayImpl {
     }
 
     /**
-     * List of TLS certificates for Traefik
+     * Configures the TLS certificates that Traefik will use.
      *
-     * @param tlsCertificates
+     * @param tlsCertificates a list of TLS certificates.
+     * @return the current builder instance                       
      */
     public TraefikBuilder withCertificates(List<TraefikTlsCertificate> tlsCertificates) {
       component.setTlsCertificates(tlsCertificates);
@@ -72,9 +75,10 @@ public class CaaSTraefik extends CaaSAPIGatewayImpl {
     }
 
     /**
-     * Hostname for Traefik
+     * Sets the hostname for the Traefik deployment.
      *
-     * @param hostname
+     * @param hostname the desired hostname.
+     * @return the current builder instance
      */
     public TraefikBuilder withHostname(String hostname) {
       component.setHostname(hostname);
@@ -82,9 +86,10 @@ public class CaaSTraefik extends CaaSAPIGatewayImpl {
     }
 
     /**
-     * The id of the container platform where Traefik will be instantiated
+     * Specifies the container platform where Traefik will be deployed.
      *
-     * @param containerPlatform
+     * @param containerPlatform the ID of the target container platform.
+     * @return the current builder instance                             
      */
     public TraefikBuilder withContainerPlatform(String containerPlatform) {
       component.setContainerPlatform(containerPlatform);
@@ -92,9 +97,10 @@ public class CaaSTraefik extends CaaSAPIGatewayImpl {
     }
 
     /**
-     * Jaeger host for Traefik
+     * Configures the Jaeger host for Traefik's tracing capabilities.
      *
-     * @param host
+     * @param host the Jaeger host's address.
+     * @return the current builder instance
      */
     public TraefikBuilder withJaegerHost(String host) {
       component.setJaegerHost(host);
@@ -102,9 +108,10 @@ public class CaaSTraefik extends CaaSAPIGatewayImpl {
     }
 
     /**
-     * List of Traefik entry points
+     * Adds a list of entry points to the Traefik configuration.
      *
-     * @param entryPoints
+     * @param entryPoints a list of desired entry points.
+     * @return the current builder instance
      */
     public TraefikBuilder withEntryPoints(List<TraefikEntryPoint> entryPoints) {
       if (CollectionUtils.isBlank(entryPoints)) {
@@ -119,15 +126,22 @@ public class CaaSTraefik extends CaaSAPIGatewayImpl {
       return builder;
     }
 
+    /**
+     * Adds a single entry point to the Traefik configuration.
+     * 
+     * @param entryPoint the desired entry point.
+     * @return the current builder instance
+     */
     public TraefikBuilder withEntryPoint(TraefikEntryPoint entryPoint) {
       return withEntryPoints(List.of(entryPoint));
     }
 
     /**
-     * Forward Auth settings for Traefik
+     * Configures Traefik's forward authentication settings.
      * For more details check <a href="https://doc.traefik.io/traefik/middlewares/http/forwardauth/">Traefik documentation</a>
      *
-     * @param forwardAuthSettings
+     * @param forwardAuthSettings settings for forward authentication.
+     * @return the current builder instance                           
      */
     public TraefikBuilder withForwardAuth(ForwardAuthSettings forwardAuthSettings) {
       component.setOidcClientId(forwardAuthSettings.getOidcClientId());
@@ -137,6 +151,13 @@ public class CaaSTraefik extends CaaSAPIGatewayImpl {
       return builder;
     }
 
+    /**
+     * Adds a DNS zone configuration to Traefik's deployment settings.
+     *
+     * @param dnsZoneName the name of the DNS zone.
+     * @param dnsRecord the DNS record associated with the zone.
+     * @return the current builder instance
+     */
     public TraefikBuilder withDnsZoneConfig(String dnsZoneName, DnsRecord dnsRecord) {
       if (component.getDnsZoneConfig() == null) {
         component.setDnsZoneConfig(new HashMap<>());
@@ -151,11 +172,24 @@ public class CaaSTraefik extends CaaSAPIGatewayImpl {
       return builder;
     }
 
+    /**
+     * Adds multiple DNS records to a specific DNS zone in Traefik's deployment settings.
+     *
+     * @param dnsZoneName the name of the DNS zone.
+     * @param dnsRecords a collection of DNS records for the zone.
+     * @return the current builder instance for chaining.
+     */
     public TraefikBuilder withDnsZoneConfig(String dnsZoneName, Collection<DnsRecord> dnsRecords) {
       dnsRecords.forEach(dnsRecord -> withDnsZoneConfig(dnsZoneName, dnsRecord));
       return builder;
     }
 
+    /**
+     * Adds multiple DNS records across different zones to Traefik's deployment settings.
+     *
+     * @param dnsRecordsMap a map with DNS zones as keys and their associated records as values.
+     * @return the current builder instance for chaining.
+     */
     public TraefikBuilder withDnsZoneConfig(Map<? extends String, ? extends Collection<DnsRecord>> dnsRecordsMap) {
       if (dnsRecordsMap == null || dnsRecordsMap.isEmpty()) {
         return builder;
@@ -167,6 +201,22 @@ public class CaaSTraefik extends CaaSAPIGatewayImpl {
         }
       });
 
+      return builder;
+    }
+
+    /**
+     * Configures Traefik's tracing settings.
+     *
+     * @param tracing the tracing configuration.
+     * @return the current builder instance for chaining.
+     */
+    public TraefikBuilder withTracing(TraefikTracing tracing) {
+      if(tracing == null) {
+        return builder;
+      }
+      
+      component.setTracing(tracing);
+      
       return builder;
     }
 

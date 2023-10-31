@@ -1,6 +1,8 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
+import com.jayway.jsonpath.JsonPath;
 import com.yanchware.fractal.sdk.TestWithFixture;
+import com.yanchware.fractal.sdk.utils.TestUtils;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import org.junit.jupiter.api.Test;
 
@@ -15,39 +17,39 @@ class CaaSTraefikTest extends TestWithFixture {
   @Test
   public void exceptionThrown_when_traefikCreatedWithNullId() {
     assertThatThrownBy(() -> CaaSTraefik.builder().withId(""))
-      .isInstanceOf(IllegalArgumentException.class)
-      .hasMessageContainingAll("A valid component id cannot be null, empty or contain spaces");
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContainingAll("A valid component id cannot be null, empty or contain spaces");
   }
 
   @Test
   public void exceptionThrown_when_traefikCreatedWithNoNamespace() {
     var traefikBuilder = CaaSTraefik.builder()
-      .withId(ComponentId.from("traefik"));
+        .withId(ComponentId.from("traefik"));
 
     assertThatThrownBy(traefikBuilder::build)
-      .isInstanceOf(IllegalArgumentException.class)
-      .hasMessageContaining("[CaaSTraefik Validation] Namespace has not been defined and it is required");
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("[CaaSTraefik Validation] Namespace has not been defined and it is required");
   }
 
   @Test
   public void exceptionThrown_when_traefikCreatedWithEmptyContainerPlatform() {
     var traefikBuilder = CaaSTraefik.builder()
-      .withId(ComponentId.from("traefik"))
-      .withNamespace("traefik")
-      .withContainerPlatform("");
+        .withId(ComponentId.from("traefik"))
+        .withNamespace("traefik")
+        .withContainerPlatform("");
 
     assertThatThrownBy(traefikBuilder::build)
-      .isInstanceOf(IllegalArgumentException.class)
-      .hasMessageContaining("[CaaSTraefik Validation] ContainerPlatform defined was either empty or blank and it is required");
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("[CaaSTraefik Validation] ContainerPlatform defined was either empty or blank and it is required");
   }
 
   @Test
   public void exceptionThrown_when_ambassadorCreatedWithNullEntryPoints() {
     var traefikBuilder = traefikBuilderWithoutEntryPoints().withEntryPoints(null);
-    
+
     assertThatThrownBy(traefikBuilder::build)
-      .isInstanceOf(IllegalArgumentException.class)
-      .hasMessageContaining("at least one entrypoint");
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("at least one entrypoint");
   }
 
   @Test
@@ -56,64 +58,64 @@ class CaaSTraefikTest extends TestWithFixture {
         .withEntryPoints(new ArrayList<>());
 
     assertThatThrownBy(traefikBuilder::build)
-      .isInstanceOf(IllegalArgumentException.class)
-      .hasMessageContaining("at least one entrypoint");
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("at least one entrypoint");
   }
 
   @Test
   public void exceptionThrown_when_ambassadorCreatedWithForwardAuthSettingsMissingClientId() {
     var traefikBuilder = traefikBuilder()
-      .withForwardAuth(new ForwardAuthSettings(
-        null,
-        a(String.class),
-        a(String.class),
-        a(String.class)));
+        .withForwardAuth(new ForwardAuthSettings(
+            null,
+            a(String.class),
+            a(String.class),
+            a(String.class)));
 
     assertThatThrownBy(traefikBuilder::build)
-      .isInstanceOf(IllegalArgumentException.class)
-      .hasMessageContaining("OIDC has been partially configured");
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("OIDC has been partially configured");
   }
 
   @Test
   public void exceptionThrown_when_ambassadorCreatedWithForwardAuthSettingsMissingClientSecretId() {
     var traefikBuilder = traefikBuilder()
-      .withForwardAuth(new ForwardAuthSettings(
-        a(String.class),
-        null,
-        a(String.class),
-        a(String.class)));
+        .withForwardAuth(new ForwardAuthSettings(
+            a(String.class),
+            null,
+            a(String.class),
+            a(String.class)));
 
     assertThatThrownBy(traefikBuilder::build)
-      .isInstanceOf(IllegalArgumentException.class)
-      .hasMessageContaining("OIDC has been partially configured");
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("OIDC has been partially configured");
   }
 
   @Test
   public void exceptionThrown_when_ambassadorCreatedWithForwardAuthSettingsForwardAuthSecret() {
     var traefikBuilder = traefikBuilder()
-      .withForwardAuth(new ForwardAuthSettings(
-        a(String.class),
-        a(String.class),
-        null,
-        a(String.class)));
+        .withForwardAuth(new ForwardAuthSettings(
+            a(String.class),
+            a(String.class),
+            null,
+            a(String.class)));
 
     assertThatThrownBy(traefikBuilder::build)
-      .isInstanceOf(IllegalArgumentException.class)
-      .hasMessageContaining("OIDC has been partially configured");
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("OIDC has been partially configured");
   }
 
   @Test
   public void exceptionThrown_when_ambassadorCreatedWithForwardAuthSettingsIssuer() {
     var traefikBuilder = traefikBuilder()
-      .withForwardAuth(new ForwardAuthSettings(
-        a(String.class),
-        a(String.class),
-        a(String.class),
-        null));
+        .withForwardAuth(new ForwardAuthSettings(
+            a(String.class),
+            a(String.class),
+            a(String.class),
+            null));
 
     assertThatThrownBy(traefikBuilder::build)
-      .isInstanceOf(IllegalArgumentException.class)
-      .hasMessageContaining("OIDC has been partially configured");
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("OIDC has been partially configured");
   }
 
 
@@ -133,9 +135,142 @@ class CaaSTraefikTest extends TestWithFixture {
     assertThat(ambassador.getType()).isEqualTo(CAAS_TRAEFIK);
   }
 
+  @Test
+  public void exceptionThrown_when_traefikCreatedWithTracingJaegerNull() {
+    assertThatThrownBy(() -> traefikBuilder()
+        .withTracing(
+            TraefikTracing.builder()
+                .withJaeger(null)
+                .build())
+        .build())
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContainingAll("JaegerTracing instance cannot be null");
+  }
+  
+  @Test
+  public void exceptionThrown_when_traefikCreatedWithTracingJaegerCollectorEndpointAndLocalAgentPort() {
+    assertThatThrownBy(() -> traefikBuilder()
+        .withTracing(
+            TraefikTracing.builder()
+                .withJaeger(JaegerTracing.builder()
+                    .withCollectorEndpoint("https://local.host.com:5778/sampling")
+                    .withLocalAgentPort(5778)
+                    .build())
+                .build())
+        .build())
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContainingAll("localAgentPort should not be provided when collectorEndpoint is provided");
+  }
+
+  @Test
+  public void exceptionThrown_when_traefikCreatedWithTracingJaegerCollectorEndpointAndLocalAgentUrlPath() {
+    assertThatThrownBy(() -> traefikBuilder()
+        .withTracing(
+            TraefikTracing.builder()
+                .withJaeger(JaegerTracing.builder()
+                    .withCollectorEndpoint("https://local.host.com:5778/sampling")
+                    .withLocalAgentUrlPath("/sampling")
+                    .build())
+                .build())
+        .build())
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContainingAll("localAgentUrlPath should not be provided when collectorEndpoint is provided");
+  }
+
+
+  @Test
+  public void exceptionThrown_when_traefikCreatedWithTracingJaegerLocalAgentPortOnly() {
+    assertThatThrownBy(() -> traefikBuilder()
+        .withTracing(
+            TraefikTracing.builder()
+                .withJaeger(JaegerTracing.builder()
+                    .withLocalAgentPort(5778)
+                    .build())
+                .build())
+        .build())
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContainingAll("localAgentUrlPath must be defined");
+  }
+
+  @Test
+  public void exceptionThrown_when_traefikCreatedWithTracingJaegerLocalAgentUrlPathOnly() {
+    assertThatThrownBy(() -> traefikBuilder()
+        .withTracing(
+            TraefikTracing.builder()
+                .withJaeger(JaegerTracing.builder()
+                    .withLocalAgentUrlPath("/sampling")
+                    .build())
+                .build())
+        .build())
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContainingAll("localAgentPort must be defined");
+  }
+
+  @Test
+  public void exceptionThrown_when_traefikCreatedWithTracingNegativeJaegerLocalAgentPort() {
+    assertThatThrownBy(() -> traefikBuilder()
+        .withTracing(
+            TraefikTracing.builder()
+                .withJaeger(JaegerTracing.builder()
+                    .withLocalAgentUrlPath("/sampling")
+                    .withLocalAgentPort(-1)
+                    .build())
+                .build())
+        .build())
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContainingAll("localAgentPort must be between 1 and 65535");
+  }
+
+  @Test
+  public void exceptionThrown_when_traefikCreatedWithTracingJaegerLocalAgentPort_ToHigh() {
+    assertThatThrownBy(() -> traefikBuilder()
+        .withTracing(
+            TraefikTracing.builder()
+                .withJaeger(JaegerTracing.builder()
+                    .withLocalAgentUrlPath("/sampling")
+                    .withLocalAgentPort(65536)
+                    .build())
+                .build())
+        .build())
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContainingAll("localAgentPort must be between 1 and 65535");
+  }
+
+  @Test
+  public void noValidationErrors_when_traefikBuilderHasRequiredFields() {
+    var localAgentPort = 5000;
+    var localAgentUrlPath = "/sampling";
+    
+    var traefik = traefikBuilder()
+        .withTracing(
+            TraefikTracing.builder()
+                .withJaeger(JaegerTracing.builder()
+                    .withLocalAgentUrlPath(localAgentUrlPath)
+                    .withLocalAgentPort(localAgentPort)
+                    .build())
+                .build())
+        .build();
+    
+    var json = TestUtils.getJsonRepresentation(traefik);
+    assertThat(traefik.validate()).isEmpty();
+    assertThat(json).isNotBlank();
+    var collectorEndpoint = JsonPath.read(json, "$.tracing.jaeger.collectorEndpoint");
+    assertThat(collectorEndpoint).isNull();
+
+    var localAgentPortFromJson = JsonPath.read(json, "$.tracing.jaeger.localAgentPort");
+    assertThat(localAgentPortFromJson).isEqualTo(localAgentPort);
+
+    var localAgentUrlPathFromJson = JsonPath.read(json, "$.tracing.jaeger.localAgentUrlPath");
+    assertThat(localAgentUrlPathFromJson).isEqualTo(localAgentUrlPath);
+    
+    assertThat(traefik.getTracing().getJaeger())
+        .extracting(JaegerTracing::getLocalAgentUrlPath, JaegerTracing::getLocalAgentPort)
+        .containsExactly(localAgentUrlPath, localAgentPort);
+  }
+
   private CaaSTraefik.TraefikBuilder traefikBuilder() {
     return traefikBuilderWithoutEntryPoints()
-      .withEntryPoints(aListOf(TraefikEntryPoint.class));
+        .withEntryPoints(aListOf(TraefikEntryPoint.class));
   }
 
   private CaaSTraefik.TraefikBuilder traefikBuilderWithoutEntryPoints() {
@@ -144,13 +279,14 @@ class CaaSTraefikTest extends TestWithFixture {
         .withNamespace(a(String.class))
         .withHostname(a(String.class));
   }
+
   private CaaSTraefik.TraefikBuilder traefikBuilderWithForwardAuth() {
     return traefikBuilder()
-      .withForwardAuth(new ForwardAuthSettings(
-        a(String.class),
-        a(String.class),
-        a(String.class),
-        a(String.class)));
+        .withForwardAuth(new ForwardAuthSettings(
+            a(String.class),
+            a(String.class),
+            a(String.class),
+            a(String.class)));
   }
 
 }
