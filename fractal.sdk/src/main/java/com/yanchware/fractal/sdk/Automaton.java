@@ -1,5 +1,7 @@
 package com.yanchware.fractal.sdk;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.yanchware.fractal.sdk.aggregates.Environment;
 import com.yanchware.fractal.sdk.aggregates.LiveSystem;
 import com.yanchware.fractal.sdk.configuration.EnvVarSdkConfiguration;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
@@ -21,6 +23,8 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.yanchware.fractal.sdk.utils.SerializationUtils.serialize;
 
 @Slf4j
 public class Automaton {
@@ -64,9 +68,22 @@ public class Automaton {
               mutation.getId());
         }
 
+    private static String envrionmentToJsonString(Environment environment) throws InstantiatorException {
+        try {
+            return serialize(environment);
+        } catch (JsonProcessingException e) {
+            var errorMessage = String.format("Unable to serialize Instantiate LiveSystem environment. %s",
+                e.getLocalizedMessage());
+
+            log.error(errorMessage, e);
+            throw new InstantiatorException(errorMessage, e);
+        }
+    }
+    
     private static LiveSystemMutationDto instantiateLiveSystem(LiveSystem liveSystem)
         throws InstantiatorException {
         log.info("Starting to instantiate live system [id: '{}']", liveSystem.getLiveSystemId());
+        log.info("Environment -> {}", envrionmentToJsonString(liveSystem.getEnvironment()));
 
         createOrUpdateBlueprint(liveSystem);
         

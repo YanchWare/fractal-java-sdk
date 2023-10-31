@@ -26,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @WireMockTest
 public class LiveSystemServiceTest {
+  
 
   @Test
   public void urlPathMatching_when_postRequestToLiveSystem(WireMockRuntimeInfo wmRuntimeInfo) throws InstantiatorException {
