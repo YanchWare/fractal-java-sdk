@@ -17,15 +17,16 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Setter(AccessLevel.PRIVATE)
 public class Environment implements Validatable {
   private final static String ID_IS_NULL = "Environment id has not been defined and it is required";
+  private final static String OwnerId_IS_NULL = "Environment OwnerId has not been defined and it is required";
   private final static String IS_PRIVATE_PARAM_KEY = "isPrivate";
   private final static String RECORDS_PARAM_KEY = "records";
   private final static String PARAMETERS_PARAM_KEY = "parameters";
 
   private String id;
-  private String displayName;
-  private String parentId;
-  private String parentType;
+  private String ownerId;
+  private EnvironmentType environmentType;
   private Map<String, Object> parameters;
+  
 
   public static EnvironmentBuilder builder() {
     return new EnvironmentBuilder();
@@ -53,18 +54,13 @@ public class Environment implements Validatable {
       return builder;
     }
 
-    public EnvironmentBuilder withDisplayName(String displayName) {
-      environment.setDisplayName(displayName);
+    public EnvironmentBuilder withOwnerId(String ownerId) {
+      environment.setOwnerId(ownerId);
       return builder;
     }
 
-    public EnvironmentBuilder withParentId(String parentId) {
-      environment.setParentId(parentId);
-      return builder;
-    }
-
-    public EnvironmentBuilder withParentType(String parentType) {
-      environment.setParentType(parentType);
+    public EnvironmentBuilder withEnvironmentType(EnvironmentType environmentType) {
+      environment.setEnvironmentType(environmentType);
       return builder;
     }
 
@@ -112,6 +108,11 @@ public class Environment implements Validatable {
     if (isBlank(id)) {
       errors.add(ID_IS_NULL);
     }
+
+    if (isBlank(ownerId)) {
+      errors.add(OwnerId_IS_NULL);
+    }
+    
     return errors;
   }
 }

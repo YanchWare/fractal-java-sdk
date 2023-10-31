@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.yanchware.fractal.sdk.aggregates.Environment;
+import com.yanchware.fractal.sdk.aggregates.EnvironmentType;
 import com.yanchware.fractal.sdk.aggregates.LiveSystem;
 import com.yanchware.fractal.sdk.domain.entities.Component;
 import com.yanchware.fractal.sdk.domain.entities.ComponentLink;
@@ -315,9 +316,8 @@ public class TestUtils {
   public static Environment getEnvExample() {
     return Environment.builder()
         .withId("2251bad7-45a2-4202-a233-cc021be0b1f9")
-        .withDisplayName("Business Platform Test")
-        .withParentId("2e114308-14ec-4d77-b610-490324fa1844")
-        .withParentType("tenant")
+        .withOwnerId("2e114308-14ec-4d77-b610-490324fa1844")
+        .withEnvironmentType(EnvironmentType.PERSONAL)
         .build();
   }
 

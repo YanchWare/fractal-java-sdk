@@ -2,6 +2,7 @@ package com.yanchware.fractal.sdk.services;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
+import com.yanchware.fractal.sdk.aggregates.EnvironmentType;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemId;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
@@ -95,10 +96,9 @@ public class LiveSystemServiceTest {
   
   private EnvironmentDto getEnvironment() {
     return new EnvironmentDto(
-        "prod",
-        "parent-id",
-        "folder",
-        "PROD",
+        "5d5bc38d-1d23-4d10-85ee-67461de4b104",
+        "b2bd7eab-ee3d-4603-86ac-3112ff6b2175",
+        EnvironmentType.PERSONAL,
         null);
   }
 
