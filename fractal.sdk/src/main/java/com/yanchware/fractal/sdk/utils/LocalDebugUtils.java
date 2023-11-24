@@ -29,7 +29,7 @@ public class LocalDebugUtils {
 
       // create a request
       var request = HttpRequest.newBuilder(
-              URI.create(String.format("http://api.local.fractal.cloud:8080%s", uriPath)))
+              URI.create(String.format("http://api-local.fractal.cloud:8080%s", uriPath)))
           .header(X_CLIENT_ID_HEADER, sdkConfiguration.getClientId())
           .header(X_CLIENT_SECRET_HEADER, sdkConfiguration.getClientSecret())
           .header("Content-Type", "application/json")
