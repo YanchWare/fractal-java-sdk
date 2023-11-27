@@ -315,9 +315,9 @@ public class TestUtils {
 
   public static Environment getEnvExample() {
     return Environment.builder()
-        .withId("2251bad7-45a2-4202-a233-cc021be0b1f9")
-        .withOwnerId("2e114308-14ec-4d77-b610-490324fa1844")
         .withEnvironmentType(EnvironmentType.PERSONAL)
+        .withOwnerId("2e114308-14ec-4d77-b610-490324fa1844")
+        .withShortName("test")
         .build();
   }
 

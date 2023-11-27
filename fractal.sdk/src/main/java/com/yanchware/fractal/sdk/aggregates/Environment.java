@@ -16,15 +16,15 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Getter
 @Setter(AccessLevel.PRIVATE)
 public class Environment implements Validatable {
-  private final static String ID_IS_NULL = "Environment id has not been defined and it is required";
-  private final static String OwnerId_IS_NULL = "Environment OwnerId has not been defined and it is required";
+  private final static String OWNER_ID_IS_NULL = "Environment OwnerId has not been defined and it is required";
+  private final static String SHORT_NAME_IS_NULL = "Environment ShortName has not been defined and it is required";
   private final static String IS_PRIVATE_PARAM_KEY = "isPrivate";
   private final static String RECORDS_PARAM_KEY = "records";
   private final static String PARAMETERS_PARAM_KEY = "parameters";
 
-  private String id;
-  private String ownerId;
   private EnvironmentType environmentType;
+  private String ownerId;
+  private String shortName;
   private Map<String, Object> parameters;
   
 
@@ -49,8 +49,8 @@ public class Environment implements Validatable {
       return this;
     }
 
-    public EnvironmentBuilder withId(String id) {
-      environment.setId(id);
+    public EnvironmentBuilder withEnvironmentType(EnvironmentType environmentType) {
+      environment.setEnvironmentType(environmentType);
       return builder;
     }
 
@@ -59,8 +59,8 @@ public class Environment implements Validatable {
       return builder;
     }
 
-    public EnvironmentBuilder withEnvironmentType(EnvironmentType environmentType) {
-      environment.setEnvironmentType(environmentType);
+    public EnvironmentBuilder withShortName(String shortName) {
+      environment.setShortName(shortName);
       return builder;
     }
 
@@ -105,12 +105,19 @@ public class Environment implements Validatable {
   public Collection<String> validate() {
     Collection<String> errors = new ArrayList<>();
 
-    if (isBlank(id)) {
-      errors.add(ID_IS_NULL);
+    if (isBlank(shortName)) {
+      errors.add(SHORT_NAME_IS_NULL);
+    } else {
+      if (shortName.length() > 30) {
+        errors.add("Environment ShortName must not be longer than 30 characters.");
+      }
+      if (!shortName.matches("[a-z0-9-]+")) {
+        errors.add("Environment ShortName must only contain lowercase letters, numbers, and dashes.");
+      }
     }
 
     if (isBlank(ownerId)) {
-      errors.add(OwnerId_IS_NULL);
+      errors.add(OWNER_ID_IS_NULL);
     }
     
     return errors;

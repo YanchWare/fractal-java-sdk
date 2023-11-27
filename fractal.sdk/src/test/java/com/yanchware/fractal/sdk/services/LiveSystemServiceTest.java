@@ -97,9 +97,9 @@ public class LiveSystemServiceTest {
   
   private EnvironmentDto getEnvironment() {
     return new EnvironmentDto(
-        "5d5bc38d-1d23-4d10-85ee-67461de4b104",
-        "b2bd7eab-ee3d-4603-86ac-3112ff6b2175",
         EnvironmentType.PERSONAL,
+        "b2bd7eab-ee3d-4603-86ac-3112ff6b2175",
+        "5d5bc38d-1d23-4d10-85ee-67461de4b104",
         null);
   }
 

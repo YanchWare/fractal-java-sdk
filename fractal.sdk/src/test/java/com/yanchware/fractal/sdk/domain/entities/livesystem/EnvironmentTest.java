@@ -18,22 +18,36 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class EnvironmentTest {
 
   @Test
-  public void exceptionThrown_when_environmentCreatedWithNullId() {
-    assertThatThrownBy(() -> generateBuilderWithInfo(null)).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Environment id has not been defined");
+  public void exceptionThrown_when_environmentCreatedWithNullShortName() {
+    assertThatThrownBy(() -> generateBuilderWithInfo(null))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("Environment ShortName has not been defined and it is required");
   }
 
   @Test
-  public void exceptionThrown_when_environmentCreatedWithEmptyId() {
-    assertThatThrownBy(() -> generateBuilderWithInfo("")).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Environment id has not been defined");
+  public void exceptionThrown_when_environmentCreatedWithEmptyShortName() {
+    assertThatThrownBy(() -> generateBuilderWithInfo(""))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("Environment ShortName has not been defined and it is required");
   }
 
   @Test
-  public void exceptionThrown_when_environmentCreatedWithBlankId() {
-    assertThatThrownBy(() -> generateBuilderWithInfo("   ")).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Environment id has not been defined");
+  public void exceptionThrown_when_environmentCreatedWithBlankShortName() {
+    assertThatThrownBy(() -> generateBuilderWithInfo("   "))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("Environment ShortName has not been defined and it is required");
   }
 
   @Test
-  public void noValidationErrors_when_environmentCreatedWithValidId() {
+  public void exceptionThrown_when_environmentCreatedWithUpercaseShortName() {
+    assertThatThrownBy(() -> generateBuilderWithInfo("Production-001"))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("Environment ShortName must only contain lowercase letters, numbers, and dashes.");
+  }
+
+
+  @Test
+  public void noValidationErrors_when_environmentCreatedWithValidShortName() {
     var env = generateBuilderWithInfo("production-001");
     assertThat(env.validate()).isEmpty();
   }
@@ -41,9 +55,9 @@ public class EnvironmentTest {
   @Test
   public void noValidationErrors_when_environmentCreatedWithDnsZone() {
     var env = Environment.builder()
-        .withId("production-001")
+        .withEnvironmentType(EnvironmentType.PERSONAL)        
         .withOwnerId("123456789")
-        .withEnvironmentType(EnvironmentType.PERSONAL)
+        .withShortName("production-001")
         .withDnsZone(
             DnsZone.builder()
                 .withName("dns.name")
@@ -70,11 +84,11 @@ public class EnvironmentTest {
     assertThat(jsonEnvironment).isNotBlank();
   }
 
-  private Environment generateBuilderWithInfo(String id) {
+  private Environment generateBuilderWithInfo(String shortName) {
     return Environment.builder()
-        .withId(id)
-        .withOwnerId("123456789")
         .withEnvironmentType(EnvironmentType.PERSONAL)
+        .withOwnerId("123456789")
+        .withShortName(shortName)
         .build();
   }
 

@@ -1,5 +1,5 @@
 steps:
-  - name: maven:3-eclipse-temurin-20-alpine
+  - name: maven:3-eclipse-temurin-21-alpine
     dir: fractal.sdk
     entrypoint: mvn
     args: ['package']

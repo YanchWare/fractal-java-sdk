@@ -12,16 +12,16 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EnvironmentDto {
-  private String id;
-  private String ownerId;
   private EnvironmentType environmentType;
+  private String ownerId;
+  private String shortName;
   private Map<String, Object> parameters;
 
   public static EnvironmentDto fromEnvironment(Environment env) {
     return new EnvironmentDto(
-        env.getId(),
-        env.getOwnerId(),
         env.getEnvironmentType(),
+        env.getOwnerId(),
+        env.getShortName(),
         env.getParameters());
   }
 }
