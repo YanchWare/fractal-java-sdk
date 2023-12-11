@@ -23,7 +23,7 @@ public class Environment implements Validatable {
   private final static String PARAMETERS_PARAM_KEY = "parameters";
 
   private EnvironmentType environmentType;
-  private String ownerId;
+  private UUID ownerId;
   private String shortName;
   private Map<String, Object> parameters;
   
@@ -54,7 +54,7 @@ public class Environment implements Validatable {
       return builder;
     }
 
-    public EnvironmentBuilder withOwnerId(String ownerId) {
+    public EnvironmentBuilder withOwnerId(UUID ownerId) {
       environment.setOwnerId(ownerId);
       return builder;
     }
@@ -116,7 +116,7 @@ public class Environment implements Validatable {
       }
     }
 
-    if (isBlank(ownerId)) {
+    if (ownerId == null || ownerId.equals(new UUID(0L, 0L))) {
       errors.add(OWNER_ID_IS_NULL);
     }
     

@@ -316,7 +316,7 @@ public class TestUtils {
   public static Environment getEnvExample() {
     return Environment.builder()
         .withEnvironmentType(EnvironmentType.PERSONAL)
-        .withOwnerId("2e114308-14ec-4d77-b610-490324fa1844")
+        .withOwnerId(UUID.fromString("2e114308-14ec-4d77-b610-490324fa1844"))
         .withShortName("test")
         .build();
   }
