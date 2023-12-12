@@ -12,6 +12,7 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands.InstantiateLiveSystemCommandRequest;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.EnvironmentDto;
+import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.EnvironmentIdDto;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemComponentDto;
 import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
 import com.yanchware.fractal.sdk.utils.StringHandler;
@@ -20,13 +21,14 @@ import org.junit.jupiter.api.Test;
 
 import java.net.http.HttpClient;
 import java.util.List;
+import java.util.UUID;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @WireMockTest
 public class LiveSystemServiceTest {
-  
+
 
   @Test
   public void urlPathMatching_when_postRequestToLiveSystem(WireMockRuntimeInfo wmRuntimeInfo) throws InstantiatorException {
@@ -94,12 +96,12 @@ public class LiveSystemServiceTest {
             .build())))
         .build();
   }
-  
+
   private EnvironmentDto getEnvironment() {
-    return new EnvironmentDto(
-        EnvironmentType.PERSONAL,
-        "b2bd7eab-ee3d-4603-86ac-3112ff6b2175",
-        "5d5bc38d-1d23-4d10-85ee-67461de4b104",
+    return new EnvironmentDto(new EnvironmentIdDto(EnvironmentType.PERSONAL,
+        UUID.fromString("b2bd7eab-ee3d-4603-86ac-3112ff6b2175"),
+        "5d5bc38d-1d23-4d10-85ee-67461de4b104"),
+
         null);
   }
 

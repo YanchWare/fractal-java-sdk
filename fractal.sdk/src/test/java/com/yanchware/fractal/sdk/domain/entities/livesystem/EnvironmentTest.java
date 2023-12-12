@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -56,7 +57,7 @@ public class EnvironmentTest {
   public void noValidationErrors_when_environmentCreatedWithDnsZone() {
     var env = Environment.builder()
         .withEnvironmentType(EnvironmentType.PERSONAL)        
-        .withOwnerId("123456789")
+        .withOwnerId(UUID.randomUUID())
         .withShortName("production-001")
         .withDnsZone(
             DnsZone.builder()
@@ -87,7 +88,7 @@ public class EnvironmentTest {
   private Environment generateBuilderWithInfo(String shortName) {
     return Environment.builder()
         .withEnvironmentType(EnvironmentType.PERSONAL)
-        .withOwnerId("123456789")
+        .withOwnerId(UUID.randomUUID())
         .withShortName(shortName)
         .build();
   }
