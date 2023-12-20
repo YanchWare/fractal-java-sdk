@@ -2,7 +2,6 @@ package com.yanchware.fractal.sdk.services;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
-import com.yanchware.fractal.sdk.aggregates.EnvironmentType;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemId;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
@@ -13,6 +12,7 @@ import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands.InstantiateLiveSystemCommandRequest;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.EnvironmentDto;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.EnvironmentIdDto;
+import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.EnvironmentTypeDto;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemComponentDto;
 import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
 import com.yanchware.fractal.sdk.utils.StringHandler;
@@ -25,6 +25,7 @@ import java.util.UUID;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @WireMockTest
 public class LiveSystemServiceTest {
@@ -76,6 +77,37 @@ public class LiveSystemServiceTest {
     verify(getRequestedFor(urlPathEqualTo("/livesystems/resourceGroupId/livesystem-name/mutations/mutation-id")));
   }
 
+  @Test
+  public void testRetrieveLiveSystem_Success(WireMockRuntimeInfo wmRuntimeInfo) throws InstantiatorException {
+    HttpClient httpClient = HttpClient.newBuilder()
+        .version(HttpClient.Version.HTTP_2)
+        .build();
+    
+    SdkConfiguration sdkConfiguration = new LocalSdkConfiguration(wmRuntimeInfo.getHttpBaseUrl());
+    
+    var liveSystemService = new LiveSystemService(httpClient, sdkConfiguration, RetryRegistry.ofDefaults());
+
+    LiveSystemId liveSystemId = new LiveSystemId("company/Development");
+
+    var inputStream = getClass().getClassLoader()
+        .getResourceAsStream("test-resources/getRequestToLiveSystemResponse.json");
+
+    assertThat(inputStream).isNotNull();
+
+    var liveSystemResponse= StringHandler.getStringFromInputStream(inputStream);
+    
+    stubFor(get(urlPathMatching("/livesystems/company/Development"))
+        .willReturn(aResponse()
+            .withStatus(200)
+            .withBody(liveSystemResponse)
+            .withHeader("Content-Type", "application/json")));
+
+    var result = liveSystemService.retrieveLiveSystem(liveSystemId);
+
+    // Assertions
+    assertNotNull(result);
+  }
+
   private InstantiateLiveSystemCommandRequest buildLiveSystemCommand() {
     return InstantiateLiveSystemCommandRequest.builder()
         .description("prod")
@@ -98,7 +130,7 @@ public class LiveSystemServiceTest {
   }
 
   private EnvironmentDto getEnvironment() {
-    return new EnvironmentDto(new EnvironmentIdDto(EnvironmentType.PERSONAL,
+    return new EnvironmentDto(new EnvironmentIdDto(EnvironmentTypeDto.PERSONAL,
         UUID.fromString("b2bd7eab-ee3d-4603-86ac-3112ff6b2175"),
         "5d5bc38d-1d23-4d10-85ee-67461de4b104"),
 
