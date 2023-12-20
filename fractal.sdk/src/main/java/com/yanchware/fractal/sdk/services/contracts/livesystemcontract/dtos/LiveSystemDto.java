@@ -5,21 +5,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 @Data
 @NoArgsConstructor
 public class LiveSystemDto {
   private String liveSystemId;
   private String fractalId;
-  private String name;
   private String requesterId;
   private BlueprintDto blueprint;
-  private Date orderTimestamp;
+  private Date created;
+  private Date lastUpdated;
   private LiveSystemStatusDto status;
   private String statusMessage;
   private EnvironmentDto environment;
-  private Map<String, LiveSystemMutationDto> systemMutationsById;
-  private List<LiveSystemComponentDto> components;
 }

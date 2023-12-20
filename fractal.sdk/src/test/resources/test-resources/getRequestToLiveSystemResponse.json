@@ -1,0 +1,543 @@
+{
+  "liveSystemId": "company/Development",
+  "fractalId": "company/Development:1.0",
+  "requesterId": "integration@test.com",
+  "blueprint": {
+    "fractalId": "company/Development:1.0",
+    "isPrivate": false,
+    "status": "Ready",
+    "reasonCode": null,
+    "description": "Blueprint created via SDK from LiveSystem with Fractal ID: company/Development:1.0",
+    "components": [
+      {
+        "outputFields": [],
+        "displayName": "null",
+        "description": "Storage.SaaS.Unmanaged generated via SDK",
+        "type": "Storage.SaaS.Unmanaged",
+        "id": "fractalsmbcredentials",
+        "version": null,
+        "locked": false,
+        "parameters": {
+          "secretValue": "<secret>"
+        },
+        "dependencies": [],
+        "links": []
+      },
+      {
+        "outputFields": [],
+        "displayName": "null",
+        "description": "Storage.SaaS.Unmanaged generated via SDK",
+        "type": "Storage.SaaS.Unmanaged",
+        "id": "fractalcloudappconfigurationreadconnectionstring",
+        "version": null,
+        "locked": false,
+        "parameters": {
+          "secretValue": "<secret>"
+        },
+        "dependencies": [],
+        "links": []
+      },
+      {
+        "outputFields": [],
+        "displayName": "Fractal Cloud Development",
+        "description": "Fractal Cloud Development AKS cluster",
+        "type": "NetworkAndCompute.PaaS.ContainerPlatform",
+        "id": "fractal-dev3",
+        "version": null,
+        "locked": false,
+        "parameters": {
+          "roles": [
+            {
+              "scope": "/subscriptions/cfd01347-6c9b-4e08-ae01-7eaf1b830ef4/resourceGroups/Central/providers/Microsoft.ContainerRegistry/registries/fractalcloud",
+              "roleName": "AcrPull"
+            }
+          ],
+          "nodePools": [
+            {
+              "name": "linux",
+              "osType": "Linux",
+              "maxSurge": 1,
+              "diskSizeGb": 50,
+              "machineType": "Standard_D2as_v4",
+              "maxNodeCount": 5,
+              "minNodeCount": 1,
+              "agentPoolMode": "User",
+              "maxPodsPerNode": 50,
+              "initialNodeCount": 1,
+              "autoscalingEnabled": true
+            },
+            {
+              "name": "win",
+              "osType": "Windows",
+              "maxSurge": 1,
+              "diskSizeGb": 100,
+              "nodeTaints": [
+                "WindowsDynamic=true:NoSchedule"
+              ],
+              "machineType": "Standard_D4as_v4",
+              "maxNodeCount": 5,
+              "minNodeCount": 1,
+              "agentPoolMode": "User",
+              "maxPodsPerNode": 50,
+              "initialNodeCount": 1,
+              "autoscalingEnabled": true
+            },
+            {
+              "name": "system2",
+              "osType": "Linux",
+              "maxSurge": 1,
+              "diskSizeGb": 50,
+              "nodeTaints": [
+                "CriticalAddonsOnly=true:NoSchedule"
+              ],
+              "machineType": "Standard_D2as_v4",
+              "maxNodeCount": 2,
+              "minNodeCount": 1,
+              "agentPoolMode": "System",
+              "maxPodsPerNode": 50,
+              "initialNodeCount": 1,
+              "autoscalingEnabled": true
+            }
+          ],
+          "podIpRange": "10.3.0.0/16",
+          "azureRegion": "westeurope",
+          "outboundIps": [
+            {
+              "name": "fractal-development-3-egress",
+              "azureResourceGroup": {
+                "name": "fractal-dev3",
+                "region": "westeurope"
+              }
+            }
+          ],
+          "serviceIpRange": "10.2.0.0/16",
+          "priorityClasses": [
+            {
+              "name": "fractal-high-priority",
+              "value": 999999000,
+              "description": "This priority class should be used for Traefik and Fractal Server pods",
+              "preemptionPolicy": "PreemptLowerPriority"
+            },
+            {
+              "name": "fractal-medium-priority",
+              "value": 900000000,
+              "description": "This priority class should be used for Anywhere Manager, Anywhere Workers and Orchestration Controller pods only.",
+              "preemptionPolicy": "PreemptLowerPriority"
+            },
+            {
+              "name": "fractal-low-priority",
+              "value": 800000000,
+              "description": "This priority class should be used for InMemory Demo Data and all helper services pods only.",
+              "preemptionPolicy": "PreemptLowerPriority"
+            },
+            {
+              "name": "fractal-deamonset-priority",
+              "value": 999999001,
+              "description": "This priority class should be used for Deamon Sets, such as logging, which should run no matter what.",
+              "preemptionPolicy": "PreemptLowerPriority"
+            },
+            {
+              "name": "fractal-over-provisioning",
+              "value": 1,
+              "description": "This priority class should be used for over-provisioning.",
+              "preemptionPolicy": "PreemptLowerPriority"
+            }
+          ],
+          "kubernetesVersion": "1.26.10",
+          "windowsAdminUsername": "fractalcloud",
+          "vnetAddressSpaceIpRange": "10.52.0.0/22",
+          "vnetSubnetAddressIpRange": "10.52.0.0/22",
+          "azureActiveDirectoryProfile": {
+            "managed": true,
+            "adminGroupObjectIDs": [
+              "d612a3f2-9082-4c4e-b4a4-726f0472a580",
+              "e8e914a5-40f7-4655-9c3b-db517e943f78"
+            ]
+          }
+        },
+        "dependencies": [],
+        "links": []
+      },
+      {
+        "outputFields": [],
+        "displayName": "Orchestration Controller",
+        "description": "Orchestration Controller Development",
+        "type": "CustomWorkloads.CaaS.Workload",
+        "id": "fractal-orco",
+        "version": null,
+        "locked": false,
+        "parameters": {
+          "roles": [
+            {
+              "name": "anywhereworkers.app.read",
+              "scope": "Cloud Cockpit DEV",
+              "roleType": "AppRoleAssignment"
+            },
+            {
+              "name": "cluster.manage",
+              "scope": "Cloud Cockpit DEV",
+              "roleType": "AppRoleAssignment"
+            },
+            {
+              "name": "Contributor",
+              "scope": "/subscriptions/cfd01347-6c9b-4e08-ae01-7eaf1b830ef4/resourceGroups/Central/providers/Microsoft.Network/dnszones/fractal.cloud"
+            },
+            {
+              "name": "Contributor",
+              "scope": "/subscriptions/20673144-8e14-454d-9eb6-b85fe39844a3/resourceGroups/rg-data/providers/Microsoft.RecoveryServices/vaults/rsv-Development"
+            },
+            {
+              "name": "Contributor",
+              "scope": "/subscriptions/20673144-8e14-454d-9eb6-b85fe39844a3/resourceGroups/rg-data/providers/Microsoft.Storage/storageAccounts/sharefractaltenantsdev3"
+            },
+            {
+              "name": "CloudControlPanel",
+              "scope": "Fractal Server",
+              "roleType": "AppRoleAssignment"
+            },
+            {
+              "name": "Orchestration",
+              "scope": "Fractal Server",
+              "roleType": "AppRoleAssignment"
+            }
+          ],
+          "repoId": "Fractal.Cloud.OrchestrationController",
+          "namespace": "fractal-cloud",
+          "branchName": "env/Development",
+          "sshRepositoryURI": "git@ssh.dev.azure.com:v3/FractalCloud/Fractal.Cloud/Fractal.Cloud.OrchestrationController",
+          "containerPlatform": "fractal-dev3",
+          "privateSSHKeySecretId": "fractalDeployerSshKey",
+          "privateSSHKeyPassphraseSecretId": "fractalDeployerSshKeyPassphrase"
+        },
+        "dependencies": [
+          "traefik",
+          "fractal-dev3"
+        ],
+        "links": [
+          {
+            "componentId": "fractalcloudappconfigurationreadconnectionstring",
+            "settings": {}
+          },
+          {
+            "componentId": "sb-fractal-data-gateway-Development",
+            "settings": {}
+          },
+          {
+            "componentId": "relay-fractal-data-gateway-Development",
+            "settings": {}
+          },
+          {
+            "componentId": "fractalsmbcredentials",
+            "settings": {}
+          }
+        ]
+      },
+      {
+        "outputFields": [],
+        "displayName": "Anywhere",
+        "description": "Anywhere Development",
+        "type": "CustomWorkloads.CaaS.Workload",
+        "id": "fractal-anywhere2",
+        "version": null,
+        "locked": false,
+        "parameters": {
+          "roles": [],
+          "repoId": "Fractal.Cloud.Anywhere",
+          "namespace": "fractal-cloud",
+          "branchName": "env/Development",
+          "sshRepositoryURI": "git@ssh.dev.azure.com:v3/FractalCloud/Fractal.Cloud/Fractal.Cloud.Anywhere",
+          "containerPlatform": "fractal-dev3",
+          "privateSSHKeySecretId": "fractalDeployerSshKey",
+          "privateSSHKeyPassphraseSecretId": "fractalDeployerSshKeyPassphrase"
+        },
+        "dependencies": [
+          "traefik",
+          "fractal-dev3"
+        ],
+        "links": []
+      },
+      {
+        "outputFields": [],
+        "displayName": "New Relic Agent",
+        "description": "New Relic Agent Development",
+        "type": "CustomWorkloads.CaaS.Workload",
+        "id": "newrelicagent",
+        "version": null,
+        "locked": false,
+        "parameters": {
+          "roles": [],
+          "repoId": "Fractal.Cloud.NewRelic",
+          "namespace": "fractal-cloud",
+          "branchName": "env/Development",
+          "sshRepositoryURI": "git@ssh.dev.azure.com:v3/FractalCloud/Fractal.Cloud/Fractal.Cloud.NewRelic",
+          "containerPlatform": "fractal-dev3",
+          "privateSSHKeySecretId": "fractalDeployerSshKey",
+          "privateSSHKeyPassphraseSecretId": "fractalDeployerSshKeyPassphrase"
+        },
+        "dependencies": [
+          "fractal-dev3"
+        ],
+        "links": []
+      },
+      {
+        "outputFields": [],
+        "displayName": "Open Telemetry Collector",
+        "description": "Open Telemetry Collector Development",
+        "type": "CustomWorkloads.CaaS.Workload",
+        "id": "otel-collector-opentelemetry-collector",
+        "version": null,
+        "locked": false,
+        "parameters": {
+          "roles": [],
+          "repoId": "Fractal.Cloud.OpenTelemetry",
+          "namespace": "observability",
+          "branchName": "env/Development",
+          "sshRepositoryURI": "git@ssh.dev.azure.com:v3/FractalCloud/Fractal.Cloud/Fractal.Cloud.OpenTelemetry",
+          "containerPlatform": "fractal-dev3",
+          "privateSSHKeySecretId": "fractalDeployerSshKey",
+          "privateSSHKeyPassphraseSecretId": "fractalDeployerSshKeyPassphrase"
+        },
+        "dependencies": [
+          "fractal-dev3"
+        ],
+        "links": []
+      },
+      {
+        "outputFields": [],
+        "displayName": "InMemory DB Demo Data",
+        "description": "InMemory Demo Data Development",
+        "type": "CustomWorkloads.CaaS.Workload",
+        "id": "demo-data",
+        "version": null,
+        "locked": false,
+        "parameters": {
+          "roles": [],
+          "repoId": "Fractal.Cloud.K8s.InMemoryDemoData",
+          "namespace": "fractal-cloud",
+          "branchName": "env/Development",
+          "sshRepositoryURI": "git@ssh.dev.azure.com:v3/FractalCloud/Fractal.Cloud/Fractal.Cloud.K8s.InMemoryDemoData",
+          "containerPlatform": "fractal-dev3",
+          "privateSSHKeySecretId": "fractalDeployerSshKey",
+          "privateSSHKeyPassphraseSecretId": "fractalDeployerSshKeyPassphrase"
+        },
+        "dependencies": [
+          "traefik",
+          "fractal-dev3"
+        ],
+        "links": []
+      },
+      {
+        "outputFields": [],
+        "displayName": "Traefik Development",
+        "description": "Traefik Development API Gateway",
+        "type": "APIManagement.CaaS.APIGateway",
+        "id": "traefik",
+        "version": null,
+        "locked": false,
+        "parameters": {
+          "tracing": {
+            "jaeger": {
+              "localAgentPort": 14268,
+              "localAgentUrlPath": "/api/traces"
+            }
+          },
+          "hostname": "fractal-Development.reserved.fractal.cloud",
+          "namespace": "traefik",
+          "entryPoints": [
+            {
+              "name": "antserver",
+              "port": 1301,
+              "protocol": "tcp",
+              "exposedPort": 1301,
+              "isTlsEnabled": true,
+              "isHttpsRedirected": false
+            },
+            {
+              "name": "inmemory",
+              "port": 5060,
+              "protocol": "tcp",
+              "exposedPort": 5060,
+              "isTlsEnabled": true,
+              "isHttpsRedirected": false
+            },
+            {
+              "name": "web",
+              "port": 8000,
+              "protocol": "tcp",
+              "exposedPort": 80,
+              "isTlsEnabled": false,
+              "isHttpsRedirected": true
+            },
+            {
+              "name": "websecure",
+              "port": 8443,
+              "protocol": "tcp",
+              "exposedPort": 443,
+              "isTlsEnabled": true,
+              "isHttpsRedirected": false
+            },
+            {
+              "name": "datadiscovery",
+              "port": 9095,
+              "protocol": "tcp",
+              "exposedPort": 9095,
+              "isTlsEnabled": true,
+              "isHttpsRedirected": false
+            },
+            {
+              "name": "metrics",
+              "port": 9100,
+              "protocol": "tcp",
+              "exposedPort": 9100,
+              "isTlsEnabled": false,
+              "isHttpsRedirected": false
+            }
+          ],
+          "oidcClientId": "580b68ba-7f2b-4920-9e40-5d95470dfc32",
+          "dnsZoneConfig": {
+            "fractal.cloud": [
+              {
+                "ttl": 300,
+                "name": "fractal-Development.reserved",
+                "@type": "A"
+              }
+            ]
+          },
+          "oidcIssuerUrl": "https://login.microsoftonline.com/e47e5fe6-a47d-4b70-b4f3-205c83453ce4/v2.0",
+          "tlsCertificates": [
+            {
+              "default": true,
+              "keySecretId": "traefik-tls-key",
+              "certSecretId": "traefik-tls-cert"
+            }
+          ],
+          "containerPlatform": "fractal-dev3",
+          "oidcClientSecretId": "traefik-oidc-client-secret",
+          "forwardAuthSecretId": "traefik-forward-auth-secret"
+        },
+        "dependencies": [
+          "fractal-dev3"
+        ],
+        "links": [
+          {
+            "componentId": "otel-collector-opentelemetry-collector",
+            "settings": {
+              "type": "JaegerTracing"
+            }
+          }
+        ]
+      },
+      {
+        "outputFields": [],
+        "displayName": "FileShare Fractal Tenants Development ",
+        "description": "Storage.PaaS.StorageAccount generated via SDK",
+        "type": "Storage.PaaS.DataStorage",
+        "id": "sharefractaltenantsdev3",
+        "version": null,
+        "locked": true,
+        "parameters": {
+          "backup": {
+            "policy": "    {\n      \"workLoadType\": \"AzureFileShare\",\n      \"backupManagementType\": \"AzureStorage\",\n      \"timeZone\": \"UTC\",\n      \"schedulePolicy\":\n        {\n          \"schedulePolicyType\": \"SimpleSchedulePolicy\",\n          \"scheduleRunFrequency\": \"Daily\",\n          \"scheduleRunTimes\": [\"2018-01-24T01:00:00.000000000Z\"]\n        },\n      \"retentionPolicy\":\n        {\n          \"retentionPolicyType\": \"LongTermRetentionPolicy\",\n          \"dailySchedule\":\n            {\n              \"retentionDuration\": { \"count\": 30, \"durationType\": \"Days\" },\n              \"retentionTimes\": [\"2018-01-24T01:00:00.000000000Z\"]\n            },\n          \"weeklySchedule\": null,\n          \"monthlySchedule\":\n            {\n              \"retentionScheduleFormatType\": \"Daily\",\n              \"retentionScheduleDaily\":\n                { \"daysOfTheMonth\": [{ \"date\": 1, \"isLast\": false }] },\n              \"retentionDuration\": { \"count\": 12, \"durationType\": \"Months\" },\n              \"retentionScheduleWeekly\": null,\n              \"retentionTimes\": [\"2018-01-24T01:00:00.000000000Z\"]\n            },\n          \"yearlySchedule\": null\n        }\n    }\n",
+            "vaultName": "rsv-Development",
+            "policyName": "bkpol-Development",
+            "vaultResourceGroupName": "rg-data",
+            "policyResourceGroupName": "rg-data"
+          },
+          "settings": {
+            "kind": "FileStorage",
+            "largeFileSharesState": "Enabled"
+          },
+          "azureRegion": "westeurope",
+          "fileService": {
+            "deleteRetentionDays": 30,
+            "deleteRetentionEnabled": true
+          },
+          "connectivity": {
+            "minimumTlsVersion": "TLS1_2",
+            "networkRuleSetBypass": "AzureServices",
+            "keyPolicyExpirationInDays": 30,
+            "networkRuleSetDefaultAction": "Allow"
+          },
+          "infrastructure": {
+            "sku": "Premium_LRS",
+            "accessTier": "Hot"
+          },
+          "azureResourceGroup": {
+            "name": "rg-data",
+            "region": "westeurope"
+          }
+        },
+        "dependencies": [],
+        "links": []
+      },
+      {
+        "outputFields": [],
+        "displayName": "Service Bus",
+        "description": "Messaging.PaaS.ServiceBus generated via SDK",
+        "type": "Messaging.PaaS.Broker",
+        "id": "sb-fractal-data-gateway-Development",
+        "version": null,
+        "locked": false,
+        "parameters": {
+          "sku": {
+            "tier": "Standard"
+          },
+          "name": "sb-fractal-data-gateway-Development",
+          "azureRegion": "westeurope",
+          "azureResourceGroup": {
+            "name": "rg-data",
+            "region": "westeurope"
+          }
+        },
+        "dependencies": [],
+        "links": []
+      },
+      {
+        "outputFields": [],
+        "displayName": "Relay",
+        "description": "Messaging.PaaS.Relay generated via SDK",
+        "type": "Messaging.PaaS.Broker",
+        "id": "relay-fractal-data-gateway-Development",
+        "version": null,
+        "locked": false,
+        "parameters": {
+          "name": "relay-fractal-data-gateway-Development",
+          "azureRegion": "westeurope",
+          "azureResourceGroup": {
+            "name": "rg-data",
+            "region": "westeurope"
+          }
+        },
+        "dependencies": [],
+        "links": []
+      }
+    ]
+  },
+  "created": "2023-04-25T21:22:25.924375+00:00",
+  "status": "Active",
+  "statusMessage": "Completed",
+  "environment": {
+    "id": {
+      "type": "Unknown",
+      "ownerId": "00000000-0000-0000-0000-000000000000",
+      "shortName": null
+    },
+    "parameters": {
+      "dnsZones": [
+        {
+          "name": "fractal.cloud",
+          "private": false,
+          "parameters": {
+            "subscriptionId": "cfd01347-6c9b-4e08-ae01-7eaf1b830ef4",
+            "azureResourceGroup": {
+              "name": "central",
+              "region": "centralus"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "currentMutationId": "bf23f8be-7e36-4db7-8565-e83a10a331fa",
+  "lastUpdated": "2023-04-25T21:22:25.940935+00:00"
+}

@@ -1,7 +1,6 @@
 package com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos;
 
 import com.yanchware.fractal.sdk.aggregates.Environment;
-import com.yanchware.fractal.sdk.aggregates.EnvironmentType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,13 +11,13 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EnvironmentIdDto {
-  private EnvironmentType type;
+  private EnvironmentTypeDto type;
   private UUID ownerId;
   private String shortName;
 
   public static EnvironmentIdDto fromEnvironment(Environment env) {
     return new EnvironmentIdDto(
-        env.getEnvironmentType(),
+        EnvironmentTypeDto.fromString(env.getEnvironmentType().toString()),
         env.getOwnerId(),
         env.getShortName());
   }
