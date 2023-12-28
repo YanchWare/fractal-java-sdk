@@ -3,6 +3,7 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 import com.yanchware.fractal.sdk.domain.entities.Validatable;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.NodeTaint;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureMachineType;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureOsSku;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureOsType;
 import com.yanchware.fractal.sdk.utils.CollectionUtils;
 import lombok.AccessLevel;
@@ -43,6 +44,7 @@ public class AzureNodePool implements Validatable {
   private String name;
   private Integer maxPodsPerNode;
   private AzureOsType osType;
+  private AzureOsSku osSku;
   private AzureAgentPoolMode agentPoolMode;
   private SortedSet<String> nodeTaints;
   private boolean autoscalingEnabled;
@@ -103,6 +105,11 @@ public class AzureNodePool implements Validatable {
 
     public AzureNodePoolBuilder withOsType(AzureOsType osType) {
       nodePool.setOsType(osType);
+      return builder;
+    }
+
+    public AzureNodePoolBuilder withOsSku(AzureOsSku osSku) {
+      nodePool.setOsSku(osSku);
       return builder;
     }
 
@@ -225,6 +232,21 @@ public class AzureNodePool implements Validatable {
       if (this.minNodeCount == null) {
         errors.add(MIN_NODE_COUNT_IS_NULL);
       }
+    }
+
+    if (this.osType == AzureOsType.LINUX &&
+        this.osSku != null && (
+        this.osSku.equals(AzureOsSku.WINDOWS2019) ||
+            this.osSku.equals(AzureOsSku.WINDOWS2022))) {
+      errors.add("Windows OS SKU cannot be used with Linux OS Type");
+    }
+
+    if (this.osType == AzureOsType.WINDOWS &&
+        this.osSku != null &&
+        (this.osSku.equals(AzureOsSku.UBUNTU) ||
+            this.osSku.equals(AzureOsSku.AZURE_LINUX) ||
+            this.osSku.equals(AzureOsSku.CBLMARINER))) {
+      errors.add("Linux OS SKU cannot be used with Windows OS Type");
     }
 
     return errors;

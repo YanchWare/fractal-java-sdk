@@ -164,4 +164,44 @@ public class AzureNodePoolTest {
         ))
         .withAutoscalingEnabled(autoscalingEnabled);
   }
+
+  @Test
+  public void correctValues_when_azureNodePoolWithAzureLinuxOsSkuBuilt() {
+    var nodePoolName = "azlinuxpool";
+    var nodePool = AzureNodePool.builder()
+        .withName(nodePoolName)
+        .withMachineType(AzureMachineType.STANDARD_B2S)
+        .withOsType(AzureOsType.LINUX)
+        .withOsSku(AzureOsSku.AZURE_LINUX)
+        .build();
+    
+    
+    assertThat(nodePool)
+        .extracting("name", "osType", "osSku", "agentPoolMode")
+        .contains(nodePoolName, AzureOsType.LINUX, AzureOsSku.AZURE_LINUX, AzureAgentPoolMode.SYSTEM);
+  }
+
+  @Test
+  public void validationError_when_azureNodePoolWithLinuxOsTypeAndWindowsOsSku() {
+    assertThatThrownBy(() -> AzureNodePool.builder()
+        .withName("azlinuxpool")
+        .withMachineType(AzureMachineType.STANDARD_B2S)
+        .withOsType(AzureOsType.LINUX)
+        .withOsSku(AzureOsSku.WINDOWS2019)
+        .build())
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("Windows OS SKU cannot be used with Linux OS Type");
+  }
+
+  @Test
+  public void validationError_when_azureNodePoolWithWindowsOsTypeAndAzureLinuxOsSku() {
+    assertThatThrownBy(() -> AzureNodePool.builder()
+        .withName("windowspool")
+        .withMachineType(AzureMachineType.STANDARD_B2S)
+        .withOsType(AzureOsType.WINDOWS)
+        .withOsSku(AzureOsSku.AZURE_LINUX)
+        .build())
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("Linux OS SKU cannot be used with Windows OS Type");
+  }
 }
