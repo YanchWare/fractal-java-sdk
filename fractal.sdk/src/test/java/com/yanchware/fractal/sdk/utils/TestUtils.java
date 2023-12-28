@@ -12,6 +12,7 @@ import com.yanchware.fractal.sdk.domain.entities.ComponentLink;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.*;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PodManagedIdentity;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.RoleAssignment;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureOsSku;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzurePostgreSqlDatabase;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzurePostgreSqlDbms;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
@@ -82,6 +83,7 @@ public class TestUtils {
             .withMinNodeCount(1)
             .withMaxPodsPerNode(100)
             .withOsType(LINUX)
+            .withOsSku(AzureOsSku.AZURE_LINUX)
             .withAutoscalingEnabled(true)
             .build())
         .withPriorityClass(PriorityClass.builder()

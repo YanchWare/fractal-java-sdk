@@ -234,13 +234,15 @@ public class AzureNodePool implements Validatable {
       }
     }
 
-    if (this.osType == AzureOsType.LINUX && (
+    if (this.osType == AzureOsType.LINUX &&
+        this.osSku != null && (
         this.osSku.equals(AzureOsSku.WINDOWS2019) ||
             this.osSku.equals(AzureOsSku.WINDOWS2022))) {
       errors.add("Windows OS SKU cannot be used with Linux OS Type");
     }
 
     if (this.osType == AzureOsType.WINDOWS &&
+        this.osSku != null &&
         (this.osSku.equals(AzureOsSku.UBUNTU) ||
             this.osSku.equals(AzureOsSku.AZURE_LINUX) ||
             this.osSku.equals(AzureOsSku.CBLMARINER))) {
