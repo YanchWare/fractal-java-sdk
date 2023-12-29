@@ -52,6 +52,6 @@ public class AzureResourceGroupTest {
         .withRegion(AzureRegion.fromString("wrong_enum"))
         .build())
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("[AzureResourceGroup Validation] name is empty or it exceeds 90 characters");
+        .hasMessageContaining("[AzureResourceGroup Validation] Name cannot be null or empty");
   }
 }

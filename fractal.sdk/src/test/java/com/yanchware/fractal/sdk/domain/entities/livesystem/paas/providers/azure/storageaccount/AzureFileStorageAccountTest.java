@@ -2,16 +2,10 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yanchware.fractal.sdk.aggregates.Environment;
-import com.yanchware.fractal.sdk.aggregates.EnvironmentType;
-import com.yanchware.fractal.sdk.aggregates.LiveSystem;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
 import com.yanchware.fractal.sdk.utils.TestUtils;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -63,33 +57,31 @@ public class AzureFileStorageAccountTest {
             .withShareQuota(100)
             .withAccessTier(AzureFileShareAccessTier.PREMIUM)
             .build())
+        .withFileShare(AzureFileShare.builder()
+            .withId("nfs-templates")
+            .withName("nfs")
+            .withDisplayName("NFS Templates")
+            .withEnabledProtocols(AzureFileShareEnabledProtocols.NFS)
+            .withRootSquash(AzureFileShareRootSquashType.ROOT_SQUASH)
+            .withShareQuota(100)
+            .withAccessTier(AzureFileShareAccessTier.PREMIUM)
+            .build())
         .withTag("key1", "value1")
         .build();
     assertTrue(storage.validate().isEmpty());
-
-
-    LiveSystem testLiveSystem = LiveSystem.builder()
-        .withFractalName("fractal-name")
-        .withName("testLiveSystem")
-        .withDescription("Test Live System")
-        .withResourceGroupId(UUID.randomUUID().toString())
-        .withComponents(List.of(storage))
-        .withEnvironment(Environment.builder()
-            .withEnvironmentType(EnvironmentType.PERSONAL)
-            .withOwnerId(UUID.randomUUID())
-            .withShortName("test")
-            .build())
-        .build();
     
-    var json = TestUtils.getJsonRepresentation(testLiveSystem);
+    var json = TestUtils.getJsonRepresentation(storage);
     assertThat(json).isNotBlank();
 
     var mapper = new ObjectMapper();
     var rootNode = mapper.readTree(json);
-    var propertyNode = rootNode.path("kind");
+    var kindNode = rootNode.path("kind");
+    var fileSharesNode = rootNode.path("fileShares");
 
-    assertThat(propertyNode).isNotNull();
+    assertThat(kindNode).isNotNull();
+    assertThat(fileSharesNode).isNotNull();
 
-    assertThat(propertyNode.asText()).isEqualTo("FileStorage");
+    assertThat(kindNode.asText()).isEqualTo("FileStorage");
+    assertThat(fileSharesNode.size()).isEqualTo(2);
   }
 }

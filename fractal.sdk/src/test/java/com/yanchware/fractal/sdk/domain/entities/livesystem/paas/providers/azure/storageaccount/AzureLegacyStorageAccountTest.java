@@ -592,6 +592,12 @@ public class AzureLegacyStorageAccountTest {
   }
 
   private AzureStorageAccount.AzureStorageAccountBuilder generateBuilder() {
-    return builder().withId("storageaccount");
+    return builder().withId("storageaccount")
+        .withName("storageaccount")
+        .withRegion(AzureRegion.EUROPE_WEST)
+        .withResourceGroup(AzureResourceGroup.builder()
+            .withName("rg-test")
+            .withRegion(AzureRegion.EUROPE_WEST)
+            .build());
   }
 }
