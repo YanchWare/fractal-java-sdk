@@ -9,7 +9,6 @@ import lombok.Setter;
 @Setter(AccessLevel.PRIVATE)
 public class AzureStorageAccountSettings {
   AzureLargeFileSharesState largeFileSharesState;
-  AzureStorageKind kind;
   Boolean isHnsEnabled;
   Boolean accountImmutabilityEnabled;
   AzureAccountImmutabilityPolicyState accountImmutabilityPolicyState;
@@ -49,11 +48,6 @@ public class AzureStorageAccountSettings {
 
     public AzureStorageAccountSettingsBuilder withLargeFileSharesState(AzureLargeFileSharesState largeFileSharesState) {
       settings.setLargeFileSharesState(largeFileSharesState);
-      return builder;
-    }
-
-    public AzureStorageAccountSettingsBuilder withKind(AzureStorageKind kind) {
-      settings.setKind(kind);
       return builder;
     }
 

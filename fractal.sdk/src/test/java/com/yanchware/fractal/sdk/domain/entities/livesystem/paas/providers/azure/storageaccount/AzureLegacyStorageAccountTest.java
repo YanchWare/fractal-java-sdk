@@ -14,11 +14,12 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.AzureLegacyStorageAccount.builder;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.AzureStorageAccount.builder;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.BaseAzureFileStorage.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AzureLegacyStorageAccountTest {
 
@@ -476,7 +477,6 @@ public class AzureLegacyStorageAccountTest {
                 .withEncryptionKeySource(AzureStorageKeySource.MICROSOFT_STORAGE)
                 .withLargeFileSharesState(AzureLargeFileSharesState.DISABLED)
                 .withFileEncryptionType(AzureStorageKeySource.MICROSOFT_STORAGE)
-                .withKind(AzureStorageKind.FILE_STORAGE)
                 .withQueueEncryptionType(AzureStorageKeyType.ACCOUNT)
                 .withTableEncryptionType(AzureStorageKeyType.ACCOUNT)
                 .withEncryptionFederatedIdentityClientId("encryptionFederatedIdentityClientId")
@@ -505,7 +505,6 @@ public class AzureLegacyStorageAccountTest {
     assertEquals(AzureStorageKeySource.MICROSOFT_STORAGE, storageAccountSettings.getEncryptionKeySource());
     assertEquals(AzureLargeFileSharesState.DISABLED, storageAccountSettings.getLargeFileSharesState());
     assertEquals(AzureStorageKeySource.MICROSOFT_STORAGE, storageAccountSettings.getFileEncryptionType());
-    assertEquals(AzureStorageKind.FILE_STORAGE, storageAccountSettings.getKind());
     assertEquals(AzureStorageKeyType.ACCOUNT, storageAccountSettings.getQueueEncryptionType());
     assertEquals(AzureStorageKeyType.ACCOUNT, storageAccountSettings.getTableEncryptionType());
     assertEquals("encryptionFederatedIdentityClientId", storageAccountSettings.getEncryptionFederatedIdentityClientId());
@@ -543,20 +542,6 @@ public class AzureLegacyStorageAccountTest {
     assertEquals("customDomainName", storageAccountSettings.getCustomDomainName());
     assertEquals("extendedLocationName", storageAccountSettings.getExtendedLocationName());
     assertEquals("extendedLocationType", storageAccountSettings.getExtendedLocationType());
-  }
-
-
-  @Test
-  public void booleanWithoutValueAreNotPresent_when_serialisingTheComponent() throws JsonProcessingException {
-    var storageAccountSettings = generateBuilder()
-        .withSettings(
-            AzureStorageAccountSettings.builder()
-                .withKind(AzureStorageKind.FILE_STORAGE)
-                .build()
-        ).build();
-
-    String result = SerializationUtils.serialize(storageAccountSettings.getSettings());
-    assertEquals("{\"kind\":\"FileStorage\"}", result);
   }
 
   @Test
@@ -606,7 +591,7 @@ public class AzureLegacyStorageAccountTest {
         isInstanceOf(IllegalArgumentException.class);
   }
 
-  private AzureLegacyStorageAccount.AzureLegacyStorageAccountBuilder generateBuilder() {
+  private AzureStorageAccount.AzureStorageAccountBuilder generateBuilder() {
     return builder().withId("storageaccount");
   }
 }
