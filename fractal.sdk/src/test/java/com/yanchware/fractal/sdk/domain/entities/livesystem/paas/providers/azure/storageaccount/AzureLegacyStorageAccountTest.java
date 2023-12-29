@@ -1,20 +1,303 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureAction;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureTlsVersion;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.valueobjects.*;
 import com.yanchware.fractal.sdk.utils.SerializationUtils;
+import com.yanchware.fractal.sdk.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.List;
 
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.AzureStorageAccount.builder;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.AzureLegacyStorageAccount.builder;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.BaseAzureFileStorage.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class AzureStorageAccountTest {
+public class AzureLegacyStorageAccountTest {
+
+  @Test
+  public void exceptionThrown_when_storageAccountBuiltWithEmptyId() {
+    assertThatThrownBy(() -> AzureLegacyStorageAccount.builder().withId("").build()).
+        isInstanceOf(IllegalArgumentException.class).
+        hasMessageContaining("Component Id is illegal");
+  }
+
+  @Test
+  public void exceptionThrown_when_storageAccountBuiltWithEmptyName() {
+    assertThatThrownBy(() -> AzureLegacyStorageAccount.builder()
+        .withId("legacy-storage-account")
+        .withName("")
+        .build()).
+        isInstanceOf(IllegalArgumentException.class).
+        hasMessageContaining(BaseAzureFileStorage.NAME_IS_NOT_VALID);
+  }
+
+  @Test
+  public void exceptionThrown_when_storageAccountBuiltWithNullName() {
+    assertThatThrownBy(() -> AzureLegacyStorageAccount.builder()
+        .withId("legacy-storage-account")
+        .withName(null)
+        .build()).
+        isInstanceOf(IllegalArgumentException.class).
+        hasMessageContaining(BaseAzureFileStorage.NAME_IS_NOT_VALID);
+  }
+
+  @Test
+  public void exceptionThrown_when_storageAccountBuiltWithToShortName() {
+    assertThatThrownBy(() -> AzureLegacyStorageAccount.builder()
+        .withId("legacy-storage-account")
+        .withName("na")
+        .build()).
+        isInstanceOf(IllegalArgumentException.class).
+        hasMessageContaining(BaseAzureFileStorage.NAME_IS_NOT_VALID);
+  }
+
+  @Test
+  public void exceptionThrown_when_storageAccountBuiltWithToLongName() {
+    assertThatThrownBy(() -> AzureLegacyStorageAccount.builder()
+        .withId("legacy-storage-account")
+        .withName("a234567890123456789012345")
+        .build()).
+        isInstanceOf(IllegalArgumentException.class).
+        hasMessageContaining(BaseAzureFileStorage.NAME_IS_NOT_VALID);
+  }
+
+  @Test
+  public void exceptionThrown_when_storageAccountBuiltWithNullAzureRegion() {
+    assertThatThrownBy(() -> AzureLegacyStorageAccount.builder()
+        .withId("legacy-storage-account")
+        .withName("abc")
+        .withRegion(null)
+        .build()).
+        isInstanceOf(IllegalArgumentException.class).
+        hasMessageContaining(AZURE_REGION_IS_BLANK);
+  }
+
+  @Test
+  public void exceptionThrown_when_storageAccountBuiltWithNullAzureResourceGroup() {
+    assertThatThrownBy(() -> AzureLegacyStorageAccount.builder()
+        .withId("legacy-storage-account")
+        .withName("abc")
+        .withRegion(AzureRegion.EUROPE_WEST)
+        .withResourceGroup(null)
+        .build()).
+        isInstanceOf(IllegalArgumentException.class).
+        hasMessageContaining(AZURE_RESOURCE_GROUP_IS_BLANK);
+  }
+
+  @Test
+  public void exceptionThrown_when_storageAccountBuiltWithEmptyNameInAzureResourceGroup() {
+    assertThatThrownBy(() -> AzureLegacyStorageAccount.builder()
+        .withId("legacy-storage-account")
+        .withName("abc")
+        .withRegion(AzureRegion.EUROPE_WEST)
+        .withResourceGroup(AzureResourceGroup.builder()
+            .withName("")
+            .build())
+        .build()).
+        isInstanceOf(IllegalArgumentException.class).
+        hasMessageContaining(AzureResourceGroup.NAME_IS_NULL_OR_EMPTY);
+  }
+
+  @Test
+  public void exceptionThrown_when_storageAccountBuiltWithNullNameInAzureResourceGroup() {
+    assertThatThrownBy(() -> AzureLegacyStorageAccount.builder()
+        .withId("legacy-storage-account")
+        .withName("abc")
+        .withRegion(AzureRegion.EUROPE_WEST)
+        .withResourceGroup(AzureResourceGroup.builder()
+            .withName(null)
+            .build())
+        .build()).
+        isInstanceOf(IllegalArgumentException.class).
+        hasMessageContaining(AzureResourceGroup.NAME_IS_NULL_OR_EMPTY);
+  }
+
+  @Test
+  public void exceptionThrown_when_storageAccountBuiltWithNullRegionInAzureResourceGroup() {
+    assertThatThrownBy(() -> AzureLegacyStorageAccount.builder()
+        .withId("legacy-storage-account")
+        .withName("abc")
+        .withRegion(AzureRegion.EUROPE_WEST)
+        .withResourceGroup(AzureResourceGroup.builder()
+            .withName("resource-group")
+            .withRegion(null)
+            .build())
+        .build()).
+        isInstanceOf(IllegalArgumentException.class).
+        hasMessageContaining(AzureResourceGroup.REGION_IS_BLANK);
+  }
+
+  @Test
+  public void exceptionThrown_when_storageAccountBuiltWithInvalidNameWithSpacesInAzureResourceGroup() {
+    assertThatThrownBy(() -> AzureLegacyStorageAccount.builder()
+        .withId("legacy-storage-account")
+        .withName("abc")
+        .withRegion(AzureRegion.EUROPE_WEST)
+        .withResourceGroup(AzureResourceGroup.builder()
+            .withName("invalid name with spaces")
+            .withRegion(AzureRegion.EUROPE_WEST)
+            .build())
+        .build()).
+        isInstanceOf(IllegalArgumentException.class).
+        hasMessageContaining(AzureResourceGroup.NAME_IS_NOT_VALID);
+  }
+
+  @Test
+  public void exceptionThrown_when_storageAccountBuiltWithInvalidNameEndsWithDotInAzureResourceGroup() {
+    assertThatThrownBy(() -> AzureLegacyStorageAccount.builder()
+        .withId("legacy-storage-account")
+        .withName("abc")
+        .withRegion(AzureRegion.EUROPE_WEST)
+        .withResourceGroup(AzureResourceGroup.builder()
+            .withName("invalid.name.")
+            .withRegion(AzureRegion.EUROPE_WEST)
+            .build())
+        .build()).
+        isInstanceOf(IllegalArgumentException.class).
+        hasMessageContaining(AzureResourceGroup.NAME_IS_NOT_VALID);
+  }
+
+  @Test
+  public void exceptionThrown_when_storageAccountBuiltWithInvalidCharacterAsPartOfNameInAzureResourceGroup() {
+    assertThatThrownBy(() -> AzureLegacyStorageAccount.builder()
+        .withId("legacy-storage-account")
+        .withName("abc")
+        .withRegion(AzureRegion.EUROPE_WEST)
+        .withResourceGroup(AzureResourceGroup.builder()
+            .withName("invalid?name")
+            .withRegion(AzureRegion.EUROPE_WEST)
+            .build())
+        .build()).
+        isInstanceOf(IllegalArgumentException.class).
+        hasMessageContaining(AzureResourceGroup.NAME_IS_NOT_VALID);
+  }
+
+  @Test
+  public void exceptionThrown_when_storageAccountBuiltWithInvalidCharactersAsPartOfNameInAzureResourceGroup() {
+    assertThatThrownBy(() -> AzureLegacyStorageAccount.builder()
+        .withId("legacy-storage-account")
+        .withName("abc")
+        .withRegion(AzureRegion.EUROPE_WEST)
+        .withResourceGroup(AzureResourceGroup.builder()
+            .withName("!invalid@name#")
+            .withRegion(AzureRegion.EUROPE_WEST)
+            .build())
+        .build()).
+        isInstanceOf(IllegalArgumentException.class).
+        hasMessageContaining(AzureResourceGroup.NAME_IS_NOT_VALID);
+  }
+
+  @Test
+  public void exceptionThrown_when_storageAccountBuiltWithEmptyKeyAndProperValueInTags() {
+    assertThatThrownBy(() -> AzureLegacyStorageAccount.builder()
+        .withId("legacy-storage-account")
+        .withName("a23456789012345678901234")
+        .withRegion(AzureRegion.EUROPE_WEST)
+        .withResourceGroup(AzureResourceGroup.builder()
+            .withName("validName123")
+            .withRegion(AzureRegion.EUROPE_WEST)
+            .build())
+        .withTag("", "value1")
+        .build()).
+        isInstanceOf(IllegalArgumentException.class).
+        hasMessageContaining(TAG_KEY_IS_BLANK);
+  }
+
+  @Test
+  public void exceptionThrown_when_storageAccountBuiltWithEmptyValueInTags() {
+    assertThatThrownBy(() -> AzureLegacyStorageAccount.builder()
+        .withId("legacy-storage-account")
+        .withName("a23456789012345678901234")
+        .withRegion(AzureRegion.EUROPE_WEST)
+        .withResourceGroup(AzureResourceGroup.builder()
+            .withName("validName123")
+            .withRegion(AzureRegion.EUROPE_WEST)
+            .build())
+        .withTag("key1", "")
+        .build()).
+        isInstanceOf(IllegalArgumentException.class).
+        hasMessageContaining("Tag value for key 'key1' cannot be null or empty");
+  }
+
+  @Test
+  public void nameIsValid_when_MinimumValidLengthNameSet() {
+    var storage = AzureLegacyStorageAccount.builder()
+        .withId("legacy-storage-account")
+        .withName("abc")
+        .withRegion(AzureRegion.EUROPE_WEST)
+        .withResourceGroup(AzureResourceGroup.builder()
+            .withName("validName123")
+            .withRegion(AzureRegion.EUROPE_WEST)
+            .build())
+        .build();
+
+    assertTrue(storage.validate().isEmpty());
+  }
+
+  @Test
+  public void nameIsValid_when_MaximumValidLengthNameSet() {
+    var storage = AzureLegacyStorageAccount.builder()
+        .withId("legacy-storage-account")
+        .withName("a23456789012345678901234")
+        .withRegion(AzureRegion.EUROPE_WEST)
+        .withResourceGroup(AzureResourceGroup.builder()
+            .withName("validName123")
+            .withRegion(AzureRegion.EUROPE_WEST)
+            .build())
+        .build();
+
+    assertTrue(storage.validate().isEmpty());
+  }
+
+  @Test
+  public void tagsAreValid_when_KeyAndValueProvided() {
+    var storage = AzureLegacyStorageAccount.builder()
+        .withId("legacy-storage-account")
+        .withName("a23456789012345678901234")
+        .withRegion(AzureRegion.EUROPE_WEST)
+        .withResourceGroup(AzureResourceGroup.builder()
+            .withName("validName123")
+            .withRegion(AzureRegion.EUROPE_WEST)
+            .build())
+        .withTag("key1", "value1")
+        .build();
+    
+    assertTrue(storage.validate().isEmpty());
+  }
+
+  @Test
+  public void kindIsValid_when_ValidationPasses() throws JsonProcessingException {
+    var storage = AzureLegacyStorageAccount.builder()
+        .withId("legacy-storage-account")
+        .withName("a23456789012345678901234")
+        .withRegion(AzureRegion.EUROPE_WEST)
+        .withResourceGroup(AzureResourceGroup.builder()
+            .withName("validName123")
+            .withRegion(AzureRegion.EUROPE_WEST)
+            .build())
+        .withTag("key1", "value1")
+        .build();
+    assertTrue(storage.validate().isEmpty());
+
+    var json = TestUtils.getJsonRepresentation(storage);
+    assertThat(json).isNotBlank();
+
+    var mapper = new ObjectMapper();
+    var rootNode = mapper.readTree(json);
+    var propertyNode = rootNode.path("kind");
+    
+    assertThat(propertyNode).isNotNull();
+    
+    assertThat(propertyNode.asText()).isEqualTo("Storage");
+  }
 
   @Test
   public void exceptionThrown_when_storageAccountBuiltWithNullId() {
@@ -97,7 +380,7 @@ public class AzureStorageAccountTest {
     var azureResourceAccessRule = new AzureResourceAccessRule(
         "tenantId", "resourceId"
     );
-    
+
     var storageAccountConnectivity = generateBuilder()
         .withConnectivity(
             AzureStorageAccountConnectivity.builder()
@@ -323,8 +606,7 @@ public class AzureStorageAccountTest {
         isInstanceOf(IllegalArgumentException.class);
   }
 
-  private AzureStorageAccount.AzureStorageAccountBuilder generateBuilder() {
+  private AzureLegacyStorageAccount.AzureLegacyStorageAccountBuilder generateBuilder() {
     return builder().withId("storageaccount");
   }
-
 }
