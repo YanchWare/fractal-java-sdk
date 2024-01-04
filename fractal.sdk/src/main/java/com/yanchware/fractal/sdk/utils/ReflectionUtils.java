@@ -19,7 +19,7 @@ public class ReflectionUtils {
     /**
      * Build component list together with dependencies
      * #1 run "dependencyId" is null because we start at the top level of components (in most cases, a ContainerPlatform)
-     * @param component component to build from - can result in multiple components, depending on hierarchy
+     * @param component component to patch from - can result in multiple components, depending on hierarchy
      * @return a list of all components mapped as key-value
      */
 

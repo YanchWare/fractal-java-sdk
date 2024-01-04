@@ -19,7 +19,7 @@ class KafkaClusterTest {
                 .withId("azure-kafka")
                 .withDescription("Kafka for Azure")
                 .withDisplayName("AzureKafka #1");
-        assertThatThrownBy(kafkaBuilder::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
+        assertThatThrownBy(kafkaBuilder::patch).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
                 "Namespace has not been defined and it is required");
     }
 
@@ -29,7 +29,7 @@ class KafkaClusterTest {
                 .withDescription("Kafka for Azure")
                 .withDisplayName("AzureKafka #1")
                 .withNamespace("namespace");
-        assertThatThrownBy(kafkaBuilder::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
+        assertThatThrownBy(kafkaBuilder::patch).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
                 "Component id has not been defined and it is required");
     }
 
@@ -41,7 +41,7 @@ class KafkaClusterTest {
                 .withDisplayName("AzureKafka #1")
                 .withNamespace("namespace")
                 .withContainerPlatform("");
-        assertThatThrownBy(kafkaBuilder::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
+        assertThatThrownBy(kafkaBuilder::patch).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
                 "ContainerPlatform defined was either empty or blank and it is required");
     }
 
@@ -54,9 +54,9 @@ class KafkaClusterTest {
                 .withNamespace("namespace")
                 .withContainerPlatform("containerPlatform")
                 .withKafkaTopics(List.of(
-                        KafkaTopic.builder().withId(ComponentId.from("topic")).withDisplayName("kafka-topic").build()))
+                        KafkaTopic.builder().withId(ComponentId.from("topic")).withDisplayName("kafka-topic").patch()))
                 .withKafkaUsers(List.of(
-                        KafkaUser.builder().withId(ComponentId.from("user-1")).withDisplayName("kafka-user").withTopicReadACL("svcName").build())).build();
+                        KafkaUser.builder().withId(ComponentId.from("user-1")).withDisplayName("kafka-user").withTopicReadACL("svcName").patch())).patch();
 
         assertThat(kafkaCluster)
                 .returns("azure-kafka", from(x -> x.getId().getValue()))

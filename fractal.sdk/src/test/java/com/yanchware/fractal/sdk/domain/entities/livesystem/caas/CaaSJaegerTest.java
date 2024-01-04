@@ -11,28 +11,28 @@ import static org.assertj.core.api.Assertions.*;
 class JaegerTest {
     @Test
     public void exceptionThrown_when_BuiltWithNullId() {
-        assertThatThrownBy(() -> Jaeger.builder().withId("").build()).
+        assertThatThrownBy(() -> Jaeger.builder().withId("").patch()).
                 isInstanceOf(IllegalArgumentException.class).
                 hasMessageContaining("Component Id is illegal");
     }
 
     @Test
     public void exceptionThrown_when_BuiltWithContainerPlatformBlank() {
-        assertThatThrownBy(() -> Jaeger.builder().withId("jaeger").withContainerPlatform("").build()).
+        assertThatThrownBy(() -> Jaeger.builder().withId("jaeger").withContainerPlatform("").patch()).
                 isInstanceOf(IllegalArgumentException.class).
                 hasMessageContaining("ContainerPlatform defined was either empty or blank");
     }
 
     @Test
     public void exceptionThrown_when_BuiltWithContainerPlatformEmpty() {
-        assertThatThrownBy(() -> Jaeger.builder().withId("jaeger").withContainerPlatform("   ").build()).
+        assertThatThrownBy(() -> Jaeger.builder().withId("jaeger").withContainerPlatform("   ").patch()).
                 isInstanceOf(IllegalArgumentException.class).
                 hasMessageContaining("ContainerPlatform defined was either empty or blank");
     }
 
     @Test
     public void exceptionThrown_when_BuiltWithEmptyValues() {
-        assertThatThrownBy(() -> Jaeger.builder().withId("jaeger").build()).
+        assertThatThrownBy(() -> Jaeger.builder().withId("jaeger").patch()).
                 isInstanceOf(IllegalArgumentException.class).
                 hasMessageContainingAll(
                         "Namespace has not been defined and it is required");
