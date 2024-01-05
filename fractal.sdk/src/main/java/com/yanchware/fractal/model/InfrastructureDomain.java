@@ -4,7 +4,8 @@ public enum InfrastructureDomain {
     API_MANAGEMENT("ApiManagement"),
     CUSTOM_WORKLOAD("CustomWorkload"),
     MESSAGING("Messaging"),
-    NETWORK_AND_COMPUTE("NetworkAndCompute"),
+    NETWORK("Network"),
+    COMPUTE("Compute"),
     OBSERVABILITY("Observability"),
     SECURITY("Security"),
     STORAGE("Storage");

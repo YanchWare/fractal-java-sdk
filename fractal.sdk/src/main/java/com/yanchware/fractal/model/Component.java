@@ -15,11 +15,12 @@ public abstract class Component {
     protected final String description;
     protected final List<? extends Dependency> dependencies;
 
-    public record Type(InfrastructureDomain domain, InfrastructureTier tier, PascalCaseString name) {
-    }
+    public record Type(
+            InfrastructureDomain domain,
+            InfrastructureTier tier,
+            PascalCaseString name) { }
 
-    public record Parameters(Map<String, Object> value) {
-    }
+    public record Parameters(Map<String, Object> value) { }
 
     public interface Dependency {
         Type type();
