@@ -18,7 +18,7 @@ public class Fractal extends Component
             String description,
             Blueprint blueprint,
             Interface fractalInterface,
-            List<BlueprintComponent.Dependency> dependencies)
+            List<Dependency> dependencies)
     {
         super(id.version(), type, displayName, description, dependencies);
         this.id = id;

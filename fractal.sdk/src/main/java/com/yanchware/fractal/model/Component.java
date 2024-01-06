@@ -15,10 +15,17 @@ public abstract class Component {
     protected final String description;
     protected final List<? extends Dependency> dependencies;
 
-    public record Type(
-            InfrastructureDomain domain,
-            InfrastructureTier tier,
-            PascalCaseString name) { }
+    @AllArgsConstructor
+    @Getter
+    public static class Type {
+        private InfrastructureDomain domain;
+
+       @Override
+        public String toString()
+       {
+           return domain.toString();
+       }
+    }
 
     public record Parameters(Map<String, Object> value) { }
 

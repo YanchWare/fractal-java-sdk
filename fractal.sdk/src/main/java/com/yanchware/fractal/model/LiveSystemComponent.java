@@ -17,7 +17,7 @@ public class LiveSystemComponent extends Component {
     public LiveSystemComponent(
             BlueprintComponent.Id id,
             Version version,
-            Type type,
+            Offer.Type type,
             String displayName,
             String description,
             List<BlueprintComponent.Dependency> dependencies,

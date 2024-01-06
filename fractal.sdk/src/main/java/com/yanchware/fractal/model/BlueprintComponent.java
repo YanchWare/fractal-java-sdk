@@ -30,6 +30,22 @@ public class BlueprintComponent extends Component {
         this.links = links;
     }
 
+    @Getter
+    public static class Type extends Component.Type {
+        private PascalCaseString name;
+        public Type(InfrastructureDomain domain, PascalCaseString name){
+            super(domain);
+        }
+
+        @Override
+        public String toString()
+        {
+            return String.format("%s.%s",
+                    super.toString(),
+                    name);
+        }
+    }
+
     public record Id(KebabCaseString value) {
     }
 
@@ -37,15 +53,6 @@ public class BlueprintComponent extends Component {
         public record Parameters(Map<String, Object> value) {
         }
     }
+
     public record Dependency(Component.Type type, Id id) implements Component.Dependency { }
-
-    public record Service(
-            Component.Type type,
-            String DisplayName,
-            List<Offer> offers) { }
-
-    public record Offer(
-            Component.Type type,
-            Provider provider,
-            String DisplayName) { }
 }
