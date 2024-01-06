@@ -3,37 +3,36 @@ package com.yanchware.fractal.model;
 import lombok.Getter;
 
 import java.util.List;
-import java.util.Map;
 
 @Getter
-public class LiveSystemComponent extends Component {
-    private final BlueprintComponent.Id id;
+public class LiveSystemComponent extends Offer {
     private final Status status;
-    private final Component.Parameters parameters;
-    private final OutputFields outputFields;
-    private final Provider provider;
-    private final List<BlueprintComponent.Link> links;
 
     public LiveSystemComponent(
-            BlueprintComponent.Id id,
+            Id id,
             Version version,
-            Offer.Type type,
+            BlueprintComponent.Service.Type type,
             String displayName,
             String description,
-            List<BlueprintComponent.Dependency> dependencies,
-            Status status,
             Component.Parameters parameters,
-            OutputFields outputFields,
+            Component.OutputFields outputFields,
+            List<Link> links,
+            List<BlueprintComponent.Dependency> dependencies,
             Provider provider,
-            List<BlueprintComponent.Link> links)
+            Status status)
     {
-        super(version, type, displayName, description, dependencies);
-        this.id = id;
+        super(
+                id,
+                version,
+                type,
+                displayName,
+                description,
+                parameters,
+                outputFields,
+                links,
+                dependencies,
+                provider);
         this.status = status;
-        this.parameters = parameters;
-        this.outputFields = outputFields;
-        this.provider = provider;
-        this.links = links;
     }
 
     public enum Status {
@@ -43,6 +42,4 @@ public class LiveSystemComponent extends Component {
         DELETING,
         FAILED
     }
-
-    public record OutputFields(Map<String, Object> value) { }
 }

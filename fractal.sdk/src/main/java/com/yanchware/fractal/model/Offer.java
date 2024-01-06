@@ -2,16 +2,34 @@ package com.yanchware.fractal.model;
 
 import lombok.Getter;
 
-public record Offer(
-        Type type,
-        Provider provider,
-        String DisplayName) {
+import java.util.List;
 
-    @Getter
-    public static class Type extends Service.Type {
-        public Type(Service.Type serviceType, PascalCaseString name)
-        {
-            super(serviceType.getBlueprintComponentType(), serviceType.getTier(), name);
-        }
+@Getter
+public class Offer extends Component {
+    private final Provider provider;
+
+    public Offer(
+            Id id,
+            Version version,
+            BlueprintComponent.Service.Type type,
+            String displayName,
+            String description,
+            Component.Parameters parameters,
+            Component.OutputFields outputFields,
+            List<Link> links,
+            List<BlueprintComponent.Dependency> dependencies,
+            Provider provider)
+    {
+        super(
+                id,
+                version,
+                type,
+                displayName,
+                description,
+                parameters,
+                outputFields,
+                links,
+                dependencies);
+        this.provider = provider;
     }
 }
