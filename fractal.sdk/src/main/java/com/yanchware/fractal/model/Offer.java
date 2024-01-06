@@ -8,7 +8,7 @@ import java.util.List;
 public class Offer extends Component {
     private final Provider provider;
 
-    public Offer(
+    protected Offer(
             Id id,
             Version version,
             BlueprintComponent.Service.Type type,

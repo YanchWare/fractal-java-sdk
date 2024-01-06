@@ -7,8 +7,8 @@ import lombok.Getter;
 @Getter
 public class BoundedContext {
     private Id id;
-    protected String displayName;
-    protected String description;
+    private String displayName;
+    private String description;
 
     public record Id(OwnerType ownerType, OwnerId ownerId, KebabCaseString name) { }
 }

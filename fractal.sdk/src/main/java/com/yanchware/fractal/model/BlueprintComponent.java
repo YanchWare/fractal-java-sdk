@@ -9,7 +9,7 @@ import java.util.List;
 
 @Getter
 public abstract class BlueprintComponent extends Component {
-    protected final List<Service> services;
+    private final List<Service> services;
 
     public BlueprintComponent(
             Id id,
@@ -34,17 +34,6 @@ public abstract class BlueprintComponent extends Component {
                 dependencies);
 
         this.services = new ArrayList<>();
-    }
-
-    public record Type(
-            InfrastructureDomain domain,
-            PascalCaseString name) implements Component.Type {
-
-        @Override
-        public String toString()
-        {
-            return String.format("%s.%s", domain, name);
-        }
     }
 
     public record Dependency(Component.Type componentType, Id id) implements Component.Dependency { }
@@ -77,15 +66,15 @@ public abstract class BlueprintComponent extends Component {
                 Version version,
                 Provider provider) {
             var offer = new Offer(
-                    id,
+                    getId(),
                     version,
                     new Type(type.domain, type.tier, name),
                     displayName,
                     description,
-                    parameters,
-                    outputFields,
-                    links,
-                    (List<Dependency>) dependencies,
+                    getParameters(),
+                    getOutputFields(),
+                    getLinks(),
+                    (List<Dependency>) getDependencies(),
                     provider);
             offers.add(offer);
             return this;
@@ -93,7 +82,7 @@ public abstract class BlueprintComponent extends Component {
     }
 
     public Service withService(InfrastructureTier tier, PascalCaseString name) {
-        var service = new Service(new Service.Type(type.domain(), tier, name), new ArrayList<>());
+        var service = new Service(new Service.Type(getType().domain(), tier, name), new ArrayList<>());
         services.add(service);
         return service;
     }

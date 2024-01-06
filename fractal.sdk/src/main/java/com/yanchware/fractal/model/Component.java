@@ -9,15 +9,15 @@ import java.util.Map;
 @AllArgsConstructor
 @Getter
 public abstract class Component {
-    protected final Id id;
-    protected final Version version;
-    protected final Type type;
-    protected final String displayName;
-    protected final String description;
-    protected final Parameters parameters;
-    protected final OutputFields outputFields;
-    protected final List<Link> links;
-    protected final List<? extends Dependency> dependencies;
+    private final Id id;
+    private final Version version;
+    private final Type type;
+    private final String displayName;
+    private final String description;
+    private final Parameters parameters;
+    private final OutputFields outputFields;
+    private final List<Link> links;
+    private final List<? extends Dependency> dependencies;
 
     public interface Type {
         InfrastructureDomain domain();

@@ -10,4 +10,6 @@ import java.util.List;
 public class Blueprint {
     private Fractal.Id fractalId;
     private List<BlueprintComponent> components;
+    private String displayName;
+    private String description;
 }
