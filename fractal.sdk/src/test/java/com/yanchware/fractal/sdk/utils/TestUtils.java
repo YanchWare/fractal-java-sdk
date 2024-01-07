@@ -300,6 +300,7 @@ public class TestUtils {
         .withId("db-2")
         .withDisplayName("db-2")
         .withName("db2")
+        .withSchema("test")
         .withLink(getComponentLink())
         .build();
   }
@@ -309,6 +310,7 @@ public class TestUtils {
         .withId("db-2")
         .withDisplayName("db-2")
         .withName("db2")
+        .withSchema("test")
         .withLink(getComponentLink())
         .build();
   }
