@@ -6,7 +6,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class BoundedContext {
-    private Id id;
+    private final Id id;
     private String displayName;
     private String description;
 

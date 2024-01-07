@@ -9,7 +9,8 @@ import java.util.List;
 @Getter
 public class Environment {
     private final Id id;
-    private final String displayName;
+    private String displayName;
+    private String description;
     private final List<LiveSystemComponent> components;
     private final List<BoundedContext.Id> allowedContexts;
 

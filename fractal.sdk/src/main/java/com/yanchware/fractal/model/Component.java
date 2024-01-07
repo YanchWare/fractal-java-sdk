@@ -12,8 +12,8 @@ public abstract class Component {
     private final Id id;
     private final Version version;
     private final Type type;
-    private final String displayName;
-    private final String description;
+    private String displayName;
+    private String description;
     private final Parameters parameters;
     private final OutputFields outputFields;
     private final List<Link> links;

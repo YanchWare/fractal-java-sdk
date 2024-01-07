@@ -8,8 +8,6 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 public class Blueprint {
-    private Fractal.Id fractalId;
-    private List<BlueprintComponent> components;
-    private String displayName;
-    private String description;
+    private final Fractal.Id fractalId;
+    private final List<BlueprintComponent> components;
 }

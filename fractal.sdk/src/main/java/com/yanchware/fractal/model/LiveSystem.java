@@ -9,12 +9,13 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 public class LiveSystem {
-    private Id id;
+    private final Id id;
     private String displayName;
+    private String description;
     private Fractal.Id fractalId;
     private Mutation.Id currentMutationId;
-    private List<Mutation> mutations;
-    private Environment.Id environmentId;
+    private final List<Mutation> mutations;
+    private final Environment.Id environmentId;
     private Status status;
 
     public record Id(BoundedContext.Id boundedContextId, KebabCaseString name){

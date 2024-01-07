@@ -6,7 +6,7 @@ import java.util.List;
 
 @Getter
 public class LiveSystemComponent extends Offer {
-    private final Status status;
+    private Status status;
 
     public LiveSystemComponent(
             Id id,
