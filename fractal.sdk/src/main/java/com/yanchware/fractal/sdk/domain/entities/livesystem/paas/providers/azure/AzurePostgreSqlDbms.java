@@ -214,8 +214,7 @@ public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms implements AzureReso
     getDatabases().stream()
         .map(x -> AzureResourceEntity.validateAzureResourceEntity((AzureResourceEntity) x, "PostgreSql Database"))
         .forEach(errors::addAll);
-
-
+    
     return errors;
   }
 }

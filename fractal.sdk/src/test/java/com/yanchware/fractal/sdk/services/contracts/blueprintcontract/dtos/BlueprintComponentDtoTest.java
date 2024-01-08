@@ -271,6 +271,7 @@ public class BlueprintComponentDtoTest {
     assertGenericComponent(azurePgDbBlueprintCompDto2, db2, PaaSRelationalDatabase.TYPE);
     assertSoftly(softly -> {
       softly.assertThat(azurePgDbBlueprintCompDto2.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(
+        db2.getSchema(),
         db2.getName(),
         ((AzureResourceEntity)db1).getAzureRegion().toString());
       softly.assertThat(azurePgDbBlueprintCompDto2.getDependencies()).as("Component Dependencies").containsExactly(apg.getId().getValue());
