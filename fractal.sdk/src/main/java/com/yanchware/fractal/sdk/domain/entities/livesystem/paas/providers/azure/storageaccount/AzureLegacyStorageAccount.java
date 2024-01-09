@@ -8,7 +8,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper = true)
-public class AzureLegacyStorageAccount extends BaseAzureFileStorage {
+public class AzureLegacyStorageAccount extends BaseAzureStorageAccount {
   @Override
   public String getKind() {
     return "Storage";
@@ -18,7 +18,7 @@ public class AzureLegacyStorageAccount extends BaseAzureFileStorage {
     return new AzureLegacyStorageAccountBuilder();
   }
 
-  public static class AzureLegacyStorageAccountBuilder extends BaseAzureFileStorage.Builder<AzureLegacyStorageAccount, AzureLegacyStorageAccountBuilder> {
+  public static class AzureLegacyStorageAccountBuilder extends BaseAzureStorageAccount.Builder<AzureLegacyStorageAccount, AzureLegacyStorageAccountBuilder> {
 
     @Override
     protected AzureLegacyStorageAccount createComponent() {

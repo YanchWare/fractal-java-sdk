@@ -8,7 +8,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper = true)
-public class AzureStorageAccount extends BaseAzureFileStorage {
+public class AzureStorageAccount extends BaseAzureStorageAccount {
   @Override
   public String getKind() {
     return "StorageV2";

@@ -1,24 +1,32 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
 
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.ExtendableEnum;
 
-public enum AzureAction {
-  ALLOW ("Allow"),
-  DENY ("Deny");
+import java.util.Collection;
 
-  private final String id;
+public final class AzureAction extends ExtendableEnum<AzureAction> {
+  public static final AzureAction ALLOW = fromString("Allow");
+  public static final AzureAction DENY = fromString("Deny");
 
-  AzureAction(final String id) {
-    this.id = id;
+
+  /**
+   * Creates or finds a AzureAction from its string representation.
+   *
+   * @param name a name to look for.
+   * @return the corresponding AzureAction.
+   */
+  @JsonCreator
+  public static AzureAction fromString(String name) {
+    return fromString(name, AzureAction.class);
   }
 
-  @JsonValue
-  public String getId() {
-    return id;
-  }
-
-  @Override
-  public String toString() {
-    return id;
+  /**
+   * Gets known AzureAction values.
+   *
+   * @return known AzureAction values.
+   */
+  public static Collection<AzureAction> values() {
+    return values(AzureAction.class);
   }
 }

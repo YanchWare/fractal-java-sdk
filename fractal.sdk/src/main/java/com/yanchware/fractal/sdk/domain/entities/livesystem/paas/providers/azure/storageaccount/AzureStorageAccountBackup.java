@@ -1,6 +1,7 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount;
 
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.valueobjects.AzureStorageKind;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.valueobjects.AzureRecoveryServicesBackupPolicyWorkloadType;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.valueobjects.AzureRecoveryServicesSkuName;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,12 +12,12 @@ public class AzureStorageAccountBackup {
   String vaultName;
   String vaultLocation;
   String vaultResourceGroupName;
-  AzureStorageKind.AzureRecoveryServicesSkuName sku;
+  AzureRecoveryServicesSkuName sku;
   String etag;
   String policyName;
   String policyResourceGroupName;
   String policyLocation;
-  AzureStorageKind.AzureRecoveryServicesBackupPolicyWorkloadType policyType;
+  AzureRecoveryServicesBackupPolicyWorkloadType policyType;
   String policy;
 
   public static AzureStorageAccountBackupBuilder builder() {
@@ -47,7 +48,7 @@ public class AzureStorageAccountBackup {
       return builder;
     }
 
-    public AzureStorageAccountBackupBuilder withSku(AzureStorageKind.AzureRecoveryServicesSkuName sku) {
+    public AzureStorageAccountBackupBuilder withSku(AzureRecoveryServicesSkuName sku) {
       backup.setSku(sku);
       return builder;
     }
@@ -72,7 +73,7 @@ public class AzureStorageAccountBackup {
       return builder;
     }
 
-    public AzureStorageAccountBackupBuilder withPolicyType(AzureStorageKind.AzureRecoveryServicesBackupPolicyWorkloadType policyType) {
+    public AzureStorageAccountBackupBuilder withPolicyType(AzureRecoveryServicesBackupPolicyWorkloadType policyType) {
       backup.setPolicyType(policyType);
       return builder;
     }

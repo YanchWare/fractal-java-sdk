@@ -1,24 +1,20 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.valueobjects;
 
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.ExtendableEnum;
 
-public enum AzureStorageKeyType {
-  SERVICE("Service"),
-  ACCOUNT("Account");
-  
-  private final String id;
+import java.util.Collection;
 
-  AzureStorageKeyType(final String id) {
-    this.id = id;
+public final class AzureStorageKeyType extends ExtendableEnum<AzureStorageKeyType> {
+  public static final AzureStorageKeyType SERVICE = fromString("Service");
+  public static final AzureStorageKeyType ACCOUNT = fromString("Account");
+
+  @JsonCreator
+  public static AzureStorageKeyType fromString(String name) {
+    return fromString(name, AzureStorageKeyType.class);
   }
 
-  @JsonValue
-  public String getId() {
-    return id;
-  }
-
-  @Override
-  public String toString() {
-    return id;
+  public static Collection<AzureStorageKeyType> values() {
+    return values(AzureStorageKeyType.class);
   }
 }

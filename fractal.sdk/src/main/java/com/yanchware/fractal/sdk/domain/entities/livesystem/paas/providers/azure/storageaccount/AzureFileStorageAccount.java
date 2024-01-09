@@ -13,7 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString(callSuper = true)
-public class AzureFileStorageAccount extends BaseAzureFileStorage {
+public class AzureFileStorageAccount extends BaseAzureStorageAccount {
   private Collection<AzureFileShare> fileShares;
 
   public AzureFileStorageAccount() {

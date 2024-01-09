@@ -1,26 +1,28 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.valueobjects;
 
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.ExtendableEnum;
 
-public enum AzureIdentityType {
-  NONE ("None"),
-  SYSTEM_ASSIGNED ("SystemAssigned"),
-  USER_ASSIGNED ("UserAssigned"),
-  SYSTEM_ASSIGNED_USER_ASSIGNED ("SystemAssigned,UserAssigned");
-  
-  private final String id;
+import java.util.Collection;
 
-  AzureIdentityType(final String id) {
-    this.id = id;
+/**
+ * The identity type.
+ */
+public final class AzureIdentityType extends ExtendableEnum<AzureIdentityType> {
+  public static final AzureIdentityType NONE = fromString("None");
+  public static final AzureIdentityType SYSTEM_ASSIGNED = fromString("SystemAssigned");
+  public static final AzureIdentityType USER_ASSIGNED = fromString("UserAssigned");
+  public static final AzureIdentityType SYSTEM_ASSIGNED_USER_ASSIGNED = fromString("SystemAssigned,UserAssigned");
+
+  public AzureIdentityType() {
   }
 
-  @JsonValue
-  public String getId() {
-    return id;
+  @JsonCreator
+  public static AzureIdentityType fromString(String name) {
+    return fromString(name, AzureIdentityType.class);
   }
 
-  @Override
-  public String toString() {
-    return id;
+  public static Collection<AzureIdentityType> values() {
+    return values(AzureIdentityType.class);
   }
 }

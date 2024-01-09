@@ -7,7 +7,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString(callSuper = true)
-public class AzureBlockBlobStorageAccount extends BaseAzureFileStorage {
+public class AzureBlockBlobStorageAccount extends BaseAzureStorageAccount {
   @Override
   public String getKind() {
     return "BlockBlobStorage";

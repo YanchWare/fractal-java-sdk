@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.AzureStorageAccount.builder;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.BaseAzureFileStorage.*;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.BaseAzureStorageAccount.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -37,7 +37,7 @@ public class AzureLegacyStorageAccountTest {
         .withName("")
         .build()).
         isInstanceOf(IllegalArgumentException.class).
-        hasMessageContaining(BaseAzureFileStorage.NAME_IS_NOT_VALID);
+        hasMessageContaining(BaseAzureStorageAccount.NAME_IS_NOT_VALID);
   }
 
   @Test
@@ -47,7 +47,7 @@ public class AzureLegacyStorageAccountTest {
         .withName(null)
         .build()).
         isInstanceOf(IllegalArgumentException.class).
-        hasMessageContaining(BaseAzureFileStorage.NAME_IS_NOT_VALID);
+        hasMessageContaining(BaseAzureStorageAccount.NAME_IS_NOT_VALID);
   }
 
   @Test
@@ -57,7 +57,7 @@ public class AzureLegacyStorageAccountTest {
         .withName("na")
         .build()).
         isInstanceOf(IllegalArgumentException.class).
-        hasMessageContaining(BaseAzureFileStorage.NAME_IS_NOT_VALID);
+        hasMessageContaining(BaseAzureStorageAccount.NAME_IS_NOT_VALID);
   }
 
   @Test
@@ -67,7 +67,7 @@ public class AzureLegacyStorageAccountTest {
         .withName("a234567890123456789012345")
         .build()).
         isInstanceOf(IllegalArgumentException.class).
-        hasMessageContaining(BaseAzureFileStorage.NAME_IS_NOT_VALID);
+        hasMessageContaining(BaseAzureStorageAccount.NAME_IS_NOT_VALID);
   }
 
   @Test
@@ -326,9 +326,9 @@ public class AzureLegacyStorageAccountTest {
                 .withPolicy("policy")
                 .withPolicyLocation("policyLocation")
                 .withPolicyName("policyName")
-                .withSku(AzureStorageKind.AzureRecoveryServicesSkuName.STANDARD)
+                .withSku(AzureRecoveryServicesSkuName.STANDARD)
                 .withPolicyResourceGroupName("policyResourceGroupName")
-                .withPolicyType(AzureStorageKind.AzureRecoveryServicesBackupPolicyWorkloadType.AzureStorage)
+                .withPolicyType(AzureRecoveryServicesBackupPolicyWorkloadType.AzureStorage)
                 .withVaultLocation("vaultLocation")
                 .withVaultName("vaultName")
                 .withVaultResourceGroupName("vaultResourceGroupName")
@@ -341,9 +341,9 @@ public class AzureLegacyStorageAccountTest {
     assertEquals("policy", storageAccountBackup.getPolicy());
     assertEquals("policyLocation", storageAccountBackup.getPolicyLocation());
     assertEquals("policyName", storageAccountBackup.getPolicyName());
-    assertEquals(AzureStorageKind.AzureRecoveryServicesSkuName.STANDARD, storageAccountBackup.getSku());
+    assertEquals(AzureRecoveryServicesSkuName.STANDARD, storageAccountBackup.getSku());
     assertEquals("policyResourceGroupName", storageAccountBackup.getPolicyResourceGroupName());
-    assertEquals(AzureStorageKind.AzureRecoveryServicesBackupPolicyWorkloadType.AzureStorage, storageAccountBackup.getPolicyType());
+    assertEquals(AzureRecoveryServicesBackupPolicyWorkloadType.AzureStorage, storageAccountBackup.getPolicyType());
     assertEquals("vaultLocation", storageAccountBackup.getVaultLocation());
     assertEquals("vaultName", storageAccountBackup.getVaultName());
     assertEquals("vaultResourceGroupName", storageAccountBackup.getVaultResourceGroupName());
@@ -368,193 +368,227 @@ public class AzureLegacyStorageAccountTest {
   @Test
   public void connectivityIsValid_when_connectivityIsSet() {
 
-    var azureVirtualNetworkRule = new AzureVirtualNetworkRule(
-        "virtualNetworkResourceId",
-        AzureStorageAction.ALLOW,
-        AzureStorageProvisionState.PROVISIONING
-    );
+    var azureVirtualNetworkRule = AzureVirtualNetworkRule.builder()
+        .withVirtualNetworkResourceId("virtualNetworkResourceId")
+        .withAction(AzureNetworkAction.ALLOW)
+        .withState(AzureState.PROVISIONING)
+        .build();
 
-    var azureStorageIpRule = new AzureStorageIpRule(
-        "ipAddressOrRange", AzureStorageAction.ALLOW
-    );
+    var azureStorageIpRule = AzureIpRule.builder()
+        .withIpAddressOrRange("ipAddressOrRange")
+        .withAction(AzureNetworkAction.ALLOW)
+        .build();
 
-    var azureResourceAccessRule = new AzureResourceAccessRule(
-        "tenantId", "resourceId"
-    );
+    var azureResourceAccessRule = AzureResourceAccessRule.builder()
+        .withResourceId("resourceId")
+        .withTenantId("tenantId")
+        .build();
 
-    var storageAccountConnectivity = generateBuilder()
-        .withConnectivity(
-            AzureStorageAccountConnectivity.builder()
-                .withAllowBlobPublicAccess(true)
-                .withAzureIdentityBasedAuthAzureDirectoryAccountType(AzureActiveDirectoryAccountType.USER)
-                .withAzureIdentityBasedAuthAzureDirectoryDomainGuid("domainGuid")
-                .withAzureIdentityBasedAuthAzureDirectoryDomainName("domainName")
-                .withAzureIdentityBasedAuthAzureDirectoryDomainSid("domainSid")
-                .withAzureIdentityBasedAuthAzureDirectoryForestName("forestName")
-                .withAzureIdentityBasedAuthAzureDirectorySamAccount("samAccount")
-                .withAzureIdentityBasedDefaultSharePermission(AzureDefaultSharePermission.NONE)
-                .withAzureIdentityBasedAuthAzureDirectoryNetBiosDomainName("netBiosDomainName")
-                .withAzureIdentityBasedAuthAzureDirectoryStorageSid("storageSid")
-                .withAzureIdentityBasedDirectoryServiceOptions(AzureDirectoryServiceOptions.NONE)
-                .withDefaultToOAuthAuthentication(true)
-                .withMinimumTlsVersion(AzureTlsVersion.TLS1_2)
-                .withEnableHttpsTrafficOnly(true)
-                .withIsLocalUserEnabled(true)
-                .withIsSftpEnabled(true)
-                .withKeyPolicyExpirationInDays(10)
-                .withNetworkRuleSetBypass(AzureStorageBypass.NONE)
-                .withNetworkRuleSetDefaultAction(AzureAction.ALLOW)
-                .withPublicNetworkAccess(AzureStoragePublicNetworkAccess.ENABLED)
-                .withPublishInternetEndpoints(true)
-                .withPublishMicrosoftEndpoints(true)
-                .withRoutingChoice("routingChoice")
-                .withSasPolicyExpirationAction("sasPolicyExpirationAction")
-                .withSasPolicyExpirationPeriod("sasPolicyExpirationPeriod")
-                .withEnableNfsV3(true)
-                .withNetworkRuleSetBypass(AzureStorageBypass.NONE)
-                .withIsLocalUserEnabled(true)
-                .withNetworkRuleSetVirtualNetworkRule(azureVirtualNetworkRule)
-                .withNetworkRuleSetResourceAccessRule(azureResourceAccessRule)
-                .withNetworkRuleSetIpRule(azureStorageIpRule)
-                .build()
-        )
-        .build()
-        .getConnectivity();
+    var storageAccount = generateBuilder()
+        .withAllowBlobPublicAccess(true)
+        .withAzureFilesIdentityBasedAuthentication(AzureFilesIdentityBasedAuthentication.builder()
+            .withActiveDirectoryProperties(AzureActiveDirectoryProperties.builder()
+                .withAccountType(AzureActiveDirectoryAccountType.USER)
+                .withAzureStorageSid("storageSid")
+                .withDomainGuid("domainGuid")
+                .withDomainName("domainName")
+                .withDomainSid("domainSid")
+                .withForestName("forestName")
+                .withNetBiosDomainName("netBiosDomainName")
+                .withSamAccountName("samAccount")
+                .build())
+            .withDefaultSharePermission(AzureDefaultSharePermission.NONE)
+            .withDirectoryServiceOptions(AzureDirectoryServiceOptions.NONE)
+            .build())
+        .withDefaultToOAuthAuthentication(true)
+        .withMinimumTlsVersion(AzureTlsVersion.TLS1_2)
+        .withSupportsHttpsTrafficOnly(true)
+        .withIsLocalUserEnabled(true)
+        .withIsSftpEnabled(true)
+        .withPublicNetworkAccess(AzurePublicNetworkAccess.ENABLED)
+        .withIsNfsV3Enabled(true)
+        .withKeyPolicy(AzureStorageAccountKeyPolicy.builder()
+            .withKeyExpirationPeriodInDays(10)
+            .build())
+        .withNetworkAcls(AzureNetworkRuleSet.builder()
+            .withBypass(AzureBypass.NONE)
+            .withDefaultAction(AzureAction.ALLOW)
+            .withVirtualNetworkRule(azureVirtualNetworkRule)
+            .withResourceAccessRule(azureResourceAccessRule)
+            .withIpRule(azureStorageIpRule)
+            .build())
+        .withRoutingPreference(AzureStorageAccountRoutingPreference.builder()
+            .withRoutingChoice(AzureRoutingChoice.INTERNET_ROUTING)
+            .withPublishInternetEndpoints(true)
+            .withPublishMicrosoftEndpoints(true)
+            .build())
+        .withSasPolicy(AzureStorageAccountSasPolicy.builder()
+            .withExpirationAction(AzureExpirationAction.LOG)
+            .withSasExpirationPeriod("10.12:24:30")
+            .build())
+        .build();
+    
+    var azureFilesIdentityBasedAuthentication = storageAccount.getAzureFilesIdentityBasedAuthentication();
+    var activeDirectoryProperties = storageAccount.getAzureFilesIdentityBasedAuthentication().getActiveDirectoryProperties();
 
-    assertTrue(storageAccountConnectivity.getEnableNfsV3());
-    assertTrue(storageAccountConnectivity.getAllowBlobPublicAccess());
-    assertEquals(AzureActiveDirectoryAccountType.USER, storageAccountConnectivity.getAzureIdentityBasedAuthAzureDirectoryAccountType());
-    assertTrue(storageAccountConnectivity.getDefaultToOAuthAuthentication());
-    assertEquals(AzureTlsVersion.TLS1_2, storageAccountConnectivity.getMinimumTlsVersion());
-    assertTrue(storageAccountConnectivity.getAllowBlobPublicAccess());
-    assertTrue(storageAccountConnectivity.getEnableHttpsTrafficOnly());
-    assertTrue(storageAccountConnectivity.getIsLocalUserEnabled());
-    assertTrue(storageAccountConnectivity.getIsSftpEnabled());
-    assertTrue(storageAccountConnectivity.getPublishInternetEndpoints());
-    assertTrue(storageAccountConnectivity.getPublishMicrosoftEndpoints());
-    assertTrue(storageAccountConnectivity.getEnableNfsV3());
-    assertEquals(10, storageAccountConnectivity.getKeyPolicyExpirationInDays());
-    assertEquals(AzureStorageBypass.NONE, storageAccountConnectivity.getNetworkRuleSetBypass());
-    assertEquals(AzureAction.ALLOW, storageAccountConnectivity.getNetworkRuleSetDefaultAction());
-    assertEquals(AzureStoragePublicNetworkAccess.ENABLED, storageAccountConnectivity.getPublicNetworkAccess());
-    assertEquals("routingChoice", storageAccountConnectivity.getRoutingChoice());
-    assertEquals("sasPolicyExpirationAction", storageAccountConnectivity.getSasPolicyExpirationAction());
-    assertEquals("sasPolicyExpirationPeriod", storageAccountConnectivity.getSasPolicyExpirationPeriod());
-    assertEquals(List.of(azureStorageIpRule), storageAccountConnectivity.getNetworkRuleSetIpRules());
-    assertEquals("domainGuid", storageAccountConnectivity.getAzureIdentityBasedAuthAzureDirectoryDomainGuid());
-    assertEquals("domainName", storageAccountConnectivity.getAzureIdentityBasedAuthAzureDirectoryDomainName());
-    assertEquals("domainSid", storageAccountConnectivity.getAzureIdentityBasedAuthAzureDirectoryDomainSid());
-    assertEquals("forestName", storageAccountConnectivity.getAzureIdentityBasedAuthAzureDirectoryForestName());
-    assertEquals("samAccount", storageAccountConnectivity.getAzureIdentityBasedAuthAzureDirectorySamAccount());
-    assertEquals("netBiosDomainName", storageAccountConnectivity.getAzureIdentityBasedAuthAzureDirectoryNetBiosDomainName());
-    assertEquals("storageSid", storageAccountConnectivity.getAzureIdentityBasedAuthAzureDirectoryStorageSid());
-    assertEquals(AzureDefaultSharePermission.NONE, storageAccountConnectivity.getAzureIdentityBasedDefaultSharePermission());
-    assertEquals(AzureDirectoryServiceOptions.NONE, storageAccountConnectivity.getAzureIdentityBasedDirectoryServiceOptions());
-    assertEquals(List.of(azureVirtualNetworkRule), storageAccountConnectivity.getNetworkRuleSetVirtualNetworkRules());
-    assertEquals(List.of(azureResourceAccessRule), storageAccountConnectivity.getNetworkRuleSetResourceAccessRules());
+    assertTrue(storageAccount.getIsNfsV3Enabled());
+    assertTrue(storageAccount.getAllowBlobPublicAccess());
+    assertEquals(AzureActiveDirectoryAccountType.USER, activeDirectoryProperties.getAccountType());
+    assertTrue(storageAccount.getDefaultToOAuthAuthentication());
+    assertEquals(AzureTlsVersion.TLS1_2, storageAccount.getMinimumTlsVersion());
+    assertTrue(storageAccount.getSupportsHttpsTrafficOnly());
+    assertTrue(storageAccount.getIsLocalUserEnabled());
+    assertTrue(storageAccount.getIsSftpEnabled());
+    assertTrue(storageAccount.getRoutingPreference().getPublishInternetEndpoints());
+    assertTrue(storageAccount.getRoutingPreference().getPublishMicrosoftEndpoints());
+    assertEquals(10, storageAccount.getKeyPolicy().getKeyExpirationPeriodInDays());
+    assertEquals(AzureBypass.NONE, storageAccount.getNetworkAcls().getBypass());
+    assertEquals(AzureAction.ALLOW, storageAccount.getNetworkAcls().getDefaultAction());
+    assertEquals(AzurePublicNetworkAccess.ENABLED, storageAccount.getPublicNetworkAccess());
+    assertEquals(AzureRoutingChoice.INTERNET_ROUTING, storageAccount.getRoutingPreference().getRoutingChoice());
+    assertEquals(AzureExpirationAction.LOG, storageAccount.getSasPolicy().getExpirationAction());
+    assertEquals("10.12:24:30", storageAccount.getSasPolicy().getSasExpirationPeriod());
+    assertEquals(List.of(azureStorageIpRule), storageAccount.getNetworkAcls().getIpRules());
+    assertEquals("domainGuid", activeDirectoryProperties.getDomainGuid());
+    assertEquals("domainName", activeDirectoryProperties.getDomainName());
+    assertEquals("domainSid", activeDirectoryProperties.getDomainSid());
+    assertEquals("forestName", activeDirectoryProperties.getForestName());
+    assertEquals("samAccount", activeDirectoryProperties.getSamAccountName());
+    assertEquals("netBiosDomainName", activeDirectoryProperties.getNetBiosDomainName());
+    assertEquals("storageSid", activeDirectoryProperties.getAzureStorageSid());
+    assertEquals(AzureDefaultSharePermission.NONE, azureFilesIdentityBasedAuthentication.getDefaultSharePermission());
+    assertEquals(AzureDirectoryServiceOptions.NONE, azureFilesIdentityBasedAuthentication.getDirectoryServiceOptions());
+    assertEquals(List.of(azureVirtualNetworkRule), storageAccount.getNetworkAcls().getVirtualNetworkRules());
+    assertEquals(List.of(azureResourceAccessRule), storageAccount.getNetworkAcls().getResourceAccessRules());
   }
 
   @Test
   public void settingsIsValid_when_settingsIsSet() {
-    var storageAccountSettings = generateBuilder()
-        .withSettings(
-            AzureStorageAccountSettings
-                .builder()
-                .withAccountImmutabilityAllowProtectedAppendWrites(true)
-                .withAccountImmutabilityEnabled(true)
-                .withAllowCrossTenantReplication(true)
-                .withAllowSharedKeyAccess(true)
-                .withBlobEncryptionEnabled(true)
-                .withFileEncryptionEnabled(true)
-                .withIsHnsEnabled(true)
-                .withQueueEncryptionEnabled(true)
-                .withTableEncryptionEnabled(true)
-                .withRequireInfrastructureEncryption(true)
-                .withAccountImmutabilityPeriodSinceCreationInDays(10)
-                .withAllowedCopyScope(AzureStorageAllowedCopyScope.AAD)
-                .withAccountImmutabilityPolicyState(AzureAccountImmutabilityPolicyState.LOCKED)
-                .withBlobEncryptionType(AzureStorageKeyType.ACCOUNT)
-                .withEncryptionKeySource(AzureStorageKeySource.MICROSOFT_STORAGE)
-                .withLargeFileSharesState(AzureLargeFileSharesState.DISABLED)
-                .withFileEncryptionType(AzureStorageKeySource.MICROSOFT_STORAGE)
-                .withQueueEncryptionType(AzureStorageKeyType.ACCOUNT)
-                .withTableEncryptionType(AzureStorageKeyType.ACCOUNT)
-                .withEncryptionFederatedIdentityClientId("encryptionFederatedIdentityClientId")
-                .withEncryptionKeyName("encryptionKeyName")
-                .withEncryptionKeyVaultUri("encryptionKeyVaultUri")
-                .withEncryptionUserAssignedIdentity("encryptionUserAssignedIdentity")
-                .withEncryptionKeyVersion("encryptionKeyVersion")
-                .build()
-        )
-        .build()
-        .getSettings();
+    var storageAccount = generateBuilder()
+        .withAllowCrossTenantReplication(true)
+        .withAllowSharedKeyAccess(true)
+        .withAllowedCopyScope(AzureStorageAccountAllowedCopyScope.AAD)
+        .withIsHnsEnabled(true)
+        .withLargeFileSharesState(AzureLargeFileSharesState.DISABLED)
+        .withImmutableStorageWithVersioning(AzureImmutableStorageAccount.builder()
+            .withEnabled(true)
+            .withImmutabilityPolicy(AzureStorageAccountImmutabilityPolicyProperties.builder()
+                .withAllowProtectedAppendWrites(true)
+                .withImmutabilityPeriodSinceCreationInDays(10)
+                .withState(AzureAccountImmutabilityPolicyState.LOCKED)
+                .build())
+            .build())
+        .withEncryption(AzureStorageAccountEncryption.builder()
+            .withRequireInfrastructureEncryption(true)
+            .withKeySource(AzureStorageAccountKeySource.MICROSOFT_STORAGE)
+            .withServices(AzureStorageAccountEncryptionServices.builder()
+                .withBlob(AzureStorageAccountEncryptionService.builder()
+                    .withEnabled(true)
+                    .withKeyType(AzureStorageKeyType.ACCOUNT)
+                    .build())
+                .withFile(AzureStorageAccountEncryptionService.builder()
+                    .withEnabled(true)
+                    .withKeyType(AzureStorageKeyType.SERVICE)
+                    .build())
+                .withQueue(AzureStorageAccountEncryptionService.builder()
+                    .withEnabled(true)
+                    .withKeyType(AzureStorageKeyType.ACCOUNT)
+                    .build())
+                .withTable(AzureStorageAccountEncryptionService.builder()
+                    .withEnabled(true)
+                    .withKeyType(AzureStorageKeyType.ACCOUNT)
+                    .build())
+                .build())
+            .withIdentity(AzureStorageAccountEncryptionIdentity.builder()
+                .withFederatedIdentityClientId("encryptionFederatedIdentityClientId")
+                .withUserAssignedIdentity("encryptionUserAssignedIdentity")
+                .build())
+            .withKeyVaultProperties(AzureStorageAccountKeyVaultProperties.builder()
+                .withKeyName("encryptionKeyName")
+                .withKeyVaultUri("encryptionKeyVaultUri")
+                .withKeyVersion("encryptionKeyVersion")
+                .build())
+            .build())
+        .build();
+    
 
-    assertTrue(storageAccountSettings.getAccountImmutabilityAllowProtectedAppendWrites());
-    assertTrue(storageAccountSettings.getAccountImmutabilityEnabled());
-    assertTrue(storageAccountSettings.getAllowCrossTenantReplication());
-    assertTrue(storageAccountSettings.getAllowSharedKeyAccess());
-    assertTrue(storageAccountSettings.getBlobEncryptionEnabled());
-    assertTrue(storageAccountSettings.getFileEncryptionEnabled());
-    assertTrue(storageAccountSettings.getIsHnsEnabled());
-    assertTrue(storageAccountSettings.getQueueEncryptionEnabled());
-    assertTrue(storageAccountSettings.getTableEncryptionEnabled());
-    assertTrue(storageAccountSettings.getRequireInfrastructureEncryption());
-    assertEquals(10, storageAccountSettings.getAccountImmutabilityPeriodSinceCreationInDays());
-    assertEquals(AzureStorageAllowedCopyScope.AAD, storageAccountSettings.getAllowedCopyScope());
-    assertEquals(AzureStorageKeyType.ACCOUNT, storageAccountSettings.getBlobEncryptionType());
-    assertEquals(AzureStorageKeySource.MICROSOFT_STORAGE, storageAccountSettings.getEncryptionKeySource());
-    assertEquals(AzureLargeFileSharesState.DISABLED, storageAccountSettings.getLargeFileSharesState());
-    assertEquals(AzureStorageKeySource.MICROSOFT_STORAGE, storageAccountSettings.getFileEncryptionType());
-    assertEquals(AzureStorageKeyType.ACCOUNT, storageAccountSettings.getQueueEncryptionType());
-    assertEquals(AzureStorageKeyType.ACCOUNT, storageAccountSettings.getTableEncryptionType());
-    assertEquals("encryptionFederatedIdentityClientId", storageAccountSettings.getEncryptionFederatedIdentityClientId());
-    assertEquals("encryptionKeyName", storageAccountSettings.getEncryptionKeyName());
-    assertEquals("encryptionKeyVaultUri", storageAccountSettings.getEncryptionKeyVaultUri());
-    assertEquals("encryptionUserAssignedIdentity", storageAccountSettings.getEncryptionUserAssignedIdentity());
-    assertEquals("encryptionKeyVersion", storageAccountSettings.getEncryptionKeyVersion());
+    assertTrue(storageAccount.getImmutableStorageWithVersioning().getImmutabilityPolicy().getAllowProtectedAppendWrites());
+    assertTrue(storageAccount.getImmutableStorageWithVersioning().getEnabled());
+    assertTrue(storageAccount.getAllowCrossTenantReplication());
+    assertTrue(storageAccount.getAllowSharedKeyAccess());
+    assertTrue(storageAccount.getIsHnsEnabled());
+    assertTrue(storageAccount.getEncryption().getServices().getBlob().getEnabled());
+    assertEquals(AzureStorageKeyType.ACCOUNT, storageAccount.getEncryption().getServices().getBlob().getKeyType());
+    assertTrue(storageAccount.getEncryption().getServices().getFile().getEnabled());
+    assertEquals(AzureStorageKeyType.SERVICE, storageAccount.getEncryption().getServices().getFile().getKeyType());
+    assertTrue(storageAccount.getEncryption().getServices().getQueue().getEnabled());
+    assertEquals(AzureStorageKeyType.ACCOUNT, storageAccount.getEncryption().getServices().getQueue().getKeyType());
+    assertTrue(storageAccount.getEncryption().getServices().getTable().getEnabled());
+    assertEquals(AzureStorageKeyType.ACCOUNT, storageAccount.getEncryption().getServices().getTable().getKeyType());
+    assertTrue(storageAccount.getEncryption().getRequireInfrastructureEncryption());
+    assertEquals(10, storageAccount.getImmutableStorageWithVersioning().getImmutabilityPolicy()
+        .getImmutabilityPeriodSinceCreationInDays());
+    assertEquals(AzureStorageAccountAllowedCopyScope.AAD, storageAccount.getAllowedCopyScope());
+   
+    assertEquals(AzureStorageAccountKeySource.MICROSOFT_STORAGE, storageAccount.getEncryption().getKeySource());
+    assertEquals(AzureLargeFileSharesState.DISABLED, storageAccount.getLargeFileSharesState());
+    assertEquals("encryptionFederatedIdentityClientId", storageAccount.getEncryption()
+        .getIdentity().getFederatedIdentityClientId());
+    assertEquals("encryptionKeyName", storageAccount.getEncryption().getKeyVaultProperties().getKeyName());
+    assertEquals("encryptionKeyVaultUri", storageAccount.getEncryption().getKeyVaultProperties().getKeyVaultUri());
+    assertEquals("encryptionUserAssignedIdentity", storageAccount.getEncryption().getIdentity().getUserAssignedIdentity());
+    assertEquals("encryptionKeyVersion", storageAccount.getEncryption().getKeyVaultProperties().getKeyVersion());
   }
 
   @Test
   public void infrastructureIsValid_when_infrastructureIsSet() {
     var storageAccountSettings = generateBuilder()
-        .withInfrastructure(
-            AzureStorageAccountInfrastructure
-                .builder()
-                .withCustomDomainUseSubName(true)
-                .withUserAssignedIdentities(new HashMap<>())
-                .withAccessTier(AzureStorageAccessTier.HOT)
-                .withSku(AzureStorageSkuName.PREMIUM_LRS)
-                .withDnsEndpointType(AzureDnsEndpointType.AZURE_DNS_ZONE)
-                .withIdentityType(AzureIdentityType.NONE)
-                .withCustomDomainName("customDomainName")
-                .withExtendedLocationName("extendedLocationName")
-                .withExtendedLocationType("extendedLocationType")
-                .build()
-        ).build()
-        .getInfrastructure();
+        .withSku(AzureStorageAccountSkuName.PREMIUM_LRS)
+        .withAccessTier(AzureStorageAccountAccessTier.HOT)
+        .withExtendedLocation(AzureStorageAccountExtendedLocation.builder()
+            .withName("extendedLocationName")
+            .withType(AzureStorageAccountExtendedLocationTypes.EDGE_ZONE)
+            .build())
+        .withIdentity(AzureStorageAccountIdentity.builder()
+            .withIdentityType(AzureIdentityType.NONE)
+            .withUserAssignedIdentities(new HashMap<>())
+            .build())
+        .withCustomDomain(AzureStorageAccountCustomDomain.builder()
+            .withName("customDomainName")
+            .withUseSubDomainName(true)
+            .build())
+        .withDnsEndpointType(AzureDnsEndpointType.AZURE_DNS_ZONE)
+        .build();
+    
 
-    assertTrue(storageAccountSettings.getCustomDomainUseSubName());
-    assertEquals(new HashMap<>(), storageAccountSettings.getUserAssignedIdentities());
-    assertEquals(AzureStorageAccessTier.HOT, storageAccountSettings.getAccessTier());
-    assertEquals(AzureStorageSkuName.PREMIUM_LRS, storageAccountSettings.getSku());
+    assertTrue(storageAccountSettings.getCustomDomain().getUseSubDomainName());
+    assertEquals(new HashMap<>(), storageAccountSettings.getIdentity().getUserAssignedIdentities());
+    assertEquals(AzureIdentityType.NONE, storageAccountSettings.getIdentity().getIdentityType());
+    assertEquals(AzureStorageAccountAccessTier.HOT, storageAccountSettings.getAccessTier());
+    assertEquals(AzureStorageAccountSkuName.PREMIUM_LRS, storageAccountSettings.getSku());
     assertEquals(AzureDnsEndpointType.AZURE_DNS_ZONE, storageAccountSettings.getDnsEndpointType());
-    assertEquals(AzureIdentityType.NONE, storageAccountSettings.getIdentityType());
-    assertEquals("customDomainName", storageAccountSettings.getCustomDomainName());
-    assertEquals("extendedLocationName", storageAccountSettings.getExtendedLocationName());
-    assertEquals("extendedLocationType", storageAccountSettings.getExtendedLocationType());
+    assertEquals("customDomainName", storageAccountSettings.getCustomDomain().getName());
+    assertEquals("extendedLocationName", storageAccountSettings.getExtendedLocation().getName());
+    assertEquals(AzureStorageAccountExtendedLocationTypes.EDGE_ZONE, storageAccountSettings.getExtendedLocation().getType());
   }
 
   @Test
   public void booleanWithValueArePresent_when_serialisingTheComponent() throws JsonProcessingException {
-    var storageAccountSettings = generateBuilder()
-        .withSettings(
-            AzureStorageAccountSettings.builder()
-                .withBlobEncryptionEnabled(true)
-                .build()
+    var storageAccount = generateBuilder()
+        .withEncryption(AzureStorageAccountEncryption.builder()
+            .withServices(
+                AzureStorageAccountEncryptionServices.builder()
+                    .withBlob(AzureStorageAccountEncryptionService.builder()
+                        .withEnabled(true)
+                        .build())
+                    .build()
+            ).build()
         ).build();
 
-    String result = SerializationUtils.serialize(storageAccountSettings.getSettings());
-    assertEquals("{\"blobEncryptionEnabled\":true}", result);
+    String result = SerializationUtils.serialize(storageAccount.getEncryption()
+        .getServices()
+        .getBlob());
+    assertEquals("{\"enabled\":true}", result);
   }
 
   @Test
