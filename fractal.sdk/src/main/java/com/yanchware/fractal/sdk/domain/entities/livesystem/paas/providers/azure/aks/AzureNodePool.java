@@ -47,6 +47,7 @@ public class AzureNodePool implements Validatable {
   private AzureOsSku osSku;
   private AzureAgentPoolMode agentPoolMode;
   private SortedSet<String> nodeTaints;
+  private Map<String, String> labels;
   private boolean autoscalingEnabled;
 
   public static AzureNodePoolBuilder builder() {
@@ -139,6 +140,11 @@ public class AzureNodePool implements Validatable {
 
     public AzureNodePoolBuilder withAutoscalingEnabled(boolean autoscalingEnabled) {
       nodePool.setAutoscalingEnabled(autoscalingEnabled);
+      return builder;
+    }
+
+    public AzureNodePoolBuilder withLabels(Map<String, String> labels) {
+      nodePool.setLabels(labels);
       return builder;
     }
 
