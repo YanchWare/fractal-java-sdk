@@ -5,6 +5,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Settings properties for Active Directory (AD).
+ */
 @Getter
 @Setter(AccessLevel.PRIVATE)
 public class AzureActiveDirectoryProperties {

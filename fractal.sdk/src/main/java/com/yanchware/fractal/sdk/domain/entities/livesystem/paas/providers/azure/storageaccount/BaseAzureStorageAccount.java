@@ -64,8 +64,6 @@ public abstract class BaseAzureStorageAccount extends PaaSDataStorage implements
   private AzureStorageAccountRoutingPreference routingPreference;
   private AzureStorageAccountSasPolicy sasPolicy;
   private Boolean supportsHttpsTrafficOnly;
-
-
   private AzureStorageAccountBackup backup;
   private AzureStorageAccountFileService fileService;
 
@@ -114,96 +112,157 @@ public abstract class BaseAzureStorageAccount extends PaaSDataStorage implements
       return builder;
     }
 
+    /**
+     * The SKU of the storage account.
+     */
     public B withSku(AzureStorageAccountSkuName sku) {
       component.setSku(sku);
 
       return builder;
     }
 
+    /**
+     * Set the extended location of the resource. 
+     * If not set, the storage account will be created in Azure main region.
+     */
     public B withExtendedLocation(AzureStorageAccountExtendedLocation extendedLocation) {
       component.setExtendedLocation(extendedLocation);
 
       return builder;
     }
 
+    /**
+     * The identity of the resource.
+     */
     public B withIdentity(AzureStorageAccountIdentity identity) {
       component.setIdentity(identity);
 
       return builder;
     }
 
+    /**
+     * Required for Blob Storage accounts. 
+     * The access tier is used for billing.
+     */
     public B withAccessTier(AzureStorageAccountAccessTier accessTier) {
       component.setAccessTier(accessTier);
 
       return builder;
     }
 
+    /**
+     * Allow or disallow public access to all blobs or containers in the storage account.
+     */
     public B withAllowBlobPublicAccess(Boolean allowBlobPublicAccess) {
       component.setAllowBlobPublicAccess(allowBlobPublicAccess);
 
       return builder;
     }
 
+    /**
+     * Allow or disallow cross AAD tenant object replication. 
+     * Set this property to true for new or existing accounts only if object replication policies will involve 
+     * storage accounts in different AAD tenants.
+     */
     public B withAllowCrossTenantReplication(Boolean allowCrossTenantReplication) {
       component.setAllowCrossTenantReplication(allowCrossTenantReplication);
 
       return builder;
     }
 
+    /**
+     * Indicates whether the storage account permits requests to be authorized with the account access key via Shared Key. 
+     * If false, then all requests, including shared access signatures, must be authorized with Azure Active Directory (Azure AD).
+     */
     public B withAllowSharedKeyAccess(Boolean allowSharedKeyAccess) {
       component.setAllowSharedKeyAccess(allowSharedKeyAccess);
 
       return builder;
     }
 
+    /**
+     * Restrict copy to and from Storage Accounts within an AAD tenant or with Private Links to the same VNet.
+     */
     public B withAllowedCopyScope(AzureStorageAccountAllowedCopyScope allowedCopyScope) {
       component.setAllowedCopyScope(allowedCopyScope);
 
       return builder;
     }
 
+    /**
+     * Provides the identity based authentication settings for Azure Files.
+     */
     public B withAzureFilesIdentityBasedAuthentication(AzureFilesIdentityBasedAuthentication azureFilesIdentityBasedAuthentication) {
       component.setAzureFilesIdentityBasedAuthentication(azureFilesIdentityBasedAuthentication);
 
       return builder;
     }
 
+    /**
+     * User domain assigned to the storage account. 
+     * Name is the CNAME source. 
+     * Only one custom domain is supported per storage account at this time. 
+     * To clear the existing custom domain, use an empty string for the custom domain name property.
+     */
     public B withCustomDomain(AzureStorageAccountCustomDomain customDomain) {
       component.setCustomDomain(customDomain);
 
       return builder;
     }
 
+    /**
+     * Enables OAuth as the default authentication, if sets to true.
+     * @param defaultToOAuthAuthentication
+     * @return
+     */
     public B withDefaultToOAuthAuthentication(Boolean defaultToOAuthAuthentication) {
       component.setDefaultToOAuthAuthentication(defaultToOAuthAuthentication);
 
       return builder;
     }
 
+    /**
+     * Allows you to specify the type of endpoint. 
+     * Set this to AzureDNSZone to create a large number of accounts in a single subscription, 
+     * which creates accounts in an Azure DNS Zone and the endpoint URL will have an alphanumeric DNS Zone identifier.
+     */
     public B withDnsEndpointType(AzureDnsEndpointType dnsEndpointType) {
       component.setDnsEndpointType(dnsEndpointType);
 
       return builder;
     }
 
+    /**
+     * Encryption settings to be used for server-side encryption for the storage account.
+     */
     public B withEncryption(AzureStorageAccountEncryption encryption) {
       component.setEncryption(encryption);
 
       return builder;
     }
 
+    /**
+     * This property enables and defines account-level immutability. 
+     * Enabling the feature auto-enables Blob Versioning.
+     */
     public B withImmutableStorageWithVersioning(AzureImmutableStorageAccount immutableStorageWithVersioning) {
       component.setImmutableStorageWithVersioning(immutableStorageWithVersioning);
 
       return builder;
     }
 
+    /**
+     * Enables Account HierarchicalNamespace, if sets to true.
+     */
     public B withIsHnsEnabled(Boolean isHnsEnabled) {
       component.setIsHnsEnabled(isHnsEnabled);
 
       return builder;
     }
 
+    /**
+     * Enables local users feature, if set to true
+     */
     public B withIsLocalUserEnabled(Boolean isLocalUserEnabled) {
       component.setIsLocalUserEnabled(isLocalUserEnabled);
 
@@ -211,13 +270,18 @@ public abstract class BaseAzureStorageAccount extends PaaSDataStorage implements
     }
 
 
+    /**
+     * Enables NFS 3.0 protocol support, if set to true.
+     */
     public B withIsNfsV3Enabled(Boolean isNfsV3Enabled) {
       component.setIsNfsV3Enabled(isNfsV3Enabled);
 
       return builder;
     }
 
-
+    /**
+     * Enables Secure File Transfer Protocol, if set to true
+     */
     public B withIsSftpEnabled(Boolean isSftpEnabled) {
       component.setIsSftpEnabled(isSftpEnabled);
 
@@ -243,6 +307,9 @@ public abstract class BaseAzureStorageAccount extends PaaSDataStorage implements
       return builder;
     }
 
+    /**
+     * Set the minimum TLS version to be permitted on requests to storage.
+     */
     public B withMinimumTlsVersion(AzureTlsVersion minimumTlsVersion) {
       component.setMinimumTlsVersion(minimumTlsVersion);
 
@@ -307,7 +374,7 @@ public abstract class BaseAzureStorageAccount extends PaaSDataStorage implements
     }
 
     /**
-     * Tag is name/value pairs that enable you to categorize resources and view consolidated billing by
+     * Tag is name/value pair that enable you to categorize resources and view consolidated billing by
      * applying the same tag to multiple resources and resource groups.
      */
     public B withTag(String key, String value) {

@@ -4,32 +4,45 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AzureFileShareAccessTierTest {
   @Test
-  public void testConstantsCreation() {
-    assertNotNull(AzureFileShareAccessTier.COOL, "COOL constant should not be null");
-    assertNotNull(AzureFileShareAccessTier.HOT, "HOT constant should not be null");
-    assertNotNull(AzureFileShareAccessTier.PREMIUM, "PREMIUM constant should not be null");
-    assertNotNull(AzureFileShareAccessTier.TRANSACTION_OPTIMIZED, "TRANSACTION_OPTIMIZED constant should not be null");
+  public void azureFileShareAccessTierConstants_shouldNotBeNull() {
+    assertThat(AzureFileShareAccessTier.COOL).as("COOL constant should not be null").isNotNull();
+    assertThat(AzureFileShareAccessTier.HOT).as("HOT constant should not be null").isNotNull();
+    assertThat(AzureFileShareAccessTier.PREMIUM).as("PREMIUM constant should not be null").isNotNull();
+    assertThat(AzureFileShareAccessTier.TRANSACTION_OPTIMIZED).as("TRANSACTION_OPTIMIZED constant should not be null").isNotNull();
   }
 
   @Test
-  public void testFromString() {
-    assertEquals(AzureFileShareAccessTier.COOL, AzureFileShareAccessTier.fromString("Cool"), "fromString should return COOL for 'Cool'");
-    assertEquals(AzureFileShareAccessTier.HOT, AzureFileShareAccessTier.fromString("Hot"), "fromString should return HOT for 'Hot'");
-    assertEquals(AzureFileShareAccessTier.PREMIUM, AzureFileShareAccessTier.fromString("Premium"), "fromString should return PREMIUM for 'Premium'");
-    assertEquals(AzureFileShareAccessTier.TRANSACTION_OPTIMIZED, AzureFileShareAccessTier.fromString("TransactionOptimized"), "fromString should return TRANSACTION_OPTIMIZED for 'TransactionOptimized'");
+  public void fromString_shouldReturnCorrespondingAzureFileShareAccessTier() {
+    assertThat(AzureFileShareAccessTier.fromString("Cool"))
+        .as("fromString should return COOL for 'Cool'")
+        .isEqualTo(AzureFileShareAccessTier.COOL);
+    
+    assertThat(AzureFileShareAccessTier.fromString("Hot"))
+        .as("fromString should return HOT for 'Hot'")
+        .isEqualTo(AzureFileShareAccessTier.HOT);
+    
+    assertThat(AzureFileShareAccessTier.fromString("Premium"))
+        .as("fromString should return PREMIUM for 'Premium'")
+        .isEqualTo(AzureFileShareAccessTier.PREMIUM);
+    
+    assertThat(AzureFileShareAccessTier.fromString("TransactionOptimized"))
+        .as("fromString should return TRANSACTION_OPTIMIZED for 'TransactionOptimized'")
+        .isEqualTo(AzureFileShareAccessTier.TRANSACTION_OPTIMIZED);
   }
 
   @Test
-  public void testValuesMethod() {
+  public void valuesMethod_shouldContainAllAzureFileShareAccessTiersWithCorrectSize() {
     Collection<AzureFileShareAccessTier> values = AzureFileShareAccessTier.values();
-    assertTrue(values.contains(AzureFileShareAccessTier.COOL), "Values should contain COOL");
-    assertTrue(values.contains(AzureFileShareAccessTier.HOT), "Values should contain HOT");
-    assertTrue(values.contains(AzureFileShareAccessTier.PREMIUM), "Values should contain PREMIUM");
-    assertTrue(values.contains(AzureFileShareAccessTier.TRANSACTION_OPTIMIZED), "Values should contain TRANSACTION_OPTIMIZED");
-    assertEquals(4, values.size(), "There should be exactly 4 values");
+
+    assertThat(values)
+        .as("Values should contain COOL, HOT, PREMIUM, and TRANSACTION_OPTIMIZED and have exactly 4 values")
+        .containsExactlyInAnyOrder(AzureFileShareAccessTier.COOL,
+            AzureFileShareAccessTier.HOT,
+            AzureFileShareAccessTier.PREMIUM,
+            AzureFileShareAccessTier.TRANSACTION_OPTIMIZED);
   }
 }

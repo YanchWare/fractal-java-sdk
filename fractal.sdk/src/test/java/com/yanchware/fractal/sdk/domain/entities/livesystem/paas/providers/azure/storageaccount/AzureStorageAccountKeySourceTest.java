@@ -4,31 +4,38 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AzureStorageAccountKeySourceTest {
   @Test
-  public void testConstantsCreation() {
-    assertNotNull(AzureStorageAccountKeySource.MICROSOFT_STORAGE, "MICROSOFT_STORAGE constant should not be null");
-    assertNotNull(AzureStorageAccountKeySource.MICROSOFT_KEYVAULT, "MICROSOFT_KEYVAULT constant should not be null");
+  public void azureStorageAccountKeySourceConstants_shouldNotBeNull() {
+    assertThat(AzureStorageAccountKeySource.MICROSOFT_STORAGE)
+        .as("MICROSOFT_STORAGE constant should not be null")
+        .isNotNull();
+
+    assertThat(AzureStorageAccountKeySource.MICROSOFT_KEYVAULT)
+        .as("MICROSOFT_KEYVAULT constant should not be null")
+        .isNotNull();
   }
 
   @Test
-  public void testFromString() {
-    assertEquals(AzureStorageAccountKeySource.MICROSOFT_STORAGE,
-        AzureStorageAccountKeySource.fromString("Microsoft.Storage"),
-        "fromString should return MICROSOFT_STORAGE for 'Microsoft.Storage'");
+  public void fromString_shouldReturnCorrespondingAzureStorageAccountKeySource() {
+    assertThat(AzureStorageAccountKeySource.fromString("Microsoft.Storage"))
+        .as("fromString should return MICROSOFT_STORAGE for 'Microsoft.Storage'")
+        .isEqualTo(AzureStorageAccountKeySource.MICROSOFT_STORAGE);
 
-    assertEquals(AzureStorageAccountKeySource.MICROSOFT_KEYVAULT,
-        AzureStorageAccountKeySource.fromString("Microsoft.Keyvault"),
-        "fromString should return MICROSOFT_KEYVAULT for 'Microsoft.Keyvault'");
+    assertThat(AzureStorageAccountKeySource.fromString("Microsoft.Keyvault"))
+        .as("fromString should return MICROSOFT_KEYVAULT for 'Microsoft.Keyvault'")
+        .isEqualTo(AzureStorageAccountKeySource.MICROSOFT_KEYVAULT);
   }
 
   @Test
-  public void testValuesMethod() {
+  public void valuesMethod_shouldContainAlAzureStorageAccountKeySourcesWithCorrectSize() {
     Collection<AzureStorageAccountKeySource> values = AzureStorageAccountKeySource.values();
-    assertTrue(values.contains(AzureStorageAccountKeySource.MICROSOFT_STORAGE), "Values should contain MICROSOFT_STORAGE");
-    assertTrue(values.contains(AzureStorageAccountKeySource.MICROSOFT_KEYVAULT), "Values should contain MICROSOFT_KEYVAULT");
-    assertEquals(2, values.size(), "There should be exactly 2 value");
+
+    assertThat(values)
+        .as("Values should contain MICROSOFT_STORAGE, and MICROSOFT_KEYVAULT and have exactly 2 values")
+        .containsExactlyInAnyOrder(AzureStorageAccountKeySource.MICROSOFT_STORAGE,
+            AzureStorageAccountKeySource.MICROSOFT_KEYVAULT);
   }
 }

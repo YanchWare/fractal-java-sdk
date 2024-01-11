@@ -4,32 +4,38 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AzureFileShareEnabledProtocolsTest {
   @Test
-  public void testConstantsCreation() {
-    assertNotNull(AzureFileShareEnabledProtocols.NFS, "NFS constant should not be null");
-    assertNotNull(AzureFileShareEnabledProtocols.SMB, "SMB constant should not be null");
+  public void azureFileShareEnabledProtocolsConstants_shouldNotBeNull() {
+    assertThat(AzureFileShareEnabledProtocols.NFS)
+        .as("NFS constant should not be null")
+        .isNotNull();
+
+    assertThat(AzureFileShareEnabledProtocols.SMB)
+        .as("SMB constant should not be null")
+        .isNotNull();
   }
 
   @Test
-  public void testFromString() {
-    assertEquals(AzureFileShareEnabledProtocols.NFS,
-        AzureFileShareEnabledProtocols.fromString("NFS"), 
-        "fromString should return NFS for 'NFS'");
+  public void fromString_shouldReturnCorrespondingAzureFileShareEnabledProtocols() {
+    assertThat(AzureFileShareEnabledProtocols.fromString("NFS"))
+        .as("fromString should return NFS for 'NFS'")
+        .isEqualTo(AzureFileShareEnabledProtocols.NFS);
     
-    assertEquals(AzureFileShareEnabledProtocols.SMB,
-        AzureFileShareEnabledProtocols.fromString("SMB"), 
-        "fromString should return SMB for 'SMB'");
-
+    assertThat(AzureFileShareEnabledProtocols.fromString("SMB"))
+        .as("fromString should return SMB for 'SMB'")
+        .isEqualTo(AzureFileShareEnabledProtocols.SMB);
   }
 
   @Test
-  public void testValuesMethod() {
+  public void valuesMethod_shouldContainAllAzureFileShareEnabledProtocolsWithCorrectSize() {
     Collection<AzureFileShareEnabledProtocols> values = AzureFileShareEnabledProtocols.values();
-    assertTrue(values.contains(AzureFileShareEnabledProtocols.NFS), "Values should contain NFS");
-    assertTrue(values.contains(AzureFileShareEnabledProtocols.SMB), "Values should contain SMB");
-    assertEquals(2, values.size(), "There should be exactly 2 values");
+
+    assertThat(values)
+        .as("Values should contain NFS, and SMB and have exactly 2 values")
+        .containsExactlyInAnyOrder(AzureFileShareEnabledProtocols.NFS, 
+            AzureFileShareEnabledProtocols.SMB);
   }
 }

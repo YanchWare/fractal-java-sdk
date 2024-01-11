@@ -4,6 +4,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * The custom domain assigned to this storage account.
+ */
 @Getter
 @Setter(AccessLevel.PRIVATE)
 public class AzureStorageAccountCustomDomain {
@@ -24,11 +27,18 @@ public class AzureStorageAccountCustomDomain {
       this.builder = this;
     }
 
+    /**
+     * Sets the custom domain name assigned to the storage account. 
+     * Name is the CNAME source.
+     */
     public AzureStorageAccountCustomDomainBuilder withName(String name) {
       customDomain.setName(name);
       return builder;
     }
 
+    /**
+     * Indicates whether indirect CName validation is enabled.
+     */
     public AzureStorageAccountCustomDomainBuilder withUseSubDomainName(Boolean useSubDomainName) {
       customDomain.setUseSubDomainName(useSubDomainName);
       return builder;

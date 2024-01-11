@@ -5,6 +5,9 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.ExtendableEnum;
 
 import java.util.Collection;
 
+/**
+ * Indicates the directory service used.
+ */
 public final class AzureDirectoryServiceOptions extends ExtendableEnum<AzureDirectoryServiceOptions> {
   public static final AzureDirectoryServiceOptions NONE = fromString("None");
   public static final AzureDirectoryServiceOptions AADDS = fromString("AADDS");

@@ -4,39 +4,56 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AzureBypassTest {
   @Test
-  public void testConstantsCreation() {
-    assertNotNull(AzureBypass.NONE, "NONE constant should not be null");
-    assertNotNull(AzureBypass.LOGGING, "LOGGING constant should not be null");
-    assertNotNull(AzureBypass.METRICS, "METRICS constant should not be null");
-    assertNotNull(AzureBypass.AZURE_SERVICES, "AZURE_SERVICES constant should not be null");
+  public void azureBypassConstants_shouldNotBeNull() {
+    assertThat(AzureBypass.NONE)
+        .as("NONE constant should not be null")
+        .isNotNull();
+
+    assertThat(AzureBypass.LOGGING)
+        .as("LOGGING constant should not be null")
+        .isNotNull();
+
+    assertThat(AzureBypass.METRICS)
+        .as("METRICS constant should not be null")
+        .isNotNull();
+
+    assertThat(AzureBypass.AZURE_SERVICES)
+        .as("AZURE_SERVICES constant should not be null")
+        .isNotNull();
   }
 
   @Test
-  public void testFromString() {
-    assertEquals(AzureBypass.NONE, AzureBypass.fromString("None"), 
-        "fromString should return NONE for 'None'");
-    
-    assertEquals(AzureBypass.LOGGING, AzureBypass.fromString("Logging"), 
-        "fromString should return LOGGING for 'Logging'");
-    
-    assertEquals(AzureBypass.METRICS, AzureBypass.fromString("Metrics"), 
-        "fromString should return METRICS for 'Metrics'");
-    
-    assertEquals(AzureBypass.AZURE_SERVICES, AzureBypass.fromString("AzureServices"), 
-        "fromString should return AZURE_SERVICES for 'AzureServices'");
+  public void fromString_shouldReturnCorrespondingAzureBypass() {
+    assertThat(AzureBypass.fromString("None"))
+        .as("fromString should return NONE for 'None'")
+        .isEqualTo(AzureBypass.NONE);
+
+    assertThat(AzureBypass.fromString("Logging"))
+        .as("fromString should return LOGGING for 'Logging'")
+        .isEqualTo(AzureBypass.LOGGING);
+
+    assertThat(AzureBypass.fromString("Metrics"))
+        .as("fromString should return METRICS for 'Metrics'")
+        .isEqualTo(AzureBypass.METRICS);
+
+    assertThat(AzureBypass.fromString("AzureServices"))
+        .as("fromString should return AZURE_SERVICES for 'AzureServices'")
+        .isEqualTo(AzureBypass.AZURE_SERVICES);
   }
 
   @Test
-  public void testValuesMethod() {
+  public void valuesMethod_shouldContainAllAzureBypassesWithCorrectSize() {
     Collection<AzureBypass> values = AzureBypass.values();
-    assertTrue(values.contains(AzureBypass.NONE), "Values should contain NONE");
-    assertTrue(values.contains(AzureBypass.LOGGING), "Values should contain LOGGING");
-    assertTrue(values.contains(AzureBypass.METRICS), "Values should contain METRICS");
-    assertTrue(values.contains(AzureBypass.AZURE_SERVICES), "Values should contain AZURE_SERVICES");
-    assertEquals(4, values.size(), "There should be exactly 4 value");
+
+    assertThat(values)
+        .as("Values should contain NONE, LOGGING, METRICS, and AZURE_SERVICES and have exactly 4 values")
+        .containsExactlyInAnyOrder(AzureBypass.NONE,
+            AzureBypass.LOGGING,
+            AzureBypass.METRICS,
+            AzureBypass.AZURE_SERVICES);
   }
 }

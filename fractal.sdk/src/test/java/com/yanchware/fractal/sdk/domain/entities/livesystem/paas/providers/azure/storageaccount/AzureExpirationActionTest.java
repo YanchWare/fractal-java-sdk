@@ -4,24 +4,29 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AzureExpirationActionTest {
   @Test
-  public void testConstantsCreation() {
-    assertNotNull(AzureExpirationAction.LOG, "LOG constant should not be null");
+  public void azureExpirationActionConstants_shouldNotBeNull() {
+    assertThat(AzureExpirationAction.LOG)
+        .as("LOG constant should not be null")
+        .isNotNull();
   }
 
   @Test
-  public void testFromString() {
-    assertEquals(AzureExpirationAction.LOG, AzureExpirationAction.fromString("Log"),
-        "fromString should return LOG for 'Log'");
+  public void fromString_shouldReturnCorrespondingAzureExpirationAction() {
+    assertThat(AzureExpirationAction.fromString("Log"))
+        .as("fromString should return LOG for 'Log'")
+        .isEqualTo(AzureExpirationAction.LOG);
   }
 
   @Test
-  public void testValuesMethod() {
+  public void valuesMethod_shouldContainAllAzureExpirationActionsWithCorrectSize() {
     Collection<AzureExpirationAction> values = AzureExpirationAction.values();
-    assertTrue(values.contains(AzureExpirationAction.LOG), "Values should contain LOG");
-    assertEquals(1, values.size(), "There should be exactly 1 value");
+
+    assertThat(values)
+        .as("Values should contain LOG and have exactly 1 value")
+        .containsExactlyInAnyOrder(AzureExpirationAction.LOG);
   }
 }

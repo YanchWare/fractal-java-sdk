@@ -4,24 +4,29 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AzureIpRuleActionTest {
   @Test
-  public void testConstantsCreation() {
-    assertNotNull(AzureNetworkAction.ALLOW, "ALLOW constant should not be null");
+  public void azureNetworkActionConstants_shouldNotBeNull() {
+    assertThat(AzureNetworkAction.ALLOW)
+        .as("ALLOW constant should not be null")
+        .isNotNull();
   }
 
   @Test
-  public void testFromString() {
-    assertEquals(AzureNetworkAction.ALLOW, AzureNetworkAction.fromString("Allow"),
-        "fromString should return ALLOW for 'Allow'");
+  public void fromString_shouldReturnCorrespondingAzureNetworkAction() {
+    assertThat(AzureNetworkAction.fromString("Allow"))
+        .as("fromString should return ALLOW for 'Allow'")
+        .isEqualTo(AzureNetworkAction.ALLOW);
   }
 
   @Test
-  public void testValuesMethod() {
+  public void valuesMethod_shouldContainAllAzureNetworkActionsWithCorrectSize() {
     Collection<AzureNetworkAction> values = AzureNetworkAction.values();
-    assertTrue(values.contains(AzureNetworkAction.ALLOW), "Values should contain ALLOW");
-    assertEquals(1, values.size(), "There should be exactly 1 value");
+
+    assertThat(values)
+        .as("Values should contain ALLOW and have exactly 1 value")
+        .containsExactlyInAnyOrder(AzureNetworkAction.ALLOW);
   }
 }

@@ -4,37 +4,48 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AzureAccountImmutabilityPolicyStateTest {
   @Test
-  public void testConstantsCreation() {
-    assertNotNull(AzureAccountImmutabilityPolicyState.UNLOCKED, "UNLOCKED constant should not be null");
-    assertNotNull(AzureAccountImmutabilityPolicyState.LOCKED, "LOCKED constant should not be null");
-    assertNotNull(AzureAccountImmutabilityPolicyState.DISABLED, "DISABLED constant should not be null");
+  public void azureAccountImmutabilityPolicyStateConstants_shouldNotBeNull() {
+    assertThat(AzureAccountImmutabilityPolicyState.UNLOCKED)
+        .as("UNLOCKED constant should not be null")
+        .isNotNull();
+
+    assertThat(AzureAccountImmutabilityPolicyState.LOCKED)
+        .as("LOCKED constant should not be null")
+        .isNotNull();
+
+    assertThat(AzureAccountImmutabilityPolicyState.DISABLED)
+        .as("DISABLED constant should not be null")
+        .isNotNull();
   }
 
   @Test
-  public void testFromString() {
-    assertEquals(AzureAccountImmutabilityPolicyState.UNLOCKED, 
-        AzureAccountImmutabilityPolicyState.fromString("Unlocked"),
-        "fromString should return UNLOCKED for 'Unlocked'");
+  public void fromString_shouldReturnCorrespondingAzureAccountImmutabilityPolicyState() {
+    assertThat(AzureAccountImmutabilityPolicyState.fromString("Unlocked"))
+        .as("fromString should return UNLOCKED for 'Unlocked'")
+        .isEqualTo(AzureAccountImmutabilityPolicyState.UNLOCKED);
 
-    assertEquals(AzureAccountImmutabilityPolicyState.LOCKED,
-        AzureAccountImmutabilityPolicyState.fromString("Locked"),
-        "fromString should return LOCKED for 'Locked'");
+    assertThat(AzureAccountImmutabilityPolicyState.fromString("Locked"))
+        .as("fromString should return LOCKED for 'Locked'")
+        .isEqualTo(AzureAccountImmutabilityPolicyState.LOCKED);
 
-    assertEquals(AzureAccountImmutabilityPolicyState.DISABLED,
-        AzureAccountImmutabilityPolicyState.fromString("Disabled"),
-        "fromString should return DISABLED for 'Disabled'");
+    assertThat(AzureAccountImmutabilityPolicyState.fromString("Disabled"))
+        .as("fromString should return DISABLED for 'Disabled'")
+        .isEqualTo(AzureAccountImmutabilityPolicyState.DISABLED);
   }
 
   @Test
-  public void testValuesMethod() {
+  public void valuesMethod_shouldContainAllAzureAccountImmutabilityPolicyStatesWithCorrectSize() {
     Collection<AzureAccountImmutabilityPolicyState> values = AzureAccountImmutabilityPolicyState.values();
-    assertTrue(values.contains(AzureAccountImmutabilityPolicyState.UNLOCKED), "Values should contain UNLOCKED");
-    assertTrue(values.contains(AzureAccountImmutabilityPolicyState.LOCKED), "Values should contain LOCKED");
-    assertTrue(values.contains(AzureAccountImmutabilityPolicyState.DISABLED), "Values should contain DISABLED");
-    assertEquals(3, values.size(), "There should be exactly 3 value");
+
+    assertThat(values)
+        .as("Values should contain UNLOCKED, LOCKED, and DISABLED and have exactly 3 values")
+        .containsExactlyInAnyOrder(
+            AzureAccountImmutabilityPolicyState.UNLOCKED,
+            AzureAccountImmutabilityPolicyState.LOCKED,
+            AzureAccountImmutabilityPolicyState.DISABLED);
   }
 }

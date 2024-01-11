@@ -4,25 +4,29 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AzureStorageAccountExtendedLocationTypesTest {
   @Test
-  public void testConstantsCreation() {
-    assertNotNull(AzureStorageAccountExtendedLocationTypes.EDGE_ZONE, "EDGE_ZONE constant should not be null");
+  public void azureStorageAccountExtendedLocationTypesConstants_shouldNotBeNull() {
+    assertThat(AzureStorageAccountExtendedLocationTypes.EDGE_ZONE)
+        .as("EDGE_ZONE constant should not be null")
+        .isNotNull();
   }
 
   @Test
-  public void testFromString() {
-    assertEquals(AzureStorageAccountExtendedLocationTypes.EDGE_ZONE,
-        AzureStorageAccountExtendedLocationTypes.fromString("EdgeZone"),
-        "fromString should return EDGE_ZONE for 'EdgeZone'");
+  public void fromString_shouldReturnCorrespondingAzureStorageAccountExtendedLocationTypes() {
+    assertThat(AzureStorageAccountExtendedLocationTypes.fromString("EdgeZone"))
+        .as("fromString should return EDGE_ZONE for 'EdgeZone'")
+        .isEqualTo(AzureStorageAccountExtendedLocationTypes.EDGE_ZONE);
   }
 
   @Test
-  public void testValuesMethod() {
+  public void valuesMethod_shouldContainAllAzureStorageAccountExtendedLocationTypesWithCorrectSize() {
     Collection<AzureStorageAccountExtendedLocationTypes> values = AzureStorageAccountExtendedLocationTypes.values();
-    assertTrue(values.contains(AzureStorageAccountExtendedLocationTypes.EDGE_ZONE), "Values should contain EDGE_ZONE");
-    assertEquals(1, values.size(), "There should be exactly 1 value");
+
+    assertThat(values)
+        .as("Values should contain EDGE_ZONE and have exactly 1 value")
+        .containsExactlyInAnyOrder(AzureStorageAccountExtendedLocationTypes.EDGE_ZONE);
   }
 }

@@ -4,31 +4,38 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AzureActiveDirectoryAccountTypeTest {
   @Test
-  public void testConstantsCreation() {
-    assertNotNull(AzureActiveDirectoryAccountType.USER, "USER constant should not be null");
-    assertNotNull(AzureActiveDirectoryAccountType.COMPUTER, "COMPUTER constant should not be null");
+  public void azureActiveDirectoryAccountTypeConstants_shouldNotBeNull() {
+    assertThat(AzureActiveDirectoryAccountType.USER)
+        .as("USER constant should not be null")
+        .isNotNull();
+
+    assertThat(AzureActiveDirectoryAccountType.COMPUTER)
+        .as("COMPUTER constant should not be null")
+        .isNotNull();
   }
 
   @Test
-  public void testFromString() {
-    assertEquals(AzureActiveDirectoryAccountType.USER,
-        AzureActiveDirectoryAccountType.fromString("User"),
-        "fromString should return USER for 'User'");
+  public void fromString_shouldReturnCorrespondingAzureActiveDirectoryAccountType() {
+    assertThat(AzureActiveDirectoryAccountType.fromString("User"))
+        .as("fromString should return USER for 'User'")
+        .isEqualTo(AzureActiveDirectoryAccountType.USER);
 
-    assertEquals(AzureActiveDirectoryAccountType.COMPUTER,
-        AzureActiveDirectoryAccountType.fromString("Computer"),
-        "fromString should return COMPUTER for 'Computer'");
+    assertThat(AzureActiveDirectoryAccountType.fromString("Computer"))
+        .as("fromString should return COMPUTER for 'Computer'")
+        .isEqualTo(AzureActiveDirectoryAccountType.COMPUTER);
   }
 
   @Test
-  public void testValuesMethod() {
+  public void valuesMethod_shouldContainAllAzureActiveDirectoryAccountTypesWithCorrectSize() {
     Collection<AzureActiveDirectoryAccountType> values = AzureActiveDirectoryAccountType.values();
-    assertTrue(values.contains(AzureActiveDirectoryAccountType.USER), "Values should contain USER");
-    assertTrue(values.contains(AzureActiveDirectoryAccountType.COMPUTER), "Values should contain COMPUTER");
-    assertEquals(2, values.size(), "There should be exactly 2 values");
+
+    assertThat(values)
+        .as("Values should contain USER, and COMPUTER and have exactly 2 values")
+        .containsExactlyInAnyOrder(AzureActiveDirectoryAccountType.USER,
+            AzureActiveDirectoryAccountType.COMPUTER);
   }
 }

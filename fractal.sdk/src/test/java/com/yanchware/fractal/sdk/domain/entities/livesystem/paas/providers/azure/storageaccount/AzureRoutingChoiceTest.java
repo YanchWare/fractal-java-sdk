@@ -4,30 +4,38 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AzureRoutingChoiceTest {
   @Test
-  public void testConstantsCreation() {
-    assertNotNull(AzureRoutingChoice.MICROSOFT_ROUTING, "MICROSOFT_ROUTING constant should not be null");
-    assertNotNull(AzureRoutingChoice.INTERNET_ROUTING, "INTERNET_ROUTING constant should not be null");
+  public void azureRoutingChoiceConstants_shouldNotBeNull() {
+    assertThat(AzureRoutingChoice.MICROSOFT_ROUTING)
+        .as("MICROSOFT_ROUTING constant should not be null")
+        .isNotNull();
+
+    assertThat(AzureRoutingChoice.INTERNET_ROUTING)
+        .as("INTERNET_ROUTING constant should not be null")
+        .isNotNull();
   }
 
   @Test
-  public void testFromString() {
-    assertEquals(AzureRoutingChoice.MICROSOFT_ROUTING, AzureRoutingChoice.fromString("MicrosoftRouting"),
-        "fromString should return MICROSOFT_ROUTING for 'MicrosoftRouting'");
-
-    assertEquals(AzureRoutingChoice.INTERNET_ROUTING, AzureRoutingChoice.fromString("InternetRouting"),
-        "fromString should return INTERNET_ROUTING for 'InternetRouting'");
+  public void fromString_shouldReturnCorrespondingAzureRoutingChoice() {
+    assertThat(AzureRoutingChoice.fromString("MicrosoftRouting"))
+        .as("fromString should return MICROSOFT_ROUTING for 'MicrosoftRouting'")
+        .isEqualTo(AzureRoutingChoice.MICROSOFT_ROUTING);
+    
+    assertThat(AzureRoutingChoice.fromString("InternetRouting"))
+        .as("fromString should return INTERNET_ROUTING for 'InternetRouting'")
+        .isEqualTo(AzureRoutingChoice.INTERNET_ROUTING);
   }
 
   @Test
-  public void testValuesMethod() {
+  public void valuesMethod_shouldContainAllAzureRoutingChoicesWithCorrectSize() {
     Collection<AzureRoutingChoice> values = AzureRoutingChoice.values();
-    assertTrue(values.contains(AzureRoutingChoice.MICROSOFT_ROUTING), "Values should contain MICROSOFT_ROUTING");
-    assertTrue(values.contains(AzureRoutingChoice.INTERNET_ROUTING), "Values should contain INTERNET_ROUTING");
-    assertEquals(2, values.size(), "There should be exactly 2 value");
+
+    assertThat(values)
+        .as("Values should contain MICROSOFT_ROUTING, and INTERNET_ROUTING and have exactly 2 values")
+        .containsExactlyInAnyOrder(AzureRoutingChoice.MICROSOFT_ROUTING, AzureRoutingChoice.INTERNET_ROUTING);
   }
 
 }

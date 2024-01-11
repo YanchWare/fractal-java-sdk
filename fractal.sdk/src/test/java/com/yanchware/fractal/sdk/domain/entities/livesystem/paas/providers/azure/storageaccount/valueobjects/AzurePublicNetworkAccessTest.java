@@ -4,29 +4,38 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AzurePublicNetworkAccessTest {
   @Test
-  public void testConstantsCreation() {
-    assertNotNull(AzurePublicNetworkAccess.ENABLED, "ENABLED constant should not be null");
-    assertNotNull(AzurePublicNetworkAccess.DISABLED, "DISABLED constant should not be null");
+  public void azurePublicNetworkAccessConstants_shouldNotBeNull() {
+    assertThat(AzurePublicNetworkAccess.ENABLED)
+        .as("ENABLED constant should not be null")
+        .isNotNull();
+
+    assertThat(AzurePublicNetworkAccess.DISABLED)
+        .as("DISABLED constant should not be null")
+        .isNotNull();
   }
 
   @Test
-  public void testFromString() {
-    assertEquals(AzurePublicNetworkAccess.ENABLED, AzurePublicNetworkAccess.fromString("Enabled"),
-        "fromString should return ENABLED for 'Enabled'");
-
-    assertEquals(AzurePublicNetworkAccess.DISABLED, AzurePublicNetworkAccess.fromString("Disabled"),
-        "fromString should return DISABLED for 'Disabled'");
+  public void fromString_shouldReturnCorrespondingAzurePublicNetworkAccess() {
+    assertThat(AzurePublicNetworkAccess.fromString("Enabled"))
+        .as("fromString should return ENABLED for 'Enabled'")
+        .isEqualTo(AzurePublicNetworkAccess.ENABLED);
+    
+    assertThat(AzurePublicNetworkAccess.fromString("Disabled"))
+        .as("fromString should return DISABLED for 'Disabled'")
+        .isEqualTo(AzurePublicNetworkAccess.DISABLED);
   }
 
   @Test
-  public void testValuesMethod() {
+  public void valuesMethod_shouldContainAllAzurePublicNetworkAccessesWithCorrectSize() {
     Collection<AzurePublicNetworkAccess> values = AzurePublicNetworkAccess.values();
-    assertTrue(values.contains(AzurePublicNetworkAccess.ENABLED), "Values should contain ENABLED");
-    assertTrue(values.contains(AzurePublicNetworkAccess.DISABLED), "Values should contain DISABLED");
-    assertEquals(2, values.size(), "There should be exactly 2 value");
+
+    assertThat(values)
+        .as("Values should contain ENABLED, and DISABLED and have exactly 2 values")
+        .containsExactlyInAnyOrder(AzurePublicNetworkAccess.ENABLED,
+            AzurePublicNetworkAccess.DISABLED);
   }
 }

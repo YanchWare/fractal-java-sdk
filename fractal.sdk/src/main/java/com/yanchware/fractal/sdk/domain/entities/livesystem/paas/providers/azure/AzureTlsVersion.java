@@ -5,6 +5,9 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.ExtendableEnum;
 
 import java.util.Collection;
 
+/**
+ * TLS version to be permitted on requests
+ */
 public final class AzureTlsVersion extends ExtendableEnum<AzureTlsVersion> {
   public static final AzureTlsVersion TLS1_0 = fromString("TLS1_0");
   

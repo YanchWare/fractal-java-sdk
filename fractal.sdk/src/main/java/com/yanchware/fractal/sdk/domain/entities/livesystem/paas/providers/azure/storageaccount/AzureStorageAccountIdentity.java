@@ -8,6 +8,9 @@ import lombok.Setter;
 
 import java.util.HashMap;
 
+/**
+ * Identity for the resource.
+ */
 @Getter
 @Setter(AccessLevel.PRIVATE)
 public class AzureStorageAccountIdentity {
@@ -30,21 +33,35 @@ public class AzureStorageAccountIdentity {
       this.builder = this;
     }
 
+    /**
+     * The principal ID of resource identity.
+     */
     public AzureStorageAccountIdentityBuilder withPrincipalId(String principalId) {
       identity.setPrincipalId(principalId);
       return builder;
     }
 
+    /**
+     * The tenant ID of resource.
+     */
     public AzureStorageAccountIdentityBuilder withTenantId(String tenantId) {
       identity.setTenantId(tenantId);
       return builder;
     }
 
+    /**
+     * The identity type.
+     */
     public AzureStorageAccountIdentityBuilder withIdentityType(AzureIdentityType identityType) {
       identity.setIdentityType(identityType);
       return builder;
     }
 
+    /**
+     * Sets a list of key value pairs that describe the set of User Assigned identities that will be used with this storage account. 
+     * The key is the ARM resource identifier of the identity. 
+     * Only 1 User Assigned identity is permitted here.
+     */
     public AzureStorageAccountIdentityBuilder withUserAssignedIdentities(HashMap<String, AzureUserAssignedIdentity> userAssignedIdentities) {
       identity.setUserAssignedIdentities(userAssignedIdentities);
       return builder;

@@ -2,29 +2,27 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yanchware.fractal.sdk.TestWithFixture;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
 import com.yanchware.fractal.sdk.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
-public class AzureBlockBlobStorageAccountTest {
+public class AzureBlockBlobStorageAccountTest extends TestWithFixture  {
   @Test
   public void kindIsValid_when_ValidationPasses() throws JsonProcessingException {
     var storage = AzureBlockBlobStorageAccount.builder()
-        .withId("block-blob-storage-account")
-        .withName("a23456789012345678901234")
-        .withDisplayName("Block Blob Storage Account")
-        .withRegion(AzureRegion.EUROPE_WEST)
-        .withResourceGroup(AzureResourceGroup.builder()
-            .withName("validName123")
-            .withRegion(AzureRegion.EUROPE_WEST)
-            .build())
-        .withTag("key1", "value1")
+        .withId(aComponentId())
+        .withName(aLowerCaseAlphanumericString(10))
+        .withDisplayName(aAlphanumericString(50))
+        .withRegion(a(AzureRegion.class))
+        .withResourceGroup(a(AzureResourceGroup.class))
+        .withTag(a(String.class), a(String.class))
         .build();
-    assertTrue(storage.validate().isEmpty());
+    
+    assertThat(storage.validate().isEmpty()).isTrue();
 
     var json = TestUtils.getJsonRepresentation(storage);
     assertThat(json).isNotBlank();

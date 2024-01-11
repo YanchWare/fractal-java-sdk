@@ -2,6 +2,7 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yanchware.fractal.sdk.TestWithFixture;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
 import com.yanchware.fractal.sdk.utils.TestUtils;
@@ -10,19 +11,16 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class AzureFileStorageAccountTest {
+public class AzureFileStorageAccountTest extends TestWithFixture {
   @Test
   public void kindIsValid_when_ValidationPasses() throws JsonProcessingException {
     var storage = AzureFileStorageAccount.builder()
-        .withId("file-storage-account")
-        .withName("a23456789012345678901234")
-        .withDisplayName("File Storage Account")
-        .withRegion(AzureRegion.EUROPE_WEST)
-        .withResourceGroup(AzureResourceGroup.builder()
-            .withName("validName123")
-            .withRegion(AzureRegion.EUROPE_WEST)
-            .build())
-        .withTag("key1", "value1")
+        .withId(aComponentId())
+        .withName(aLowerCaseAlphanumericString(10))
+        .withDisplayName(aAlphanumericString(50))
+        .withRegion(a(AzureRegion.class))
+        .withResourceGroup(a(AzureResourceGroup.class))
+        .withTag(a(String.class), a(String.class))
         .build();
     assertTrue(storage.validate().isEmpty());
 
@@ -41,32 +39,32 @@ public class AzureFileStorageAccountTest {
   @Test
   public void fileShareIsValid_when_ValidationPasses() throws JsonProcessingException {
     var storage = AzureFileStorageAccount.builder()
-        .withId("file-storage-account")
-        .withName("a23456789012345678901234")
-        .withDisplayName("File Storage Account")
-        .withRegion(AzureRegion.EUROPE_WEST)
+        .withId(aComponentId())
+        .withName(aLowerCaseAlphanumericString(10))
+        .withDisplayName(aAlphanumericString(50))
+        .withRegion(a(AzureRegion.class))
         .withResourceGroup(AzureResourceGroup.builder()
-            .withName("validName123")
-            .withRegion(AzureRegion.EUROPE_WEST)
+            .withName(aLowerCaseAlphanumericString(10))
+            .withRegion(a(AzureRegion.class))
             .build())
         .withFileShare(AzureFileShare.builder()
-            .withId("templates")
-            .withName("templates")
-            .withDisplayName("Templates")
-            .withEnabledProtocols(AzureFileShareEnabledProtocols.SMB)
+            .withId(aLowerCaseAlphanumericString(10, true, "-"))
+            .withName(aLowerCaseAlphanumericString(10))
+            .withDisplayName(aAlphanumericString(50))
+            .withEnabledProtocols(a(AzureFileShareEnabledProtocols.class))
             .withShareQuota(100)
-            .withAccessTier(AzureFileShareAccessTier.PREMIUM)
+            .withAccessTier(a(AzureFileShareAccessTier.class))
             .build())
         .withFileShare(AzureFileShare.builder()
-            .withId("nfs-templates")
-            .withName("nfs")
-            .withDisplayName("NFS Templates")
-            .withEnabledProtocols(AzureFileShareEnabledProtocols.NFS)
-            .withRootSquash(AzureFileShareRootSquashType.ROOT_SQUASH)
+            .withId(aLowerCaseAlphanumericString(10, true, "-"))
+            .withName(aLowerCaseAlphanumericString(10))
+            .withDisplayName(aAlphanumericString(50))
+            .withEnabledProtocols(a(AzureFileShareEnabledProtocols.class))
+            .withRootSquash(a(AzureFileShareRootSquashType.class))
             .withShareQuota(100)
-            .withAccessTier(AzureFileShareAccessTier.PREMIUM)
+            .withAccessTier(a(AzureFileShareAccessTier.class))
             .build())
-        .withTag("key1", "value1")
+        .withTag(a(String.class), a(String.class))
         .build();
     assertTrue(storage.validate().isEmpty());
     

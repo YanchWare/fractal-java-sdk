@@ -4,29 +4,37 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AzureDnsEndpointTypeTest {
   @Test
-  public void testConstantsCreation() {
-    assertNotNull(AzureDnsEndpointType.STANDARD, "STANDARD constant should not be null");
-    assertNotNull(AzureDnsEndpointType.AZURE_DNS_ZONE, "AZURE_DNS_ZONE constant should not be null");
+  public void azureDnsEndpointTypeConstants_shouldNotBeNull() {
+    assertThat(AzureDnsEndpointType.STANDARD)
+        .as("STANDARD constant should not be null")
+        .isNotNull();
+
+    assertThat(AzureDnsEndpointType.AZURE_DNS_ZONE)
+        .as("AZURE_DNS_ZONE constant should not be null")
+        .isNotNull();
   }
 
   @Test
-  public void testFromString() {
-    assertEquals(AzureDnsEndpointType.STANDARD, AzureDnsEndpointType.fromString("Standard"),
-        "fromString should return STANDARD for 'Standard'");
+  public void fromString_shouldReturnCorrespondingAzureDnsEndpointType() {
+    assertThat(AzureDnsEndpointType.fromString("Standard"))
+        .as("fromString should return STANDARD for 'Standard'")
+        .isEqualTo(AzureDnsEndpointType.STANDARD);
 
-    assertEquals(AzureDnsEndpointType.AZURE_DNS_ZONE, AzureDnsEndpointType.fromString("AzureDnsZone"),
-        "fromString should return STANDARD for 'Standard'");
+    assertThat(AzureDnsEndpointType.fromString("AzureDnsZone"))
+        .as("fromString should return STANDARD for 'Standard'")
+        .isEqualTo(AzureDnsEndpointType.AZURE_DNS_ZONE);
   }
 
   @Test
-  public void testValuesMethod() {
+  public void valuesMethod_shouldContainAllAzureDnsEndpointTypesWithCorrectSize() {
     Collection<AzureDnsEndpointType> values = AzureDnsEndpointType.values();
-    assertTrue(values.contains(AzureDnsEndpointType.STANDARD), "Values should contain STANDARD");
-    assertTrue(values.contains(AzureDnsEndpointType.AZURE_DNS_ZONE), "Values should contain AZURE_DNS_ZONE");
-    assertEquals(2, values.size(), "There should be exactly 2 values");
+
+    assertThat(values)
+        .as("Values should contain STANDARD, and AZURE_DNS_ZONE and have exactly 2 values")
+        .containsExactlyInAnyOrder(AzureDnsEndpointType.STANDARD, AzureDnsEndpointType.AZURE_DNS_ZONE);
   }
 }

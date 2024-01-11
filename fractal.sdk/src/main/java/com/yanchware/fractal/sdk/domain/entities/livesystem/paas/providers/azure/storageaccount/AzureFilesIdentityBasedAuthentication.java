@@ -12,19 +12,8 @@ import lombok.Setter;
 @Getter
 @Setter(AccessLevel.PRIVATE)
 public class AzureFilesIdentityBasedAuthentication {
-  /**
-   * Required if directoryServiceOptions are AD, optional if they are AADKERB.
-   */
   private AzureActiveDirectoryProperties activeDirectoryProperties;
-
-  /**
-   * Default share permission for users using Kerberos authentication if RBAC role is not assigned.
-   */
   private AzureDefaultSharePermission defaultSharePermission;
-
-  /**
-   * Indicates the directory service used. Note that this enum may be extended in the future.
-   */
   private AzureDirectoryServiceOptions directoryServiceOptions;
 
   public static AzureFilesIdentityBasedAuthenticationBuilder builder() {
@@ -41,18 +30,27 @@ public class AzureFilesIdentityBasedAuthentication {
       this.builder = this;
     }
 
+    /**
+     * Required if directoryServiceOptions are AD, optional if they are AADKERB.
+     */
     public AzureFilesIdentityBasedAuthenticationBuilder withActiveDirectoryProperties(
         AzureActiveDirectoryProperties activeDirectoryProperties) {
       azureFilesIdentityBasedAuthentication.setActiveDirectoryProperties(activeDirectoryProperties);
       return builder;
     }
 
+    /**
+     * Default share permission for users using Kerberos authentication if RBAC role is not assigned.
+     */
     public AzureFilesIdentityBasedAuthenticationBuilder withDefaultSharePermission(
         AzureDefaultSharePermission defaultSharePermission) {
       azureFilesIdentityBasedAuthentication.setDefaultSharePermission(defaultSharePermission);
       return builder;
     }
 
+    /**
+     * Indicates the directory service used. Note that this enum may be extended in the future.
+     */
     public AzureFilesIdentityBasedAuthenticationBuilder withDirectoryServiceOptions(
         AzureDirectoryServiceOptions directoryServiceOptions) {
       azureFilesIdentityBasedAuthentication.setDirectoryServiceOptions(directoryServiceOptions);

@@ -4,43 +4,56 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AzureDirectoryServiceOptionsTest {
   @Test
-  public void testConstantsCreation() {
-    assertNotNull(AzureDirectoryServiceOptions.NONE, "NONE constant should not be null");
-    assertNotNull(AzureDirectoryServiceOptions.AADDS, "AADDS constant should not be null");
-    assertNotNull(AzureDirectoryServiceOptions.AD, "AD constant should not be null");
-    assertNotNull(AzureDirectoryServiceOptions.AADKERB, "AADKERB constant should not be null");
+  public void azureDirectoryServiceOptionsConstants_shouldNotBeNull() {
+    assertThat(AzureDirectoryServiceOptions.NONE)
+        .as("NONE constant should not be null")
+        .isNotNull();
+
+    assertThat(AzureDirectoryServiceOptions.AADDS)
+        .as("AADDS constant should not be null")
+        .isNotNull();
+
+    assertThat(AzureDirectoryServiceOptions.AD)
+        .as("AD constant should not be null")
+        .isNotNull();
+
+    assertThat(AzureDirectoryServiceOptions.AADKERB)
+        .as("AADKERB constant should not be null")
+        .isNotNull();
   }
 
   @Test
-  public void testFromString() {
-    assertEquals(AzureDirectoryServiceOptions.NONE,
-        AzureDirectoryServiceOptions.fromString("None"),
-        "fromString should return NONE for 'None'");
+  public void fromString_shouldReturnCorrespondingAzureDirectoryServiceOptions() {
+    assertThat(AzureDirectoryServiceOptions.fromString("None"))
+        .as("fromString should return NONE for 'None'")
+        .isEqualTo(AzureDirectoryServiceOptions.NONE);
 
-    assertEquals(AzureDirectoryServiceOptions.AADDS,
-        AzureDirectoryServiceOptions.fromString("AADDS"),
-        "fromString should return AADDS for 'AADDS'");
+    assertThat(AzureDirectoryServiceOptions.fromString("AADDS"))
+        .as("fromString should return AADDS for 'AADDS'")
+        .isEqualTo(AzureDirectoryServiceOptions.AADDS);
+    
+    assertThat(AzureDirectoryServiceOptions.fromString("AD"))
+        .as("fromString should return AD for 'AD'")
+        .isEqualTo(AzureDirectoryServiceOptions.AD);
 
-    assertEquals(AzureDirectoryServiceOptions.AD,
-        AzureDirectoryServiceOptions.fromString("AD"),
-        "fromString should return AD for 'AD'");
-
-    assertEquals(AzureDirectoryServiceOptions.AADKERB,
-        AzureDirectoryServiceOptions.fromString("AADKERB"),
-        "fromString should return AADKERB for 'AADKERB'");
+    assertThat(AzureDirectoryServiceOptions.fromString("AADKERB"))
+        .as("fromString should return AADKERB for 'AADKERB'")
+        .isEqualTo(AzureDirectoryServiceOptions.AADKERB);
   }
 
   @Test
-  public void testValuesMethod() {
+  public void valuesMethod_shouldContainAllAzureDirectoryServiceOptionsWithCorrectSize() {
     Collection<AzureDirectoryServiceOptions> values = AzureDirectoryServiceOptions.values();
-    assertTrue(values.contains(AzureDirectoryServiceOptions.NONE), "Values should contain NONE");
-    assertTrue(values.contains(AzureDirectoryServiceOptions.AADDS), "Values should contain AADDS");
-    assertTrue(values.contains(AzureDirectoryServiceOptions.AD), "Values should contain AD");
-    assertTrue(values.contains(AzureDirectoryServiceOptions.AADKERB), "Values should contain AADKERB");
-    assertEquals(4, values.size(), "There should be exactly 4 values");
+
+    assertThat(values)
+        .as("Values should contain NONE, AADDS, AD, and AADKERB and have exactly 4 values")
+        .containsExactlyInAnyOrder(AzureDirectoryServiceOptions.NONE,
+            AzureDirectoryServiceOptions.AADDS,
+            AzureDirectoryServiceOptions.AD,
+            AzureDirectoryServiceOptions.AADKERB);
   }
 }

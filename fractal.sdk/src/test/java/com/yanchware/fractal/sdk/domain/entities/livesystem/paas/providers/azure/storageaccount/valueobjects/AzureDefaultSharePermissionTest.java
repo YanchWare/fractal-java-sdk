@@ -4,56 +4,59 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AzureDefaultSharePermissionTest {
   @Test
-  public void testConstantsCreation() {
-    assertNotNull(AzureDefaultSharePermission.NONE, "NONE constant should not be null");
-    
-    assertNotNull(AzureDefaultSharePermission.STORAGE_FILE_DATA_SMB_SHARE_READER, 
-        "STORAGE_FILE_DATA_SMB_SHARE_READER constant should not be null");
-    
-    assertNotNull(AzureDefaultSharePermission.STORAGE_FILE_DATA_SMB_SHARE_CONTRIBUTOR, 
-        "STORAGE_FILE_DATA_SMB_SHARE_CONTRIBUTOR constant should not be null");
+  public void azureDefaultSharePermissionConstants_shouldNotBeNull() {
+    assertThat(AzureDefaultSharePermission.NONE)
+        .as("NONE constant should not be null")
+        .isNotNull();
 
-    assertNotNull(AzureDefaultSharePermission.STORAGE_FILE_DATA_SMB_SHARE_ELEVATED_CONTRIBUTOR,
-        "STORAGE_FILE_DATA_SMB_SHARE_ELEVATED_CONTRIBUTOR constant should not be null");
+    assertThat(AzureDefaultSharePermission.STORAGE_FILE_DATA_SMB_SHARE_READER)
+        .as("STORAGE_FILE_DATA_SMB_SHARE_READER constant should not be null")
+        .isNotNull();
+
+    assertThat(AzureDefaultSharePermission.STORAGE_FILE_DATA_SMB_SHARE_CONTRIBUTOR)
+        .as("STORAGE_FILE_DATA_SMB_SHARE_CONTRIBUTOR constant should not be null")
+        .isNotNull();
+
+    assertThat(AzureDefaultSharePermission.STORAGE_FILE_DATA_SMB_SHARE_ELEVATED_CONTRIBUTOR)
+        .as("STORAGE_FILE_DATA_SMB_SHARE_ELEVATED_CONTRIBUTOR constant should not be null")
+        .isNotNull();
   }
 
   @Test
-  public void testFromString() {
-    assertEquals(AzureDefaultSharePermission.NONE,
-        AzureDefaultSharePermission.fromString("None"),
-        "fromString should return NONE for 'None'");
+  public void fromString_shouldReturnCorrespondingAzureDefaultSharePermission() {
+    assertThat(AzureDefaultSharePermission.fromString("None"))
+        .as("fromString should return NONE for 'None'")
+        .isEqualTo(AzureDefaultSharePermission.NONE);
 
-    assertEquals(AzureDefaultSharePermission.STORAGE_FILE_DATA_SMB_SHARE_READER,
-        AzureDefaultSharePermission.fromString("StorageFileDataSmbShareReader"),
-        "fromString should return STORAGE_FILE_DATA_SMB_SHARE_READER for 'StorageFileDataSmbShareReader'");
+    assertThat(AzureDefaultSharePermission.fromString("StorageFileDataSmbShareReader"))
+        .as("fromString should return STORAGE_FILE_DATA_SMB_SHARE_READER for 'StorageFileDataSmbShareReader'")
+        .isEqualTo(AzureDefaultSharePermission.STORAGE_FILE_DATA_SMB_SHARE_READER);
 
-    assertEquals(AzureDefaultSharePermission.STORAGE_FILE_DATA_SMB_SHARE_CONTRIBUTOR,
-        AzureDefaultSharePermission.fromString("StorageFileDataSmbShareContributor"),
-        "fromString should return STORAGE_FILE_DATA_SMB_SHARE_CONTRIBUTOR for 'StorageFileDataSmbShareContributor'");
+    assertThat(AzureDefaultSharePermission.fromString("StorageFileDataSmbShareContributor"))
+        .as("fromString should return STORAGE_FILE_DATA_SMB_SHARE_CONTRIBUTOR for 'StorageFileDataSmbShareContributor'")
+        .isEqualTo(AzureDefaultSharePermission.STORAGE_FILE_DATA_SMB_SHARE_CONTRIBUTOR);
 
-    assertEquals(AzureDefaultSharePermission.STORAGE_FILE_DATA_SMB_SHARE_ELEVATED_CONTRIBUTOR,
-        AzureDefaultSharePermission.fromString("StorageFileDataSmbShareElevatedContributor"),
-        "fromString should return STORAGE_FILE_DATA_SMB_SHARE_ELEVATED_CONTRIBUTOR for 'StorageFileDataSmbShareElevatedContributor'");
+    assertThat(AzureDefaultSharePermission.fromString("StorageFileDataSmbShareElevatedContributor"))
+        .as("fromString should return STORAGE_FILE_DATA_SMB_SHARE_ELEVATED_CONTRIBUTOR for 'StorageFileDataSmbShareElevatedContributor'")
+        .isEqualTo(AzureDefaultSharePermission.STORAGE_FILE_DATA_SMB_SHARE_ELEVATED_CONTRIBUTOR);
   }
 
   @Test
-  public void testValuesMethod() {
+  public void valuesMethod_shouldContainAllAzureDefaultSharePermissionsWithCorrectSize() {
     Collection<AzureDefaultSharePermission> values = AzureDefaultSharePermission.values();
-    assertTrue(values.contains(AzureDefaultSharePermission.NONE), "Values should contain NONE");
-    
-    assertTrue(values.contains(AzureDefaultSharePermission.STORAGE_FILE_DATA_SMB_SHARE_READER), 
-        "Values should contain STORAGE_FILE_DATA_SMB_SHARE_READER");
-    
-    assertTrue(values.contains(AzureDefaultSharePermission.STORAGE_FILE_DATA_SMB_SHARE_CONTRIBUTOR), 
-        "Values should contain STORAGE_FILE_DATA_SMB_SHARE_CONTRIBUTOR");
-    
-    assertTrue(values.contains(AzureDefaultSharePermission.STORAGE_FILE_DATA_SMB_SHARE_ELEVATED_CONTRIBUTOR), 
-        "Values should contain STORAGE_FILE_DATA_SMB_SHARE_ELEVATED_CONTRIBUTOR");
-    
-    assertEquals(4, values.size(), "There should be exactly 4 values");
+
+    assertThat(values)
+        .as("Values should contain NONE, STORAGE_FILE_DATA_SMB_SHARE_READER, " +
+            "STORAGE_FILE_DATA_SMB_SHARE_CONTRIBUTOR, and STORAGE_FILE_DATA_SMB_SHARE_ELEVATED_CONTRIBUTOR " +
+            "and have exactly 4 values")
+        .containsExactlyInAnyOrder(
+            AzureDefaultSharePermission.NONE,
+            AzureDefaultSharePermission.STORAGE_FILE_DATA_SMB_SHARE_READER,
+            AzureDefaultSharePermission.STORAGE_FILE_DATA_SMB_SHARE_CONTRIBUTOR,
+            AzureDefaultSharePermission.STORAGE_FILE_DATA_SMB_SHARE_ELEVATED_CONTRIBUTOR);
   }
 }

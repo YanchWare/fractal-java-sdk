@@ -4,39 +4,56 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AzureIdentityTypeTest {
   @Test
-  public void testConstantsCreation() {
-    assertNotNull(AzureIdentityType.NONE, "NONE constant should not be null");
-    assertNotNull(AzureIdentityType.SYSTEM_ASSIGNED, "SYSTEM_ASSIGNED constant should not be null");
-    assertNotNull(AzureIdentityType.USER_ASSIGNED, "USER_ASSIGNED constant should not be null");
-    assertNotNull(AzureIdentityType.SYSTEM_ASSIGNED_USER_ASSIGNED, "SYSTEM_ASSIGNED_USER_ASSIGNED constant should not be null");
+  public void azureIdentityTypeConstants_shouldNotBeNull() {
+    assertThat(AzureIdentityType.NONE)
+        .as("NONE constant should not be null")
+        .isNotNull();
+
+    assertThat(AzureIdentityType.SYSTEM_ASSIGNED)
+        .as("SYSTEM_ASSIGNED constant should not be null")
+        .isNotNull();
+
+    assertThat(AzureIdentityType.USER_ASSIGNED)
+        .as("USER_ASSIGNED constant should not be null")
+        .isNotNull();
+
+    assertThat(AzureIdentityType.SYSTEM_ASSIGNED_USER_ASSIGNED)
+        .as("SYSTEM_ASSIGNED_USER_ASSIGNED constant should not be null")
+        .isNotNull();
   }
 
   @Test
-  public void testFromString() {
-    assertEquals(AzureIdentityType.NONE, AzureIdentityType.fromString("None"),
-        "fromString should return NONE for 'None'");
+  public void fromString_shouldReturnCorrespondingAzureIdentityType() {
+    assertThat(AzureIdentityType.fromString("None"))
+        .as("fromString should return NONE for 'None'")
+        .isEqualTo(AzureIdentityType.NONE);
 
-    assertEquals(AzureIdentityType.SYSTEM_ASSIGNED, AzureIdentityType.fromString("SystemAssigned"),
-        "fromString should return SYSTEM_ASSIGNED for 'SystemAssigned'");
+    assertThat(AzureIdentityType.fromString("SystemAssigned"))
+        .as("fromString should return SYSTEM_ASSIGNED for 'SystemAssigned'")
+        .isEqualTo(AzureIdentityType.SYSTEM_ASSIGNED);
 
-    assertEquals(AzureIdentityType.USER_ASSIGNED, AzureIdentityType.fromString("UserAssigned"),
-        "fromString should return USER_ASSIGNED for 'UserAssigned'");
+    assertThat(AzureIdentityType.fromString("UserAssigned"))
+        .as("fromString should return USER_ASSIGNED for 'UserAssigned'")
+        .isEqualTo(AzureIdentityType.USER_ASSIGNED);
 
-    assertEquals(AzureIdentityType.SYSTEM_ASSIGNED_USER_ASSIGNED, AzureIdentityType.fromString("SystemAssigned,UserAssigned"),
-        "fromString should return SYSTEM_ASSIGNED_USER_ASSIGNED for 'SystemAssigned,UserAssigned'");
+    assertThat(AzureIdentityType.fromString("SystemAssigned,UserAssigned"))
+        .as("fromString should return SYSTEM_ASSIGNED_USER_ASSIGNED for 'SystemAssigned,UserAssigned'")
+        .isEqualTo(AzureIdentityType.SYSTEM_ASSIGNED_USER_ASSIGNED);
   }
 
   @Test
-  public void testValuesMethod() {
+  public void valuesMethod_shouldContainAllAzureIdentityTypesWithCorrectSize() {
     Collection<AzureIdentityType> values = AzureIdentityType.values();
-    assertTrue(values.contains(AzureIdentityType.NONE), "Values should contain NONE");
-    assertTrue(values.contains(AzureIdentityType.SYSTEM_ASSIGNED), "Values should contain SYSTEM_ASSIGNED");
-    assertTrue(values.contains(AzureIdentityType.USER_ASSIGNED), "Values should contain USER_ASSIGNED");
-    assertTrue(values.contains(AzureIdentityType.SYSTEM_ASSIGNED_USER_ASSIGNED), "Values should contain SYSTEM_ASSIGNED_USER_ASSIGNED");
-    assertEquals(4, values.size(), "There should be exactly 4 value");
+
+    assertThat(values)
+        .as("Values should contain NONE, SYSTEM_ASSIGNED, USER_ASSIGNED, and SYSTEM_ASSIGNED_USER_ASSIGNED and have exactly 4 values")
+        .containsExactlyInAnyOrder(AzureIdentityType.NONE,
+            AzureIdentityType.SYSTEM_ASSIGNED,
+            AzureIdentityType.USER_ASSIGNED,
+            AzureIdentityType.SYSTEM_ASSIGNED_USER_ASSIGNED);
   }
 }

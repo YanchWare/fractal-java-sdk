@@ -4,29 +4,32 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AzureActionTest {
   @Test
-  public void testConstantsCreation() {
-    assertNotNull(AzureAction.ALLOW, "ALLOW constant should not be null");
-    assertNotNull(AzureAction.DENY, "DENY constant should not be null");
+  public void azureActionConstants_shouldNotBeNull() {
+    assertThat(AzureAction.ALLOW).as("ALLOW constant should not be null").isNotNull();
+    assertThat(AzureAction.DENY).as("DENY constant should not be null").isNotNull();
   }
 
   @Test
-  public void testFromString() {
-    assertEquals(AzureAction.ALLOW, AzureAction.fromString("Allow"), 
-        "fromString should return ALLOW for 'Allow'");
-    
-    assertEquals(AzureAction.DENY, AzureAction.fromString("Deny"), 
-        "fromString should return DENY for 'Deny'");
+  public void fromString_shouldReturnCorrespondingAzureAction() {
+    assertThat(AzureAction.fromString("Allow"))
+        .as("fromString should return ALLOW for 'Allow'")
+        .isEqualTo(AzureAction.ALLOW);
+
+    assertThat(AzureAction.fromString("Deny"))
+        .as("fromString should return DENY for 'Deny'")
+        .isEqualTo(AzureAction.DENY);
   }
 
   @Test
-  public void testValuesMethod() {
+  public void valuesMethod_shouldContainAllAzureActionsWithCorrectSize() {
     Collection<AzureAction> values = AzureAction.values();
-    assertTrue(values.contains(AzureAction.ALLOW), "Values should contain ALLOW");
-    assertTrue(values.contains(AzureAction.DENY), "Values should contain DENY");
-    assertEquals(2, values.size(), "There should be exactly 2 value");
+
+    assertThat(values)
+        .as("Values should contain ALLOW, DENY and have exactly 2 values")
+        .containsExactlyInAnyOrder(AzureAction.ALLOW, AzureAction.DENY);
   }
 }
