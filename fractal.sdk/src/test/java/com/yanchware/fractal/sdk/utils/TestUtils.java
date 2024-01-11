@@ -28,10 +28,7 @@ import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.SoftAssertions;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PreemptionPolicy.NEVER;
@@ -85,6 +82,7 @@ public class TestUtils {
             .withOsType(LINUX)
             .withOsSku(AzureOsSku.AZURE_LINUX)
             .withAutoscalingEnabled(true)
+            .withLabels(Map.of("env", "test"))
             .build())
         .withPriorityClass(PriorityClass.builder()
             .withName("fractal-critical")
@@ -302,6 +300,7 @@ public class TestUtils {
         .withId("db-2")
         .withDisplayName("db-2")
         .withName("db2")
+        .withSchema("test")
         .withLink(getComponentLink())
         .build();
   }
@@ -311,6 +310,7 @@ public class TestUtils {
         .withId("db-2")
         .withDisplayName("db-2")
         .withName("db2")
+        .withSchema("test")
         .withLink(getComponentLink())
         .build();
   }
@@ -370,14 +370,25 @@ public class TestUtils {
 
   public static void assertGenericComponent(ComponentDto componentDto, Component comp, String type) {
     SoftAssertions.assertSoftly(softly -> {
-      softly.assertThat(componentDto.getId()).as("Component ID").isEqualTo(comp.getId().getValue());
-      softly.assertThat(componentDto.getDisplayName()).as("Component Display Name").isEqualTo(comp.getDisplayName());
-      softly.assertThat(componentDto.getDescription()).as("Component Description").contains(comp.getDescription());
-      softly.assertThat(componentDto.getType()).as("Component Type").isEqualTo(type);
-      softly.assertThat(componentDto.getVersion()).as("Component Version").isEqualTo(DEFAULT_VERSION);
-      softly.assertThat(componentDto.isLocked()).as("Component isLocked").isEqualTo(comp.isLocked());
-      softly.assertThat(componentDto.getDependencies()).as("Component Dependencies").containsAll(comp.getDependencies().stream().map(ComponentId::getValue).collect(toSet()));
-      softly.assertThat(componentDto.getLinks()).as("Component Links").containsAll(comp.getLinks());
+      softly.assertThat(componentDto)
+        .extracting(
+          ComponentDto::getId,
+          ComponentDto::getDisplayName,
+          ComponentDto::getDescription,
+          ComponentDto::getType,
+          ComponentDto::getVersion,
+          ComponentDto::isLocked,
+          ComponentDto::getDependencies,
+          ComponentDto::getLinks)
+        .containsExactly(
+          comp.getId().getValue(),
+          comp.getDisplayName(),
+          comp.getDescription(),
+          type,
+          DEFAULT_VERSION,
+          comp.isLocked(),
+          comp.getDependencies().stream().map(ComponentId::getValue).collect(toSet()),
+          comp.getLinks());
     });
   }
 
