@@ -5,6 +5,11 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * <pre>
+ * Virtual Network rule.
+ * </pre>
+ */
 @Getter
 @Setter(AccessLevel.PRIVATE)
 public class AzureVirtualNetworkRule {
@@ -27,7 +32,9 @@ public class AzureVirtualNetworkRule {
     }
 
     /**
+     * <pre>
      * The action of virtual network rule.
+     * </pre>
      */
     public AzureVirtualNetworkRuleBuilder withAction(AzureNetworkAction action) {
       instance.setAction(action);
@@ -35,8 +42,12 @@ public class AzureVirtualNetworkRule {
     }
     
     /**
-     * Resource ID of a subnet, 
-     * for example: /subscriptions/{subscriptionId}/resourceGroups/{groupName}/providers/Microsoft.Network/virtualNetworks/{vnetName}/subnets/{subnetName}.
+     * <pre>
+     * Resource ID of a subnet.
+     * 
+     * For example:
+     *  /subscriptions/{subscriptionId}/resourceGroups/{groupName}/providers/Microsoft.Network/virtualNetworks/{vnetName}/subnets/{subnetName}.
+     * </pre>
      */
     public AzureVirtualNetworkRuleBuilder withVirtualNetworkResourceId(String virtualNetworkResourceId) {
       instance.setVirtualNetworkResourceId(virtualNetworkResourceId);
@@ -44,7 +55,9 @@ public class AzureVirtualNetworkRule {
     }
     
     /**
+     * <pre>
      * Gets the state of virtual network rule.
+     * </pre>
      */
     public AzureVirtualNetworkRuleBuilder withState(AzureState state) {
       instance.setState(state);

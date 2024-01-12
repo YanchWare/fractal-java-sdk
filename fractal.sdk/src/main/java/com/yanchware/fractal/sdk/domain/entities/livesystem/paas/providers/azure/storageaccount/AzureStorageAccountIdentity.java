@@ -1,12 +1,12 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount;
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.valueobjects.AzureIdentityType;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.valueobjects.AzureUserAssignedIdentity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Identity for the resource.
@@ -17,7 +17,7 @@ public class AzureStorageAccountIdentity {
   private String principalId;
   private String tenantId;
   private AzureIdentityType identityType;
-  private HashMap<String, AzureUserAssignedIdentity> userAssignedIdentities;
+  private Map<String, AzureUserAssignedIdentity> userAssignedIdentities;
 
   public static AzureStorageAccountIdentityBuilder builder() {
     return new AzureStorageAccountIdentityBuilder();
@@ -34,7 +34,9 @@ public class AzureStorageAccountIdentity {
     }
 
     /**
+     * <pre>
      * The principal ID of resource identity.
+     * </pre>
      */
     public AzureStorageAccountIdentityBuilder withPrincipalId(String principalId) {
       identity.setPrincipalId(principalId);
@@ -42,7 +44,9 @@ public class AzureStorageAccountIdentity {
     }
 
     /**
+     * <pre>
      * The tenant ID of resource.
+     * </pre>
      */
     public AzureStorageAccountIdentityBuilder withTenantId(String tenantId) {
       identity.setTenantId(tenantId);
@@ -50,7 +54,9 @@ public class AzureStorageAccountIdentity {
     }
 
     /**
+     * <pre>
      * The identity type.
+     * </pre>
      */
     public AzureStorageAccountIdentityBuilder withIdentityType(AzureIdentityType identityType) {
       identity.setIdentityType(identityType);
@@ -58,12 +64,30 @@ public class AzureStorageAccountIdentity {
     }
 
     /**
+     * <pre>
      * Sets a list of key value pairs that describe the set of User Assigned identities that will be used with this storage account. 
      * The key is the ARM resource identifier of the identity. 
      * Only 1 User Assigned identity is permitted here.
+     * </pre>
      */
-    public AzureStorageAccountIdentityBuilder withUserAssignedIdentities(HashMap<String, AzureUserAssignedIdentity> userAssignedIdentities) {
+    public AzureStorageAccountIdentityBuilder withUserAssignedIdentities(Map<String, AzureUserAssignedIdentity> userAssignedIdentities) {
       identity.setUserAssignedIdentities(userAssignedIdentities);
+      return builder;
+    }
+
+    /**
+     * <pre>
+     * Key value pair that describe User Assigned identity that will be used with this storage account. 
+     * The key is the ARM resource identifier of the identity. 
+     * </pre>
+     */
+    public AzureStorageAccountIdentityBuilder withUserAssignedIdentity(String key, AzureUserAssignedIdentity userAssignedIdentity) {
+      if (identity.getUserAssignedIdentities() == null) {
+        withUserAssignedIdentities(new HashMap<>());
+      }
+
+      identity.getUserAssignedIdentities().put(key, userAssignedIdentity);
+
       return builder;
     }
 

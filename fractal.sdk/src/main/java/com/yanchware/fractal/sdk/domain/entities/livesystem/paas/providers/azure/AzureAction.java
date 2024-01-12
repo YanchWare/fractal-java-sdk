@@ -5,6 +5,11 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.ExtendableEnum;
 
 import java.util.Collection;
 
+/**
+ * <pre>
+ * Specifies action of allow or deny when no other rules match.
+ * </pre>
+ */
 public final class AzureAction extends ExtendableEnum<AzureAction> {
   public static final AzureAction ALLOW = fromString("Allow");
   public static final AzureAction DENY = fromString("Deny");

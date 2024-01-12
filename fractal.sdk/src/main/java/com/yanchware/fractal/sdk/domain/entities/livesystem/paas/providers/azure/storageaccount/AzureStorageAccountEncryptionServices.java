@@ -27,7 +27,9 @@ public class AzureStorageAccountEncryptionServices {
     }
 
     /**
+     * <pre>
      * The encryption function of the blob storage service.
+     * </pre>
      */
     public AzureStorageAccountEncryptionServicesBuilder withBlob(AzureStorageAccountEncryptionService blob) {
       instance.setBlob(blob);
@@ -35,7 +37,9 @@ public class AzureStorageAccountEncryptionServices {
     }
 
     /**
+     * <pre>
      * The encryption function of the file storage service.
+     * </pre>
      */
     public AzureStorageAccountEncryptionServicesBuilder withFile(AzureStorageAccountEncryptionService file) {
       instance.setFile(file);
@@ -43,7 +47,9 @@ public class AzureStorageAccountEncryptionServices {
     }
 
     /**
+     * <pre>
      * The encryption function of the queue storage service.
+     * </pre>
      */
     public AzureStorageAccountEncryptionServicesBuilder withQueue(AzureStorageAccountEncryptionService queue) {
       instance.setQueue(queue);
@@ -51,7 +57,9 @@ public class AzureStorageAccountEncryptionServices {
     }
 
     /**
+     * <pre>
      * The encryption function of the queue storage service.
+     * </pre>
      */
     public AzureStorageAccountEncryptionServicesBuilder withTable(AzureStorageAccountEncryptionService table) {
       instance.setTable(table);

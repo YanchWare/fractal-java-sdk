@@ -4,6 +4,11 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * <pre>
+ * SasPolicy assigned to the storage account.
+ * </pre>
+ */
 @Getter
 @Setter(AccessLevel.PRIVATE)
 public class AzureStorageAccountSasPolicy {
@@ -25,8 +30,10 @@ public class AzureStorageAccountSasPolicy {
     }
 
     /**
+     * <pre>
      * The SAS expiration action. 
      * Can only be Log.
+     * </pre>
      */
     public AzureStorageAccountSasPolicyBuilder withExpirationAction(AzureExpirationAction expirationAction) {
       instance.setExpirationAction(expirationAction);
@@ -34,7 +41,9 @@ public class AzureStorageAccountSasPolicy {
     }
     
     /**
+     * <pre>
      * The SAS expiration period, DD.HH:MM:SS
+     * </pre>
      */
     public AzureStorageAccountSasPolicyBuilder withSasExpirationPeriod(String sasExpirationPeriod) {
       instance.setSasExpirationPeriod(sasExpirationPeriod);

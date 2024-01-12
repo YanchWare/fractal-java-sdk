@@ -4,6 +4,11 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * <pre>
+ * Resource Access Rule.
+ * </pre>
+ */
 @Getter
 @Setter(AccessLevel.PRIVATE)
 public class AzureResourceAccessRule {
@@ -25,7 +30,9 @@ public class AzureResourceAccessRule {
     }
 
     /**
+     * <pre>
      * Resource Id
+     * </pre>
      */
     public AzureResourceAccessRuleBuilder withResourceId(String resourceId) {
       instance.setResourceId(resourceId);
@@ -33,7 +40,9 @@ public class AzureResourceAccessRule {
     }
     
     /**
+     * <pre>
      * Tenant Id
+     * </pre>
      */
     public AzureResourceAccessRuleBuilder withTenantId(String tenantId) {
       instance.setTenantId(tenantId);

@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Map;
 
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion.EUROPE_WEST;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion.WEST_EUROPE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -36,7 +36,7 @@ public class AzureServiceBusTest {
 
   @Test
   public void noValidationErrors_when_serviceBusHasRequiredFields() {
-    var azureResourceGroup = AzureResourceGroup.builder().withName("az-group").withRegion(EUROPE_WEST).build();
+    var azureResourceGroup = AzureResourceGroup.builder().withName("az-group").withRegion(WEST_EUROPE).build();
     
     var idOrName = "sb-test-x";
     
@@ -63,7 +63,7 @@ public class AzureServiceBusTest {
     var serviceBus = AzureServiceBus.builder()
         .withId(idOrName)
         .withName(idOrName)
-        .withRegion(AzureRegion.EUROPE_WEST)
+        .withRegion(AzureRegion.WEST_EUROPE)
         .withAzureResourceGroup(azureResourceGroup)
         .withTags(tags)
         .withSku(sku)
@@ -95,7 +95,7 @@ public class AzureServiceBusTest {
         
         .containsExactly(ComponentId.from(idOrName),
             idOrName,
-            AzureRegion.EUROPE_WEST,
+            AzureRegion.WEST_EUROPE,
             azureResourceGroup,
             tags,
             sku,

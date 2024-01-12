@@ -364,7 +364,7 @@ public class AzureAppServiceTest {
   @Test
   public void returns_without_errors_when_appServiceBuiltWithProperAppServicePlan() {
     var appServicePlanName = "name-test";
-    var selectedRegion = AzureRegion.US_EAST;
+    var selectedRegion = AzureRegion.EAST_US;
     var selectedOperatingSystem = AzureOsType.LINUX;
     var selectedPricingPlan = AzurePricingPlan.BASIC_B1;
     var tags = Map.of("tagKey", "tagValue");
@@ -429,7 +429,7 @@ public class AzureAppServiceTest {
         .withRepoId("repo-id")
         .withBranchName("env/test")
         .withSecretPasswordKey("***")
-        .withRegion(AzureRegion.EUROPE_WEST);
+        .withRegion(AzureRegion.WEST_EUROPE);
   }
 
 }

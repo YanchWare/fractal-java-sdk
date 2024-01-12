@@ -2,6 +2,11 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
+/**
+ * <pre>
+ * Allow large file shares if sets to Enabled. It cannot be disabled once it is enabled.
+ * </pre>
+ */
 public enum AzureLargeFileSharesState {
   DISABLED ("Disabled"),
   ENABLED ("Enabled");

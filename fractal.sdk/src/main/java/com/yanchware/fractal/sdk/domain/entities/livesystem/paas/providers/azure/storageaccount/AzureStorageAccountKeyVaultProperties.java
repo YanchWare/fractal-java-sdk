@@ -26,7 +26,9 @@ public class AzureStorageAccountKeyVaultProperties {
     }
     
     /**
+     * <pre>
      * The name of KeyVault key.
+     * </pre>
      */
     public AzureStorageAccountKeyVaultPropertiesBuilder withKeyName(String keyName) {
       instance.setKeyName(keyName);
@@ -34,7 +36,9 @@ public class AzureStorageAccountKeyVaultProperties {
     }
     
     /**
+     * <pre>
      * The Uri of KeyVault.
+     * </pre>
      */
     public AzureStorageAccountKeyVaultPropertiesBuilder withKeyVaultUri(String keyVaultUri) {
       instance.setKeyVaultUri(keyVaultUri);
@@ -42,7 +46,9 @@ public class AzureStorageAccountKeyVaultProperties {
     }
     
     /**
+     * <pre>
      * The version of KeyVault key.
+     * </pre>
      */
     public AzureStorageAccountKeyVaultPropertiesBuilder withKeyVersion(String keyVersion) {
       instance.setKeyVersion(keyVersion);

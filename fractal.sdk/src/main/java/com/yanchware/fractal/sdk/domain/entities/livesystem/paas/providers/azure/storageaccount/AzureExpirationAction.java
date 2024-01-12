@@ -5,6 +5,12 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.ExtendableEnum;
 
 import java.util.Collection;
 
+/**
+ * <pre>
+ * The SAS expiration action. 
+ * Can only be Log.
+ * </pre>
+ */
 public final class AzureExpirationAction extends ExtendableEnum<AzureExpirationAction> {
   public static final AzureExpirationAction LOG = fromString("Log");
 

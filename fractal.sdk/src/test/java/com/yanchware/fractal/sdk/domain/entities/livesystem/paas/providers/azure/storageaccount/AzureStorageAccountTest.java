@@ -17,10 +17,10 @@ public class AzureStorageAccountTest {
     var storage = AzureStorageAccount.builder()
         .withId("storage-account")
         .withName("a23456789012345678901234")
-        .withRegion(AzureRegion.EUROPE_WEST)
+        .withRegion(AzureRegion.WEST_EUROPE)
         .withResourceGroup(AzureResourceGroup.builder()
             .withName("validName123")
-            .withRegion(AzureRegion.EUROPE_WEST)
+            .withRegion(AzureRegion.WEST_EUROPE)
             .build())
         .withTag("key1", "value1")
         .build();

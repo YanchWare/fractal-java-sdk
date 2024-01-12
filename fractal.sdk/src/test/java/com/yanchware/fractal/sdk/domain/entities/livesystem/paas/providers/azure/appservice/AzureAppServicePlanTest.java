@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class AzureAppServicePlanTest {
   private final static String APP_SERVICE_PLAN_NAME = "name-test";
-  private final static AzureRegion SELECTED_REGION = AzureRegion.US_EAST;
+  private final static AzureRegion SELECTED_REGION = AzureRegion.EAST_US;
   private final static AzureOsType SELECTED_OPERATING_SYSTEM = AzureOsType.LINUX;
   private final static AzurePricingPlan SELECTED_PRICING_PLAN = AzurePricingPlan.BASIC_B1;
   private final static AzureResourceGroup AZURE_RESOURCE_GROUP = AzureResourceGroup.builder()

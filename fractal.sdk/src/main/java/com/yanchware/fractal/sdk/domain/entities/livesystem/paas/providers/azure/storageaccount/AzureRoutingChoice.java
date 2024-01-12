@@ -5,6 +5,11 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.ExtendableEnum;
 
 import java.util.Collection;
 
+/**
+ * <pre>
+ * Routing Choice defines the kind of network routing opted by the user.
+ * </pre>
+ */
 public final class AzureRoutingChoice extends ExtendableEnum<AzureRoutingChoice> {
   public static final AzureRoutingChoice MICROSOFT_ROUTING = fromString("MicrosoftRouting");
   public static final AzureRoutingChoice INTERNET_ROUTING = fromString("InternetRouting");

@@ -34,9 +34,11 @@ public class AzureNetworkRuleSet {
     }
 
     /**
+     * <pre>
      * Specifies whether traffic is bypassed for Logging/Metrics/AzureServices. 
      * Possible values are any combination of Logging|Metrics|AzureServices (For example, "Logging, Metrics"), 
      * or None to bypass none of those traffics.
+     * </pre>
      */
     public AzureNetworkRuleSetBuilder withBypass(AzureBypass bypass) {
       instance.setBypass(bypass);
@@ -44,17 +46,29 @@ public class AzureNetworkRuleSet {
     }
     
     /**
+     * <pre>
      * Specifies the default action of allow or deny when no other rules match.
+     * </pre>
      */
     public AzureNetworkRuleSetBuilder withDefaultAction(AzureAction defaultAction) {
       instance.setDefaultAction(defaultAction);
       return builder;
     }
 
+    /**
+     * <pre>
+     * Sets the IP ACL rule
+     * </pre>>
+     */
     public AzureNetworkRuleSetBuilder withIpRule(AzureIpRule ipRule) {
       return withIpRules(List.of(ipRule));
     }
 
+    /**
+     * <pre>
+     * Sets the IP ACL rules
+     * </pre>
+     */
     public AzureNetworkRuleSetBuilder withIpRules(List<AzureIpRule> ipRules) {
       if (isBlank(ipRules)) {
         return builder;
@@ -68,10 +82,20 @@ public class AzureNetworkRuleSet {
       return builder;
     }
 
+    /**
+     * <pre>
+     * Sets the resource access rule
+     * </pre>
+     */
     public AzureNetworkRuleSetBuilder withResourceAccessRule(AzureResourceAccessRule resourceAccessRule) {
       return withResourceAccessRules(List.of(resourceAccessRule));
     }
 
+    /**
+     * <pre>
+     * Sets the resource access rules
+     * </pre>
+     */
     public AzureNetworkRuleSetBuilder withResourceAccessRules(List<AzureResourceAccessRule> resourceAccessRules) {
       if (isBlank(resourceAccessRules)) {
         return builder;
@@ -85,10 +109,20 @@ public class AzureNetworkRuleSet {
       return builder;
     }
 
+    /**
+     * <pre>
+     * Sets the virtual network rule
+     * </pre>
+     */
     public AzureNetworkRuleSetBuilder withVirtualNetworkRule(AzureVirtualNetworkRule virtualNetworkRule) {
       return withVirtualNetworkRules(List.of(virtualNetworkRule));
     }
 
+    /**
+     * <pre>
+     * Sets the virtual network rules
+     * </pre>
+     */
     public AzureNetworkRuleSetBuilder withVirtualNetworkRules(List<AzureVirtualNetworkRule> virtualNetworkRules) {
       if (isBlank(virtualNetworkRules)) {
         return builder;

@@ -4,6 +4,13 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * <pre>
+ * Routing preference defines the type of network.
+ * Either microsoft or internet routing to be used to deliver the user data.
+ * The default option is microsoft routing.
+ * </pre>
+ */
 @Getter
 @Setter(AccessLevel.PRIVATE)
 public class AzureStorageAccountRoutingPreference {
@@ -27,7 +34,9 @@ public class AzureStorageAccountRoutingPreference {
     }
 
     /**
+     * <pre>
      * A boolean flag which indicates whether internet routing storage endpoints are to be published
+     * </pre>
      */
     public AzureStorageAccountRoutingPreferenceBuilder withPublishInternetEndpoints(Boolean publishInternetEndpoints) {
       instance.setPublishInternetEndpoints(publishInternetEndpoints);
@@ -35,7 +44,9 @@ public class AzureStorageAccountRoutingPreference {
     }
     
     /**
+     * <pre>
      * A boolean flag which indicates whether microsoft routing storage endpoints are to be published
+     * </pre>
      */
     public AzureStorageAccountRoutingPreferenceBuilder withPublishMicrosoftEndpoints(Boolean publishMicrosoftEndpoints) {
       instance.setPublishMicrosoftEndpoints(publishMicrosoftEndpoints);
@@ -43,7 +54,9 @@ public class AzureStorageAccountRoutingPreference {
     }
     
     /**
+     * <pre>
      * Routing Choice defines the kind of network routing opted by the user.
+     * </pre>
      */
     public AzureStorageAccountRoutingPreferenceBuilder withRoutingChoice(AzureRoutingChoice routingChoice) {
       instance.setRoutingChoice(routingChoice);

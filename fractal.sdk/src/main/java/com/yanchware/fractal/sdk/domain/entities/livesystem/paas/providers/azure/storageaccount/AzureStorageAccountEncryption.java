@@ -29,7 +29,9 @@ public class AzureStorageAccountEncryption {
     }
 
     /**
+     * <pre>
      * The identity to be used with service-side encryption at rest.
+     * </pre>
      */
     public AzureStorageAccountEncryptionBuilder withIdentity(AzureStorageAccountEncryptionIdentity identity) {
       encryption.setIdentity(identity);
@@ -37,8 +39,10 @@ public class AzureStorageAccountEncryption {
     }
 
     /**
+     * <pre>
      * The encryption keySource (provider). 
      * Possible values (case-insensitive): Microsoft.Storage, Microsoft.Keyvault
+     * </pre>
      */
     public AzureStorageAccountEncryptionBuilder withKeySource(AzureStorageAccountKeySource keySource) {
       encryption.setKeySource(keySource);
@@ -46,7 +50,9 @@ public class AzureStorageAccountEncryption {
     }
 
     /**
+     * <pre>
      * Properties provided by key vault.
+     * </pre>
      */
     public AzureStorageAccountEncryptionBuilder withKeyVaultProperties(AzureStorageAccountKeyVaultProperties keyVaultProperties) {
       encryption.setKeyVaultProperties(keyVaultProperties);
@@ -54,7 +60,10 @@ public class AzureStorageAccountEncryption {
     }
     
     /**
-     * A boolean indicating whether the service applies a secondary layer of encryption with platform managed keys for data at rest.
+     * <pre>
+     * A boolean indicating whether the service applies a secondary layer of encryption 
+     * with platform managed keys for data at rest.
+     * </pre>
      */
     public AzureStorageAccountEncryptionBuilder withRequireInfrastructureEncryption(Boolean requireInfrastructureEncryption) {
       encryption.setRequireInfrastructureEncryption(requireInfrastructureEncryption);
@@ -62,9 +71,11 @@ public class AzureStorageAccountEncryption {
     }
     
     /**
+     * <pre>
      * List of services which support encryption.
+     * </pre>
      */
-    public AzureStorageAccountEncryptionBuilder withServices(AzureStorageAccountEncryptionServices  services) {
+    public AzureStorageAccountEncryptionBuilder withServices(AzureStorageAccountEncryptionServices services) {
       encryption.setServices(services);
       return builder;
     }

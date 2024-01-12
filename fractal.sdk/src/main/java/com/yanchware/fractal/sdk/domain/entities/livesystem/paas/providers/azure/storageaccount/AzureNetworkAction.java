@@ -5,6 +5,11 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.ExtendableEnum;
 
 import java.util.Collection;
 
+/**
+ * <pre>
+ * The network action.
+ * </pre>
+ */
 public final class AzureNetworkAction extends ExtendableEnum<AzureNetworkAction> {
   public static final AzureNetworkAction ALLOW = fromString("Allow");
   /**

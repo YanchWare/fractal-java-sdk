@@ -5,7 +5,11 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.ExtendableEnum;
 
 import java.util.Collection;
 
-
+/**
+ * <pre>
+ * The state of virtual network rule.
+ * </pre>
+ */
 public final class AzureState extends ExtendableEnum<AzureState> {
 
   public static final AzureState PROVISIONING = fromString("Provisioning");

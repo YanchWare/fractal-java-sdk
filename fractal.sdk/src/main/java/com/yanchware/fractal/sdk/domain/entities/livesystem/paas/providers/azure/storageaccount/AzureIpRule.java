@@ -4,6 +4,11 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * <pre>
+ * IP rule with specific IP or IP range in CIDR format.
+ * </pre>
+ */
 @Getter
 @Setter(AccessLevel.PRIVATE)
 public class AzureIpRule {
@@ -25,7 +30,9 @@ public class AzureIpRule {
     }
 
     /**
+     * <pre>
      * The action of IP ACL rule.
+     * </pre>
      */
     public AzureIpRuleBuilder withAction(AzureNetworkAction action) {
       instance.setAction(action);
@@ -33,8 +40,10 @@ public class AzureIpRule {
     }
     
     /**
+     * <pre>
      * Specifies the IP or IP range in CIDR format. 
      * Only IPV4 address is allowed.
+     * </pre>
      */
     public AzureIpRuleBuilder withIpAddressOrRange(String ipAddressOrRange) {
       instance.setIpAddressOrRange(ipAddressOrRange);

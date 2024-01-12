@@ -53,7 +53,7 @@ class LiveSystemAksComponentDtoTest extends LiveSystemKubernetesComponentDtoTest
                 .containsExactly(
                         aks.getAddonProfiles(),
                         aks.getAzureActiveDirectoryProfile(),
-                        aks.getAzureRegion().getName(),
+                        aks.getAzureRegion(),
                         aks.getExternalWorkspaceResourceId(),
                         aks.getKubernetesVersion(),
                         aks.getNodePools(),

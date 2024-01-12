@@ -28,8 +28,10 @@ public class AzureStorageAccountCustomDomain {
     }
 
     /**
+     * <pre>
      * Sets the custom domain name assigned to the storage account. 
      * Name is the CNAME source.
+     * </pre>
      */
     public AzureStorageAccountCustomDomainBuilder withName(String name) {
       customDomain.setName(name);
@@ -37,7 +39,9 @@ public class AzureStorageAccountCustomDomain {
     }
 
     /**
+     * <pre>
      * Indicates whether indirect CName validation is enabled.
+     * </pre>
      */
     public AzureStorageAccountCustomDomainBuilder withUseSubDomainName(Boolean useSubDomainName) {
       customDomain.setUseSubDomainName(useSubDomainName);

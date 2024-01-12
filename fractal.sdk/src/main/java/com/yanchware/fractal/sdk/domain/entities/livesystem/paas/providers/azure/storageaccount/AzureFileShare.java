@@ -55,7 +55,7 @@ public class AzureFileShare extends PaaSFileShare implements LiveSystemComponent
     } else if (name.length() < 3 || name.length() > 63) {
       errors.add("Name must be between 3 and 63 characters in length");
     } else if (!NAME_PATTERN.matcher(name).matches()) {
-      errors.add("Name must use numbers, lower-case letters, and dash (-) only. Every dash (-) must be immediately preceded and followed by a letter or number");
+      errors.add("Invalid name: '" + name + "'; Name must use numbers, lower-case letters, and dash (-) only. Every dash (-) must be immediately preceded and followed by a letter or number");
     }
 
     if (accessTier == null) {

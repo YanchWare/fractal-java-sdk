@@ -34,13 +34,16 @@ public class AzureActiveDirectoryProperties {
       this.builder = this;
     }
 
+    /**
+     * <pre>Specifies the Active Directory account type for Azure Storage.</pre>
+     */
     public AzureActiveDirectoryPropertiesBuilder withAccountType(AzureActiveDirectoryAccountType accountType) {
       properties.setAccountType(accountType);
       return builder;
     }
 
     /**
-     * Specifies the security identifier (SID) for Azure Storage.
+     * <pre>Specifies the security identifier (SID) for Azure Storage.</pre>
      */
     public AzureActiveDirectoryPropertiesBuilder withAzureStorageSid(String azureStorageSid) {
       properties.setAzureStorageSid(azureStorageSid);
@@ -48,7 +51,7 @@ public class AzureActiveDirectoryProperties {
     }
 
     /**
-     * Specifies the domain GUID.
+     * <pre>Specifies the domain GUID.</pre>
      */
     public AzureActiveDirectoryPropertiesBuilder withDomainGuid(String domainGuid) {
       properties.setDomainGuid(domainGuid);
@@ -56,7 +59,7 @@ public class AzureActiveDirectoryProperties {
     }
 
     /**
-     * Specifies the primary domain that the AD DNS server is authoritative for.
+     * <pre>Specifies the primary domain that the AD DNS server is authoritative for.</pre>
      */
     public AzureActiveDirectoryPropertiesBuilder withDomainName(String domainName) {
       properties.setDomainName(domainName);
@@ -64,7 +67,7 @@ public class AzureActiveDirectoryProperties {
     }
 
     /**
-     * Specifies the security identifier (SID).
+     * <pre>Specifies the security identifier (SID).</pre>
      */
     public AzureActiveDirectoryPropertiesBuilder withDomainSid(String domainSid) {
       properties.setDomainSid(domainSid);
@@ -72,7 +75,7 @@ public class AzureActiveDirectoryProperties {
     }
 
     /**
-     * Specifies the Active Directory forest to get.
+     * <pre>Specifies the Active Directory forest to get.</pre>
      */
     public AzureActiveDirectoryPropertiesBuilder withForestName(String forestName) {
       properties.setForestName(forestName);
@@ -80,7 +83,7 @@ public class AzureActiveDirectoryProperties {
     }
 
     /**
-     * Specifies the NetBIOS domain name.
+     * <pre>Specifies the NetBIOS domain name.</pre>
      */
     public AzureActiveDirectoryPropertiesBuilder withNetBiosDomainName(String netBiosDomainName) {
       properties.setNetBiosDomainName(netBiosDomainName);
@@ -88,7 +91,7 @@ public class AzureActiveDirectoryProperties {
     }
 
     /**
-     * Specifies the Active Directory SAMAccountName for Azure Storage.
+     * <pre>Specifies the Active Directory SAMAccountName for Azure Storage.</pre>
      */
     public AzureActiveDirectoryPropertiesBuilder withSamAccountName(String samAccountName) {
       properties.setSamAccountName(samAccountName);

@@ -68,7 +68,7 @@ public abstract class CosmosAccountTest<T extends AzureCosmosAccountBuilder<?, ?
     var throughput = a(Integer.class);
     var builder = getBuilder()
         .withId("a-legal-id")
-        .withRegion(AzureRegion.ASIA_EAST)
+        .withRegion(AzureRegion.EAST_ASIA)
         .withMaxTotalThroughput(throughput);
 
     var component = builder.build();
@@ -84,7 +84,7 @@ public abstract class CosmosAccountTest<T extends AzureCosmosAccountBuilder<?, ?
   public void tagsAreAsExpected_when_TagsAreSet() {
     var builder = getBuilder()
         .withId("a-legal-id")
-        .withRegion(AzureRegion.ASIA_EAST)
+        .withRegion(AzureRegion.EAST_ASIA)
         .withTags(Map.ofEntries(
             entry("a", "tag A"),
             entry("b", "tag B")
@@ -103,7 +103,7 @@ public abstract class CosmosAccountTest<T extends AzureCosmosAccountBuilder<?, ?
   public void tagsAreAsExpected_when_ASingleTagIsSet() {
     var builder = getBuilder()
         .withId("a-legal-id")
-        .withRegion(AzureRegion.ASIA_EAST)
+        .withRegion(AzureRegion.EAST_ASIA)
         .withTag("a", "tag A");
 
     var component = builder.build();
@@ -122,7 +122,7 @@ public abstract class CosmosAccountTest<T extends AzureCosmosAccountBuilder<?, ?
         .withAzureResourceGroup(
             AzureResourceGroup.builder()
                 .withName(a(String.class))
-                .withRegion(AzureRegion.ASIA_SOUTHEAST)
+                .withRegion(AzureRegion.SOUTHEAST_ASIA)
                 .build())
         .withMaxTotalThroughput(throughput)
         .withBackupPolicy(AzureCosmosBackupPolicy.builder()
@@ -153,11 +153,11 @@ public abstract class CosmosAccountTest<T extends AzureCosmosAccountBuilder<?, ?
             .withBackupRetentionIntervalInHours(8)
             .withBackupStorageRedundancy(BackupStorageRedundancy.GEO)
             .build())
-        .withRegion(AzureRegion.ASIA_EAST)
+        .withRegion(AzureRegion.EAST_ASIA)
         .withAzureResourceGroup(
             AzureResourceGroup.builder()
                 .withName(a(String.class))
-                .withRegion(AzureRegion.ASIA_SOUTHEAST)
+                .withRegion(AzureRegion.SOUTHEAST_ASIA)
                 .build())
         .withMaxTotalThroughput(throughput);
 
@@ -180,11 +180,11 @@ public abstract class CosmosAccountTest<T extends AzureCosmosAccountBuilder<?, ?
             .withBackupRetentionIntervalInHours(8)
             .withBackupStorageRedundancy(BackupStorageRedundancy.GEO)
             .build())
-        .withRegion(AzureRegion.ASIA_EAST)
+        .withRegion(AzureRegion.EAST_ASIA)
         .withAzureResourceGroup(
             AzureResourceGroup.builder()
                 .withName(a(String.class))
-                .withRegion(AzureRegion.ASIA_SOUTHEAST)
+                .withRegion(AzureRegion.SOUTHEAST_ASIA)
                 .build());
 
     var component = builder.build();
@@ -203,7 +203,7 @@ public abstract class CosmosAccountTest<T extends AzureCosmosAccountBuilder<?, ?
     var throughput = a(Integer.class);
     var builder = getBuilder()
         .withId(accountId)
-        .withRegion(AzureRegion.ASIA_EAST)
+        .withRegion(AzureRegion.EAST_ASIA)
         .withMaxTotalThroughput(throughput)
         .withCosmosEntities(entities);
 
@@ -227,7 +227,7 @@ public abstract class CosmosAccountTest<T extends AzureCosmosAccountBuilder<?, ?
     var throughput = a(Integer.class);
     var builder = getBuilder()
         .withId("a-legal-id")
-        .withRegion(AzureRegion.ASIA_EAST)
+        .withRegion(AzureRegion.EAST_ASIA)
         .withMaxTotalThroughput(throughput)
         .withCosmosEntity(entity);
 
@@ -254,7 +254,7 @@ public abstract class CosmosAccountTest<T extends AzureCosmosAccountBuilder<?, ?
     
     var builder = getBuilder()
         .withId("a-legal-id")
-        .withRegion(AzureRegion.ASIA_EAST)
+        .withRegion(AzureRegion.EAST_ASIA)
         .withMaxTotalThroughput(throughput)
         .withBackupPolicy(backupPolicy)
         .withCosmosEntity(entity);

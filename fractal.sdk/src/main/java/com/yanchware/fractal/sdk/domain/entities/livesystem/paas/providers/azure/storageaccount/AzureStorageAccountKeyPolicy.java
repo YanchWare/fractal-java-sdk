@@ -24,7 +24,9 @@ public class AzureStorageAccountKeyPolicy {
     }
 
     /**
+     * <pre>
      * The key expiration period in days.
+     * </pre>
      */
     public AzureStorageAccountKeyPolicyBuilder withKeyExpirationPeriodInDays(Integer keyExpirationPeriodInDays) {
       instance.setKeyExpirationPeriodInDays(keyExpirationPeriodInDays);
