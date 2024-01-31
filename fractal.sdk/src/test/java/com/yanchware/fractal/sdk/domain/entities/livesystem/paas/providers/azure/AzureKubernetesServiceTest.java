@@ -128,6 +128,10 @@ public class AzureKubernetesServiceTest {
     var aks = AzureKubernetesService.builder()
         .withId(ComponentId.from("test"))
         .withRegion(EUROPE_WEST)
+        .withResourceGroup(AzureResourceGroup.builder()
+            .withRegion(EUROPE_WEST)
+            .withName("rg-test")
+            .build())
         .withNodePool(
             AzureNodePool.builder()
                 .withName("winds")
