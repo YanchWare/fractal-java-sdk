@@ -311,8 +311,6 @@ public class AzureLegacyStorageAccountTest extends TestWithFixture {
     var storageAccountSku = a(AzureStorageAccountSkuName.class);
     var extendedLocationName = aLowerCaseAlphanumericString(15);
     var extendedLocationType = a(AzureStorageAccountExtendedLocationTypes.class);
-    var identityPrincipalId = a(String.class);
-    var identityTenantId = a(String.class);
     var identityType = a(AzureIdentityType.class);
     var userAssignedIdentityKey = a(String.class);
     var userAssignedIdentityClientId = a(String.class);
@@ -386,8 +384,6 @@ public class AzureLegacyStorageAccountTest extends TestWithFixture {
         .build();
 
     var identity = AzureStorageAccountIdentity.builder()
-        .withPrincipalId(identityPrincipalId)
-        .withTenantId(identityTenantId)
         .withIdentityType(identityType)
         .withUserAssignedIdentity(userAssignedIdentityKey, AzureUserAssignedIdentity.builder()
             .withClientId(userAssignedIdentityClientId)
@@ -583,12 +579,6 @@ public class AzureLegacyStorageAccountTest extends TestWithFixture {
 
     assertThat(storageAccount.getIdentity())
         .isEqualTo(storageAccountIdentity);
-
-    assertThat(storageAccountIdentity.getPrincipalId())
-        .isEqualTo(identityPrincipalId);
-
-    assertThat(storageAccountIdentity.getTenantId())
-        .isEqualTo(identityTenantId);
 
     assertThat(storageAccountIdentity.getIdentityType())
         .isEqualTo(identityType);

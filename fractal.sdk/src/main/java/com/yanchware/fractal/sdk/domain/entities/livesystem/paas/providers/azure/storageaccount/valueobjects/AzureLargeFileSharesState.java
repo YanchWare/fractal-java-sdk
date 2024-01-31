@@ -1,29 +1,37 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.valueobjects;
 
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.ExtendableEnum;
+
+import java.util.Collection;
 
 /**
  * <pre>
  * Allow large file shares if sets to Enabled. It cannot be disabled once it is enabled.
  * </pre>
  */
-public enum AzureLargeFileSharesState {
-  DISABLED ("Disabled"),
-  ENABLED ("Enabled");
+public final class AzureLargeFileSharesState extends ExtendableEnum<AzureLargeFileSharesState> {
+  public static final AzureLargeFileSharesState DISABLED = fromString("Disabled");
   
-  private final String id;
+  public static final AzureLargeFileSharesState ENABLED = fromString("Enabled");
 
-  AzureLargeFileSharesState(final String id) {
-    this.id = id;
+  /**
+   * Creates or finds a AzureLargeFileSharesState from its string representation.
+   *
+   * @param name a name to look for.
+   * @return the corresponding AzureLargeFileSharesState.
+   */
+  @JsonCreator
+  public static AzureLargeFileSharesState fromString(String name) {
+    return fromString(name, AzureLargeFileSharesState.class);
   }
 
-  @JsonValue
-  public String getId() {
-    return id;
-  }
-
-  @Override
-  public String toString() {
-    return id;
+  /**
+   * Gets known AzureLargeFileSharesState values.
+   *
+   * @return known AzureLargeFileSharesState values.
+   */
+  public static Collection<AzureLargeFileSharesState> values() {
+    return values(AzureLargeFileSharesState.class);
   }
 }

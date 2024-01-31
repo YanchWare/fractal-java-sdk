@@ -1,5 +1,6 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yanchware.fractal.sdk.domain.entities.Validatable;
 import org.apache.commons.lang3.StringUtils;
 
@@ -15,10 +16,14 @@ import java.util.regex.Pattern;
  * You decide how you want to allocate resources to resource groups based on what makes the most sense for you  .
  */
 public class AzureResourceGroup extends AzureProxyResource implements Validatable {
+  @JsonIgnore
   public static final String NAME_IS_NULL_OR_EMPTY = "[AzureResourceGroup Validation] Name cannot be null or empty";
   private static final String NAME_EXCEEDS_LENGTH_LIMIT = "[AzureResourceGroup Validation] Name exceeds 90 characters";
+
+  @JsonIgnore
   public static final String NAME_IS_NOT_VALID = "[AzureResourceGroup Validation] Name can only include alphanumeric, underscore, parentheses, hyphen, period (except at end), and Unicode characters that match the allowed characters";
 
+  @JsonIgnore
   public final static String REGION_IS_BLANK = "[AzureResourceGroup Validation] Region has not been defined and it is required";
 
   private static final Pattern RESOURCE_GROUP_NAME_PATTERN = Pattern.compile("^[\\w()-.]+[\\w()-]$");

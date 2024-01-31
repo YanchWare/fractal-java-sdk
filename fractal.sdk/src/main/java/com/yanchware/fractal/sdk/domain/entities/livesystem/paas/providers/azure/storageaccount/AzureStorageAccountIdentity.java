@@ -14,8 +14,6 @@ import java.util.Map;
 @Getter
 @Setter(AccessLevel.PRIVATE)
 public class AzureStorageAccountIdentity {
-  private String principalId;
-  private String tenantId;
   private AzureIdentityType identityType;
   private Map<String, AzureUserAssignedIdentity> userAssignedIdentities;
 
@@ -31,26 +29,6 @@ public class AzureStorageAccountIdentity {
     public AzureStorageAccountIdentityBuilder() {
       this.identity = new AzureStorageAccountIdentity();
       this.builder = this;
-    }
-
-    /**
-     * <pre>
-     * The principal ID of resource identity.
-     * </pre>
-     */
-    public AzureStorageAccountIdentityBuilder withPrincipalId(String principalId) {
-      identity.setPrincipalId(principalId);
-      return builder;
-    }
-
-    /**
-     * <pre>
-     * The tenant ID of resource.
-     * </pre>
-     */
-    public AzureStorageAccountIdentityBuilder withTenantId(String tenantId) {
-      identity.setTenantId(tenantId);
-      return builder;
     }
 
     /**

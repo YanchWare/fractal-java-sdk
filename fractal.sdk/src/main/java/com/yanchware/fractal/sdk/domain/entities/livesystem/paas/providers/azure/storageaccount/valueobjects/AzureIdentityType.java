@@ -13,10 +13,7 @@ public final class AzureIdentityType extends ExtendableEnum<AzureIdentityType> {
   public static final AzureIdentityType SYSTEM_ASSIGNED = fromString("SystemAssigned");
   public static final AzureIdentityType USER_ASSIGNED = fromString("UserAssigned");
   public static final AzureIdentityType SYSTEM_ASSIGNED_USER_ASSIGNED = fromString("SystemAssigned,UserAssigned");
-
-  public AzureIdentityType() {
-  }
-
+  
   @JsonCreator
   public static AzureIdentityType fromString(String name) {
     return fromString(name, AzureIdentityType.class);

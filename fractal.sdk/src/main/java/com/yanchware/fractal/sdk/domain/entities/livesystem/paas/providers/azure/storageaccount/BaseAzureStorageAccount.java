@@ -1,5 +1,6 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yanchware.fractal.sdk.domain.entities.Component;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PaaSDataStorage;
@@ -24,9 +25,17 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_AZURE_ST
 @Setter
 public abstract class BaseAzureStorageAccount extends PaaSDataStorage implements AzureResourceEntity, LiveSystemComponent {
   private static final Pattern NAME_PATTERN = Pattern.compile("^[a-z0-9]{3,24}$");
+
+  @JsonIgnore
   public static final String NAME_IS_NOT_VALID = "Name must be between 3 and 24 characters in length and use numbers and lower-case letters only";
+
+  @JsonIgnore
   public static final String AZURE_RESOURCE_GROUP_IS_BLANK = "Azure Resource group has not been defined and it is required";
+
+  @JsonIgnore
   public static final String AZURE_REGION_IS_BLANK = "Region has not been defined and it is required";
+
+  @JsonIgnore
   public static final String TAG_KEY_IS_BLANK = "Tag key cannot be null or empty";
   private static final String TAG_VALUE_INVALID_FORMAT = "Tag value for key '%s' cannot be null or empty";
 
@@ -59,7 +68,7 @@ public abstract class BaseAzureStorageAccount extends PaaSDataStorage implements
   private AzureStorageAccountKeyPolicy keyPolicy;
   private AzureLargeFileSharesState largeFileSharesState;
   private AzureTlsVersion minimumTlsVersion;
-  private AzureNetworkRuleSet networkAcls;
+  private AzureNetworkRuleSet networkRuleSet;
   private AzurePublicNetworkAccess publicNetworkAccess;
   private AzureStorageAccountRoutingPreference routingPreference;
   private AzureStorageAccountSasPolicy sasPolicy;
@@ -368,8 +377,8 @@ public abstract class BaseAzureStorageAccount extends PaaSDataStorage implements
      * Network rule set
      * </pre>
      */
-    public B withNetworkAcls(AzureNetworkRuleSet networkAcls) {
-      component.setNetworkAcls(networkAcls);
+    public B withNetworkRuleSet(AzureNetworkRuleSet networkRuleSet) {
+      component.setNetworkRuleSet(networkRuleSet);
 
       return builder;
     }
