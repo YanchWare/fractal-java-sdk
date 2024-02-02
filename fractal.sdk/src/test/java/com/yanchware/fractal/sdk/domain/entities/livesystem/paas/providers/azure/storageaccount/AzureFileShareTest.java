@@ -36,31 +36,6 @@ public class AzureFileShareTest {
   }
 
   @Test
-  public void exceptionThrown_when_AccessTierIsNull() {
-    Exception exception = assertThrows(IllegalArgumentException.class, () ->
-        AzureFileShare.builder()
-            .withName("validname")
-            .withAccessTier(null)
-            .build()
-    );
-
-    assertTrue(exception.getMessage().contains("Access tier cannot be null"));
-  }
-
-  @Test
-  public void exceptionThrown_when_EnabledProtocolsAreNull() {
-    Exception exception = assertThrows(IllegalArgumentException.class, () ->
-        AzureFileShare.builder()
-            .withName("validname")
-            .withAccessTier(AzureFileShareAccessTier.HOT)
-            .withEnabledProtocols(null)
-            .build()
-    );
-
-    assertTrue(exception.getMessage().contains("Enabled protocols cannot be null"));
-  }
-
-  @Test
   public void exceptionThrown_when_MetadataIsInvalid() {
     Exception exception = assertThrows(IllegalArgumentException.class, () ->
         AzureFileShare.builder()

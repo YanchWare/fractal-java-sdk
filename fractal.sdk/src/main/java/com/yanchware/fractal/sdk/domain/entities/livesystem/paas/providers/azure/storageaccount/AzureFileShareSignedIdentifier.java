@@ -13,14 +13,8 @@ import java.util.Collection;
 @Getter
 @Setter(AccessLevel.PRIVATE)
 public class AzureFileShareSignedIdentifier implements Validatable {
-  /**
-   * A unique identifier of the stored access policy.
-   */
   private String id;
   
-  /**
-   * Access policy
-   */
   private AzureFileShareAccessPolicy accessPolicy;
 
   public static AzureFileShareSignedIdentifierBuilder builder() {
@@ -53,11 +47,19 @@ public class AzureFileShareSignedIdentifier implements Validatable {
       this.builder = this;
     }
 
+    /**
+     * <pre>
+     * A unique identifier of the stored access policy.
+     * </pre>
+     */
     public AzureFileShareSignedIdentifierBuilder withId(String id) {
       signedIdentifier.setId(id);
       return builder;
     }
 
+    /**
+     * Access policy
+     */
     public AzureFileShareSignedIdentifierBuilder withAccessPolicy(AzureFileShareAccessPolicy accessPolicy) {
       signedIdentifier.setAccessPolicy(accessPolicy);
       return builder;

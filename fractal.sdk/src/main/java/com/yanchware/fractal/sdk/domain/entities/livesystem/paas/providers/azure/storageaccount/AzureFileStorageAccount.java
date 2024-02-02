@@ -15,6 +15,7 @@ import java.util.List;
 @ToString(callSuper = true)
 public class AzureFileStorageAccount extends BaseAzureStorageAccount {
   private Collection<AzureFileShare> fileShares;
+  private AzureStorageAccountFileService fileService;
 
   public AzureFileStorageAccount() {
     this.fileShares = new ArrayList<>();
@@ -39,6 +40,11 @@ public class AzureFileStorageAccount extends BaseAzureStorageAccount {
     @Override
     protected AzureFileStorageAccountBuilder getBuilder() {
       return this;
+    }
+
+    public AzureFileStorageAccountBuilder withFileService(AzureStorageAccountFileService fileService) {
+      component.setFileService(fileService);
+      return builder;
     }
 
     public AzureFileStorageAccountBuilder withFileShares(Collection<AzureFileShare> fileShares) {

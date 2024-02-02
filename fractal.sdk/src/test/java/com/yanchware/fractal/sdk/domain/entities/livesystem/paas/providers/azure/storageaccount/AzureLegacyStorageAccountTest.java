@@ -360,15 +360,15 @@ public class AzureLegacyStorageAccountTest extends TestWithFixture {
     var keyPolicyExpirationPeriodInDays = aPositiveInteger();
     var largeFileSharesState = a(AzureLargeFileSharesState.class);
     var minimumTlsVersion = a(AzureTlsVersion.class);
-    var networkAclBypass = a(AzureBypass.class);
-    var networkAclDefaultAction = a(AzureAction.class);
-    var networkAclIpRuleAction = a(AzureNetworkAction.class);
-    var networkAclIpRuleIpAddressOrRange = a(String.class);
-    var networkAclResourceAccessRuleResourceId = a(String.class);
-    var networkAclResourceAccessRuleTenantId = a(String.class);
-    var networkAclVirtualNetworkRuleAction = a(AzureNetworkAction.class);
-    var networkAclVirtualNetworkRuleResourceId = a(String.class);
-    var networkAclVirtualNetworkRuleState = a(AzureState.class);
+    var networkRuleSetBypass = a(AzureBypass.class);
+    var networkRuleSetDefaultAction = a(AzureAction.class);
+    var networkRuleSetIpRuleAction = a(AzureNetworkAction.class);
+    var networkRuleSetIpRuleIpAddressOrRange = a(String.class);
+    var networkRuleSetResourceAccessRuleResourceId = a(String.class);
+    var networkRuleSetResourceAccessRuleTenantId = a(String.class);
+    var networkRuleSetVirtualNetworkRuleAction = a(AzureNetworkAction.class);
+    var networkRuleSetVirtualNetworkRuleResourceId = a(String.class);
+    var networkRuleSetVirtualNetworkRuleState = a(AzureState.class);
     var publicNetworkAccess = a(AzurePublicNetworkAccess.class);
     var routingPreferencePublishInternetEndpoints = a(Boolean.class);
     var routingPreferencePublishMicrosoftEndpoints = a(Boolean.class);
@@ -474,28 +474,28 @@ public class AzureLegacyStorageAccountTest extends TestWithFixture {
         .withKeyExpirationPeriodInDays(keyPolicyExpirationPeriodInDays)
         .build();
 
-    var networkAclIpRule = AzureIpRule.builder()
-        .withAction(networkAclIpRuleAction)
-        .withIpAddressOrRange(networkAclIpRuleIpAddressOrRange)
+    var networkRuleSetIpRule = AzureIpRule.builder()
+        .withAction(networkRuleSetIpRuleAction)
+        .withIpAddressOrRange(networkRuleSetIpRuleIpAddressOrRange)
         .build();
 
-    var networkAclResourceAccessRule = AzureResourceAccessRule.builder()
-        .withResourceId(networkAclResourceAccessRuleResourceId)
-        .withTenantId(networkAclResourceAccessRuleTenantId)
+    var networkRuleSetResourceAccessRule = AzureResourceAccessRule.builder()
+        .withResourceId(networkRuleSetResourceAccessRuleResourceId)
+        .withTenantId(networkRuleSetResourceAccessRuleTenantId)
         .build();
 
-    var networkAclVirtualNetworkRule = AzureVirtualNetworkRule.builder()
-        .withAction(networkAclVirtualNetworkRuleAction)
-        .withVirtualNetworkResourceId(networkAclVirtualNetworkRuleResourceId)
-        .withState(networkAclVirtualNetworkRuleState)
+    var networkRuleSetVirtualNetworkRule = AzureVirtualNetworkRule.builder()
+        .withAction(networkRuleSetVirtualNetworkRuleAction)
+        .withVirtualNetworkResourceId(networkRuleSetVirtualNetworkRuleResourceId)
+        .withState(networkRuleSetVirtualNetworkRuleState)
         .build();
 
-    var networkAcls = AzureNetworkRuleSet.builder()
-        .withBypass(networkAclBypass)
-        .withDefaultAction(networkAclDefaultAction)
-        .withIpRule(networkAclIpRule)
-        .withResourceAccessRule(networkAclResourceAccessRule)
-        .withVirtualNetworkRule(networkAclVirtualNetworkRule)
+    var networkRuleSet = AzureNetworkRuleSet.builder()
+        .withBypass(networkRuleSetBypass)
+        .withDefaultAction(networkRuleSetDefaultAction)
+        .withIpRule(networkRuleSetIpRule)
+        .withResourceAccessRule(networkRuleSetResourceAccessRule)
+        .withVirtualNetworkRule(networkRuleSetVirtualNetworkRule)
         .build();
 
     var routingPreference = AzureStorageAccountRoutingPreference.builder()
@@ -531,7 +531,7 @@ public class AzureLegacyStorageAccountTest extends TestWithFixture {
         .withKeyPolicy(keyPolicy)
         .withLargeFileSharesState(largeFileSharesState)
         .withMinimumTlsVersion(minimumTlsVersion)
-        .withNetworkAcls(networkAcls)
+        .withNetworkRuleSet(networkRuleSet)
         .withPublicNetworkAccess(publicNetworkAccess)
         .withRoutingPreference(routingPreference)
         .withSasPolicy(sasPolicy)
@@ -558,10 +558,10 @@ public class AzureLegacyStorageAccountTest extends TestWithFixture {
     var storageAccountImmutableStorage = storageAccount.getImmutableStorageWithVersioning();
     var storageAccountImmutableStoragePolicy = storageAccountImmutableStorage.getImmutabilityPolicy();
     var storageAccountKeyPolicy = storageAccount.getKeyPolicy();
-    var storageAccountNetworkAcls = storageAccount.getNetworkAcls();
-    var storageAccountNetworkAclIpRule = storageAccountNetworkAcls.getIpRules().getFirst();
-    var storageAccountNetworkAclResourceAccessRule = storageAccountNetworkAcls.getResourceAccessRules().getFirst();
-    var storageAccountNetworkAclVirtualNetworkRule = storageAccountNetworkAcls.getVirtualNetworkRules().getFirst();
+    var storageAccountNetworkRuleSet = storageAccount.getNetworkRuleSet();
+    var storageAccountNetworkRuleSetIpRule = storageAccountNetworkRuleSet.getIpRules().getFirst();
+    var storageAccountNetworkRuleSetResourceAccessRule = storageAccountNetworkRuleSet.getResourceAccessRules().getFirst();
+    var storageAccountNetworkRuleSetVirtualNetworkRule = storageAccountNetworkRuleSet.getVirtualNetworkRules().getFirst();
     var storageAccountRoutingPreference = storageAccount.getRoutingPreference();
     var storageAccountSasPolicy = storageAccount.getSasPolicy();
 
@@ -769,44 +769,44 @@ public class AzureLegacyStorageAccountTest extends TestWithFixture {
     assertThat(storageAccount.getMinimumTlsVersion())
         .isEqualTo(minimumTlsVersion);
 
-    assertThat(storageAccount.getNetworkAcls())
-        .isEqualTo(networkAcls);
+    assertThat(storageAccount.getNetworkRuleSet())
+        .isEqualTo(networkRuleSet);
 
-    assertThat(storageAccountNetworkAcls.getBypass())
-        .isEqualTo(networkAclBypass);
+    assertThat(storageAccountNetworkRuleSet.getBypass())
+        .isEqualTo(networkRuleSetBypass);
 
-    assertThat(storageAccountNetworkAcls.getDefaultAction())
-        .isEqualTo(networkAclDefaultAction);
+    assertThat(storageAccountNetworkRuleSet.getDefaultAction())
+        .isEqualTo(networkRuleSetDefaultAction);
 
-    assertThat(storageAccountNetworkAcls.getIpRules())
+    assertThat(storageAccountNetworkRuleSet.getIpRules())
         .hasSize(1);
 
-    assertThat(storageAccountNetworkAclIpRule.getAction())
-        .isEqualTo(networkAclIpRuleAction);
+    assertThat(storageAccountNetworkRuleSetIpRule.getAction())
+        .isEqualTo(networkRuleSetIpRuleAction);
 
-    assertThat(storageAccountNetworkAclIpRule.getIpAddressOrRange())
-        .isEqualTo(networkAclIpRuleIpAddressOrRange);
+    assertThat(storageAccountNetworkRuleSetIpRule.getIpAddressOrRange())
+        .isEqualTo(networkRuleSetIpRuleIpAddressOrRange);
 
-    assertThat(storageAccountNetworkAcls.getResourceAccessRules())
+    assertThat(storageAccountNetworkRuleSet.getResourceAccessRules())
         .hasSize(1);
 
-    assertThat(storageAccountNetworkAclResourceAccessRule.getResourceId())
-        .isEqualTo(networkAclResourceAccessRuleResourceId);
+    assertThat(storageAccountNetworkRuleSetResourceAccessRule.getResourceId())
+        .isEqualTo(networkRuleSetResourceAccessRuleResourceId);
 
-    assertThat(storageAccountNetworkAclResourceAccessRule.getTenantId())
-        .isEqualTo(networkAclResourceAccessRuleTenantId);
+    assertThat(storageAccountNetworkRuleSetResourceAccessRule.getTenantId())
+        .isEqualTo(networkRuleSetResourceAccessRuleTenantId);
 
-    assertThat(storageAccountNetworkAcls.getVirtualNetworkRules())
+    assertThat(storageAccountNetworkRuleSet.getVirtualNetworkRules())
         .hasSize(1);
 
-    assertThat(storageAccountNetworkAclVirtualNetworkRule.getAction())
-        .isEqualTo(networkAclVirtualNetworkRuleAction);
+    assertThat(storageAccountNetworkRuleSetVirtualNetworkRule.getAction())
+        .isEqualTo(networkRuleSetVirtualNetworkRuleAction);
 
-    assertThat(storageAccountNetworkAclVirtualNetworkRule.getVirtualNetworkResourceId())
-        .isEqualTo(networkAclVirtualNetworkRuleResourceId);
+    assertThat(storageAccountNetworkRuleSetVirtualNetworkRule.getVirtualNetworkResourceId())
+        .isEqualTo(networkRuleSetVirtualNetworkRuleResourceId);
 
-    assertThat(storageAccountNetworkAclVirtualNetworkRule.getState())
-        .isEqualTo(networkAclVirtualNetworkRuleState);
+    assertThat(storageAccountNetworkRuleSetVirtualNetworkRule.getState())
+        .isEqualTo(networkRuleSetVirtualNetworkRuleState);
 
     assertThat(storageAccount.getPublicNetworkAccess())
         .isEqualTo(publicNetworkAccess);

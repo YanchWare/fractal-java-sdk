@@ -13,19 +13,9 @@ import java.util.Collection;
 @Getter
 @Setter(AccessLevel.PRIVATE)
 public class AzureFileShareAccessPolicy implements Validatable {
-  /**
-   * Expiry time of the access policy.
-   */
+  
   private OffsetDateTime expiryTime;
-
-  /**
-   * List of abbreviated permissions.
-   */
   private String permission;
-
-  /**
-   * Start time of the access policy.
-   */
   private OffsetDateTime startTime;
 
   public static AzureFileShareAccessPolicyBuilder builder() {
@@ -62,16 +52,31 @@ public class AzureFileShareAccessPolicy implements Validatable {
       this.builder = this;
     }
 
+    /**
+     * <pre>
+     * Expiry time of the access policy.
+     * </pre>
+     */
     public AzureFileShareAccessPolicyBuilder withExpiryTime(OffsetDateTime expiryTime) {
       accessPolicy.setExpiryTime(expiryTime);
       return builder;
     }
 
+    /**
+     * <pre>
+     * List of abbreviated permissions.
+     * </pre>
+     */
     public AzureFileShareAccessPolicyBuilder withPermission(String permission) {
       accessPolicy.setPermission(permission);
       return builder;
     }
 
+    /**
+     * <pre>
+     * Start time of the access policy.
+     * </pre>
+     */
     public AzureFileShareAccessPolicyBuilder withStartTime(OffsetDateTime startTime) {
       accessPolicy.setStartTime(startTime);
       return builder;

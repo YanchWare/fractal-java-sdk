@@ -39,7 +39,6 @@ public abstract class BaseAzureStorageAccount extends PaaSDataStorage implements
   public static final String TAG_KEY_IS_BLANK = "Tag key cannot be null or empty";
   private static final String TAG_VALUE_INVALID_FORMAT = "Tag value for key '%s' cannot be null or empty";
 
-
   private String name;
   private AzureRegion azureRegion;
   private AzureResourceGroup azureResourceGroup;
@@ -74,7 +73,7 @@ public abstract class BaseAzureStorageAccount extends PaaSDataStorage implements
   private AzureStorageAccountSasPolicy sasPolicy;
   private Boolean supportsHttpsTrafficOnly;
   private AzureStorageAccountBackup backup;
-  private AzureStorageAccountFileService fileService;
+  
 
 
   @Override
@@ -455,11 +454,6 @@ public abstract class BaseAzureStorageAccount extends PaaSDataStorage implements
 
     public B withBackup(AzureStorageAccountBackup backup) {
       component.setBackup(backup);
-      return builder;
-    }
-
-    public B withFileService(AzureStorageAccountFileService fileService) {
-      component.setFileService(fileService);
       return builder;
     }
   }

@@ -1,14 +1,13 @@
 package com.yanchware.fractal.sdk.utils;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yanchware.fractal.sdk.domain.entities.Validatable;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.BlueprintComponent;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import lombok.extern.slf4j.Slf4j;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.*;
 import java.util.*;
 
 import static com.yanchware.fractal.sdk.configuration.Constants.BLUEPRINT_TYPE;
@@ -103,6 +102,8 @@ public class ReflectionUtils {
                     continue;
                 }
                 try {
+                    // New logic to handle specific methods
+                    handleMethodInvocation(component, parametersMap, "getKind", "kind");
                     if (classUnder.isBlueprintComponent()) {
                         handleParams(component, fieldValueMap, parametersMap, f, classUnder);
                     } else if (classUnder.isLiveSystemComponent()) {
@@ -138,22 +139,30 @@ public class ReflectionUtils {
      * @param fieldValueMap map that holds generic component fields
      * @param parametersMap map that holds parameters of a component
      * @param f field we are handling
-     * @throws IllegalAccessException
+     * @throws IllegalAccessException Illegal Access Exception
      */
     private static void handleParams(LiveSystemComponent component, Map<String, Object> fieldValueMap, Map<String, Object> parametersMap, Field f, ReflectionClassUnder classUnder) throws IllegalAccessException {
+        if (f.isAnnotationPresent(JsonIgnore.class)) {
+            log.trace("Field '{}' is annotated with @JsonIgnore, so will be ignored.", f.getName());
+            return;
+        }
+        
         if (f.getType() == ProviderType.class) {
             log.trace("Found a provider type for component: {}", component.getClass().getSimpleName());
             return;
         }
+        
         Object componentObject = f.get(component);
         if (componentObject == null) {
             log.trace("Field '{}' of component '{}' is null. Will skip.", f.getName(), component.getClass().getSimpleName());
             return;
         }
+        
         if (classUnder.isBlueprintComponent() && isFieldTypeConstant(f)) {
             fieldValueMap.put(BLUEPRINT_TYPE, componentObject);
             return;
         }
+        
         if (isFieldPrivateStaticFinal(f)) {
             log.trace("Field '{}' is private-static-final, so will be ignored.", f.getName());
             return;
@@ -165,6 +174,28 @@ public class ReflectionUtils {
         }
 
         parametersMap.put(f.getName(), componentObject);
+
+        
+    }
+
+    // New method to handle invocation of specific methods like getKind
+    private static void handleMethodInvocation(LiveSystemComponent component, 
+                                               Map<String, Object> parametersMap, 
+                                               String methodName,
+                                               String paramKey) {
+        try {
+            Method method = component.getClass().getMethod(methodName);
+            if (method != null) {
+                Object result = method.invoke(component);
+                if (result != null) {
+                    parametersMap.put(paramKey, result);
+                }
+            }
+        } catch (NoSuchMethodException e) {
+            log.trace("Method '{}' not found in component: {}", methodName, component.getClass().getSimpleName());
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+            log.error("Error invoking method '{}' on component: {}", methodName, component.getClass().getSimpleName(), e);
+        }
     }
 
     /**

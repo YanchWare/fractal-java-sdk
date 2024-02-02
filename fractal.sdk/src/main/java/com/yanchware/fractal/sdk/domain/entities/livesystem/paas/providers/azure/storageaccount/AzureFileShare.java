@@ -26,7 +26,7 @@ public class AzureFileShare extends PaaSFileShare implements LiveSystemComponent
   private static final Pattern NAME_PATTERN = Pattern.compile("^(?![0-9-])[a-z0-9]+(-[a-z0-9]+)*$");
   private static final int MAX_QUOTA_LARGE_FILE_SHARE = 102400;
 
-  
+
   private String name;
   private AzureFileShareAccessTier accessTier;
   private AzureFileShareEnabledProtocols enabledProtocols;
@@ -58,13 +58,7 @@ public class AzureFileShare extends PaaSFileShare implements LiveSystemComponent
       errors.add("Invalid name: '" + name + "'; Name must use numbers, lower-case letters, and dash (-) only. Every dash (-) must be immediately preceded and followed by a letter or number");
     }
 
-    if (accessTier == null) {
-      errors.add("Access tier cannot be null.");
-    }
-
-    if (enabledProtocols == null) {
-      errors.add("Enabled protocols cannot be null.");
-    } else if (enabledProtocols == AzureFileShareEnabledProtocols.NFS) {
+    if (enabledProtocols == AzureFileShareEnabledProtocols.NFS) {
       if (rootSquash == null) {
         errors.add("Root squash type must be specified for NFS shares.");
       }
@@ -81,24 +75,22 @@ public class AzureFileShare extends PaaSFileShare implements LiveSystemComponent
       });
     }
 
-   
-
-    if (shareQuota == null || shareQuota <= 0) {
-      errors.add("Share quota must be greater than 0.");
-    } else {
-      if (shareQuota > MAX_QUOTA_LARGE_FILE_SHARE) {
-        errors.add("Share quota must be less than or equal to " + MAX_QUOTA_LARGE_FILE_SHARE + " for shares.");
-      }
+    if (shareQuota != null && shareQuota > MAX_QUOTA_LARGE_FILE_SHARE) {
+      errors.add("Share quota must be less than or equal to " + MAX_QUOTA_LARGE_FILE_SHARE + " for shares.");
     }
 
     if (signedIdentifiers != null) {
       signedIdentifiers.forEach(signedIdentifier -> errors.addAll(signedIdentifier.validate()));
     }
+    
+    if(shareQuota != null && shareQuota <=0) {
+      errors.add("Share quota must be greater than 0 for shares.");
+    }
 
     return errors;
   }
 
-  public static class AzureFileShareBuilder extends Builder<AzureFileShare, AzureFileShareBuilder>{
+  public static class AzureFileShareBuilder extends Builder<AzureFileShare, AzureFileShareBuilder> {
     @Override
     protected AzureFileShare createComponent() {
       return new AzureFileShare();
@@ -114,7 +106,7 @@ public class AzureFileShare extends PaaSFileShare implements LiveSystemComponent
       component.setType(PAAS_AZURE_FILE_SHARE);
       return super.build();
     }
-    
+
 
     public AzureFileShareBuilder withName(String name) {
       component.setName(name);
@@ -149,8 +141,8 @@ public class AzureFileShare extends PaaSFileShare implements LiveSystemComponent
     public AzureFileShareBuilder withSignedIdentifiers(List<AzureFileShareSignedIdentifier> signedIdentifiers) {
       if (CollectionUtils.isBlank(signedIdentifiers)) {
         return builder;
-      }      
-      
+      }
+
       if (component.getSignedIdentifiers() == null) {
         component.setSignedIdentifiers(new ArrayList<>());
       }
