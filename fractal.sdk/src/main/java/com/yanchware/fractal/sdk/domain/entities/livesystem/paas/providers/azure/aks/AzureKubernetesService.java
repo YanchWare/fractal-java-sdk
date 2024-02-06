@@ -90,6 +90,11 @@ public class AzureKubernetesService extends KubernetesCluster implements AzureRe
       return builder;
     }
 
+    public AzureKubernetesServiceBuilder withResourceGroup(AzureResourceGroup azureResourceGroup) {
+      component.setAzureResourceGroup(azureResourceGroup);
+      return builder;
+    }
+
     public AzureKubernetesServiceBuilder withNodePool(AzureNodePool nodePool) {
       return withNodePools(List.of(nodePool));
     }
