@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Optional;
 
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PostgreSqlCharset.UTF8;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion.EUROPE_WEST;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion.WEST_EUROPE;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureStorageAutoGrow.ENABLED;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.valueobjects.AzureSkuName.B_GEN5_1;
 import static com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType.AZURE;
@@ -35,7 +35,7 @@ public class AzurePostgreSqlTest {
   public void exceptionThrown_when_azurePgCreatedWithBackUpRetentionDaysLessThan7() {
     var azurePg = AzurePostgreSqlDbms.builder()
         .withId(ComponentId.from("azure-pg"))
-        .withRegion(EUROPE_WEST)
+        .withRegion(WEST_EUROPE)
         .withStorageMB(1234)
         .withBackupRetentionDays(6);
     assertThatThrownBy(azurePg::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
@@ -46,7 +46,7 @@ public class AzurePostgreSqlTest {
   public void exceptionThrown_when_azurePgCreatedWithBackUpRetentionDaysHigherThan35() {
     var azurePg = AzurePostgreSqlDbms.builder()
         .withId(ComponentId.from("azure-pg"))
-        .withRegion(EUROPE_WEST)
+        .withRegion(WEST_EUROPE)
         .withStorageMB(1234)
         .withBackupRetentionDays(36);
     assertThatThrownBy(azurePg::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
@@ -55,7 +55,7 @@ public class AzurePostgreSqlTest {
 
   @Test
   public void propertiesAreSet_when_azurePgCreatedWithJustIdAndRegion() {
-    var azurePg = AzurePostgreSqlDbms.builder().withId(ComponentId.from("azure-pg")).withRegion(EUROPE_WEST);
+    var azurePg = AzurePostgreSqlDbms.builder().withId(ComponentId.from("azure-pg")).withRegion(WEST_EUROPE);
     assertThat(azurePg.build().validate()).isEmpty();
   }
 
@@ -63,7 +63,7 @@ public class AzurePostgreSqlTest {
   public void propertiesAreSet_when_azurePostgresIsCreated() {
     var azurePostgreSql = AzurePostgreSqlDbms.builder()
         .withId(ComponentId.from("azure-psg"))
-        .withRegion(EUROPE_WEST)
+        .withRegion(WEST_EUROPE)
         .withRootUser("rootUser")
         .withSkuName(B_GEN5_1)
         .withStorageAutoGrow(ENABLED)
@@ -80,7 +80,7 @@ public class AzurePostgreSqlTest {
     assertThat(azurePostgreSql)
         .returns(PAAS_POSTGRESQL_DBMS, from(AzurePostgreSqlDbms::getType))
         .returns(AZURE, from(AzurePostgreSqlDbms::getProvider))
-        .returns(EUROPE_WEST, from(AzurePostgreSqlDbms::getAzureRegion))
+        .returns(WEST_EUROPE, from(AzurePostgreSqlDbms::getAzureRegion))
         .returns("rootUser", from(AzurePostgreSqlDbms::getRootUser))
         .returns(B_GEN5_1, from(AzurePostgreSqlDbms::getSkuName))
         .returns(ENABLED, from(AzurePostgreSqlDbms::getStorageAutoGrow))

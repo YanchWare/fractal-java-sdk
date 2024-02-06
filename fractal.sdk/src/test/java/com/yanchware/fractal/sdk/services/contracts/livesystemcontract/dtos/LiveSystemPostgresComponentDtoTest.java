@@ -1,8 +1,5 @@
 package com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos;
 
-import com.yanchware.fractal.sdk.domain.entities.Component;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PaaSPostgreSqlDatabase;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PaaSPostgreSqlDbms;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzurePostgreSqlDatabase;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzurePostgreSqlDbms;
 import com.yanchware.fractal.sdk.utils.TestUtils;
@@ -43,7 +40,7 @@ class LiveSystemPostgresComponentDtoTest {
                 "storageAutoGrow",
                 "storageMB")
             .containsExactly(
-                postgres.getAzureRegion().getName(),
+                postgres.getAzureRegion(),
                 postgres.getBackupRetentionDays(),
                 postgres.getName(),
                 postgres.getRootUser(),
@@ -61,7 +58,7 @@ class LiveSystemPostgresComponentDtoTest {
                 "name",
                 "schema")
             .containsExactly(
-                database.getAzureRegion().getName(),
+                database.getAzureRegion(),
                 database.getName(),
                 database.getSchema());
     }

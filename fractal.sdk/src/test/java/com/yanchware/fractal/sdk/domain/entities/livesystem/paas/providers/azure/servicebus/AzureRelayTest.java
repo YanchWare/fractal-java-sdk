@@ -4,7 +4,7 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
 import org.junit.jupiter.api.Test;
 
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion.EUROPE_WEST;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion.WEST_EUROPE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -25,11 +25,11 @@ public class AzureRelayTest {
 
   @Test
   public void noValidationErrors_when_relayHasRequiredFields() {
-    AzureResourceGroup azureResourceGroup = AzureResourceGroup.builder().withName("az-group").withRegion(EUROPE_WEST).build();
+    AzureResourceGroup azureResourceGroup = AzureResourceGroup.builder().withName("az-group").withRegion(WEST_EUROPE).build();
     var relay = AzureRelay.builder()
         .withId("relay-test-x")
         .withName("relay-test-x")
-        .withRegion(AzureRegion.EUROPE_WEST)
+        .withRegion(AzureRegion.WEST_EUROPE)
         .withAzureResourceGroup(azureResourceGroup)
         .build();
     assertThat(relay.validate()).isEmpty();

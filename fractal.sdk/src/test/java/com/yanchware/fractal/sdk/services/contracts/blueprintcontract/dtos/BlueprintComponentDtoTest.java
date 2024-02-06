@@ -179,7 +179,7 @@ public class BlueprintComponentDtoTest {
         .assertThat(aksDto.getParameters().values())
         .as("Component Parameters")
         .containsExactlyInAnyOrder(
-            aks.getAzureRegion().toString(),
+            aks.getAzureRegion(),
             aks.getAzureActiveDirectoryProfile(),
             aks.getNodePools(),
             aks.getServiceIpRange(),
@@ -236,7 +236,7 @@ public class BlueprintComponentDtoTest {
     assertSoftly(softly -> {
       softly.assertThat(azurePgBlueprintCompDto.getParameters().values()).as("Component Parameters")
           .containsExactlyInAnyOrder(
-              apg.getAzureRegion().toString(),
+              apg.getAzureRegion(),
               apg.getRootUser(),
               apg.getSkuName().getId(),
               apg.getStorageAutoGrow().getId(),
@@ -258,7 +258,7 @@ public class BlueprintComponentDtoTest {
       softly.assertThat(azurePgDbBlueprintCompDto.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(
         db1.getName(),
         db1.getSchema(),
-        ((AzureResourceEntity)db1).getAzureRegion().toString());
+        ((AzureResourceEntity)db1).getAzureRegion());
       softly.assertThat(azurePgDbBlueprintCompDto.getDependencies()).as("Component Dependencies").containsExactly(apg.getId().getValue());
       softly.assertThat(azurePgDbBlueprintCompDto.getLinks()).as("Component Links").isEmpty();
     });
@@ -273,7 +273,7 @@ public class BlueprintComponentDtoTest {
       softly.assertThat(azurePgDbBlueprintCompDto2.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(
         db2.getSchema(),
         db2.getName(),
-        ((AzureResourceEntity)db1).getAzureRegion().toString());
+        ((AzureResourceEntity)db1).getAzureRegion());
       softly.assertThat(azurePgDbBlueprintCompDto2.getDependencies()).as("Component Dependencies").containsExactly(apg.getId().getValue());
       softly.assertThat(azurePgDbBlueprintCompDto2.getLinks()).as("Component Links").containsAll(apg.getLinks());
     });

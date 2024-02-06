@@ -49,6 +49,7 @@ public enum ComponentType {
   PAAS_WORKLOAD("CustomWorkloads.PaaS.Workload"),
   PAAS_AZURE_WEBAPP("CustomWorkloads.PaaS.WebApp"),
   PAAS_AZURE_STORAGE("Storage.PaaS.StorageAccount"),
+  PAAS_AZURE_FILE_SHARE("Storage.PaaS.FileShare"),
   PAAS_MESSAGE_BROKER("Messaging.PaaS.Broker"),
   PAAS_MESSAGE_ENTITY("Messaging.PaaS.Entity"),
   PAAS_SERVICE_BUS_NAMESPACE("Messaging.PaaS.ServiceBus"),

@@ -1,25 +1,28 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.valueobjects;
 
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.ExtendableEnum;
 
-public enum AzureDefaultSharePermission {
-  NONE ("None"),
-  STORAGE_FILE_DATA_SMB_SHARE_READER ("StorageFileDataSmbShareReader"),
-  STORAGE_FILE_DATA_SMB_SHARE_CONTRIBUTOR ("StorageFileDataSmbShareContributor"),
-  STORAGE_FILE_DATA_SMB_SHARE_ELEVATED_CONTRIBUTOR ("StorageFileDataSmbShareElevatedContributor");
-  private final String id;
+import java.util.Collection;
 
-  AzureDefaultSharePermission(final String id) {
-    this.id = id;
+/**
+ * Default share permission for users using Kerberos authentication if RBAC role is not assigned.
+ */
+public final class AzureDefaultSharePermission extends ExtendableEnum<AzureDefaultSharePermission> {
+  public static final AzureDefaultSharePermission NONE = fromString("None");
+  public static final AzureDefaultSharePermission STORAGE_FILE_DATA_SMB_SHARE_READER = 
+      fromString("StorageFileDataSmbShareReader");
+  public static final AzureDefaultSharePermission STORAGE_FILE_DATA_SMB_SHARE_CONTRIBUTOR = 
+      fromString("StorageFileDataSmbShareContributor");
+  public static final AzureDefaultSharePermission STORAGE_FILE_DATA_SMB_SHARE_ELEVATED_CONTRIBUTOR = 
+      fromString("StorageFileDataSmbShareElevatedContributor");
+
+  @JsonCreator
+  public static AzureDefaultSharePermission fromString(String name) {
+    return fromString(name, AzureDefaultSharePermission.class);
   }
 
-  @JsonValue
-  public String getId() {
-    return id;
-  }
-
-  @Override
-  public String toString() {
-    return id;
+  public static Collection<AzureDefaultSharePermission> values() {
+    return values(AzureDefaultSharePermission.class);
   }
 }

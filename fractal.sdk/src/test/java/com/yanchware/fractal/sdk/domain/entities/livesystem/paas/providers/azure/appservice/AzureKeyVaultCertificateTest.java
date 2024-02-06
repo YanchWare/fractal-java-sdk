@@ -61,7 +61,7 @@ class AzureKeyVaultCertificateTest {
         .withKeyVaultId(keyVaultId)
         .withName(certificateName)
         .withPassword(certificatePassword)
-        .withRegion(AzureRegion.EUROPE_WEST)
+        .withRegion(AzureRegion.WEST_EUROPE)
         .withTags(tags)
         .withTag("key1", "value1")
         .withTag("key2", "value2")
@@ -79,7 +79,7 @@ class AzureKeyVaultCertificateTest {
         .containsExactly(keyVaultId, 
             certificateName,
             certificatePassword, 
-            AzureRegion.EUROPE_WEST,
+            AzureRegion.WEST_EUROPE,
             Map.of("key1", "value1", "key2", "value2", "key3", "value3", "key4", "value4"));
   }
 }

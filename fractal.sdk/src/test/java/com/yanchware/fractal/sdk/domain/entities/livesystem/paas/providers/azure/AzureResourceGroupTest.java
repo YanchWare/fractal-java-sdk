@@ -9,7 +9,7 @@ public class AzureResourceGroupTest {
   @Test
   public void correctValues_when_AzureResourceGroupWithEnumBuilt() {
     var resourceGroupName = "resourceGroupName";
-    var region = AzureRegion.EUROPE_WEST;
+    var region = AzureRegion.WEST_EUROPE;
 
     var azureResourceGroup = AzureResourceGroup.builder()
         .withName(resourceGroupName)
@@ -32,17 +32,7 @@ public class AzureResourceGroupTest {
 
     assertThat(azureResourceGroup)
         .extracting("name", "region")
-        .contains(resourceGroupName, AzureRegion.US_EAST2);
-  }
-
-  @Test
-  public void validationError_when_AzureResourceGroupWithWrongEnumAsStringBuilt() {
-    assertThatThrownBy(() -> AzureResourceGroup.builder()
-        .withName("resourceGroupName")
-        .withRegion(AzureRegion.fromString("wrong_enum"))
-        .build())
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("[AzureResourceGroup Validation] Region has not been defined and it is required");
+        .contains(resourceGroupName, AzureRegion.EAST_US2);
   }
 
   @Test
@@ -52,6 +42,6 @@ public class AzureResourceGroupTest {
         .withRegion(AzureRegion.fromString("wrong_enum"))
         .build())
         .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("[AzureResourceGroup Validation] name is empty or it exceeds 90 characters");
+        .hasMessageContaining("[AzureResourceGroup Validation] Name cannot be null or empty");
   }
 }

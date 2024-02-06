@@ -120,7 +120,7 @@ public class LiveSystemServiceTest {
             .withAzureResourceGroup(
                 AzureResourceGroup.builder()
                     .withName("MyRg")
-                    .withRegion(AzureRegion.ASIA_EAST)
+                    .withRegion(AzureRegion.EAST_ASIA)
                     .build())
             .withCosmosEntity(AzureCosmosGremlinDatabase.builder()
                 .withId("graph-db-1")

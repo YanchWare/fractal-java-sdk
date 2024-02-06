@@ -1,26 +1,25 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.valueobjects;
 
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.ExtendableEnum;
 
-public enum AzureDirectoryServiceOptions {
-  NONE ("None"),
-  AADDS ("AADDS"),
-  AD ("AD"),
-  AADKERB ("AADKERB");
-  
-  private final String id;
+import java.util.Collection;
 
-  AzureDirectoryServiceOptions(final String id) {
-    this.id = id;
+/**
+ * Indicates the directory service used.
+ */
+public final class AzureDirectoryServiceOptions extends ExtendableEnum<AzureDirectoryServiceOptions> {
+  public static final AzureDirectoryServiceOptions NONE = fromString("None");
+  public static final AzureDirectoryServiceOptions AADDS = fromString("AADDS");
+  public static final AzureDirectoryServiceOptions AD = fromString("AD");
+  public static final AzureDirectoryServiceOptions AADKERB = fromString("AADKERB");
+
+  @JsonCreator
+  public static AzureDirectoryServiceOptions fromString(String name) {
+    return fromString(name, AzureDirectoryServiceOptions.class);
   }
 
-  @JsonValue
-  public String getId() {
-    return id;
-  }
-
-  @Override
-  public String toString() {
-    return id;
+  public static Collection<AzureDirectoryServiceOptions> values() {
+    return values(AzureDirectoryServiceOptions.class);
   }
 }

@@ -1,24 +1,23 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.valueobjects;
 
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.ExtendableEnum;
 
-public enum AzureActiveDirectoryAccountType {
-  USER ("User"),
-  COMPUTER ("Computer");
+import java.util.Collection;
+
+/**
+ * Specifies the Active Directory account type for Azure Storage.
+ */
+public final class AzureActiveDirectoryAccountType extends ExtendableEnum<AzureActiveDirectoryAccountType> {
+  public static final AzureActiveDirectoryAccountType USER = fromString("User");
+  public static final AzureActiveDirectoryAccountType COMPUTER = fromString("Computer");
   
-  private final String id;
-
-  AzureActiveDirectoryAccountType(final String id) {
-    this.id = id;
+  @JsonCreator
+  public static AzureActiveDirectoryAccountType fromString(String name) {
+    return fromString(name, AzureActiveDirectoryAccountType.class);
   }
 
-  @JsonValue
-  public String getId() {
-    return id;
-  }
-
-  @Override
-  public String toString() {
-    return id;
+  public static Collection<AzureActiveDirectoryAccountType> values() {
+    return values(AzureActiveDirectoryAccountType.class);
   }
 }

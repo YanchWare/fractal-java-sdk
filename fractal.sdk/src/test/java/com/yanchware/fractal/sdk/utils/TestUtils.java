@@ -35,7 +35,7 @@ import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.Preempti
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PreemptionPolicy.PREEMPT_LOWER_PRIORITY;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureMachineType.STANDARD_B2S;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureOsType.LINUX;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion.EUROPE_WEST;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion.WEST_EUROPE;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureStorageAutoGrow.ENABLED;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.valueobjects.AzureSkuName.B_GEN5_1;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpMachine.E2_STANDARD2;
@@ -50,7 +50,7 @@ public class TestUtils {
         .withId("aks-1")
         .withDescription("Test AKS cluster")
         .withDisplayName("AKS #1")
-        .withRegion(EUROPE_WEST)
+        .withRegion(WEST_EUROPE)
         .withServiceIpRange("10.2.0.0/16")
         .withPodIpRange("10.3.0.0/16")
         .withVnetAddressSpaceIpRange("10.1.0.0/22")
@@ -60,7 +60,7 @@ public class TestUtils {
             .withName("fractal")
             .withAzureResourceGroup(AzureResourceGroup.builder()
                 .withName("group")
-                .withRegion(EUROPE_WEST)
+                .withRegion(WEST_EUROPE)
                 .build())
             .build())
         .withAddonProfiles(List.of(
@@ -268,7 +268,7 @@ public class TestUtils {
         .withName("db-name")
         .withDescription("PostgreSQL")
         .withDisplayName("PostgreSQL")
-        .withRegion(EUROPE_WEST)
+        .withRegion(WEST_EUROPE)
         .withRootUser("rootUser")
         .withSkuName(B_GEN5_1)
         .withStorageAutoGrow(ENABLED)
@@ -348,7 +348,7 @@ public class TestUtils {
   public static AzureKubernetesServiceBuilder getDefaultAks() {
     return AzureKubernetesService.builder()
         .withId(ComponentId.from("test"))
-        .withRegion(EUROPE_WEST)
+        .withRegion(WEST_EUROPE)
         .withNodePool(AzureNodePool.builder()
             .withMachineType(STANDARD_B2S)
             .withName("azure")

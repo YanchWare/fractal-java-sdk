@@ -9,7 +9,7 @@ import com.yanchware.fractal.sdk.utils.TestUtils;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import org.junit.jupiter.api.Test;
 
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion.EUROPE_WEST;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion.WEST_EUROPE;
 import static com.yanchware.fractal.sdk.utils.TestUtils.getAksBuilder;
 import static com.yanchware.fractal.sdk.utils.TestUtils.getDefaultAks;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_KUBERNETES;
@@ -127,9 +127,9 @@ public class AzureKubernetesServiceTest {
     var machineType = "This_Not_Exist_For_Sure";
     var aks = AzureKubernetesService.builder()
         .withId(ComponentId.from("test"))
-        .withRegion(EUROPE_WEST)
+        .withRegion(WEST_EUROPE)
         .withResourceGroup(AzureResourceGroup.builder()
-            .withRegion(EUROPE_WEST)
+            .withRegion(WEST_EUROPE)
             .withName("rg-test")
             .build())
         .withNodePool(

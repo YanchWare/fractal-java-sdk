@@ -3,7 +3,7 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
 import org.junit.jupiter.api.Test;
 
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion.EUROPE_WEST;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion.WEST_EUROPE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -35,10 +35,10 @@ class AzureOutboundIpTest {
         .withAzureResourceGroup(AzureResourceGroup
             .builder()
             .withName("name")
-            .withRegion(EUROPE_WEST)
+            .withRegion(WEST_EUROPE)
             .build())
         .build();
     assertThat(outboundIp.getName()).isEqualTo("fractal");
-    assertThat(outboundIp.getAzureResourceGroup()).extracting("name", "region").containsExactly("name", EUROPE_WEST);
+    assertThat(outboundIp.getAzureResourceGroup()).extracting("name", "region").containsExactly("name", WEST_EUROPE);
   }
 }
