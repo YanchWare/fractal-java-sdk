@@ -7,6 +7,8 @@ import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.CAAS_TRAEFIK;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -146,7 +148,7 @@ class CaaSTraefikTest extends TestWithFixture {
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContainingAll("JaegerTracing instance cannot be null");
   }
-  
+
   @Test
   public void exceptionThrown_when_traefikCreatedWithTracingJaegerCollectorEndpointAndLocalAgentPort() {
     assertThatThrownBy(() -> traefikBuilder()
@@ -240,7 +242,7 @@ class CaaSTraefikTest extends TestWithFixture {
   public void noValidationErrors_when_traefikBuilderHasRequiredFields() {
     var localAgentPort = 5000;
     var localAgentUrlPath = "/sampling";
-    
+
     var traefik = traefikBuilder()
         .withTracing(
             TraefikTracing.builder()
@@ -255,25 +257,32 @@ class CaaSTraefikTest extends TestWithFixture {
                 .withMemory(a(Integer.class).toString())
                 .build())
             .build())
-        .withNodeSelector(NodeSelector.builder()
-            .withSelector(a(String.class), a(String.class))
-            .withSelector(a(String.class), a(String.class))
-            .build())
+        .withNodeSelectors(Map.of(
+            a(String.class), a(String.class),
+            a(String.class), a(String.class)))
         .withToleration(Toleration.builder()
             .withKey(a(String.class))
             .withOperator(TolerationOperator.EQUAL)
             .withValue(a(String.class))
             .withEffect(TaintEffect.NO_EXECUTE)
             .build())
-        .withToleration(Toleration.builder()
-            .withKey(a(String.class))
-            .withOperator(TolerationOperator.EXISTS)
-            .withValue(a(String.class))
-            .withEffect(TaintEffect.NO_EXECUTE)
-            .build())
+        .withTolerations(List.of(
+            Toleration.builder()
+                .withKey(a(String.class))
+                .withOperator(TolerationOperator.EXISTS)
+                .withValue(a(String.class))
+                .withEffect(TaintEffect.NO_EXECUTE)
+                .build(),
+            Toleration.builder()
+                .withKey(a(String.class))
+                .withOperator(TolerationOperator.EXISTS)
+                .withValue(a(String.class))
+                .withEffect(TaintEffect.NO_EXECUTE)
+                .build()
+        ))
         .withPriorityClassName(a(String.class))
         .build();
-    
+
     var json = TestUtils.getJsonRepresentation(traefik);
     assertThat(traefik.validate()).isEmpty();
     assertThat(json).isNotBlank();
@@ -285,10 +294,13 @@ class CaaSTraefikTest extends TestWithFixture {
 
     var localAgentUrlPathFromJson = JsonPath.read(json, "$.tracing.jaeger.localAgentUrlPath");
     assertThat(localAgentUrlPathFromJson).isEqualTo(localAgentUrlPath);
-    
+
     assertThat(traefik.getTracing().getJaeger())
         .extracting(JaegerTracing::getLocalAgentUrlPath, JaegerTracing::getLocalAgentPort)
         .containsExactly(localAgentUrlPath, localAgentPort);
+
+    assertThat(traefik.getNodeSelectors()).hasSize(2);
+    assertThat(traefik.getTolerations()).hasSize(3);
   }
 
   private CaaSTraefik.TraefikBuilder traefikBuilder() {

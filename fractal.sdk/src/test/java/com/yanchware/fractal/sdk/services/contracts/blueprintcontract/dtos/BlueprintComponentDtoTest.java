@@ -26,7 +26,7 @@ public class BlueprintComponentDtoTest {
 
     var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(aks));
 
-    var prometheus = (CaaSPrometheus) aks.getMonitoringInstances().get(0);
+    var prometheus = (CaaSPrometheus) aks.getMonitoringInstances().getFirst();
     var prometheusDto = getBlueprintComponentDto(blueprintComponentDtoList, prometheus.getId().getValue());
     var aksId = aks.getId().getValue();
 
@@ -46,7 +46,7 @@ public class BlueprintComponentDtoTest {
     var aks = getAksBuilder().withAPIGateway(getAmbassadorExample()).build();
     var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(aks));
 
-    var ambassador = (CaaSAmbassador) aks.getApiGatewayInstances().get(0);
+    var ambassador = (CaaSAmbassador) aks.getApiGatewayInstances().getFirst();
     var ambassadorDto = getBlueprintComponentDto(blueprintComponentDtoList, ambassador.getId().getValue());
     var aksId = aks.getId().getValue();
 
@@ -70,7 +70,7 @@ public class BlueprintComponentDtoTest {
       .withServiceMeshSecurity(getOcelotExample()).build();
     var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(aks));
 
-    var ocelot = (CaaSOcelot) aks.getServiceMeshSecurityInstances().get(0);
+    var ocelot = (CaaSOcelot) aks.getServiceMeshSecurityInstances().getFirst();
     var ocelotDto = getBlueprintComponentDto(blueprintComponentDtoList, ocelot.getId().getValue());
     var aksId = aks.getId().getValue();
 
@@ -94,7 +94,7 @@ public class BlueprintComponentDtoTest {
     var aks = getAksBuilder().withLogging(getElasticLoggingExample()).build();
     var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(aks));
 
-    var elasticLogging = (CaaSElasticLogging) aks.getLoggingInstances().get(0);
+    var elasticLogging = (CaaSElasticLogging) aks.getLoggingInstances().getFirst();
     var elasticLoggingDto = getBlueprintComponentDto(blueprintComponentDtoList, elasticLogging.getId().getValue());
     var aksId = aks.getId().getValue();
 
@@ -121,7 +121,7 @@ public class BlueprintComponentDtoTest {
     var aks = getAksBuilder().withDocumentDB(getElasticDataStoreExample()).build();
     var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(aks));
 
-    var elasticDataStore = (CaaSElasticDataStore) aks.getDocumentDBInstances().get(0);
+    var elasticDataStore = (CaaSElasticDataStore) aks.getDocumentDBInstances().getFirst();
     var elasticDataStoreDto = getBlueprintComponentDto(blueprintComponentDtoList, elasticDataStore.getId().getValue());
     var aksId = aks.getId().getValue();
 
@@ -147,7 +147,7 @@ public class BlueprintComponentDtoTest {
     var aks = getAksBuilder().withK8sWorkload(getK8sWorkloadExample()).build();
     var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(aks));
 
-    var k8sWorkload = aks.getK8sWorkloadInstances().get(0);
+    var k8sWorkload = aks.getK8sWorkloadInstances().getFirst();
     var k8sWorkloadDto = getBlueprintComponentDto(blueprintComponentDtoList, k8sWorkload.getId().getValue());
     var aksId = aks.getId().getValue();
 
@@ -231,7 +231,7 @@ public class BlueprintComponentDtoTest {
     assertThat(blueprintComponentDtoList).hasSize(3);
 
     //assert postgres server
-    var azurePgBlueprintCompDto = blueprintComponentDtoList.get(0);
+    var azurePgBlueprintCompDto = blueprintComponentDtoList.getFirst();
     assertGenericComponent(azurePgBlueprintCompDto, apg, PaaSRelationalDbms.TYPE);
     assertSoftly(softly -> {
       softly.assertThat(azurePgBlueprintCompDto.getParameters().values()).as("Component Parameters")
@@ -286,7 +286,7 @@ public class BlueprintComponentDtoTest {
 
     assertThat(blueprintComponentDtoList).hasSize(2);
 
-    var gcpPgBlueprintCompDto = blueprintComponentDtoList.get(0);
+    var gcpPgBlueprintCompDto = blueprintComponentDtoList.getFirst();
     assertGenericComponent(gcpPgBlueprintCompDto, gcpPostgres, PaaSRelationalDbms.TYPE);
     assertSoftly(softly -> {
       softly.assertThat(gcpPgBlueprintCompDto.getParameters().values()).as("Component Parameters")
