@@ -1,7 +1,6 @@
 package com.yanchware.fractal.sdk.domain.entities.blueprint.caas;
 
 import com.yanchware.fractal.sdk.domain.entities.Component;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.NodeSelector;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.ResourceManagement;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.Toleration;
 import lombok.AccessLevel;
@@ -10,10 +9,7 @@ import lombok.Setter;
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidLettersNumbersUnderscoresDashesAndPeriods;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -28,7 +24,7 @@ public abstract class CaaSComponent extends Component {
   private String namespace;
   private Map<String, List<Object>> dnsZoneConfig;
   private ResourceManagement resourceManagement;
-  private NodeSelector nodeSelector;
+  private Map<String, String> nodeSelectors;
   private List<Toleration> tolerations;
   private String priorityClassName;
 
@@ -61,21 +57,50 @@ public abstract class CaaSComponent extends Component {
     }
 
     /**
+     /**
      * <pre>
-     * Sets node selector constraints for the component, specifying a set of node labels that the target node must have.
-     * This ensures the component runs on nodes with specific characteristics or capabilities.</pre>
-     * 
-     * @param nodeSelector The NodeSelector object containing label key-value pairs.
-     *                     
+     * Sets multiple node selectors at once. 
+     * Each entry in the map represents a label and its desired value.</pre>
+     *
+     * @param selectors A map of label keys to label values defining the node selection criteria.
+     *
      * @Note: <strong>Node selectors provide powerful control over pod scheduling, but incorrect or overly restrictive
      * configurations may limit your deployment options. Fractal Cloud cannot guarantee the functionality of the deployment
      * if node selector configurations prevent scheduling. You need to verify the accuracy and applicability of your
      * node label selections.</strong>
      */
-    public B withNodeSelector(NodeSelector nodeSelector) {
-      component.setNodeSelector(nodeSelector);
+    public B withNodeSelectors(Map<String, String> selectors) {
+      if (component.getNodeSelectors() == null) {
+        component.setNodeSelectors(new HashMap<>());
+      }
+      
+      component.getNodeSelectors().putAll(selectors);
       return builder;
     }
+
+    /**
+     * <pre>
+     * Adds a single node selector. 
+     * This method allows you to specify one label and its desired value at a time.
+     * Can be called multiple times to add multiple selectors.</pre>
+     *
+     * @param label The label key representing a specific characteristic of nodes.
+     * @param value The label value that nodes must have to match the selector.
+     *
+     * @Note: <strong>Node selectors provide powerful control over pod scheduling, but incorrect or overly restrictive
+     * configurations may limit your deployment options. Fractal Cloud cannot guarantee the functionality of the deployment
+     * if node selector configurations prevent scheduling. You need to verify the accuracy and applicability of your
+     * node label selections.</strong>
+     */
+    public B withNodeSelector(String label, String value) {
+      if (component.getNodeSelectors() == null) {
+        component.setNodeSelectors(new HashMap<>());
+      }
+      
+      component.getNodeSelectors().put(label, value);
+      return builder;
+    }
+    
 
     /**
      * <pre>
