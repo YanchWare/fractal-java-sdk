@@ -75,6 +75,16 @@ public class AzureKubernetesServiceTest {
   }
 
   @Test
+  public void exceptionThrown_when_bothEnableAndDisableWorkloadIdentitySetToTrue() {
+    assertThatThrownBy(() -> getDefaultAks()
+        .enableWorkloadIdentity()
+        .disableWorkloadIdentity()
+        .build())
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessageContaining("enableWorkloadIdentity and disableWorkloadIdentity cannot both be true");
+  }
+
+  @Test
   public void typeIsKubernetes_when_aksIsBuiltWithoutSpecifyType() {
     var aksBuilder = getDefaultAks();
     assertThat(aksBuilder.build().getType()).isEqualTo(PAAS_KUBERNETES);
