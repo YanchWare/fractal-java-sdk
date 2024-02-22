@@ -47,6 +47,7 @@ public abstract class KubernetesCluster extends PaaSContainerPlatform implements
   private List<CaaSSearchImpl> documentDBInstances;
   private PodManagedIdentity podManagedIdentity;
   private String windowsAdminUsername;
+  private Boolean workloadIdentityEnabled;
 
   public KubernetesCluster() {
     super();
@@ -224,9 +225,15 @@ public abstract class KubernetesCluster extends PaaSContainerPlatform implements
       return builder;
     }
 
+    public B withWorkloadIdentityEnabled(boolean workloadIdentityEnabled) {
+      component.setWorkloadIdentityEnabled(workloadIdentityEnabled);
+      return builder;
+    }
+
     @Override
     public T build() {
       component.setType(PAAS_KUBERNETES);
+      
       return super.build();
     }
 
@@ -270,6 +277,7 @@ public abstract class KubernetesCluster extends PaaSContainerPlatform implements
       if(podManagedIdentity != null) errors.add("Pod Managed Identity is not fully supported yet for GCP");
       if(!priorityClasses.isEmpty()) errors.add("Priority classes are not fully supported yet for GCP");
     }
+    
     return errors;
   }
 

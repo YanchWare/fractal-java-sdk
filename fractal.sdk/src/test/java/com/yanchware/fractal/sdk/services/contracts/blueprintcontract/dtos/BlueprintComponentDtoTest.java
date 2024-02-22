@@ -193,7 +193,9 @@ public class BlueprintComponentDtoTest {
             aks.getAddonProfiles(),
             aks.getRoles(),
             aks.getKubernetesVersion(),
-            aks.getTags()
+            aks.getTags(),
+            aks.getWindowsAdminUsername(),
+            aks.getWorkloadIdentityEnabled()
         ));
   }
 

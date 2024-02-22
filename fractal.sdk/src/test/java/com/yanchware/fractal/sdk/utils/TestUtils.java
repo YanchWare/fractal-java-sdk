@@ -114,6 +114,8 @@ public class TestUtils {
         .withActiveDirectoryProfile(AzureActiveDirectoryProfile.builder()
             .withAdminGroupObjectIDs(List.of(UUID.randomUUID().toString()))
             .build())
+        .withWindowsAdminUsername("unit-test")
+        .withWorkloadIdentityEnabled(true)
         .withTag("tag1", "tag1Value")
         .withTag("tag2", "tag2Value");
   }
@@ -369,27 +371,25 @@ public class TestUtils {
   }
 
   public static void assertGenericComponent(ComponentDto componentDto, Component comp, String type) {
-    SoftAssertions.assertSoftly(softly -> {
-      softly.assertThat(componentDto)
-        .extracting(
-          ComponentDto::getId,
-          ComponentDto::getDisplayName,
-          ComponentDto::getDescription,
-          ComponentDto::getType,
-          ComponentDto::getVersion,
-          ComponentDto::isLocked,
-          ComponentDto::getDependencies,
-          ComponentDto::getLinks)
-        .containsExactly(
-          comp.getId().getValue(),
-          comp.getDisplayName(),
-          comp.getDescription(),
-          type,
-          DEFAULT_VERSION,
-          comp.isLocked(),
-          comp.getDependencies().stream().map(ComponentId::getValue).collect(toSet()),
-          comp.getLinks());
-    });
+    SoftAssertions.assertSoftly(softly -> softly.assertThat(componentDto)
+      .extracting(
+        ComponentDto::getId,
+        ComponentDto::getDisplayName,
+        ComponentDto::getDescription,
+        ComponentDto::getType,
+        ComponentDto::getVersion,
+        ComponentDto::isLocked,
+        ComponentDto::getDependencies,
+        ComponentDto::getLinks)
+      .containsExactly(
+        comp.getId().getValue(),
+        comp.getDisplayName(),
+        comp.getDescription(),
+        type,
+        DEFAULT_VERSION,
+        comp.isLocked(),
+        comp.getDependencies().stream().map(ComponentId::getValue).collect(toSet()),
+        comp.getLinks()));
   }
 
   public static String getJsonRepresentation(Object obj) {
