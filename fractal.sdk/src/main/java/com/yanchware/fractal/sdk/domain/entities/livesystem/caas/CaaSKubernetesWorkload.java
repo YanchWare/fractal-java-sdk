@@ -27,6 +27,7 @@ public class CaaSKubernetesWorkload extends CaaSWorkload implements LiveSystemCo
     private List<CustomWorkloadRole> roles;
     private String workloadSecretIdKey;
     private String workloadSecretPasswordKey;
+    private String serviceAccountName;
 
     @Override
     public ProviderType getProvider(){
@@ -109,6 +110,17 @@ public class CaaSKubernetesWorkload extends CaaSWorkload implements LiveSystemCo
                 }
             });
 
+            return builder;
+        }
+
+        /**
+         * <pre>
+         * Sets the ServiceAccount name for the Kubernetes workload. 
+         * This name is crucial for configuring workload identity by linking the Kubernetes ServiceAccount 
+         * to Azure User Managed Identity.</pre>
+         */
+        public KubernetesWorkloadBuilder withServiceAccountName(String serviceAccountName) {
+            component.setServiceAccountName(serviceAccountName);
             return builder;
         }
 
