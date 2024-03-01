@@ -35,7 +35,9 @@ public class CaaSKubernetesWorkload extends CaaSWorkload implements LiveSystemCo
     }
 
     protected CaaSKubernetesWorkload() {
+        
         roles = new ArrayList<>();
+        this.setRecreateOnFailure(true);
     }
 
     @Override
@@ -130,5 +132,4 @@ public class CaaSKubernetesWorkload extends CaaSWorkload implements LiveSystemCo
             return super.build();
         }
     }
-
 }

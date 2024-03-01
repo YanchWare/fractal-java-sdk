@@ -67,7 +67,7 @@ public class CaaSTraefik extends CaaSAPIGatewayImpl {
      * Configures the TLS certificates that Traefik will use.
      *
      * @param tlsCertificates a list of TLS certificates.
-     * @return the current builder instance                       
+     * @return the current builder instance
      */
     public TraefikBuilder withCertificates(List<TraefikTlsCertificate> tlsCertificates) {
       component.setTlsCertificates(tlsCertificates);
@@ -89,7 +89,7 @@ public class CaaSTraefik extends CaaSAPIGatewayImpl {
      * Specifies the container platform where Traefik will be deployed.
      *
      * @param containerPlatform the ID of the target container platform.
-     * @return the current builder instance                             
+     * @return the current builder instance
      */
     public TraefikBuilder withContainerPlatform(String containerPlatform) {
       component.setContainerPlatform(containerPlatform);
@@ -128,7 +128,7 @@ public class CaaSTraefik extends CaaSAPIGatewayImpl {
 
     /**
      * Adds a single entry point to the Traefik configuration.
-     * 
+     *
      * @param entryPoint the desired entry point.
      * @return the current builder instance
      */
@@ -141,7 +141,7 @@ public class CaaSTraefik extends CaaSAPIGatewayImpl {
      * For more details check <a href="https://doc.traefik.io/traefik/middlewares/http/forwardauth/">Traefik documentation</a>
      *
      * @param forwardAuthSettings settings for forward authentication.
-     * @return the current builder instance                           
+     * @return the current builder instance
      */
     public TraefikBuilder withForwardAuth(ForwardAuthSettings forwardAuthSettings) {
       component.setOidcClientId(forwardAuthSettings.getOidcClientId());
@@ -155,7 +155,7 @@ public class CaaSTraefik extends CaaSAPIGatewayImpl {
      * Adds a DNS zone configuration to Traefik's deployment settings.
      *
      * @param dnsZoneName the name of the DNS zone.
-     * @param dnsRecord the DNS record associated with the zone.
+     * @param dnsRecord   the DNS record associated with the zone.
      * @return the current builder instance
      */
     public TraefikBuilder withDnsZoneConfig(String dnsZoneName, DnsRecord dnsRecord) {
@@ -176,7 +176,7 @@ public class CaaSTraefik extends CaaSAPIGatewayImpl {
      * Adds multiple DNS records to a specific DNS zone in Traefik's deployment settings.
      *
      * @param dnsZoneName the name of the DNS zone.
-     * @param dnsRecords a collection of DNS records for the zone.
+     * @param dnsRecords  a collection of DNS records for the zone.
      * @return the current builder instance for chaining.
      */
     public TraefikBuilder withDnsZoneConfig(String dnsZoneName, Collection<DnsRecord> dnsRecords) {
@@ -211,12 +211,12 @@ public class CaaSTraefik extends CaaSAPIGatewayImpl {
      * @return the current builder instance for chaining.
      */
     public TraefikBuilder withTracing(TraefikTracing tracing) {
-      if(tracing == null) {
+      if (tracing == null) {
         return builder;
       }
-      
+
       component.setTracing(tracing);
-      
+
       return builder;
     }
 

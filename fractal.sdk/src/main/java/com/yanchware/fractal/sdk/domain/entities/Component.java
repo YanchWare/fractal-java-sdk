@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.*;
 
 import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Slf4j
 @Getter
@@ -29,10 +30,13 @@ public abstract class Component implements Validatable {
   private Set<ComponentId> dependencies;
   private Set<ComponentLink> links;
   private String description;
+  @Setter(AccessLevel.PUBLIC)
+  private boolean recreateOnFailure;
 
   protected Component() {
     links = new HashSet<>();
     dependencies = new HashSet<>();
+    recreateOnFailure = false;
   }
 
   @Override
@@ -125,6 +129,11 @@ public abstract class Component implements Validatable {
       return builder;
     }
 
+    public B withRecreateOnFailure(boolean recreateOnFailure) {
+      component.setRecreateOnFailure(recreateOnFailure);
+      return builder;
+    }
+
     public T build() {
       Collection<String> errors = component.validate();
 
@@ -135,7 +144,7 @@ public abstract class Component implements Validatable {
           Arrays.toString(errors.toArray())));
       }
 
-      if (component.getDescription() == null) {
+      if (isBlank(component.getDescription())) {
         component.setDescription(String.format("%s generated via SDK", component.getType().getId()));
       }
 

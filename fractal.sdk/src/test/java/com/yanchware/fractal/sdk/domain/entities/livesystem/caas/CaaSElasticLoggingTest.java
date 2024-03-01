@@ -94,6 +94,9 @@ class CaaSElasticLoggingTest {
     @Test
     public void typeIsElasticLogging_when_WithAllRequiredValues() {
         assertThatCode(TestUtils::getElasticLoggingExample).doesNotThrowAnyException();
-        assertThat(TestUtils.getElasticLoggingExample().getType()).isEqualTo(CAAS_ELASTIC_LOGGING);
+        var elasticLogging = TestUtils.getElasticLoggingExample();
+        
+        assertThat(elasticLogging.getType()).isEqualTo(CAAS_ELASTIC_LOGGING);
+        assertThat(elasticLogging.isRecreateOnFailure()).isFalse();
     }
 }
