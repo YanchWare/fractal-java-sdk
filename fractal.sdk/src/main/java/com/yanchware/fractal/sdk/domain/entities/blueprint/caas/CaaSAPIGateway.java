@@ -8,4 +8,8 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.CAAS_API_GATE
 @ToString(callSuper = true)
 public class CaaSAPIGateway extends CaaSComponent implements BlueprintComponent {
   public static final String TYPE = CAAS_API_GATEWAY.getId();
+
+  public CaaSAPIGateway() {
+    this.setRecreateOnFailure(true);
+  }
 }

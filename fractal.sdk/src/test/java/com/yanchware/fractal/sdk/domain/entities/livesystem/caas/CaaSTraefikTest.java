@@ -133,8 +133,18 @@ class CaaSTraefikTest extends TestWithFixture {
 
   @Test
   public void typeIsTraefik_when_traefikIsBuilt() {
-    var ambassador = traefikBuilder().build();
-    assertThat(ambassador.getType()).isEqualTo(CAAS_TRAEFIK);
+    var traefik = traefikBuilder().build();
+    assertThat(traefik.getType()).isEqualTo(CAAS_TRAEFIK);
+    assertThat(traefik.isRecreateOnFailure()).isTrue();
+  }
+
+  @Test
+  public void recreateOnFailureIsFalse_when_ProperlySet() {
+    var traefik = traefikBuilder()
+        .withRecreateOnFailure(false)
+        .build();
+    
+    assertThat(traefik.isRecreateOnFailure()).isFalse();
   }
 
   @Test

@@ -27,6 +27,8 @@ public class CaaSKubernetesWorkload extends CaaSWorkload implements LiveSystemCo
     private List<CustomWorkloadRole> roles;
     private String workloadSecretIdKey;
     private String workloadSecretPasswordKey;
+    private String serviceAccountName;
+    private Boolean workloadIdentityEnabled;
 
     @Override
     public ProviderType getProvider(){
@@ -34,7 +36,9 @@ public class CaaSKubernetesWorkload extends CaaSWorkload implements LiveSystemCo
     }
 
     protected CaaSKubernetesWorkload() {
+        
         roles = new ArrayList<>();
+        this.setRecreateOnFailure(true);
     }
 
     @Override
@@ -112,11 +116,32 @@ public class CaaSKubernetesWorkload extends CaaSWorkload implements LiveSystemCo
             return builder;
         }
 
+        /**
+         * <pre>
+         * Sets the ServiceAccount name for the Kubernetes workload. 
+         * This name is crucial for configuring workload identity by linking the Kubernetes ServiceAccount 
+         * to Azure User Managed Identity.</pre>
+         */
+        public KubernetesWorkloadBuilder withServiceAccountName(String serviceAccountName) {
+            component.setServiceAccountName(serviceAccountName);
+            return builder;
+        }
+
+        /**
+         * <pre>
+         * Enables or disables the Workload Identity for the Kubernetes workload.
+         * By default, Fractal Cloud Agent sets this to true.</pre>
+         * @param workloadIdentityEnabled A boolean flag to enable or disable Workload Identity.
+         */
+        public KubernetesWorkloadBuilder withWorkloadIdentityEnabled(boolean workloadIdentityEnabled) {
+            component.setWorkloadIdentityEnabled(workloadIdentityEnabled);
+            return builder;
+        }
+
         @Override
         public CaaSKubernetesWorkload build() {
             component.setType(CAAS_K8S_WORKLOAD);
             return super.build();
         }
     }
-
 }
