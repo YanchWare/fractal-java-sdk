@@ -1,37 +1,50 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
-import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.ExtendableEnum;
 
-public enum TaintEffect {
+import java.util.Collection;
+
+
+/**
+ * <pre>
+ * Enumerates the possible effects of a Kubernetes taint on pods that do not tolerate the taint.
+ * Taints are a mechanism in Kubernetes used to evict pods from nodes. If a pod does not tolerate a taint,
+ * the effect of the taint determines what happens to the pod on that node.
+ *
+ * 
+ * The effects include:
+ * - NoSchedule: Pods that do not tolerate this effect are not scheduled on the node.
+ * - PreferNoSchedule: The scheduler tries to avoid scheduling pods that do not tolerate this effect on the node,
+ *                     but it is not a strict requirement.
+ * - NoExecute: Pods that are already running on the node and do not tolerate this effect are evicted. 
+ *               New pods that do not tolerate this effect are not scheduled on the node.
+ * </pre>
+ */
+public final class TaintEffect extends ExtendableEnum<TaintEffect> {
+  public static final TaintEffect NO_SCHEDULE = fromString("NoSchedule");
+  public static final TaintEffect PREFER_NO_SCHEDULE = fromString("PreferNoSchedule");
+  public static final TaintEffect NO_EXECUTE = fromString("NoExecute");
+
 
   /**
-   * The Kubernetes scheduler will only allow scheduling pods that have tolerations for the tainted nodes
+   * Creates or finds a TaintEffect from its string representation.
+   *
+   * @param name a name to look for.
+   * @return the corresponding TaintEffect.
    */
-  NO_SCHEDULE("NoSchedule"),
+  @JsonCreator
+  public static TaintEffect fromString(String name) {
+    return fromString(name, TaintEffect.class);
+  }
 
   /**
-   * The Kubernetes scheduler will try to avoid scheduling pods that don’t have tolerations for the tainted nodes
+   * Gets known TaintEffect values.
+   *
+   * @return known TaintEffect values.
    */
-  PREFER_NO_SCHEDULE("PreferNoSchedule"),
-
-  /**
-   * Kubernetes will evict the running pods from the nodes if the pods don’t have tolerations for the tainted nodes
-   */
-  NO_EXECUTE("NoExecute");
-
-  private final String id;
-
-  TaintEffect(final String id) {
-    this.id = id;
+  public static Collection<TaintEffect> values() {
+    return values(TaintEffect.class);
   }
 
-  @JsonValue
-  public String getId() {
-    return id;
-  }
-
-  @Override
-  public String toString() {
-    return id;
-  }
 }
