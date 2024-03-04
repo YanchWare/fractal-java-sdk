@@ -56,6 +56,24 @@ public class CaaSKubernetesCustomWorkloadTest {
   }
 
   @Test
+  public void properValuesSet_when_workloadBuiltWithAllRequiredValues() {
+    var serviceAccountName = "required-service-account-name";
+    var customWorkload = generateBuilder()
+        .withNamespace("fractal")
+        .withPrivateSSHKeyPassphraseSecretId("svc-private-ssh-key-pass")
+        .withPrivateSSHKeySecretId("svc-private-ssh-key-secret")
+        .withSSHRepositoryURI("ssh")
+        .withRepoId("repo-id")
+        .withBranchName("branch-name")
+        .withServiceAccountName(serviceAccountName)
+        .withWorkloadIdentityEnabled(false)
+        .build();
+    
+    assertThat(customWorkload.getServiceAccountName()).isEqualTo(serviceAccountName);
+    assertThat(customWorkload.getWorkloadIdentityEnabled()).isFalse();
+  }
+
+  @Test
   public void exceptionThrown_when_workloadBuiltWithWorkloadSecretIdKeyEmpty() {
     var builder = generateBuilder()
         .withNamespace("fractal")

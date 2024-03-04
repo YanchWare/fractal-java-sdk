@@ -28,6 +28,7 @@ public class CaaSKubernetesWorkload extends CaaSWorkload implements LiveSystemCo
     private String workloadSecretIdKey;
     private String workloadSecretPasswordKey;
     private String serviceAccountName;
+    private Boolean workloadIdentityEnabled;
 
     @Override
     public ProviderType getProvider(){
@@ -123,6 +124,17 @@ public class CaaSKubernetesWorkload extends CaaSWorkload implements LiveSystemCo
          */
         public KubernetesWorkloadBuilder withServiceAccountName(String serviceAccountName) {
             component.setServiceAccountName(serviceAccountName);
+            return builder;
+        }
+
+        /**
+         * <pre>
+         * Enables or disables the Workload Identity for the Kubernetes workload.
+         * By default, Fractal Cloud Agent sets this to true.</pre>
+         * @param workloadIdentityEnabled A boolean flag to enable or disable Workload Identity.
+         */
+        public KubernetesWorkloadBuilder withWorkloadIdentityEnabled(boolean workloadIdentityEnabled) {
+            component.setWorkloadIdentityEnabled(workloadIdentityEnabled);
             return builder;
         }
 
