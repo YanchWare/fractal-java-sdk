@@ -24,6 +24,7 @@ public class ComponentDto {
   private String type;
   private String version;
   private boolean locked;
+  private boolean recreateOnFailure;
   private Map<String, Object> parameters;
   private Set<String> dependencies;
   private Set<ComponentLink> links;
@@ -76,6 +77,11 @@ public class ComponentDto {
       return builder;
     }
 
+    public B withRecreateOnFailure(boolean recreateOnFailure) {
+      componentDto.setRecreateOnFailure(recreateOnFailure);
+      return builder;
+    }
+
     public B withParameters(Map<String, Object> parameters) {
       if (componentDto.getParameters() == null) {
         componentDto.setParameters(new HashMap<>());
@@ -110,6 +116,7 @@ public class ComponentDto {
       if ((Boolean)allFields.get(LOCKED_KEY)) {
         lock();
       }
+      withRecreateOnFailure((Boolean)allFields.get(RECREATE_ON_FAILURE_KEY));
       withParameters((Map<String, Object>) allFields.get(PARAMETERS_KEY));
       withDependencies(componentIds.stream().map(ComponentId::getValue).collect(toSet()));
       withLinks((Set<ComponentLink>) allFields.get(Constants.LINKS_KEY));

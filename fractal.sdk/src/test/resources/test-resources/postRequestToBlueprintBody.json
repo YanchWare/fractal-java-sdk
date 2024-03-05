@@ -8,6 +8,7 @@
       "type": "type",
       "version": "V0.1",
       "locked" : false,
+      "recreateOnFailure": false,
       "parameters": {},
       "dependencies": [],
       "links": [],

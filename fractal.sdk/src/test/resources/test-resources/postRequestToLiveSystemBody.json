@@ -10,6 +10,7 @@
       "type": "Storage.PaaS.CosmosDbGremlinDatabase",
       "version": "1.0",
       "locked": false,
+      "recreateOnFailure": false,
       "parameters": {
         "azureResourceGroup": {
           "name": "MyRg",
@@ -36,6 +37,7 @@
       "type": "Storage.PaaS.CosmosDbAccount",
       "version": "1.0",
       "locked": false,
+      "recreateOnFailure": false,
       "parameters": {
         "azureResourceGroup": {
           "name": "MyRg",
