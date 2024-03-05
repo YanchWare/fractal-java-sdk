@@ -29,6 +29,7 @@ public class Constants {
   public static final String DEPENDENCIES_KEY = "dependencies";
 
   public static final String LINKS_KEY = "links";
+  public static final String RECREATE_ON_FAILURE_KEY = "recreateOnFailure";
 
   public static final String TEST_ENVIRONMENT = "api.local.fractal.cloud";
 
