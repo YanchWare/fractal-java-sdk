@@ -11,3 +11,4 @@ public class PaaSFileShare extends Component implements BlueprintComponent {
   public static final String TYPE = PAAS_AZURE_FILE_SHARE.getId();
 
 }
+

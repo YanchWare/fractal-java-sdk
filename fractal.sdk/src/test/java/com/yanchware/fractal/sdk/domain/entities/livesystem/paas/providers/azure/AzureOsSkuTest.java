@@ -2,7 +2,8 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AzureOsSkuTest {
   
