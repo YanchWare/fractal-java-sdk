@@ -12,7 +12,7 @@ class AzureWebAppDeploymentSlotTest {
 
     // Act
     var deploymentSlot = AzureWebAppDeploymentSlot.builder()
-        .withId("slot")
+        .withName("slot")
         .withCloneSettingsFromWebApp(expectedCloneSettings)
         .build();
 
@@ -29,7 +29,6 @@ class AzureWebAppDeploymentSlotTest {
 
     // Act
     var deploymentSlot = AzureWebAppDeploymentSlot.builder()
-        .withId("slot")
         .withName(slotName)
         .build();
 

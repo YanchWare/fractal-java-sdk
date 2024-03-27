@@ -1227,13 +1227,6 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
         return builder;
       }
 
-      deploymentSlots.forEach(slot -> {
-        slot.getDependencies().add(component.getId());
-        slot.setAzureRegion(component.getAzureRegion());
-        slot.setAzureRegion(component.getAzureRegion());
-        slot.setAzureResourceGroup(component.getAzureResourceGroup());
-      });
-
       this.component.deploymentSlots.addAll(deploymentSlots);
       return builder;
     }

@@ -1,49 +1,35 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSWorkloadDeploymentSlot;
-import com.yanchware.fractal.sdk.domain.entities.environment.DnsRecord;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.CustomWorkload;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.CustomWorkloadBuilder;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemComponent;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.CustomWorkloadRole;
+import com.yanchware.fractal.sdk.domain.entities.Validatable;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureOsType;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceEntity;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.valueobjects.AzureAppServiceClientCertMode;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.valueobjects.AzureAppServiceRedundancyMode;
-import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
-import com.yanchware.fractal.sdk.utils.SerializationUtils;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidAlphanumericsHyphens;
 import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidLettersNumbersPeriodsAndHyphens;
 import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLength;
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_AZURE_WEBAPP_DEPLOYMENT_SLOT;
 
 @Getter
 @Setter
-@ToString(callSuper = true)
-public class AzureWebAppDeploymentSlot extends PaaSWorkloadDeploymentSlot implements AzureResourceEntity, LiveSystemComponent, CustomWorkload {
-  
-  private final static String RUNTIME_STACK_AND_OPERATING_SYSTEM_MISMATCH_PATTERN = "[AzureWebApp Validation] The Runtime Stack and Operating System mismatches. Please choose %s or change Operating System to %s";
-  private final static String NAME_NOT_VALID = "[AzureWebApp Validation] The name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen, and must be between 2 and 60 characters";
-  private final static String CUSTOM_DOMAIN_NOT_VALID = "[AzureWebApp Validation] The CustomDomain must contain at least one period, cannot start or end with a period. CustomDomain are made up of letters, numbers, periods, and dashes.";
-  private final static String RUNTIME_STACK_IS_EMPTY = "[AzureWebApp Validation] The Runtime Stack is either empty or blank and it is required";
-  private final static String OPERATING_SYSTEM_IS_EMPTY = "[AzureWebApp Validation] The Operating System is either empty or blank and it is required";
-  @JsonIgnore
-  public static final String AZURE_RESOURCE_GROUP_IS_BLANK = "Azure Resource group has not been defined and it is required";
+public class AzureWebAppDeploymentSlot implements Validatable {// extends PaaSWorkloadDeploymentSlot implements AzureResourceEntity, LiveSystemComponent, CustomWorkload {
 
-  @JsonIgnore
-  public static final String AZURE_REGION_IS_BLANK = "Region has not been defined and it is required";
+  private final static String RUNTIME_STACK_AND_OPERATING_SYSTEM_MISMATCH_PATTERN = "[AzureWebAppDeploymentSlot Validation] The Runtime Stack and Operating System mismatches. Please choose %s or change Operating System to %s";
+  private final static String NAME_NOT_VALID = "[AzureWebAppDeploymentSlot Validation] The name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen, and must be between 2 and 59 characters";
+  private final static String CUSTOM_DOMAIN_NOT_VALID = "[AzureWebAppDeploymentSlot Validation] The CustomDomain must contain at least one period, cannot start or end with a period. CustomDomain are made up of letters, numbers, periods, and dashes.";
+  private final static String RUNTIME_STACK_IS_EMPTY = "[AzureWebAppDeploymentSlot Validation] The Runtime Stack is either empty or blank and it is required";
+  private final static String OPERATING_SYSTEM_IS_EMPTY = "[AzureWebAppDeploymentSlot Validation] The Operating System is either empty or blank and it is required";
+
+  
 
   @JsonIgnore
   public static final String TAG_KEY_IS_BLANK = "Tag key cannot be null or empty";
@@ -51,16 +37,6 @@ public class AzureWebAppDeploymentSlot extends PaaSWorkloadDeploymentSlot implem
 
   private String name;
   private boolean cloneSettingsFromWebApp;
-  private String privateSSHKeyPassphraseSecretId;
-  private String privateSSHKeySecretId;
-  private String sshRepositoryURI;
-  private String repoId;
-  private String branchName;
-  private List<CustomWorkloadRole> roles;
-  private String workloadSecretIdKey;
-  private String workloadSecretPasswordKey;
-  private AzureRegion azureRegion;
-  private AzureResourceGroup azureResourceGroup;
   private Boolean clientAffinityEnabled;
   private Boolean clientCertEnabled;
   private String clientCertExclusionPaths;
@@ -84,40 +60,26 @@ public class AzureWebAppDeploymentSlot extends PaaSWorkloadDeploymentSlot implem
   private Boolean vnetContentShareEnabled;
   private Boolean vnetImagePullEnabled;
   private AzureWebAppConfiguration configuration;
-  private Map<String, String> tags;
-  private AzureAppServicePlan appServicePlan;
   private Collection<AzureKeyVaultCertificate> certificates;
   private Collection<String> customDomains;
   private AzureOsType operatingSystem;
   private AzureWebAppRuntimeStack runtimeStack;
-  private Map<String, List<Object>> dnsZoneConfig;
+  
 
-
-  @Override
-  public ProviderType getProvider() {
-    return ProviderType.AZURE;
+  AzureWebAppDeploymentSlot() {
+    cloneSettingsFromWebApp = true;
   }
 
-  protected AzureWebAppDeploymentSlot() {
-    roles = new ArrayList<>();
-    cloneSettingsFromWebApp = true;
+  public static DeploymentSlotBuilder builder() {
+    return new DeploymentSlotBuilder();
   }
 
   @Override
   public Collection<String> validate() {
-    Collection<String> errors = super.validate();
+    Collection<String> errors = new ArrayList<>();
 
     if(!this.cloneSettingsFromWebApp) {
-      errors.addAll(CustomWorkload.validateCustomWorkload(this, "AzureWebAppDeploymentSlot"));
-      // Validate Azure Region
-      if (azureRegion == null) {
-        errors.add(AZURE_REGION_IS_BLANK);
-      }
 
-      // Validate Azure Resource Group
-      if (azureResourceGroup == null) {
-        errors.add(AZURE_RESOURCE_GROUP_IS_BLANK);
-      }
 
       if (configuration == null && operatingSystem == null) {
         errors.add(OPERATING_SYSTEM_IS_EMPTY);
@@ -160,7 +122,7 @@ public class AzureWebAppDeploymentSlot extends PaaSWorkloadDeploymentSlot implem
 
     if (StringUtils.isNotBlank(name)) {
       var hasValidCharacters = isValidAlphanumericsHyphens(name);
-      var hasValidLengths = isValidStringLength(name, 2, 60);
+      var hasValidLengths = isValidStringLength(name, 2, 59);
       if (!hasValidCharacters || !hasValidLengths) {
         errors.add(NAME_NOT_VALID);
       }
@@ -184,55 +146,23 @@ public class AzureWebAppDeploymentSlot extends PaaSWorkloadDeploymentSlot implem
     return errors;
   }
 
-  public static AzureWebAppDeploymentSlotBuilder builder() {
-    return new AzureWebAppDeploymentSlotBuilder();
-  }
+  public static class DeploymentSlotBuilder {
 
-  public static class AzureWebAppDeploymentSlotBuilder extends CustomWorkloadBuilder<AzureWebAppDeploymentSlot, AzureWebAppDeploymentSlotBuilder> {
+    private final AzureWebAppDeploymentSlot slot;
+    private final DeploymentSlotBuilder builder;
 
-    @Override
-    protected AzureWebAppDeploymentSlot createComponent() {
-      return new AzureWebAppDeploymentSlot();
+    public DeploymentSlotBuilder() {
+      this.slot = new AzureWebAppDeploymentSlot();
+      this.builder = this;
     }
 
-    @Override
-    protected AzureWebAppDeploymentSlotBuilder getBuilder() {
-      return this;
-    }
-
-    @Override
-    public AzureWebAppDeploymentSlot build() {
-      component.setType(PAAS_AZURE_WEBAPP_DEPLOYMENT_SLOT);
-      return super.build();
-    }
-    
-    public AzureWebAppDeploymentSlotBuilder withCloneSettingsFromWebApp(boolean cloneSettingsFromWebApp) {
-      component.setCloneSettingsFromWebApp(cloneSettingsFromWebApp);
+    public DeploymentSlotBuilder withCloneSettingsFromWebApp(boolean cloneSettingsFromWebApp) {
+      slot.setCloneSettingsFromWebApp(cloneSettingsFromWebApp);
       return builder;
     }
 
-    /**
-     * The region in which the component will be created
-     *
-     * @param region Azure region
-     */
-    public AzureWebAppDeploymentSlotBuilder withRegion(AzureRegion region) {
-      component.setAzureRegion(region);
-      return builder;
-    }
-
-    /**
-     * The resource group in which the component will be created
-     *
-     * @param resourceGroup Azure Resource Group reference
-     */
-    public AzureWebAppDeploymentSlotBuilder withResourceGroup(AzureResourceGroup resourceGroup) {
-      component.setAzureResourceGroup(resourceGroup);
-      return builder;
-    }
-
-    public AzureWebAppDeploymentSlotBuilder withConfiguration(AzureWebAppConfiguration configuration) {
-      component.setConfiguration(configuration);
+    public DeploymentSlotBuilder withConfiguration(AzureWebAppConfiguration configuration) {
+      slot.setConfiguration(configuration);
       return builder;
     }
 
@@ -241,35 +171,8 @@ public class AzureWebAppDeploymentSlot extends PaaSWorkloadDeploymentSlot implem
      *
      * @param name
      */
-    public AzureWebAppDeploymentSlotBuilder withName(String name) {
-      component.setName(name);
-      return builder;
-    }
-
-    /**
-     * Tags are name/value pairs that enable you to categorize resources and view consolidated billing by
-     * applying the same tag to multiple resources and resource groups.
-     */
-    public AzureWebAppDeploymentSlotBuilder withTags(Map<String, String> tags) {
-      component.setTags(tags);
-      return builder;
-    }
-
-    /**
-     * Tag is name/value pairs that enable you to categorize resources and view consolidated billing by
-     * applying the same tag to multiple resources and resource groups.
-     */
-    public AzureWebAppDeploymentSlotBuilder withTag(String key, String value) {
-      if (component.getTags() == null) {
-        withTags(new HashMap<>());
-      }
-
-      component.getTags().put(key, value);
-      return builder;
-    }
-
-    public AzureWebAppDeploymentSlotBuilder withAppServicePlan(AzureAppServicePlan appServicePlan) {
-      component.setAppServicePlan(appServicePlan);
+    public DeploymentSlotBuilder withName(String name) {
+      slot.setName(name);
       return builder;
     }
 
@@ -278,7 +181,7 @@ public class AzureWebAppDeploymentSlot extends PaaSWorkloadDeploymentSlot implem
      *
      * @param certificate
      */
-    public AzureWebAppDeploymentSlotBuilder withCertificate(AzureKeyVaultCertificate certificate) {
+    public DeploymentSlotBuilder withCertificate(AzureKeyVaultCertificate certificate) {
       return withCertificates(List.of(certificate));
     }
 
@@ -287,16 +190,16 @@ public class AzureWebAppDeploymentSlot extends PaaSWorkloadDeploymentSlot implem
      *
      * @param certificates
      */
-    public AzureWebAppDeploymentSlotBuilder withCertificates(Collection<? extends AzureKeyVaultCertificate> certificates) {
+    public DeploymentSlotBuilder withCertificates(Collection<? extends AzureKeyVaultCertificate> certificates) {
       if (isBlank(certificates)) {
         return builder;
       }
 
-      if (component.getCertificates() == null) {
-        component.setCertificates(new ArrayList<>());
+      if (slot.getCertificates() == null) {
+        slot.setCertificates(new ArrayList<>());
       }
 
-      component.getCertificates().addAll(certificates);
+      slot.getCertificates().addAll(certificates);
       return builder;
     }
 
@@ -304,7 +207,7 @@ public class AzureWebAppDeploymentSlot extends PaaSWorkloadDeploymentSlot implem
      * The CustomDomain must contain at least one period, cannot start or end with a period.
      * CustomDomain are made up of letters, numbers, periods, and dashes.
      */
-    public AzureWebAppDeploymentSlotBuilder withCustomDomain(String customDomain) {
+    public DeploymentSlotBuilder withCustomDomain(String customDomain) {
       return withCustomDomains(List.of(customDomain));
     }
 
@@ -312,160 +215,132 @@ public class AzureWebAppDeploymentSlot extends PaaSWorkloadDeploymentSlot implem
      * The CustomDomains list must contain CustomDomain that has at least one period, cannot start or end with a period.
      * CustomDomain are made up of letters, numbers, periods, and dashes.
      */
-    public AzureWebAppDeploymentSlotBuilder withCustomDomains(Collection<? extends String> customDomains) {
+    public DeploymentSlotBuilder withCustomDomains(Collection<? extends String> customDomains) {
       if (isBlank(customDomains)) {
         return builder;
       }
 
-      if (component.getCustomDomains() == null) {
-        component.setCustomDomains(new ArrayList<>());
+      if (slot.getCustomDomains() == null) {
+        slot.setCustomDomains(new ArrayList<>());
       }
 
-      component.getCustomDomains().addAll(customDomains);
+      slot.getCustomDomains().addAll(customDomains);
       return builder;
     }
 
-    public AzureWebAppDeploymentSlotBuilder withClientAffinityEnabled(Boolean clientAffinityEnabled) {
-      component.setClientAffinityEnabled(clientAffinityEnabled);
+    public DeploymentSlotBuilder withClientAffinityEnabled(Boolean clientAffinityEnabled) {
+      slot.setClientAffinityEnabled(clientAffinityEnabled);
       return builder;
     }
 
-    public AzureWebAppDeploymentSlotBuilder withClientCertEnabled(Boolean clientCertEnabled) {
-      component.setClientCertEnabled(clientCertEnabled);
+    public DeploymentSlotBuilder withClientCertEnabled(Boolean clientCertEnabled) {
+      slot.setClientCertEnabled(clientCertEnabled);
       return builder;
     }
 
-    public AzureWebAppDeploymentSlotBuilder withClientCertExclusionPaths(String clientCertExclusionPaths) {
-      component.setClientCertExclusionPaths(clientCertExclusionPaths);
+    public DeploymentSlotBuilder withClientCertExclusionPaths(String clientCertExclusionPaths) {
+      slot.setClientCertExclusionPaths(clientCertExclusionPaths);
       return builder;
     }
 
-    public AzureWebAppDeploymentSlotBuilder withClientCertMode(AzureAppServiceClientCertMode clientCertMode) {
-      component.setClientCertMode(clientCertMode);
+    public DeploymentSlotBuilder withClientCertMode(AzureAppServiceClientCertMode clientCertMode) {
+      slot.setClientCertMode(clientCertMode);
       return builder;
     }
 
-    public AzureWebAppDeploymentSlotBuilder withCloningInfo(AzureWebAppCloningInfo cloningInfo) {
-      component.setCloningInfo(cloningInfo);
+    public DeploymentSlotBuilder withCloningInfo(AzureWebAppCloningInfo cloningInfo) {
+      slot.setCloningInfo(cloningInfo);
       return builder;
     }
 
-    public AzureWebAppDeploymentSlotBuilder withContainerSize(Integer containerSize) {
-      component.setContainerSize(containerSize);
+    public DeploymentSlotBuilder withContainerSize(Integer containerSize) {
+      slot.setContainerSize(containerSize);
       return builder;
     }
 
-    public AzureWebAppDeploymentSlotBuilder withCustomDomainVerificationId(String customDomainVerificationId) {
-      component.setCustomDomainVerificationId(customDomainVerificationId);
+    public DeploymentSlotBuilder withCustomDomainVerificationId(String customDomainVerificationId) {
+      slot.setCustomDomainVerificationId(customDomainVerificationId);
       return builder;
     }
 
-    public AzureWebAppDeploymentSlotBuilder withDailyMemoryTimeQuota(Integer dailyMemoryTimeQuota) {
-      component.setDailyMemoryTimeQuota(dailyMemoryTimeQuota);
+    public DeploymentSlotBuilder withDailyMemoryTimeQuota(Integer dailyMemoryTimeQuota) {
+      slot.setDailyMemoryTimeQuota(dailyMemoryTimeQuota);
       return builder;
     }
 
-    public AzureWebAppDeploymentSlotBuilder withEnabled(Boolean enabled) {
-      component.setEnabled(enabled);
+    public DeploymentSlotBuilder withEnabled(Boolean enabled) {
+      slot.setEnabled(enabled);
       return builder;
     }
 
-    public AzureWebAppDeploymentSlotBuilder withHostNamesDisabled(Boolean hostNamesDisabled) {
-      component.setHostNamesDisabled(hostNamesDisabled);
+    public DeploymentSlotBuilder withHostNamesDisabled(Boolean hostNamesDisabled) {
+      slot.setHostNamesDisabled(hostNamesDisabled);
       return builder;
     }
 
-    public AzureWebAppDeploymentSlotBuilder withHostingEnvironmentProfileId(String hostingEnvironmentProfileId) {
-      component.setHostingEnvironmentProfileId(hostingEnvironmentProfileId);
+    public DeploymentSlotBuilder withHostingEnvironmentProfileId(String hostingEnvironmentProfileId) {
+      slot.setHostingEnvironmentProfileId(hostingEnvironmentProfileId);
       return builder;
     }
 
-    public AzureWebAppDeploymentSlotBuilder withHttpsOnly(Boolean httpsOnly) {
-      component.setHttpsOnly(httpsOnly);
+    public DeploymentSlotBuilder withHttpsOnly(Boolean httpsOnly) {
+      slot.setHttpsOnly(httpsOnly);
       return builder;
     }
 
-    public AzureWebAppDeploymentSlotBuilder withHyperV(Boolean hyperV) {
-      component.setHyperV(hyperV);
+    public DeploymentSlotBuilder withHyperV(Boolean hyperV) {
+      slot.setHyperV(hyperV);
       return builder;
     }
 
-    public AzureWebAppDeploymentSlotBuilder withRedundancyMode(AzureAppServiceRedundancyMode redundancyMode) {
-      component.setRedundancyMode(redundancyMode);
+    public DeploymentSlotBuilder withRedundancyMode(AzureAppServiceRedundancyMode redundancyMode) {
+      slot.setRedundancyMode(redundancyMode);
       return builder;
     }
 
-    public AzureWebAppDeploymentSlotBuilder withReserved(Boolean reserved) {
-      component.setReserved(reserved);
+    public DeploymentSlotBuilder withReserved(Boolean reserved) {
+      slot.setReserved(reserved);
       return builder;
     }
 
-    public AzureWebAppDeploymentSlotBuilder withScmSiteAlsoStopped(Boolean scmSiteAlsoStopped) {
-      component.setScmSiteAlsoStopped(scmSiteAlsoStopped);
+    public DeploymentSlotBuilder withScmSiteAlsoStopped(Boolean scmSiteAlsoStopped) {
+      slot.setScmSiteAlsoStopped(scmSiteAlsoStopped);
       return builder;
     }
 
-    public AzureWebAppDeploymentSlotBuilder withStorageAccountRequired(Boolean storageAccountRequired) {
-      component.setStorageAccountRequired(storageAccountRequired);
+    public DeploymentSlotBuilder withStorageAccountRequired(Boolean storageAccountRequired) {
+      slot.setStorageAccountRequired(storageAccountRequired);
       return builder;
     }
 
-    public AzureWebAppDeploymentSlotBuilder withVirtualNetworkSubnetId(String virtualNetworkSubnetId) {
-      component.setVirtualNetworkSubnetId(virtualNetworkSubnetId);
+    public DeploymentSlotBuilder withVirtualNetworkSubnetId(String virtualNetworkSubnetId) {
+      slot.setVirtualNetworkSubnetId(virtualNetworkSubnetId);
       return builder;
     }
 
-    public AzureWebAppDeploymentSlotBuilder withVnetContentShareEnabled(Boolean vnetContentShareEnabled) {
-      component.setVnetContentShareEnabled(vnetContentShareEnabled);
+    public DeploymentSlotBuilder withVnetContentShareEnabled(Boolean vnetContentShareEnabled) {
+      slot.setVnetContentShareEnabled(vnetContentShareEnabled);
       return builder;
     }
 
-    public AzureWebAppDeploymentSlotBuilder withVnetImagePullEnabled(Boolean vnetImagePullEnabled) {
-      component.setVnetImagePullEnabled(vnetImagePullEnabled);
+    public DeploymentSlotBuilder withVnetImagePullEnabled(Boolean vnetImagePullEnabled) {
+      slot.setVnetImagePullEnabled(vnetImagePullEnabled);
       return builder;
     }
 
-    public AzureWebAppDeploymentSlotBuilder withOperatingSystem(AzureOsType operatingSystem) {
-      component.setOperatingSystem(operatingSystem);
+    public DeploymentSlotBuilder withOperatingSystem(AzureOsType operatingSystem) {
+      slot.setOperatingSystem(operatingSystem);
       return builder;
     }
 
-    public AzureWebAppDeploymentSlotBuilder withRuntimeStack(AzureWebAppRuntimeStack runtimeStack) {
-      component.setRuntimeStack(runtimeStack);
+    public DeploymentSlotBuilder withRuntimeStack(AzureWebAppRuntimeStack runtimeStack) {
+      slot.setRuntimeStack(runtimeStack);
       return builder;
     }
+    
 
-    public AzureWebAppDeploymentSlotBuilder withDnsZoneConfig(String dnsZoneName, DnsRecord dnsRecord) {
-      if (component.getDnsZoneConfig() == null) {
-        component.setDnsZoneConfig(new HashMap<>());
-      }
-
-      if (!component.getDnsZoneConfig().containsKey(dnsZoneName)) {
-        component.getDnsZoneConfig().put(dnsZoneName, new ArrayList<>());
-      }
-
-      component.getDnsZoneConfig().get(dnsZoneName).add(SerializationUtils.convertValueToMap(dnsRecord));
-
-      return builder;
-    }
-
-    public AzureWebAppDeploymentSlotBuilder withDnsZoneConfig(String dnsZoneName, Collection<DnsRecord> dnsRecords) {
-      dnsRecords.forEach(dnsRecord -> withDnsZoneConfig(dnsZoneName, dnsRecord));
-      return builder;
-    }
-
-    public AzureWebAppDeploymentSlotBuilder withDnsZoneConfig(Map<? extends String, ? extends Collection<DnsRecord>> dnsRecordsMap) {
-      if (dnsRecordsMap == null || dnsRecordsMap.isEmpty()) {
-        return builder;
-      }
-
-      dnsRecordsMap.forEach((key, value) -> {
-        for (var dnsRecord : value) {
-          withDnsZoneConfig(key, dnsRecord);
-        }
-      });
-
-      return builder;
+    public AzureWebAppDeploymentSlot build() {
+      return slot;
     }
   }
 
