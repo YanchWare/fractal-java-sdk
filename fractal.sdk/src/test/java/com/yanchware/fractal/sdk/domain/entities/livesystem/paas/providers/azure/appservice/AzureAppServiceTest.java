@@ -218,7 +218,7 @@ public class AzureAppServiceTest {
   public void returns_without_errors_when_settingConfiguration() {
     var webApp = generateSampleBuilder()
         .withOperatingSystem(AzureOsType.LINUX)
-        .withRuntimeStack(AzureWebAppLinuxRuntimeStack.GO_1_18)
+        .withRuntimeStack(AzureWebAppLinuxRuntimeStack.JAVA_17)
         .withConfiguration(AzureWebAppConfiguration.builder()
             .withJavaVersion("java version")
             .withApiManagementConfigId("withApiManagementConfigId")
@@ -411,6 +411,7 @@ public class AzureAppServiceTest {
     assertThat(appServicePlan.getName()).isEqualTo(appServicePlanName);
     assertThat(appServicePlan.getTags().size()).isEqualTo(1);
     assertThat(appServicePlan.getTags()).isEqualTo(tags);
+    
     
     assertThat(webApp.getAppServicePlan()).isEqualTo(appServicePlan);
     assertThat(webApp.getTags().size()).isEqualTo(1);

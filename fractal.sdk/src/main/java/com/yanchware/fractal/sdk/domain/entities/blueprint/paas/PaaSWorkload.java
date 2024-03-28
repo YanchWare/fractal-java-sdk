@@ -10,3 +10,5 @@ import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_WORKLOAD
 public class PaaSWorkload extends Component implements BlueprintComponent {
   public static final String TYPE = PAAS_WORKLOAD.getId();
 }
+
+

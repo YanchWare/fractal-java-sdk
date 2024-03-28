@@ -2,6 +2,7 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.ExtendableEnum;
+
 import java.util.Collection;
 
 /**
