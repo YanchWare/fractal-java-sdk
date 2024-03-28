@@ -21,7 +21,7 @@ import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLengt
 
 @Getter
 @Setter
-public class AzureWebAppDeploymentSlot implements Validatable {// extends PaaSWorkloadDeploymentSlot implements AzureResourceEntity, LiveSystemComponent, CustomWorkload {
+public class AzureWebAppDeploymentSlot implements Validatable {
 
   private final static String RUNTIME_STACK_AND_OPERATING_SYSTEM_MISMATCH_PATTERN = "[AzureWebAppDeploymentSlot Validation] The Runtime Stack and Operating System mismatches. Please choose %s or change Operating System to %s";
   private final static String NAME_NOT_VALID = "[AzureWebAppDeploymentSlot Validation] The name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen, and must be between 2 and 59 characters";
