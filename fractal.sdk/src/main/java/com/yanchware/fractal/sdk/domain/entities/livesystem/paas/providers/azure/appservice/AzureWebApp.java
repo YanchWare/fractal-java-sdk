@@ -28,7 +28,7 @@ import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidAlphanumericsHyphens;
 import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidLettersNumbersPeriodsAndHyphens;
 import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLength;
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_AZURE_WEBAPP;
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_WEBAPP;
 
 /**
  * <pre>
@@ -192,7 +192,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
 
     @Override
     public AzureWebApp build() {
-      component.setType(PAAS_AZURE_WEBAPP);
+      component.setType(PAAS_WEBAPP);
       return super.build();
     }
 
@@ -861,7 +861,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
      *                    and disaster recovery.
      *
      * Example usage:
-     * {@codebuilder.withRedundancyMode(AzureAppServiceRedundancyMode.GEO_REDUNDANT); // Configures geo-redundant hosting}</pre>
+     * {@code builder.withRedundancyMode(AzureAppServiceRedundancyMode.GEO_REDUNDANT); // Configures geo-redundant hosting}</pre>
      *
      * @param redundancyMode the {@link AzureAppServiceRedundancyMode} specifying the desired redundancy strategy.
      * @return the {@code AzureWebAppBuilder} instance, enabling fluent chaining of configuration methods.
@@ -1156,7 +1156,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
      * and reducing the potential for configuration errors.
      * 
      * Example usage:
-     * {@codeMap<String, Collection<DnsRecord>> dnsRecordsMap = Map.of(
+     * {@code Map<String, Collection<DnsRecord>> dnsRecordsMap = Map.of(
      *     "example.com", Arrays.asList(
      *         new DnsARecord.builder()
      *           .withName("www")

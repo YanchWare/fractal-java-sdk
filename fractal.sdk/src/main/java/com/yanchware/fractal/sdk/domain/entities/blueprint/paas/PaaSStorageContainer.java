@@ -4,11 +4,10 @@ import com.yanchware.fractal.sdk.domain.entities.Component;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.BlueprintComponent;
 import lombok.ToString;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_FILE_SHARE;
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_STORAGE_CONTAINER;
 
 @ToString(callSuper = true)
-public class PaaSFileShare extends Component implements BlueprintComponent {
-  public static final String TYPE = PAAS_FILE_SHARE.getId();
+public class PaaSStorageContainer extends Component implements BlueprintComponent {
+  public static final String TYPE = PAAS_STORAGE_CONTAINER.getId();
 
 }
-
