@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_AZURE_FILE_SHARE;
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_FILE_SHARE;
 
 @Getter
 @Setter(AccessLevel.PROTECTED)
@@ -103,7 +103,7 @@ public class AzureFileShare extends PaaSFileShare implements LiveSystemComponent
 
     @Override
     public AzureFileShare build() {
-      component.setType(PAAS_AZURE_FILE_SHARE);
+      component.setType(PAAS_FILE_SHARE);
       return super.build();
     }
 

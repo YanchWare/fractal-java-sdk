@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_AZURE_STORAGE;
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_STORAGE_ACCOUNT;
 
 @Getter
 @Setter
@@ -60,7 +60,6 @@ public abstract class BaseAzureStorageAccount extends PaaSDataStorage implements
   private AzureDnsEndpointType dnsEndpointType;
   private AzureStorageAccountEncryption encryption;
   private AzureImmutableStorageAccount immutableStorageWithVersioning;
-  private Boolean isHnsEnabled;
   private Boolean isLocalUserEnabled;
   private Boolean isNfsV3Enabled;
   private Boolean isSftpEnabled;
@@ -85,7 +84,7 @@ public abstract class BaseAzureStorageAccount extends PaaSDataStorage implements
 
     @Override
     public T build() {
-      component.setType(PAAS_AZURE_STORAGE);
+      component.setType(PAAS_STORAGE_ACCOUNT);
       return super.build();
     }
 
@@ -288,17 +287,6 @@ public abstract class BaseAzureStorageAccount extends PaaSDataStorage implements
      */
     public B withImmutableStorageWithVersioning(AzureImmutableStorageAccount immutableStorageWithVersioning) {
       component.setImmutableStorageWithVersioning(immutableStorageWithVersioning);
-
-      return builder;
-    }
-
-    /**
-     * <pre>
-     * Enables Account HierarchicalNamespace, if sets to true.
-     * </pre>
-     */
-    public B withIsHnsEnabled(Boolean isHnsEnabled) {
-      component.setIsHnsEnabled(isHnsEnabled);
 
       return builder;
     }
