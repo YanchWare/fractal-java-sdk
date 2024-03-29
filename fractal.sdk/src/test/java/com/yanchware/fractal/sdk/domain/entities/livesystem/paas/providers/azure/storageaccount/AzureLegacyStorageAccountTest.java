@@ -353,7 +353,6 @@ public class AzureLegacyStorageAccountTest extends TestWithFixture {
     var immutabilityPolicyAllowProtectedAppendWrites = a(Boolean.class);
     var immutabilityPolicyImmutabilityPeriodSinceCreationInDays = aPositiveInteger();
     var immutabilityPolicyState = a(AzureAccountImmutabilityPolicyState.class);
-    var isHnsEnabled = a(Boolean.class);
     var isLocalUserEnabled = a(Boolean.class);
     var isNfsV3Enabled = a(Boolean.class);
     var isSftpEnabled = a(Boolean.class);
@@ -524,7 +523,6 @@ public class AzureLegacyStorageAccountTest extends TestWithFixture {
         .withDnsEndpointType(dnsEndpointType)
         .withEncryption(encryption)
         .withImmutableStorageWithVersioning(immutableStorage)
-        .withIsHnsEnabled(isHnsEnabled)
         .withIsLocalUserEnabled(isLocalUserEnabled)
         .withIsNfsV3Enabled(isNfsV3Enabled)
         .withIsSftpEnabled(isSftpEnabled)
@@ -744,9 +742,6 @@ public class AzureLegacyStorageAccountTest extends TestWithFixture {
 
     assertThat(storageAccountImmutableStoragePolicy.getImmutabilityPeriodSinceCreationInDays())
         .isEqualTo(immutabilityPolicyImmutabilityPeriodSinceCreationInDays);
-
-    assertThat(storageAccount.getIsHnsEnabled())
-        .isEqualTo(isHnsEnabled);
 
     assertThat(storageAccount.getIsLocalUserEnabled())
         .isEqualTo(isLocalUserEnabled);

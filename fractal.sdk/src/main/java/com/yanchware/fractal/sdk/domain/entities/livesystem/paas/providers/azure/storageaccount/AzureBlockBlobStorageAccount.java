@@ -13,6 +13,7 @@ import java.util.List;
 @Setter
 @ToString(callSuper = true)
 public class AzureBlockBlobStorageAccount extends BaseAzureStorageAccount {
+  private Boolean isHnsEnabled;
   private Collection<AzureBlobContainer> containers;
 
   public AzureBlockBlobStorageAccount() {
@@ -38,6 +39,17 @@ public class AzureBlockBlobStorageAccount extends BaseAzureStorageAccount {
     @Override
     protected AzureBlockBlobStorageAccountBuilder getBuilder() {
       return this;
+    }
+
+    /**
+     * <pre>
+     * Enables Account HierarchicalNamespace, if sets to true.
+     * </pre>
+     */
+    public AzureBlockBlobStorageAccountBuilder withIsHnsEnabled(Boolean isHnsEnabled) {
+      component.setIsHnsEnabled(isHnsEnabled);
+
+      return builder;
     }
 
     public AzureBlockBlobStorageAccountBuilder withContainers(Collection<AzureBlobContainer> containers) {
