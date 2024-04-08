@@ -1059,6 +1059,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
      *
      * Example usage for a newer Linux runtime stack not predefined:
      * {@code builder.withRuntimeStack(AzureWebAppLinuxRuntimeStack.fromString("DOTNETCORE|9.0"));}
+     * </pre>
      *
      * @param runtimeStack the {@link AzureWebAppRuntimeStack} specifying the desired runtime environment, either
      *        a predefined option or a custom string for newer runtimes.
@@ -1199,15 +1200,14 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
      * of different versions of your web app in separate environments, allowing for testing, staging,
      * and rolling out changes with minimal impact on the production environment. Each slot can be
      * configured independently and swapped with the production slot to facilitate seamless updates.
-     * <p>
+     * 
      * This method ensures that all provided deployment slots are associated with the current web app,
      * inheriting settings such as the Azure region and resource group from the parent app. This
      * association is crucial for maintaining organizational and operational consistency across
      * environments.
-     * <p>
+     * 
      * Example usage:
-     * <pre>
-     * Collection<AzureWebAppDeploymentSlot> deploymentSlots = Arrays.asList(
+     * {@code Collection<AzureWebAppDeploymentSlot> deploymentSlots = Arrays.asList(
      *     new AzureWebAppDeploymentSlot.builder()
      *         .withName("staging")
      *         .build(),
@@ -1215,7 +1215,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
      *         .withName("testing")
      *         .build()
      * );
-     * builder.withDeploymentSlots(deploymentSlots);
+     * builder.withDeploymentSlots(deploymentSlots);} 
      * </pre>
      *
      * @param deploymentSlots a collection of {@link AzureWebAppDeploymentSlot} instances to be added

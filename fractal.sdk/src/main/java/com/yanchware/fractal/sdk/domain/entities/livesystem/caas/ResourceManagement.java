@@ -31,7 +31,7 @@ public class ResourceManagement {
      * <pre>
      * Specifies the resource requests for a container.</pre>
      *
-     * @Note: <strong>If you choose to customize these values, please be aware that Fractal Cloud cannot guarantee the functionality of the deployment. 
+     * @important.note <strong>If you choose to customize these values, please be aware that Fractal Cloud cannot guarantee the functionality of the deployment. 
      * <br>You bear full responsibility for ensuring the correctness of your configuration. 
      * <br>Misconfiguration can lead to application failures or resource allocation issues. 
      * <br>Be mindful of the suffix case and the units of measurement to avoid common pitfalls.</strong>
@@ -47,7 +47,7 @@ public class ResourceManagement {
      * <pre>
      * Specifies the resource limits for a container.</pre>
      * 
-     * @Note: <strong>If you choose to customize these values, please be aware that Fractal Cloud cannot guarantee the functionality of the deployment. 
+     * @important.note <strong>If you choose to customize these values, please be aware that Fractal Cloud cannot guarantee the functionality of the deployment. 
      * <br>You bear full responsibility for ensuring the correctness of your configuration. 
      * <br>Misconfiguration can lead to application failures or resource allocation issues. 
      * <br>Be mindful of the suffix case and the units of measurement to avoid common pitfalls.</strong>

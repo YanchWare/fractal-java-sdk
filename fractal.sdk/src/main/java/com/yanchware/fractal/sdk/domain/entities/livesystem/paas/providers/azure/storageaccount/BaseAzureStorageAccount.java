@@ -440,6 +440,11 @@ public abstract class BaseAzureStorageAccount extends PaaSDataStorage implements
       return builder;
     }
 
+    /**
+     * Specifies settings for the backup configuration of the Azure Storage Account, including details about 
+     * the Recovery Services vault, backup policy, and other related settings. This configuration ensures data 
+     * protection and facilitates disaster recovery scenarios.
+     */
     public B withBackup(AzureStorageAccountBackup backup) {
       component.setBackup(backup);
       return builder;
