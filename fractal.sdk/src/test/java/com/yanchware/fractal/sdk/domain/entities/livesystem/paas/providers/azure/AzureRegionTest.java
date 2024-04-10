@@ -205,6 +205,10 @@ public class AzureRegionTest {
     assertThat(AzureRegion.BRAZIL_SOUTHEAST)
         .as("BRAZIL_SOUTHEAST constant should not be null")
         .isNotNull();
+
+    assertThat(AzureRegion.GLOBAL)
+        .as("GLOBAL constant should not be null")
+        .isNotNull();
   }
 
   @Test
@@ -404,6 +408,10 @@ public class AzureRegionTest {
     assertThat(AzureRegion.fromString("brazilsoutheast"))
         .as("fromString should return BRAZIL_SOUTHEAST for 'brazilsoutheast'")
         .isEqualTo(AzureRegion.BRAZIL_SOUTHEAST);
+
+    assertThat(AzureRegion.fromString("Global"))
+        .as("fromString should return GLOBAL for 'Global'")
+        .isEqualTo(AzureRegion.GLOBAL);
   }
 
   @Test
@@ -460,6 +468,7 @@ public class AzureRegionTest {
             AzureRegion.SWITZERLAND_WEST,
             AzureRegion.UK_WEST,
             AzureRegion.UAE_CENTRAL,
-            AzureRegion.BRAZIL_SOUTHEAST);
+            AzureRegion.BRAZIL_SOUTHEAST,
+            AzureRegion.GLOBAL);
   }
 }

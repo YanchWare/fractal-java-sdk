@@ -1,14 +1,12 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cdn;
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureIdentityType;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.AzureUserAssignedIdentity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Managed service identity (system assigned and/ or user assigned identities).
@@ -16,10 +14,8 @@ import java.util.UUID;
 @Getter
 @Setter(AccessLevel.PRIVATE)
 public class AzureManagedServiceIdentity {
-  private UUID principalId;
-  private UUID tenantId;
   private AzureIdentityType type;
-  private Map<String, AzureUserAssignedIdentity> userAssignedIdentities;
+  private Collection<String> userAssignedIdentities;
 
   public static AzureManagedServiceIdentityBuilder builder() {
     return new AzureManagedServiceIdentityBuilder();
@@ -36,28 +32,6 @@ public class AzureManagedServiceIdentity {
 
     /**
      * <pre>
-     * The service principal ID of the system assigned identity. This property will only be provided for a system 
-     * assigned identity.
-     * </pre>
-     */
-    public AzureManagedServiceIdentityBuilder withPrincipalId(UUID principalId) {
-      instance.setPrincipalId(principalId);
-      return builder;
-    }
-
-    /**
-     * <pre>
-     * The tenant ID of the system assigned identity. This property will only be provided for a system assigned 
-     * identity.
-     * </pre>
-     */
-    public AzureManagedServiceIdentityBuilder withTenantId(UUID tenantId) {
-      instance.setTenantId(tenantId);
-      return builder;
-    }
-
-    /**
-     * <pre>
      * Type of managed service identity (where both SystemAssigned and UserAssigned types are allowed).
      * </pre>
      */
@@ -67,26 +41,26 @@ public class AzureManagedServiceIdentity {
     }
 
     /**
-     * The set of user assigned identities associated with the resource. The dictionary keys should be ARM 
+     * The set of user assigned identity id's associated with the resource. It should be ARM 
      * resource ids in the form:
      * '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/{identityName}.'
-     * The dictionary values can be empty objects ({}) in requests.
      */
-    public AzureManagedServiceIdentityBuilder withUserAssignedIdentities(Map<String, AzureUserAssignedIdentity> userAssignedIdentities) {
+    public AzureManagedServiceIdentityBuilder withUserAssignedIdentities(Collection<String> userAssignedIdentities) {
       instance.setUserAssignedIdentities(userAssignedIdentities);
       return builder;
     }
 
     /**
-     * User assigned identity associated with the resource. The dictionary key should be ARM resource id in the form:
+     * User assigned identity associated with the resource. It should be ARM resource id in the form:
      * '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/{identityName}.'
      */
-    public AzureManagedServiceIdentityBuilder withUserAssignedIdentity(String key, AzureUserAssignedIdentity userAssignedIdentity) {
+    public AzureManagedServiceIdentityBuilder withUserAssignedIdentity(String userAssignedIdentityId) {
       if (instance.getUserAssignedIdentities() == null) {
-        withUserAssignedIdentities(new HashMap<>());
+        withUserAssignedIdentities(new ArrayList<>() {
+        });
       }
 
-      instance.getUserAssignedIdentities().put(key, userAssignedIdentity);
+      instance.getUserAssignedIdentities().add(userAssignedIdentityId);
       return builder;
     }
 
