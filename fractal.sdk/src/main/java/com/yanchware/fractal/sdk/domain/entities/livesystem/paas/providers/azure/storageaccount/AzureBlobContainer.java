@@ -97,7 +97,7 @@ public class AzureBlobContainer extends PaaSStorageContainer implements LiveSyst
      * Each hyphen must be preceded and followed by a non-hyphen character. 
      * The name must also be between 3 and 63 characters long.</pre>
      *
-     * @param name A {@code String} representing the name for the Azure Blob Container. Must follow Azure naming conventions.
+     * @param name A <code>String</code> representing the name for the Azure Blob Container. Must follow Azure naming conventions.
      * @return The builder instance for chaining.
      */
     public AzureBlobContainerBuilder withName(String name) {
@@ -113,7 +113,7 @@ public class AzureBlobContainer extends PaaSStorageContainer implements LiveSyst
      * Setting a default encryption scope enables specifying the encryption key 
      * to be used for storing the blobs in this container.</pre>
      *
-     * @param defaultEncryptionScope A {@code String} representing the default encryption scope.
+     * @param defaultEncryptionScope A <code>String</code> representing the default encryption scope.
      * @return The builder instance for chaining.
      */
     public AzureBlobContainerBuilder withDefaultEncryptionScope(String defaultEncryptionScope) {
@@ -125,10 +125,10 @@ public class AzureBlobContainer extends PaaSStorageContainer implements LiveSyst
      * <pre>
      * Specifies whether the encryption scope override should be denied for the Azure Blob Container.
      * 
-     * When set to {@code true}, it prevents the clients from specifying an encryption scope other than the default 
+     * When set to <code>true</code>, it prevents the clients from specifying an encryption scope other than the default 
      * for this container. This ensures that all blobs in the container are encrypted under the same scope.</pre>
      *
-     * @param denyEncryptionScopeOverride A {@code Boolean} indicating whether to deny encryption scope override.
+     * @param denyEncryptionScopeOverride A <code>Boolean</code> indicating whether to deny encryption scope override.
      * @return The builder instance for chaining.
      */
     public AzureBlobContainerBuilder withDenyEncryptionScopeOverride(Boolean denyEncryptionScopeOverride) {
@@ -143,7 +143,7 @@ public class AzureBlobContainer extends PaaSStorageContainer implements LiveSyst
      * When enabled, all user access is mapped to anonymous access. 
      * This can be useful in scenarios where you do not want to maintain user identities for access to the container.</pre>
      *
-     * @param enableNfsV3AllSquash A {@code Boolean} indicating whether to enable NFSv3 all squash.
+     * @param enableNfsV3AllSquash A <code>Boolean</code> indicating whether to enable NFSv3 all squash.
      * @return The builder instance for chaining.
      */
     public AzureBlobContainerBuilder withEnableNfsV3AllSquash(Boolean enableNfsV3AllSquash) {
@@ -159,7 +159,7 @@ public class AzureBlobContainer extends PaaSStorageContainer implements LiveSyst
      * This is a security feature to prevent a root user on the client machine from having root privileges 
      * on the container.</pre>
      *
-     * @param enableNfsV3RootSquash A {@code Boolean} indicating whether to enable NFSv3 root squash.
+     * @param enableNfsV3RootSquash A <code>Boolean</code> indicating whether to enable NFSv3 root squash.
      * @return The builder instance for chaining.
      */
     public AzureBlobContainerBuilder withEnableNfsV3RootSquash(Boolean enableNfsV3RootSquash) {
@@ -189,7 +189,7 @@ public class AzureBlobContainer extends PaaSStorageContainer implements LiveSyst
      * Metadata is represented as a collection of key-value pairs that can be used to store additional information 
      * about the container. Each key and value must be a non-null and non-empty string.</pre>
      *
-     * @param metadata A {@code Map<String, String>} containing the metadata key-value pairs.
+     * @param metadata A <code>Map<String, String></code> containing the metadata key-value pairs.
      * @return The builder instance for chaining.
      */
     public AzureBlobContainerBuilder withMetadata(Map<String, String> metadata) {

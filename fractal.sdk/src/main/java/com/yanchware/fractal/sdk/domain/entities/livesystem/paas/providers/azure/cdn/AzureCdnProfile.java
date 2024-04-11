@@ -123,24 +123,25 @@ public class AzureCdnProfile extends PaaSNetworkCdnProfile implements AzureResou
      * set, and the provider of the CDN services. The SKU choice impacts various aspects of the CDN service,
      * including global distribution capabilities, content acceleration, security features, and cost.
      * 
-     * The {@code AzureCdnSku} is an extendable enum, allowing for future expansion. Current predefined SKUs include:
-     *   - {@code STANDARD_EDGIO}: Standard tier provided by Verizon. Suitable for general content delivery needs
-     *     with a balance of performance and cost.
-     *   - {@code PREMIUM_EDGIO}: Premium tier provided by Verizon, offering advanced security features and
-     *     analytics on top of the Standard tier services.
-     *   - {@code STANDARD_MICROSOFT}: Standard tier provided by Microsoft, offering competitive content delivery
-     *     services with integrated Azure features.
-     *   - {@code STANDARD_AZURE_FRONT_DOOR}: A variant of Azure Front Door services in the standard tier, optimized
-     *     for global and dynamic content acceleration.
-     *   - {@code PREMIUM_AZURE_FRONT_DOOR}: The premium version of Azure Front Door services, providing additional
-     *     security and optimization features for highly dynamic and secure applications.</pre>
+     * The <code><strong>AzureCdnSku</strong></code> is an extendable enum, allowing for future expansion. 
+     * Current predefined SKUs include:
+     *   - <code><strong>STANDARD_EDGIO</strong></code> Standard tier provided by Verizon. Suitable for general content delivery needs
+     *      with a balance of performance and cost.
+     *   - <code><strong>PREMIUM_EDGIO</strong></code> Premium tier provided by Verizon, offering advanced security features and
+     *      analytics on top of the Standard tier services.
+     *   - <code><strong>STANDARD_MICROSOFT</strong></code> Standard tier provided by Microsoft, offering competitive content delivery
+     *      services with integrated Azure features.
+     *   - <code><strong>STANDARD_AZURE_FRONT_DOOR</strong></code> A variant of Azure Front Door services in the standard tier, optimized
+     *      for global and dynamic content acceleration.
+     *   - <code><strong>PREMIUM_AZURE_FRONT_DOOR</strong></code> The premium version of Azure Front Door services, providing additional
+     *      security and optimization features for highly dynamic and secure applications.</pre>
      * 
      * @important.note: Direct SKU updates post-creation of the CDN profile are not supported through this SDK. Changing the SKU
      *     requires creating a new CDN profile with the desired SKU and, if necessary, deleting the old one. 
      *     Selecting the correct SKU is crucial for aligning service capabilities with your application needs and
      *     budget. Review the detailed comparison of features and pricing in Azure CDN documentation to make an
      *     informed choice.
-     * @param sku The desired SKU for the CDN Profile, selected from the predefined {@code AzureCdnSku} values.
+     * @param sku The desired SKU for the CDN Profile, selected from the predefined <code>AzureCdnSku</code> values.
      * @return The builder instance for chaining further configuration calls.
      */
     public AzureCdnProfileBuilder withSku(AzureCdnSku sku) {
@@ -157,7 +158,7 @@ public class AzureCdnProfile extends PaaSNetworkCdnProfile implements AzureResou
      *
      * In scenarios where automation scripts or tools require dynamic region specification or if a
      * particular region is known to exist but is not present in the {@link AzureRegion} enum,
-     * {@code AzureRegion.fromString(String name)} can be used to extend the enum dynamically.
+     * <code>AzureRegion.fromString(String name)</code> can be used to extend the enum dynamically.
      * This approach ensures that the builder remains compatible with future Azure regions without
      * needing constant updates.
      *
@@ -167,8 +168,8 @@ public class AzureCdnProfile extends PaaSNetworkCdnProfile implements AzureResou
      * </pre>
      * @param region the Azure region as an {@link AzureRegion} where the Web App will be deployed.
      *               This can either be one of the predefined regions or an extended enum value
-     *               created through {@code AzureRegion.fromString(String name)}.
-     * @return the {@code AzureWebAppBuilder} instance for chaining further configuration calls.
+     *               created through <code>AzureRegion.fromString(String name)</code>.
+     * @return the <code>AzureWebAppBuilder</code> instance for chaining further configuration calls.
      */
     public AzureCdnProfileBuilder withRegion(AzureRegion region) {
       component.setAzureRegion(region);
@@ -178,7 +179,7 @@ public class AzureCdnProfile extends PaaSNetworkCdnProfile implements AzureResou
     /**
      * <pre>
      * Sets the Azure resource group for the CDN Profile. The resource group name must adhere to Azure's
-     * naming conventions, specifically matching the regex pattern {@code ^[-\w\._\(\)]+[^\.]$}, which
+     * naming conventions, specifically matching the regex pattern <code>^[-\w\._\(\)]+[^\.]$</code>, which
      * ensures the name is valid and conforms to Azure's standards for resource naming.
      *
      * The resource group is a crucial organizational unit within Azure that holds related resources for
@@ -187,12 +188,15 @@ public class AzureCdnProfile extends PaaSNetworkCdnProfile implements AzureResou
      *
      * Example usage:
      *
-     * {@code AzureResourceGroup.builder().withName("rg-sample-group").withRegion(AzureRegion.WEST_EUROPE).build();}
+     * {@code AzureResourceGroup.builder()
+     *   .withName("rg-sample-group")
+     *   .withRegion(AzureRegion.WEST_EUROPE)
+     * .build();}
      * </pre>
      *
-     * @param resourceGroup the {@code AzureResourceGroup} representing the resource group to which the
+     * @param resourceGroup the <code>AzureResourceGroup</code> representing the resource group to which the
      *                      Web App will belong.
-     * @return the {@code AzureWebAppBuilder} instance for chaining further configuration calls.
+     * @return the <code>AzureWebAppBuilder</code> instance for chaining further configuration calls.
      */
     public AzureCdnProfileBuilder withResourceGroup(AzureResourceGroup resourceGroup) {
       component.setAzureResourceGroup(resourceGroup);

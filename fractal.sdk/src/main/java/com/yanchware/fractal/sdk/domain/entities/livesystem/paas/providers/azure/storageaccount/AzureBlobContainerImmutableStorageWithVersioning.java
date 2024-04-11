@@ -30,7 +30,7 @@ public class AzureBlobContainerImmutableStorageWithVersioning {
      * or deleted once they are created, providing an additional layer of data protection. 
      * This setting is particularly useful for compliance and data retention scenarios.</pre>
      *
-     * @param enabled A {@code Boolean} indicating whether immutable storage with versioning is enabled.
+     * @param enabled A <code>Boolean</code> indicating whether immutable storage with versioning is enabled.
      * @return The builder instance for chaining.
      */
     public AzureBlobContainerImmutableStorageWithVersioningBuilder withEnabled(Boolean enabled) {

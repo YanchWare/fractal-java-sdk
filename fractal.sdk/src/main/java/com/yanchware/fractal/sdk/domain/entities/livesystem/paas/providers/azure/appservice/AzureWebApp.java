@@ -200,13 +200,13 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
      * <pre>
      * Configures the Azure region where the Web App will be deployed. The region is a critical
      * configuration that dictates the geographical location of the deployed resources, affecting
-     * latency, availability, and compliance. Utilizing the {@link AzureRegion} {@code ExtendableEnum}
+     * latency, availability, and compliance. Utilizing the {@link AzureRegion} <code>ExtendableEnum</code>
      * allows for flexibility in specifying regions, accommodating cases where specific regions might
      * not be explicitly listed in the enum.
      * 
      * In scenarios where automation scripts or tools require dynamic region specification or if a
-     * particular region is known to exist but is not present in the {@code AzureRegion} enum,
-     * {@code AzureRegion.fromString(String name)} can be used to extend the enum dynamically.
+     * particular region is known to exist but is not present in the <code>AzureRegion</code> enum,
+     * <code>AzureRegion.fromString(String name)</code> can be used to extend the enum dynamically.
      * This approach ensures that the builder remains compatible with future Azure regions without
      * needing constant updates.
      * 
@@ -216,8 +216,8 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
      * </pre>
      * @param region the Azure region as an {@link AzureRegion} where the Web App will be deployed.
      *               This can either be one of the predefined regions or an extended enum value
-     *               created through {@code AzureRegion.fromString(String name)}.
-     * @return the {@code AzureWebAppBuilder} instance for chaining further configuration calls.
+     *               created through <code>AzureRegion.fromString(String name)</code>.
+     * @return the <code>AzureWebAppBuilder</code> instance for chaining further configuration calls.
      */
     public AzureWebAppBuilder withRegion(AzureRegion region) {
       component.setAzureRegion(region);
@@ -227,7 +227,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
     /**
      * <pre>
      * Sets the Azure resource group for the Web App. The resource group name must adhere to Azure's
-     * naming conventions, specifically matching the regex pattern {@code ^[-\w\._\(\)]+[^\.]$}, which
+     * naming conventions, specifically matching the regex pattern <code>^[-\w\._\(\)]+[^\.]$</code>, which
      * ensures the name is valid and conforms to Azure's standards for resource naming.
      * 
      * The resource group is a crucial organizational unit within Azure that holds related resources for
@@ -236,12 +236,15 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
      * 
      * Example usage:
      * 
-     * {@code AzureResourceGroup.builder().withName("rg-sample-group").withRegion(AzureRegion.WEST_EUROPE).build();}
+     * {@code AzureResourceGroup.builder()
+     *   .withName("rg-sample-group")
+     *   .withRegion(AzureRegion.WEST_EUROPE)
+     * .build();}
      * </pre>
      *
-     * @param resourceGroup the {@code AzureResourceGroup} representing the resource group to which the
+     * @param resourceGroup the <code>AzureResourceGroup</code> representing the resource group to which the
      *                      Web App will belong.
-     * @return the {@code AzureWebAppBuilder} instance for chaining further configuration calls.
+     * @return the <code>AzureWebAppBuilder</code> instance for chaining further configuration calls.
      */
     public AzureWebAppBuilder withResourceGroup(AzureResourceGroup resourceGroup) {
       component.setAzureResourceGroup(resourceGroup);
@@ -275,7 +278,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
      *
      * @param configuration the {@link AzureWebAppConfiguration} instance containing all configuration
      *                      settings for the Azure Web App.
-     * @return the {@code AzureWebAppBuilder} instance for chaining further configuration calls.
+     * @return the <code>AzureWebAppBuilder</code> instance for chaining further configuration calls.
      * @throws IllegalArgumentException if the provided configuration is invalid or incomplete.
      */
     public AzureWebAppBuilder withConfiguration(AzureWebAppConfiguration configuration) {
@@ -318,7 +321,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
      *
      * @param tags a {@link Map} containing the tags to be assigned to the Azure Web App, where each key is the tag name
      *             and each value is the tag value.
-     * @return the {@code AzureWebAppBuilder} instance, allowing for chaining of multiple configuration methods in a fluent manner.
+     * @return the <code>AzureWebAppBuilder</code> instance, allowing for chaining of multiple configuration methods in a fluent manner.
      */
     public AzureWebAppBuilder withTags(Map<String, String> tags) {
       component.setTags(tags);
@@ -342,7 +345,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
      *
      * @param key   the name of the tag to add or update. This acts as a unique identifier for the tag.
      * @param value the value of the tag. This provides context or categorization information for the tag.
-     * @return the {@code AzureWebAppBuilder} instance, allowing for the fluent chaining of configuration methods.
+     * @return the <code>AzureWebAppBuilder</code> instance, allowing for the fluent chaining of configuration methods.
      */
     public AzureWebAppBuilder withTag(String key, String value) {
       if (component.getTags() == null) {
@@ -378,7 +381,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
      * builder.withAppServicePlan(appServicePlan);}</pre>
      *
      * @param appServicePlan the {@link AzureAppServicePlan} instance to be applied to the Azure Web App.
-     * @return the {@code AzureWebAppBuilder} instance, allowing for fluent chaining of configuration methods.
+     * @return the <code>AzureWebAppBuilder</code> instance, allowing for fluent chaining of configuration methods.
      * @throws IllegalArgumentException if the provided app service plan is invalid.
      */
     public AzureWebAppBuilder withAppServicePlan(AzureAppServicePlan appServicePlan) {
@@ -409,7 +412,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
      * builder.withCertificate(certificate);}</pre>
      *
      * @param certificate an {@link AzureKeyVaultCertificate} instance to be used by the web app for SSL/TLS.
-     * @return the {@code AzureWebAppBuilder} instance, allowing for fluent chaining of configuration methods.
+     * @return the <code>AzureWebAppBuilder</code> instance, allowing for fluent chaining of configuration methods.
      * @throws IllegalArgumentException if the provided certificate is invalid or if validation fails.
      */
     public AzureWebAppBuilder withCertificate(AzureKeyVaultCertificate certificate) {
@@ -449,7 +452,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
      * builder.withCertificates(certificates);}</pre>
      *
      * @param certificates a collection of {@link AzureKeyVaultCertificate} instances to be used by the web app for SSL/TLS.
-     * @return the {@code AzureWebAppBuilder} instance, allowing for fluent chaining of configuration methods.
+     * @return the <code>AzureWebAppBuilder</code> instance, allowing for fluent chaining of configuration methods.
      * @throws IllegalArgumentException if any of the provided certificates are invalid or if validation fails.
      */
     public AzureWebAppBuilder withCertificates(Collection<? extends AzureKeyVaultCertificate> certificates) {
@@ -479,7 +482,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
      * {@code builder.withCustomDomain("example.mydomain.com");}</pre>
      *
      * @param customDomain the custom domain to associate with the Azure Web App, following specific format rules.
-     * @return the {@code AzureWebAppBuilder} instance, allowing for fluent chaining of configuration methods.
+     * @return the <code>AzureWebAppBuilder</code> instance, allowing for fluent chaining of configuration methods.
      * @throws IllegalArgumentException if the provided custom domain is invalid based on the defined rules.
      */
     public AzureWebAppBuilder withCustomDomain(String customDomain) {
@@ -496,7 +499,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
      * 
      * This method enables the configuration of multiple custom domains at once, providing flexibility 
      * for applications requiring several domain names. If specific formatting rules are not met, the 
-     * method may throw an {@code IllegalArgumentException}.
+     * method may throw an <code>IllegalArgumentException</code>.
      * 
      * Example usage:
      * {@code Collection<String> customDomains = List.of("www.example.com", "api.example.com");
@@ -504,7 +507,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
      *
      * @param customDomains a collection of custom domain names to associate with the Azure Web App, 
      *        adhering to the defined formatting rules.
-     * @return the {@code AzureWebAppBuilder} instance, allowing for fluent chaining of configuration methods.
+     * @return the <code>AzureWebAppBuilder</code> instance, allowing for fluent chaining of configuration methods.
      * @throws IllegalArgumentException if any provided custom domain is invalid based on the defined rules.
      */
     public AzureWebAppBuilder withCustomDomains(Collection<? extends String> customDomains) {
@@ -540,7 +543,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
      * @param clientAffinityEnabled true to enable client affinity, ensuring that requests from the same
      *        session are routed to the same instance. False to disable client affinity, allowing requests
      *        to be distributed across all instances without session stickiness.
-     * @return the {@code AzureWebAppBuilder} instance, allowing for fluent chaining of configuration methods.
+     * @return the <code>AzureWebAppBuilder</code> instance, allowing for fluent chaining of configuration methods.
      */
     public AzureWebAppBuilder withClientAffinityEnabled(Boolean clientAffinityEnabled) {
       component.setClientAffinityEnabled(clientAffinityEnabled);
@@ -565,7 +568,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
      * @param clientCertEnabled true to enable client certificate authentication, requiring clients to
      *        present a valid certificate for access. False to disable this feature, allowing access
      *        without client certificates.
-     * @return the {@code AzureWebAppBuilder} instance, enabling fluent chaining of configuration methods.
+     * @return the <code>AzureWebAppBuilder</code> instance, enabling fluent chaining of configuration methods.
      */
     public AzureWebAppBuilder withClientCertEnabled(Boolean clientCertEnabled) {
       component.setClientCertEnabled(clientCertEnabled);
@@ -590,7 +593,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
      *
      * @param clientCertExclusionPaths a comma-separated list of paths to exclude from client certificate 
      *        authentication. Each path should be specified relative to the web app's root.
-     * @return the {@code AzureWebAppBuilder} instance, allowing for fluent chaining of configuration methods.
+     * @return the <code>AzureWebAppBuilder</code> instance, allowing for fluent chaining of configuration methods.
      */
     public AzureWebAppBuilder withClientCertExclusionPaths(String clientCertExclusionPaths) {
       component.setClientCertExclusionPaths(clientCertExclusionPaths);
@@ -600,14 +603,14 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
     /**
      * <pre>
      * Sets the mode for client certificate authentication in the Azure Web App, determining how client
-     * certificates are handled. This setting works in conjunction with {@code ClientCertEnabled} to
+     * certificates are handled. This setting works in conjunction with <code>ClientCertEnabled</code> to
      * define the behavior for client certificate authentication.
      * 
-     * When {@code ClientCertEnabled} is set to {@code false}, the client certificate is ignored regardless
-     * of the {@code ClientCertMode} setting. If {@code ClientCertEnabled} is {@code true} and
-     * {@code ClientCertMode} is set to {@code Required}, client certificates are mandatory for accessing
-     * the web app. When {@code ClientCertEnabled} is {@code true} and {@code ClientCertMode} is
-     * {@code Optional}, client certificates, if provided, are accepted but not required for access.
+     * When <code>ClientCertEnabled</code> is set to <code>false</code>, the client certificate is ignored regardless
+     * of the <code>ClientCertMode</code> setting. If <code>ClientCertEnabled</code> is <code>true</code> and
+     * <code>ClientCertMode</code> is set to <code>Required</code>, client certificates are mandatory for accessing
+     * the web app. When <code>ClientCertEnabled</code> is <code>true</code> and <code>ClientCertMode</code> is
+     * <code>Optional</code>, client certificates, if provided, are accepted but not required for access.
      * 
      * This configuration allows for flexible handling of client certificates, accommodating scenarios
      * ranging from strict security requirements to more open access with the option of client certificate
@@ -618,7 +621,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
      * builder.withClientCertMode(AzureAppServiceClientCertMode.Optional); // Client certificates are optional}</pre>
      *
      * @param clientCertMode the {@link AzureAppServiceClientCertMode} value defining the handling of client certificates.
-     * @return the {@code AzureWebAppBuilder} instance, facilitating fluent chaining of configuration methods.
+     * @return the <code>AzureWebAppBuilder</code> instance, facilitating fluent chaining of configuration methods.
      */
     public AzureWebAppBuilder withClientCertMode(AzureAppServiceClientCertMode clientCertMode) {
       component.setClientCertMode(clientCertMode);
@@ -650,7 +653,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
      * builder.withCloningInfo(cloningInfo);</pre>
      *
      * @param cloningInfo an {@link AzureWebAppCloningInfo} instance containing the configurations for cloning the app.
-     * @return the {@code AzureWebAppBuilder} instance, enabling fluent chaining of configuration methods.
+     * @return the <code>AzureWebAppBuilder</code> instance, enabling fluent chaining of configuration methods.
      */
     public AzureWebAppBuilder withCloningInfo(AzureWebAppCloningInfo cloningInfo) {
       component.setCloningInfo(cloningInfo);
@@ -671,7 +674,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
      * {@code builder.withContainerSize(1536); // Sets the container size to 1536 MB}</pre>
      *
      * @param containerSize the size of the container in megabytes. Must be a valid size supported by Azure Web Apps.
-     * @return the {@code AzureWebAppBuilder} instance, enabling fluent chaining of configuration methods.
+     * @return the <code>AzureWebAppBuilder</code> instance, enabling fluent chaining of configuration methods.
      */
     public AzureWebAppBuilder withContainerSize(Integer containerSize) {
       component.setContainerSize(containerSize);
@@ -694,7 +697,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
      * {@code builder.withCustomDomainVerificationId("uniqueVerificationId");}</pre>
      *
      * @param customDomainVerificationId the unique verification ID provided by Azure for the custom domain.
-     * @return the {@code AzureWebAppBuilder} instance, allowing for fluent chaining of configuration methods.
+     * @return the <code>AzureWebAppBuilder</code> instance, allowing for fluent chaining of configuration methods.
      */
     public AzureWebAppBuilder withCustomDomainVerificationId(String customDomainVerificationId) {
       component.setCustomDomainVerificationId(customDomainVerificationId);
@@ -717,7 +720,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
      *
      * @param dailyMemoryTimeQuota the daily memory-time quota in MB-hours. A null or zero value indicates
      *        no quota is applied.
-     * @return the {@code AzureWebAppBuilder} instance, enabling fluent chaining of configuration methods.
+     * @return the <code>AzureWebAppBuilder</code> instance, enabling fluent chaining of configuration methods.
      */
     public AzureWebAppBuilder withDailyMemoryTimeQuota(Integer dailyMemoryTimeQuota) {
       component.setDailyMemoryTimeQuota(dailyMemoryTimeQuota);
@@ -741,7 +744,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
      *
      * @param enabled true to enable the web app, making it accessible to users; false to disable the web app,
      *        taking it offline.
-     * @return the {@code AzureWebAppBuilder} instance, enabling fluent chaining of configuration methods.
+     * @return the <code>AzureWebAppBuilder</code> instance, enabling fluent chaining of configuration methods.
      */
     public AzureWebAppBuilder withEnabled(Boolean enabled) {
       component.setEnabled(enabled);
@@ -755,16 +758,16 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
      * to APIs or backend processes only. This setting can be used for apps that should not be directly
      * accessed by users, serving instead as backend services or APIs.
      * 
-     * When {@code hostNamesDisabled} is set to {@code true}, the app is only accessible through an API
+     * When <code>hostNamesDisabled</code> is set to <code>true</code>, the app is only accessible through an API
      * management process, providing an additional layer of control over how the app is exposed.
      * 
      * Example usage:
      * {@code builder.withHostNamesDisabled(true); // Disables public hostnames, limiting access to APIs
      * builder.withHostNamesDisabled(false); // Enables public hostnames, allowing web access}</pre>
      *
-     * @param hostNamesDisabled {@code true} to disable public hostnames and restrict access to the app;
-     *        {@code false} to enable public hostnames and allow web access.
-     * @return the {@code AzureWebAppBuilder} instance, facilitating fluent chaining of configuration methods.
+     * @param hostNamesDisabled <code>true</code> to disable public hostnames and restrict access to the app;
+     *        <code>false</code> to enable public hostnames and allow web access.
+     * @return the <code>AzureWebAppBuilder</code> instance, facilitating fluent chaining of configuration methods.
      */
     public AzureWebAppBuilder withHostNamesDisabled(Boolean hostNamesDisabled) {
       component.setHostNamesDisabled(hostNamesDisabled);
@@ -788,7 +791,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
      * {@code builder.withHostingEnvironmentProfileId("your-ase-resource-id");}</pre>
      *
      * @param hostingEnvironmentProfileId the resource ID of the App Service Environment to use for the app.
-     * @return the {@code AzureWebAppBuilder} instance, enabling fluent chaining of configuration methods.
+     * @return the <code>AzureWebAppBuilder</code> instance, enabling fluent chaining of configuration methods.
      */
     public AzureWebAppBuilder withHostingEnvironmentProfileId(String hostingEnvironmentProfileId) {
       component.setHostingEnvironmentProfileId(hostingEnvironmentProfileId);
@@ -811,13 +814,13 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
      * {@code builder.withHttpsOnly(true); // Explicitly enforces HTTPS, redirecting HTTP requests to HTTPS
      * builder.withHttpsOnly(false); // Disables HTTPS-only mode, allowing both HTTP and HTTPS requests}
      * 
-     * Note: In the absence of explicit configuration, Fractal Cloud sets HTTPS-only mode to {@code true}
+     * Note: In the absence of explicit configuration, Fractal Cloud sets HTTPS-only mode to <code>true</code>
      * by default, ensuring enhanced security for your web application.</pre>
      *
-     * @param httpsOnly {@code true} to enable HTTPS-only mode, ensuring all requests use HTTPS;
-     *                  {@code false} to allow both HTTP and HTTPS requests. If not defined, Fractal Cloud
-     *                  defaults to {@code true}.
-     * @return the {@code AzureWebAppBuilder} instance, enabling fluent chaining of configuration methods.
+     * @param httpsOnly <code>true</code> to enable HTTPS-only mode, ensuring all requests use HTTPS;
+     *                  <code>false</code> to allow both HTTP and HTTPS requests. If not defined, Fractal Cloud
+     *                  defaults to <code>true</code>.
+     * @return the <code>AzureWebAppBuilder</code> instance, enabling fluent chaining of configuration methods.
      */
     public AzureWebAppBuilder withHttpsOnly(Boolean httpsOnly) {
       component.setHttpsOnly(httpsOnly);
@@ -838,8 +841,8 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
      * {@code builder.withHyperV(true); // Enables the Hyper-V sandbox for enhanced isolation
      * builder.withHyperV(false); // Disables the Hyper-V sandbox}</pre>
      *
-     * @param hyperV {@code true} to enable the Hyper-V sandbox for the app; {@code false} to disable it.
-     * @return the {@code AzureWebAppBuilder} instance, allowing for fluent chaining of configuration methods.
+     * @param hyperV <code>true</code> to enable the Hyper-V sandbox for the app; <code>false</code> to disable it.
+     * @return the <code>AzureWebAppBuilder</code> instance, allowing for fluent chaining of configuration methods.
      */
     public AzureWebAppBuilder withHyperV(Boolean hyperV) {
       component.setHyperV(hyperV);
@@ -853,18 +856,18 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
      * application's requirements for uptime, data replication, and failover capabilities.
      * 
      * The available redundancy modes are:
-     *   - {@code NONE}: No additional redundancy; the app is hosted in a single location.
-     *   - {@code MANUAL}: Redundancy is managed manually by the user, allowing for custom failover processes.
-     *   - {@code FAILOVER}: Automatic failover to a secondary location in case of failure in the primary location.
-     *   - {@code ACTIVE_ACTIVE}: The app runs simultaneously in multiple locations, offering high availability.
-     *   - {@code GEO_REDUNDANT}: The app is hosted across multiple geographic regions for maximum availability 
+     *   - <code><strong>NONE</strong></code> No additional redundancy; the app is hosted in a single location.
+     *   - <code><strong>MANUAL</strong></code> Redundancy is managed manually by the user, allowing for custom failover processes.
+     *   - <code><strong>FAILOVER</strong></code> Automatic failover to a secondary location in case of failure in the primary location.
+     *   - <code><strong>ACTIVE_ACTIVE</strong></code> The app runs simultaneously in multiple locations, offering high availability.
+     *   - <code><strong>GEO_REDUNDANT</strong></code> The app is hosted across multiple geographic regions for maximum availability 
      *                    and disaster recovery.
      *
      * Example usage:
      * {@code builder.withRedundancyMode(AzureAppServiceRedundancyMode.GEO_REDUNDANT); // Configures geo-redundant hosting}</pre>
      *
      * @param redundancyMode the {@link AzureAppServiceRedundancyMode} specifying the desired redundancy strategy.
-     * @return the {@code AzureWebAppBuilder} instance, enabling fluent chaining of configuration methods.
+     * @return the <code>AzureWebAppBuilder</code> instance, enabling fluent chaining of configuration methods.
      */
     public AzureWebAppBuilder withRedundancyMode(AzureAppServiceRedundancyMode redundancyMode) {
       component.setRedundancyMode(redundancyMode);
@@ -873,8 +876,8 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
 
     /**
      * <pre>
-     * Specifies whether the Azure Web App is reserved for Linux-based hosting. Setting this to {@code true}
-     * indicates that the web app is intended to run on Linux, while {@code false} typically indicates Windows-based hosting.
+     * Specifies whether the Azure Web App is reserved for Linux-based hosting. Setting this to <code>true</code>
+     * indicates that the web app is intended to run on Linux, while <code>false</code> typically indicates Windows-based hosting.
      * This distinction is crucial for ensuring that the app is deployed on the correct operating system, which can 
      * affect compatibility, performance, and available features.
      * 
@@ -885,8 +888,8 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
      * {@code builder.withReserved(true); // Specifies that the web app is intended for Linux-based hosting
      * builder.withReserved(false); // Specifies that the web app is intended for Windows-based hosting}</pre>
      *
-     * @param reserved {@code true} to indicate Linux-based hosting; {@code false} for Windows-based hosting.
-     * @return the {@code AzureWebAppBuilder} instance, enabling fluent chaining of configuration methods.
+     * @param reserved <code>true</code> to indicate Linux-based hosting; <code>false</code> for Windows-based hosting.
+     * @return the <code>AzureWebAppBuilder</code> instance, enabling fluent chaining of configuration methods.
      */
     public AzureWebAppBuilder withReserved(Boolean reserved) {
       component.setReserved(reserved);
@@ -900,15 +903,15 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
      * and reduce costs, especially for environments that do not require continuous SCM site availability.
      * 
      * By default, the SCM site remains operational even when the web app is stopped, allowing access to
-     * SCM functions such as deployment and logging. Setting this option to {@code true} synchronizes the
+     * SCM functions such as deployment and logging. Setting this option to <code>true</code> synchronizes the
      * operational state of the SCM site with the web app, ensuring both are stopped or started together.
      * 
      * Example usage:
      * {@code builder.withScmSiteAlsoStopped(true); // Stops the SCM site when the web app is stopped
      * builder.withScmSiteAlsoStopped(false); // Keeps the SCM site running when the web app is stopped}</pre>
      *
-     * @param scmSiteAlsoStopped {@code true} to stop the SCM site when the web app is stopped;
-     *                           {@code false} to keep the SCM site operational regardless of the web app's state.
+     * @param scmSiteAlsoStopped <code>true</code> to stop the SCM site when the web app is stopped;
+     *                           <code>false</code> to keep the SCM site operational regardless of the web app's state.
      *                           The default is {@code false}.
      * @return the {@code AzureWebAppBuilder} instance, enabling fluent chaining of configuration methods.
      */

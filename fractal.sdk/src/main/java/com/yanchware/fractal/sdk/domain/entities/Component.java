@@ -78,8 +78,8 @@ public abstract class Component implements Validatable {
      * Fractal Cloud interface and other areas where a more descriptive, 
      * human-friendly name for a component is preferable over its technical identifier.</pre>
      *
-     * @param displayName A {@code String} representing the new display name for the component. 
-     *                    This cannot be {@code null} or empty.
+     * @param displayName A <code>String</code> representing the new display name for the component. 
+     *                    This cannot be <code>null</code> or empty.
      * @see Component
      */
     public B withDisplayName(String displayName) {
@@ -91,16 +91,16 @@ public abstract class Component implements Validatable {
      * <pre>
      * Sets the unique identifier for the current {@link Component} instance using a {@link ComponentId}.
      * 
-     * The method validates the provided {@code ComponentId} against a series of rules defined in the 
+     * The method validates the provided <code>ComponentId</code> against a series of rules defined in the 
      * {@link ComponentId} class. These rules ensure that the ID is not null, not empty, starts with a 
      * lowercase letter, contains only lowercase letters, digits, and hyphens, and adheres to length 
      * constraints (between 3 and 63 characters).
      *
-     * If the {@code ComponentId} fails validation, an {@link IllegalArgumentException} is thrown,
+     * If the <code>ComponentId</code> fails validation, an {@link IllegalArgumentException} is thrown,
      * detailing the reason for failure based on the specific validation rule(s) the provided ID violated.</pre>
      *
-     * @param id The {@link ComponentId} to set as the identifier for the component. Must not be {@code null}.
-     * @throws IllegalArgumentException if the {@code id} is {@code null} or doesn't meet the validation 
+     * @param id The {@link ComponentId} to set as the identifier for the component. Must not be <code>null</code>.
+     * @throws IllegalArgumentException if the <code>id</code> is <code>null</code> or doesn't meet the validation 
      *                                  criteria set by {@link ComponentId#validate(String)}.
      */
     public B withId(ComponentId id) {
@@ -110,7 +110,7 @@ public abstract class Component implements Validatable {
 
     /**
      * <pre>
-     * Sets the unique identifier for the current {@link Component} instance by converting a {@code String}
+     * Sets the unique identifier for the current {@link Component} instance by converting a <code>String</code>
      * to a {@link ComponentId}.
      * 
      * This convenience method facilitates the direct assignment of a component's ID using a string value. 
@@ -123,9 +123,9 @@ public abstract class Component implements Validatable {
      * is thrown, indicating the specific validation failure(s). This ensures that only valid identifiers 
      * are set for components, maintaining integrity within the Fractal Cloud infrastructure.</pre>
      *
-     * @param id A {@code String} representing the desired identifier for the component. This string is 
+     * @param id A <code>String</code> representing the desired identifier for the component. This string is 
      *           converted to a {@link ComponentId}, and must adhere to the {@link ComponentId} validation rules.
-     * @throws IllegalArgumentException if the {@code id} string is {@code null}, empty, or violates the 
+     * @throws IllegalArgumentException if the <code>id</code> string is <code>null</code>, empty, or violates the 
      *                                  validation rules defined by {@link ComponentId#validate(String)}.
      */
     public B withId(String id) {
@@ -138,7 +138,7 @@ public abstract class Component implements Validatable {
      * Assigns the version to the current {@link Component} instance.
      * 
      * This method sets the version string for a component, intended for future use to distinguish 
-     * between different stages or configurations of a component's lifecycle. Currently, if a {@code null}
+     * between different stages or configurations of a component's lifecycle. Currently, if a <code>null</code>
      * version is provided, the version is set to a default value of "1.0". This defaulting behavior 
      * ensures backward compatibility and facilitates the future introduction of version management 
      * without affecting existing components.
@@ -147,7 +147,7 @@ public abstract class Component implements Validatable {
      * between component iterations within the Fractal Cloud infrastructure, ensuring that operations 
      * utilize the correct component version.</pre>
      *
-     * @param version A {@code String} representing the new version for the component. If {@code null}, 
+     * @param version A <code>String</code> representing the new version for the component. If <code>null</code>, 
      *                the version is set to the default value of "1.0". Future implementations will enforce 
      *                specific format compliance with the application's versioning scheme.
      */
@@ -209,7 +209,7 @@ public abstract class Component implements Validatable {
      *
      * @param dependencies A collection of {@link ComponentId} representing the dependencies to be 
      *                     added to the component. This collection must not be null, and each 
-     *                     {@code ComponentId} within it represents a unique component dependency 
+     *                     <code>ComponentId</code> within it represents a unique component dependency 
      *                     that must be available prior to the instantiation of the current component.
      */
     public B withDependencies(Collection<? extends ComponentId> dependencies) {
@@ -228,7 +228,7 @@ public abstract class Component implements Validatable {
      * 
      * This method provides a convenient way to add a single dependency to the component, ensuring that
      * this dependency is instantiated before the component itself. It leverages the {@link #withDependencies(Collection)}
-     * method, wrapping the single {@code dependency} in a set and passing it on for addition. This approach
+     * method, wrapping the single <code>dependency</code> in a set and passing it on for addition. This approach
      * maintains the integrity of dependency management, ensuring that all dependencies, whether added
      * individually or in a collection, are handled uniformly.
      *
@@ -307,7 +307,7 @@ public abstract class Component implements Validatable {
      * This ensures that every component managed by the SDK has a descriptive text, enhancing clarity and 
      * manageability within the system.</pre>
      *
-     * @param description A {@code String} representing the description to set for the component. If this parameter
+     * @param description A <code>String</code> representing the description to set for the component. If this parameter
      *                    is blank (null, empty, or whitespace only), a default description is automatically generated.
      */
     public B withDescription(String description) {
@@ -323,18 +323,18 @@ public abstract class Component implements Validatable {
      * upon encountering a failure during its lifecycle. This feature is crucial for maintaining 
      * high availability and resilience, particularly for critical components where automatic recovery 
      * is preferred to manual intervention. By default, components do not automatically recreate on failure 
-     * ({@code recreateOnFailure = false}). However, this behavior is overridden to {@code true} in specific 
+     * (<code>recreateOnFailure = false</code>). However, this behavior is overridden to <code>true</code> in specific 
      * subclasses, such as {@link CaaSAPIGateway} and {@link CaaSKubernetesWorkload}, to enhance their 
      * reliability and self-healing capabilities.
      *
-     * Setting this flag to {@code true} enables the component for automatic recreation following a failure, 
-     * while {@code false} disables this behavior, necessitating manual remediation to resolve 
+     * Setting this flag to <code>true</code> enables the component for automatic recreation following a failure, 
+     * while <code>false</code> disables this behavior, necessitating manual remediation to resolve 
      * failures. This setting permits tailored lifecycle and resilience strategies for different 
      * component types within the system, accommodating both automated recovery needs and scenarios 
      * where manual intervention is preferred.</pre>
      *
-     * @param recreateOnFailure A {@code boolean} value indicating whether the component should be 
-     *                          recreated on failure ({@code true}) or not ({@code false}). The default 
+     * @param recreateOnFailure A <code>boolean</code> value indicating whether the component should be 
+     *                          recreated on failure (<code>true</code>) or not (<code>false</code>). The default 
      *                          behavior may vary based on the component's type or subclass, with certain 
      *                          types defaulting to automatic recreation to ensure continuity and resilience.
      */
@@ -355,7 +355,7 @@ public abstract class Component implements Validatable {
      *
      * If the component's description is not explicitly set, a default description is generated based on 
      * the component's type to ensure every component is accompanied by descriptive text. Additionally, if 
-     * the version is not specified, it defaults to {@code DEFAULT_VERSION}, which is currently "1.0". This 
+     * the version is not specified, it defaults to <code>DEFAULT_VERSION</code>, which is currently "1.0". This 
      * standardizes the component versioning, simplifying management and integration within the system.</pre>
      *
      * @return The fully constructed and validated {@link Component} instance, ready for use within the system.
