@@ -45,7 +45,9 @@ public class AzureBlobStorageAccount extends BaseAzureStorageAccount {
 
     /**
      * <pre>
-     * Enables Account HierarchicalNamespace, if sets to true.
+     * Indicates whether the Hierarchical Namespace (HNS) is enabled on the storage account, 
+     * enabling Azure Data Lake Storage Gen2 features. Enabling HNS allows for the organization of files 
+     * into a hierarchy of directories for efficient data access.
      * </pre>
      */
     public AzureBlobStorageAccountBuilder withIsHnsEnabled(Boolean isHnsEnabled) {

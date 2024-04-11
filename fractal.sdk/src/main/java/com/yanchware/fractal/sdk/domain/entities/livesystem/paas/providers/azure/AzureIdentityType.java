@@ -1,4 +1,4 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.valueobjects;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.ExtendableEnum;
@@ -6,7 +6,7 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.ExtendableEnum;
 import java.util.Collection;
 
 /**
- * The identity type.
+ * SystemAssigned, UserAssigned
  */
 public final class AzureIdentityType extends ExtendableEnum<AzureIdentityType> {
   public static final AzureIdentityType NONE = fromString("None");

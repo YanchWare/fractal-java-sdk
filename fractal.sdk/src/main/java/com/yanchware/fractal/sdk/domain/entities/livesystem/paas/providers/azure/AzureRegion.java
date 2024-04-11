@@ -257,6 +257,7 @@ public final class AzureRegion extends ExtendableEnum<AzureRegion> {
    * (South America) Brazil Southeast
    */
   public static final AzureRegion BRAZIL_SOUTHEAST = fromString("brazilsoutheast");
+  public static final AzureRegion GLOBAL = fromString("Global");
 
 
   /**

@@ -1,6 +1,6 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount;
 
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.valueobjects.AzureIdentityType;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureIdentityType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;

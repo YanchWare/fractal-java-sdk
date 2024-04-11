@@ -46,7 +46,7 @@ public abstract class CaaSComponent extends Component {
      * 
      * @param resourceManagement The ResourceManagement settings for the component.
      *                           
-     * @Note: <strong>Customizing resource management values offers flexibility, but you need to carefully consider
+     * @important.note <strong>Customizing resource management values offers flexibility, but you need to carefully consider
      * the implications. Fractal Cloud cannot guarantee the functionality of the deployment if these customizations
      * lead to resource constraints or conflicts. You are responsible for ensuring that your configurations are
      * appropriate for your application's needs and compatible with your cluster's capabilities.</strong>
@@ -55,8 +55,7 @@ public abstract class CaaSComponent extends Component {
       component.setResourceManagement(resourceManagement);
       return builder;
     }
-
-    /**
+    
      /**
      * <pre>
      * Sets multiple node selectors at once. 
@@ -64,7 +63,7 @@ public abstract class CaaSComponent extends Component {
      *
      * @param selectors A map of label keys to label values defining the node selection criteria.
      *
-     * @Note: <strong>Node selectors provide powerful control over pod scheduling, but incorrect or overly restrictive
+     * @important.note <strong>Node selectors provide powerful control over pod scheduling, but incorrect or overly restrictive
      * configurations may limit your deployment options. Fractal Cloud cannot guarantee the functionality of the deployment
      * if node selector configurations prevent scheduling. You need to verify the accuracy and applicability of your
      * node label selections.</strong>
@@ -87,7 +86,7 @@ public abstract class CaaSComponent extends Component {
      * @param label The label key representing a specific characteristic of nodes.
      * @param value The label value that nodes must have to match the selector.
      *
-     * @Note: <strong>Node selectors provide powerful control over pod scheduling, but incorrect or overly restrictive
+     * @important.note <strong>Node selectors provide powerful control over pod scheduling, but incorrect or overly restrictive
      * configurations may limit your deployment options. Fractal Cloud cannot guarantee the functionality of the deployment
      * if node selector configurations prevent scheduling. You need to verify the accuracy and applicability of your
      * node label selections.</strong>
@@ -109,7 +108,7 @@ public abstract class CaaSComponent extends Component {
      * 
      * @param tolerations A list of Toleration objects for the component.
      *                    
-     * @Note: <strong>Toleration configurations must be carefully crafted to ensure compatibility with cluster taints.
+     * @important.note <strong>Toleration configurations must be carefully crafted to ensure compatibility with cluster taints.
      * Fractal Cloud cannot guarantee the functionality of the deployment if tolerations cause the component to be
      * unscheduled or scheduled on unsuitable nodes. You need to carefully review and test your toleration settings
      * to ensure they align with your deployment strategy and security requirements.</strong>
@@ -128,7 +127,7 @@ public abstract class CaaSComponent extends Component {
      * 
      * @param toleration A Toleration object to add to the component.
      *                   
-     * @Note: <strong>Adding individual tolerations requires precision to avoid unintended scheduling outcomes.
+     * @important.note <strong>Adding individual tolerations requires precision to avoid unintended scheduling outcomes.
      * Fractal Cloud cannot guarantee the functionality of the deployment if improper tolerations lead to deployment
      * challenges. You need to ensure that tolerations are correctly configured for your operational environment.</strong>
      */
@@ -146,7 +145,7 @@ public abstract class CaaSComponent extends Component {
      * 
      * @param priorityClassName The name of the PriorityClass for the component.
      *                          
-     * @Note: <strong>Priority class names influence the scheduling and lifecycle of pods significantly.
+     * @important.note <strong>Priority class names influence the scheduling and lifecycle of pods significantly.
      * Fractal Cloud cannot guarantee the functionality of the deployment if priority class names conflict with
      * cluster policies or other deployed applications. You need to ensure that priority class names are chosen
      * with an understanding of your cluster's scheduling policies.</strong>

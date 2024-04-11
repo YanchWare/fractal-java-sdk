@@ -3,10 +3,7 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yanchware.fractal.sdk.TestWithFixture;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureAction;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureTlsVersion;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.*;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.valueobjects.*;
 import com.yanchware.fractal.sdk.utils.TestUtils;
 import org.junit.jupiter.api.Test;

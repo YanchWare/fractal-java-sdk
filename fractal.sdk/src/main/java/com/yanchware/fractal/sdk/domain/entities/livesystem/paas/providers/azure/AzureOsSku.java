@@ -6,9 +6,12 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.ExtendableEnum;
 import java.util.Collection;
 
 /**
+ * <pre>
  * Specifies the OS SKU used by the agent pool. 
  * The default is Ubuntu if OSType is Linux. 
- * The default is Windows2019 when Kubernetes <= 1.24 or Windows2022 when Kubernetes >= 1.25 if OSType is Windows.
+ * The default is Windows2019 when Kubernetes &lt;= 1.24 or 
+ * Windows2022 when Kubernetes &gt;= 1.25 if OSType is Windows.
+ * </pre>
  */
 public class AzureOsSku extends ExtendableEnum<AzureOsSku> {
 
