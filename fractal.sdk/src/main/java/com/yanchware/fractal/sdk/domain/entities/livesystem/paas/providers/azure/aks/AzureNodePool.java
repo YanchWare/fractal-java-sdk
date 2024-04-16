@@ -40,6 +40,7 @@ public class AzureNodePool implements Validatable {
   private AzureMachineType machineType;
   private Integer maxNodeCount;
   private Integer maxSurge;
+  private Integer drainTimeoutInMinutes;
   private Integer minNodeCount;
   private String name;
   private Integer maxPodsPerNode;
@@ -83,9 +84,27 @@ public class AzureNodePool implements Validatable {
       nodePool.setMaxNodeCount(maxNodeCount);
       return builder;
     }
-
+    
     public AzureNodePoolBuilder withMaxSurge(Integer maxSurge) {
       nodePool.setMaxSurge(maxSurge);
+      return builder;
+    }
+
+    /**
+     * <pre>
+     * Sets the drain timeout for nodes in the node pool.
+     * 
+     * This method configures the amount of time, in minutes, to wait for the eviction of pods and their graceful 
+     * termination on each node during an upgrade process. The specified timeout period respects the constraints 
+     * imposed by pod disruption budgets. If the operation exceeds this timeout, the upgrade is considered to have failed.
+     * 
+     * If this parameter is not explicitly set, a default timeout of 30 minutes is applied.</pre>
+     *
+     * @param drainTimeoutInMinutes the drain timeout in minutes to be set for the node pool; if null, the default timeout is applied
+     * @return this {@code AzureNodePoolBuilder} instance with the updated drain timeout setting
+     */
+    public AzureNodePoolBuilder withDrainTimeoutInMinutes(Integer drainTimeoutInMinutes) {
+      nodePool.setDrainTimeoutInMinutes(drainTimeoutInMinutes);
       return builder;
     }
 
