@@ -204,4 +204,27 @@ public class AzureNodePoolTest {
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining("Linux OS SKU cannot be used with Windows OS Type");
   }
+
+  @Test
+  public void useGen2VirtualMachineIsTrue_when_defaultConfiguration() {
+    var nodePool = getAzureNodePoolBuilder("linux", 50, true)
+        .withMinNodeCount(1)
+        .withMaxNodeCount(2)
+        .build();
+
+    assertThat(nodePool.isUseGen2VirtualMachine())
+        .isEqualTo(true);
+  }
+
+  @Test
+  public void useGen2VirtualMachineIsFalse_when_properlyConfigured() {
+    var nodePool = getAzureNodePoolBuilder("linux", 50, true)
+        .withUseGen2VirtualMachine(false)
+        .withMinNodeCount(1)
+        .withMaxNodeCount(2)
+        .build();
+
+    assertThat(nodePool.isUseGen2VirtualMachine())
+        .isEqualTo(false);
+  }
 }
