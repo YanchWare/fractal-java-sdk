@@ -7,4 +7,5 @@ public interface SdkConfiguration {
   String getClientSecret();
   URI getBlueprintEndpoint();
   URI getLiveSystemEndpoint();
+  URI getEnvironmentsEndpoint();
 }

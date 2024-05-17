@@ -3,6 +3,7 @@ package com.yanchware.fractal.sdk.aggregates;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.domain.entities.Validatable;
 import com.yanchware.fractal.sdk.domain.entities.environment.DnsZone;
+import com.yanchware.fractal.sdk.utils.CollectionUtils;
 import com.yanchware.fractal.sdk.utils.SerializationUtils;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -18,6 +19,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 public class Environment implements Validatable {
   private final static String OWNER_ID_IS_NULL = "Environment OwnerId has not been defined and it is required";
   private final static String SHORT_NAME_IS_NULL = "Environment ShortName has not been defined and it is required";
+  private final static String RESOURCE_GROUPS_IS_EMPTY = "Environment ResourceGroups has not been defined and it is required";
   private final static String IS_PRIVATE_PARAM_KEY = "isPrivate";
   private final static String RECORDS_PARAM_KEY = "records";
   private final static String PARAMETERS_PARAM_KEY = "parameters";
@@ -25,8 +27,14 @@ public class Environment implements Validatable {
   private EnvironmentType environmentType;
   private UUID ownerId;
   private String shortName;
+  private String name;
+  private Collection<UUID> resourceGroups;
   private Map<String, Object> parameters;
-  
+
+  public Environment() {
+    resourceGroups = new ArrayList<>();
+  }
+
 
   public static EnvironmentBuilder builder() {
     return new EnvironmentBuilder();
@@ -64,6 +72,24 @@ public class Environment implements Validatable {
       return builder;
     }
 
+    public EnvironmentBuilder withName(String name) {
+      environment.setName(name);
+      return builder;
+    }
+
+    public EnvironmentBuilder withResourceGroup(UUID resourceGroupId) {
+      return withResourceGroups(List.of(resourceGroupId));
+    }
+
+    public EnvironmentBuilder withResourceGroups(Collection<UUID> resourceGroups) {
+      if (CollectionUtils.isBlank(resourceGroups)) {
+        return builder;
+      }
+
+      environment.getResourceGroups().addAll(resourceGroups);
+      return builder;
+    }
+    
     public EnvironmentBuilder withDnsZone(DnsZone dnsZone) {
       return withDnsZones(List.of(dnsZone));
     }
@@ -114,6 +140,14 @@ public class Environment implements Validatable {
       if (!shortName.matches("[a-z0-9-]+")) {
         errors.add("Environment ShortName must only contain lowercase letters, numbers, and dashes.");
       }
+    }
+
+    if (CollectionUtils.isBlank(resourceGroups)) {
+      errors.add(RESOURCE_GROUPS_IS_EMPTY);
+    }
+    
+    if(isBlank(name)) {
+      name = shortName;
     }
 
     if (ownerId == null || ownerId.equals(new UUID(0L, 0L))) {

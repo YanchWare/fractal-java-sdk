@@ -9,6 +9,7 @@ import com.yanchware.fractal.sdk.configuration.instantiation.InstantiationConfig
 import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemId;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.services.BlueprintService;
+import com.yanchware.fractal.sdk.services.EnvironmentsService;
 import com.yanchware.fractal.sdk.services.LiveSystemService;
 import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.commands.CreateBlueprintCommandRequest;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands.InstantiateLiveSystemCommandRequest;
@@ -31,12 +32,14 @@ public class Automaton {
     private static Automaton instance;
     private static BlueprintService blueprintService;
     private static LiveSystemService liveSystemService;
+    private static EnvironmentsService environmentsService;
     private static RetryRegistry serviceRetryRegistry;
 
     private Automaton(HttpClient httpClient, SdkConfiguration sdkConfiguration) {
         Automaton.serviceRetryRegistry = getDefaultRetryRegistry();
         Automaton.blueprintService = new BlueprintService(httpClient, sdkConfiguration, Automaton.serviceRetryRegistry);
         Automaton.liveSystemService = new LiveSystemService(httpClient, sdkConfiguration, Automaton.serviceRetryRegistry);
+        Automaton.environmentsService = new EnvironmentsService(httpClient, sdkConfiguration, Automaton.serviceRetryRegistry);
     }
 
     // Used for unit testing:
@@ -97,6 +100,15 @@ public class Automaton {
         blueprintService.createOrUpdateBlueprint(blueprintCommand, liveSystem.getFractalId());
     }
 
+    public static void instantiate(Environment environment) throws InstantiatorException {
+        if (instance == null) {
+            initializeAutomaton(getSdkConfiguration());
+        }
+
+        instantiateEnvironment(environment);
+    }
+    
+
     public static void instantiate(List<LiveSystem> liveSystems) throws InstantiatorException {
         if (instance == null) {
             initializeAutomaton(getSdkConfiguration());
@@ -128,6 +140,10 @@ public class Automaton {
                     liveSystemMutation.getValue());
             }
         }
+    }
+
+    private static void instantiateEnvironment(Environment environment) throws InstantiatorException {
+        environmentsService.createOrUpdateEnvironment(environment);
     }
 
     private static EnvVarSdkConfiguration getSdkConfiguration() throws InstantiatorException {

@@ -19,8 +19,7 @@ public class LocalSdkConfiguration implements SdkConfiguration {
   }
 
   @Override
-  public String getClientSecret()
-  {
+  public String getClientSecret() {
     return "test-client-secret";
   }
 
@@ -35,4 +34,8 @@ public class LocalSdkConfiguration implements SdkConfiguration {
   public URI getLiveSystemEndpoint() {
     return new URI(httpBaseUrl + "/livesystems");
   }
+
+  @SneakyThrows
+  @Override
+  public URI getEnvironmentsEndpoint() { return new URI(httpBaseUrl + "/environments"); }
 }
