@@ -42,6 +42,7 @@ public class AzureKubernetesService extends KubernetesCluster implements AzureRe
   private Collection<RoleAssignment> roles;
   private AzureActiveDirectoryProfile azureActiveDirectoryProfile;
   private String kubernetesVersion;
+  private ManagedClusterSkuTier managedClusterSkuTier;
 
   @Setter
   private Map<String, String> tags;
@@ -52,6 +53,7 @@ public class AzureKubernetesService extends KubernetesCluster implements AzureRe
   protected AzureKubernetesService() {
     nodePools = new ArrayList<>();
     outboundIps = new ArrayList<>();
+    managedClusterSkuTier = ManagedClusterSkuTier.FREE;
   }
 
   @Override
@@ -192,6 +194,11 @@ public class AzureKubernetesService extends KubernetesCluster implements AzureRe
 
     public AzureKubernetesServiceBuilder withKubernetesVersion(String kubernetesVersion) {
       component.setKubernetesVersion(kubernetesVersion);
+      return builder;
+    }
+
+    public AzureKubernetesServiceBuilder withManagedClusterSkuTier(ManagedClusterSkuTier managedClusterSkuTier) {
+      component.setManagedClusterSkuTier(managedClusterSkuTier);
       return builder;
     }
   }
