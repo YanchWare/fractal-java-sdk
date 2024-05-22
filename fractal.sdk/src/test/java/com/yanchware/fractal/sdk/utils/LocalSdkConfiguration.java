@@ -23,6 +23,16 @@ public class LocalSdkConfiguration implements SdkConfiguration {
     return "test-client-secret";
   }
 
+  @Override
+  public String getAzureSpClientId() {
+    return "";
+  }
+
+  @Override
+  public String getAzureSpClientSecret() {
+    return "";
+  }
+
   @SneakyThrows
   @Override
   public URI getBlueprintEndpoint() {

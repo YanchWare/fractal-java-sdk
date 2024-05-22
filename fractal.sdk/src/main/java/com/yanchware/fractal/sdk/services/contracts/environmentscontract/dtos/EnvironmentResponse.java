@@ -1,4 +1,4 @@
-package com.yanchware.fractal.sdk.services.contracts.environmentscontract.commands.dtos;
+package com.yanchware.fractal.sdk.services.contracts.environmentscontract.dtos;
 
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.EnvironmentIdDto;
 import lombok.Data;

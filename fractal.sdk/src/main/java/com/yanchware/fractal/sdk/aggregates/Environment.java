@@ -3,6 +3,7 @@ package com.yanchware.fractal.sdk.aggregates;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.domain.entities.Validatable;
 import com.yanchware.fractal.sdk.domain.entities.environment.DnsZone;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.utils.CollectionUtils;
 import com.yanchware.fractal.sdk.utils.SerializationUtils;
 import lombok.AccessLevel;
@@ -12,6 +13,7 @@ import lombok.Setter;
 import java.util.*;
 
 import static com.yanchware.fractal.sdk.domain.entities.environment.DnsRecordConstants.DNS_ZONES_PARAM_KEY;
+import static com.yanchware.fractal.sdk.domain.entities.environment.EnvironmentConstants.*;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Getter
@@ -21,8 +23,6 @@ public class Environment implements Validatable {
   private final static String SHORT_NAME_IS_NULL = "Environment ShortName has not been defined and it is required";
   private final static String RESOURCE_GROUPS_IS_EMPTY = "Environment ResourceGroups has not been defined and it is required";
   private final static String IS_PRIVATE_PARAM_KEY = "isPrivate";
-  private final static String RECORDS_PARAM_KEY = "records";
-  private final static String PARAMETERS_PARAM_KEY = "parameters";
 
   private EnvironmentType environmentType;
   private UUID ownerId;
@@ -33,6 +33,7 @@ public class Environment implements Validatable {
 
   public Environment() {
     resourceGroups = new ArrayList<>();
+    parameters = new HashMap<>();
   }
 
 
@@ -95,11 +96,7 @@ public class Environment implements Validatable {
     }
 
     public EnvironmentBuilder withDnsZones(Collection<DnsZone> dnsZones) {
-      if (environment.parameters == null) {
-        environment.parameters = new HashMap<>();
-      }
       try {
-
         if (!environment.parameters.containsKey(DNS_ZONES_PARAM_KEY)) {
           environment.parameters.put(DNS_ZONES_PARAM_KEY, 
               SerializationUtils.deserialize(
@@ -111,6 +108,36 @@ public class Environment implements Validatable {
         throw new RuntimeException(e);
       }
       
+      return builder;
+    }
+
+    public EnvironmentBuilder withRegion(AzureRegion region) {
+      if (environment.parameters.containsKey(REGION_PARAM_KEY)) {
+        environment.parameters.replace(REGION_PARAM_KEY, region);
+      } else {
+        environment.parameters.put(REGION_PARAM_KEY, region);
+      }
+
+      return builder;
+    }
+
+    public EnvironmentBuilder withTenantId(UUID tenantId) {
+      if (environment.parameters.containsKey(TENANT_ID_PARAM_KEY)) {
+        environment.parameters.replace(TENANT_ID_PARAM_KEY, tenantId);
+      } else {
+        environment.parameters.put(TENANT_ID_PARAM_KEY, tenantId);
+      }
+
+      return builder;
+    }
+
+    public EnvironmentBuilder withSubscriptionId(UUID subscriptionId) {
+      if (environment.parameters.containsKey(SUBSCRIPTION_ID_PARAM_KEY)) {
+        environment.parameters.replace(SUBSCRIPTION_ID_PARAM_KEY, subscriptionId);
+      } else {
+        environment.parameters.put(SUBSCRIPTION_ID_PARAM_KEY, subscriptionId);
+      }
+
       return builder;
     }
 

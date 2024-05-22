@@ -5,6 +5,7 @@ import com.yanchware.fractal.sdk.aggregates.EnvironmentType;
 import com.yanchware.fractal.sdk.domain.entities.environment.DnsAaaaRecord;
 import com.yanchware.fractal.sdk.domain.entities.environment.DnsPtrRecord;
 import com.yanchware.fractal.sdk.domain.entities.environment.DnsZone;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 
@@ -59,6 +60,42 @@ public class EnvironmentTest {
         .withEnvironmentType(EnvironmentType.PERSONAL)        
         .withOwnerId(UUID.randomUUID())
         .withShortName("production-001")
+        .withDnsZone(
+            DnsZone.builder()
+                .withName("dns.name")
+                .withRecords(Map.of("componentId", List.of(
+                    DnsAaaaRecord.builder()
+                        .withName("name")
+                        .withIpV6Address("2001:db8:3333:4444:CCCC:DDDD:EEEE:FFFF")
+                        .withTtl(Duration.ofMinutes(1))
+                        .build(),
+                    DnsPtrRecord.builder()
+                        .withName("name")
+                        .withDomainName("")
+                        .withTtl(Duration.ofMinutes(1))
+                        .build()
+                )))
+                .withParameter("key", "value")
+                .isPrivate(false)
+                .build())
+        .build();
+
+    assertThat(env.validate()).isEmpty();
+
+    var jsonEnvironment = TestUtils.getJsonRepresentation(env);
+    assertThat(jsonEnvironment).isNotBlank();
+  }
+
+  @Test
+  public void noValidationErrors_when_environmentCreatedWithRegionTenantIdAndSubscriptionId() {
+    var env = Environment.builder()
+        .withEnvironmentType(EnvironmentType.PERSONAL)
+        .withOwnerId(UUID.randomUUID())
+        .withShortName("production-001")
+        .withRegion(AzureRegion.AUSTRALIA_CENTRAL)
+        .withTenantId(UUID.randomUUID())
+        .withSubscriptionId(UUID.randomUUID())
+        .withResourceGroup(UUID.randomUUID())
         .withDnsZone(
             DnsZone.builder()
                 .withName("dns.name")

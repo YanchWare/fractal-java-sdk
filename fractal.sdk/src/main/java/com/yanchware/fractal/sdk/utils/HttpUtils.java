@@ -8,6 +8,7 @@ import java.net.URI;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Arrays;
+import java.util.Map;
 
 import static com.yanchware.fractal.sdk.configuration.Constants.X_CLIENT_ID_HEADER;
 import static com.yanchware.fractal.sdk.configuration.Constants.X_CLIENT_SECRET_HEADER;
@@ -28,21 +29,37 @@ public class HttpUtils {
   }
 
   public static HttpRequest buildPostRequest(URI uri, SdkConfiguration sdkConfiguration, String payload) {
-    return getHttpRequestBuilder(uri, sdkConfiguration)
+    return buildPostRequest(uri, sdkConfiguration, payload, null);
+  }
+
+  public static HttpRequest buildPostRequest(URI uri, SdkConfiguration sdkConfiguration, 
+                                             String payload,
+                                             Map<String, String> additionalHeaders) {
+    return getHttpRequestBuilder(uri, sdkConfiguration, additionalHeaders)
         .POST(ofString(payload))
         .build();
   }
 
   public static HttpRequest.Builder getHttpRequestBuilder(URI uri, SdkConfiguration sdkConfiguration) {
-    if (EnvVarUtils.isLocalDebug()) {
-      return LocalDebugUtils.getHttpRequestBuilder(uri, sdkConfiguration);
-    } else {
-      return HttpRequest.newBuilder()
-          .uri(uri)
-          .header(X_CLIENT_ID_HEADER, sdkConfiguration.getClientId())
-          .header(X_CLIENT_SECRET_HEADER, sdkConfiguration.getClientSecret())
-          .header("Content-Type", "application/json");
+    return getHttpRequestBuilder(uri, sdkConfiguration, null);
+  }
+
+  public static HttpRequest.Builder getHttpRequestBuilder(URI uri, 
+                                                          SdkConfiguration sdkConfiguration, 
+                                                          Map<String, String> additionalHeaders) {
+    HttpRequest.Builder builder = EnvVarUtils.isLocalDebug() ?
+        LocalDebugUtils.getHttpRequestBuilder(uri, sdkConfiguration) :
+        HttpRequest.newBuilder()
+            .uri(uri)
+            .header(X_CLIENT_ID_HEADER, sdkConfiguration.getClientId())
+            .header(X_CLIENT_SECRET_HEADER, sdkConfiguration.getClientSecret())
+            .header("Content-Type", "application/json");
+
+    if (additionalHeaders != null) {
+      additionalHeaders.forEach(builder::header);
     }
+
+    return builder;
   }
 
   public static void ensureAcceptableResponse(HttpResponse<String> response, String requestName, int[] acceptedResponses)

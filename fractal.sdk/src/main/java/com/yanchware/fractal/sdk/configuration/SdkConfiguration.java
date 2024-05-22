@@ -5,6 +5,8 @@ import java.net.URI;
 public interface SdkConfiguration {
   String getClientId();
   String getClientSecret();
+  String getAzureSpClientId();
+  String getAzureSpClientSecret();
   URI getBlueprintEndpoint();
   URI getLiveSystemEndpoint();
   URI getEnvironmentsEndpoint();

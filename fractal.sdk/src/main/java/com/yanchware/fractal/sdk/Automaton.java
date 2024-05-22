@@ -143,7 +143,11 @@ public class Automaton {
     }
 
     private static void instantiateEnvironment(Environment environment) throws InstantiatorException {
-        environmentsService.createOrUpdateEnvironment(environment);
+       var response = environmentsService.createOrUpdateEnvironment(environment);
+       
+       if(response.getStatus().equalsIgnoreCase("active")) {
+           environmentsService.InitializeSubscription(environment);
+       }
     }
 
     private static EnvVarSdkConfiguration getSdkConfiguration() throws InstantiatorException {

@@ -7,9 +7,13 @@ public class Constants {
 
   public static final String X_CLIENT_ID_HEADER = "X-ClientID";
   public static final String X_CLIENT_SECRET_HEADER = "X-ClientSecret";
+  public static final String X_AZURE_SP_CLIENT_ID_HEADER = "X-Azure-SP-Client-ID";
+  public static final String X_AZURE_SP_CLIENT_SECRET_HEADER = "X-Azure-SP-Client-Secret";
 
   public static final String CLIENT_ID_KEY = "CLIENT_ID";
   public static final String CLIENT_SECRET_KEY = "CLIENT_SECRET";
+  public static final String AZURE_SP_CLIENT_ID_KEY = "AZURE_SP_CLIENT_ID";
+  public static final String AZURE_SP_CLIENT_SECRET_KEY = "AZURE_SP_CLIENT_SECRET";
   public static final String BLUEPRINT_TYPE = "blueprintType";
 
   public static final String COMPONENT_TYPE = "type";
