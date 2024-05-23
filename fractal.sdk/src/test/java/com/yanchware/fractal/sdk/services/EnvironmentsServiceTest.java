@@ -2,14 +2,18 @@ package com.yanchware.fractal.sdk.services;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
+import com.github.tomakehurst.wiremock.stubbing.Scenario;
 import com.yanchware.fractal.sdk.aggregates.Environment;
 import com.yanchware.fractal.sdk.aggregates.EnvironmentType;
 import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
+import com.yanchware.fractal.sdk.utils.StringHandler;
 import io.github.resilience4j.retry.RetryRegistry;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.net.http.HttpClient;
+import java.time.Duration;
+import java.util.Map;
 import java.util.UUID;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
@@ -23,7 +27,7 @@ class EnvironmentsServiceTest {
   private Environment mockEnvironment;
 
   @BeforeEach
-  void setUp(WireMockRuntimeInfo wmRuntimeInfo) {
+  void setUp(WireMockRuntimeInfo wmRuntimeInfo) {    
     var httpClient = HttpClient.newBuilder()
         .version(HttpClient.Version.HTTP_2)
         .build();
@@ -130,7 +134,7 @@ class EnvironmentsServiceTest {
 
     stubFor(put(urlPattern)
         .willReturn(aResponse()
-            .withStatus(202)));
+            .withStatus(200)));
 
     // When
     environmentsService.createOrUpdateEnvironment(mockEnvironment);
@@ -152,7 +156,7 @@ class EnvironmentsServiceTest {
     // Add stub for POST request
     stubFor(post(urlPattern)
         .willReturn(aResponse()
-            .withStatus(202)));
+            .withStatus(201)));
 
     // When
     environmentsService.createOrUpdateEnvironment(mockEnvironment);
@@ -202,9 +206,114 @@ class EnvironmentsServiceTest {
     // Then
     verify(1, putRequestedFor(urlPattern));
     assertThat(response).isNotNull();
-    assertThat(response.getId().getType()).isEqualTo(mockEnvironment.getEnvironmentType().toString());
+    assertThat(response.getId().getType().toString()).isEqualTo(mockEnvironment.getEnvironmentType().toString());
     assertThat(response.getId().getOwnerId()).isEqualTo(mockEnvironment.getOwnerId());
     assertThat(response.getId().getShortName()).isEqualTo(mockEnvironment.getShortName());
 
+  }
+
+  @Test
+  void fetchCurrentInitialization_should_ReturnValidInitializationRunResponse() throws Exception {
+    // Given
+    var urlPattern = urlPathMatching("/environments/.*/.*/.*/initializer/azure/status");
+
+    var inputStream = getClass().getClassLoader()
+        .getResourceAsStream("test-resources/fetchCurrentInitializationInProgressResponse.json");
+
+    assertThat(inputStream).isNotNull();
+
+    var fetchCurrentInitializationResponse = StringHandler.getStringFromInputStream(inputStream);
+
+    // Replace the placeholders
+    fetchCurrentInitializationResponse = replacePlaceholders(fetchCurrentInitializationResponse, geEnvironmentIdPlaceholders());
+
+    stubFor(get(urlPattern)
+        .willReturn(aResponse()
+            .withStatus(200)
+            .withBody(fetchCurrentInitializationResponse)
+            .withHeader("Content-Type", "application/json")));
+
+    // When
+    var response = environmentsService.fetchCurrentInitialization(mockEnvironment);
+
+    // Then
+    verify(1, getRequestedFor(urlPattern));
+
+    assertThat(response).isNotNull();
+    assertThat(response.getEnvironmentId().getType().toString()).isEqualTo(mockEnvironment.getEnvironmentType().toString());
+    assertThat(response.getEnvironmentId().getOwnerId()).isEqualTo(mockEnvironment.getOwnerId());
+    assertThat(response.getEnvironmentId().getShortName()).isEqualTo(mockEnvironment.getShortName());
+    assertThat(response.getSteps()).isNotNull();
+    assertThat(response.getSteps().size()).isGreaterThan(1);
+  }
+
+  @Test
+  void InitializeSubscription_should_HandleInitializationInProgress() throws Exception {
+    // Given
+    var urlPatternStatus = urlPathMatching("/environments/.*/.*/.*/initializer/azure/status");
+    var placeholders = geEnvironmentIdPlaceholders();
+    
+    var inputStreamInProgress = getClass().getClassLoader()
+        .getResourceAsStream("test-resources/fetchCurrentInitializationInProgressResponse.json");
+    assertThat(inputStreamInProgress).isNotNull();
+
+    var fetchCurrentInitializationInProgressResponse = StringHandler.getStringFromInputStream(inputStreamInProgress);
+    fetchCurrentInitializationInProgressResponse = replacePlaceholders(fetchCurrentInitializationInProgressResponse, placeholders);
+
+    // Mocking fetchCurrentInitialization response for "Completed" status
+    var inputStreamCompleted = getClass().getClassLoader()
+        .getResourceAsStream("test-resources/fetchCurrentInitializationCompletedResponse.json");
+    assertThat(inputStreamCompleted).isNotNull();
+
+    var fetchCurrentInitializationCompletedResponse = StringHandler.getStringFromInputStream(inputStreamCompleted);
+    fetchCurrentInitializationCompletedResponse = replacePlaceholders(fetchCurrentInitializationCompletedResponse, placeholders);
+
+    stubFor(get(urlPatternStatus)
+        .inScenario("Initialization Scenario")
+        .whenScenarioStateIs(Scenario.STARTED)
+        .willReturn(aResponse()
+            .withStatus(200)
+            .withBody(fetchCurrentInitializationInProgressResponse)
+            .withHeader("Content-Type", "application/json"))
+        .willSetStateTo("InProgress1"));
+
+    stubFor(get(urlPatternStatus)
+        .inScenario("Initialization Scenario")
+        .whenScenarioStateIs("InProgress1")
+        .willReturn(aResponse()
+            .withStatus(200)
+            .withBody(fetchCurrentInitializationInProgressResponse)
+            .withHeader("Content-Type", "application/json"))
+        .willSetStateTo("InProgress2"));
+
+    stubFor(get(urlPatternStatus)
+        .inScenario("Initialization Scenario")
+        .whenScenarioStateIs("InProgress2")
+        .willReturn(aResponse()
+            .withStatus(200)
+            .withBody(fetchCurrentInitializationCompletedResponse)
+            .withHeader("Content-Type", "application/json"))
+        .willSetStateTo("Completed"));
+
+    // When
+    environmentsService.InitializeSubscription(mockEnvironment, Duration.ofSeconds(2));
+
+    // Then
+    verify(3, getRequestedFor(urlPatternStatus)); 
+  }
+
+  private Map<String, String> geEnvironmentIdPlaceholders() {
+    return Map.of(
+        "$ENVIRONMENT_TYPE", mockEnvironment.getEnvironmentType().toString(),
+        "$ENVIRONMENT_OWNER_ID", mockEnvironment.getOwnerId().toString(),
+        "$ENVIRONMENT_SHORT_NAME", mockEnvironment.getShortName()
+    );
+  }
+
+  private static String replacePlaceholders(String json, Map<String, String> placeholders) {
+    for (Map.Entry<String, String> entry : placeholders.entrySet()) {
+      json = json.replace(entry.getKey(), entry.getValue());
+    }
+    return json;
   }
 }

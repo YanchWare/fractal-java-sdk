@@ -8,13 +8,20 @@ import com.yanchware.fractal.sdk.services.contracts.environmentscontract.command
 import com.yanchware.fractal.sdk.services.contracts.environmentscontract.commands.SubscriptionInitializationRequest;
 import com.yanchware.fractal.sdk.services.contracts.environmentscontract.commands.UpdateEnvironmentRequest;
 import com.yanchware.fractal.sdk.services.contracts.environmentscontract.dtos.EnvironmentResponse;
+import com.yanchware.fractal.sdk.services.contracts.environmentscontract.dtos.InitializationRunResponse;
+import com.yanchware.fractal.sdk.services.contracts.environmentscontract.dtos.InitializationRunRoot;
+import com.yanchware.fractal.sdk.services.contracts.environmentscontract.dtos.InitializationStepResponse;
 import com.yanchware.fractal.sdk.utils.HttpUtils;
+import io.github.resilience4j.retry.Retry;
+import io.github.resilience4j.retry.RetryConfig;
 import io.github.resilience4j.retry.RetryRegistry;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.URI;
 import java.net.http.HttpClient;
+import java.time.Duration;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,6 +33,8 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Slf4j
 @AllArgsConstructor
 public class EnvironmentsService {
+  private static final int CHECK_INITIALIZATION_STATUS_MAX_ATTEMPTS = 55;
+  
   private final HttpClient client;
   private final SdkConfiguration sdkConfiguration;
   private final RetryRegistry retryRegistry;
@@ -73,6 +82,34 @@ public class EnvironmentsService {
   }
 
   public void InitializeSubscription(Environment environment) throws InstantiatorException {
+    InitializeSubscription(environment, Duration.ofSeconds(30));
+  }
+
+  protected void InitializeSubscription(Environment environment, Duration waitDurationBetweenChecks) throws InstantiatorException {
+    var currentInitialization = fetchCurrentInitialization(environment);
+
+    if (currentInitialization == null ||
+        "Failed".equals(currentInitialization.getStatus()) ||
+        "Cancelled".equals(currentInitialization.getStatus())) {
+      startNewInitialization(environment);
+    } else {
+      checkInitializationStatus(environment, waitDurationBetweenChecks);
+    }
+  }
+  
+  protected InitializationRunResponse fetchCurrentInitialization(Environment environment) throws InstantiatorException {
+    var runRoot = executeRequestWithRetries(
+        "fetchCurrentInitialization",
+        client,
+        retryRegistry,
+        HttpUtils.buildGetRequest(getEnvironmentsUri(environment, "initializer/azure/status"), sdkConfiguration),
+        new int[]{200, 404},
+        InitializationRunRoot.class);
+
+    return runRoot == null ? null : runRoot.getInitializationRun();
+  }
+
+  private void startNewInitialization(Environment environment) throws InstantiatorException {
     var payload = getPayload(environment, "START_INITIALIZATION");
 
     var azureSpClientId = sdkConfiguration.getAzureSpClientId();
@@ -82,7 +119,7 @@ public class EnvironmentsService {
     }
 
     var azureSpClientSecret = sdkConfiguration.getAzureSpClientSecret();
-    if (isBlank(azureSpClientId)) {
+    if (isBlank(azureSpClientSecret)) {
       throw new IllegalArgumentException(
           String.format("The environment variable %s is required and it has not been defined", AZURE_SP_CLIENT_SECRET_KEY));
     }
@@ -101,6 +138,96 @@ public class EnvironmentsService {
             additionalHeaders),
         new int[]{202},
         EnvironmentResponse.class);
+  }
+
+  private void checkInitializationStatus(Environment environment, Duration waitDuration) throws InstantiatorException {
+    log.info("Starting operation [checkInitializationStatus] for Environment [id: '{}']",
+        environment.getEnvironmentType() + "\\" + environment.getOwnerId() + "\\" + environment.getShortName());
+
+    var retryConfig = RetryConfig.custom()
+        .retryExceptions(InstantiatorException.class)
+        .maxAttempts(CHECK_INITIALIZATION_STATUS_MAX_ATTEMPTS)
+        .waitDuration(waitDuration)
+        .build();
+
+    var retry = RetryRegistry.of(retryConfig).retry("checkInitializationStatus");
+
+    try {
+      Retry.decorateCheckedSupplier(retry, () -> {
+        InitializationRunResponse currentInitialization = fetchCurrentInitialization(environment);
+        printInitializationStatus(currentInitialization);
+        validateInitializationStatus(currentInitialization);
+
+        return currentInitialization;
+      }).get();
+    } catch (Throwable ex) {
+      throw new InstantiatorException(ex.getLocalizedMessage());
+    }
+  }
+
+  private void validateInitializationStatus(InitializationRunResponse initializationRun) throws InstantiatorException {
+    var environmentId = initializationRun.getEnvironmentId().toString();
+    switch (initializationRun.getStatus()) {
+      case "Completed" -> log.info("Initialization for Environment [id: '{}'] completed", environmentId);
+      case "Failed" -> {
+        var messageToThrow = getFailedStepsMessageToThrow(environmentId, initializationRun);
+        if (isBlank(messageToThrow)) {
+          log.warn("Initialization for Environment [id: '{}'] failed but error message is not visible yet", environmentId);
+          throw new InstantiatorException("Initialization failed, but the error message is not visible yet.");
+        } else {
+          log.warn("Initialization for Environment [id: '{}'] failed", environmentId);
+          throw new InstantiatorException(messageToThrow);
+        }
+      }
+      case "Cancelled" -> {
+        log.warn("Initialization for Environment [id: '{}'] cancelled", environmentId);
+        throw new InstantiatorException("Initialization was cancelled.");
+      }
+      case "InProgress" -> {
+        log.info("Initialization for Environment [id: '{}'] is in progress", environmentId);
+        throw new InstantiatorException("Initialization is in progress, retrying...");
+      }
+      default -> throw new InstantiatorException(String.format("Unknown initialization status: [%s]", initializationRun.getStatus()));
+    }
+  }
+
+  private String getFailedStepsMessageToThrow(String environmentId, InitializationRunResponse initializationRun) {
+    var failedSteps = initializationRun.getSteps()
+        .stream()
+        .filter(step -> "Failed".equals(step.getStatus()))
+        .toList();
+
+    if (failedSteps.isEmpty()) {
+      return "";
+    } else {
+      var messageToThrow = new StringBuilder();
+      messageToThrow.append(
+          String.format("Initialization for Environment [id: '%s'] failed. Failed steps -> ", environmentId));
+      for (var step : failedSteps) {
+        var errorMessage = step.getLastOperationStatusMessage();
+
+        if (isBlank(errorMessage)) {
+          return "";
+        }
+
+        messageToThrow.append(String.format("id: '%s', status: '%s', errorMessage: '%s' - ",
+            step.getResourceName(),
+            step.getStatus(),
+            errorMessage));
+      }
+
+      return messageToThrow.substring(0, messageToThrow.length() - 3);
+    }
+  }
+
+  private void printInitializationStatus(InitializationRunResponse initializationRun) {
+    log.info("Initialization Run ID: {}", initializationRun.getId());
+    
+    initializationRun.getSteps().sort(Comparator.comparingInt(InitializationStepResponse::getOrder));
+    
+    initializationRun.getSteps()
+        .forEach(step -> log.info("Step - Resource Name: {}, Resource Type: {}, Status: {}",
+            step.getResourceName(), step.getResourceType(), step.getStatus()));
   }
 
   private String getPayload(Environment environment, String requestType) throws InstantiatorException {

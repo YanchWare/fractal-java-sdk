@@ -59,6 +59,7 @@ public class EnvironmentTest {
     var env = Environment.builder()
         .withEnvironmentType(EnvironmentType.PERSONAL)        
         .withOwnerId(UUID.randomUUID())
+        .withResourceGroup(UUID.randomUUID())
         .withShortName("production-001")
         .withDnsZone(
             DnsZone.builder()
@@ -126,6 +127,7 @@ public class EnvironmentTest {
     return Environment.builder()
         .withEnvironmentType(EnvironmentType.PERSONAL)
         .withOwnerId(UUID.randomUUID())
+        .withResourceGroup(UUID.randomUUID())
         .withShortName(shortName)
         .build();
   }

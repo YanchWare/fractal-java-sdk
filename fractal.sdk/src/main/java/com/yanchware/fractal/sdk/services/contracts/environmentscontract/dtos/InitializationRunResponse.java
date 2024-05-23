@@ -4,22 +4,19 @@ import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.Envi
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Collection;
 import java.util.Date;
-import java.util.Map;
+import java.util.List;
 import java.util.UUID;
 
 @Data
 @NoArgsConstructor
-public class EnvironmentResponse {
-  private EnvironmentIdDto id;
-  private String name;
-  private Collection<UUID> resourceGroups;
-  private Map<String, String> parameters;
+public class InitializationRunResponse {
+  private UUID id;
+  private EnvironmentIdDto environmentId;
+  private String cloudProvider;
+  private List<InitializationStepResponse> steps;
   private String status;
+  private String requester;
   private Date createdAt;
-  private String createdBy;
-  private Date updatedAt;
-  private String updatedBy;
 }
 
