@@ -50,6 +50,11 @@ public class AzureNodePool implements Validatable {
   private SortedSet<String> nodeTaints;
   private Map<String, String> labels;
   private boolean autoscalingEnabled;
+  private boolean useGen2VirtualMachine;
+
+  protected AzureNodePool() {
+    useGen2VirtualMachine = true;
+  }
 
   public static AzureNodePoolBuilder builder() {
     return new AzureNodePoolBuilder();
@@ -159,6 +164,11 @@ public class AzureNodePool implements Validatable {
 
     public AzureNodePoolBuilder withAutoscalingEnabled(boolean autoscalingEnabled) {
       nodePool.setAutoscalingEnabled(autoscalingEnabled);
+      return builder;
+    }
+
+    public AzureNodePoolBuilder withUseGen2VirtualMachine(boolean useGen2VirtualMachine) {
+      nodePool.setUseGen2VirtualMachine(useGen2VirtualMachine);
       return builder;
     }
 
