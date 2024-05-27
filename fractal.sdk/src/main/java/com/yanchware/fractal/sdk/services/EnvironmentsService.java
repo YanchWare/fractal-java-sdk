@@ -33,21 +33,27 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Slf4j
 @AllArgsConstructor
 public class EnvironmentsService {
-  private static final int CHECK_INITIALIZATION_STATUS_MAX_ATTEMPTS = 55;
+  private final Duration totalAllowedDuration = Duration.ofMinutes(55);
   
   private final HttpClient client;
   private final SdkConfiguration sdkConfiguration;
   private final RetryRegistry retryRegistry;
 
   public EnvironmentResponse createOrUpdateEnvironment(Environment environment) throws InstantiatorException {
+    var environmentId = environment.getEnvironmentType() + "\\" + environment.getOwnerId() + "\\" + environment.getShortName();
+    log.info("Starting createOrUpdateEnvironment for Environment [id: '{}']", environmentId);
+
     if (fetchEnvironment(environment) != null) {
+      log.info("Environment exists, updating environment [id: '{}']", environmentId);
       return updateEnvironment(environment);
     }
 
+    log.info("Environment does not exist, creating new environment [id: '{}']", environmentId);
     return createEnvironment(environment);
   }
 
   protected EnvironmentResponse fetchEnvironment(Environment environment) throws InstantiatorException {
+    log.info("Fetching environment details [id: '{}']", environment.getEnvironmentType() + "\\" + environment.getOwnerId() + "\\" + environment.getShortName());
     return executeRequestWithRetries(
         "fetchEnvironment",
         client,
@@ -58,6 +64,8 @@ public class EnvironmentsService {
   }
 
   protected EnvironmentResponse createEnvironment(Environment environment) throws InstantiatorException {
+    log.info("Creating environment [id: '{}']", environment.getEnvironmentType() + "\\" + environment.getOwnerId() + "\\" + environment.getShortName());
+
     var payload = getPayload(environment, "CREATE");
 
     return executeRequestWithRetries(
@@ -70,6 +78,7 @@ public class EnvironmentsService {
   }
 
   protected EnvironmentResponse updateEnvironment(Environment environment) throws InstantiatorException {
+    log.info("Updating environment [id: '{}']", environment.getEnvironmentType() + "\\" + environment.getOwnerId() + "\\" + environment.getShortName());
     var payload = getPayload(environment, "UPDATE");
 
     return executeRequestWithRetries(
@@ -91,13 +100,20 @@ public class EnvironmentsService {
     if (currentInitialization == null ||
         "Failed".equals(currentInitialization.getStatus()) ||
         "Cancelled".equals(currentInitialization.getStatus())) {
+      log.info("Starting new initialization for environment [id: '{}']", environment.getEnvironmentType() + "\\" + environment.getOwnerId() + "\\" + environment.getShortName());
       startNewInitialization(environment);
+
+      log.info("New initialization started, checking initialization status for environment [id: '{}']", environment.getEnvironmentType() + "\\" + environment.getOwnerId() + "\\" + environment.getShortName());
+      checkInitializationStatus(environment, waitDurationBetweenChecks);
     } else {
+      log.info("Checking initialization status for environment [id: '{}']", environment.getEnvironmentType() + "\\" + environment.getOwnerId() + "\\" + environment.getShortName());
       checkInitializationStatus(environment, waitDurationBetweenChecks);
     }
   }
   
   protected InitializationRunResponse fetchCurrentInitialization(Environment environment) throws InstantiatorException {
+    log.info("Fetching current initialization status for environment [id: '{}']", environment.getEnvironmentType() + "\\" + environment.getOwnerId() + "\\" + environment.getShortName());
+
     var runRoot = executeRequestWithRetries(
         "fetchCurrentInitialization",
         client,
@@ -110,6 +126,7 @@ public class EnvironmentsService {
   }
 
   private void startNewInitialization(Environment environment) throws InstantiatorException {
+    log.info("Starting new initialization process for environment [id: '{}']", environment.getEnvironmentType() + "\\" + environment.getOwnerId() + "\\" + environment.getShortName());
     var payload = getPayload(environment, "START_INITIALIZATION");
 
     var azureSpClientId = sdkConfiguration.getAzureSpClientId();
@@ -144,9 +161,11 @@ public class EnvironmentsService {
     log.info("Starting operation [checkInitializationStatus] for Environment [id: '{}']",
         environment.getEnvironmentType() + "\\" + environment.getOwnerId() + "\\" + environment.getShortName());
 
+    int maxAttempts = (int) (totalAllowedDuration.toMillis() / waitDuration.toMillis());
+
     var retryConfig = RetryConfig.custom()
         .retryExceptions(InstantiatorException.class)
-        .maxAttempts(CHECK_INITIALIZATION_STATUS_MAX_ATTEMPTS)
+        .maxAttempts(maxAttempts)
         .waitDuration(waitDuration)
         .build();
 
@@ -226,7 +245,7 @@ public class EnvironmentsService {
     initializationRun.getSteps().sort(Comparator.comparingInt(InitializationStepResponse::getOrder));
     
     initializationRun.getSteps()
-        .forEach(step -> log.info("Step - Resource Name: {}, Resource Type: {}, Status: {}",
+        .forEach(step -> log.info("Step - Name: '{}', Type: '{}', Status: '{}'",
             step.getResourceName(), step.getResourceType(), step.getStatus()));
   }
 
