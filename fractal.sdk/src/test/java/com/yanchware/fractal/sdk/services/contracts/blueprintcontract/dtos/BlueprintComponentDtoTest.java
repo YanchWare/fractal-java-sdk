@@ -195,7 +195,8 @@ public class BlueprintComponentDtoTest {
             aks.getKubernetesVersion(),
             aks.getTags(),
             aks.getWindowsAdminUsername(),
-            aks.getWorkloadIdentityEnabled()
+            aks.getWorkloadIdentityEnabled(),
+            aks.getManagedClusterSkuTier()
         ));
   }
 

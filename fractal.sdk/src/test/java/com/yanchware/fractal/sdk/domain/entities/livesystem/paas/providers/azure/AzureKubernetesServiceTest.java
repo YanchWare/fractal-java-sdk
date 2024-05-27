@@ -5,6 +5,7 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PriorityClass;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.aks.AzureAgentPoolMode;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.aks.AzureKubernetesService;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.aks.AzureNodePool;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.aks.ManagedClusterSkuTier;
 import com.yanchware.fractal.sdk.utils.TestUtils;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ import static com.yanchware.fractal.sdk.utils.TestUtils.getDefaultAks;
 import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_KUBERNETES;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class AzureKubernetesServiceTest {
 
@@ -22,9 +24,20 @@ public class AzureKubernetesServiceTest {
   public void noValidationErrors_when_aksHasRequiredFields() {
     var aks = getDefaultAks().build();
     assertThat(aks.validate()).isEmpty();
+    assertThat(aks.getManagedClusterSkuTier()).isEqualTo(ManagedClusterSkuTier.FREE);
     assertThat(aks.getNodePools()).first()
         .extracting(AzureNodePool::getAgentPoolMode, AzureNodePool::getOsType)
         .containsExactly(AzureAgentPoolMode.SYSTEM, AzureOsType.LINUX);
+  }
+  
+  @Test
+  public void noValidationErrors_when_aksHasRequiredFieldsAndManagedClusterSkuTierChanged() {
+    var aks = getDefaultAks()
+        .withManagedClusterSkuTier(ManagedClusterSkuTier.PREMIUM)
+        .build();
+    assertThat(aks.validate()).isEmpty();
+    
+    assertThat(aks.getManagedClusterSkuTier()).isEqualTo(ManagedClusterSkuTier.PREMIUM);
   }
 
   @Test
