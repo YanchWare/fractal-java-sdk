@@ -324,6 +324,7 @@ public class TestUtils {
     return Environment.builder()
         .withEnvironmentType(EnvironmentType.PERSONAL)
         .withOwnerId(UUID.fromString("2e114308-14ec-4d77-b610-490324fa1844"))
+        .withResourceGroup(UUID.randomUUID())
         .withShortName("test")
         .build();
   }

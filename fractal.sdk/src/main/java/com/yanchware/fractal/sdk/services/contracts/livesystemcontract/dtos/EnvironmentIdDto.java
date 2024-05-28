@@ -21,4 +21,9 @@ public class EnvironmentIdDto {
         env.getOwnerId(),
         env.getShortName());
   }
+
+  @Override
+  public String toString() {
+    return type + "\\" + ownerId + "\\" + shortName;
+  }
 }

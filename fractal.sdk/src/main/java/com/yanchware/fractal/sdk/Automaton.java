@@ -9,6 +9,7 @@ import com.yanchware.fractal.sdk.configuration.instantiation.InstantiationConfig
 import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemId;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.services.BlueprintService;
+import com.yanchware.fractal.sdk.services.EnvironmentsService;
 import com.yanchware.fractal.sdk.services.LiveSystemService;
 import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.commands.CreateBlueprintCommandRequest;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands.InstantiateLiveSystemCommandRequest;
@@ -31,19 +32,31 @@ public class Automaton {
     private static Automaton instance;
     private static BlueprintService blueprintService;
     private static LiveSystemService liveSystemService;
+    private static EnvironmentsService environmentsService;
     private static RetryRegistry serviceRetryRegistry;
 
     private Automaton(HttpClient httpClient, SdkConfiguration sdkConfiguration) {
         Automaton.serviceRetryRegistry = getDefaultRetryRegistry();
         Automaton.blueprintService = new BlueprintService(httpClient, sdkConfiguration, Automaton.serviceRetryRegistry);
         Automaton.liveSystemService = new LiveSystemService(httpClient, sdkConfiguration, Automaton.serviceRetryRegistry);
+        Automaton.environmentsService = new EnvironmentsService(httpClient, sdkConfiguration, Automaton.serviceRetryRegistry);
     }
 
-    // Used for unit testing:
+    /**
+     * Initializes the Automaton instance for unit testing.
+     *
+     * @param httpClient the HTTP client to be used
+     * @param sdkConfiguration the SDK configuration
+     */
     protected static void initializeAutomaton(HttpClient httpClient, SdkConfiguration sdkConfiguration) {
         instance = new Automaton(httpClient, sdkConfiguration);
     }
 
+    /**
+     * Initializes the Automaton instance.
+     *
+     * @param sdkConfiguration the SDK configuration
+     */
     protected static void initializeAutomaton(SdkConfiguration sdkConfiguration) {
         var builder = HttpClient
             .newBuilder()
@@ -97,6 +110,26 @@ public class Automaton {
         blueprintService.createOrUpdateBlueprint(blueprintCommand, liveSystem.getFractalId());
     }
 
+    /**
+     * Instantiates the given environment.
+     *
+     * @param environment the environment to be instantiated
+     * @throws InstantiatorException if an error occurs during instantiation
+     */
+    public static void instantiate(Environment environment) throws InstantiatorException {
+        if (instance == null) {
+            initializeAutomaton(getSdkConfiguration());
+        }
+
+        instantiateEnvironment(environment);
+    }
+
+    /**
+     * Instantiates the given list of live systems.
+     *
+     * @param liveSystems the list of live systems to be instantiated
+     * @throws InstantiatorException if an error occurs during instantiation
+     */
     public static void instantiate(List<LiveSystem> liveSystems) throws InstantiatorException {
         if (instance == null) {
             initializeAutomaton(getSdkConfiguration());
@@ -107,6 +140,13 @@ public class Automaton {
         }
     }
 
+    /**
+     * Instantiates the given list of live systems with the provided instantiation configuration.
+     *
+     * @param liveSystems the list of live systems to be instantiated
+     * @param config the instantiation configuration
+     * @throws InstantiatorException if an error occurs during instantiation
+     */
     public static void instantiate(List<LiveSystem> liveSystems, InstantiationConfiguration config)
         throws InstantiatorException {
 
@@ -128,6 +168,14 @@ public class Automaton {
                     liveSystemMutation.getValue());
             }
         }
+    }
+
+    private static void instantiateEnvironment(Environment environment) throws InstantiatorException {
+       var response = environmentsService.createOrUpdateEnvironment(environment);
+       
+       if(response.getStatus().equalsIgnoreCase("active")) {
+           environmentsService.InitializeSubscription(environment);
+       }
     }
 
     private static EnvVarSdkConfiguration getSdkConfiguration() throws InstantiatorException {
