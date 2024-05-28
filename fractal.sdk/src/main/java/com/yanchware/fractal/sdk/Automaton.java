@@ -42,11 +42,21 @@ public class Automaton {
         Automaton.environmentsService = new EnvironmentsService(httpClient, sdkConfiguration, Automaton.serviceRetryRegistry);
     }
 
-    // Used for unit testing:
+    /**
+     * Initializes the Automaton instance for unit testing.
+     *
+     * @param httpClient the HTTP client to be used
+     * @param sdkConfiguration the SDK configuration
+     */
     protected static void initializeAutomaton(HttpClient httpClient, SdkConfiguration sdkConfiguration) {
         instance = new Automaton(httpClient, sdkConfiguration);
     }
 
+    /**
+     * Initializes the Automaton instance.
+     *
+     * @param sdkConfiguration the SDK configuration
+     */
     protected static void initializeAutomaton(SdkConfiguration sdkConfiguration) {
         var builder = HttpClient
             .newBuilder()
@@ -100,6 +110,12 @@ public class Automaton {
         blueprintService.createOrUpdateBlueprint(blueprintCommand, liveSystem.getFractalId());
     }
 
+    /**
+     * Instantiates the given environment.
+     *
+     * @param environment the environment to be instantiated
+     * @throws InstantiatorException if an error occurs during instantiation
+     */
     public static void instantiate(Environment environment) throws InstantiatorException {
         if (instance == null) {
             initializeAutomaton(getSdkConfiguration());
@@ -107,8 +123,13 @@ public class Automaton {
 
         instantiateEnvironment(environment);
     }
-    
 
+    /**
+     * Instantiates the given list of live systems.
+     *
+     * @param liveSystems the list of live systems to be instantiated
+     * @throws InstantiatorException if an error occurs during instantiation
+     */
     public static void instantiate(List<LiveSystem> liveSystems) throws InstantiatorException {
         if (instance == null) {
             initializeAutomaton(getSdkConfiguration());
@@ -119,6 +140,13 @@ public class Automaton {
         }
     }
 
+    /**
+     * Instantiates the given list of live systems with the provided instantiation configuration.
+     *
+     * @param liveSystems the list of live systems to be instantiated
+     * @param config the instantiation configuration
+     * @throws InstantiatorException if an error occurs during instantiation
+     */
     public static void instantiate(List<LiveSystem> liveSystems, InstantiationConfiguration config)
         throws InstantiatorException {
 
