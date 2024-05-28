@@ -45,3 +45,20 @@ This means that tests and design of the SDK needs to be done accordingly (nice o
 Intro + Drawing
 Arguments (required & optional - specify defaults) - java code example with comments to the fields + detailed
 Examples (maybe with tabs for each provider)
+
+
+## SSL Certificate Management Script for Local Development
+This script (local-dev/importLocalSslCertToJavaKeystore.sh) is designed to manage SSL certificates for local development environments, specifically addressing the PKIX path building failed error often encountered in Java applications. It automates the process of exporting an SSL certificate from a specified domain and port and importing it into the Java keystore.
+
+### Script Overview  
+The script performs the following tasks:
+
+1. Exports the SSL Certificate: Connects to the specified domain and port to retrieve the SSL certificate.
+2. Verifies Certificate Export: Ensures that the certificate has been successfully exported.
+3. Imports the Certificate into Java Keystore: Adds the exported certificate to the Java keystore, replacing any existing certificate with the same alias.
+4. Cleans Up: Deletes the exported certificate file after the import process is complete.
+
+Note  
+This script uses the default Java keystore located at `$JAVA_HOME/lib/security/cacerts`. 
+If your keystore is located elsewhere, update the pathToJavaKeystore variable accordingly.
+Ensure you have the necessary permissions to modify the Java keystore, as this operation typically requires sudo access.

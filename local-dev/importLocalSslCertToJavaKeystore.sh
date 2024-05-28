@@ -4,8 +4,7 @@ set -e
 # Define variables
 domain="api-local.fractal.cloud"
 port=8443
-#pathToJavaKeystore="$JAVA_HOME/lib/security/cacerts"
-pathToJavaKeystore="/Users/kamil/Library/Java/JavaVirtualMachines/temurin-21.0.3/Contents/Home/lib/security/cacerts"
+pathToJavaKeystore="$JAVA_HOME/lib/security/cacerts"
 certFile="$domain.cer"
 
 # Extract the domain and port from the full URL
@@ -13,7 +12,7 @@ certFile="$domain.cer"
 
 # Use default HTTPS port if no port is found
 if [ -z "$port" ]; then
-    port=844
+    port=8443
 fi
 
 # Export the SSL certificate from the domain and port
