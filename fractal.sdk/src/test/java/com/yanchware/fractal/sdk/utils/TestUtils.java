@@ -23,6 +23,8 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.G
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpPostgreSqlDbms;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GoogleKubernetesEngine;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GoogleKubernetesEngine.GoogleKubernetesEngineBuilder;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.oci.OciContainerEngineForKubernetes;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.oci.OciContainerEngineForKubernetes.OciContainerEngineForKubernetesBuilder;
 import com.yanchware.fractal.sdk.services.contracts.ComponentDto;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +45,7 @@ import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.provider
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.valueobjects.AzureSkuName.B_GEN5_1;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpMachine.E2_STANDARD2;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpRegion.EU_WEST1;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.oci.OciRegion.EU_ZURICH_1;
 import static java.util.stream.Collectors.toSet;
 
 @Slf4j
@@ -372,6 +375,12 @@ public class TestUtils {
             .withName("gke")
             .withMachineType(E2_STANDARD2)
             .build());
+  }
+
+  public static OciContainerEngineForKubernetesBuilder getDefaultOke() {
+    return OciContainerEngineForKubernetes.builder()
+            .withId(ComponentId.from("test"))
+            .withRegion(EU_ZURICH_1);
   }
 
   public static void assertGenericComponent(ComponentDto componentDto, Component comp, String type) {

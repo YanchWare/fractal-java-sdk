@@ -6,5 +6,6 @@ public enum ProviderTypeDto {
   GCP,
   AZURE,
   CAAS,
-  SAAS
+  SAAS,
+  OCI
 }
