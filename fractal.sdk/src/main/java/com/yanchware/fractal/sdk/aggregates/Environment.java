@@ -141,6 +141,29 @@ public class Environment implements Validatable {
       return builder;
     }
 
+    /**
+     * Tags are name/value pairs that enable you to categorize resources.
+     */
+    public EnvironmentBuilder withTags(Map<String, String> tags) {
+      Map<String, String> existingTags = (Map<String, String>) environment.parameters.get(TAGS_PARAM_KEY);
+      if (existingTags == null) {
+        existingTags = new HashMap<>();
+        environment.parameters.put(TAGS_PARAM_KEY, existingTags);
+      }
+
+      existingTags.putAll(tags);
+
+
+      return builder;
+    }
+
+    /**
+     * Tag is name/value pairs that enable you to categorize resources.
+     */
+    public EnvironmentBuilder withTag(String key, String value) {
+      return withTags(Map.of(key, value));
+    }
+
     public Environment build() {
       Collection<String> errors = environment.validate();
 
