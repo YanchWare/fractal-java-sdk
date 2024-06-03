@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import static com.yanchware.fractal.sdk.domain.entities.environment.EnvironmentConstants.TAGS_PARAM_KEY;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -121,6 +122,30 @@ public class EnvironmentTest {
 
     var jsonEnvironment = TestUtils.getJsonRepresentation(env);
     assertThat(jsonEnvironment).isNotBlank();
+  }
+
+  @Test
+  public void noValidationErrors_when_environmentCreatedWithTags() {
+    var env = Environment.builder()
+        .withEnvironmentType(EnvironmentType.PERSONAL)
+        .withOwnerId(UUID.randomUUID())
+        .withShortName("production-001")
+        .withRegion(AzureRegion.AUSTRALIA_CENTRAL)
+        .withResourceGroup(UUID.randomUUID())
+        .withTags(Map.of("key1", "value1", "key2", "value2"))
+        .withTag("key1", "value2")
+        .withTag("key3", "value3")
+        .build();
+
+    assertThat(env.validate()).isEmpty();
+
+    var jsonEnvironment = TestUtils.getJsonRepresentation(env);
+    assertThat(jsonEnvironment).isNotBlank();
+
+    Map<String, String> tags = (Map<String, String>) env.getParameters().get(TAGS_PARAM_KEY);
+
+    // Assert that the tags map has exactly 3 entries
+    assertThat(tags).hasSize(3);
   }
 
   private Environment generateBuilderWithInfo(String shortName) {

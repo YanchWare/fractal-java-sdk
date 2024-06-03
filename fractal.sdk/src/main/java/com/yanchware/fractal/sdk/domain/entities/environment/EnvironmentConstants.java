@@ -6,4 +6,5 @@ public class EnvironmentConstants {
   public static final String REGION_PARAM_KEY = "region";
   public static final String TENANT_ID_PARAM_KEY = "tenantId";
   public static final String SUBSCRIPTION_ID_PARAM_KEY = "subscriptionId";
+  public static final String TAGS_PARAM_KEY = "tags";
 }

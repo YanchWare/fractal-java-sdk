@@ -3,6 +3,7 @@ package com.yanchware.fractal.sdk.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.aggregates.Environment;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
+import com.yanchware.fractal.sdk.domain.exceptions.EnvironmentInitializationException;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.services.contracts.environmentscontract.commands.CreateEnvironmentRequest;
 import com.yanchware.fractal.sdk.services.contracts.environmentscontract.commands.SubscriptionInitializationRequest;
@@ -43,12 +44,16 @@ public class EnvironmentsService {
     var environmentId = environment.getEnvironmentType() + "\\" + environment.getOwnerId() + "\\" + environment.getShortName();
     log.info("Starting createOrUpdateEnvironment for Environment [id: '{}']", environmentId);
 
-    if (fetchEnvironment(environment) != null) {
-      log.info("Environment exists, updating environment [id: '{}']", environmentId);
-      return updateEnvironment(environment);
+    var existingEnvironment = fetchEnvironment(environment);
+    if (existingEnvironment != null) {
+      if (existingEnvironment.equalsTo(environment)) {
+        log.info("No changes detected for Environment [id: '{}']. Update not required.", environmentId);
+        return existingEnvironment;
+      } else {
+        return updateEnvironment(environment);
+      }
     }
-
-    log.info("Environment does not exist, creating new environment [id: '{}']", environmentId);
+    
     return createEnvironment(environment);
   }
 
@@ -64,7 +69,8 @@ public class EnvironmentsService {
   }
 
   protected EnvironmentResponse createEnvironment(Environment environment) throws InstantiatorException {
-    log.info("Creating environment [id: '{}']", environment.getEnvironmentType() + "\\" + environment.getOwnerId() + "\\" + environment.getShortName());
+    log.info("Environment does not exist, creating new environment [id: '{}']", 
+        environment.getEnvironmentType() + "\\" + environment.getOwnerId() + "\\" + environment.getShortName());
 
     var payload = getPayload(environment, "CREATE");
 
@@ -78,7 +84,7 @@ public class EnvironmentsService {
   }
 
   protected EnvironmentResponse updateEnvironment(Environment environment) throws InstantiatorException {
-    log.info("Updating environment [id: '{}']", environment.getEnvironmentType() + "\\" + environment.getOwnerId() + "\\" + environment.getShortName());
+    log.info("Environment [id: '{}'] exists, updating ...", environment.getEnvironmentType() + "\\" + environment.getOwnerId() + "\\" + environment.getShortName());
     var payload = getPayload(environment, "UPDATE");
 
     return executeRequestWithRetries(
@@ -100,7 +106,6 @@ public class EnvironmentsService {
     if (currentInitialization == null ||
         "Failed".equals(currentInitialization.getStatus()) ||
         "Cancelled".equals(currentInitialization.getStatus())) {
-      log.info("Starting new initialization for environment [id: '{}']", environment.getEnvironmentType() + "\\" + environment.getOwnerId() + "\\" + environment.getShortName());
       startNewInitialization(environment);
 
       log.info("New initialization started, checking initialization status for environment [id: '{}']", environment.getEnvironmentType() + "\\" + environment.getOwnerId() + "\\" + environment.getShortName());
@@ -184,7 +189,7 @@ public class EnvironmentsService {
     }
   }
 
-  private void validateInitializationStatus(InitializationRunResponse initializationRun) throws InstantiatorException {
+  private void validateInitializationStatus(InitializationRunResponse initializationRun) throws InstantiatorException, EnvironmentInitializationException {
     var environmentId = initializationRun.getEnvironmentId().toString();
     switch (initializationRun.getStatus()) {
       case "Completed" -> log.info("Initialization for Environment [id: '{}'] completed", environmentId);
@@ -194,19 +199,19 @@ public class EnvironmentsService {
           log.warn("Initialization for Environment [id: '{}'] failed but error message is not visible yet", environmentId);
           throw new InstantiatorException("Initialization failed, but the error message is not visible yet.");
         } else {
-          log.warn("Initialization for Environment [id: '{}'] failed", environmentId);
-          throw new InstantiatorException(messageToThrow);
+          log.error("Initialization for Environment [id: '{}'] failed", environmentId);
+          throw new EnvironmentInitializationException(messageToThrow);
         }
       }
       case "Cancelled" -> {
         log.warn("Initialization for Environment [id: '{}'] cancelled", environmentId);
-        throw new InstantiatorException("Initialization was cancelled.");
+        throw new EnvironmentInitializationException("Initialization was cancelled.");
       }
       case "InProgress" -> {
         log.info("Initialization for Environment [id: '{}'] is in progress", environmentId);
         throw new InstantiatorException("Initialization is in progress, retrying...");
       }
-      default -> throw new InstantiatorException(String.format("Unknown initialization status: [%s]", initializationRun.getStatus()));
+      default -> throw new EnvironmentInitializationException(String.format("Unknown initialization status: [%s]", initializationRun.getStatus()));
     }
   }
 
@@ -245,8 +250,19 @@ public class EnvironmentsService {
     initializationRun.getSteps().sort(Comparator.comparingInt(InitializationStepResponse::getOrder));
     
     initializationRun.getSteps()
-        .forEach(step -> log.info("Step - Name: '{}', Type: '{}', Status: '{}'",
-            step.getResourceName(), step.getResourceType(), step.getStatus()));
+        .forEach(step -> {
+          String status = step.getStatus();
+          String resourceName = step.getResourceName();
+          String resourceType = step.getResourceType();
+          
+          if ("Failed".equalsIgnoreCase(status)) {
+            log.error("Step - Name: '{}', Type: '{}', Status: '{}'",
+                resourceName, resourceType, status);
+          } else {
+            log.info("Step - Name: '{}', Type: '{}', Status: '{}'",
+                resourceName, resourceType, status);
+          }
+        });
   }
 
   private String getPayload(Environment environment, String requestType) throws InstantiatorException {
