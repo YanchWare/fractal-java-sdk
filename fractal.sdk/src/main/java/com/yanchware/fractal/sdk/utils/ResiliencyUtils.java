@@ -56,7 +56,6 @@ public class ResiliencyUtils {
         ensureAcceptableResponse(response, requestName, acceptedResponses);
 
         if (response.statusCode() == 404) {
-          log.info("Attempted {} has come up with a 404 Not Found", requestName);
           return null;
         }
 

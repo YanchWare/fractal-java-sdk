@@ -18,6 +18,14 @@ public class SerializationUtils {
 
   private static ObjectMapper objectMapper;
 
+  private static final ObjectMapper orderedMapper = new ObjectMapper()
+      .enable(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS)
+      .setSerializationInclusion(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL);
+
+  public static String serializeSortedJson(Object value) throws JsonProcessingException {
+    return orderedMapper.writeValueAsString(value);
+  }
+
   public static <T> T deserialize(String jsonString, TypeReference<T> typeRef) throws JsonProcessingException {
     if (objectMapper == null) {
       initializeObjectMapper();
