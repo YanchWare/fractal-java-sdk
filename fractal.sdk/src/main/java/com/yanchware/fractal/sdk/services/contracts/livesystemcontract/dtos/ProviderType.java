@@ -5,5 +5,6 @@ public enum ProviderType {
     GCP,
     AZURE,
     CAAS,
-    SAAS
+    SAAS,
+    OCI
 }
