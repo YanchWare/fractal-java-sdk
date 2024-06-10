@@ -90,53 +90,39 @@ public class Environment implements Validatable {
       environment.getResourceGroups().addAll(resourceGroups);
       return builder;
     }
-    
+
     public EnvironmentBuilder withDnsZone(DnsZone dnsZone) {
       return withDnsZones(List.of(dnsZone));
     }
 
     public EnvironmentBuilder withDnsZones(Collection<DnsZone> dnsZones) {
       try {
-        if (!environment.parameters.containsKey(DNS_ZONES_PARAM_KEY)) {
-          environment.parameters.put(DNS_ZONES_PARAM_KEY, 
-              SerializationUtils.deserialize(
-                  SerializationUtils.serialize(dnsZones), 
-                  DnsZone[].class));
-        }
+        environment.parameters.put(DNS_ZONES_PARAM_KEY,
+            SerializationUtils.deserialize(
+                SerializationUtils.serialize(dnsZones),
+                DnsZone[].class));
 
       } catch (JsonProcessingException e) {
         throw new RuntimeException(e);
       }
-      
+
       return builder;
     }
 
     public EnvironmentBuilder withRegion(AzureRegion region) {
-      if (environment.parameters.containsKey(REGION_PARAM_KEY)) {
-        environment.parameters.replace(REGION_PARAM_KEY, region);
-      } else {
-        environment.parameters.put(REGION_PARAM_KEY, region);
-      }
+      environment.parameters.put(REGION_PARAM_KEY, region);
 
       return builder;
     }
 
     public EnvironmentBuilder withTenantId(UUID tenantId) {
-      if (environment.parameters.containsKey(TENANT_ID_PARAM_KEY)) {
-        environment.parameters.replace(TENANT_ID_PARAM_KEY, tenantId);
-      } else {
-        environment.parameters.put(TENANT_ID_PARAM_KEY, tenantId);
-      }
+      environment.parameters.put(TENANT_ID_PARAM_KEY, tenantId);
 
       return builder;
     }
 
     public EnvironmentBuilder withSubscriptionId(UUID subscriptionId) {
-      if (environment.parameters.containsKey(SUBSCRIPTION_ID_PARAM_KEY)) {
-        environment.parameters.replace(SUBSCRIPTION_ID_PARAM_KEY, subscriptionId);
-      } else {
-        environment.parameters.put(SUBSCRIPTION_ID_PARAM_KEY, subscriptionId);
-      }
+      environment.parameters.put(SUBSCRIPTION_ID_PARAM_KEY, subscriptionId);
 
       return builder;
     }
@@ -195,15 +181,15 @@ public class Environment implements Validatable {
     if (CollectionUtils.isBlank(resourceGroups)) {
       errors.add(RESOURCE_GROUPS_IS_EMPTY);
     }
-    
-    if(isBlank(name)) {
+
+    if (isBlank(name)) {
       name = shortName;
     }
 
     if (ownerId == null || ownerId.equals(new UUID(0L, 0L))) {
       errors.add(OWNER_ID_IS_NULL);
     }
-    
+
     return errors;
   }
 }
