@@ -6,16 +6,20 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @ToString
 public class ComponentLink implements Validatable {
+    private static final String ROLE_NAME_PARAM_KEY = "roleName";
+    
     public String componentId;
     public Map<String, Object> settings;
+
+    public ComponentLink() {
+        settings = new HashMap<>();
+    }
 
     public static ComponentLinkBuilder builder() {
         return new ComponentLinkBuilder();
@@ -54,7 +58,17 @@ public class ComponentLink implements Validatable {
         }
 
         public ComponentLinkBuilder withSettings(Map<String, Object> settings) {
-            componentLink.setSettings(settings);
+            componentLink.setSettings(new HashMap<>(settings));
+            return builder;
+        }
+
+        public ComponentLinkBuilder withRoleName(String roleName) {
+            if (componentLink.settings.containsKey(ROLE_NAME_PARAM_KEY)) {
+                componentLink.settings.replace(ROLE_NAME_PARAM_KEY, roleName);
+            } else {
+                componentLink.getSettings().put(ROLE_NAME_PARAM_KEY, roleName);
+            }
+
             return builder;
         }
 
