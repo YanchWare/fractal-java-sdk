@@ -4,6 +4,7 @@ public class Constants {
   public static final String LIVESYSTEM_ENDPOINT_KEY = "LIVESYSTEM_ENDPOINT";
   public static final String BLUEPRINT_ENDPOINT_KEY = "BLUEPRINT_ENDPOINT";
   public static final String ENVIRONMENTS_ENDPOINT_KEY = "ENVIRONMENTS_ENDPOINT";
+  public static final String GIT_COMMIT_ID_KEY = "commitId";
 
   public static final String X_CLIENT_ID_HEADER = "X-ClientID";
   public static final String X_CLIENT_SECRET_HEADER = "X-ClientSecret";

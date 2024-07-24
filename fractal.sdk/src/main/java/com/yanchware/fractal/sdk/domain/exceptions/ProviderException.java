@@ -22,5 +22,5 @@ public class ProviderException extends Exception {
         super(message);
         this.failedComponents = failedComponentsIds;
     }
-
 }
+

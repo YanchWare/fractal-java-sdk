@@ -3,14 +3,12 @@ package com.yanchware.fractal.sdk.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemId;
+import com.yanchware.fractal.sdk.domain.exceptions.ComponentInstantiationException;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.domain.exceptions.ProviderException;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands.InstantiateLiveSystemCommandRequest;
 import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands.UpdateLiveSystemCommandRequest;
-import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemComponentDto;
-import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemComponentStatusDto;
-import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemDto;
-import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemMutationDto;
+import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.*;
 import com.yanchware.fractal.sdk.utils.EnvVarUtils;
 import com.yanchware.fractal.sdk.utils.HttpUtils;
 import com.yanchware.fractal.sdk.utils.LocalDebugUtils;
@@ -143,8 +141,8 @@ public class LiveSystemService {
         var messageToThrow = getFailedComponentsMessageToThrow(livesystemIdStr,
             liveSystemMutationId,
             liveSystemMutationResponseComponents);
-        
-        if(StringUtils.isBlank(messageToThrow)) {
+
+        if (StringUtils.isBlank(messageToThrow)) {
           log.warn("LiveSystem [id: '{}'] instantiation failed but erorrMessage is not visible yet, retrying: {}", liveSystemId, getStatusFromComponents(liveSystemMutationResponseComponents));
           String timeoutExceptionMessage = String.format(
               "LiveSystem [%s] instantiation wait timeout. Response is %s",
@@ -221,11 +219,11 @@ public class LiveSystemService {
               liveSystemId, liveSystemMutationId));
       for (var component : failedComponents) {
         var errorMessage = component.getLastOperationStatusMessage();
-        
-        if(StringUtils.isBlank(errorMessage)) {
+
+        if (StringUtils.isBlank(errorMessage)) {
           return "";
         }
-        
+
         messageToThrow.append(String.format("id: '%s', status: '%s', errorMessage: '%s' - ",
             component.getId(),
             component.getStatus(),
@@ -249,6 +247,16 @@ public class LiveSystemService {
   private static LiveSystemMutationDto getLiveSystemMutationResponse(String requestName, String bodyContents) throws ProviderException {
     try {
       return deserialize(bodyContents, LiveSystemMutationDto.class);
+    } catch (JsonProcessingException e) {
+      String message = String.format("Attempted %s failed. Deserialization of %s failed.", requestName, bodyContents);
+      log.error(message);
+      throw new ProviderException(message);
+    }
+  }
+
+  private static LiveSystemComponentMutationDto getLiveSystemComponentMutationResponse(String requestName, String bodyContents) throws ProviderException {
+    try {
+      return deserialize(bodyContents, LiveSystemComponentMutationDto.class);
     } catch (JsonProcessingException e) {
       String message = String.format("Attempted %s failed. Deserialization of %s failed.", requestName, bodyContents);
       log.error(message);
@@ -281,6 +289,140 @@ public class LiveSystemService {
     }
 
     return getDeserializedResponseBody(response.body());
+  }
+
+  public LiveSystemComponentMutationDto instantiateComponent(String resourceGroupId, String liveSystemName, String componentId)
+      throws InstantiatorException {
+    log.info("Instantiating component [id: '{}'] in LiveSystem [name: '{}', resource group id: '{}']",
+        componentId, liveSystemName, resourceGroupId);
+
+    HttpRequest request = HttpUtils.buildPostRequest(
+        getInstantiateComponentUri(resourceGroupId, liveSystemName, componentId),
+        sdkConfiguration, null); // Assuming no request body needed for instantiation
+
+    return executeRequestWithRetries(
+        "instantiateComponent",
+        client,
+        retryRegistry,
+        request,
+        new int[]{200, 404}, // Accepted status code
+        LiveSystemComponentMutationDto.class);
+  }
+
+  public LiveSystemComponentMutationDto getComponentMutationStatus(
+      String liveSystemId,
+      String componentId,
+      String mutationId) throws InstantiatorException {
+    var requestName = "getComponentMutationStatus";
+
+    var acceptedResponses = new int[]{200, 404};
+
+    var request = HttpUtils.buildGetRequest(
+        getComponentStateUri(liveSystemId, componentId, mutationId),
+        sdkConfiguration);
+
+    var retryConfig = RetryConfig.custom()
+        .retryExceptions(InstantiatorException.class)
+        .maxAttempts(CHECK_LIVE_SYSTEM_MUTATION_STATUS_MAX_ATTEMPTS)
+        .waitDuration(Duration.ofSeconds(30L))
+        .build();
+
+    var retry = RetryRegistry.of(retryConfig).retry(requestName);
+
+    try {
+      return Retry.decorateCheckedSupplier(retry, () ->
+          getComponentMutationStatus(
+              liveSystemId,
+              componentId,
+              mutationId,
+              requestName,
+              acceptedResponses,
+              request)).get();
+    } catch (Throwable ex) {
+      throw new InstantiatorException(ex.getLocalizedMessage());
+    }
+  }
+
+  private LiveSystemComponentMutationDto getComponentMutationStatus(
+      String liveSystemId,
+      String componentId,
+      String mutationId,
+      String requestName,
+      int[] acceptedResponses,
+      HttpRequest request) throws IOException, InterruptedException, InstantiatorException, ProviderException, ComponentInstantiationException {
+
+    if (EnvVarUtils.isLocalDebug()) {
+      request = LocalDebugUtils.getHttpRequestBuilder(request.uri(), sdkConfiguration)
+          .build();
+    }
+
+    var response = client.send(request, HttpResponse.BodyHandlers.ofString());
+    ensureAcceptableResponse(response, requestName, acceptedResponses);
+
+    if (response.statusCode() == 404) {
+      throw new ComponentInstantiationException(
+          String.format(
+              "Component [id: '%s'] not found [LiveSystemId: '%s', MutationId: '%s']",
+              componentId, liveSystemId, mutationId));
+    }
+
+    String bodyContents = response.body();
+    if (isBlank(bodyContents)) {
+      throw new ComponentInstantiationException(
+          String.format(
+              "Unexpected empty or null response body for component [id: '%s'] in LiveSystem [id: '%s']. Status code: %d.",
+              componentId, liveSystemId, response.statusCode()));
+    }
+
+    var componentMutationDto = getLiveSystemComponentMutationResponse(requestName, bodyContents);
+
+    if (componentMutationDto == null) {
+      String message = String.format("The LiveSystem [%s] exists, but the LiveSystem's provider LiveSystem is still empty or not fully updated for mutation [%s]",
+          liveSystemId, mutationId);
+      log.info(message);
+      throw new InstantiatorException(message);
+    }
+
+    var component = componentMutationDto.getComponent();
+
+    switch (component.getStatus()) {
+      case Active -> {
+        log.info("Instantiation completed [LiveSystemId: '{}', ComponentId: '{}']", liveSystemId, component.getId());
+
+        return componentMutationDto;
+      }
+      case Failed -> {
+        log.warn("Instantiation failed [LiveSystemId: '{}', ComponentId: '{}']", liveSystemId, componentId);
+        throw new ProviderException(component.getLastOperationStatusMessage());
+      }
+      case Instantiating -> {
+        log.info("Instantiation is in progress [LiveSystemId: '{}', ComponentId: '{}']", liveSystemId, componentId);
+        String timeoutExceptionMessage = String.format(
+            "Instantiation wait timeout [LiveSystemId: '%s', ComponentId: '%s']. Response is %s",
+            liveSystemId,
+            componentId,
+            response.body());
+        throw new InstantiatorException(timeoutExceptionMessage);
+      }
+      default ->
+          throw new ProviderException(String.format("Instantiation has an unknown state '%s' [LiveSystemId: '%s', ComponentId: '%s', MutationId: '%s']",
+              component.getStatus(),
+              liveSystemId,
+              componentId,
+              mutationId));
+    }
+  }
+
+  private URI getInstantiateComponentUri(String resourceGroupId, String liveSystemName, String componentId) {
+    return URI.create(String.format(
+        "%s/%s/%s/component/%s/instantiate",
+        getLiveSystemUri(), resourceGroupId, liveSystemName, componentId));
+  }
+
+  private URI getComponentStateUri(String liveSystemId, String componentId, String mutationId) {
+    return URI.create(String.format(
+        "%s/%s/component/%s/state/%s",
+        getLiveSystemUri(), liveSystemId, componentId, mutationId));
   }
 
   private static LiveSystemDto getDeserializedResponseBody(String bodyContents) throws InstantiatorException {
@@ -333,7 +475,9 @@ public class LiveSystemService {
     try {
       String serializedCommand = serialize(command);
       log.info("Instantiate LiveSystem message: {}", serializedCommand);
-      request = HttpUtils.buildPostRequest(getLiveSystemUri(), sdkConfiguration, serializedCommand);
+
+      var liveSystemUri = URI.create(String.format("%s/", getLiveSystemUri()));
+      request = HttpUtils.buildPostRequest(liveSystemUri, sdkConfiguration, serializedCommand);
     } catch (JsonProcessingException e) {
       throw new InstantiatorException("Error processing InstantiateLiveSystemCommandRequest because of JsonProcessing", e);
     }
@@ -348,11 +492,11 @@ public class LiveSystemService {
   }
 
   private URI getLiveSystemUri(LiveSystemId liveSystemId) {
-    return URI.create(String.format("%s%s", getLiveSystemUri(), liveSystemId.toString()));
+    return URI.create(String.format("%s/%s", getLiveSystemUri(), liveSystemId.toString()));
   }
 
   private URI getLiveSystemUri() {
-    return URI.create(sdkConfiguration.getLiveSystemEndpoint() + "/");
+    return sdkConfiguration.getLiveSystemEndpoint();
   }
 
   private URI getLiveSystemMutationUri(LiveSystemId liveSystemId, String mutationId) {

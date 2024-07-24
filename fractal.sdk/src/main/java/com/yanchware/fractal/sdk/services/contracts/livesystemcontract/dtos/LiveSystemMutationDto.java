@@ -18,3 +18,4 @@ public class LiveSystemMutationDto {
   private Map<String, LiveSystemComponentDto> componentsById;
   private Map<String, Set<String>> componentsBlocked;
 }
+
