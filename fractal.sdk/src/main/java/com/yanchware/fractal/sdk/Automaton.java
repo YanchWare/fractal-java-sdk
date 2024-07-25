@@ -263,6 +263,53 @@ public class Automaton {
     }
   }
 
+  /**
+   * Deploys a custom workload component within a specified live system in a "fire-and-forget" manner.
+   *
+   * <p>This method performs the following steps:</p>
+   *
+   * <ol>
+   *   <li><strong>Parameter Validation:</strong> Ensures that all input parameters are valid and not null or empty.</li>
+   *   <li><strong>Component Instantiation:</strong> Initiates the instantiation of the custom workload component within the live system.</li>
+   * </ol>
+   *
+   * <p>Note: This method does not wait for deployment completion or verify the commit ID.</p>
+   *
+   * @param resourceGroupId            The ID of the resource group containing the live system.
+   * @param liveSystemName             The name of the live system.
+   * @param customWorkloadComponentId  The ID of the custom workload component to deploy.
+   *
+   * @throws ComponentInstantiationException If any of the required parameters are null or empty or the component is not found.
+   */
+  public static void deployCustomWorkload(String resourceGroupId,
+                                          String liveSystemName,
+                                          String customWorkloadComponentId) throws ComponentInstantiationException, InstantiatorException {
+    if (isBlank(resourceGroupId)) {
+      throw new ComponentInstantiationException("Resource group ID cannot be blank.");
+    }
+
+    if (isBlank(liveSystemName)) {
+      throw new ComponentInstantiationException("Live system name cannot be blank.");
+    }
+
+    if (isBlank(customWorkloadComponentId)) {
+      throw new ComponentInstantiationException("Custom workload component ID cannot be blank.");
+    }
+
+    if (instance == null) {
+      initializeAutomaton(getSdkConfiguration());
+    }
+
+    var componentMutationDto = liveSystemService.instantiateComponent(
+        resourceGroupId, liveSystemName, customWorkloadComponentId);
+
+    if (componentMutationDto == null) {
+      throw new ComponentInstantiationException(
+          String.format("Component [id: '%s'] not found in LiveSystem [name: '%s', resource group id: '%s']",
+              customWorkloadComponentId, liveSystemName, resourceGroupId));
+    }
+  }
+
   private static LiveSystemComponentMutationDto waitForCustomWorkloadDeploymentCompletion(
       LiveSystemComponentMutationDto componentMutationDto)
       throws InstantiatorException {
