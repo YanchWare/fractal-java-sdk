@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.yanchware.fractal.sdk.configuration.Constants.GIT_COMMIT_ID_KEY;
+import static com.yanchware.fractal.sdk.utils.OutputFieldUtils.printOutputFields;
 import static com.yanchware.fractal.sdk.utils.SerializationUtils.serialize;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -249,13 +250,12 @@ public class Automaton {
 
           deployCustomWorkload(resourceGroupId, liveSystemName, customWorkloadComponentId, commitId, config);
         } else if (componentStatus != LiveSystemComponentStatusDto.Active) {
+          printOutputFields(component.getOutputFields());
           throw new ComponentInstantiationException("Component deployment failed with status: " + updatedComponentMutation.getStatus());
         } else {
           log.info("Component deployment completed successfully.");
 
-          component.getOutputFields()
-              .forEach((key, value) ->
-                  log.info("  {}: {}", key, value));
+          printOutputFields(component.getOutputFields());
         }
       } catch (InstantiatorException e) {
         throw new ComponentInstantiationException(e.getLocalizedMessage(), e);

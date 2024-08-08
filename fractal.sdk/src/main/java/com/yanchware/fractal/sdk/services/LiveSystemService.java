@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.yanchware.fractal.sdk.utils.HttpUtils.ensureAcceptableResponse;
+import static com.yanchware.fractal.sdk.utils.OutputFieldUtils.printOutputFields;
 import static com.yanchware.fractal.sdk.utils.ResiliencyUtils.executeRequestWithRetries;
 import static com.yanchware.fractal.sdk.utils.SerializationUtils.deserialize;
 import static com.yanchware.fractal.sdk.utils.SerializationUtils.serialize;
@@ -133,8 +134,7 @@ public class LiveSystemService {
 
     switch (liveSystemMutationResponse.getStatus()) {
       case COMPLETED -> {
-        log.info("LiveSystem [id: '{}'] instantiation completed: {}", liveSystemId, getStatusFromComponents(liveSystemMutationResponseComponents));
-
+        logInstantiationCompleted(liveSystemId, liveSystemMutationResponseComponents);
         return liveSystemMutationResponse;
       }
       case FAILED -> {
@@ -167,8 +167,7 @@ public class LiveSystemService {
         var uniqueStatuses = getUniqueStatusesFromComponents(liveSystemMutationResponseComponents);
 
         if (allComponentsProcessed(uniqueStatuses)) {
-          log.info("LiveSystem [id: '{}'] instantiation completed: {}", liveSystemId, getStatusFromComponents(liveSystemMutationResponseComponents));
-
+          logInstantiationCompleted(liveSystemId, liveSystemMutationResponseComponents);
           return liveSystemMutationResponse;
         } else {
           log.info("LiveSystem [id: '{}'] instantiation is in progress: {}", liveSystemId, getStatusFromComponents(liveSystemMutationResponseComponents));
@@ -185,6 +184,13 @@ public class LiveSystemService {
               liveSystemMutationId,
               liveSystemMutationResponse.getStatus()));
     }
+  }
+  
+  private void logInstantiationCompleted(LiveSystemId liveSystemId,
+                                         Map<String, LiveSystemComponentDto> liveSystemMutationResponseComponents) {
+    log.info("LiveSystem [id: '{}'] instantiation completed: {}", 
+        liveSystemId,
+        getStatusFromComponents(liveSystemMutationResponseComponents));
   }
 
   private boolean allComponentsProcessed(String uniqueStatuses) {
@@ -393,6 +399,7 @@ public class LiveSystemService {
       }
       case Failed -> {
         log.warn("Instantiation failed [LiveSystemId: '{}', ComponentId: '{}']", liveSystemId, componentId);
+        printOutputFields(component.getOutputFields());
         throw new ProviderException(component.getLastOperationStatusMessage());
       }
       case Instantiating -> {
