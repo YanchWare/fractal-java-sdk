@@ -38,7 +38,11 @@ public class InstantiationWaitConfiguration {
      * Wait for the instantiation until the timeout (Default is 120 minutes).
      */
     public InstantiationWaitConfigurationBuilder withTimeoutMinutes(int timeoutMinutes) {
-      configuration.setTimeoutMinutes(timeoutMinutes);
+      if (timeoutMinutes > 0) {
+        configuration.setWaitForInstantiation(true);
+        configuration.setTimeoutMinutes(timeoutMinutes);
+      }
+
       return builder;
     }
 
