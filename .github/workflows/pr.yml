@@ -27,6 +27,7 @@ jobs:
           key: fractal-sdk-maven-dependencies
           
       - name: Maven Clean Package
+        working-directory: fractal.sdk
         run: mvn clean package
         
       - name: Save dependencies cache
