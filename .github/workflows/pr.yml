@@ -28,7 +28,7 @@ jobs:
           
       - name: Maven Clean Package
         working-directory: fractal.sdk
-        run: mvn clean package
+        run: mvn --batch-mode clean package
         
       - name: Save dependencies cache
         uses: actions/cache@v4
