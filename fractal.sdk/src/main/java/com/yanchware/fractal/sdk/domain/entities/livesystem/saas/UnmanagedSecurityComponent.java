@@ -9,14 +9,14 @@ import lombok.ToString;
 
 import java.util.Collection;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.SAAS_EXTERNAL_SECURITY;
+import static com.yanchware.fractal.sdk.valueobjects.ComponentType.SAAS_UNMANAGED_SECURITY;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
-public class ExternalSecurityComponent extends com.yanchware.fractal.sdk.domain.entities.blueprint.saas.ExternalSecurityComponent implements LiveSystemComponent {
-  private final static String SECRET_VALUE_IS_BLANK = "[SaaSExternalSecurityComponent Validation] Secret Value has not been defined and it is required";
+public class UnmanagedSecurityComponent extends com.yanchware.fractal.sdk.domain.entities.blueprint.saas.UnmanagedSecurityComponent implements LiveSystemComponent {
+  private final static String SECRET_VALUE_IS_BLANK = "[SaaSUnmanagedSecurityComponent Validation] Secret Value has not been defined and it is required";
 
   private String secretName;
   private String secretValue;
@@ -30,11 +30,11 @@ public class ExternalSecurityComponent extends com.yanchware.fractal.sdk.domain.
     return new ExternalSecurityComponentBuilder();
   }
 
-  public static class ExternalSecurityComponentBuilder extends Builder<ExternalSecurityComponent, ExternalSecurityComponentBuilder> {
+  public static class ExternalSecurityComponentBuilder extends Builder<UnmanagedSecurityComponent, ExternalSecurityComponentBuilder> {
 
     @Override
-    protected ExternalSecurityComponent createComponent() {
-      return new ExternalSecurityComponent();
+    protected UnmanagedSecurityComponent createComponent() {
+      return new UnmanagedSecurityComponent();
     }
 
     @Override
@@ -65,8 +65,8 @@ public class ExternalSecurityComponent extends com.yanchware.fractal.sdk.domain.
     }
 
     @Override
-    public ExternalSecurityComponent build() {
-      component.setType(SAAS_EXTERNAL_SECURITY);
+    public UnmanagedSecurityComponent build() {
+      component.setType(SAAS_UNMANAGED_SECURITY);
       return super.build();
     }
   }

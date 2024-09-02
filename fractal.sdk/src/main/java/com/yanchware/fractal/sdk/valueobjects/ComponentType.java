@@ -59,7 +59,7 @@ public enum ComponentType {
   PAAS_SERVICE_BUS_QUEUE("Messaging.PaaS.ServiceBusQueue"),
   PAAS_SERVICE_BUS_TOPIC("Messaging.PaaS.ServiceBusTopic"),
   SAAS_UNMANAGED_BROKER("Messaging.SaaS.Unmanaged"),
-  SAAS_EXTERNAL_SECURITY("Security.SaaS.External"),
+  SAAS_UNMANAGED_SECURITY("Security.SaaS.Unmanaged"),
   SAAS_UNMANAGED_STORAGE("Storage.SaaS.Unmanaged"),
   PAAS_CDN_PROFILE("Network.PaaS.CdnProfile");
   private final String id;
