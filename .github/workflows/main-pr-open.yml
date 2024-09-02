@@ -1,4 +1,4 @@
-name: 'Master - PR Open'
+name: 'Main - PR Open'
 on:
   pull_request:
     branches:

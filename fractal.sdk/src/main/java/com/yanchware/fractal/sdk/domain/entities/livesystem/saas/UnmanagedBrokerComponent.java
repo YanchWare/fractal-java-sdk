@@ -15,7 +15,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
-public class UnmanagedBrokerComponent extends com.yanchware.fractal.sdk.domain.entities.blueprint.saas.UnmanagedStorageComponent implements LiveSystemComponent {
+public class UnmanagedBrokerComponent extends com.yanchware.fractal.sdk.domain.entities.blueprint.saas.UnmanagedBrokerComponent implements LiveSystemComponent {
   private final static String SECRET_VALUE_IS_BLANK = "[SaaSUnmanagedBrokerComponent Validation] Secret Value has not been defined and it is required";
 
   private String secretName;

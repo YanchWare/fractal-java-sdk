@@ -1,0 +1,38 @@
+name: PR
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          
+      - name: Restore dependencies cache
+        uses: actions/cache@v4
+        id: cache-restore
+        with:
+          path: |
+            .m2/repository
+          key: fractal-sdk-maven-dependencies
+          
+      - name: Maven Clean Package
+        working-directory: fractal.sdk
+        run: mvn --batch-mode clean package
+        
+      - name: Save dependencies cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            .m2/repository
+          key: fractal-sdk-maven-dependencies
