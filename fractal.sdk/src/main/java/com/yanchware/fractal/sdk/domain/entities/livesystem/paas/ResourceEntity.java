@@ -1,4 +1,4 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers;
+package com.yanchware.fractal.sdk.domain.entities.livesystem.paas;
 
 import java.util.Map;
 
