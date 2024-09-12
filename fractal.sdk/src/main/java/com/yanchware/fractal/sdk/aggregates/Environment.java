@@ -3,7 +3,6 @@ package com.yanchware.fractal.sdk.aggregates;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.domain.entities.Validatable;
 import com.yanchware.fractal.sdk.domain.entities.environment.DnsZone;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.utils.CollectionUtils;
 import com.yanchware.fractal.sdk.utils.SerializationUtils;
 import lombok.AccessLevel;
@@ -109,7 +108,7 @@ public class Environment implements Validatable {
       return builder;
     }
 
-    public EnvironmentBuilder withRegion(AzureRegion region) {
+    public EnvironmentBuilder withRegion(String region) {
       environment.parameters.put(REGION_PARAM_KEY, region);
 
       return builder;
