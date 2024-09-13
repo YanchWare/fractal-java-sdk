@@ -3,7 +3,7 @@ package com.yanchware.fractal.sdk.aggregates;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.domain.entities.Validatable;
 import com.yanchware.fractal.sdk.domain.entities.environment.DnsZone;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
+import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
 import com.yanchware.fractal.sdk.utils.CollectionUtils;
 import com.yanchware.fractal.sdk.utils.SerializationUtils;
 import lombok.AccessLevel;
@@ -30,10 +30,12 @@ public class Environment implements Validatable {
   private String name;
   private Collection<UUID> resourceGroups;
   private Map<String, Object> parameters;
+  private Map<ProviderType, CloudAgent> cloudAgentByProviderType;
 
   public Environment() {
     resourceGroups = new ArrayList<>();
     parameters = new HashMap<>();
+    cloudAgentByProviderType = new HashMap<>();
   }
 
 
@@ -109,22 +111,16 @@ public class Environment implements Validatable {
       return builder;
     }
 
-    public EnvironmentBuilder withRegion(AzureRegion region) {
-      environment.parameters.put(REGION_PARAM_KEY, region);
-
-      return builder;
+    public EnvironmentBuilder withCloudAgent(CloudAgent cloudAgent) {
+      return withCloudAgents(List.of(cloudAgent));
     }
 
-    public EnvironmentBuilder withTenantId(UUID tenantId) {
-      environment.parameters.put(TENANT_ID_PARAM_KEY, tenantId);
-
-      return builder;
-    }
-
-    public EnvironmentBuilder withSubscriptionId(UUID subscriptionId) {
-      environment.parameters.put(SUBSCRIPTION_ID_PARAM_KEY, subscriptionId);
-
-      return builder;
+    public EnvironmentBuilder withCloudAgents(Collection<CloudAgent> cloudAgents) {
+      cloudAgents.forEach(x -> {
+        x.injectIntoEnvironmentParameters(environment.parameters);
+        environment.cloudAgentByProviderType.put(x.getProvider(), x);
+      });
+      return this;
     }
 
     /**

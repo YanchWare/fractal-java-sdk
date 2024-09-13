@@ -5,6 +5,7 @@ import com.yanchware.fractal.sdk.aggregates.EnvironmentType;
 import com.yanchware.fractal.sdk.domain.entities.environment.DnsAaaaRecord;
 import com.yanchware.fractal.sdk.domain.entities.environment.DnsPtrRecord;
 import com.yanchware.fractal.sdk.domain.entities.environment.DnsZone;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureCloudAgent;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.utils.TestUtils;
 import org.junit.jupiter.api.Test;
@@ -94,9 +95,10 @@ public class EnvironmentTest {
         .withEnvironmentType(EnvironmentType.PERSONAL)
         .withOwnerId(UUID.randomUUID())
         .withShortName("production-001")
-        .withRegion(AzureRegion.AUSTRALIA_CENTRAL)
-        .withTenantId(UUID.randomUUID())
-        .withSubscriptionId(UUID.randomUUID())
+        .withCloudAgent(new AzureCloudAgent(
+                AzureRegion.AUSTRALIA_CENTRAL,
+                UUID.randomUUID(),
+                UUID.randomUUID()))
         .withResourceGroup(UUID.randomUUID())
         .withDnsZone(
             DnsZone.builder()
@@ -130,7 +132,10 @@ public class EnvironmentTest {
         .withEnvironmentType(EnvironmentType.PERSONAL)
         .withOwnerId(UUID.randomUUID())
         .withShortName("production-001")
-        .withRegion(AzureRegion.AUSTRALIA_CENTRAL)
+        .withCloudAgent(new AzureCloudAgent(
+                AzureRegion.AUSTRALIA_CENTRAL,
+                UUID.randomUUID(),
+                UUID.randomUUID()))
         .withResourceGroup(UUID.randomUUID())
         .withTags(Map.of("key1", "value1", "key2", "value2"))
         .withTag("key1", "value2")

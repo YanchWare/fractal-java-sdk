@@ -6,7 +6,7 @@ import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.exceptions.EnvironmentInitializationException;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.services.contracts.environmentscontract.commands.CreateEnvironmentRequest;
-import com.yanchware.fractal.sdk.services.contracts.environmentscontract.commands.SubscriptionInitializationRequest;
+import com.yanchware.fractal.sdk.services.contracts.environmentscontract.commands.AzureSubscriptionInitializationRequest;
 import com.yanchware.fractal.sdk.services.contracts.environmentscontract.commands.UpdateEnvironmentRequest;
 import com.yanchware.fractal.sdk.services.contracts.environmentscontract.dtos.EnvironmentResponse;
 import com.yanchware.fractal.sdk.services.contracts.environmentscontract.dtos.InitializationRunResponse;
@@ -270,7 +270,7 @@ public class EnvironmentsService {
       return switch (requestType) {
         case "CREATE" -> serialize(CreateEnvironmentRequest.fromEnvironment(environment));
         case "UPDATE" -> serialize(UpdateEnvironmentRequest.fromEnvironment(environment));
-        case "START_INITIALIZATION" -> serialize(SubscriptionInitializationRequest.fromEnvironment(environment));
+        case "START_INITIALIZATION" -> serialize(AzureSubscriptionInitializationRequest.fromEnvironment(environment));
         default -> throw new IllegalArgumentException("Unknown request type: " + requestType);
       };
     } catch (JsonProcessingException e) {
