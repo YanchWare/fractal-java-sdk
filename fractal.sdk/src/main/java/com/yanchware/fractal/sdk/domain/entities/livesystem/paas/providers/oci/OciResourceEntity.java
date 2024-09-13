@@ -1,6 +1,6 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.oci;
 
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.ResourceEntity;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.ResourceEntity;
 
 import java.util.ArrayList;
 import java.util.Collection;

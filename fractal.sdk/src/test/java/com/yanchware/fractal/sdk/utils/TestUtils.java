@@ -12,6 +12,7 @@ import com.yanchware.fractal.sdk.domain.entities.ComponentLink;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.*;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PodManagedIdentity;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.RoleAssignment;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.aws.AwsElasticKubernetesService;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureOsSku;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzurePostgreSqlDatabase;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzurePostgreSqlDbms;
@@ -25,6 +26,7 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.G
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GoogleKubernetesEngine.GoogleKubernetesEngineBuilder;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.oci.OciContainerEngineForKubernetes;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.oci.OciContainerEngineForKubernetes.OciContainerEngineForKubernetesBuilder;
+import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.aws.AwsElasticKubernetesService.AwsElasticKubernetesServiceBuilder;
 import com.yanchware.fractal.sdk.services.contracts.ComponentDto;
 import com.yanchware.fractal.sdk.valueobjects.ComponentId;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +40,7 @@ import java.util.UUID;
 import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PreemptionPolicy.NEVER;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PreemptionPolicy.PREEMPT_LOWER_PRIORITY;
+import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.aws.AwsRegion.EU_NORTH_1;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureMachineType.STANDARD_B2S;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureOsType.LINUX;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion.WEST_EUROPE;
@@ -381,6 +384,12 @@ public class TestUtils {
     return OciContainerEngineForKubernetes.builder()
             .withId(ComponentId.from("test"))
             .withRegion(EU_ZURICH_1);
+  }
+
+  public static AwsElasticKubernetesServiceBuilder getDefaultEks() {
+    return AwsElasticKubernetesService.builder()
+            .withId(ComponentId.from("test"))
+            .withRegion(EU_NORTH_1);
   }
 
   public static void assertGenericComponent(ComponentDto componentDto, Component comp, String type) {
