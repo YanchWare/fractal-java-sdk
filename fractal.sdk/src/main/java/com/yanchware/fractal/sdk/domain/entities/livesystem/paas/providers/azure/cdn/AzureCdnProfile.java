@@ -6,7 +6,7 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceEntity;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
-import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
+import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_CDN_PROFILE;
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_CDN_PROFILE;
 
 /**
  * Represents an Azure CDN Profile within the SDK, encapsulating the configuration for a Content Delivery Network (CDN)

@@ -10,7 +10,7 @@ import lombok.ToString;
 
 import java.util.Collection;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_POSTGRESQL_DATABASE;
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_POSTGRESQL_DATABASE;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Getter

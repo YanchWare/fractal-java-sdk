@@ -7,13 +7,13 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.aks.AzureNodePool;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.aks.ManagedClusterSkuTier;
 import com.yanchware.fractal.sdk.utils.TestUtils;
-import com.yanchware.fractal.sdk.valueobjects.ComponentId;
+import com.yanchware.fractal.sdk.domain.values.ComponentId;
 import org.junit.jupiter.api.Test;
 
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion.WEST_EUROPE;
 import static com.yanchware.fractal.sdk.utils.TestUtils.getAksBuilder;
 import static com.yanchware.fractal.sdk.utils.TestUtils.getDefaultAks;
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_KUBERNETES;
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_KUBERNETES;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;

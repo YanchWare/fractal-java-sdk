@@ -4,7 +4,7 @@ import com.yanchware.fractal.sdk.domain.entities.Component;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.BlueprintComponent;
 import lombok.ToString;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_RELATIONAL_DBMS;
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_RELATIONAL_DBMS;
 
 @ToString(callSuper = true)
 public class PaaSRelationalDbms extends Component implements BlueprintComponent {

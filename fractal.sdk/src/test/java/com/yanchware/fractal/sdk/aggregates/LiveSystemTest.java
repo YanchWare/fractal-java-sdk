@@ -1,5 +1,6 @@
 package com.yanchware.fractal.sdk.aggregates;
 
+import com.yanchware.fractal.sdk.domain.livesystem.LiveSystem;
 import org.junit.jupiter.api.Test;
 
 import static com.yanchware.fractal.sdk.utils.TestUtils.getDefaultAks;

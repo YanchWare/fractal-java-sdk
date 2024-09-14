@@ -3,8 +3,9 @@ package com.yanchware.fractal.sdk.services;
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
-import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.commands.CreateBlueprintCommandRequest;
-import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.dtos.BlueprintComponentDto;
+import com.yanchware.fractal.sdk.domain.blueprint.service.BlueprintService;
+import com.yanchware.fractal.sdk.domain.blueprint.service.commands.CreateBlueprintCommandRequest;
+import com.yanchware.fractal.sdk.domain.blueprint.service.dtos.BlueprintComponentDto;
 import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
 import com.yanchware.fractal.sdk.utils.StringHandler;
 import io.github.resilience4j.retry.RetryRegistry;
@@ -42,7 +43,7 @@ public class BlueprintServiceTest {
             .withStatus(202)
             .withHeader("Content-Type", "application/json")));
 
-        blueprintService.createBlueprint(buildBlueprintRequest(), "resource-group/fr:fr");
+        blueprintService.create(buildBlueprintRequest(), "resource-group/fr:fr");
 
         verify(postRequestedFor(urlPathEqualTo("/blueprints/resource-group/fr/fr")));
     }

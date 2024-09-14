@@ -9,7 +9,7 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureTlsVersion;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.storageaccount.valueobjects.*;
-import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
+import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_STORAGE_ACCOUNT;
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_STORAGE_ACCOUNT;
 
 @Getter
 @Setter

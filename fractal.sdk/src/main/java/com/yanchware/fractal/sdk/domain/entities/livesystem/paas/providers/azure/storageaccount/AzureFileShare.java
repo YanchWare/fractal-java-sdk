@@ -5,7 +5,7 @@ import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSFileShare;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
-import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
+import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import com.yanchware.fractal.sdk.utils.CollectionUtils;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_FILE_SHARE;
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_FILE_SHARE;
 
 @Getter
 @Setter(AccessLevel.PROTECTED)

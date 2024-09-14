@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_COSMOS_ACCOUNT;
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_COSMOS_ACCOUNT;
 
 public abstract class AzureCosmosAccountBuilder<T extends Component & AzureCosmosAccount, B extends AzureCosmosAccountBuilder<T, B>> extends Component.Builder<T, B> {
 

@@ -1,8 +1,9 @@
 package com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands;
 
-import com.yanchware.fractal.sdk.aggregates.Environment;
-import com.yanchware.fractal.sdk.aggregates.LiveSystem;
-import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.EnvironmentDto;
+import com.yanchware.fractal.sdk.domain.environment.EnvironmentAggregate;
+import com.yanchware.fractal.sdk.domain.livesystem.LiveSystem;
+import com.yanchware.fractal.sdk.domain.livesystem.service.commands.InstantiateLiveSystemCommandRequest;
+import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.EnvironmentDto;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
 
@@ -28,7 +29,7 @@ class InstantiateLiveSystemCommandRequestTest {
         });
     }
 
-    private void assertEnvironment(EnvironmentDto envDto, Environment env) {
+    private void assertEnvironment(EnvironmentDto envDto, EnvironmentAggregate env) {
         SoftAssertions.assertSoftly(softly -> {
             softly.assertThat(envDto.getId().getType().toString()).isEqualTo(env.getEnvironmentType().toString());
             softly.assertThat(envDto.getId().getOwnerId()).isEqualTo(env.getOwnerId());

@@ -10,7 +10,7 @@ import lombok.ToString;
 
 import java.util.*;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.CAAS_TRAEFIK;
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.CAAS_TRAEFIK;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Getter

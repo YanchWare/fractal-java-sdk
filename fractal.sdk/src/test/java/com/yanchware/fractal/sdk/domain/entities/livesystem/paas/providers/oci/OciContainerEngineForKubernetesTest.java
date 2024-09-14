@@ -3,7 +3,7 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.oci;
 import org.junit.jupiter.api.Test;
 
 import static com.yanchware.fractal.sdk.utils.TestUtils.getDefaultOke;
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_KUBERNETES;
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_KUBERNETES;
 import static org.assertj.core.api.Assertions.*;
 
 public class OciContainerEngineForKubernetesTest {

@@ -6,8 +6,8 @@ import com.yanchware.fractal.sdk.TestWithFixture;
 import com.yanchware.fractal.sdk.domain.entities.Component;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos.*;
 import com.yanchware.fractal.sdk.utils.TestUtils;
-import com.yanchware.fractal.sdk.valueobjects.ComponentId;
-import com.yanchware.fractal.sdk.valueobjects.ComponentType;
+import com.yanchware.fractal.sdk.domain.values.ComponentId;
+import com.yanchware.fractal.sdk.domain.values.ComponentType;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.Test;
 

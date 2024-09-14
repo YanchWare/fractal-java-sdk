@@ -2,7 +2,7 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 
 import org.junit.jupiter.api.Test;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.CAAS_OCELOT;
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.CAAS_OCELOT;
 import static org.assertj.core.api.Assertions.*;
 
 class CaaSOcelotTest {

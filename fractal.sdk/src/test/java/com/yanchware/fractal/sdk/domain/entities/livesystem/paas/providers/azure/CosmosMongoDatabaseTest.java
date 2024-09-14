@@ -2,9 +2,9 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos.AzureCosmosMongoDatabase;
-import com.yanchware.fractal.sdk.valueobjects.ComponentType;
+import com.yanchware.fractal.sdk.domain.values.ComponentType;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_COSMOS_MONGO_DATABASE;
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_COSMOS_MONGO_DATABASE;
 
 public class CosmosMongoDatabaseTest extends CosmosEntityTest<AzureCosmosMongoDatabase.AzureCosmosMongoDatabaseBuilder> {
 

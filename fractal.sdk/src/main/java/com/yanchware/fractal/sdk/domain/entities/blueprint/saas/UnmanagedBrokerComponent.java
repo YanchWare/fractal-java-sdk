@@ -4,7 +4,7 @@ import com.yanchware.fractal.sdk.domain.entities.Component;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.BlueprintComponent;
 import lombok.ToString;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.SAAS_UNMANAGED_BROKER;
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.SAAS_UNMANAGED_BROKER;
 
 @ToString(callSuper = true)
 public class UnmanagedBrokerComponent extends Component implements BlueprintComponent {

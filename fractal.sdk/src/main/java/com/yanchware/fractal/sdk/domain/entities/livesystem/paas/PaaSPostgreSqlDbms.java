@@ -11,7 +11,7 @@ import lombok.ToString;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_POSTGRESQL_DBMS;
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_POSTGRESQL_DBMS;
 
 @Getter
 @Setter(AccessLevel.PROTECTED)

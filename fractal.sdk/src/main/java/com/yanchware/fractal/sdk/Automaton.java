@@ -1,22 +1,21 @@
 package com.yanchware.fractal.sdk;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.yanchware.fractal.sdk.aggregates.Environment;
-import com.yanchware.fractal.sdk.aggregates.LiveSystem;
+import com.yanchware.fractal.sdk.domain.blueprint.BlueprintFactory;
+import com.yanchware.fractal.sdk.domain.environment.EnvironmentAggregate;
+import com.yanchware.fractal.sdk.domain.livesystem.LiveSystem;
 import com.yanchware.fractal.sdk.configuration.EnvVarSdkConfiguration;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.configuration.instantiation.InstantiationConfiguration;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemId;
 import com.yanchware.fractal.sdk.domain.exceptions.ComponentInstantiationException;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
-import com.yanchware.fractal.sdk.services.BlueprintService;
-import com.yanchware.fractal.sdk.services.EnvironmentsService;
-import com.yanchware.fractal.sdk.services.LiveSystemService;
-import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.commands.CreateBlueprintCommandRequest;
-import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands.InstantiateLiveSystemCommandRequest;
-import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemComponentMutationDto;
-import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemComponentStatusDto;
-import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemMutationDto;
+import com.yanchware.fractal.sdk.domain.environment.EnvironmentsFactory;
+import com.yanchware.fractal.sdk.domain.livesystem.service.LiveSystemService;
+import com.yanchware.fractal.sdk.domain.livesystem.service.commands.InstantiateLiveSystemCommandRequest;
+import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.LiveSystemComponentMutationDto;
+import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.LiveSystemComponentStatusDto;
+import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.LiveSystemMutationDto;
 import io.github.resilience4j.core.IntervalFunction;
 import io.github.resilience4j.retry.RetryConfig;
 import io.github.resilience4j.retry.RetryRegistry;
@@ -36,16 +35,16 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Slf4j
 public class Automaton {
   private static Automaton instance;
-  private static BlueprintService blueprintService;
+  private static BlueprintFactory blueprintFactory;
   private static LiveSystemService liveSystemService;
-  private static EnvironmentsService environmentsService;
+  private static EnvironmentsFactory environmentsFactory;
   private static RetryRegistry serviceRetryRegistry;
 
   private Automaton(HttpClient httpClient, SdkConfiguration sdkConfiguration) {
     Automaton.serviceRetryRegistry = getDefaultRetryRegistry();
-    Automaton.blueprintService = new BlueprintService(httpClient, sdkConfiguration, Automaton.serviceRetryRegistry);
+    Automaton.blueprintFactory = new BlueprintFactory(httpClient, sdkConfiguration, Automaton.serviceRetryRegistry);
     Automaton.liveSystemService = new LiveSystemService(httpClient, sdkConfiguration, Automaton.serviceRetryRegistry);
-    Automaton.environmentsService = new EnvironmentsService(httpClient, sdkConfiguration, Automaton.serviceRetryRegistry);
+    Automaton.environmentsFactory = new EnvironmentsFactory(httpClient, sdkConfiguration, Automaton.serviceRetryRegistry);
   }
 
   /**
@@ -87,7 +86,7 @@ public class Automaton {
         mutation.getId());
   }
 
-  private static String envrionmentToJsonString(Environment environment) throws InstantiatorException {
+  private static String environmentToJsonString(EnvironmentAggregate environment) throws InstantiatorException {
     try {
       return serialize(environment);
     } catch (JsonProcessingException e) {
@@ -102,7 +101,7 @@ public class Automaton {
   private static LiveSystemMutationDto instantiateLiveSystem(LiveSystem liveSystem)
       throws InstantiatorException {
     log.info("Starting to instantiate live system [id: '{}']", liveSystem.getLiveSystemId());
-    log.info("Environment -> {}", envrionmentToJsonString(liveSystem.getEnvironment()));
+    log.info("Environment -> {}", environmentToJsonString(liveSystem.getEnvironment()));
 
     createOrUpdateBlueprint(liveSystem);
 
@@ -110,10 +109,8 @@ public class Automaton {
   }
 
   private static void createOrUpdateBlueprint(LiveSystem liveSystem) throws InstantiatorException {
-    var blueprintCommand = CreateBlueprintCommandRequest.fromLiveSystem(
-        liveSystem.getComponents(), liveSystem.getFractalId());
-
-    blueprintService.createOrUpdateBlueprint(blueprintCommand, liveSystem.getFractalId());
+    var blueprintAggregate = blueprintFactory.getBlueprintAggregate(liveSystem);
+    blueprintAggregate.createOrUpdate();
   }
 
   /**
@@ -122,7 +119,7 @@ public class Automaton {
    * @param environment the environment to be instantiated
    * @throws InstantiatorException if an error occurs during instantiation
    */
-  public static void instantiate(Environment environment) throws InstantiatorException {
+  public static void instantiate(EnvironmentAggregate environment) throws InstantiatorException {
     if (instance == null) {
       initializeAutomaton(getSdkConfiguration());
     }
@@ -319,12 +316,8 @@ public class Automaton {
         componentMutationDto.getId());
   }
 
-  private static void instantiateEnvironment(Environment environment) throws InstantiatorException {
-    var response = environmentsService.createOrUpdateEnvironment(environment);
-
-    if (response.getStatus().equalsIgnoreCase("active")) {
-      environmentsService.InitializeSubscription(environment);
-    }
+  private static void instantiateEnvironment(EnvironmentAggregate environment) throws InstantiatorException {
+    environment.initializeAgents();
   }
 
   private static EnvVarSdkConfiguration getSdkConfiguration() throws InstantiatorException {

@@ -4,7 +4,7 @@ import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSRelationalDa
 import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
-import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
+import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +13,7 @@ import lombok.ToString;
 import java.util.Collection;
 import java.util.Map;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_COSMOS_POSTGRESQL_DATABASE;
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_COSMOS_POSTGRESQL_DATABASE;
 
 @Getter
 @Setter

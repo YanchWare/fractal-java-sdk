@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Map;
 
 import static com.yanchware.fractal.sdk.utils.TestUtils.getDefaultGke;
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_KUBERNETES;
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_KUBERNETES;
 import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.*;
 

@@ -5,7 +5,7 @@ import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSStorageConta
 import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
-import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
+import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_STORAGE_CONTAINER;
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_STORAGE_CONTAINER;
 
 @Getter
 @Setter(AccessLevel.PROTECTED)

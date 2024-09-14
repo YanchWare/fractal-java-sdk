@@ -3,7 +3,7 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.saas;
 
 import org.junit.jupiter.api.Test;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.SAAS_UNMANAGED_BROKER;
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.SAAS_UNMANAGED_BROKER;
 import static org.assertj.core.api.Assertions.*;
 
 class UnmanagedMessageBrokerTest {

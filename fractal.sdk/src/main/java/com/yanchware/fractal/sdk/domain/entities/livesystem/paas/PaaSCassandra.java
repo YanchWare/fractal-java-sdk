@@ -10,7 +10,7 @@ import lombok.ToString;
 
 import java.util.Collection;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_CASANDRA_DBMS;
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_CASANDRA_DBMS;
 
 @Getter
 @Setter(AccessLevel.PROTECTED)

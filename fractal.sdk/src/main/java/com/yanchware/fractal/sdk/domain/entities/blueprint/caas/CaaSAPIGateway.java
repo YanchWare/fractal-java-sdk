@@ -3,7 +3,7 @@ package com.yanchware.fractal.sdk.domain.entities.blueprint.caas;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.BlueprintComponent;
 import lombok.ToString;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.CAAS_API_GATEWAY;
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.CAAS_API_GATEWAY;
 
 @ToString(callSuper = true)
 public class CaaSAPIGateway extends CaaSComponent implements BlueprintComponent {

@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.AzureWebApp.builder;
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_WEBAPP;
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_WEBAPP;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

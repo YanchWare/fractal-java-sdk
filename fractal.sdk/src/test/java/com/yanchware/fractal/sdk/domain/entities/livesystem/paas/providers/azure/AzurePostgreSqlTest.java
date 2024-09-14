@@ -1,7 +1,7 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PaaSPostgreSqlDatabase;
-import com.yanchware.fractal.sdk.valueobjects.ComponentId;
+import com.yanchware.fractal.sdk.domain.values.ComponentId;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
@@ -10,8 +10,8 @@ import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PostgreS
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion.WEST_EUROPE;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureStorageAutoGrow.ENABLED;
 import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.valueobjects.AzureSkuName.B_GEN5_1;
-import static com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType.AZURE;
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_POSTGRESQL_DBMS;
+import static com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType.AZURE;
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_POSTGRESQL_DBMS;
 import static org.assertj.core.api.Assertions.*;
 
 public class AzurePostgreSqlTest {

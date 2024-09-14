@@ -5,7 +5,7 @@ import com.yanchware.fractal.sdk.domain.entities.environment.DnsRecord;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.CustomWorkload;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.CustomWorkloadBuilder;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemComponent;
-import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
+import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import com.yanchware.fractal.sdk.utils.SerializationUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +13,7 @@ import lombok.ToString;
 
 import java.util.*;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.CAAS_K8S_WORKLOAD;
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.CAAS_K8S_WORKLOAD;
 
 @Getter
 @Setter

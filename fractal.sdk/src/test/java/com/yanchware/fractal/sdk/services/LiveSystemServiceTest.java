@@ -9,11 +9,12 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos.AzureCosmosGremlinDatabase;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos.AzureCosmosGremlinDbms;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
-import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands.InstantiateLiveSystemCommandRequest;
-import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.EnvironmentDto;
-import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.EnvironmentIdDto;
-import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.EnvironmentTypeDto;
-import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemComponentDto;
+import com.yanchware.fractal.sdk.domain.livesystem.service.LiveSystemService;
+import com.yanchware.fractal.sdk.domain.livesystem.service.commands.InstantiateLiveSystemCommandRequest;
+import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.EnvironmentDto;
+import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.EnvironmentIdDto;
+import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.EnvironmentTypeDto;
+import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.LiveSystemComponentDto;
 import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
 import com.yanchware.fractal.sdk.utils.StringHandler;
 import io.github.resilience4j.retry.RetryRegistry;

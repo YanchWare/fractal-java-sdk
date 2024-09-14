@@ -1,7 +1,7 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.oci;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.ExtendableEnum;
+import com.yanchware.fractal.sdk.utils.ExtendableEnum;
 
 import java.util.Collection;
 

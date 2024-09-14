@@ -1,6 +1,6 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure;
 
-import com.yanchware.fractal.sdk.valueobjects.ComponentId;
+import com.yanchware.fractal.sdk.domain.values.ComponentId;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

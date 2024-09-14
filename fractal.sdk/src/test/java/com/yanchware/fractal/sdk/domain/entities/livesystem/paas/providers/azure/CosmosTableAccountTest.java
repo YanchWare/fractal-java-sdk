@@ -3,12 +3,12 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos.AzureCosmosTableDbms;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos.AzureCosmosTableEntity;
-import com.yanchware.fractal.sdk.valueobjects.ComponentType;
+import com.yanchware.fractal.sdk.domain.values.ComponentType;
 
 import java.util.Collection;
 import java.util.List;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_COSMOS_ACCOUNT;
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_COSMOS_ACCOUNT;
 
 public class CosmosTableAccountTest extends CosmosAccountTest<AzureCosmosTableDbms.AzureCosmosTableDbmsBuilder> {
 

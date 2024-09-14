@@ -1,7 +1,7 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp;
 
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.KubernetesCluster;
-import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
+import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import static com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType.GCP;
+import static com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType.GCP;
 import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 
 @Getter

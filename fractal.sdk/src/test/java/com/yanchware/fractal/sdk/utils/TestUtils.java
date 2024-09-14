@@ -4,9 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.yanchware.fractal.sdk.aggregates.Environment;
-import com.yanchware.fractal.sdk.aggregates.EnvironmentType;
-import com.yanchware.fractal.sdk.aggregates.LiveSystem;
+import com.yanchware.fractal.sdk.domain.environment.EnvironmentAggregate;
+import com.yanchware.fractal.sdk.domain.environment.EnvironmentType;
+import com.yanchware.fractal.sdk.domain.livesystem.LiveSystem;
 import com.yanchware.fractal.sdk.domain.entities.Component;
 import com.yanchware.fractal.sdk.domain.entities.ComponentLink;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.*;
@@ -27,8 +27,8 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.G
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.oci.OciContainerEngineForKubernetes;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.oci.OciContainerEngineForKubernetes.OciContainerEngineForKubernetesBuilder;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.aws.AwsElasticKubernetesService.AwsElasticKubernetesServiceBuilder;
-import com.yanchware.fractal.sdk.services.contracts.ComponentDto;
-import com.yanchware.fractal.sdk.valueobjects.ComponentId;
+import com.yanchware.fractal.sdk.domain.services.contracts.ComponentDto;
+import com.yanchware.fractal.sdk.domain.values.ComponentId;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.SoftAssertions;
 
@@ -326,8 +326,8 @@ public class TestUtils {
         .build();
   }
 
-  public static Environment getEnvExample() {
-    return Environment.builder()
+  public static EnvironmentAggregate getEnvExample() {
+    return EnvironmentAggregate.builder()
         .withEnvironmentType(EnvironmentType.PERSONAL)
         .withOwnerId(UUID.fromString("2e114308-14ec-4d77-b610-490324fa1844"))
         .withResourceGroup(UUID.randomUUID())

@@ -3,7 +3,7 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azur
 import com.yanchware.fractal.sdk.domain.entities.Component;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSMessageEntity;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemComponent;
-import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
+import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -11,7 +11,7 @@ import lombok.ToString;
 import java.time.Duration;
 import java.util.Collection;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_SERVICE_BUS_QUEUE;
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_SERVICE_BUS_QUEUE;
 
 
 @Getter

@@ -2,8 +2,8 @@ package com.yanchware.fractal.sdk.domain.entities;
 
 import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.CaaSAPIGateway;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.CaaSKubernetesWorkload;
-import com.yanchware.fractal.sdk.valueobjects.ComponentId;
-import com.yanchware.fractal.sdk.valueobjects.ComponentType;
+import com.yanchware.fractal.sdk.domain.values.ComponentId;
+import com.yanchware.fractal.sdk.domain.values.ComponentType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;

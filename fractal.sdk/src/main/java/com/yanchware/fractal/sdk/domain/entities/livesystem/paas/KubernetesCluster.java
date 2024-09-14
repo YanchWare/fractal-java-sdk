@@ -5,7 +5,7 @@ import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.*;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSContainerPlatform;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.*;
-import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.ProviderType;
+import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,7 +17,7 @@ import java.util.List;
 
 import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 import static com.yanchware.fractal.sdk.utils.ValidationUtils.isPresentAndValidIpRange;
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_KUBERNETES;
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_KUBERNETES;
 
 /**
  * <p>

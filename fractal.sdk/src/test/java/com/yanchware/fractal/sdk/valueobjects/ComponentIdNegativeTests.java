@@ -1,5 +1,6 @@
 package com.yanchware.fractal.sdk.valueobjects;
 
+import com.yanchware.fractal.sdk.domain.values.ComponentId;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -10,7 +11,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentId.MAX_LENGTH;
+import static com.yanchware.fractal.sdk.domain.values.ComponentId.MAX_LENGTH;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ComponentIdNegativeTests {

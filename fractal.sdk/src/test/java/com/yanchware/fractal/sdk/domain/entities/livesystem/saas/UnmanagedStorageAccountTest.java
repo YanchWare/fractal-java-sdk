@@ -4,7 +4,7 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.saas;
 import com.yanchware.fractal.sdk.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.SAAS_UNMANAGED_STORAGE;
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.SAAS_UNMANAGED_STORAGE;
 import static org.assertj.core.api.Assertions.*;
 
 class UnmanagedStorageAccountTest {

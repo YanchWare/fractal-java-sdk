@@ -4,7 +4,7 @@ import com.yanchware.fractal.sdk.domain.entities.Component;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.BlueprintComponent;
 import lombok.ToString;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_STORAGE_CONTAINER;
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_STORAGE_CONTAINER;
 
 @ToString(callSuper = true)
 public class PaaSStorageContainer extends Component implements BlueprintComponent {

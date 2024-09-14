@@ -1,7 +1,7 @@
 package com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.cosmos;
 
 import com.yanchware.fractal.sdk.domain.entities.Component;
-import com.yanchware.fractal.sdk.valueobjects.ComponentId;
+import com.yanchware.fractal.sdk.domain.values.ComponentId;
 
 public abstract class AzureCosmosEntityBuilder<T extends Component, B extends AzureCosmosEntityBuilder<T, B>> extends Component.Builder<T, B>{
 

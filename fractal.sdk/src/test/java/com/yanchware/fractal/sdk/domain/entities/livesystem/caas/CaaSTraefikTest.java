@@ -3,14 +3,14 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem.caas;
 import com.jayway.jsonpath.JsonPath;
 import com.yanchware.fractal.sdk.TestWithFixture;
 import com.yanchware.fractal.sdk.utils.TestUtils;
-import com.yanchware.fractal.sdk.valueobjects.ComponentId;
+import com.yanchware.fractal.sdk.domain.values.ComponentId;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.CAAS_TRAEFIK;
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.CAAS_TRAEFIK;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

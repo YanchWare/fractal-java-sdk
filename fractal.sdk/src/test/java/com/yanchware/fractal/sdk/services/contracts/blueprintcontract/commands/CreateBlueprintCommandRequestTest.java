@@ -1,5 +1,6 @@
 package com.yanchware.fractal.sdk.services.contracts.blueprintcontract.commands;
 
+import com.yanchware.fractal.sdk.domain.blueprint.service.commands.CreateBlueprintCommandRequest;
 import com.yanchware.fractal.sdk.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 

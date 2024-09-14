@@ -1,6 +1,6 @@
 package com.yanchware.fractal.sdk.domain.entities;
 
-import com.yanchware.fractal.sdk.valueobjects.ComponentId;
+import com.yanchware.fractal.sdk.domain.values.ComponentId;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;

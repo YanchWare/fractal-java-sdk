@@ -4,7 +4,7 @@ import com.yanchware.fractal.sdk.domain.entities.Component;
 import com.yanchware.fractal.sdk.domain.entities.blueprint.BlueprintComponent;
 import lombok.ToString;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_GRAPH_DATABASE;
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_GRAPH_DATABASE;
 
 @ToString(callSuper = true)
 public class PaaSGraphDatabase extends Component implements BlueprintComponent {

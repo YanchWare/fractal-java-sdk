@@ -8,7 +8,7 @@ import lombok.ToString;
 
 import java.util.Collection;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.CAAS_ELASTIC_LOGGING;
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.CAAS_ELASTIC_LOGGING;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 /**

@@ -5,7 +5,7 @@ import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.Test;
 
-import static com.yanchware.fractal.sdk.valueobjects.ComponentType.PAAS_CASANDRA_DBMS;
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_CASANDRA_DBMS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
