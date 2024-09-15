@@ -1,17 +1,11 @@
 package com.yanchware.fractal.sdk.domain.livesystem.service.dtos;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.util.Date;
 
-@Data
-@NoArgsConstructor
-public class LiveSystemComponentMutationDto {
-  private String liveSystemId;
-  private String id;
-  private LiveSystemMutationStatusDto status;
-  private LiveSystemComponentDto component;
-  private Date created;
-  private Date lastUpdated;
-}
+public record LiveSystemComponentMutationDto (
+  String liveSystemId,
+  String id,
+  LiveSystemMutationStatusDto status,
+  LiveSystemComponentDto component,
+  Date created,
+  Date lastUpdated){ }

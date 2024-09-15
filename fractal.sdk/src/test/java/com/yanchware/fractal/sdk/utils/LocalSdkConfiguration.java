@@ -25,12 +25,12 @@ public class LocalSdkConfiguration implements SdkConfiguration {
 
   @Override
   public String getAzureSpClientId() {
-    return "";
+    return "xxx";
   }
 
   @Override
   public String getAzureSpClientSecret() {
-    return "";
+    return "xxx";
   }
 
   @SneakyThrows

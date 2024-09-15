@@ -1,4 +1,4 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem.saas;
+package com.yanchware.fractal.sdk.domain.livesystem.saas;
 
 import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;

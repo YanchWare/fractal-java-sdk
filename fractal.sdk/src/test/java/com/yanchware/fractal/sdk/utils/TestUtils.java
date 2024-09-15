@@ -6,9 +6,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentAggregate;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentType;
-import com.yanchware.fractal.sdk.domain.livesystem.LiveSystem;
+import com.yanchware.fractal.sdk.domain.environment.EnvironmentsFactory;
+import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemAggregate;
 import com.yanchware.fractal.sdk.domain.Component;
 import com.yanchware.fractal.sdk.domain.ComponentLink;
+import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemsFactory;
 import com.yanchware.fractal.sdk.domain.livesystem.caas.*;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.PodManagedIdentity;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.RoleAssignment;
@@ -29,9 +31,11 @@ import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciContain
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.aws.AwsElasticKubernetesService.AwsElasticKubernetesServiceBuilder;
 import com.yanchware.fractal.sdk.domain.services.contracts.ComponentDto;
 import com.yanchware.fractal.sdk.domain.values.ComponentId;
+import io.github.resilience4j.retry.RetryRegistry;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.SoftAssertions;
 
+import java.net.http.HttpClient;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -327,7 +331,11 @@ public class TestUtils {
   }
 
   public static EnvironmentAggregate getEnvExample() {
-    return EnvironmentAggregate.builder()
+    var environmentsFactory = new EnvironmentsFactory(
+            HttpClient.newBuilder().build(),
+            new LocalSdkConfiguration(""),
+            RetryRegistry.ofDefaults());
+    return environmentsFactory.builder()
         .withEnvironmentType(EnvironmentType.PERSONAL)
         .withOwnerId(UUID.fromString("2e114308-14ec-4d77-b610-490324fa1844"))
         .withResourceGroup(UUID.randomUUID())
@@ -335,8 +343,12 @@ public class TestUtils {
         .build();
   }
 
-  public static LiveSystem getLiveSystemExample() {
-    return LiveSystem.builder()
+  public static LiveSystemAggregate getLiveSystemExample() {
+    var liveSystemsFactory = new LiveSystemsFactory(
+            HttpClient.newBuilder().build(),
+            new LocalSdkConfiguration(""),
+            RetryRegistry.ofDefaults());
+    return liveSystemsFactory.builder()
         .withName("business-platform-test")
         .withDescription("Business platform")
         .withResourceGroupId("test-resource-group")

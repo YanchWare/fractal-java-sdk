@@ -1,4 +1,4 @@
-package com.yanchware.fractal.sdk.domain.entities.livesystem.saas;
+package com.yanchware.fractal.sdk.domain.livesystem.saas;
 
 import org.junit.jupiter.api.Test;
 

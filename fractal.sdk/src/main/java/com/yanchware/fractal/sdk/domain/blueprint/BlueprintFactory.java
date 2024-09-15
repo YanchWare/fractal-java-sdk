@@ -1,7 +1,7 @@
 package com.yanchware.fractal.sdk.domain.blueprint;
 
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
-import com.yanchware.fractal.sdk.domain.livesystem.LiveSystem;
+import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemAggregate;
 import com.yanchware.fractal.sdk.domain.blueprint.service.dtos.BlueprintComponentDto;
 import io.github.resilience4j.retry.RetryRegistry;
 
@@ -19,7 +19,7 @@ public class BlueprintFactory {
         this.retryRegistry = retryRegistry;
     }
 
-    public BlueprintAggregate getBlueprintAggregate(LiveSystem liveSystem) {
+    public BlueprintAggregate getBlueprintAggregate(LiveSystemAggregate liveSystem) {
         var fractalId = liveSystem.getFractalId();
         return new BlueprintAggregate(
                 client,

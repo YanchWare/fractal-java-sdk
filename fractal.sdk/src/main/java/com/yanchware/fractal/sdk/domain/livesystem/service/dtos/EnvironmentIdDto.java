@@ -1,26 +1,11 @@
 package com.yanchware.fractal.sdk.domain.livesystem.service.dtos;
 
-import com.yanchware.fractal.sdk.domain.environment.EnvironmentAggregate;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.util.UUID;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class EnvironmentIdDto {
-  private EnvironmentTypeDto type;
-  private UUID ownerId;
-  private String shortName;
-
-  public static EnvironmentIdDto fromEnvironment(EnvironmentAggregate env) {
-    return new EnvironmentIdDto(
-        EnvironmentTypeDto.fromString(env.getEnvironmentType().toString()),
-        env.getOwnerId(),
-        env.getShortName());
-  }
+public record EnvironmentIdDto (
+        EnvironmentTypeDto type,
+        UUID ownerId,
+        String shortName){
 
   @Override
   public String toString() {

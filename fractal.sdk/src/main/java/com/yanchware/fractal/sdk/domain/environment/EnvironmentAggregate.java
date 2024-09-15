@@ -15,6 +15,8 @@ import com.yanchware.fractal.sdk.domain.environment.oci.OciCloudAgent;
 import com.yanchware.fractal.sdk.domain.environment.service.EnvironmentService;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.domain.environment.service.dtos.EnvironmentResponse;
+import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.EnvironmentDto;
+import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.EnvironmentIdDto;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import com.yanchware.fractal.sdk.utils.CollectionUtils;
 import com.yanchware.fractal.sdk.utils.SerializationUtils;
@@ -208,20 +210,25 @@ public class EnvironmentAggregate implements Validatable {
     if (existingEnvironmentResponse == null) return false;
 
     var environmentIdInResponse = existingEnvironmentResponse.id();
-    return Objects.equals(environmentIdInResponse.getType().toString(), environmentType.toString()) &&
-            Objects.equals(environmentIdInResponse.getOwnerId(), ownerId) &&
-            Objects.equals(environmentIdInResponse.getShortName(), shortName) &&
+    return Objects.equals(environmentIdInResponse.type().toString(), environmentType.toString()) &&
+            Objects.equals(environmentIdInResponse.ownerId(), ownerId) &&
+            Objects.equals(environmentIdInResponse.shortName(), shortName) &&
             Objects.equals(existingEnvironmentResponse.name(), name) &&
             Objects.equals(existingEnvironmentResponse.resourceGroups(), resourceGroups) &&
             mapsEqual(parameters, parameters);
   }
 
-  @SneakyThrows
   public void initializeAgents() {
     var agents = cloudAgentByProviderType.values();
     try (ExecutorService executor = Executors.newFixedThreadPool(agents.size())) {
       for (var agent : agents) {
-        executor.execute(agent::initialize);
+        executor.execute(() -> {
+            try {
+                agent.initialize();
+            } catch (InstantiatorException e) {
+                throw new RuntimeException(e);
+            }
+        });
       }
     }
   }
@@ -241,5 +248,9 @@ public class EnvironmentAggregate implements Validatable {
     } catch (JsonProcessingException e) {
       return false;
     }
+  }
+
+  public EnvironmentDto toDto() {
+      return new EnvironmentDto(getId().toDto(), parameters);
   }
 }

@@ -65,27 +65,4 @@ public class LiveSystemComponentDto extends ComponentDto {
             return builder;
         }
     }
-
-    public static Map<String, LiveSystemComponentDto> fromLiveSystemComponents(Collection<LiveSystemComponent> lsComponents) {
-        Map<String, LiveSystemComponentDto> map = new HashMap<>();
-        for (LiveSystemComponent comp : lsComponents) {
-            List<Map<String, Object>> listOfComponents = ReflectionUtils.buildComponents(comp);
-            for (var component : listOfComponents) {
-                LiveSystemComponentDto componentDto = toLiveSystemComponent(comp, component);
-                map.put(componentDto.getId(), componentDto);
-            }
-        }
-        return map;
-    }
-
-    private static LiveSystemComponentDto toLiveSystemComponent(LiveSystemComponent component, Map<String, Object> allFields) {
-        return LiveSystemComponentDto.builder()
-                .withFields(allFields)
-                .withType(String.valueOf(allFields.get(COMPONENT_TYPE)))
-                .withStatus(LiveSystemComponentStatusDto.Instantiating)
-                .withOutputFields(emptyMap())
-                .withLastUpdated(new Date())
-                .withProvider(component.getProvider())
-                .build();
-    }
 }
