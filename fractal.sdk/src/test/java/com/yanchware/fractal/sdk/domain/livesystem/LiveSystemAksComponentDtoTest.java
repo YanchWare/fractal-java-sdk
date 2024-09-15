@@ -25,8 +25,7 @@ class LiveSystemAksComponentDtoTest extends LiveSystemKubernetesComponentDtoTest
                 RetryRegistry.ofDefaults());
         var aks = TestUtils.getAksExample();
         var liveSystem = factory.builder()
-                .withResourceGroupId("test")
-                .withName("test")
+                .withId(new LiveSystemIdValue("test", "test"))
                 .withComponent(aks)
                 .build();
         var lsDtoMap = liveSystem.blueprintMapFromLiveSystemComponents();

@@ -6,7 +6,6 @@ import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.EnvironmentDto;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
 
-import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
 import static com.yanchware.fractal.sdk.utils.TestUtils.getLiveSystemExample;
 
 class InstantiateLiveSystemCommandRequestTest {
@@ -16,7 +15,7 @@ class InstantiateLiveSystemCommandRequestTest {
         var ls = getLiveSystemExample();
         var commandRequest = new InstantiateLiveSystemCommandRequest(
                 ls.getId().toString(),
-                ls.getFractalId(),
+                ls.getFractalId().toString(),
                 ls.getDescription(),
                 null,
                 ls.blueprintMapFromLiveSystemComponents(),
@@ -28,8 +27,8 @@ class InstantiateLiveSystemCommandRequestTest {
 
     private void assertLiveSystemInfo(InstantiateLiveSystemCommandRequest commandRequest, LiveSystemAggregate ls) {
         SoftAssertions.assertSoftly(softly -> {
-            softly.assertThat(commandRequest.liveSystemId()).contains(ls.getName(), ls.getResourceGroupId());
-            softly.assertThat(commandRequest.fractalId()).contains(ls.getName(), ls.getResourceGroupId(), DEFAULT_VERSION);
+            softly.assertThat(commandRequest.liveSystemId()).isEqualTo(ls.getId().toString());
+            softly.assertThat(commandRequest.fractalId()).isEqualTo(ls.getFractalId().toString());
             softly.assertThat(commandRequest.description()).isEqualTo(ls.getDescription());
         });
     }

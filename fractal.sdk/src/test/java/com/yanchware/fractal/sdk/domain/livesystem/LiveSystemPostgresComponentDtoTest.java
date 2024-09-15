@@ -26,8 +26,7 @@ class LiveSystemPostgresComponentDtoTest {
                 RetryRegistry.ofDefaults());
         var postgres = TestUtils.getAzurePostgresExample();
         var liveSystem = factory.builder()
-                .withResourceGroupId("test")
-                .withName("test")
+                .withId(new LiveSystemIdValue("test", "test"))
                 .withComponent(postgres)
                 .build();
         assertPostgres(postgres, liveSystem.blueprintMapFromLiveSystemComponents());

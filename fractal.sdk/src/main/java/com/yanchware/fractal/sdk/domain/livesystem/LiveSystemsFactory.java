@@ -1,6 +1,7 @@
 package com.yanchware.fractal.sdk.domain.livesystem;
 
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
+import com.yanchware.fractal.sdk.domain.blueprint.FractalIdValue;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentAggregate;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import com.yanchware.fractal.sdk.utils.CollectionUtils;
@@ -8,8 +9,6 @@ import io.github.resilience4j.retry.RetryRegistry;
 
 import java.net.http.HttpClient;
 import java.util.*;
-
-import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public class LiveSystemsFactory {
 
@@ -50,21 +49,16 @@ public class LiveSystemsFactory {
             return this;
         }
 
-        public LiveSystemBuilder withName(String name) {
-            liveSystem.setName(name);
+        public LiveSystemBuilder withId(LiveSystemIdValue liveSystemId) {
+            liveSystem.setId(liveSystemId);
             return builder;
         }
 
-        public LiveSystemBuilder withFractalName(String fractalName) {
-            if(isBlank(fractalName)) {
-                throw new IllegalArgumentException("Fractal name cannot be null or empty");
+        public LiveSystemBuilder withFractalId(FractalIdValue fractalId) {
+            if(fractalId == null) {
+                throw new IllegalArgumentException("Fractal id cannot be null or empty");
             }
-            liveSystem.setFractalName(fractalName);
-            return builder;
-        }
-
-        public LiveSystemBuilder withResourceGroupId(String resourceGroupId) {
-            liveSystem.setResourceGroupId(resourceGroupId);
+            liveSystem.setFractalId(fractalId);
             return builder;
         }
 

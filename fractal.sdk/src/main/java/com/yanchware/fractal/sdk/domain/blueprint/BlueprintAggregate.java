@@ -13,7 +13,7 @@ import java.util.Collection;
 @Getter
 public class BlueprintAggregate {
     private final BlueprintService service;
-    private final String fractalId;
+    private final FractalIdValue fractalId;
     private final String description;
     private final boolean isPrivate;
     private final Collection<BlueprintComponentDto> components;
@@ -22,7 +22,7 @@ public class BlueprintAggregate {
             HttpClient client,
             SdkConfiguration sdkConfiguration,
             RetryRegistry retryRegistry,
-            String fractalId,
+            FractalIdValue fractalId,
             String description,
             boolean isPrivate,
             // TODO: We should find a way to fix this instead to have DTOs in the Aggregate 🤮

@@ -2,6 +2,7 @@ package com.yanchware.fractal.sdk.domain.blueprint.service;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
+import com.yanchware.fractal.sdk.domain.blueprint.FractalIdValue;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.domain.blueprint.service.commands.CreateBlueprintCommandRequest;
 import com.yanchware.fractal.sdk.domain.blueprint.service.dtos.BlueprintComponentDto;
@@ -42,7 +43,9 @@ public class BlueprintServiceTest {
             .withStatus(202)
             .withHeader("Content-Type", "application/json")));
 
-        blueprintService.create(buildBlueprintRequest(), "resource-group/fr:fr");
+        blueprintService.create(
+                buildBlueprintRequest(),
+                new FractalIdValue("resource-group", "fr", "fr"));
 
         verify(postRequestedFor(urlPathEqualTo("/blueprints/resource-group/fr/fr")));
     }

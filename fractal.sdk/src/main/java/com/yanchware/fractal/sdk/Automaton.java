@@ -7,6 +7,7 @@ import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemAggregate;
 import com.yanchware.fractal.sdk.configuration.EnvVarSdkConfiguration;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.configuration.instantiation.InstantiationConfiguration;
+import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemIdValue;
 import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemsFactory;
 import com.yanchware.fractal.sdk.domain.exceptions.ComponentInstantiationException;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
@@ -180,25 +181,24 @@ public class Automaton {
    *   <li><strong>Output Fields Logging:</strong> If the deployment is successful, the component's output fields are logged for informational purposes.</li>
    * </ol>
    *
-   * @param resourceGroupId            The ID of the resource group containing the live system.
-   * @param liveSystemName             The name of the live system.
+   * @param liveSystemId               The ID of the live system.
    * @param customWorkloadComponentId  The ID of the custom workload component to deploy.
-   * @param commitId                  The expected commit ID to be deployed.
-   * @param config                    The instantiation configuration, which can specify whether to wait for deployment completion.
+   * @param commitId                   The expected commit ID to be deployed.
+   * @param config                     The instantiation configuration, which can specify whether to wait for deployment completion.
    *
    * @throws ComponentInstantiationException If ny of the required parameters are null or empty, the component is not found, the deployment fails, or an error occurs while waiting for deployment completion.
    */
-  public static void deployCustomWorkload(String resourceGroupId,
-                                          String liveSystemName,
+  public static void deployCustomWorkload(LiveSystemIdValue liveSystemId,
                                           String customWorkloadComponentId,
                                           String commitId,
-                                          InstantiationConfiguration config) throws ComponentInstantiationException, InstantiatorException {
-
-    if (isBlank(resourceGroupId)) {
+                                          InstantiationConfiguration config)
+          throws ComponentInstantiationException, InstantiatorException
+  {
+    if (isBlank(liveSystemId.resourceGroupId())) {
       throw new ComponentInstantiationException("Resource group ID cannot be blank.");
     }
 
-    if (isBlank(liveSystemName)) {
+    if (isBlank(liveSystemId.name())) {
       throw new ComponentInstantiationException("Live system name cannot be blank.");
     }
 
@@ -215,15 +215,15 @@ public class Automaton {
     }
 
     var liveSystem = liveSystemFactory.builder()
-            .withResourceGroupId(resourceGroupId).withName(liveSystemName)
+            .withId(liveSystemId)
             .build();
 
     var componentMutationDto = liveSystem.instantiateComponent(customWorkloadComponentId);
 
     if (componentMutationDto == null) {
       throw new ComponentInstantiationException(
-          String.format("Component [id: '%s'] not found in LiveSystem [name: '%s', resource group id: '%s']",
-              customWorkloadComponentId, liveSystemName, resourceGroupId));
+          String.format("Component [id: '%s'] not found in LiveSystem [id: '%s']",
+              customWorkloadComponentId, liveSystemId));
     }
 
     // Optional waiting based on configuration
@@ -241,7 +241,7 @@ public class Automaton {
           log.info("Component is active but at a different commit ID. Expected: '{}', Current: '{}'. Re-triggering deployment",
               commitId, component.getOutputFields().get(GIT_COMMIT_ID_KEY));
 
-          deployCustomWorkload(resourceGroupId, liveSystemName, customWorkloadComponentId, commitId, config);
+          deployCustomWorkload(liveSystemId, customWorkloadComponentId, commitId, config);
         } else if (componentStatus != LiveSystemComponentStatusDto.Active) {
           printOutputFields(component.getOutputFields());
           throw new ComponentInstantiationException("Component deployment failed with status: " + updatedComponentMutation.status());
@@ -268,20 +268,18 @@ public class Automaton {
    *
    * <p>Note: This method does not wait for deployment completion or verify the commit ID.</p>
    *
-   * @param resourceGroupId            The ID of the resource group containing the live system.
-   * @param liveSystemName             The name of the live system.
+   * @param liveSystemId               The ID of the live system.
    * @param customWorkloadComponentId  The ID of the custom workload component to deploy.
    *
    * @throws ComponentInstantiationException If any of the required parameters are null or empty or the component is not found.
    */
-  public static void deployCustomWorkload(String resourceGroupId,
-                                          String liveSystemName,
+  public static void deployCustomWorkload(LiveSystemIdValue liveSystemId,
                                           String customWorkloadComponentId) throws ComponentInstantiationException, InstantiatorException {
-    if (isBlank(resourceGroupId)) {
+    if (isBlank(liveSystemId.resourceGroupId())) {
       throw new ComponentInstantiationException("Resource group ID cannot be blank.");
     }
 
-    if (isBlank(liveSystemName)) {
+    if (isBlank(liveSystemId.name())) {
       throw new ComponentInstantiationException("Live system name cannot be blank.");
     }
 
@@ -294,15 +292,15 @@ public class Automaton {
     }
 
     var liveSystem = liveSystemFactory.builder()
-            .withResourceGroupId(resourceGroupId).withName(liveSystemName)
+            .withId(liveSystemId)
             .build();
 
     var componentMutationDto = liveSystem.instantiateComponent(customWorkloadComponentId);
 
     if (componentMutationDto == null) {
       throw new ComponentInstantiationException(
-          String.format("Component [id: '%s'] not found in LiveSystem [name: '%s', resource group id: '%s']",
-              customWorkloadComponentId, liveSystemName, resourceGroupId));
+          String.format("Component [id: '%s'] not found in LiveSystem [id: '%s']",
+              customWorkloadComponentId, liveSystemId));
     }
   }
 

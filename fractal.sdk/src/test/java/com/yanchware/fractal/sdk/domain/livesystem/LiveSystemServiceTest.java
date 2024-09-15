@@ -3,6 +3,7 @@ package com.yanchware.fractal.sdk.domain.livesystem;
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
+import com.yanchware.fractal.sdk.domain.blueprint.FractalIdValue;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentType;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentsFactory;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion;
@@ -34,6 +35,7 @@ public class LiveSystemServiceTest {
         .build();
     SdkConfiguration sdkConfiguration = new LocalSdkConfiguration(wmRuntimeInfo.getHttpBaseUrl());
     var liveSystemsFactory = new LiveSystemsFactory(httpClient, sdkConfiguration, RetryRegistry.ofDefaults());
+    var liveSystemsService = new LiveSystemService(httpClient, sdkConfiguration, RetryRegistry.ofDefaults());
     var environmentsFactory = new EnvironmentsFactory(httpClient, sdkConfiguration, RetryRegistry.ofDefaults());
 
     var inputStream = getClass().getClassLoader()
@@ -50,8 +52,8 @@ public class LiveSystemServiceTest {
             .withShortName("5d5bc38d-1d23-4d10-8")
             .build();
     var liveSystem = liveSystemsFactory.builder()
-            .withResourceGroupId("resourceGroupId")
-            .withName("livesystem-name")
+            .withId(new LiveSystemIdValue("resourceGroupId", "livesystem-name"))
+            .withFractalId(new FractalIdValue("resourceGroupId", "fractalName", "fractalVersion" ))
             .withDescription("prod")
             .withEnvironment(environment)
             .withComponent(AzureCosmosGremlinDbms.builder()
@@ -74,7 +76,14 @@ public class LiveSystemServiceTest {
             .withStatus(200)
             .withHeader("Content-Type", "application/json")));
 
-    liveSystem.instantiate();
+    liveSystemsService.instantiateLiveSystem(
+            liveSystem.getId().toString(),
+            liveSystem.getFractalId(),
+            liveSystem.getDescription(),
+            null,
+            liveSystem.blueprintMapFromLiveSystemComponents(),
+            liveSystem.getEnvironment().toDto());
+
     verify(postRequestedFor(urlPathEqualTo("/livesystems/")));
   }
 

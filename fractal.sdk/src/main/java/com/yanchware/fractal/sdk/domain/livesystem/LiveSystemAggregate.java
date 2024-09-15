@@ -2,6 +2,7 @@ package com.yanchware.fractal.sdk.domain.livesystem;
 
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.Validatable;
+import com.yanchware.fractal.sdk.domain.blueprint.FractalIdValue;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentAggregate;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.domain.livesystem.service.LiveSystemService;
@@ -17,7 +18,6 @@ import java.net.http.HttpClient;
 import java.util.*;
 
 import static com.yanchware.fractal.sdk.configuration.Constants.COMPONENT_TYPE;
-import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
 import static java.util.Collections.emptyMap;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -25,16 +25,15 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Setter(AccessLevel.PROTECTED)
 public class LiveSystemAggregate implements Validatable {
     private final static String ID_IS_NULL = "[LiveSystem Validation] Id has not been defined and it is required";
+    private final static String NAME_IS_NULL = "[LiveSystem Validation] Name has not been defined and it is required";
     private final static String RESOURCE_GROUP_ID_IS_NULL = "[LiveSystem Validation] ResourceGroupId has not been defined and it is required'";
     private final static String EMPTY_COMPONENT_LIST = "[LiveSystem Validation] Components list is null or empty and at least one component is required";
     private final LiveSystemService service;
 
     @Getter
-    private String name;
+    private LiveSystemIdValue id;
     @Getter
-    private String resourceGroupId;
-    @Getter
-    private String fractalName;
+    private FractalIdValue fractalId;
     @Getter
     private String description;
     @Getter
@@ -48,10 +47,6 @@ public class LiveSystemAggregate implements Validatable {
     @Getter
     private ProviderType provider;
 
-    public LiveSystemIdValue getId() {
-        return new LiveSystemIdValue(name, resourceGroupId);
-    }
-
     protected LiveSystemAggregate(
             HttpClient client,
             SdkConfiguration sdkConfiguration,
@@ -63,7 +58,7 @@ public class LiveSystemAggregate implements Validatable {
 
     // TODO: Use entity instead of LiveSystemComponentMutationDto
     public LiveSystemComponentMutationDto instantiateComponent(String componentId) throws InstantiatorException {
-        return service.instantiateComponent(resourceGroupId, name, componentId);
+        return service.instantiateComponent(id, componentId);
     }
 
     public LiveSystemComponentMutationDto getComponentMutationStatus(String componentId, String mutationId)
@@ -83,7 +78,7 @@ public class LiveSystemAggregate implements Validatable {
         if (service.retrieveLiveSystem(getId()) != null) {
             return service.updateLiveSystem(
                     getId().toString(),
-                    getFractalId(),
+                    fractalId,
                     description,
                     provider.toString(),
                     blueprintMapFromLiveSystemComponents(),
@@ -92,7 +87,7 @@ public class LiveSystemAggregate implements Validatable {
 
         return service.instantiateLiveSystem(
                 getId().toString(),
-                getFractalId(),
+                fractalId,
                 description,
                 provider.toString(),
                 blueprintMapFromLiveSystemComponents(),
@@ -131,19 +126,19 @@ public class LiveSystemAggregate implements Validatable {
     public Collection<String> validate() {
         Collection<String> errors = new ArrayList<>();
 
-        if (isBlank(name)) {
+        if (id == null) {
             errors.add(ID_IS_NULL);
+            return errors;
         }
 
-        if (isBlank(resourceGroupId)) {
+        if (isBlank(id.name())) {
+            errors.add(NAME_IS_NULL);
+        }
+
+        if (isBlank(id.resourceGroupId())) {
             errors.add(RESOURCE_GROUP_ID_IS_NULL);
         }
 
         return errors;
-    }
-
-    public String getFractalId() {
-        return String.format("%s/%s:%s", getResourceGroupId(),
-            getFractalName() != null ? getFractalName() : getName(), DEFAULT_VERSION);
     }
 }

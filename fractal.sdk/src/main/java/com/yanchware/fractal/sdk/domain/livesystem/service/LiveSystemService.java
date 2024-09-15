@@ -3,6 +3,7 @@ package com.yanchware.fractal.sdk.domain.livesystem.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.Service;
+import com.yanchware.fractal.sdk.domain.blueprint.FractalIdValue;
 import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemIdValue;
 import com.yanchware.fractal.sdk.domain.exceptions.ComponentInstantiationException;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
@@ -290,13 +291,13 @@ public class LiveSystemService extends Service {
     return getDeserializedResponseBody(response.body());
   }
 
-  public LiveSystemComponentMutationDto instantiateComponent(String resourceGroupId, String liveSystemName, String componentId)
+  public LiveSystemComponentMutationDto instantiateComponent(LiveSystemIdValue liveSystemId, String componentId)
       throws InstantiatorException {
-    log.info("Instantiating component [id: '{}'] in LiveSystem [name: '{}', resource group id: '{}']",
-        componentId, liveSystemName, resourceGroupId);
+    log.info("Instantiating component [id: '{}'] in LiveSystem [id: '{}']",
+        componentId, liveSystemId);
 
     HttpRequest request = HttpUtils.buildPostRequest(
-        getInstantiateComponentUri(resourceGroupId, liveSystemName, componentId),
+        getInstantiateComponentUri(liveSystemId, componentId),
         sdkConfiguration, null); // Assuming no request body needed for instantiation
 
     return executeRequestWithRetries(
@@ -413,10 +414,10 @@ public class LiveSystemService extends Service {
     }
   }
 
-  private URI getInstantiateComponentUri(String resourceGroupId, String liveSystemName, String componentId) {
+  private URI getInstantiateComponentUri(LiveSystemIdValue liveSystemId, String componentId) {
     return URI.create(String.format(
         "%s/%s/%s/component/%s/instantiate",
-        getLiveSystemUri(), resourceGroupId, liveSystemName, componentId));
+        getLiveSystemUri(), liveSystemId.resourceGroupId(), liveSystemId.name(), componentId));
   }
 
   private URI getComponentStateUri(String liveSystemId, String componentId, String mutationId) {
@@ -437,7 +438,7 @@ public class LiveSystemService extends Service {
 
   public LiveSystemMutationDto updateLiveSystem(
           String liveSystemId,
-          String fractalId,
+          FractalIdValue fractalId,
           String description,
           String provider,
           Map<String, LiveSystemComponentDto> blueprintMap,
@@ -446,7 +447,7 @@ public class LiveSystemService extends Service {
 
     var command = new UpdateLiveSystemCommandRequest(
             liveSystemId,
-            fractalId,
+            fractalId.toString(),
             description,
             provider,
             blueprintMap,
@@ -487,7 +488,7 @@ public class LiveSystemService extends Service {
 
   public LiveSystemMutationDto instantiateLiveSystem(
           String liveSystemId,
-          String fractalId,
+          FractalIdValue fractalId,
           String description,
           String provider,
           Map<String, LiveSystemComponentDto> blueprintMap,
@@ -495,7 +496,7 @@ public class LiveSystemService extends Service {
   {
     var command = new InstantiateLiveSystemCommandRequest(
             liveSystemId,
-            fractalId,
+            fractalId.toString(),
             description,
             provider,
             blueprintMap,

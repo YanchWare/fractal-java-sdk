@@ -3,6 +3,7 @@ package com.yanchware.fractal.sdk.domain.blueprint.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.Service;
+import com.yanchware.fractal.sdk.domain.blueprint.FractalIdValue;
 import com.yanchware.fractal.sdk.domain.blueprint.service.dtos.BlueprintComponentDto;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.domain.blueprint.service.commands.CreateBlueprintCommandRequest;
@@ -27,7 +28,7 @@ public class BlueprintService extends Service {
   }
 
   public void createOrUpdate(
-          String fractalId,
+          FractalIdValue fractalId,
           String description,
           boolean isPrivate,
           Collection<BlueprintComponentDto> components) throws InstantiatorException
@@ -43,7 +44,7 @@ public class BlueprintService extends Service {
     create(command, fractalId);
   }
 
-  protected void create(CreateBlueprintCommandRequest command, String fractalId) throws InstantiatorException {
+  protected void create(CreateBlueprintCommandRequest command, FractalIdValue fractalId) throws InstantiatorException {
     HttpRequest request;
     try {
       request = HttpUtils.buildPostRequest(getBlueprintsUri(fractalId), sdkConfiguration, serialize(command));
@@ -54,7 +55,7 @@ public class BlueprintService extends Service {
     executeRequestWithRetries("createBlueprint", client, retryRegistry, request, new int[]{202});
   }
 
-  protected void update(UpdateBlueprintCommandRequest command, String fractalId) throws InstantiatorException {
+  protected void update(UpdateBlueprintCommandRequest command, FractalIdValue fractalId) throws InstantiatorException {
     HttpRequest request;
     try {
       request = HttpUtils.buildPutRequest(getBlueprintsUri(fractalId), sdkConfiguration, serialize(command));
@@ -65,7 +66,7 @@ public class BlueprintService extends Service {
     executeRequestWithRetries("updateBlueprint", client, retryRegistry, request, new int[]{202});
   }
 
-  protected BlueprintDto retrieve(String fractalId) throws InstantiatorException {
+  protected BlueprintDto retrieve(FractalIdValue fractalId) throws InstantiatorException {
 
     return executeRequestWithRetries(
         "retrieveBlueprint",
@@ -76,8 +77,8 @@ public class BlueprintService extends Service {
         BlueprintDto.class);
   }
 
-  private URI getBlueprintsUri(String fractalId) {
-    return URI.create(sdkConfiguration.getBlueprintEndpoint() + "/" + fractalId.replace(":", "/"));
+  private URI getBlueprintsUri(FractalIdValue fractalId) {
+    return URI.create(sdkConfiguration.getBlueprintEndpoint() + "/" + fractalId.toString().replace(":", "/"));
   }
 
   private String getCommandAsJsonString(CreateBlueprintCommandRequest command) throws InstantiatorException {

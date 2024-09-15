@@ -4,12 +4,14 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.yanchware.fractal.sdk.domain.blueprint.FractalIdValue;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentAggregate;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentType;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentsFactory;
 import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemAggregate;
 import com.yanchware.fractal.sdk.domain.Component;
 import com.yanchware.fractal.sdk.domain.ComponentLink;
+import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemIdValue;
 import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemsFactory;
 import com.yanchware.fractal.sdk.domain.livesystem.caas.*;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.PodManagedIdentity;
@@ -349,9 +351,9 @@ public class TestUtils {
             new LocalSdkConfiguration(""),
             RetryRegistry.ofDefaults());
     return liveSystemsFactory.builder()
-        .withName("business-platform-test")
+        .withId(new LiveSystemIdValue("test-resource-group", "business-platform-test"))
+        .withFractalId(new FractalIdValue("test-resource-group", "business-platform-test", "v1.0"))
         .withDescription("Business platform")
-        .withResourceGroupId("test-resource-group")
         .withComponent(getAksExample())
         .withComponent(getAzurePostgresExample())
         .withEnvironment(getEnvExample())
