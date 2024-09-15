@@ -1,7 +1,7 @@
 package com.yanchware.fractal.sdk.domain.services.contracts;
 
 import com.yanchware.fractal.sdk.configuration.Constants;
-import com.yanchware.fractal.sdk.domain.entities.ComponentLink;
+import com.yanchware.fractal.sdk.domain.ComponentLink;
 import com.yanchware.fractal.sdk.domain.values.ComponentId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

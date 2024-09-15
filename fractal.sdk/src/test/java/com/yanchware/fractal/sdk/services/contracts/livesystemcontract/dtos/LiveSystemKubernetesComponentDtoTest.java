@@ -1,7 +1,7 @@
 package com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos;
 
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.*;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.KubernetesCluster;
+import com.yanchware.fractal.sdk.domain.livesystem.caas.*;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.KubernetesCluster;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.LiveSystemComponentDto;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import com.yanchware.fractal.sdk.domain.values.ComponentType;

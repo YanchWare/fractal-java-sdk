@@ -4,7 +4,7 @@ import com.yanchware.fractal.sdk.domain.blueprint.service.dtos.BlueprintComponen
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.List;
+import java.util.Collection;
 
 @Data
 @Builder
@@ -14,7 +14,7 @@ public class UpdateBlueprintCommandRequest {
     private String fractalVersion;
     private String description;
     private boolean isPrivate;
-    List<BlueprintComponentDto> components;
+    Collection<BlueprintComponentDto> components;
 
     public static UpdateBlueprintCommandRequest fromCreateCommand(CreateBlueprintCommandRequest command, String fractalId) {
         String[] splitId = fractalId.split("/|\\:");
@@ -22,9 +22,9 @@ public class UpdateBlueprintCommandRequest {
                 .resourceGroupId(splitId[0])
                 .fractalName(splitId[1])
                 .fractalVersion(splitId[2])
-                .description(command.getDescription())
+                .description(command.description())
                 .isPrivate(command.isPrivate())
-                .components(command.getComponents())
+                .components(command.components())
                 .build();
     }
 }

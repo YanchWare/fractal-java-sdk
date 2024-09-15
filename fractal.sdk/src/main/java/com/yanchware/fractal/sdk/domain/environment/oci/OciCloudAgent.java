@@ -1,6 +1,6 @@
 package com.yanchware.fractal.sdk.domain.environment.oci;
 
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.oci.OciRegion;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciRegion;
 import com.yanchware.fractal.sdk.domain.environment.CloudAgentEntity;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentIdValue;
 import com.yanchware.fractal.sdk.domain.environment.service.EnvironmentService;
@@ -9,7 +9,7 @@ import lombok.Getter;
 
 import java.util.Map;
 
-import static com.yanchware.fractal.sdk.domain.entities.environment.EnvironmentConstants.REGION_PARAM_KEY;
+import static com.yanchware.fractal.sdk.domain.environment.EnvironmentAggregate.REGION_PARAM_KEY;
 
 @Getter
 public class OciCloudAgent extends CloudAgentEntity {

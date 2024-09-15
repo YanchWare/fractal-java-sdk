@@ -2,12 +2,12 @@ package com.yanchware.fractal.sdk.domain.environment;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
-import com.yanchware.fractal.sdk.domain.entities.Validatable;
-import com.yanchware.fractal.sdk.domain.entities.environment.DnsZone;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.aws.AwsRegion;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpRegion;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.oci.OciRegion;
+import com.yanchware.fractal.sdk.domain.Validatable;
+import com.yanchware.fractal.sdk.domain.blueprint.iaas.DnsZone;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.aws.AwsRegion;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GcpRegion;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciRegion;
 import com.yanchware.fractal.sdk.domain.environment.aws.AwsCloudAgent;
 import com.yanchware.fractal.sdk.domain.environment.azure.AzureCloudAgent;
 import com.yanchware.fractal.sdk.domain.environment.gcp.GcpCloudAgent;
@@ -30,14 +30,16 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.yanchware.fractal.sdk.domain.entities.environment.DnsRecordConstants.DNS_ZONES_PARAM_KEY;
-import static com.yanchware.fractal.sdk.domain.entities.environment.EnvironmentConstants.CLOUD_AGENTS_PARAM_KEY;
-import static com.yanchware.fractal.sdk.domain.entities.environment.EnvironmentConstants.TAGS_PARAM_KEY;
+import static com.yanchware.fractal.sdk.domain.blueprint.iaas.DnsZone.DNS_ZONES_PARAM_KEY;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Slf4j
 @Setter(AccessLevel.PROTECTED)
 public class EnvironmentAggregate implements Validatable {
+  public static final String REGION_PARAM_KEY = "region";
+  private static final String TAGS_PARAM_KEY = "tags";
+  private static final String CLOUD_AGENTS_PARAM_KEY = "agents";
+
   private final static String OWNER_ID_IS_NULL = "Environment OwnerId has not been defined and it is required";
   private final static String SHORT_NAME_IS_NULL = "Environment ShortName has not been defined and it is required";
   private final static String RESOURCE_GROUPS_IS_EMPTY = "Environment ResourceGroups has not been defined and it is required";

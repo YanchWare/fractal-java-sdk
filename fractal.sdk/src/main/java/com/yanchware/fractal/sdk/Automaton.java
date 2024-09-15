@@ -7,7 +7,7 @@ import com.yanchware.fractal.sdk.domain.livesystem.LiveSystem;
 import com.yanchware.fractal.sdk.configuration.EnvVarSdkConfiguration;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.configuration.instantiation.InstantiationConfiguration;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemId;
+import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemId;
 import com.yanchware.fractal.sdk.domain.exceptions.ComponentInstantiationException;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentsFactory;

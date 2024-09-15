@@ -1,5 +1,6 @@
 package com.yanchware.fractal.sdk.domain.entities.environment;
 
+import com.yanchware.fractal.sdk.domain.blueprint.iaas.DnsCaaRecord;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

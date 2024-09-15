@@ -16,7 +16,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.util.Collection;
-import java.util.List;
 
 import static com.yanchware.fractal.sdk.utils.SerializationUtils.serialize;
 

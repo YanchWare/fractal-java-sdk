@@ -1,11 +1,11 @@
 package com.yanchware.fractal.sdk.domain.environment;
 
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
-import com.yanchware.fractal.sdk.domain.entities.environment.DnsZone;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.aws.AwsRegion;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpRegion;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.oci.OciRegion;
+import com.yanchware.fractal.sdk.domain.blueprint.iaas.DnsZone;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.aws.AwsRegion;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GcpRegion;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciRegion;
 import com.yanchware.fractal.sdk.utils.CollectionUtils;
 import io.github.resilience4j.retry.RetryRegistry;
 import lombok.AllArgsConstructor;

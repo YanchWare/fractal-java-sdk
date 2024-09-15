@@ -1,9 +1,10 @@
 package com.yanchware.fractal.sdk.utils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.yanchware.fractal.sdk.domain.entities.Validatable;
-import com.yanchware.fractal.sdk.domain.entities.blueprint.BlueprintComponent;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemComponent;
+import com.yanchware.fractal.sdk.domain.Validatable;
+
+import com.yanchware.fractal.sdk.domain.blueprint.BlueprintComponent;
+import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import lombok.extern.slf4j.Slf4j;
 
@@ -174,8 +175,6 @@ public class ReflectionUtils {
         }
 
         parametersMap.put(f.getName(), componentObject);
-
-        
     }
 
     // New method to handle invocation of specific methods like getKind

@@ -2,11 +2,11 @@ package com.yanchware.fractal.sdk.domain.entities.livesystem;
 
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentAggregate;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentType;
-import com.yanchware.fractal.sdk.domain.entities.environment.DnsAaaaRecord;
-import com.yanchware.fractal.sdk.domain.entities.environment.DnsPtrRecord;
-import com.yanchware.fractal.sdk.domain.entities.environment.DnsZone;
+import com.yanchware.fractal.sdk.domain.environment.DnsAaaaRecord;
+import com.yanchware.fractal.sdk.domain.environment.DnsPtrRecord;
+import com.yanchware.fractal.sdk.domain.blueprint.iaas.DnsZone;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentsFactory;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
 import com.yanchware.fractal.sdk.utils.TestUtils;
 import io.github.resilience4j.retry.RetryRegistry;

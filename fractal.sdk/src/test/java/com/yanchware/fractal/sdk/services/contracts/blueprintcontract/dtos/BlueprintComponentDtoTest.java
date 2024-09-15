@@ -1,13 +1,13 @@
 package com.yanchware.fractal.sdk.services.contracts.blueprintcontract.dtos;
 
-import com.yanchware.fractal.sdk.domain.entities.blueprint.caas.*;
-import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSContainerPlatform;
-import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSRelationalDatabase;
-import com.yanchware.fractal.sdk.domain.entities.blueprint.paas.PaaSRelationalDbms;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.*;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.KubernetesCluster;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PaaSPostgreSqlDatabase;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceEntity;
+import com.yanchware.fractal.sdk.domain.blueprint.caas.*;
+import com.yanchware.fractal.sdk.domain.blueprint.paas.PaaSContainerPlatform;
+import com.yanchware.fractal.sdk.domain.blueprint.paas.PaaSRelationalDatabase;
+import com.yanchware.fractal.sdk.domain.blueprint.paas.PaaSRelationalDbms;
+import com.yanchware.fractal.sdk.domain.livesystem.caas.*;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.KubernetesCluster;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.PaaSPostgreSqlDatabase;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureResourceEntity;
 import com.yanchware.fractal.sdk.domain.blueprint.service.dtos.BlueprintComponentDto;
 import com.yanchware.fractal.sdk.utils.TestUtils;
 import org.junit.jupiter.api.Test;

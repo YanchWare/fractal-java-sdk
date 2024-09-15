@@ -1,5 +1,6 @@
 package com.yanchware.fractal.sdk.domain.entities;
 
+import com.yanchware.fractal.sdk.domain.ComponentLink;
 import com.yanchware.fractal.sdk.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 

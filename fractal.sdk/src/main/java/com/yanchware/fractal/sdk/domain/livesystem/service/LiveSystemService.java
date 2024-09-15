@@ -2,12 +2,11 @@ package com.yanchware.fractal.sdk.domain.livesystem.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemId;
+import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemId;
 import com.yanchware.fractal.sdk.domain.exceptions.ComponentInstantiationException;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.domain.exceptions.ProviderException;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.*;
-import com.yanchware.fractal.sdk.domain.services.contracts.livesystemcontract.dtos.*;
 import com.yanchware.fractal.sdk.domain.livesystem.service.commands.InstantiateLiveSystemCommandRequest;
 import com.yanchware.fractal.sdk.domain.livesystem.service.commands.UpdateLiveSystemCommandRequest;
 import com.yanchware.fractal.sdk.utils.EnvVarUtils;

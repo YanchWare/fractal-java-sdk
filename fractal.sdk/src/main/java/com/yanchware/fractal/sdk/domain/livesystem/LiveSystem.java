@@ -1,7 +1,7 @@
 package com.yanchware.fractal.sdk.domain.livesystem;
 
-import com.yanchware.fractal.sdk.domain.entities.Validatable;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemComponent;
+import com.yanchware.fractal.sdk.domain.Validatable;
+import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentAggregate;
 import lombok.AccessLevel;
 import lombok.Getter;

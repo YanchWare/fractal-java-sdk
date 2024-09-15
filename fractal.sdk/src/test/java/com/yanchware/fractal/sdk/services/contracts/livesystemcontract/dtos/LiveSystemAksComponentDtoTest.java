@@ -1,6 +1,6 @@
 package com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos;
 
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.aks.AzureKubernetesService;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.aks.AzureKubernetesService;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.LiveSystemComponentDto;
 import com.yanchware.fractal.sdk.utils.TestUtils;
 import com.yanchware.fractal.sdk.domain.values.ComponentType;

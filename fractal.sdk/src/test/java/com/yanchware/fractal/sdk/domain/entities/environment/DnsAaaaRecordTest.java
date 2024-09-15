@@ -1,5 +1,6 @@
 package com.yanchware.fractal.sdk.domain.entities.environment;
 
+import com.yanchware.fractal.sdk.domain.blueprint.iaas.DnsAaaaRecord;
 import com.yanchware.fractal.sdk.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 
