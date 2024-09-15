@@ -10,11 +10,25 @@ public class Constants {
   public static final String X_CLIENT_SECRET_HEADER = "X-ClientSecret";
   public static final String X_AZURE_SP_CLIENT_ID_HEADER = "X-Azure-SP-Client-ID";
   public static final String X_AZURE_SP_CLIENT_SECRET_HEADER = "X-Azure-SP-Client-Secret";
+  public static final String X_AWS_ACCESS_KEY_ID_HEADER = "X-AWS-Access-Key-ID";
+  public static final String X_AWS_SECRET_ACCESS_KEY_HEADER = "X-AWS-Secret-Access-Key";
+  public static final String X_AWS_SESSION_TOKEN_HEADER = "X-AWS-Session-Token";
+  public static final String X_GCP_SERVICE_ACCOUNT_EMAIL_HEADER = "X-GCP-Service-Account-Email";
+  public static final String X_GCP_SERVICE_ACCOUNT_CREDENTIALS_HEADER = "X-GCP-Service-Account-Credentials";
+  public static final String X_OCI_SERVICE_ACCOUNT_ID_HEADER = "X-OCI-Service-Account-Id";
+  public static final String X_OCI_SERVICE_ACCOUNT_CREDENTIALS_HEADER = "X-OCI-Service-Account-Credentials";
 
   public static final String CLIENT_ID_KEY = "CLIENT_ID";
   public static final String CLIENT_SECRET_KEY = "CLIENT_SECRET";
   public static final String AZURE_SP_CLIENT_ID_KEY = "AZURE_SP_CLIENT_ID";
   public static final String AZURE_SP_CLIENT_SECRET_KEY = "AZURE_SP_CLIENT_SECRET";
+  public static final String AWS_ACCESS_KEY_ID_KEY = "AWS_ACCESS_KEY_ID";
+  public static final String AWS_SECRET_ACCESS_KEY = "AWS_SECRET_ACCESS_KEY";
+  public static final String AWS_SESSION_TOKEN_KEY = "AWS_SESSION_TOKEN";
+  public static final String GCP_SERVICE_ACCOUNT_EMAIL_KEY = "GCP_SERVICE_ACCOUNT_EMAIL";
+  public static final String GCP_SERVICE_ACCOUNT_CREDENTIALS_KEY = "GCP_SERVICE_ACCOUNT_CREDENTIALS";
+  public static final String OCI_SERVICE_ACCOUNT_ID_KEY = "OCI_SERVICE_ACCOUNT_ID";
+  public static final String OCI_SERVICE_ACCOUNT_CREDENTIALS_KEY = "OCI_SERVICE_ACCOUNT_CREDENTIALS";
   public static final String BLUEPRINT_TYPE = "blueprintType";
 
   public static final String COMPONENT_TYPE = "type";

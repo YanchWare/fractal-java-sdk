@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.time.Duration;
 import java.util.Comparator;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -42,7 +43,7 @@ public abstract class CloudAgentEntity {
         this.environmentId = environmentId;
     }
 
-    protected void checkInitializationStatus() throws InstantiatorException {
+    protected void checkInitializationStatus(Supplier<InitializationRunResponse> fetchCurrentInitialization) throws InstantiatorException {
         log.info("Starting operation [checkInitializationStatus] for Environment [id: '{}']", environmentId);
 
         int maxAttempts = (int) (TOTAL_ALLOWED_DURATION.toMillis() / RETRIES_DELAY.toMillis());
@@ -57,7 +58,7 @@ public abstract class CloudAgentEntity {
 
         try {
             Retry.decorateCheckedSupplier(retry, () -> {
-                InitializationRunResponse currentInitialization = environmentService.fetchCurrentAzureInitialization(environmentId);
+                InitializationRunResponse currentInitialization = fetchCurrentInitialization.get();
                 printInitializationStatus(currentInitialization);
                 validateInitializationStatus(currentInitialization);
 

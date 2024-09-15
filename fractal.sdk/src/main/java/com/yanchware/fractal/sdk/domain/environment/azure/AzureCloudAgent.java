@@ -1,5 +1,6 @@
 package com.yanchware.fractal.sdk.domain.environment.azure;
 
+import com.yanchware.fractal.sdk.domain.environment.service.dtos.InitializationRunResponse;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.environment.CloudAgentEntity;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentIdValue;
@@ -59,10 +60,10 @@ public class AzureCloudAgent extends CloudAgentEntity {
                     tags);
 
             log.info("New initialization started, checking initialization status for environment [id: '{}']", environmentId);
-            checkInitializationStatus();
+            checkInitializationStatus(this::fetchCurrentAzureInitialization);
         } else {
             log.info("Checking initialization status for environment [id: '{}']", environmentId);
-            checkInitializationStatus();
+            checkInitializationStatus(this::fetchCurrentAzureInitialization);
         }
     }
 
@@ -72,5 +73,13 @@ public class AzureCloudAgent extends CloudAgentEntity {
                 REGION_PARAM_KEY, region,
                 TENANT_ID_PARAM_KEY, tenantId,
                 SUBSCRIPTION_ID_PARAM_KEY, subscriptionId);
+    }
+
+    private InitializationRunResponse fetchCurrentAzureInitialization() {
+        try {
+            return environmentService.fetchCurrentAzureInitialization(environmentId);
+        } catch (InstantiatorException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

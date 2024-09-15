@@ -1,16 +1,20 @@
 package com.yanchware.fractal.sdk.domain.environment.oci;
 
+import com.yanchware.fractal.sdk.domain.environment.service.dtos.InitializationRunResponse;
+import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciRegion;
 import com.yanchware.fractal.sdk.domain.environment.CloudAgentEntity;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentIdValue;
 import com.yanchware.fractal.sdk.domain.environment.service.EnvironmentService;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
 
 import static com.yanchware.fractal.sdk.domain.environment.EnvironmentAggregate.REGION_PARAM_KEY;
 
+@Slf4j
 @Getter
 public class OciCloudAgent extends CloudAgentEntity {
     public static final String TENANCY_ID_PARAM_KEY = "tenancyId";
@@ -40,10 +44,27 @@ public class OciCloudAgent extends CloudAgentEntity {
     }
 
     @Override
-    public void initialize() {
-        // TODO: implement
-    }
+    public void initialize() throws InstantiatorException {
+        var currentInitialization = environmentService.fetchCurrentOciInitialization(environmentId);
 
+        if (currentInitialization == null ||
+                "Failed".equals(currentInitialization.status()) ||
+                "Cancelled".equals(currentInitialization.status())) {
+
+            environmentService.startOciCloudAgentInitialization(
+                    environmentId,
+                    tenancyId,
+                    compartmentId,
+                    region,
+                    tags);
+
+            log.info("New initialization started, checking initialization status for environment [id: '{}']", environmentId);
+            checkInitializationStatus(this::fetchCurrentOciInitialization);
+        } else {
+            log.info("Checking initialization status for environment [id: '{}']", environmentId);
+            checkInitializationStatus(this::fetchCurrentOciInitialization);
+        }
+    }
     @Override
     protected Map<String, Object> getConfigurationForEnvironmentParameters() {
         return Map.of(
@@ -51,5 +72,13 @@ public class OciCloudAgent extends CloudAgentEntity {
                 TENANCY_ID_PARAM_KEY, tenancyId,
                 COMPARTMENT_ID_PARAM_KEY, compartmentId
         );
+    }
+
+    private InitializationRunResponse fetchCurrentOciInitialization() {
+        try {
+            return environmentService.fetchCurrentOciInitialization(environmentId);
+        } catch (InstantiatorException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

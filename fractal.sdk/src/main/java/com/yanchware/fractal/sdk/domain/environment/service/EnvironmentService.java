@@ -3,15 +3,17 @@ package com.yanchware.fractal.sdk.domain.environment.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.Service;
+import com.yanchware.fractal.sdk.domain.environment.service.commands.*;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.aws.AwsRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentIdValue;
 import com.yanchware.fractal.sdk.domain.environment.service.dtos.EnvironmentResponse;
 import com.yanchware.fractal.sdk.domain.environment.service.dtos.InitializationRunResponse;
 import com.yanchware.fractal.sdk.domain.environment.service.dtos.InitializationRunRoot;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
-import com.yanchware.fractal.sdk.domain.environment.service.commands.AzureSubscriptionInitializationRequest;
-import com.yanchware.fractal.sdk.domain.environment.service.commands.CreateEnvironmentRequest;
-import com.yanchware.fractal.sdk.domain.environment.service.commands.UpdateEnvironmentRequest;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GcpRegion;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciRegion;
+import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import com.yanchware.fractal.sdk.utils.HttpUtils;
 import io.github.resilience4j.retry.RetryRegistry;
 import lombok.extern.slf4j.Slf4j;
@@ -110,7 +112,7 @@ public class EnvironmentService extends Service {
         additionalHeaders.put(X_AZURE_SP_CLIENT_SECRET_HEADER, azureSpClientSecret);
 
         executeRequestWithRetries(
-                "InitializeSubscription",
+                "InitializeAzureSubscription",
                 client,
                 retryRegistry,
                 HttpUtils.buildPostRequest(
@@ -126,14 +128,164 @@ public class EnvironmentService extends Service {
                 EnvironmentResponse.class);
     }
 
+    public void startAwsCloudAgentInitialization(
+            EnvironmentIdValue environmentId,
+            String organizationId,
+            String accountId,
+            AwsRegion region,
+            Map<String, String> tags) throws InstantiatorException
+    {
+        var awsAccessKeyId = sdkConfiguration.getAwsAccessKeyId();
+        if (isBlank(awsAccessKeyId)) {
+            throw new IllegalArgumentException(
+                    String.format("The environment variable %s is required and it has not been defined", AWS_ACCESS_KEY_ID_KEY));
+        }
+
+        var awsSecretAccessKey = sdkConfiguration.getAwsSecretAccessKey();
+        if (isBlank(awsSecretAccessKey)) {
+            throw new IllegalArgumentException(
+                    String.format("The environment variable %s is required and it has not been defined", AWS_SECRET_ACCESS_KEY));
+        }
+
+        var awsSessionToken = sdkConfiguration.getAwsSessionToken();
+        if (isBlank(awsSessionToken)) {
+            throw new IllegalArgumentException(
+                    String.format("The environment variable %s is required and it has not been defined", AWS_SESSION_TOKEN_KEY));
+        }
+
+        Map<String, String> additionalHeaders = new HashMap<>();
+        additionalHeaders.put(X_AWS_ACCESS_KEY_ID_HEADER, awsAccessKeyId);
+        additionalHeaders.put(X_AWS_SECRET_ACCESS_KEY_HEADER, awsSecretAccessKey);
+        additionalHeaders.put(X_AWS_SESSION_TOKEN_HEADER, awsSessionToken);
+
+        executeRequestWithRetries(
+                "InitializeAwsAccount",
+                client,
+                retryRegistry,
+                HttpUtils.buildPostRequest(
+                        getEnvironmentsUri(environmentId, "initializer/aws/initialize"),
+                        sdkConfiguration,
+                        serializeSafely(new AwsAccountInitializationRequest(
+                                organizationId,
+                                accountId,
+                                region.toString(),
+                                tags)),
+                        additionalHeaders),
+                new int[]{202},
+                EnvironmentResponse.class);
+    }
+
+    public void startGcpCloudAgentInitialization(
+            EnvironmentIdValue environmentId,
+            String organizationId,
+            String projectId,
+            GcpRegion region,
+            Map<String, String> tags) throws InstantiatorException
+    {
+        var gcpServiceAccountEMail = sdkConfiguration.getGcpServiceAccountEMail();
+        if (isBlank(gcpServiceAccountEMail)) {
+            throw new IllegalArgumentException(
+                    String.format("The environment variable %s is required and it has not been defined", GCP_SERVICE_ACCOUNT_EMAIL_KEY));
+        }
+
+        var gcpServiceAccountCredentials = sdkConfiguration.getGcpServiceAccountCredentials();
+        if (isBlank(gcpServiceAccountCredentials)) {
+            throw new IllegalArgumentException(
+                    String.format("The environment variable %s is required and it has not been defined", GCP_SERVICE_ACCOUNT_CREDENTIALS_KEY));
+        }
+
+        Map<String, String> additionalHeaders = new HashMap<>();
+        additionalHeaders.put(X_GCP_SERVICE_ACCOUNT_EMAIL_HEADER, gcpServiceAccountEMail);
+        additionalHeaders.put(X_GCP_SERVICE_ACCOUNT_CREDENTIALS_HEADER, gcpServiceAccountCredentials);
+
+        executeRequestWithRetries(
+                "InitializeGcpProject",
+                client,
+                retryRegistry,
+                HttpUtils.buildPostRequest(
+                        getEnvironmentsUri(environmentId, "initializer/gcp/initialize"),
+                        sdkConfiguration,
+                        serializeSafely(new GcpProjectInitializationRequest(
+                                organizationId,
+                                projectId,
+                                region.toString(),
+                                tags)),
+                        additionalHeaders),
+                new int[]{202},
+                EnvironmentResponse.class);
+    }
+
+    public void startOciCloudAgentInitialization(
+            EnvironmentIdValue environmentId,
+            String tenancyId,
+            String compartmentId,
+            OciRegion region,
+            Map<String, String> tags) throws InstantiatorException
+    {
+        var ociServiceAccountId = sdkConfiguration.getOciServiceAccountId();
+        if (isBlank(ociServiceAccountId)) {
+            throw new IllegalArgumentException(
+                    String.format("The environment variable %s is required and it has not been defined", OCI_SERVICE_ACCOUNT_ID_KEY));
+        }
+
+        var ociServiceAccountCendentials = sdkConfiguration.getOciServiceAccountCendentials();
+        if (isBlank(ociServiceAccountCendentials)) {
+            throw new IllegalArgumentException(
+                    String.format("The environment variable %s is required and it has not been defined", OCI_SERVICE_ACCOUNT_CREDENTIALS_KEY));
+        }
+
+        Map<String, String> additionalHeaders = new HashMap<>();
+        additionalHeaders.put(X_OCI_SERVICE_ACCOUNT_ID_HEADER, ociServiceAccountId);
+        additionalHeaders.put(X_OCI_SERVICE_ACCOUNT_CREDENTIALS_HEADER, ociServiceAccountCendentials);
+
+        executeRequestWithRetries(
+                "InitializeOciProject",
+                client,
+                retryRegistry,
+                HttpUtils.buildPostRequest(
+                        getEnvironmentsUri(environmentId, "initializer/oci/initialize"),
+                        sdkConfiguration,
+                        serializeSafely(new GcpProjectInitializationRequest(
+                                tenancyId,
+                                compartmentId,
+                                region.toString(),
+                                tags)),
+                        additionalHeaders),
+                new int[]{202},
+                EnvironmentResponse.class);
+    }
+
+    public InitializationRunResponse fetchCurrentAwsInitialization(EnvironmentIdValue environmentId) throws InstantiatorException
+    {
+        return fetchCurrentInitialization(environmentId, ProviderType.AWS);
+    }
+
     public InitializationRunResponse fetchCurrentAzureInitialization(EnvironmentIdValue environmentId) throws InstantiatorException
     {
+        return fetchCurrentInitialization(environmentId, ProviderType.AZURE);
+    }
+
+    public InitializationRunResponse fetchCurrentGcpInitialization(EnvironmentIdValue environmentId) throws InstantiatorException
+    {
+        return fetchCurrentInitialization(environmentId, ProviderType.GCP);
+    }
+
+    public InitializationRunResponse fetchCurrentOciInitialization(EnvironmentIdValue environmentId) throws InstantiatorException
+    {
+        return fetchCurrentInitialization(environmentId, ProviderType.OCI);
+    }
+
+    private InitializationRunResponse fetchCurrentInitialization(
+            EnvironmentIdValue environmentId,
+            ProviderType provider) throws InstantiatorException
+    {
+        var providerStr = provider.toString().toLowerCase();
         var runRoot = executeRequestWithRetries(
-                "fetchCurrentInitialization",
+                String.format("fetchCurrent%sInitialization", providerStr),
                 client,
                 retryRegistry,
                 HttpUtils.buildGetRequest(
-                        getEnvironmentsUri(environmentId,"initializer/azure/status"),
+                        getEnvironmentsUri(environmentId,String.format("initializer/%s/status", providerStr)),
                         sdkConfiguration),
                 new int[]{200, 404},
                 InitializationRunRoot.class);

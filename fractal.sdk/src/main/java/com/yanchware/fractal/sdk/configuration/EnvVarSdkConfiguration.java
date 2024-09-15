@@ -129,6 +129,83 @@ public class EnvVarSdkConfiguration implements SdkConfiguration {
     return checkAndReturnUri(ENVIRONMENTS_ENDPOINT_KEY, DEFAULT_ENVIRONMENTS_ENDPOINT);
   }
 
+  /**
+   * Gets the AWS Access Key ID, part of the temporary credentials of an AWS role, from environment variables.
+   * The environment variable key is {@value com.yanchware.fractal.sdk.configuration.Constants#AWS_ACCESS_KEY_ID_KEY}.
+   *
+   * @return the AWS Access Key ID
+   */
+  @Override
+  public String getAwsAccessKeyId() {
+    return System.getenv(AWS_ACCESS_KEY_ID_KEY);
+  }
+
+  /**
+   * Gets the AWS Secret Access Key, part of the temporary credentials of an AWS role, from environment variables.
+   * The environment variable key is {@value com.yanchware.fractal.sdk.configuration.Constants#AWS_SECRET_ACCESS_KEY}.
+   *
+   * @return the AWS Secret Access Key
+   */
+  @Override
+  public String getAwsSecretAccessKey() {
+    return System.getenv(AWS_SECRET_ACCESS_KEY);
+  }
+
+  /**
+   * Gets the AWS Session Token, part of the temporary credentials of an AWS role, from environment variables.
+   * The environment variable key is {@value com.yanchware.fractal.sdk.configuration.Constants#AWS_SESSION_TOKEN_KEY}.
+   *
+   * @return the AWS Session Token
+   */
+  @Override
+  public String getAwsSessionToken() {
+    return System.getenv(AWS_SESSION_TOKEN_KEY);
+  }
+
+  /**
+   * Gets the GCP service account email from environment variables.
+   * The environment variable key is {@value com.yanchware.fractal.sdk.configuration.Constants#GCP_SERVICE_ACCOUNT_EMAIL_KEY}.
+   *
+   * @return the GCP service account email
+   */
+  @Override
+  public String getGcpServiceAccountEMail() {
+    return System.getenv(GCP_SERVICE_ACCOUNT_EMAIL_KEY);
+  }
+
+  /**
+   * Gets the GCP service account credentials from environment variables.
+   * The environment variable key is {@value com.yanchware.fractal.sdk.configuration.Constants#GCP_SERVICE_ACCOUNT_CREDENTIALS_KEY}.
+   *
+   * @return the GCP service account credentials
+   */
+  @Override
+  public String getGcpServiceAccountCredentials() {
+    return System.getenv(GCP_SERVICE_ACCOUNT_CREDENTIALS_KEY);
+  }
+
+  /**
+   * Gets the OCI service account ID from environment variables.
+   * The environment variable key is {@value com.yanchware.fractal.sdk.configuration.Constants#OCI_SERVICE_ACCOUNT_ID_KEY}.
+   *
+   * @return the OCI service account ID
+   */
+  @Override
+  public String getOciServiceAccountId() {
+    return System.getenv(OCI_SERVICE_ACCOUNT_ID_KEY);
+  }
+
+  /**
+   * Gets the OCI service account credentials from environment variables.
+   * The environment variable key is {@value com.yanchware.fractal.sdk.configuration.Constants#OCI_SERVICE_ACCOUNT_CREDENTIALS_KEY}.
+   *
+   * @return the OCI service account credentials
+   */
+  @Override
+  public String getOciServiceAccountCendentials() {
+    return System.getenv(OCI_SERVICE_ACCOUNT_CREDENTIALS_KEY);
+  }
+
   private URI checkAndReturnUri(String endpointEnvKey, URI defaultValue) {
     String endpoint = System.getenv(endpointEnvKey);
     if (isBlank(endpoint)) {

@@ -67,7 +67,7 @@ public class LiveSystemAggregate implements Validatable {
         return service.getComponentMutationStatus(getId().toString(), componentId, mutationId);
     }
 
-        // TODO: Use entity instead of LiveSystemMutationDto
+    // TODO: Use entity instead of LiveSystemMutationDto
     public LiveSystemMutationDto instantiate() throws InstantiatorException {
         log.info("Starting to instantiate live system: {}", getId());
 
