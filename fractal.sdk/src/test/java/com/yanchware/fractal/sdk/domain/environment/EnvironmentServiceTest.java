@@ -2,10 +2,17 @@ package com.yanchware.fractal.sdk.domain.environment;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
+import com.github.tomakehurst.wiremock.matching.UrlPathPattern;
 import com.github.tomakehurst.wiremock.stubbing.Scenario;
+import com.yanchware.fractal.sdk.domain.environment.aws.AwsCloudAgent;
 import com.yanchware.fractal.sdk.domain.environment.azure.AzureCloudAgent;
+import com.yanchware.fractal.sdk.domain.environment.gcp.GcpCloudAgent;
+import com.yanchware.fractal.sdk.domain.environment.oci.OciCloudAgent;
 import com.yanchware.fractal.sdk.domain.environment.service.EnvironmentService;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.aws.AwsRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GcpRegion;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciRegion;
 import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
 import com.yanchware.fractal.sdk.utils.StringHandler;
 import io.github.resilience4j.retry.RetryRegistry;
@@ -238,7 +245,7 @@ class EnvironmentServiceTest {
     var fetchCurrentInitializationResponse = StringHandler.getStringFromInputStream(inputStream);
 
     // Replace the placeholders
-    fetchCurrentInitializationResponse = replacePlaceholders(fetchCurrentInitializationResponse, geEnvironmentIdPlaceholders());
+    fetchCurrentInitializationResponse = replacePlaceholders(fetchCurrentInitializationResponse, getEnvironmentIdPlaceholders());
 
     stubFor(get(urlPattern)
         .willReturn(aResponse()
@@ -261,52 +268,28 @@ class EnvironmentServiceTest {
   }
 
   @Test
+  void initializeAccount_should_HandleInitializationInProgress() throws Exception {
+    var urlPathPattern = urlPathMatching("/environments/.*/.*/.*/initializer/aws/status");
+    var urlPatternStatus = prepareMocksForCloudAgentInitializationTest(urlPathPattern);
+
+    // When
+    CloudAgentEntity cloudAgent = new AwsCloudAgent(
+            mockEnvironment.getId(),
+            environmentService,
+            AwsRegion.EU_NORTH_1,
+            "organizationId",
+            "accountId",
+            Collections.emptyMap());
+    cloudAgent.initialize();
+
+    // Then
+    verify(3, getRequestedFor(urlPatternStatus)); 
+  }
+
+  @Test
   void initializeSubscription_should_HandleInitializationInProgress() throws Exception {
-    // Given
-    var urlPatternStatus = urlPathMatching("/environments/.*/.*/.*/initializer/azure/status");
-    var placeholders = geEnvironmentIdPlaceholders();
-    
-    var inputStreamInProgress = getClass().getClassLoader()
-        .getResourceAsStream("test-resources/fetchCurrentInitializationInProgressResponse.json");
-    assertThat(inputStreamInProgress).isNotNull();
-
-    var fetchCurrentInitializationInProgressResponse = StringHandler.getStringFromInputStream(inputStreamInProgress);
-    fetchCurrentInitializationInProgressResponse = replacePlaceholders(fetchCurrentInitializationInProgressResponse, placeholders);
-
-    // Mocking fetchCurrentInitialization response for "Completed" status
-    var inputStreamCompleted = getClass().getClassLoader()
-        .getResourceAsStream("test-resources/fetchCurrentInitializationCompletedResponse.json");
-    assertThat(inputStreamCompleted).isNotNull();
-
-    var fetchCurrentInitializationCompletedResponse = StringHandler.getStringFromInputStream(inputStreamCompleted);
-    fetchCurrentInitializationCompletedResponse = replacePlaceholders(fetchCurrentInitializationCompletedResponse, placeholders);
-
-    stubFor(get(urlPatternStatus)
-        .inScenario("Initialization Scenario")
-        .whenScenarioStateIs(Scenario.STARTED)
-        .willReturn(aResponse()
-            .withStatus(200)
-            .withBody(fetchCurrentInitializationInProgressResponse)
-            .withHeader("Content-Type", "application/json"))
-        .willSetStateTo("InProgress1"));
-
-    stubFor(get(urlPatternStatus)
-        .inScenario("Initialization Scenario")
-        .whenScenarioStateIs("InProgress1")
-        .willReturn(aResponse()
-            .withStatus(200)
-            .withBody(fetchCurrentInitializationInProgressResponse)
-            .withHeader("Content-Type", "application/json"))
-        .willSetStateTo("InProgress2"));
-
-    stubFor(get(urlPatternStatus)
-        .inScenario("Initialization Scenario")
-        .whenScenarioStateIs("InProgress2")
-        .willReturn(aResponse()
-            .withStatus(200)
-            .withBody(fetchCurrentInitializationCompletedResponse)
-            .withHeader("Content-Type", "application/json"))
-        .willSetStateTo("Completed"));
+    var urlPathPattern = urlPathMatching("/environments/.*/.*/.*/initializer/azure/status");
+    var urlPatternStatus = prepareMocksForCloudAgentInitializationTest(urlPathPattern);
 
     // When
     CloudAgentEntity cloudAgent = new AzureCloudAgent(
@@ -319,10 +302,96 @@ class EnvironmentServiceTest {
     cloudAgent.initialize();
 
     // Then
-    verify(3, getRequestedFor(urlPatternStatus)); 
+    verify(3, getRequestedFor(urlPatternStatus));
   }
 
-  private Map<String, String> geEnvironmentIdPlaceholders() {
+  @Test
+  void initializeProject_should_HandleInitializationInProgress() throws Exception {
+    var urlPathPattern = urlPathMatching("/environments/.*/.*/.*/initializer/gcp/status");
+    var urlPatternStatus = prepareMocksForCloudAgentInitializationTest(urlPathPattern);
+
+    // When
+    CloudAgentEntity cloudAgent = new GcpCloudAgent(
+            mockEnvironment.getId(),
+            environmentService,
+            GcpRegion.EU_WEST1,
+            "organizationId",
+            "projectId",
+            Collections.emptyMap());
+    cloudAgent.initialize();
+
+    // Then
+    verify(3, getRequestedFor(urlPatternStatus));
+  }
+
+  @Test
+  void initializeCompartment_should_HandleInitializationInProgress() throws Exception {
+    var urlPathPattern = urlPathMatching("/environments/.*/.*/.*/initializer/oci/status");
+    var urlPatternStatus = prepareMocksForCloudAgentInitializationTest(urlPathPattern);
+
+    // When
+    CloudAgentEntity cloudAgent = new OciCloudAgent(
+            mockEnvironment.getId(),
+            environmentService,
+            OciRegion.EU_ZURICH_1,
+            "tenancyId",
+            "compartmentId",
+            Collections.emptyMap());
+    cloudAgent.initialize();
+
+    // Then
+    verify(3, getRequestedFor(urlPatternStatus));
+  }
+
+  private UrlPathPattern prepareMocksForCloudAgentInitializationTest(UrlPathPattern urlPatternStatus){
+    // Given
+    var placeholders = getEnvironmentIdPlaceholders();
+
+    var inputStreamInProgress = getClass().getClassLoader()
+            .getResourceAsStream("test-resources/fetchCurrentInitializationInProgressResponse.json");
+    assertThat(inputStreamInProgress).isNotNull();
+
+    var fetchCurrentInitializationInProgressResponse = StringHandler.getStringFromInputStream(inputStreamInProgress);
+    fetchCurrentInitializationInProgressResponse = replacePlaceholders(fetchCurrentInitializationInProgressResponse, placeholders);
+
+    // Mocking fetchCurrentInitialization response for "Completed" status
+    var inputStreamCompleted = getClass().getClassLoader()
+            .getResourceAsStream("test-resources/fetchCurrentInitializationCompletedResponse.json");
+    assertThat(inputStreamCompleted).isNotNull();
+
+    var fetchCurrentInitializationCompletedResponse = StringHandler.getStringFromInputStream(inputStreamCompleted);
+    fetchCurrentInitializationCompletedResponse = replacePlaceholders(fetchCurrentInitializationCompletedResponse, placeholders);
+
+    stubFor(get(urlPatternStatus)
+            .inScenario("Initialization Scenario")
+            .whenScenarioStateIs(Scenario.STARTED)
+            .willReturn(aResponse()
+                    .withStatus(200)
+                    .withBody(fetchCurrentInitializationInProgressResponse)
+                    .withHeader("Content-Type", "application/json"))
+            .willSetStateTo("InProgress1"));
+
+    stubFor(get(urlPatternStatus)
+            .inScenario("Initialization Scenario")
+            .whenScenarioStateIs("InProgress1")
+            .willReturn(aResponse()
+                    .withStatus(200)
+                    .withBody(fetchCurrentInitializationInProgressResponse)
+                    .withHeader("Content-Type", "application/json"))
+            .willSetStateTo("InProgress2"));
+
+    stubFor(get(urlPatternStatus)
+            .inScenario("Initialization Scenario")
+            .whenScenarioStateIs("InProgress2")
+            .willReturn(aResponse()
+                    .withStatus(200)
+                    .withBody(fetchCurrentInitializationCompletedResponse)
+                    .withHeader("Content-Type", "application/json"))
+            .willSetStateTo("Completed"));
+    return urlPatternStatus;
+  }
+
+  private Map<String, String> getEnvironmentIdPlaceholders() {
     return Map.of(
         "$ENVIRONMENT_TYPE", mockEnvironment.getEnvironmentType().toString(),
         "$ENVIRONMENT_OWNER_ID", mockEnvironment.getOwnerId().toString(),
