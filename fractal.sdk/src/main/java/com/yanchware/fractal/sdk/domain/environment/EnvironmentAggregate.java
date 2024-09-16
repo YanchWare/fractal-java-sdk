@@ -16,7 +16,6 @@ import com.yanchware.fractal.sdk.domain.environment.service.EnvironmentService;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.domain.environment.service.dtos.EnvironmentResponse;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.EnvironmentDto;
-import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.EnvironmentIdDto;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import com.yanchware.fractal.sdk.utils.CollectionUtils;
 import com.yanchware.fractal.sdk.utils.SerializationUtils;
@@ -24,7 +23,6 @@ import io.github.resilience4j.retry.RetryRegistry;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.http.HttpClient;
@@ -49,11 +47,7 @@ public class EnvironmentAggregate implements Validatable {
   private final Map<String, Object> parameters;
 
   @Getter
-  private EnvironmentType environmentType;
-  @Getter
-  private UUID ownerId;
-  @Getter
-  private String shortName;
+  private EnvironmentIdValue id;
   @Getter
   private String name;
   @Getter
@@ -73,13 +67,6 @@ public class EnvironmentAggregate implements Validatable {
     this.cloudAgentByProviderType = new HashMap<>();
     this.service = new EnvironmentService(client, sdkConfiguration, retryRegistry);
     this.tags = new HashMap<>();
-  }
-
-  public EnvironmentIdValue getId(){
-    if (ownerId == null || isBlank(shortName)) {
-      throw new IllegalStateException("Environment ShortName and/or ownerId have not been defined and they are required");
-    }
-    return new EnvironmentIdValue(environmentType, ownerId, shortName);
   }
 
   public void registerAwsCloudAgent(AwsRegion region, String organizationId, String accountId) {
@@ -146,13 +133,13 @@ public class EnvironmentAggregate implements Validatable {
   public Collection<String> validate() {
     Collection<String> errors = new ArrayList<>();
 
-    if (isBlank(shortName)) {
+    if (isBlank(id.shortName())) {
       errors.add(SHORT_NAME_IS_NULL);
     } else {
-      if (shortName.length() > 30) {
+      if (id.shortName().length() > 30) {
         errors.add("Environment ShortName must not be longer than 30 characters.");
       }
-      if (!shortName.matches("[a-z0-9-]+")) {
+      if (!id.shortName().matches("[a-z0-9-]+")) {
         errors.add("Environment ShortName must only contain lowercase letters, numbers, and dashes.");
       }
     }
@@ -162,10 +149,10 @@ public class EnvironmentAggregate implements Validatable {
     }
 
     if (isBlank(name)) {
-      name = shortName;
+      name = id.shortName();
     }
 
-    if (ownerId == null || ownerId.equals(new UUID(0L, 0L))) {
+    if (id.ownerId() == null || id.ownerId().equals(new UUID(0L, 0L))) {
       errors.add(OWNER_ID_IS_NULL);
     }
 
@@ -210,9 +197,9 @@ public class EnvironmentAggregate implements Validatable {
     if (existingEnvironmentResponse == null) return false;
 
     var environmentIdInResponse = existingEnvironmentResponse.id();
-    return Objects.equals(environmentIdInResponse.type().toString(), environmentType.toString()) &&
-            Objects.equals(environmentIdInResponse.ownerId(), ownerId) &&
-            Objects.equals(environmentIdInResponse.shortName(), shortName) &&
+    return Objects.equals(environmentIdInResponse.type().toString(), id.type().toString()) &&
+            Objects.equals(environmentIdInResponse.ownerId(), id.ownerId()) &&
+            Objects.equals(environmentIdInResponse.shortName(), id.shortName()) &&
             Objects.equals(existingEnvironmentResponse.name(), name) &&
             Objects.equals(existingEnvironmentResponse.resourceGroups(), resourceGroups) &&
             mapsEqual(parameters, parameters);

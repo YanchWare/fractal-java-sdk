@@ -42,11 +42,13 @@ class EnvironmentServiceTest {
     var sdkConfiguration = new LocalSdkConfiguration(wmRuntimeInfo.getHttpBaseUrl());
       EnvironmentsFactory environmentsFactory = new EnvironmentsFactory(httpClient, sdkConfiguration, RetryRegistry.ofDefaults());
     mockEnvironment = environmentsFactory.builder()
+        .withId(new EnvironmentIdValue(
+                EnvironmentType.PERSONAL,
+                UUID.randomUUID(),
+                "test-env"
+        ))
         .withName("Test Environment")
-        .withShortName("test-env")
-        .withEnvironmentType(EnvironmentType.PERSONAL)
         .withResourceGroup(UUID.randomUUID())
-        .withOwnerId(UUID.randomUUID())
         .build();
     environmentService = new EnvironmentService(httpClient, sdkConfiguration, RetryRegistry.ofDefaults());
   }
@@ -75,9 +77,9 @@ class EnvironmentServiceTest {
                 "updatedAt": "2024-05-20T21:30:27.045813+00:00",
                 "updatedBy": "tests@yanchware.com"
             }
-            """, mockEnvironment.getEnvironmentType(),
-        mockEnvironment.getOwnerId(),
-        mockEnvironment.getShortName(),
+            """, mockEnvironment.getId().type(),
+        mockEnvironment.getId().ownerId(),
+        mockEnvironment.getId().shortName(),
         mockEnvironment.getName(),
         resourceGroupsJson,
         parametersJson);
@@ -95,9 +97,9 @@ class EnvironmentServiceTest {
     verify(1, getRequestedFor(urlPattern));
 
     assertThat(response).isNotNull();
-    assertThat(response.id().type().toString()).isEqualTo(mockEnvironment.getEnvironmentType().toString());
-    assertThat(response.id().ownerId()).isEqualTo(mockEnvironment.getOwnerId());
-    assertThat(response.id().shortName()).isEqualTo(mockEnvironment.getShortName());
+    assertThat(response.id().type().toString()).isEqualTo(mockEnvironment.getId().type().toString());
+    assertThat(response.id().ownerId()).isEqualTo(mockEnvironment.getId().ownerId());
+    assertThat(response.id().shortName()).isEqualTo(mockEnvironment.getId().shortName());
     assertThat(response.name()).isEqualTo(mockEnvironment.getName());
     assertThat(response.resourceGroups()).containsExactlyElementsOf(mockEnvironment.getResourceGroups());
     assertThat(response.parameters()).isEqualTo(mockEnvironment.toDto().parameters());
@@ -127,9 +129,9 @@ class EnvironmentServiceTest {
                 "updatedAt": "2024-05-20T21:30:27.045813+00:00",
                 "updatedBy": "tests@yanchware.com"
             }
-            """, mockEnvironment.getEnvironmentType(),
-        mockEnvironment.getOwnerId(),
-        mockEnvironment.getShortName(),
+            """, mockEnvironment.getId().type(),
+        mockEnvironment.getId().ownerId(),
+        mockEnvironment.getId().shortName(),
         mockEnvironment.getName());
 
     stubFor(get(urlPattern)
@@ -204,9 +206,9 @@ class EnvironmentServiceTest {
                 "updatedAt": "2024-05-20T21:30:27.045813+00:00",
                 "updatedBy": "tests@yanchware.com"
             }
-            """, mockEnvironment.getEnvironmentType(),
-        mockEnvironment.getOwnerId(),
-        mockEnvironment.getShortName(),
+            """, mockEnvironment.getId().type(),
+        mockEnvironment.getId().ownerId(),
+        mockEnvironment.getId().shortName(),
         mockEnvironment.toDto().parameters());
 
     stubFor(put(urlPattern)
@@ -226,9 +228,9 @@ class EnvironmentServiceTest {
     // Then
     verify(1, putRequestedFor(urlPattern));
     assertThat(response).isNotNull();
-    assertThat(response.id().type().toString()).isEqualTo(mockEnvironment.getEnvironmentType().toString());
-    assertThat(response.id().ownerId()).isEqualTo(mockEnvironment.getOwnerId());
-    assertThat(response.id().shortName()).isEqualTo(mockEnvironment.getShortName());
+    assertThat(response.id().type().toString()).isEqualTo(mockEnvironment.getId().type().toString());
+    assertThat(response.id().ownerId()).isEqualTo(mockEnvironment.getId().ownerId());
+    assertThat(response.id().shortName()).isEqualTo(mockEnvironment.getId().shortName());
 
   }
 
@@ -260,9 +262,9 @@ class EnvironmentServiceTest {
     verify(1, getRequestedFor(urlPattern));
 
     assertThat(response).isNotNull();
-    assertThat(response.environmentId().type().toString()).isEqualTo(mockEnvironment.getEnvironmentType().toString());
-    assertThat(response.environmentId().ownerId()).isEqualTo(mockEnvironment.getOwnerId());
-    assertThat(response.environmentId().shortName()).isEqualTo(mockEnvironment.getShortName());
+    assertThat(response.environmentId().type().toString()).isEqualTo(mockEnvironment.getId().type().toString());
+    assertThat(response.environmentId().ownerId()).isEqualTo(mockEnvironment.getId().ownerId());
+    assertThat(response.environmentId().shortName()).isEqualTo(mockEnvironment.getId().shortName());
     assertThat(response.steps()).isNotNull();
     assertThat(response.steps().size()).isGreaterThan(1);
   }
@@ -393,9 +395,9 @@ class EnvironmentServiceTest {
 
   private Map<String, String> getEnvironmentIdPlaceholders() {
     return Map.of(
-        "$ENVIRONMENT_TYPE", mockEnvironment.getEnvironmentType().toString(),
-        "$ENVIRONMENT_OWNER_ID", mockEnvironment.getOwnerId().toString(),
-        "$ENVIRONMENT_SHORT_NAME", mockEnvironment.getShortName()
+        "$ENVIRONMENT_TYPE", mockEnvironment.getId().type().toString(),
+        "$ENVIRONMENT_OWNER_ID", mockEnvironment.getId().ownerId().toString(),
+        "$ENVIRONMENT_SHORT_NAME", mockEnvironment.getId().shortName()
     );
   }
 
