@@ -42,34 +42,34 @@ public class EnvVarSdkConfiguration implements SdkConfiguration {
 
   /**
    * Gets the BOT client ID or Cloud Agent Client ID from environment variables.
-   * The environment variable key is {@value com.yanchware.fractal.sdk.configuration.Constants#CLIENT_ID_KEY}.
+   * The environment variable key is {@value com.yanchware.fractal.sdk.configuration.Constants#CI_CD_SERVICE_ACCOUNT_NAME_KEY}.
    *
    * @return the BOT client ID or Cloud Agent Client ID
    * @throws IllegalArgumentException if the client ID environment variable is not set
    */
   @Override
   public String getClientId() {
-    var clientId = System.getenv(CLIENT_ID_KEY);
+    var clientId = System.getenv(CI_CD_SERVICE_ACCOUNT_NAME_KEY);
     if (isBlank(clientId)) {
       throw new IllegalArgumentException(
-          String.format("The environment variable %s is required and it has not been defined", CLIENT_ID_KEY));
+          String.format("The environment variable %s is required and it has not been defined", CI_CD_SERVICE_ACCOUNT_NAME_KEY));
     }
     return clientId;
   }
 
   /**
    * Gets the BOT client secret or Cloud Agent Client secret from environment variables.
-   * The environment variable key is {@value com.yanchware.fractal.sdk.configuration.Constants#CLIENT_SECRET_KEY}.
+   * The environment variable key is {@value com.yanchware.fractal.sdk.configuration.Constants#CI_CD_SERVICE_ACCOUNT_SECRET_KEY}.
    *
    * @return the BOT client secret or Cloud Agent Client secret
    * @throws IllegalArgumentException if the client secret environment variable is not set
    */
   @Override
   public String getClientSecret() {
-    var clientSecret = System.getenv(CLIENT_SECRET_KEY);
+    var clientSecret = System.getenv(CI_CD_SERVICE_ACCOUNT_SECRET_KEY);
     if (isBlank(clientSecret)) {
       throw new IllegalArgumentException(
-          String.format("The environment variable %s is required and it has not been defined", CLIENT_SECRET_KEY));
+          String.format("The environment variable %s is required and it has not been defined", CI_CD_SERVICE_ACCOUNT_SECRET_KEY));
     }
     return clientSecret;
   }

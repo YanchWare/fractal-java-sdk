@@ -25,7 +25,7 @@ public class BlueprintAggregate {
             FractalIdValue fractalId,
             String description,
             boolean isPrivate,
-            // TODO: We should find a way to fix this instead to have DTOs in the Aggregate 🤮
+            // TODO FRA-1870: We should find a way to fix this instead to have DTOs in the Aggregate 🤮
             Collection<BlueprintComponentDto> components)
     {
         this.fractalId = fractalId;

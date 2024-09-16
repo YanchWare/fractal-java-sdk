@@ -56,7 +56,7 @@ public class LiveSystemAggregate implements Validatable {
         components = new ArrayList<>();
     }
 
-    // TODO: Use entity instead of LiveSystemComponentMutationDto
+    // TODO FRA-1870: Use entity instead of LiveSystemComponentMutationDto
     public LiveSystemComponentMutationDto instantiateComponent(String componentId) throws InstantiatorException {
         return service.instantiateComponent(id, componentId);
     }
@@ -67,7 +67,7 @@ public class LiveSystemAggregate implements Validatable {
         return service.getComponentMutationStatus(getId().toString(), componentId, mutationId);
     }
 
-    // TODO: Use entity instead of LiveSystemMutationDto
+    // TODO FRA-1870: Use entity instead of LiveSystemMutationDto
     public LiveSystemMutationDto instantiate() throws InstantiatorException {
         log.info("Starting to instantiate live system: {}", getId());
 

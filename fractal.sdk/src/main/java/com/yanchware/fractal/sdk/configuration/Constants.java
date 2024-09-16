@@ -18,8 +18,8 @@ public class Constants {
   public static final String X_OCI_SERVICE_ACCOUNT_ID_HEADER = "X-OCI-Service-Account-Id";
   public static final String X_OCI_SERVICE_ACCOUNT_CREDENTIALS_HEADER = "X-OCI-Service-Account-Credentials";
 
-  public static final String CLIENT_ID_KEY = "CLIENT_ID";
-  public static final String CLIENT_SECRET_KEY = "CLIENT_SECRET";
+  public static final String CI_CD_SERVICE_ACCOUNT_NAME_KEY = "CI_CD_SERVICE_ACCOUNT_NAME";
+  public static final String CI_CD_SERVICE_ACCOUNT_SECRET_KEY = "CI_CD_SERVICE_ACCOUNT_SECRET";
   public static final String AZURE_SP_CLIENT_ID_KEY = "AZURE_SP_CLIENT_ID";
   public static final String AZURE_SP_CLIENT_SECRET_KEY = "AZURE_SP_CLIENT_SECRET";
   public static final String AWS_ACCESS_KEY_ID_KEY = "AWS_ACCESS_KEY_ID";
