@@ -1,7 +1,7 @@
 package com.yanchware.fractal.sdk;
 
 import com.flextrade.jfixture.JFixture;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.ExtendableEnum;
+import com.yanchware.fractal.sdk.utils.ExtendableEnum;
 import org.junit.jupiter.api.BeforeEach;
 
 import java.lang.reflect.Method;

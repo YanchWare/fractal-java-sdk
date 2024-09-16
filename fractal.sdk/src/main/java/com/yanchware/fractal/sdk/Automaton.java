@@ -1,22 +1,18 @@
 package com.yanchware.fractal.sdk;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.yanchware.fractal.sdk.aggregates.Environment;
-import com.yanchware.fractal.sdk.aggregates.LiveSystem;
+import com.yanchware.fractal.sdk.domain.blueprint.BlueprintFactory;
+import com.yanchware.fractal.sdk.domain.environment.EnvironmentAggregate;
+import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemAggregate;
 import com.yanchware.fractal.sdk.configuration.EnvVarSdkConfiguration;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.configuration.instantiation.InstantiationConfiguration;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.LiveSystemId;
+import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemIdValue;
+import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemsFactory;
 import com.yanchware.fractal.sdk.domain.exceptions.ComponentInstantiationException;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
-import com.yanchware.fractal.sdk.services.BlueprintService;
-import com.yanchware.fractal.sdk.services.EnvironmentsService;
-import com.yanchware.fractal.sdk.services.LiveSystemService;
-import com.yanchware.fractal.sdk.services.contracts.blueprintcontract.commands.CreateBlueprintCommandRequest;
-import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.commands.InstantiateLiveSystemCommandRequest;
-import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemComponentMutationDto;
-import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemComponentStatusDto;
-import com.yanchware.fractal.sdk.services.contracts.livesystemcontract.dtos.LiveSystemMutationDto;
+import com.yanchware.fractal.sdk.domain.environment.EnvironmentsFactory;
+import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.*;
 import io.github.resilience4j.core.IntervalFunction;
 import io.github.resilience4j.retry.RetryConfig;
 import io.github.resilience4j.retry.RetryRegistry;
@@ -36,16 +32,16 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Slf4j
 public class Automaton {
   private static Automaton instance;
-  private static BlueprintService blueprintService;
-  private static LiveSystemService liveSystemService;
-  private static EnvironmentsService environmentsService;
+  private static BlueprintFactory blueprintFactory;
+  private static LiveSystemsFactory liveSystemFactory;
+  private static EnvironmentsFactory environmentsFactory;
   private static RetryRegistry serviceRetryRegistry;
 
   private Automaton(HttpClient httpClient, SdkConfiguration sdkConfiguration) {
     Automaton.serviceRetryRegistry = getDefaultRetryRegistry();
-    Automaton.blueprintService = new BlueprintService(httpClient, sdkConfiguration, Automaton.serviceRetryRegistry);
-    Automaton.liveSystemService = new LiveSystemService(httpClient, sdkConfiguration, Automaton.serviceRetryRegistry);
-    Automaton.environmentsService = new EnvironmentsService(httpClient, sdkConfiguration, Automaton.serviceRetryRegistry);
+    Automaton.blueprintFactory = new BlueprintFactory(httpClient, sdkConfiguration, Automaton.serviceRetryRegistry);
+    Automaton.liveSystemFactory = new LiveSystemsFactory(httpClient, sdkConfiguration, Automaton.serviceRetryRegistry);
+    Automaton.environmentsFactory = new EnvironmentsFactory(httpClient, sdkConfiguration, Automaton.serviceRetryRegistry);
   }
 
   /**
@@ -78,16 +74,13 @@ public class Automaton {
         .build());
   }
 
-  private static void waitForMutationInstantiation(
-      LiveSystem liveSystem,
-      LiveSystemMutationDto mutation)
-      throws InstantiatorException {
-    liveSystemService.checkLiveSystemMutationStatus(
-        new LiveSystemId(liveSystem.getLiveSystemId()),
-        mutation.getId());
+  private static void waitForMutationInstantiation(LiveSystemAggregate liveSystem, LiveSystemMutationDto mutation)
+      throws InstantiatorException
+  {
+    liveSystem.checkLiveSystemMutationStatus(mutation.id());
   }
 
-  private static String envrionmentToJsonString(Environment environment) throws InstantiatorException {
+  private static String environmentToJsonString(EnvironmentAggregate environment) throws InstantiatorException {
     try {
       return serialize(environment);
     } catch (JsonProcessingException e) {
@@ -99,21 +92,19 @@ public class Automaton {
     }
   }
 
-  private static LiveSystemMutationDto instantiateLiveSystem(LiveSystem liveSystem)
+  private static LiveSystemMutationDto instantiateLiveSystem(LiveSystemAggregate liveSystem)
       throws InstantiatorException {
-    log.info("Starting to instantiate live system [id: '{}']", liveSystem.getLiveSystemId());
-    log.info("Environment -> {}", envrionmentToJsonString(liveSystem.getEnvironment()));
+    log.info("Starting to instantiate live system [id: '{}']", liveSystem.getId());
+    log.info("Environment -> {}", environmentToJsonString(liveSystem.getEnvironment()));
 
     createOrUpdateBlueprint(liveSystem);
 
-    return liveSystemService.instantiate(InstantiateLiveSystemCommandRequest.fromLiveSystem(liveSystem));
+    return liveSystem.instantiate();
   }
 
-  private static void createOrUpdateBlueprint(LiveSystem liveSystem) throws InstantiatorException {
-    var blueprintCommand = CreateBlueprintCommandRequest.fromLiveSystem(
-        liveSystem.getComponents(), liveSystem.getFractalId());
-
-    blueprintService.createOrUpdateBlueprint(blueprintCommand, liveSystem.getFractalId());
+  private static void createOrUpdateBlueprint(LiveSystemAggregate liveSystem) throws InstantiatorException {
+    var blueprintAggregate = blueprintFactory.getBlueprintAggregate(liveSystem);
+    blueprintAggregate.createOrUpdate();
   }
 
   /**
@@ -122,7 +113,7 @@ public class Automaton {
    * @param environment the environment to be instantiated
    * @throws InstantiatorException if an error occurs during instantiation
    */
-  public static void instantiate(Environment environment) throws InstantiatorException {
+  public static void instantiate(EnvironmentAggregate environment) throws InstantiatorException {
     if (instance == null) {
       initializeAutomaton(getSdkConfiguration());
     }
@@ -136,12 +127,12 @@ public class Automaton {
    * @param liveSystems the list of live systems to be instantiated
    * @throws InstantiatorException if an error occurs during instantiation
    */
-  public static void instantiate(List<LiveSystem> liveSystems) throws InstantiatorException {
+  public static void instantiate(List<LiveSystemAggregate> liveSystems) throws InstantiatorException {
     if (instance == null) {
       initializeAutomaton(getSdkConfiguration());
     }
 
-    for (LiveSystem liveSystem : liveSystems) {
+    for (LiveSystemAggregate liveSystem : liveSystems) {
       instantiateLiveSystem(liveSystem);
     }
   }
@@ -153,16 +144,16 @@ public class Automaton {
    * @param config      the instantiation configuration
    * @throws InstantiatorException if an error occurs during instantiation
    */
-  public static void instantiate(List<LiveSystem> liveSystems, InstantiationConfiguration config)
+  public static void instantiate(List<LiveSystemAggregate> liveSystems, InstantiationConfiguration config)
       throws InstantiatorException {
 
     if (instance == null) {
       initializeAutomaton(getSdkConfiguration());
     }
 
-    var liveSystemsMutations = new ArrayList<ImmutablePair<LiveSystem, LiveSystemMutationDto>>();
+    var liveSystemsMutations = new ArrayList<ImmutablePair<LiveSystemAggregate, LiveSystemMutationDto>>();
 
-    for (LiveSystem liveSystem : liveSystems) {
+    for (LiveSystemAggregate liveSystem : liveSystems) {
       liveSystemsMutations.add(new ImmutablePair<>(liveSystem, instantiateLiveSystem(liveSystem)));
     }
 
@@ -190,25 +181,24 @@ public class Automaton {
    *   <li><strong>Output Fields Logging:</strong> If the deployment is successful, the component's output fields are logged for informational purposes.</li>
    * </ol>
    *
-   * @param resourceGroupId            The ID of the resource group containing the live system.
-   * @param liveSystemName             The name of the live system.
+   * @param liveSystemId               The ID of the live system.
    * @param customWorkloadComponentId  The ID of the custom workload component to deploy.
-   * @param commitId                  The expected commit ID to be deployed.
-   * @param config                    The instantiation configuration, which can specify whether to wait for deployment completion.
+   * @param commitId                   The expected commit ID to be deployed.
+   * @param config                     The instantiation configuration, which can specify whether to wait for deployment completion.
    *
    * @throws ComponentInstantiationException If ny of the required parameters are null or empty, the component is not found, the deployment fails, or an error occurs while waiting for deployment completion.
    */
-  public static void deployCustomWorkload(String resourceGroupId,
-                                          String liveSystemName,
+  public static void deployCustomWorkload(LiveSystemIdValue liveSystemId,
                                           String customWorkloadComponentId,
                                           String commitId,
-                                          InstantiationConfiguration config) throws ComponentInstantiationException, InstantiatorException {
-
-    if (isBlank(resourceGroupId)) {
+                                          InstantiationConfiguration config)
+          throws ComponentInstantiationException, InstantiatorException
+  {
+    if (isBlank(liveSystemId.resourceGroupId())) {
       throw new ComponentInstantiationException("Resource group ID cannot be blank.");
     }
 
-    if (isBlank(liveSystemName)) {
+    if (isBlank(liveSystemId.name())) {
       throw new ComponentInstantiationException("Live system name cannot be blank.");
     }
 
@@ -224,21 +214,24 @@ public class Automaton {
       initializeAutomaton(getSdkConfiguration());
     }
 
-    var componentMutationDto = liveSystemService.instantiateComponent(
-        resourceGroupId, liveSystemName, customWorkloadComponentId);
+    var liveSystem = liveSystemFactory.builder()
+            .withId(liveSystemId)
+            .build();
+
+    var componentMutationDto = liveSystem.instantiateComponent(customWorkloadComponentId);
 
     if (componentMutationDto == null) {
       throw new ComponentInstantiationException(
-          String.format("Component [id: '%s'] not found in LiveSystem [name: '%s', resource group id: '%s']",
-              customWorkloadComponentId, liveSystemName, resourceGroupId));
+          String.format("Component [id: '%s'] not found in LiveSystem [id: '%s']",
+              customWorkloadComponentId, liveSystemId));
     }
 
     // Optional waiting based on configuration
     if (config != null && config.waitConfiguration != null && config.getWaitConfiguration().waitForInstantiation) {
       try {
-        var updatedComponentMutation = waitForCustomWorkloadDeploymentCompletion(componentMutationDto);
+        var updatedComponentMutation = waitForCustomWorkloadDeploymentCompletion(liveSystem, componentMutationDto);
 
-        var component = updatedComponentMutation.getComponent();
+        var component = updatedComponentMutation.component();
         var componentStatus = component.getStatus();
 
         if (componentStatus == LiveSystemComponentStatusDto.Active &&
@@ -248,10 +241,10 @@ public class Automaton {
           log.info("Component is active but at a different commit ID. Expected: '{}', Current: '{}'. Re-triggering deployment",
               commitId, component.getOutputFields().get(GIT_COMMIT_ID_KEY));
 
-          deployCustomWorkload(resourceGroupId, liveSystemName, customWorkloadComponentId, commitId, config);
+          deployCustomWorkload(liveSystemId, customWorkloadComponentId, commitId, config);
         } else if (componentStatus != LiveSystemComponentStatusDto.Active) {
           printOutputFields(component.getOutputFields());
-          throw new ComponentInstantiationException("Component deployment failed with status: " + updatedComponentMutation.getStatus());
+          throw new ComponentInstantiationException("Component deployment failed with status: " + updatedComponentMutation.status());
         } else {
           log.info("Component deployment completed successfully.");
 
@@ -275,20 +268,18 @@ public class Automaton {
    *
    * <p>Note: This method does not wait for deployment completion or verify the commit ID.</p>
    *
-   * @param resourceGroupId            The ID of the resource group containing the live system.
-   * @param liveSystemName             The name of the live system.
+   * @param liveSystemId               The ID of the live system.
    * @param customWorkloadComponentId  The ID of the custom workload component to deploy.
    *
    * @throws ComponentInstantiationException If any of the required parameters are null or empty or the component is not found.
    */
-  public static void deployCustomWorkload(String resourceGroupId,
-                                          String liveSystemName,
+  public static void deployCustomWorkload(LiveSystemIdValue liveSystemId,
                                           String customWorkloadComponentId) throws ComponentInstantiationException, InstantiatorException {
-    if (isBlank(resourceGroupId)) {
+    if (isBlank(liveSystemId.resourceGroupId())) {
       throw new ComponentInstantiationException("Resource group ID cannot be blank.");
     }
 
-    if (isBlank(liveSystemName)) {
+    if (isBlank(liveSystemId.name())) {
       throw new ComponentInstantiationException("Live system name cannot be blank.");
     }
 
@@ -300,31 +291,29 @@ public class Automaton {
       initializeAutomaton(getSdkConfiguration());
     }
 
-    var componentMutationDto = liveSystemService.instantiateComponent(
-        resourceGroupId, liveSystemName, customWorkloadComponentId);
+    var liveSystem = liveSystemFactory.builder()
+            .withId(liveSystemId)
+            .build();
+
+    var componentMutationDto = liveSystem.instantiateComponent(customWorkloadComponentId);
 
     if (componentMutationDto == null) {
       throw new ComponentInstantiationException(
-          String.format("Component [id: '%s'] not found in LiveSystem [name: '%s', resource group id: '%s']",
-              customWorkloadComponentId, liveSystemName, resourceGroupId));
+          String.format("Component [id: '%s'] not found in LiveSystem [id: '%s']",
+              customWorkloadComponentId, liveSystemId));
     }
   }
 
   private static LiveSystemComponentMutationDto waitForCustomWorkloadDeploymentCompletion(
-      LiveSystemComponentMutationDto componentMutationDto)
-      throws InstantiatorException {
-    return liveSystemService.getComponentMutationStatus(
-        componentMutationDto.getLiveSystemId(),
-        componentMutationDto.getComponent().getId(),
-        componentMutationDto.getId());
+          LiveSystemAggregate liveSystemAggregate,
+          LiveSystemComponentMutationDto componentMutationDto) throws InstantiatorException {
+    return liveSystemAggregate.getComponentMutationStatus(
+        componentMutationDto.component().getId(),
+        componentMutationDto.id());
   }
 
-  private static void instantiateEnvironment(Environment environment) throws InstantiatorException {
-    var response = environmentsService.createOrUpdateEnvironment(environment);
-
-    if (response.getStatus().equalsIgnoreCase("active")) {
-      environmentsService.InitializeSubscription(environment);
-    }
+  private static void instantiateEnvironment(EnvironmentAggregate environment) throws InstantiatorException {
+    environment.initializeAgents();
   }
 
   private static EnvVarSdkConfiguration getSdkConfiguration() throws InstantiatorException {

@@ -25,12 +25,12 @@ public class LocalSdkConfiguration implements SdkConfiguration {
 
   @Override
   public String getAzureSpClientId() {
-    return "";
+    return "xxx";
   }
 
   @Override
   public String getAzureSpClientSecret() {
-    return "";
+    return "xxx";
   }
 
   @SneakyThrows
@@ -48,4 +48,39 @@ public class LocalSdkConfiguration implements SdkConfiguration {
   @SneakyThrows
   @Override
   public URI getEnvironmentsEndpoint() { return new URI(httpBaseUrl + "/environments"); }
+
+  @Override
+  public String getAwsAccessKeyId() {
+    return "";
+  }
+
+  @Override
+  public String getAwsSecretAccessKey() {
+    return "";
+  }
+
+  @Override
+  public String getAwsSessionToken() {
+    return "";
+  }
+
+  @Override
+  public String getGcpServiceAccountEMail() {
+    return "";
+  }
+
+  @Override
+  public String getGcpServiceAccountCredentials() {
+    return "";
+  }
+
+  @Override
+  public String getOciServiceAccountId() {
+    return "";
+  }
+
+  @Override
+  public String getOciServiceAccountCendentials() {
+    return "";
+  }
 }

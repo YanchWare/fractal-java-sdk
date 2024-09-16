@@ -55,4 +55,53 @@ public interface SdkConfiguration {
    * @return the URI of the environments endpoint
    */
   URI getEnvironmentsEndpoint();
+
+  /**
+   * Gets the AWS Access Key ID.
+   *
+   * @return the AWS Access Key ID
+   */
+  String getAwsAccessKeyId();
+
+  /**
+   * Gets the AWS Secret Access Key.
+   *
+   * @return the AWS Secret Access Key
+   */
+  String getAwsSecretAccessKey();
+
+  /**
+   * Gets the AWS Session Token.
+   *
+   * @return the AWS Session Token
+   */
+  String getAwsSessionToken();
+
+  /**
+   * Gets the GCP Service Account eMail.
+   *
+   * @return the GCP Service Account eMail
+   */
+  String getGcpServiceAccountEMail();
+
+  /**
+   * Gets the GCP Service Account Credentials.
+   *
+   * @return the GCP Service Account Credentials
+   */
+  String getGcpServiceAccountCredentials();
+
+  /**
+   * Gets the OCI Service Account ID.
+   *
+   * @return the OCI Service Account ID
+   */
+  String getOciServiceAccountId();
+
+  /**
+   * Gets the OCI Service Account Credentials.
+   *
+   * @return the OCI Service Account Credentials
+   */
+  String getOciServiceAccountCendentials();
 }

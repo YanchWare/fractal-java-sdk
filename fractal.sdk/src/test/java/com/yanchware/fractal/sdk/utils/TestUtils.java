@@ -4,51 +4,57 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.yanchware.fractal.sdk.aggregates.Environment;
-import com.yanchware.fractal.sdk.aggregates.EnvironmentType;
-import com.yanchware.fractal.sdk.aggregates.LiveSystem;
-import com.yanchware.fractal.sdk.domain.entities.Component;
-import com.yanchware.fractal.sdk.domain.entities.ComponentLink;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.caas.*;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.PodManagedIdentity;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.RoleAssignment;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.aws.AwsElasticKubernetesService;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureOsSku;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzurePostgreSqlDatabase;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzurePostgreSqlDbms;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureResourceGroup;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.aks.*;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.aks.AzureKubernetesService.AzureKubernetesServiceBuilder;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpNodePool;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpPostgreSqlDatabase;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpPostgreSqlDbms;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GoogleKubernetesEngine;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GoogleKubernetesEngine.GoogleKubernetesEngineBuilder;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.oci.OciContainerEngineForKubernetes;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.oci.OciContainerEngineForKubernetes.OciContainerEngineForKubernetesBuilder;
-import com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.aws.AwsElasticKubernetesService.AwsElasticKubernetesServiceBuilder;
-import com.yanchware.fractal.sdk.services.contracts.ComponentDto;
-import com.yanchware.fractal.sdk.valueobjects.ComponentId;
+import com.yanchware.fractal.sdk.domain.blueprint.FractalIdValue;
+import com.yanchware.fractal.sdk.domain.environment.EnvironmentAggregate;
+import com.yanchware.fractal.sdk.domain.environment.EnvironmentType;
+import com.yanchware.fractal.sdk.domain.environment.EnvironmentsFactory;
+import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemAggregate;
+import com.yanchware.fractal.sdk.domain.Component;
+import com.yanchware.fractal.sdk.domain.ComponentLink;
+import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemIdValue;
+import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemsFactory;
+import com.yanchware.fractal.sdk.domain.livesystem.caas.*;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.PodManagedIdentity;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.RoleAssignment;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.aws.AwsElasticKubernetesService;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureOsSku;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzurePostgreSqlDatabase;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzurePostgreSqlDbms;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureResourceGroup;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.aks.*;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.aks.AzureKubernetesService.AzureKubernetesServiceBuilder;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GcpNodePool;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GcpPostgreSqlDatabase;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GcpPostgreSqlDbms;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GoogleKubernetesEngine;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GoogleKubernetesEngine.GoogleKubernetesEngineBuilder;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciContainerEngineForKubernetes;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciContainerEngineForKubernetes.OciContainerEngineForKubernetesBuilder;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.aws.AwsElasticKubernetesService.AwsElasticKubernetesServiceBuilder;
+import com.yanchware.fractal.sdk.domain.services.contracts.ComponentDto;
+import com.yanchware.fractal.sdk.domain.values.ComponentId;
+import io.github.resilience4j.retry.RetryRegistry;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.SoftAssertions;
 
+import java.net.http.HttpClient;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import static com.yanchware.fractal.sdk.configuration.Constants.DEFAULT_VERSION;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PreemptionPolicy.NEVER;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.caas.PreemptionPolicy.PREEMPT_LOWER_PRIORITY;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.aws.AwsRegion.EU_NORTH_1;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureMachineType.STANDARD_B2S;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureOsType.LINUX;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureRegion.WEST_EUROPE;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.AzureStorageAutoGrow.ENABLED;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.azure.appservice.valueobjects.AzureSkuName.B_GEN5_1;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpMachine.E2_STANDARD2;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.gcp.GcpRegion.EU_WEST1;
-import static com.yanchware.fractal.sdk.domain.entities.livesystem.paas.providers.oci.OciRegion.EU_ZURICH_1;
+import static com.yanchware.fractal.sdk.domain.livesystem.caas.PreemptionPolicy.NEVER;
+import static com.yanchware.fractal.sdk.domain.livesystem.caas.PreemptionPolicy.PREEMPT_LOWER_PRIORITY;
+import static com.yanchware.fractal.sdk.domain.livesystem.paas.providers.aws.AwsRegion.EU_NORTH_1;
+import static com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureMachineType.STANDARD_B2S;
+import static com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureOsType.LINUX;
+import static com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion.WEST_EUROPE;
+import static com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureStorageAutoGrow.ENABLED;
+import static com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.appservice.valueobjects.AzureSkuName.B_GEN5_1;
+import static com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GcpMachine.E2_STANDARD2;
+import static com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GcpRegion.EU_WEST1;
+import static com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciRegion.EU_ZURICH_1;
 import static java.util.stream.Collectors.toSet;
 
 @Slf4j
@@ -326,8 +332,12 @@ public class TestUtils {
         .build();
   }
 
-  public static Environment getEnvExample() {
-    return Environment.builder()
+  public static EnvironmentAggregate getEnvExample() {
+    var environmentsFactory = new EnvironmentsFactory(
+            HttpClient.newBuilder().build(),
+            new LocalSdkConfiguration(""),
+            RetryRegistry.ofDefaults());
+    return environmentsFactory.builder()
         .withEnvironmentType(EnvironmentType.PERSONAL)
         .withOwnerId(UUID.fromString("2e114308-14ec-4d77-b610-490324fa1844"))
         .withResourceGroup(UUID.randomUUID())
@@ -335,11 +345,15 @@ public class TestUtils {
         .build();
   }
 
-  public static LiveSystem getLiveSystemExample() {
-    return LiveSystem.builder()
-        .withName("business-platform-test")
+  public static LiveSystemAggregate getLiveSystemExample() {
+    var liveSystemsFactory = new LiveSystemsFactory(
+            HttpClient.newBuilder().build(),
+            new LocalSdkConfiguration(""),
+            RetryRegistry.ofDefaults());
+    return liveSystemsFactory.builder()
+        .withId(new LiveSystemIdValue("test-resource-group", "business-platform-test"))
+        .withFractalId(new FractalIdValue("test-resource-group", "business-platform-test", "v1.0"))
         .withDescription("Business platform")
-        .withResourceGroupId("test-resource-group")
         .withComponent(getAksExample())
         .withComponent(getAzurePostgresExample())
         .withEnvironment(getEnvExample())

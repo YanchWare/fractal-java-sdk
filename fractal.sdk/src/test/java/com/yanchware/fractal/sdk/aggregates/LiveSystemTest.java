@@ -1,6 +1,15 @@
 package com.yanchware.fractal.sdk.aggregates;
 
+import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
+import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemAggregate;
+import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemIdValue;
+import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemsFactory;
+import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
+import io.github.resilience4j.retry.RetryRegistry;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.net.http.HttpClient;
 
 import static com.yanchware.fractal.sdk.utils.TestUtils.getDefaultAks;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -8,44 +17,62 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class LiveSystemTest {
 
+  LiveSystemsFactory factory;
+
+  @BeforeEach
+  public void setup() {
+    factory = new LiveSystemsFactory(
+            HttpClient.newBuilder().build(),
+            new LocalSdkConfiguration(""),
+            RetryRegistry.ofDefaults());
+  }
+  
   @Test
   public void multipleValidationErrors_when_liveSystemHasNoFields() {
-    assertThatThrownBy(() -> LiveSystem.builder().build()).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll("Id has not been defined", "ResourceGroupId has not been defined and it is required", "Components list is null or empty");
+    assertThatThrownBy(() -> factory.builder().build()).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll("Id has not been defined");
   }
 
   @Test
   public void multipleValidationErrors_when_liveSystemHasNullId() {
-    assertThatThrownBy(() -> LiveSystem.builder().withName(null).build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Id has not been defined");
+    assertThatThrownBy(() -> factory.builder().withId(null).build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Id has not been defined");
+  }
+
+  @Test
+  public void multipleValidationErrors_when_liveSystemHasNullName() {
+    assertThatThrownBy(() -> factory.builder().withId(new LiveSystemIdValue("xxx", null)).build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Name has not been defined");
   }
 
   @Test
   public void multipleValidationErrors_when_liveSystemHasEmptyId() {
-    assertThatThrownBy(() -> LiveSystem.builder().withName("").build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Id has not been defined");
+    assertThatThrownBy(() -> factory.builder().withId(new LiveSystemIdValue("xxx", "")).build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Name has not been defined");
   }
 
   @Test
   public void multipleValidationErrors_when_liveSystemHasBlankId() {
-    assertThatThrownBy(() -> LiveSystem.builder().withName("   ").build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Id has not been defined");
+    assertThatThrownBy(() -> factory.builder().withId(new LiveSystemIdValue("xxx", "    ")).build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Name has not been defined");
   }
 
   @Test
   public void multipleValidationErrors_when_liveSystemHasNullResourceGroupId() {
-    assertThatThrownBy(() -> LiveSystem.builder().withResourceGroupId(null).build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("ResourceGroupId has not been defined and it is required");
+    assertThatThrownBy(() -> factory.builder().withId(new LiveSystemIdValue(null, "xxx")).build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("ResourceGroupId has not been defined and it is required");
   }
 
   @Test
   public void multipleValidationErrors_when_liveSystemHasEmptyResourceGroupId() {
-    assertThatThrownBy(() -> LiveSystem.builder().withResourceGroupId("").build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("ResourceGroupId has not been defined and it is required");
+    assertThatThrownBy(() -> factory.builder().withId(new LiveSystemIdValue("", "xxx")).build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("ResourceGroupId has not been defined and it is required");
   }
 
   @Test
   public void multipleValidationErrors_when_liveSystemHasBlankResourceGroupId() {
-    assertThatThrownBy(() -> LiveSystem.builder().withResourceGroupId("   ").build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("ResourceGroupId has not been defined and it is required");
+    assertThatThrownBy(() -> factory.builder().withId(new LiveSystemIdValue("   ", "xxx")).build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("ResourceGroupId has not been defined and it is required");
   }
 
   @Test
   public void multipleValidationErrors_when_liveSystemHasNoComponents() {
-    assertThatThrownBy(() -> LiveSystem.builder().build()).isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Components list is null or empty and at least one component is required");
+    assertThatThrownBy(() -> factory.builder()
+            .withId(new LiveSystemIdValue("res/group", "ls"))
+            .build().instantiate()).isInstanceOf(InstantiatorException.class)
+            .hasMessageContaining("Components list is null or empty and at least one component is required");
   }
 
   @Test
@@ -53,10 +80,9 @@ public class LiveSystemTest {
     assertThat(generateBuilder().validate()).isEmpty();
   }
 
-  private LiveSystem generateBuilder() {
-    return LiveSystem.builder()
-        .withName("ls")
-        .withResourceGroupId("res/group")
+  private LiveSystemAggregate generateBuilder() {
+    return factory.builder()
+        .withId(new LiveSystemIdValue("res/group", "ls"))
         .withComponent(
             getDefaultAks()
                 .build())
