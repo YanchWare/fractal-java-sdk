@@ -35,9 +35,9 @@ class InstantiateLiveSystemCommandRequestTest {
 
     private void assertEnvironment(EnvironmentDto envDto, EnvironmentAggregate env) {
         SoftAssertions.assertSoftly(softly -> {
-            softly.assertThat(envDto.id().type().toString()).isEqualTo(env.getEnvironmentType().toString());
-            softly.assertThat(envDto.id().ownerId()).isEqualTo(env.getOwnerId());
-            softly.assertThat(envDto.id().shortName()).isEqualTo(env.getShortName());
+            softly.assertThat(envDto.id().type().toString()).isEqualTo(env.getId().type().toString());
+            softly.assertThat(envDto.id().ownerId()).isEqualTo(env.getId().ownerId());
+            softly.assertThat(envDto.id().shortName()).isEqualTo(env.getId().shortName());
             softly.assertThat(envDto.parameters()).isEqualTo(env.toDto().parameters());
         });
     }

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.yanchware.fractal.sdk.domain.blueprint.FractalIdValue;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentAggregate;
+import com.yanchware.fractal.sdk.domain.environment.EnvironmentIdValue;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentType;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentsFactory;
 import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemAggregate;
@@ -338,10 +339,11 @@ public class TestUtils {
             new LocalSdkConfiguration(""),
             RetryRegistry.ofDefaults());
     return environmentsFactory.builder()
-        .withEnvironmentType(EnvironmentType.PERSONAL)
-        .withOwnerId(UUID.fromString("2e114308-14ec-4d77-b610-490324fa1844"))
+        .withId(new EnvironmentIdValue(
+                EnvironmentType.PERSONAL,
+                UUID.fromString("2e114308-14ec-4d77-b610-490324fa1844"),
+                "test"))
         .withResourceGroup(UUID.randomUUID())
-        .withShortName("test")
         .build();
   }
 

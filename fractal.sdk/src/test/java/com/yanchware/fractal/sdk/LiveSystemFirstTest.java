@@ -16,7 +16,7 @@ public class LiveSystemFirstTest {
     @SetEnvironmentVariable(key = "CLIENT_ID", value = "xxx")
     @SetEnvironmentVariable(key = "CLIENT_SECRET", value = "xxx")
     public void liveSystemInstantiated_when_AutomatonCalledWithValidLiveSystemInformation() throws InstantiatorException {
-        Automaton.instantiate(List.of(getLiveSystemExample()));
+        Automaton.getInstance().instantiate(List.of(getLiveSystemExample()));
     }
 
 }

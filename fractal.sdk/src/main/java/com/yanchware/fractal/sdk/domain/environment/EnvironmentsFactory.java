@@ -43,18 +43,8 @@ public class EnvironmentsFactory {
       return this;
     }
 
-    public EnvironmentBuilder withEnvironmentType(EnvironmentType environmentType) {
-      environment.setEnvironmentType(environmentType);
-      return builder;
-    }
-
-    public EnvironmentBuilder withOwnerId(UUID ownerId) {
-      environment.setOwnerId(ownerId);
-      return builder;
-    }
-
-    public EnvironmentBuilder withShortName(String shortName) {
-      environment.setShortName(shortName);
+    public EnvironmentBuilder withId(EnvironmentIdValue environmentId) {
+      environment.setId(environmentId);
       return builder;
     }
 

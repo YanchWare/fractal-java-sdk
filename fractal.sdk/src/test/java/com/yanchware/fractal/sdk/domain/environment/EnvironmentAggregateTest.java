@@ -69,10 +69,11 @@ public class EnvironmentAggregateTest {
   @Test
   public void noValidationErrors_when_environmentCreatedWithDnsZone() {
     var env = factory.builder()
-        .withEnvironmentType(EnvironmentType.PERSONAL)        
-        .withOwnerId(UUID.randomUUID())
+        .withId(new EnvironmentIdValue(
+                EnvironmentType.PERSONAL,
+                UUID.randomUUID(),
+                "production-001"))
         .withResourceGroup(UUID.randomUUID())
-        .withShortName("production-001")
         .withDnsZone(
             DnsZone.builder()
                 .withName("dns.name")
@@ -102,9 +103,10 @@ public class EnvironmentAggregateTest {
   @Test
   public void noValidationErrors_when_environmentCreatedWithRegionTenantIdAndSubscriptionId() {
     var env = factory.builder()
-        .withEnvironmentType(EnvironmentType.PERSONAL)
-        .withOwnerId(UUID.randomUUID())
-        .withShortName("production-001")
+        .withId(new EnvironmentIdValue(
+                EnvironmentType.PERSONAL,
+                UUID.randomUUID(),
+                "production-001"))
         .withAzureCloudAgent(
                 AzureRegion.AUSTRALIA_CENTRAL,
                 UUID.randomUUID(),
@@ -139,9 +141,10 @@ public class EnvironmentAggregateTest {
   @Test
   public void noValidationErrors_when_environmentCreatedWithTags() {
     var env = factory.builder()
-        .withEnvironmentType(EnvironmentType.PERSONAL)
-        .withOwnerId(UUID.randomUUID())
-        .withShortName("production-001")
+        .withId(new EnvironmentIdValue(
+                EnvironmentType.PERSONAL,
+                UUID.randomUUID(),
+                "production-001"))
         .withAzureCloudAgent(
                 AzureRegion.AUSTRALIA_CENTRAL,
                 UUID.randomUUID(),
@@ -165,10 +168,11 @@ public class EnvironmentAggregateTest {
 
   private EnvironmentAggregate generateBuilderWithInfo(String shortName) {
     return factory.builder()
-        .withEnvironmentType(EnvironmentType.PERSONAL)
-        .withOwnerId(UUID.randomUUID())
+        .withId(new EnvironmentIdValue(
+                EnvironmentType.PERSONAL,
+                UUID.randomUUID(),
+                shortName))
         .withResourceGroup(UUID.randomUUID())
-        .withShortName(shortName)
         .build();
   }
 
