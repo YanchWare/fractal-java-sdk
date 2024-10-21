@@ -289,7 +289,7 @@ public class Automaton {
     liveSystem.checkLiveSystemMutationStatus(mutation.id());
   }
 
-  private static String environmentToJsonString(EnvironmentAggregate environment) throws InstantiatorException {
+  private static String environmentToJsonString(EnvironmentDto environment) throws InstantiatorException {
     try {
       return serialize(environment);
     } catch (JsonProcessingException e) {
@@ -304,7 +304,7 @@ public class Automaton {
   private LiveSystemMutationDto instantiateLiveSystem(LiveSystemAggregate liveSystem)
       throws InstantiatorException {
     log.info("Starting to instantiate live system [id: '{}']", liveSystem.getId());
-    log.info("Environment -> {}", environmentToJsonString(liveSystem.getEnvironment()));
+    log.info("Environment -> {}", environmentToJsonString(liveSystem.getEnvironment().toDto()));
 
     createOrUpdateBlueprint(liveSystem);
 
@@ -325,6 +325,7 @@ public class Automaton {
   }
 
   private static void instantiateEnvironment(EnvironmentAggregate environment) throws InstantiatorException {
+    environment.initializeEnvironments();
     environment.initializeAgents();
   }
 

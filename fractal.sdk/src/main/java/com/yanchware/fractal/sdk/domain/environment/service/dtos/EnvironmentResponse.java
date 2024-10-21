@@ -4,6 +4,7 @@ import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.EnvironmentIdDto
 import java.util.*;
 
 public record EnvironmentResponse(
+  EnvironmentIdDto managementEnvironmentId,
   EnvironmentIdDto id,
   String name,
   Collection<UUID> resourceGroups,

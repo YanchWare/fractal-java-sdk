@@ -3,7 +3,7 @@ package com.yanchware.fractal.sdk.domain.livesystem;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.Validatable;
 import com.yanchware.fractal.sdk.domain.blueprint.FractalIdValue;
-import com.yanchware.fractal.sdk.domain.environment.EnvironmentAggregate;
+import com.yanchware.fractal.sdk.domain.environment.Environment;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.domain.livesystem.service.LiveSystemService;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.*;
@@ -37,7 +37,7 @@ public class LiveSystemAggregate implements Validatable {
     @Getter
     private String description;
     @Getter
-    private EnvironmentAggregate environment;
+    private Environment environment;
     @Getter
     private Date created;
     @Getter

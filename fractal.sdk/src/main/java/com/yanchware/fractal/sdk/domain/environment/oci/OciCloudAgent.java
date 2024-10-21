@@ -26,13 +26,12 @@ public class OciCloudAgent extends CloudAgentEntity {
 
     public OciCloudAgent(
             EnvironmentIdValue environmentId,
-            EnvironmentService environmentService,
             OciRegion region,
             String tenancyId,
             String compartmentId,
             Map<String, String> tags)
     {
-        super(environmentId, environmentService, tags);
+        super(environmentId, tags);
         this.region = region;
         this.tenancyId = tenancyId;
         this.compartmentId = compartmentId;
@@ -44,7 +43,7 @@ public class OciCloudAgent extends CloudAgentEntity {
     }
 
     @Override
-    public void initialize() throws InstantiatorException {
+    public void initialize(EnvironmentService environmentService, EnvironmentIdValue managementEnvironmentId) throws InstantiatorException {
         var currentInitialization = environmentService.fetchCurrentOciInitialization(environmentId);
 
         if (currentInitialization == null ||
@@ -59,10 +58,10 @@ public class OciCloudAgent extends CloudAgentEntity {
                     tags);
 
             log.info("New initialization started, checking initialization status for environment [id: '{}']", environmentId);
-            checkInitializationStatus(this::fetchCurrentOciInitialization);
+            checkInitializationStatus(() -> fetchCurrentOciInitialization(environmentService));
         } else {
             log.info("Checking initialization status for environment [id: '{}']", environmentId);
-            checkInitializationStatus(this::fetchCurrentOciInitialization);
+            checkInitializationStatus(() -> fetchCurrentOciInitialization(environmentService));
         }
     }
     @Override
@@ -74,7 +73,7 @@ public class OciCloudAgent extends CloudAgentEntity {
         );
     }
 
-    private InitializationRunResponse fetchCurrentOciInitialization() {
+    private InitializationRunResponse fetchCurrentOciInitialization(EnvironmentService environmentService) {
         try {
             return environmentService.fetchCurrentOciInitialization(environmentId);
         } catch (InstantiatorException e) {

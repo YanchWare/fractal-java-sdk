@@ -23,23 +23,16 @@ public abstract class CloudAgentEntity {
     protected static final Duration RETRIES_DELAY = Duration.ofSeconds(30);
     protected static final Duration TOTAL_ALLOWED_DURATION = Duration.ofMinutes(55);
     protected final EnvironmentIdValue environmentId;
-    protected final EnvironmentService environmentService;
     protected final Map<String, String> tags;
 
     public abstract ProviderType getProvider();
-    public abstract void initialize() throws InstantiatorException;
+    public abstract void initialize(EnvironmentService environmentService, EnvironmentIdValue managementEnvironmentId) throws InstantiatorException;
     protected abstract Map<String, Object> getConfigurationForEnvironmentParameters();
 
     protected CloudAgentEntity(
             EnvironmentIdValue environmentId,
-            EnvironmentService environmentService,
             Map<String, String> tags) {
         this.tags = tags;
-        if (environmentId == null || environmentService == null) {
-            throw new IllegalArgumentException("Environment and EnvironmentService cannot be null");
-        }
-
-        this.environmentService = environmentService;
         this.environmentId = environmentId;
     }
 

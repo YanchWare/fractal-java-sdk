@@ -26,13 +26,12 @@ public class AwsCloudAgent extends CloudAgentEntity {
 
     public AwsCloudAgent(
             EnvironmentIdValue environmentId,
-            EnvironmentService environmentService,
             AwsRegion region,
             String organizationId,
             String accountId,
             Map<String, String> tags)
     {
-        super(environmentId, environmentService, tags);
+        super(environmentId, tags);
         this.region = region;
         this.organizationId = organizationId;
         this.accountId = accountId;
@@ -44,7 +43,7 @@ public class AwsCloudAgent extends CloudAgentEntity {
     }
 
     @Override
-    public void initialize() throws InstantiatorException {
+    public void initialize(EnvironmentService environmentService, EnvironmentIdValue managementEnvironmentId) throws InstantiatorException {
         var currentInitialization = environmentService.fetchCurrentAwsInitialization(environmentId);
 
         if (currentInitialization == null ||
@@ -59,10 +58,10 @@ public class AwsCloudAgent extends CloudAgentEntity {
                     tags);
 
             log.info("New initialization started, checking initialization status for environment [id: '{}']", environmentId);
-            checkInitializationStatus(this::fetchCurrentAwsInitialization);
+            checkInitializationStatus(() -> fetchCurrentAwsInitialization(environmentService));
         } else {
             log.info("Checking initialization status for environment [id: '{}']", environmentId);
-            checkInitializationStatus(this::fetchCurrentAwsInitialization);
+            checkInitializationStatus(() -> fetchCurrentAwsInitialization(environmentService));
         }
     }
 
@@ -75,7 +74,7 @@ public class AwsCloudAgent extends CloudAgentEntity {
         );
     }
 
-    private InitializationRunResponse fetchCurrentAwsInitialization() {
+    private InitializationRunResponse fetchCurrentAwsInitialization(EnvironmentService environmentService) {
         try {
             return environmentService.fetchCurrentAwsInitialization(environmentId);
         } catch (InstantiatorException e) {
