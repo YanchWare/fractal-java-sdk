@@ -189,7 +189,7 @@ public class AzureBlobContainer extends PaaSStorageContainer implements LiveSyst
      * Metadata is represented as a collection of key-value pairs that can be used to store additional information 
      * about the container. Each key and value must be a non-null and non-empty string.</pre>
      *
-     * @param metadata A <code>Map<String, String></code> containing the metadata key-value pairs.
+     * @param metadata A <code>Map&lt;String, String&gt;</code> containing the metadata key-value pairs.
      * @return The builder instance for chaining.
      */
     public AzureBlobContainerBuilder withMetadata(Map<String, String> metadata) {
