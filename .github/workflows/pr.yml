@@ -17,22 +17,29 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-          
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: 8.10.2
+
       - name: Restore dependencies cache
         uses: actions/cache@v4
         id: cache-restore
         with:
           path: |
-            .m2/repository
-          key: fractal-sdk-maven-dependencies
-          
-      - name: Maven Clean Package
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: fractal-sdk-dependencies
+
+      - name: Build with Gradle
         working-directory: fractal.sdk
-        run: mvn --batch-mode clean package
+        run: ./gradlew clean test
         
       - name: Save dependencies cache
         uses: actions/cache@v4
         with:
           path: |
-            .m2/repository
-          key: fractal-sdk-maven-dependencies
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: fractal-sdk-dependencies
