@@ -3,6 +3,7 @@ package com.yanchware.fractal.sdk.domain;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
+import com.yanchware.fractal.sdk.utils.StringHelper;
 import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryRegistry;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +46,7 @@ public abstract class Service {
             }).get();
         } catch (Throwable ex) {
             throw new InstantiatorException(
-                    String.format("All attempts for request %s failed", requestName),
+                    String.format("All attempts to %s failed", StringHelper.toWords(requestName)),
                     ex);
         }
     }
@@ -59,6 +60,8 @@ public abstract class Service {
             Class<T> classRef) throws InstantiatorException {
 
         Retry retry = retryRegistry.retry(requestName);
+        
+        var requestNameLog = StringHelper.toWords(requestName);
 
         try {
             var result = Retry.decorateCheckedSupplier(retry, () -> {
@@ -71,22 +74,23 @@ public abstract class Service {
 
                 String bodyContents = response.body();
                 if (isBlank(bodyContents)) {
-                    log.error("Attempted {} has come up with empty or null body contents", requestName);
+                    log.error("Attempted {} has come up with empty or null body contents", requestNameLog);
                     return null;
                 }
 
                 try {
                     return deserialize(bodyContents, classRef);
                 } catch (JsonProcessingException e) {
-                    log.error("Attempted {} failed. Deserialization of {} failed", requestName, bodyContents);
+                    log.error("Attempted {} failed. Deserialization of {} failed", requestNameLog, bodyContents);
                     return null;
                 }
             });
             return result.get();
         } catch (Throwable ex) {
-            log.error("Attempted {} failed all attempts", requestName, ex);
+            log.error("All attempts failed. {}", ex.getMessage()); // Improved log message
             throw new InstantiatorException(
-                    String.format("All attempts for request %s failed with cause: %s", requestName, ex));
+                String.format("%s. Please try again later or contact Fractal Cloud support if the issue persists.", 
+                    ex.getMessage())); // Improved exception message
         }
     }
 }

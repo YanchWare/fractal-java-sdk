@@ -1,6 +1,6 @@
 package com.yanchware.fractal.sdk.domain.livesystem.service.commands;
 
-import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.EnvironmentDto;
+import com.yanchware.fractal.sdk.domain.livesystem.EnvironmentReference;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.LiveSystemComponentDto;
 
 import java.util.Map;
@@ -11,5 +11,5 @@ public record InstantiateLiveSystemCommandRequest(
     String description,
     String provider,
     Map<String, LiveSystemComponentDto> blueprintMap,
-    EnvironmentDto environment){
+    EnvironmentReference environment){
 }

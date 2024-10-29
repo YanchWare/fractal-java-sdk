@@ -26,13 +26,12 @@ public class GcpCloudAgent extends CloudAgentEntity {
 
     public GcpCloudAgent(
             EnvironmentIdValue environmentId,
-            EnvironmentService environmentService,
             GcpRegion region,
             String organizationId,
             String projectId,
             Map<String, String> tags)
     {
-        super(environmentId, environmentService, tags);
+        super(environmentId, tags);
         this.region = region;
         this.organizationId = organizationId;
         this.projectId = projectId;
@@ -44,7 +43,7 @@ public class GcpCloudAgent extends CloudAgentEntity {
     }
 
     @Override
-    public void initialize() throws InstantiatorException {
+    public void initialize(EnvironmentService environmentService, EnvironmentIdValue managementEnvironmentId) throws InstantiatorException {
         var currentInitialization = environmentService.fetchCurrentGcpInitialization(environmentId);
 
         if (currentInitialization == null ||
@@ -59,10 +58,10 @@ public class GcpCloudAgent extends CloudAgentEntity {
                     tags);
 
             log.info("New initialization started, checking initialization status for environment [id: '{}']", environmentId);
-            checkInitializationStatus(this::fetchCurrentGcpInitialization);
+            checkInitializationStatus(() -> fetchCurrentGcpInitialization(environmentService));
         } else {
             log.info("Checking initialization status for environment [id: '{}']", environmentId);
-            checkInitializationStatus(this::fetchCurrentGcpInitialization);
+            checkInitializationStatus(() -> fetchCurrentGcpInitialization(environmentService));
         }
     }
 
@@ -75,7 +74,7 @@ public class GcpCloudAgent extends CloudAgentEntity {
         );
     }
 
-    private InitializationRunResponse fetchCurrentGcpInitialization() {
+    private InitializationRunResponse fetchCurrentGcpInitialization(EnvironmentService environmentService) {
         try {
             return environmentService.fetchCurrentGcpInitialization(environmentId);
         } catch (InstantiatorException e) {
