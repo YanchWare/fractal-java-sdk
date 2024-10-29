@@ -3,7 +3,10 @@ package com.yanchware.fractal.sdk.domain.environment;
 import com.yanchware.fractal.sdk.domain.blueprint.iaas.DnsAaaaRecord;
 import com.yanchware.fractal.sdk.domain.blueprint.iaas.DnsPtrRecord;
 import com.yanchware.fractal.sdk.domain.blueprint.iaas.DnsZone;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.aws.AwsRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GcpRegion;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciRegion;
 import com.yanchware.fractal.sdk.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 
@@ -54,10 +57,7 @@ class ManagementEnvironmentTest {
             "management"))
         .withResourceGroup(UUID.randomUUID())
         .withOperationalEnvironment(OperationalEnvironment.builder()
-            .withId(new EnvironmentIdValue(
-                EnvironmentType.PERSONAL,
-                UUID.randomUUID(),
-                "operational-001"))
+            .withShortName("operational-001")
             .withResourceGroup(UUID.randomUUID())
             .build())
         .build()
@@ -76,10 +76,7 @@ class ManagementEnvironmentTest {
             "management"))
         .withResourceGroup(UUID.randomUUID())
         .withOperationalEnvironment(OperationalEnvironment.builder()
-            .withId(new EnvironmentIdValue(
-                EnvironmentType.PERSONAL,
-                ownerId,
-                "operational-001"))
+            .withShortName("operational-001")
             .withResourceGroup(UUID.randomUUID())
             .build())
         .build()
@@ -200,39 +197,26 @@ class ManagementEnvironmentTest {
   public void noValidationErrors_when_environmentCreatedWithOperationalEnvironment() {
     var ownerId = UUID.randomUUID();
     var environmentType = EnvironmentType.PERSONAL;
-    
+
     var operationalEnvironment = OperationalEnvironment.builder()
-        .withId(new EnvironmentIdValue(
-            environmentType,
-            ownerId,
-            "operational-001"))
+        .withShortName("operational-001")
         .withResourceGroup(UUID.randomUUID())
-        .withDnsZone(
-            DnsZone.builder()
-                .withName("dns.name")
-                .withRecords(Map.of("componentId", List.of(
-                    DnsAaaaRecord.builder()
-                        .withName("name")
-                        .withIpV6Address("2001:db8:3333:4444:CCCC:DDDD:EEEE:FFFF")
-                        .withTtl(Duration.ofMinutes(1))
-                        .build(),
-                    DnsPtrRecord.builder()
-                        .withName("name")
-                        .withDomainName("")
-                        .withTtl(Duration.ofMinutes(1))
-                        .build()
-                )))
-                .withParameter("key", "value")
-                .isPrivate(false)
-                .build())
+        .withAzureSubscription(AzureRegion.WEST_EUROPE, UUID.randomUUID())
+        .withTag("key1", "value1")
+        .withTag("key2", "value3")
+        .withTag("key3", "value4")
         .build();
-    
+
     var managementEnvironment = ManagementEnvironment.builder()
         .withId(new EnvironmentIdValue(
             environmentType,
             ownerId,
             "production-001"))
         .withResourceGroup(UUID.randomUUID())
+        .withAwsCloudAgent(AwsRegion.EU_NORTH_1, UUID.randomUUID().toString(), UUID.randomUUID().toString())
+        .withAzureCloudAgent(AzureRegion.WEST_EUROPE, UUID.randomUUID(), UUID.randomUUID())
+        .withGcpCloudAgent(GcpRegion.EU_WEST1, UUID.randomUUID().toString(), UUID.randomUUID().toString())
+        .withOciCloudAgent(OciRegion.EU_ZURICH_1, UUID.randomUUID().toString(), UUID.randomUUID().toString())
         .withDnsZone(
             DnsZone.builder()
                 .withName("dns.name")

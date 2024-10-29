@@ -3,7 +3,6 @@ package com.yanchware.fractal.sdk.domain.livesystem;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.Validatable;
 import com.yanchware.fractal.sdk.domain.blueprint.FractalIdValue;
-import com.yanchware.fractal.sdk.domain.environment.Environment;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.domain.livesystem.service.LiveSystemService;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.*;
@@ -37,7 +36,7 @@ public class LiveSystemAggregate implements Validatable {
     @Getter
     private String description;
     @Getter
-    private Environment environment;
+    private EnvironmentReference environment;
     @Getter
     private Date created;
     @Getter
@@ -69,7 +68,6 @@ public class LiveSystemAggregate implements Validatable {
 
     // TODO FRA-1870: Use entity instead of LiveSystemMutationDto
     public LiveSystemMutationDto instantiate() throws InstantiatorException {
-        log.info("Starting to instantiate live system: {}", getId());
 
         if (components == null || components.isEmpty()) {
             throw new InstantiatorException(EMPTY_COMPONENT_LIST);
@@ -82,7 +80,7 @@ public class LiveSystemAggregate implements Validatable {
                     description,
                     provider.toString(),
                     blueprintMapFromLiveSystemComponents(),
-                    environment.toDto());
+                    environment);
         }
 
         return service.instantiateLiveSystem(
@@ -91,7 +89,7 @@ public class LiveSystemAggregate implements Validatable {
                 description,
                 provider.toString(),
                 blueprintMapFromLiveSystemComponents(),
-                environment.toDto());
+                environment);
     }
 
     public void checkLiveSystemMutationStatus(String liveSystemMutationId) throws InstantiatorException {

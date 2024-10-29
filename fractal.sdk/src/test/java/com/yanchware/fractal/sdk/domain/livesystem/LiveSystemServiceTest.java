@@ -57,7 +57,7 @@ public class LiveSystemServiceTest {
             .withId(new LiveSystemIdValue("resourceGroupId", "livesystem-name"))
             .withFractalId(new FractalIdValue("resourceGroupId", "fractalName", "fractalVersion" ))
             .withDescription("prod")
-            .withEnvironment(managementEnvironment)
+            .withEnvironmentId(managementEnvironment.getId())
             .withComponent(AzureCosmosGremlinDbms.builder()
               .withId("cosmos-graph-1")
               .withMaxTotalThroughput(500)
@@ -84,7 +84,7 @@ public class LiveSystemServiceTest {
             liveSystem.getDescription(),
             null,
             liveSystem.blueprintMapFromLiveSystemComponents(),
-            liveSystem.getEnvironment().toDto());
+            liveSystem.getEnvironment());
 
     verify(postRequestedFor(urlPathEqualTo("/livesystems/")));
   }

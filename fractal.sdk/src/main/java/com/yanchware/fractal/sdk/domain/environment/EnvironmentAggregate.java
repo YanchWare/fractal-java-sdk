@@ -1,9 +1,11 @@
 package com.yanchware.fractal.sdk.domain.environment;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.environment.service.EnvironmentService;
 import com.yanchware.fractal.sdk.domain.environment.service.dtos.EnvironmentResponse;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
+import com.yanchware.fractal.sdk.utils.SerializationUtils;
 import io.github.resilience4j.retry.RetryRegistry;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -11,6 +13,8 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.http.HttpClient;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -31,38 +35,96 @@ public class EnvironmentAggregate {
     this.service = new EnvironmentService(client, sdkConfiguration, retryRegistry);
   }
 
-  public EnvironmentResponse createOrUpdate(Environment environment) throws InstantiatorException {
-    return createOrUpdate(null, environment);
-  }
+  public void createOrUpdate() throws InstantiatorException {
+    var managementEnvironmentId = managementEnvironment.getId();
 
-  public EnvironmentResponse createOrUpdate(EnvironmentIdValue managementEnvironmentId,
-                                            Environment environment) throws InstantiatorException {
-    var environmentId = environment.getId();
-    log.info("Starting createOrUpdateEnvironment for Environment [id: '{}']", environmentId);
 
-    log.info("Fetching environment details [id: '{}']", environmentId);
-    var existingEnvironment = service.fetch(environmentId);
+    var existingEnvironment = service.fetch(managementEnvironmentId);
     if (existingEnvironment != null) {
-      if (environment.doesNotNeedUpdate(existingEnvironment)) {
-        log.info("No changes detected for Environment [id: '{}']. Update not required.", environmentId);
-        return existingEnvironment;
+      if (doesNotNeedUpdate(managementEnvironment, existingEnvironment)) {
+        log.info("Management Environment [id: '{}'] already exists and is up-to-date.", managementEnvironmentId);
       } else {
-        log.info("Environment [id: '{}'] exists, updating ...", environmentId);
-        return service.update(
-            environmentId,
-            environment.getName(),
-            environment.getResourceGroups(),
-            environment.getParameters());
+        log.info("Updating existing Management Environment  [id: '{}']", managementEnvironmentId);
+        service.update(
+            managementEnvironmentId,
+            managementEnvironment.getName(),
+            managementEnvironment.getResourceGroups(),
+            managementEnvironment.getParameters());
       }
+    } else {
+      log.info("Creating new Management Environment [id: '{}']", managementEnvironmentId);
+      service.create(
+          null,
+          managementEnvironmentId,
+          managementEnvironment.getName(),
+          managementEnvironment.getResourceGroups(),
+          managementEnvironment.getParameters());
     }
 
-    log.info("Environment does not exist, creating new environment [id: '{}']", environmentId);
-    return service.create(
-        managementEnvironmentId,
-        environmentId,
-        environment.getName(),
-        environment.getResourceGroups(),
-        environment.getParameters());
+    for (var operationalEnvironment : managementEnvironment.getOperationalEnvironments()) {
+      initializeOperationalEnvironment(operationalEnvironment);
+    }
+  }
+
+  private void initializeOperationalEnvironment(OperationalEnvironment operationalEnvironment) throws InstantiatorException {
+    var environmentId = operationalEnvironment.getId();
+
+    var existingEnvironment = service.fetch(environmentId);
+    if (existingEnvironment != null) {
+      if (doesNotNeedUpdate(operationalEnvironment, existingEnvironment)) {
+        log.info("Operational Environment [id: '{}'] already exists and is up-to-date.", environmentId);
+      } else {
+        log.info("Updating existing Operational Environment  [id: '{}']", environmentId);
+        service.update(
+            environmentId,
+            operationalEnvironment.getName(),
+            operationalEnvironment.getResourceGroups(),
+            operationalEnvironment.getParameters());
+      }
+    } else {
+      log.info("Creating new Operational Environment [id: '{}']", environmentId);
+      service.create(
+          managementEnvironment.getId(),
+          environmentId,
+          operationalEnvironment.getName(),
+          operationalEnvironment.getResourceGroups(),
+          operationalEnvironment.getParameters());
+    }
+  }
+
+  /**
+   * Compares this environment response with another environment object.
+   *
+   * @param existingEnvironmentResponse the environment response to compare with current entity
+   * @return true if the environments are equal, false otherwise
+   */
+  private boolean doesNotNeedUpdate(Environment environment, EnvironmentResponse existingEnvironmentResponse) {
+    if (existingEnvironmentResponse == null) return false;
+
+    var environmentIdInResponse = existingEnvironmentResponse.id();
+    return Objects.equals(environmentIdInResponse.type().toString(), environment.getId().type().toString()) &&
+        Objects.equals(environmentIdInResponse.ownerId(), environment.getId().ownerId()) &&
+        Objects.equals(environmentIdInResponse.shortName(), environment.getId().shortName()) &&
+        Objects.equals(existingEnvironmentResponse.name(), environment.getName()) &&
+        Objects.equals(existingEnvironmentResponse.resourceGroups(), environment.getResourceGroups()) &&
+        mapsEqual(existingEnvironmentResponse.parameters(), environment.getParameters());
+  }
+
+  /**
+   * Compares two maps for equality using JSON serialization.
+   *
+   * @param map1 the first map to compare
+   * @param map2 the second map to compare
+   * @return true if the maps are equal, false otherwise
+   */
+  private boolean mapsEqual(Map<String, Object> map1, Map<String, Object> map2) {
+    try {
+      String json1 = SerializationUtils.serializeSortedJson(map1);
+      String json2 = SerializationUtils.serializeSortedJson(map2);
+      return json1.equals(json2);
+    } catch (JsonProcessingException e) {
+      return false;
+    }
   }
 
 
@@ -74,40 +136,28 @@ public class EnvironmentAggregate {
       for (var managementAgent : managementAgents) {
         executor.execute(() -> {
           try {
+
+            var providerType = managementAgent.getProvider();
+
             managementAgent.initialize(service, null);
+
+            for (var operationalEnvironment : managementEnvironment.getOperationalEnvironments()) {
+
+              var operationalAgent = operationalEnvironment.getCloudAgentByProviderType()
+                  .values()
+                  .stream().filter(a -> a.getProvider() == providerType)
+                  .findFirst();
+
+              if (operationalAgent.isPresent()) {
+                operationalAgent.get().initialize(service, managementEnvironment.getId());
+              }
+            }
           } catch (InstantiatorException e) {
-            throw new RuntimeException(e);
+            log.error(e.getMessage());
+            System.exit(1);
           }
         });
       }
-    }
-
-    // 2. Initialize Operational Environment Agents (after management agents are initialized)
-    var operationalEnvironments = managementEnvironment.getOperationalEnvironments();
-    if (operationalEnvironments != null) {
-      for (var operationalEnvironment : operationalEnvironments) {
-        var operationalAgents = operationalEnvironment.getCloudAgentByProviderType().values();
-        try (ExecutorService executor = Executors.newFixedThreadPool(operationalAgents.size())) {
-          for (var operationalAgent : operationalAgents) {
-            executor.execute(() -> {
-              try {
-                operationalAgent.initialize(service, managementEnvironment.getId());
-              } catch (InstantiatorException e) {
-                throw new RuntimeException(e);
-              }
-            });
-          }
-        }
-      }
-    }
-  }
-
-  public void initializeEnvironments() throws InstantiatorException {
-    var managementEnvironment = getManagementEnvironment();
-    var response = createOrUpdate(managementEnvironment);
-
-    for (OperationalEnvironment operationalEnvironment : managementEnvironment.getOperationalEnvironments()) {
-      createOrUpdate(managementEnvironment.getId(), operationalEnvironment);
     }
   }
 }

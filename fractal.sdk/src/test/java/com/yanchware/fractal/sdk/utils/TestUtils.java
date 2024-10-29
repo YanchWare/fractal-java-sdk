@@ -351,7 +351,7 @@ public class TestUtils {
         .withDescription("Business platform")
         .withComponent(getAksExample())
         .withComponent(getAzurePostgresExample())
-        .withEnvironment(getEnvExample())
+        .withEnvironmentId(getEnvExample().getId())
         .build();
   }
 

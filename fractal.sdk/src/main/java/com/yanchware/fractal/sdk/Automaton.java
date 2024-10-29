@@ -3,6 +3,7 @@ package com.yanchware.fractal.sdk;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.domain.blueprint.BlueprintFactory;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentAggregate;
+import com.yanchware.fractal.sdk.domain.livesystem.EnvironmentReference;
 import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemAggregate;
 import com.yanchware.fractal.sdk.configuration.EnvVarSdkConfiguration;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
@@ -289,7 +290,7 @@ public class Automaton {
     liveSystem.checkLiveSystemMutationStatus(mutation.id());
   }
 
-  private static String environmentToJsonString(EnvironmentDto environment) throws InstantiatorException {
+  private static String environmentToJsonString(EnvironmentReference environment) throws InstantiatorException {
     try {
       return serialize(environment);
     } catch (JsonProcessingException e) {
@@ -303,9 +304,6 @@ public class Automaton {
 
   private LiveSystemMutationDto instantiateLiveSystem(LiveSystemAggregate liveSystem)
       throws InstantiatorException {
-    log.info("Starting to instantiate live system [id: '{}']", liveSystem.getId());
-    log.info("Environment -> {}", environmentToJsonString(liveSystem.getEnvironment().toDto()));
-
     createOrUpdateBlueprint(liveSystem);
 
     return liveSystem.instantiate();
@@ -325,7 +323,7 @@ public class Automaton {
   }
 
   private static void instantiateEnvironment(EnvironmentAggregate environment) throws InstantiatorException {
-    environment.initializeEnvironments();
+    environment.createOrUpdate();
     environment.initializeAgents();
   }
 

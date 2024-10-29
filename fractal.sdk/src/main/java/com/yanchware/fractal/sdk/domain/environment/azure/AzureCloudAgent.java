@@ -50,6 +50,8 @@ public class AzureCloudAgent extends CloudAgentEntity {
         "Failed".equals(currentInitialization.status()) ||
         "Cancelled".equals(currentInitialization.status())) {
 
+      log.info("Initializing Azure Cloud Agent for environment [id: '{}']...", environmentId); // Log before starting
+
       environmentService.startAzureCloudAgentInitialization(
           managementEnvironmentId,
           environmentId,
@@ -57,11 +59,9 @@ public class AzureCloudAgent extends CloudAgentEntity {
           subscriptionId,
           region,
           tags);
-
-      log.info("New initialization started, checking initialization status for environment [id: '{}']", environmentId);
+      
       checkInitializationStatus(() -> fetchCurrentAzureInitialization(environmentService));
     } else {
-      log.info("Checking initialization status for environment [id: '{}']", environmentId);
       checkInitializationStatus(() -> fetchCurrentAzureInitialization(environmentService));
     }
   }

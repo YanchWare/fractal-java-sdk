@@ -1,8 +1,6 @@
 package com.yanchware.fractal.sdk.domain.livesystem;
 
-import com.yanchware.fractal.sdk.domain.environment.Environment;
 import com.yanchware.fractal.sdk.domain.livesystem.service.commands.InstantiateLiveSystemCommandRequest;
-import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.EnvironmentDto;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +17,7 @@ class InstantiateLiveSystemCommandRequestTest {
                 ls.getDescription(),
                 null,
                 ls.blueprintMapFromLiveSystemComponents(),
-                ls.getEnvironment().toDto());
+                ls.getEnvironment());
         
         assertLiveSystemInfo(commandRequest, ls);
         assertEnvironment(commandRequest.environment(), ls.getEnvironment());
@@ -33,12 +31,11 @@ class InstantiateLiveSystemCommandRequestTest {
         });
     }
 
-    private void assertEnvironment(EnvironmentDto envDto, Environment env) {
+    private void assertEnvironment(EnvironmentReference envDto, EnvironmentReference env) {
         SoftAssertions.assertSoftly(softly -> {
-            softly.assertThat(envDto.id().type().toString()).isEqualTo(env.getId().type().toString());
-            softly.assertThat(envDto.id().ownerId()).isEqualTo(env.getId().ownerId());
-            softly.assertThat(envDto.id().shortName()).isEqualTo(env.getId().shortName());
-            softly.assertThat(envDto.parameters()).isEqualTo(env.getParameters());
+            softly.assertThat(envDto.id().type().toString()).isEqualTo(env.id().type().toString());
+            softly.assertThat(envDto.id().ownerId()).isEqualTo(env.id().ownerId());
+            softly.assertThat(envDto.id().shortName()).isEqualTo(env.id().shortName());
         });
     }
 

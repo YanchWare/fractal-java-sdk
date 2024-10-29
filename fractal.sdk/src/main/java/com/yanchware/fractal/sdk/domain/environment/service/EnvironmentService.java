@@ -3,18 +3,19 @@ package com.yanchware.fractal.sdk.domain.environment.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.Service;
-import com.yanchware.fractal.sdk.domain.environment.service.commands.*;
-import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.aws.AwsRegion;
-import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentIdValue;
+import com.yanchware.fractal.sdk.domain.environment.service.commands.*;
 import com.yanchware.fractal.sdk.domain.environment.service.dtos.EnvironmentResponse;
 import com.yanchware.fractal.sdk.domain.environment.service.dtos.InitializationRunResponse;
 import com.yanchware.fractal.sdk.domain.environment.service.dtos.InitializationRunRoot;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.aws.AwsRegion;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GcpRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import com.yanchware.fractal.sdk.utils.HttpUtils;
+import com.yanchware.fractal.sdk.utils.StringHelper;
 import io.github.resilience4j.retry.RetryRegistry;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,7 +27,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import static com.yanchware.fractal.sdk.configuration.Constants.*;
-import static com.yanchware.fractal.sdk.configuration.Constants.X_AZURE_SP_CLIENT_SECRET_HEADER;
 import static com.yanchware.fractal.sdk.utils.SerializationUtils.serialize;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -78,16 +78,28 @@ public class EnvironmentService extends Service {
         EnvironmentResponse.class);
   }
 
-  public EnvironmentResponse fetch(EnvironmentIdValue environmentId) throws InstantiatorException {
-    return executeRequestWithRetries(
-        "fetchEnvironment",
-        client,
-        retryRegistry,
-        HttpUtils.buildGetRequest(
-            getEnvironmentsUri(environmentId),
-            sdkConfiguration),
-        new int[]{200, 404},
-        EnvironmentResponse.class);
+  public EnvironmentResponse fetch(EnvironmentIdValue environmentId) {
+    try {
+
+      return executeRequestWithRetries(
+          "fetchEnvironment",
+          client,
+          retryRegistry,
+          HttpUtils.buildGetRequest(
+              getEnvironmentsUri(environmentId),
+              sdkConfiguration),
+          new int[]{200, 404},
+          EnvironmentResponse.class);
+    } catch (Exception e) {
+      log.error("An unexpected error occurred while fetching the environment [id: '{}']. " +
+              "Please try again later or contact Fractal Cloud support if the issue persists.",
+          environmentId);
+      
+      System.exit(1);
+      
+      return null;
+      
+    }
   }
 
   public void startAzureCloudAgentInitialization(
@@ -274,7 +286,7 @@ public class EnvironmentService extends Service {
   private InitializationRunResponse fetchCurrentInitialization(
       EnvironmentIdValue environmentId,
       ProviderType provider) throws InstantiatorException {
-    var providerStr = provider.toString().toLowerCase();
+    var providerStr = StringHelper.convertToTitleCase(provider.toString());
     var runRoot = executeRequestWithRetries(
         String.format("fetchCurrent%sInitialization", providerStr),
         client,

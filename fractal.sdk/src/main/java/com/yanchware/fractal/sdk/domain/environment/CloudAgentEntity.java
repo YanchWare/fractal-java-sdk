@@ -6,6 +6,7 @@ import com.yanchware.fractal.sdk.domain.environment.service.dtos.InitializationS
 import com.yanchware.fractal.sdk.domain.exceptions.EnvironmentInitializationException;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
+import com.yanchware.fractal.sdk.utils.StringHelper;
 import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryConfig;
 import io.github.resilience4j.retry.RetryRegistry;
@@ -37,8 +38,8 @@ public abstract class CloudAgentEntity {
     }
 
     protected void checkInitializationStatus(Supplier<InitializationRunResponse> fetchCurrentInitialization) throws InstantiatorException {
-        log.info("Starting operation [checkInitializationStatus] for Environment [id: '{}']", environmentId);
-
+        log.info("Checking initialization status for environment [id: '{}']", environmentId);
+        
         int maxAttempts = (int) (TOTAL_ALLOWED_DURATION.toMillis() / RETRIES_DELAY.toMillis());
 
         var retryConfig = RetryConfig.custom()
@@ -64,32 +65,42 @@ public abstract class CloudAgentEntity {
 
     private void validateInitializationStatus(InitializationRunResponse initializationRun) throws InstantiatorException, EnvironmentInitializationException {
         var environmentId = initializationRun.environmentId().toString();
+        var providerType = StringHelper.convertToTitleCase(getProvider().toString());
+        
         switch (initializationRun.status()) {
-            case "Completed" -> log.info("Initialization for Environment [id: '{}'] completed", environmentId);
+            case "Completed" -> log.info("{} cloud agent initialized successfully [EnvironmentId: '{}']", 
+                providerType,
+                environmentId);
             case "Failed" -> {
-                var messageToThrow = getFailedStepsMessageToThrow(environmentId, initializationRun);
+                var messageToThrow = getFailedStepsMessageToThrow(providerType, environmentId, initializationRun);
                 if (isBlank(messageToThrow)) {
-                    log.warn("Initialization for Environment [id: '{}'] failed but error message is not visible yet", environmentId);
-                    throw new InstantiatorException("Initialization failed, but the error message is not visible yet.");
+                    log.info("{} cloud agent initialization in progress [EnvironmentId: '{}']", providerType, environmentId);
+                    throw new InstantiatorException("Initialization is in progress, retrying...");
                 } else {
-                    log.error("Initialization for Environment [id: '{}'] failed", environmentId);
                     throw new EnvironmentInitializationException(messageToThrow);
                 }
             }
             case "Cancelled" -> {
-                log.warn("Initialization for Environment [id: '{}'] cancelled", environmentId);
+                log.warn("{} cloud agent initialization cancelled [EnvironmentId: '{}']", providerType, environmentId);
                 throw new EnvironmentInitializationException("Initialization was cancelled.");
             }
             case "InProgress" -> {
-                log.info("Initialization for Environment [id: '{}'] is in progress", environmentId);
+                log.info("{} cloud agent initialization in progress [EnvironmentId: '{}']", providerType, environmentId);
                 throw new InstantiatorException("Initialization is in progress, retrying...");
             }
-            default -> throw new EnvironmentInitializationException(
+            default -> {
+                log.warn("{} cloud agent initialization in an unknown state [EnvironmentId: '{}']", providerType,
+                    environmentId);
+                throw new EnvironmentInitializationException(
                     String.format("Unknown initialization status: [%s]", initializationRun.status()));
+            }
         }
     }
 
-    private String getFailedStepsMessageToThrow(String environmentId, InitializationRunResponse initializationRun) {
+    private String getFailedStepsMessageToThrow(
+        String providerType,
+        String environmentId, 
+        InitializationRunResponse initializationRun) {
         var failedSteps = initializationRun.steps()
                 .stream()
                 .filter(step -> "Failed".equals(step.status()))
@@ -100,42 +111,50 @@ public abstract class CloudAgentEntity {
         } else {
             var messageToThrow = new StringBuilder();
             messageToThrow.append(
-                    String.format("Initialization for Environment [id: '%s'] failed. Failed steps -> ", environmentId));
+                    String.format("%s cloud agent initialization failed [EnvironmentId: '%s'].\n   Failed steps:\n", 
+                        providerType,
+                        environmentId));
+            
             for (var step : failedSteps) {
                 var errorMessage = step.lastOperationStatusMessage();
-
-                if (isBlank(errorMessage)) {
-                    return "";
-                }
-
-                messageToThrow.append(String.format("id: '%s', status: '%s', errorMessage: '%s' - ",
+                
+                messageToThrow.append(String.format("      - Name: '%s', Status: '%s', ErrorMessage: '%s'\n",
                         step.resourceName(),
                         step.status(),
                         errorMessage));
             }
 
-            return messageToThrow.substring(0, messageToThrow.length() - 3);
+            messageToThrow.deleteCharAt(messageToThrow.length() - 1);
+            return messageToThrow.toString();
         }
     }
 
     private void printInitializationStatus(InitializationRunResponse initializationRun) {
-        log.info("Initialization Run ID: {}", initializationRun.id());
 
         initializationRun.steps().sort(Comparator.comparingInt(InitializationStepResponse::order));
 
+        var stepsInfo = new StringBuilder();
         initializationRun.steps()
-                .forEach(step -> {
-                    String status = step.status();
-                    String resourceName = step.resourceName();
-                    String resourceType = step.resourceType();
+            .forEach(step -> {
+                String status = step.status();
+                String resourceName = step.resourceName();
+                String resourceType = step.resourceType();
 
-                    if ("Failed".equalsIgnoreCase(status)) {
-                        log.error("Step - Name: '{}', Type: '{}', Status: '{}'",
-                                resourceName, resourceType, status);
-                    } else {
-                        log.info("Step - Name: '{}', Type: '{}', Status: '{}'",
-                                resourceName, resourceType, status);
-                    }
-                });
+                // Append each step's information to the log message
+                stepsInfo.append(String.format("  Step - Name: '%s', Type: '%s', Status: '%s'\n", 
+                    resourceName, 
+                    resourceType, 
+                    status));
+            });
+
+        if (!stepsInfo.isEmpty()) {
+            stepsInfo.deleteCharAt(stepsInfo.length() - 1);
+            
+            var status = String.format("%s cloud agent initialization status [id: '%s']:\n", 
+                initializationRun.cloudProvider(),                
+                initializationRun.id());
+
+          log.info("{}{}", status, stepsInfo);
+        }
     }
 }
