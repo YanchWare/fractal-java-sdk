@@ -136,7 +136,7 @@ public class AzureCdnProfile extends PaaSNetworkCdnProfile implements AzureResou
      *   - <code><strong>PREMIUM_AZURE_FRONT_DOOR</strong></code> The premium version of Azure Front Door services, providing additional
      *      security and optimization features for highly dynamic and secure applications.</pre>
      * 
-     * @important.note: Direct SKU updates post-creation of the CDN profile are not supported through this SDK. Changing the SKU
+     * @important.note Direct SKU updates post-creation of the CDN profile are not supported through this SDK. Changing the SKU
      *     requires creating a new CDN profile with the desired SKU and, if necessary, deleting the old one. 
      *     Selecting the correct SKU is crucial for aligning service capabilities with your application needs and
      *     budget. Review the detailed comparison of features and pricing in Azure CDN documentation to make an
