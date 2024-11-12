@@ -51,36 +51,36 @@ public class LocalSdkConfiguration implements SdkConfiguration {
 
   @Override
   public String getAwsAccessKeyId() {
-    return "";
+    return "xxx";
   }
 
   @Override
   public String getAwsSecretAccessKey() {
-    return "";
+    return "xxx";
   }
 
   @Override
   public String getAwsSessionToken() {
-    return "";
+    return "xxx";
   }
 
   @Override
   public String getGcpServiceAccountEMail() {
-    return "";
+    return "xxx";
   }
 
   @Override
   public String getGcpServiceAccountCredentials() {
-    return "";
+    return "xxx";
   }
 
   @Override
   public String getOciServiceAccountId() {
-    return "";
+    return "xxx";
   }
 
   @Override
   public String getOciServiceAccountCendentials() {
-    return "";
+    return "xxx";
   }
 }

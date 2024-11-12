@@ -43,6 +43,11 @@ public class AzureCloudAgent extends CloudAgentEntity {
   }
 
   @Override
+  public void initialize(EnvironmentService environmentService) throws InstantiatorException {
+    initialize(environmentService, null);
+  }
+
+  @Override
   public void initialize(EnvironmentService environmentService, EnvironmentIdValue managementEnvironmentId) throws InstantiatorException {
     var currentInitialization = environmentService.fetchCurrentAzureInitialization(environmentId);
 

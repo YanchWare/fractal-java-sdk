@@ -43,6 +43,11 @@ public class OciCloudAgent extends CloudAgentEntity {
     }
 
     @Override
+    public void initialize(EnvironmentService environmentService) throws InstantiatorException {
+        initialize(environmentService, null);
+    }
+
+    @Override
     public void initialize(EnvironmentService environmentService, EnvironmentIdValue managementEnvironmentId) throws InstantiatorException {
         var currentInitialization = environmentService.fetchCurrentOciInitialization(environmentId);
 
@@ -60,7 +65,6 @@ public class OciCloudAgent extends CloudAgentEntity {
             log.info("New initialization started, checking initialization status for environment [id: '{}']", environmentId);
             checkInitializationStatus(() -> fetchCurrentOciInitialization(environmentService));
         } else {
-            log.info("Checking initialization status for environment [id: '{}']", environmentId);
             checkInitializationStatus(() -> fetchCurrentOciInitialization(environmentService));
         }
     }

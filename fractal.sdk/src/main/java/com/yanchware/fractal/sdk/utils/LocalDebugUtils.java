@@ -27,16 +27,13 @@ public class LocalDebugUtils {
     try {
       HttpResponse<String> response;
       try (var client = HttpClient.newHttpClient()) {
-
-        // create a request
         var request = HttpRequest.newBuilder(
-                URI.create(String.format("http://api-local.fractal.cloud:30801%s", uriPath)))
+            URI.create(String.format("http://api-local.fractal.cloud:30801%s", uriPath)))
             .header(X_CLIENT_ID_HEADER, sdkConfiguration.getClientId())
             .header(X_CLIENT_SECRET_HEADER, sdkConfiguration.getClientSecret())
             .header("Content-Type", "application/json")
             .POST(HttpRequest.BodyPublishers.noBody())
             .build();
-
 
         response = client.send(request, HttpResponse.BodyHandlers.ofString());
       }

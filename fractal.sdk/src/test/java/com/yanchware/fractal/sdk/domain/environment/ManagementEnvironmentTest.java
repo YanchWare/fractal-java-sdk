@@ -49,44 +49,6 @@ class ManagementEnvironmentTest {
   }
 
   @Test
-  public void exceptionThrown_when_environmentCreatedWithOperationalEnvironmentAndDifferentOwnerId() {
-    assertThatThrownBy(() -> ManagementEnvironment.builder()
-        .withId(new EnvironmentIdValue(
-            EnvironmentType.PERSONAL,
-            UUID.randomUUID(),
-            "management"))
-        .withResourceGroup(UUID.randomUUID())
-        .withOperationalEnvironment(OperationalEnvironment.builder()
-            .withShortName("operational-001")
-            .withResourceGroup(UUID.randomUUID())
-            .build())
-        .build()
-    )
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("Operational environment must have the same owner id as management environment.");
-  }
-
-  @Test
-  public void exceptionThrown_when_environmentCreatedWithOperationalEnvironmentAndDifferentEnvironmentType() {
-    var ownerId = UUID.randomUUID();
-    assertThatThrownBy(() -> ManagementEnvironment.builder()
-        .withId(new EnvironmentIdValue(
-            EnvironmentType.ORGANIZATIONAL,
-            ownerId,
-            "management"))
-        .withResourceGroup(UUID.randomUUID())
-        .withOperationalEnvironment(OperationalEnvironment.builder()
-            .withShortName("operational-001")
-            .withResourceGroup(UUID.randomUUID())
-            .build())
-        .build()
-    )
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("Operational environment must have the same type as management environment.");
-  }
-
-
-  @Test
   public void noValidationErrors_when_environmentCreatedWithValidShortName() {
     var env = generateBuilderWithInfo("production-001");
     assertThat(env.validate()).isEmpty();

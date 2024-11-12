@@ -292,7 +292,7 @@ public class EnvironmentService extends Service {
         client,
         retryRegistry,
         HttpUtils.buildGetRequest(
-            getEnvironmentsUri(environmentId, String.format("initializer/%s/status", providerStr)),
+            getEnvironmentsUri(environmentId, String.format("initializer/%s/status", providerStr.toLowerCase())),
             sdkConfiguration),
         new int[]{200, 404},
         InitializationRunRoot.class);

@@ -43,6 +43,11 @@ public class GcpCloudAgent extends CloudAgentEntity {
     }
 
     @Override
+    public void initialize(EnvironmentService environmentService) throws InstantiatorException {
+        initialize(environmentService, null);
+    }
+
+    @Override
     public void initialize(EnvironmentService environmentService, EnvironmentIdValue managementEnvironmentId) throws InstantiatorException {
         var currentInitialization = environmentService.fetchCurrentGcpInitialization(environmentId);
 
@@ -60,7 +65,6 @@ public class GcpCloudAgent extends CloudAgentEntity {
             log.info("New initialization started, checking initialization status for environment [id: '{}']", environmentId);
             checkInitializationStatus(() -> fetchCurrentGcpInitialization(environmentService));
         } else {
-            log.info("Checking initialization status for environment [id: '{}']", environmentId);
             checkInitializationStatus(() -> fetchCurrentGcpInitialization(environmentService));
         }
     }

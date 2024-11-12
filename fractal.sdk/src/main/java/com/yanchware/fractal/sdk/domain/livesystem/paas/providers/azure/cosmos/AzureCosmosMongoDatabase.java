@@ -37,7 +37,6 @@ public class AzureCosmosMongoDatabase extends PaaSDocumentDatabase implements Li
     
     private Map<String, String> tags;
 
-
     @Override
     public ProviderType getProvider() {
         return ProviderType.AZURE;

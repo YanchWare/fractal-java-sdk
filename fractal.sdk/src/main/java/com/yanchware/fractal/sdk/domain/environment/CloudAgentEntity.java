@@ -27,7 +27,8 @@ public abstract class CloudAgentEntity {
     protected final Map<String, String> tags;
 
     public abstract ProviderType getProvider();
-    public abstract void initialize(EnvironmentService environmentService, EnvironmentIdValue managementEnvironmentId) throws InstantiatorException;
+    public abstract void initialize(EnvironmentService environmentService) throws InstantiatorException;
+    public abstract void initialize(EnvironmentService environmentService, EnvironmentIdValue managedEnvironmentId) throws InstantiatorException;
     protected abstract Map<String, Object> getConfigurationForEnvironmentParameters();
 
     protected CloudAgentEntity(
@@ -38,7 +39,7 @@ public abstract class CloudAgentEntity {
     }
 
     protected void checkInitializationStatus(Supplier<InitializationRunResponse> fetchCurrentInitialization) throws InstantiatorException {
-        log.info("Checking initialization status for environment [id: '{}']", environmentId);
+        log.info("Checking initialization status for environment [id: '{}']", environmentId.toString());
         
         int maxAttempts = (int) (TOTAL_ALLOWED_DURATION.toMillis() / RETRIES_DELAY.toMillis());
 
@@ -74,7 +75,7 @@ public abstract class CloudAgentEntity {
             case "Failed" -> {
                 var messageToThrow = getFailedStepsMessageToThrow(providerType, environmentId, initializationRun);
                 if (isBlank(messageToThrow)) {
-                    log.info("{} cloud agent initialization in progress [EnvironmentId: '{}']", providerType, environmentId);
+                    logCloudAgentInitializationInProgress(providerType, environmentId);
                     throw new InstantiatorException("Initialization is in progress, retrying...");
                 } else {
                     throw new EnvironmentInitializationException(messageToThrow);
@@ -85,7 +86,7 @@ public abstract class CloudAgentEntity {
                 throw new EnvironmentInitializationException("Initialization was cancelled.");
             }
             case "InProgress" -> {
-                log.info("{} cloud agent initialization in progress [EnvironmentId: '{}']", providerType, environmentId);
+                logCloudAgentInitializationInProgress(providerType, environmentId);
                 throw new InstantiatorException("Initialization is in progress, retrying...");
             }
             default -> {
@@ -95,6 +96,10 @@ public abstract class CloudAgentEntity {
                     String.format("Unknown initialization status: [%s]", initializationRun.status()));
             }
         }
+    }
+    
+    private void logCloudAgentInitializationInProgress(String providerType, String environmentId) {
+        log.info("{} cloud agent initialization in progress [EnvironmentId: '{}']", providerType, environmentId);
     }
 
     private String getFailedStepsMessageToThrow(

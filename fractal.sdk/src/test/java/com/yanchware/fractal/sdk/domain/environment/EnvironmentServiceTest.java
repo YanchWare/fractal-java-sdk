@@ -282,7 +282,7 @@ class EnvironmentServiceTest {
         "organizationId",
         "accountId",
         Collections.emptyMap());
-    cloudAgent.initialize(environmentService, null);
+    cloudAgent.initialize(environmentService);
 
     // Then
     verify(3, getRequestedFor(urlPatternStatus));
@@ -300,7 +300,7 @@ class EnvironmentServiceTest {
         UUID.randomUUID(),
         UUID.randomUUID(),
         Collections.emptyMap());
-    cloudAgent.initialize(environmentService, null);
+    cloudAgent.initialize(environmentService);
 
     // Then
     verify(3, getRequestedFor(urlPatternStatus));
@@ -318,7 +318,7 @@ class EnvironmentServiceTest {
         "organizationId",
         "projectId",
         Collections.emptyMap());
-    cloudAgent.initialize(environmentService, null);
+    cloudAgent.initialize(environmentService);
 
     // Then
     verify(3, getRequestedFor(urlPatternStatus));
@@ -336,7 +336,7 @@ class EnvironmentServiceTest {
         "tenancyId",
         "compartmentId",
         Collections.emptyMap());
-    cloudAgent.initialize(environmentService, null);
+    cloudAgent.initialize(environmentService);
 
     // Then
     verify(3, getRequestedFor(urlPatternStatus));

@@ -139,7 +139,7 @@ public class EnvironmentAggregate {
 
             var providerType = managementAgent.getProvider();
 
-            managementAgent.initialize(service, null);
+            managementAgent.initialize(service);
 
             for (var operationalEnvironment : managementEnvironment.getOperationalEnvironments()) {
 
