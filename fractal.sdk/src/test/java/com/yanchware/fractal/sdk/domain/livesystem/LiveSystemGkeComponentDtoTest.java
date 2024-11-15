@@ -3,6 +3,7 @@ package com.yanchware.fractal.sdk.domain.livesystem;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GoogleKubernetesEngine;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.LiveSystemComponentDto;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.LiveSystemKubernetesComponentDtoTest;
+import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
 import com.yanchware.fractal.sdk.utils.TestUtils;
 import com.yanchware.fractal.sdk.domain.values.ComponentType;
@@ -27,6 +28,7 @@ class LiveSystemGkeComponentDtoTest extends LiveSystemKubernetesComponentDtoTest
         var postgres = TestUtils.getGcpPostgresExample();
         var liveSystem = factory.builder()
                 .withId(new LiveSystemIdValue("test", "test"))
+                .withStandardProvider(ProviderType.AZURE)
                 .withComponents(List.of(gke, postgres))
                 .build();
 

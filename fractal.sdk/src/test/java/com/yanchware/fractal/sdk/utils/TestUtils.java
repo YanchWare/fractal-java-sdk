@@ -29,6 +29,7 @@ import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GoogleKube
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciContainerEngineForKubernetes;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciContainerEngineForKubernetes.OciContainerEngineForKubernetesBuilder;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.aws.AwsElasticKubernetesService.AwsElasticKubernetesServiceBuilder;
+import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import com.yanchware.fractal.sdk.domain.services.contracts.ComponentDto;
 import com.yanchware.fractal.sdk.domain.values.ComponentId;
 import io.github.resilience4j.retry.RetryRegistry;
@@ -349,6 +350,7 @@ public class TestUtils {
         .withId(new LiveSystemIdValue("test-resource-group", "business-platform-test"))
         .withFractalId(new FractalIdValue("test-resource-group", "business-platform-test", "v1.0"))
         .withDescription("Business platform")
+        .withStandardProvider(ProviderType.AZURE)
         .withComponent(getAksExample())
         .withComponent(getAzurePostgresExample())
         .withEnvironmentId(getEnvExample().getId())

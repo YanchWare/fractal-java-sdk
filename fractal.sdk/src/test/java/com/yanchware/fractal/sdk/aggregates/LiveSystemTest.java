@@ -4,6 +4,7 @@ import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemAggregate;
 import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemIdValue;
 import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemsFactory;
+import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
 import io.github.resilience4j.retry.RetryRegistry;
 import org.junit.jupiter.api.BeforeEach;
@@ -71,6 +72,7 @@ public class LiveSystemTest {
   public void multipleValidationErrors_when_liveSystemHasNoComponents() {
     assertThatThrownBy(() -> factory.builder()
             .withId(new LiveSystemIdValue("res/group", "ls"))
+            .withStandardProvider(ProviderType.AWS)
             .build().instantiate()).isInstanceOf(InstantiatorException.class)
             .hasMessageContaining("Components list is null or empty and at least one component is required");
   }
@@ -83,6 +85,7 @@ public class LiveSystemTest {
   private LiveSystemAggregate generateBuilder() {
     return factory.builder()
         .withId(new LiveSystemIdValue("res/group", "ls"))
+        .withStandardProvider(ProviderType.AZURE)
         .withComponent(
             getDefaultAks()
                 .build())

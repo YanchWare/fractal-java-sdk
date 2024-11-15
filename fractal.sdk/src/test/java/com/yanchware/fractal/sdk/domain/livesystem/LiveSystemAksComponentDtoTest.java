@@ -3,6 +3,7 @@ package com.yanchware.fractal.sdk.domain.livesystem;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.aks.AzureKubernetesService;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.LiveSystemComponentDto;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.LiveSystemKubernetesComponentDtoTest;
+import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import com.yanchware.fractal.sdk.domain.values.ComponentType;
 import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
 import com.yanchware.fractal.sdk.utils.TestUtils;
@@ -27,6 +28,7 @@ class LiveSystemAksComponentDtoTest extends LiveSystemKubernetesComponentDtoTest
     var aks = TestUtils.getAksExample();
     var liveSystem = factory.builder()
         .withId(new LiveSystemIdValue("test", "test"))
+        .withStandardProvider(ProviderType.AZURE)
         .withComponent(aks)
         .build();
     var lsDtoMap = liveSystem.blueprintMapFromLiveSystemComponents();

@@ -13,6 +13,7 @@ import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRes
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.cosmos.AzureCosmosGremlinDatabase;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.cosmos.AzureCosmosGremlinDbms;
 import com.yanchware.fractal.sdk.domain.livesystem.service.LiveSystemService;
+import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
 import com.yanchware.fractal.sdk.utils.StringHandler;
 import io.github.resilience4j.retry.RetryRegistry;
@@ -58,6 +59,7 @@ public class LiveSystemServiceTest {
             .withFractalId(new FractalIdValue("resourceGroupId", "fractalName", "fractalVersion" ))
             .withDescription("prod")
             .withEnvironmentId(managementEnvironment.getId())
+            .withStandardProvider(ProviderType.AZURE)
             .withComponent(AzureCosmosGremlinDbms.builder()
               .withId("cosmos-graph-1")
               .withMaxTotalThroughput(500)
