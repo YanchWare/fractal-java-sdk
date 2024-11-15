@@ -71,6 +71,7 @@ public class OciCloudAgent extends CloudAgentEntity {
     @Override
     protected Map<String, Object> getConfigurationForEnvironmentParameters() {
         return Map.of(
+                PROVIDER_PARAM_KEY, getProvider(),
                 REGION_PARAM_KEY, region,
                 TENANCY_ID_PARAM_KEY, tenancyId,
                 COMPARTMENT_ID_PARAM_KEY, compartmentId

@@ -21,6 +21,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Slf4j
 public abstract class CloudAgentEntity {
+    public static final String PROVIDER_PARAM_KEY = "provider";
     protected static final Duration RETRIES_DELAY = Duration.ofSeconds(30);
     protected static final Duration TOTAL_ALLOWED_DURATION = Duration.ofMinutes(55);
     protected final EnvironmentIdValue environmentId;
