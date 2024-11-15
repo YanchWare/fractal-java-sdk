@@ -50,9 +50,7 @@ public class HttpUtils {
   public static HttpRequest.Builder getHttpRequestBuilder(URI uri,
                                                           SdkConfiguration sdkConfiguration,
                                                           Map<String, String> additionalHeaders) {
-    HttpRequest.Builder builder = EnvVarUtils.isLocalDebug() ?
-        LocalDebugUtils.getHttpRequestBuilder(uri, sdkConfiguration) :
-        HttpRequest.newBuilder()
+    var builder = HttpRequest.newBuilder()
             .uri(uri)
             .header(X_CLIENT_ID_HEADER, sdkConfiguration.getClientId())
             .header(X_CLIENT_SECRET_HEADER, sdkConfiguration.getClientSecret())

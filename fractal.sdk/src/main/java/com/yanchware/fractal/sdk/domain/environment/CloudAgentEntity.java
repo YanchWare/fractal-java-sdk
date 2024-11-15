@@ -39,8 +39,6 @@ public abstract class CloudAgentEntity {
     }
 
     protected void checkInitializationStatus(Supplier<InitializationRunResponse> fetchCurrentInitialization) throws InstantiatorException {
-        log.info("Checking initialization status for environment [id: '{}']", environmentId.toString());
-        
         int maxAttempts = (int) (TOTAL_ALLOWED_DURATION.toMillis() / RETRIES_DELAY.toMillis());
 
         var retryConfig = RetryConfig.custom()
@@ -69,7 +67,7 @@ public abstract class CloudAgentEntity {
         var providerType = StringHelper.convertToTitleCase(getProvider().toString());
         
         switch (initializationRun.status()) {
-            case "Completed" -> log.info("{} cloud agent initialized successfully [EnvironmentId: '{}']", 
+            case "Completed" -> log.info("{} Cloud Agent initialization completed successfully [EnvironmentId: '{}']", 
                 providerType,
                 environmentId);
             case "Failed" -> {
@@ -99,7 +97,8 @@ public abstract class CloudAgentEntity {
     }
     
     private void logCloudAgentInitializationInProgress(String providerType, String environmentId) {
-        log.info("{} cloud agent initialization in progress [EnvironmentId: '{}']", providerType, environmentId);
+        log.info("{} Cloud Agent initialization [status: 'InProgress', EnvironmentId: '{}']. Next check in {} seconds...", 
+            providerType, environmentId, RETRIES_DELAY.toSeconds());
     }
 
     private String getFailedStepsMessageToThrow(
@@ -138,28 +137,37 @@ public abstract class CloudAgentEntity {
 
         initializationRun.steps().sort(Comparator.comparingInt(InitializationStepResponse::order));
 
-        var stepsInfo = new StringBuilder();
+        var logMessage = new StringBuilder();
         initializationRun.steps()
             .forEach(step -> {
                 String status = step.status();
                 String resourceName = step.resourceName();
                 String resourceType = step.resourceType();
 
+                String statusSymbol = switch (status) {
+                    case "Completed" -> "✅";
+                    case "InProgress" -> "🚧";
+                    case "Failed" -> "❌";
+                    case "NotStarted" -> "⏳";
+                    default -> ""; // For "NotStarted" or other unknown statuses
+                };
+
                 // Append each step's information to the log message
-                stepsInfo.append(String.format("  Step - Name: '%s', Type: '%s', Status: '%s'\n", 
+                logMessage.append(String.format("  %s Name: '%s', Type: '%s'\n",
+                    statusSymbol, 
                     resourceName, 
-                    resourceType, 
-                    status));
+                    resourceType));
             });
 
-        if (!stepsInfo.isEmpty()) {
-            stepsInfo.deleteCharAt(stepsInfo.length() - 1);
+        if (!logMessage.isEmpty()) {
+            logMessage.deleteCharAt(logMessage.length() - 1);
             
-            var status = String.format("%s cloud agent initialization status [id: '%s']:\n", 
-                initializationRun.cloudProvider(),                
-                initializationRun.id());
+            var status = String.format("%s Cloud Agent initialization [status: '%s', EnvironmentId: '%s'], steps:\n", 
+                initializationRun.cloudProvider(),
+                initializationRun.status(),
+                initializationRun.environmentId());
 
-          log.info("{}{}", status, stepsInfo);
+          log.info("{}{}", status, logMessage);
         }
     }
 }

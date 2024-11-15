@@ -26,6 +26,7 @@ public class LiveSystemAggregate implements Validatable {
     private final static String ID_IS_NULL = "[LiveSystem Validation] Id has not been defined and it is required";
     private final static String NAME_IS_NULL = "[LiveSystem Validation] Name has not been defined and it is required";
     private final static String RESOURCE_GROUP_ID_IS_NULL = "[LiveSystem Validation] ResourceGroupId has not been defined and it is required'";
+    private final static String PROVIDER_ID_IS_NULL = "[LiveSystem Validation] Provider has not been defined and it is required'";
     private final static String EMPTY_COMPONENT_LIST = "[LiveSystem Validation] Components list is null or empty and at least one component is required";
     private final LiveSystemService service;
 
@@ -135,6 +136,10 @@ public class LiveSystemAggregate implements Validatable {
 
         if (isBlank(id.resourceGroupId())) {
             errors.add(RESOURCE_GROUP_ID_IS_NULL);
+        }
+
+        if (provider == null) {
+            errors.add(PROVIDER_ID_IS_NULL);
         }
 
         return errors;

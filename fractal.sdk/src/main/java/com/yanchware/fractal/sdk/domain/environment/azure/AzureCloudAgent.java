@@ -50,12 +50,16 @@ public class AzureCloudAgent extends CloudAgentEntity {
   @Override
   public void initialize(EnvironmentService environmentService, EnvironmentIdValue managementEnvironmentId) throws InstantiatorException {
     var currentInitialization = environmentService.fetchCurrentAzureInitialization(environmentId);
+    
+    if(currentInitialization != null && currentInitialization.status().equals("Completed")) {
+      log.info("{} Cloud Agent initialization for environment '{}' completed successfully.",
+          currentInitialization.cloudProvider(), currentInitialization.environmentId());
+      return;
+    }
 
     if (currentInitialization == null ||
         "Failed".equals(currentInitialization.status()) ||
         "Cancelled".equals(currentInitialization.status())) {
-
-      log.info("Initializing Azure Cloud Agent for environment [id: '{}']...", environmentId); // Log before starting
 
       environmentService.startAzureCloudAgentInitialization(
           managementEnvironmentId,

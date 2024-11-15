@@ -44,7 +44,7 @@ public class EnvironmentAggregate {
       if (doesNotNeedUpdate(managementEnvironment, existingEnvironment)) {
         log.info("Management Environment [id: '{}'] already exists and is up-to-date.", managementEnvironmentId);
       } else {
-        log.info("Updating existing Management Environment  [id: '{}']", managementEnvironmentId);
+        log.info("Updating existing Management Environment [id: '{}']", managementEnvironmentId);
         service.update(
             managementEnvironmentId,
             managementEnvironment.getName(),
@@ -74,7 +74,7 @@ public class EnvironmentAggregate {
       if (doesNotNeedUpdate(operationalEnvironment, existingEnvironment)) {
         log.info("Operational Environment [id: '{}'] already exists and is up-to-date.", environmentId);
       } else {
-        log.info("Updating existing Operational Environment  [id: '{}']", environmentId);
+        log.info("Updating existing Operational Environment [id: '{}']", environmentId);
         service.update(
             environmentId,
             operationalEnvironment.getName(),

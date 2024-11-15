@@ -12,9 +12,7 @@ import com.yanchware.fractal.sdk.domain.exceptions.ProviderException;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.*;
 import com.yanchware.fractal.sdk.domain.livesystem.service.commands.InstantiateLiveSystemCommandRequest;
 import com.yanchware.fractal.sdk.domain.livesystem.service.commands.UpdateLiveSystemCommandRequest;
-import com.yanchware.fractal.sdk.utils.EnvVarUtils;
 import com.yanchware.fractal.sdk.utils.HttpUtils;
-import com.yanchware.fractal.sdk.utils.LocalDebugUtils;
 import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryConfig;
 import io.github.resilience4j.retry.RetryRegistry;
@@ -89,12 +87,6 @@ public class LiveSystemService extends Service {
       String requestName,
       int[] acceptedResponses,
       HttpRequest request) throws IOException, InterruptedException, InstantiatorException, ProviderException {
-
-    if (EnvVarUtils.isLocalDebug()) {
-      request = LocalDebugUtils.getHttpRequestBuilder(request.uri(), sdkConfiguration)
-          .build();
-    }
-
     var livesystemIdStr = liveSystemId.toString();
     var response = client.send(request, HttpResponse.BodyHandlers.ofString());
     ensureAcceptableResponse(response, requestName, acceptedResponses);
@@ -350,11 +342,6 @@ public class LiveSystemService extends Service {
       String requestName,
       int[] acceptedResponses,
       HttpRequest request) throws IOException, InterruptedException, InstantiatorException, ProviderException, ComponentInstantiationException {
-
-    if (EnvVarUtils.isLocalDebug()) {
-      request = LocalDebugUtils.getHttpRequestBuilder(request.uri(), sdkConfiguration)
-          .build();
-    }
 
     var response = client.send(request, HttpResponse.BodyHandlers.ofString());
     ensureAcceptableResponse(response, requestName, acceptedResponses);
