@@ -34,7 +34,7 @@ public class BlueprintService extends Service {
           Collection<BlueprintComponentDto> components) throws InstantiatorException
   {
     var command = new CreateBlueprintCommandRequest(description, isPrivate, components);
-    log.info("Create or update blueprint: {}", getCommandAsJsonString(command));
+    log.info("Create or update blueprint [FractalId: '{}']", fractalId);
 
     if (retrieve(fractalId) != null) {
       update(UpdateBlueprintCommandRequest.fromCreateCommand(command, fractalId), fractalId);
@@ -79,17 +79,5 @@ public class BlueprintService extends Service {
 
   private URI getBlueprintsUri(FractalIdValue fractalId) {
     return URI.create(sdkConfiguration.getBlueprintEndpoint() + "/" + fractalId.toString().replace(":", "/"));
-  }
-
-  private String getCommandAsJsonString(CreateBlueprintCommandRequest command) throws InstantiatorException {
-    try {
-      return serialize(command);
-    } catch (JsonProcessingException e) {
-      var errorMessage = String.format("Unable to serialize Create Blueprint Command Request. %s",
-          e.getLocalizedMessage());
-
-      log.error(errorMessage, e);
-      throw new InstantiatorException(errorMessage, e);
-    }
   }
 }

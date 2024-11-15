@@ -3,7 +3,6 @@ package com.yanchware.fractal.sdk.domain.livesystem;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.Validatable;
 import com.yanchware.fractal.sdk.domain.blueprint.FractalIdValue;
-import com.yanchware.fractal.sdk.domain.environment.EnvironmentAggregate;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.domain.livesystem.service.LiveSystemService;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.*;
@@ -27,6 +26,7 @@ public class LiveSystemAggregate implements Validatable {
     private final static String ID_IS_NULL = "[LiveSystem Validation] Id has not been defined and it is required";
     private final static String NAME_IS_NULL = "[LiveSystem Validation] Name has not been defined and it is required";
     private final static String RESOURCE_GROUP_ID_IS_NULL = "[LiveSystem Validation] ResourceGroupId has not been defined and it is required'";
+    private final static String PROVIDER_ID_IS_NULL = "[LiveSystem Validation] Provider has not been defined and it is required'";
     private final static String EMPTY_COMPONENT_LIST = "[LiveSystem Validation] Components list is null or empty and at least one component is required";
     private final LiveSystemService service;
 
@@ -37,7 +37,7 @@ public class LiveSystemAggregate implements Validatable {
     @Getter
     private String description;
     @Getter
-    private EnvironmentAggregate environment;
+    private EnvironmentReference environment;
     @Getter
     private Date created;
     @Getter
@@ -69,7 +69,6 @@ public class LiveSystemAggregate implements Validatable {
 
     // TODO FRA-1870: Use entity instead of LiveSystemMutationDto
     public LiveSystemMutationDto instantiate() throws InstantiatorException {
-        log.info("Starting to instantiate live system: {}", getId());
 
         if (components == null || components.isEmpty()) {
             throw new InstantiatorException(EMPTY_COMPONENT_LIST);
@@ -82,7 +81,7 @@ public class LiveSystemAggregate implements Validatable {
                     description,
                     provider.toString(),
                     blueprintMapFromLiveSystemComponents(),
-                    environment.toDto());
+                    environment);
         }
 
         return service.instantiateLiveSystem(
@@ -91,7 +90,7 @@ public class LiveSystemAggregate implements Validatable {
                 description,
                 provider.toString(),
                 blueprintMapFromLiveSystemComponents(),
-                environment.toDto());
+                environment);
     }
 
     public void checkLiveSystemMutationStatus(String liveSystemMutationId) throws InstantiatorException {
@@ -137,6 +136,10 @@ public class LiveSystemAggregate implements Validatable {
 
         if (isBlank(id.resourceGroupId())) {
             errors.add(RESOURCE_GROUP_ID_IS_NULL);
+        }
+
+        if (provider == null) {
+            errors.add(PROVIDER_ID_IS_NULL);
         }
 
         return errors;

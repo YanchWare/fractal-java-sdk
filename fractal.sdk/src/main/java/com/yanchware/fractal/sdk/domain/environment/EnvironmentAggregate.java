@@ -2,22 +2,9 @@ package com.yanchware.fractal.sdk.domain.environment;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
-import com.yanchware.fractal.sdk.domain.Validatable;
-import com.yanchware.fractal.sdk.domain.blueprint.iaas.DnsZone;
-import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.aws.AwsRegion;
-import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion;
-import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GcpRegion;
-import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciRegion;
-import com.yanchware.fractal.sdk.domain.environment.aws.AwsCloudAgent;
-import com.yanchware.fractal.sdk.domain.environment.azure.AzureCloudAgent;
-import com.yanchware.fractal.sdk.domain.environment.gcp.GcpCloudAgent;
-import com.yanchware.fractal.sdk.domain.environment.oci.OciCloudAgent;
 import com.yanchware.fractal.sdk.domain.environment.service.EnvironmentService;
-import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.domain.environment.service.dtos.EnvironmentResponse;
-import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.EnvironmentDto;
-import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
-import com.yanchware.fractal.sdk.utils.CollectionUtils;
+import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.utils.SerializationUtils;
 import io.github.resilience4j.retry.RetryRegistry;
 import lombok.AccessLevel;
@@ -26,165 +13,83 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.http.HttpClient;
-import java.util.*;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static com.yanchware.fractal.sdk.domain.blueprint.iaas.DnsZone.DNS_ZONES_PARAM_KEY;
-import static org.apache.commons.lang3.StringUtils.isBlank;
-
 @Slf4j
 @Setter(AccessLevel.PROTECTED)
-public class EnvironmentAggregate implements Validatable {
+public class EnvironmentAggregate {
   public static final String REGION_PARAM_KEY = "region";
-  private static final String TAGS_PARAM_KEY = "tags";
-  private static final String CLOUD_AGENTS_PARAM_KEY = "agents";
 
-  private final static String OWNER_ID_IS_NULL = "Environment OwnerId has not been defined and it is required";
-  private final static String SHORT_NAME_IS_NULL = "Environment ShortName has not been defined and it is required";
-  private final static String RESOURCE_GROUPS_IS_EMPTY = "Environment ResourceGroups has not been defined and it is required";
   private final EnvironmentService service;
-  private final Map<String, Object> parameters;
 
   @Getter
-  private EnvironmentIdValue id;
-  @Getter
-  private String name;
-  @Getter
-  private Collection<UUID> resourceGroups;
-  @Getter
-  private Map<String, String> tags;
-  @Getter
-  private Map<ProviderType, CloudAgentEntity> cloudAgentByProviderType;
+  private ManagementEnvironment managementEnvironment;
 
   public EnvironmentAggregate(
-          HttpClient client,
-          SdkConfiguration sdkConfiguration,
-          RetryRegistry retryRegistry)
-  {
-    this.resourceGroups = new ArrayList<>();
-    this.parameters = new HashMap<>();
-    this.cloudAgentByProviderType = new HashMap<>();
+      HttpClient client,
+      SdkConfiguration sdkConfiguration,
+      RetryRegistry retryRegistry) {
     this.service = new EnvironmentService(client, sdkConfiguration, retryRegistry);
-    this.tags = new HashMap<>();
   }
 
-  public void registerAwsCloudAgent(AwsRegion region, String organizationId, String accountId) {
-    var agent = new AwsCloudAgent(getId(), service, region, organizationId, accountId, tags);
-    registerCloudAgent(agent);
-  }
+  public void createOrUpdate() throws InstantiatorException {
+    var managementEnvironmentId = managementEnvironment.getId();
 
-  public void registerAzureCloudAgent(AzureRegion region, UUID tenantId, UUID subscriptionId) {
-    var agent = new AzureCloudAgent(getId(), service, region, tenantId, subscriptionId, tags);
-    registerCloudAgent(agent);
-  }
 
-  public void registerGcpCloudAgent(GcpRegion region, String organizationId, String projectId) {
-    var agent = new GcpCloudAgent(getId(), service, region, organizationId, projectId, tags);
-    registerCloudAgent(agent);
-  }
-
-  public void registerOciCloudAgent(OciRegion region, String tenancyId, String compartmentId) {
-    var agent = new OciCloudAgent(getId(), service, region, tenancyId, compartmentId, tags);
-    registerCloudAgent(agent);
-  }
-
-  public void addTags(Map<String, String> tags) {
-    Map<String, String> existingTags = (Map<String, String>) parameters.get(TAGS_PARAM_KEY);
-    if (existingTags == null) {
-      existingTags = new HashMap<>();
-      parameters.put(TAGS_PARAM_KEY, existingTags);
-    }
-
-    existingTags.putAll(tags);
-    this.tags.putAll(tags);
-  }
-
-  public void addDnsZones(Collection<DnsZone> dnsZones){
-    try {
-      parameters.put(DNS_ZONES_PARAM_KEY,
-              SerializationUtils.deserialize(
-                      SerializationUtils.serialize(dnsZones),
-                      DnsZone[].class));
-
-    } catch (JsonProcessingException e) {
-      throw new RuntimeException(e);
-    }
-  }
-
-  private void registerCloudAgent(CloudAgentEntity cloudAgent){
-    if (cloudAgentByProviderType.containsKey(cloudAgent.getProvider())) {
-      throw new IllegalArgumentException(
-              String.format("A Cloud agent for Provider %s has already been defined", cloudAgent.getProvider()));
-    }
-
-    cloudAgentByProviderType.put(ProviderType.AZURE, cloudAgent);
-
-    Collection<Map<String, Object>> existingAgents = (Collection<Map<String, Object>>) parameters.get(CLOUD_AGENTS_PARAM_KEY);
-    if (existingAgents == null) {
-      existingAgents = new ArrayList<>();
-      parameters.put(CLOUD_AGENTS_PARAM_KEY, existingAgents);
-    }
-
-    existingAgents.add(cloudAgent.getConfigurationForEnvironmentParameters());
-  }
-
-  @Override
-  public Collection<String> validate() {
-    Collection<String> errors = new ArrayList<>();
-
-    if (isBlank(id.shortName())) {
-      errors.add(SHORT_NAME_IS_NULL);
+    var existingEnvironment = service.fetch(managementEnvironmentId);
+    if (existingEnvironment != null) {
+      if (doesNotNeedUpdate(managementEnvironment, existingEnvironment)) {
+        log.info("Management Environment [id: '{}'] already exists and is up-to-date.", managementEnvironmentId);
+      } else {
+        log.info("Updating existing Management Environment [id: '{}']", managementEnvironmentId);
+        service.update(
+            managementEnvironmentId,
+            managementEnvironment.getName(),
+            managementEnvironment.getResourceGroups(),
+            managementEnvironment.getParameters());
+      }
     } else {
-      if (id.shortName().length() > 30) {
-        errors.add("Environment ShortName must not be longer than 30 characters.");
-      }
-      if (!id.shortName().matches("[a-z0-9-]+")) {
-        errors.add("Environment ShortName must only contain lowercase letters, numbers, and dashes.");
-      }
+      log.info("Creating new Management Environment [id: '{}']", managementEnvironmentId);
+      service.create(
+          null,
+          managementEnvironmentId,
+          managementEnvironment.getName(),
+          managementEnvironment.getResourceGroups(),
+          managementEnvironment.getParameters());
     }
 
-    if (CollectionUtils.isBlank(resourceGroups)) {
-      errors.add(RESOURCE_GROUPS_IS_EMPTY);
+    for (var operationalEnvironment : managementEnvironment.getOperationalEnvironments()) {
+      initializeOperationalEnvironment(operationalEnvironment);
     }
-
-    if (isBlank(name)) {
-      name = id.shortName();
-    }
-
-    if (id.ownerId() == null || id.ownerId().equals(new UUID(0L, 0L))) {
-      errors.add(OWNER_ID_IS_NULL);
-    }
-
-    return errors;
   }
 
-  public EnvironmentResponse createOrUpdate() throws InstantiatorException {
-    var environmentId = getId();
-    log.info("Starting createOrUpdateEnvironment for Environment [id: '{}']", environmentId);
+  private void initializeOperationalEnvironment(OperationalEnvironment operationalEnvironment) throws InstantiatorException {
+    var environmentId = operationalEnvironment.getId();
 
-    log.info("Fetching environment details [id: '{}']", environmentId);
     var existingEnvironment = service.fetch(environmentId);
     if (existingEnvironment != null) {
-      if (doesNotNeedUpdate(existingEnvironment)) {
-        log.info("No changes detected for Environment [id: '{}']. Update not required.", environmentId);
-        return existingEnvironment;
+      if (doesNotNeedUpdate(operationalEnvironment, existingEnvironment)) {
+        log.info("Operational Environment [id: '{}'] already exists and is up-to-date.", environmentId);
       } else {
-        log.info("Environment [id: '{}'] exists, updating ...", environmentId);
-        return service.update(
-                environmentId,
-                name,
-                resourceGroups,
-                parameters);
-      }
-    }
-
-    log.info("Environment does not exist, creating new environment [id: '{}']", environmentId);
-    return service.create(
+        log.info("Updating existing Operational Environment [id: '{}']", environmentId);
+        service.update(
             environmentId,
-            name,
-            resourceGroups,
-            parameters);
+            operationalEnvironment.getName(),
+            operationalEnvironment.getResourceGroups(),
+            operationalEnvironment.getParameters());
+      }
+    } else {
+      log.info("Creating new Operational Environment [id: '{}']", environmentId);
+      service.create(
+          managementEnvironment.getId(),
+          environmentId,
+          operationalEnvironment.getName(),
+          operationalEnvironment.getResourceGroups(),
+          operationalEnvironment.getParameters());
+    }
   }
 
   /**
@@ -193,31 +98,16 @@ public class EnvironmentAggregate implements Validatable {
    * @param existingEnvironmentResponse the environment response to compare with current entity
    * @return true if the environments are equal, false otherwise
    */
-  private boolean doesNotNeedUpdate(EnvironmentResponse existingEnvironmentResponse) {
+  private boolean doesNotNeedUpdate(Environment environment, EnvironmentResponse existingEnvironmentResponse) {
     if (existingEnvironmentResponse == null) return false;
 
     var environmentIdInResponse = existingEnvironmentResponse.id();
-    return Objects.equals(environmentIdInResponse.type().toString(), id.type().toString()) &&
-            Objects.equals(environmentIdInResponse.ownerId(), id.ownerId()) &&
-            Objects.equals(environmentIdInResponse.shortName(), id.shortName()) &&
-            Objects.equals(existingEnvironmentResponse.name(), name) &&
-            Objects.equals(existingEnvironmentResponse.resourceGroups(), resourceGroups) &&
-            mapsEqual(parameters, parameters);
-  }
-
-  public void initializeAgents() {
-    var agents = cloudAgentByProviderType.values();
-    try (ExecutorService executor = Executors.newFixedThreadPool(agents.size())) {
-      for (var agent : agents) {
-        executor.execute(() -> {
-            try {
-                agent.initialize();
-            } catch (InstantiatorException e) {
-                throw new RuntimeException(e);
-            }
-        });
-      }
-    }
+    return Objects.equals(environmentIdInResponse.type().toString(), environment.getId().type().toString()) &&
+        Objects.equals(environmentIdInResponse.ownerId(), environment.getId().ownerId()) &&
+        Objects.equals(environmentIdInResponse.shortName(), environment.getId().shortName()) &&
+        Objects.equals(existingEnvironmentResponse.name(), environment.getName()) &&
+        Objects.equals(existingEnvironmentResponse.resourceGroups(), environment.getResourceGroups()) &&
+        mapsEqual(existingEnvironmentResponse.parameters(), environment.getParameters());
   }
 
   /**
@@ -237,7 +127,37 @@ public class EnvironmentAggregate implements Validatable {
     }
   }
 
-  public EnvironmentDto toDto() {
-      return new EnvironmentDto(getId().toDto(), parameters);
+
+  public void initializeAgents() {
+    var managementAgents = managementEnvironment.getCloudAgentByProviderType().values();
+
+    // 1. Initialize Management Environment Agents
+    try (ExecutorService executor = Executors.newFixedThreadPool(managementAgents.size())) {
+      for (var managementAgent : managementAgents) {
+        executor.execute(() -> {
+          try {
+
+            var providerType = managementAgent.getProvider();
+
+            managementAgent.initialize(service);
+
+            for (var operationalEnvironment : managementEnvironment.getOperationalEnvironments()) {
+
+              var operationalAgent = operationalEnvironment.getCloudAgentByProviderType()
+                  .values()
+                  .stream().filter(a -> a.getProvider() == providerType)
+                  .findFirst();
+
+              if (operationalAgent.isPresent()) {
+                operationalAgent.get().initialize(service, managementEnvironment.getId());
+              }
+            }
+          } catch (InstantiatorException e) {
+            log.error(e.getMessage());
+            System.exit(1);
+          }
+        });
+      }
+    }
   }
 }

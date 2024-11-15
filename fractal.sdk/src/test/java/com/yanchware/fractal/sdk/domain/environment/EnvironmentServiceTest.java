@@ -30,26 +30,26 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @WireMockTest
 class EnvironmentServiceTest {
-  private EnvironmentAggregate mockEnvironment;
+  private ManagementEnvironment mockEnvironment;
   private EnvironmentService environmentService;
 
   @BeforeEach
-  void setUp(WireMockRuntimeInfo wmRuntimeInfo) {    
+  void setUp(WireMockRuntimeInfo wmRuntimeInfo) {
     var httpClient = HttpClient.newBuilder()
         .version(HttpClient.Version.HTTP_2)
         .build();
 
     var sdkConfiguration = new LocalSdkConfiguration(wmRuntimeInfo.getHttpBaseUrl());
-      EnvironmentsFactory environmentsFactory = new EnvironmentsFactory(httpClient, sdkConfiguration, RetryRegistry.ofDefaults());
-    mockEnvironment = environmentsFactory.builder()
+    mockEnvironment = ManagementEnvironment.builder()
         .withId(new EnvironmentIdValue(
-                EnvironmentType.PERSONAL,
-                UUID.randomUUID(),
-                "test-env"
+            EnvironmentType.PERSONAL,
+            UUID.randomUUID(),
+            "test-env"
         ))
         .withName("Test Environment")
         .withResourceGroup(UUID.randomUUID())
         .build();
+    
     environmentService = new EnvironmentService(httpClient, sdkConfiguration, RetryRegistry.ofDefaults());
   }
 
@@ -146,10 +146,10 @@ class EnvironmentServiceTest {
 
     // When
     environmentService.update(
-            mockEnvironment.getId(),
-            mockEnvironment.getName(),
-            mockEnvironment.getResourceGroups(),
-            mockEnvironment.toDto().parameters());
+        mockEnvironment.getId(),
+        mockEnvironment.getName(),
+        mockEnvironment.getResourceGroups(),
+        mockEnvironment.toDto().parameters());
 
     // Then
     verify(1, putRequestedFor(urlPattern));
@@ -172,10 +172,11 @@ class EnvironmentServiceTest {
 
     // When
     environmentService.create(
-            mockEnvironment.getId(),
-            mockEnvironment.getName(),
-            mockEnvironment.getResourceGroups(),
-            mockEnvironment.toDto().parameters());
+        null,
+        mockEnvironment.getId(),
+        mockEnvironment.getName(),
+        mockEnvironment.getResourceGroups(),
+        mockEnvironment.toDto().parameters());
 
 
     // Then
@@ -219,10 +220,10 @@ class EnvironmentServiceTest {
 
     // When
     var response = environmentService.update(
-            mockEnvironment.getId(),
-            mockEnvironment.getName(),
-            mockEnvironment.getResourceGroups(),
-            mockEnvironment.toDto().parameters());
+        mockEnvironment.getId(),
+        mockEnvironment.getName(),
+        mockEnvironment.getResourceGroups(),
+        mockEnvironment.toDto().parameters());
 
 
     // Then
@@ -276,16 +277,15 @@ class EnvironmentServiceTest {
 
     // When
     CloudAgentEntity cloudAgent = new AwsCloudAgent(
-            mockEnvironment.getId(),
-            environmentService,
-            AwsRegion.EU_NORTH_1,
-            "organizationId",
-            "accountId",
-            Collections.emptyMap());
-    cloudAgent.initialize();
+        mockEnvironment.getId(),
+        AwsRegion.EU_NORTH_1,
+        "organizationId",
+        "accountId",
+        Collections.emptyMap());
+    cloudAgent.initialize(environmentService);
 
     // Then
-    verify(3, getRequestedFor(urlPatternStatus)); 
+    verify(3, getRequestedFor(urlPatternStatus));
   }
 
   @Test
@@ -295,13 +295,12 @@ class EnvironmentServiceTest {
 
     // When
     CloudAgentEntity cloudAgent = new AzureCloudAgent(
-            mockEnvironment.getId(),
-            environmentService,
-            AzureRegion.WEST_EUROPE,
-            UUID.randomUUID(),
-            UUID.randomUUID(),
-            Collections.emptyMap());
-    cloudAgent.initialize();
+        mockEnvironment.getId(),
+        AzureRegion.WEST_EUROPE,
+        UUID.randomUUID(),
+        UUID.randomUUID(),
+        Collections.emptyMap());
+    cloudAgent.initialize(environmentService);
 
     // Then
     verify(3, getRequestedFor(urlPatternStatus));
@@ -314,13 +313,12 @@ class EnvironmentServiceTest {
 
     // When
     CloudAgentEntity cloudAgent = new GcpCloudAgent(
-            mockEnvironment.getId(),
-            environmentService,
-            GcpRegion.EU_WEST1,
-            "organizationId",
-            "projectId",
-            Collections.emptyMap());
-    cloudAgent.initialize();
+        mockEnvironment.getId(),
+        GcpRegion.EU_WEST1,
+        "organizationId",
+        "projectId",
+        Collections.emptyMap());
+    cloudAgent.initialize(environmentService);
 
     // Then
     verify(3, getRequestedFor(urlPatternStatus));
@@ -333,24 +331,23 @@ class EnvironmentServiceTest {
 
     // When
     CloudAgentEntity cloudAgent = new OciCloudAgent(
-            mockEnvironment.getId(),
-            environmentService,
-            OciRegion.EU_ZURICH_1,
-            "tenancyId",
-            "compartmentId",
-            Collections.emptyMap());
-    cloudAgent.initialize();
+        mockEnvironment.getId(),
+        OciRegion.EU_ZURICH_1,
+        "tenancyId",
+        "compartmentId",
+        Collections.emptyMap());
+    cloudAgent.initialize(environmentService);
 
     // Then
     verify(3, getRequestedFor(urlPatternStatus));
   }
 
-  private UrlPathPattern prepareMocksForCloudAgentInitializationTest(UrlPathPattern urlPatternStatus){
+  private UrlPathPattern prepareMocksForCloudAgentInitializationTest(UrlPathPattern urlPatternStatus) {
     // Given
     var placeholders = getEnvironmentIdPlaceholders();
 
     var inputStreamInProgress = getClass().getClassLoader()
-            .getResourceAsStream("test-resources/fetchCurrentInitializationInProgressResponse.json");
+        .getResourceAsStream("test-resources/fetchCurrentInitializationInProgressResponse.json");
     assertThat(inputStreamInProgress).isNotNull();
 
     var fetchCurrentInitializationInProgressResponse = StringHandler.getStringFromInputStream(inputStreamInProgress);
@@ -358,38 +355,38 @@ class EnvironmentServiceTest {
 
     // Mocking fetchCurrentInitialization response for "Completed" status
     var inputStreamCompleted = getClass().getClassLoader()
-            .getResourceAsStream("test-resources/fetchCurrentInitializationCompletedResponse.json");
+        .getResourceAsStream("test-resources/fetchCurrentInitializationCompletedResponse.json");
     assertThat(inputStreamCompleted).isNotNull();
 
     var fetchCurrentInitializationCompletedResponse = StringHandler.getStringFromInputStream(inputStreamCompleted);
     fetchCurrentInitializationCompletedResponse = replacePlaceholders(fetchCurrentInitializationCompletedResponse, placeholders);
 
     stubFor(get(urlPatternStatus)
-            .inScenario("Initialization Scenario")
-            .whenScenarioStateIs(Scenario.STARTED)
-            .willReturn(aResponse()
-                    .withStatus(200)
-                    .withBody(fetchCurrentInitializationInProgressResponse)
-                    .withHeader("Content-Type", "application/json"))
-            .willSetStateTo("InProgress1"));
+        .inScenario("Initialization Scenario")
+        .whenScenarioStateIs(Scenario.STARTED)
+        .willReturn(aResponse()
+            .withStatus(200)
+            .withBody(fetchCurrentInitializationInProgressResponse)
+            .withHeader("Content-Type", "application/json"))
+        .willSetStateTo("InProgress1"));
 
     stubFor(get(urlPatternStatus)
-            .inScenario("Initialization Scenario")
-            .whenScenarioStateIs("InProgress1")
-            .willReturn(aResponse()
-                    .withStatus(200)
-                    .withBody(fetchCurrentInitializationInProgressResponse)
-                    .withHeader("Content-Type", "application/json"))
-            .willSetStateTo("InProgress2"));
+        .inScenario("Initialization Scenario")
+        .whenScenarioStateIs("InProgress1")
+        .willReturn(aResponse()
+            .withStatus(200)
+            .withBody(fetchCurrentInitializationInProgressResponse)
+            .withHeader("Content-Type", "application/json"))
+        .willSetStateTo("InProgress2"));
 
     stubFor(get(urlPatternStatus)
-            .inScenario("Initialization Scenario")
-            .whenScenarioStateIs("InProgress2")
-            .willReturn(aResponse()
-                    .withStatus(200)
-                    .withBody(fetchCurrentInitializationCompletedResponse)
-                    .withHeader("Content-Type", "application/json"))
-            .willSetStateTo("Completed"));
+        .inScenario("Initialization Scenario")
+        .whenScenarioStateIs("InProgress2")
+        .willReturn(aResponse()
+            .withStatus(200)
+            .withBody(fetchCurrentInitializationCompletedResponse)
+            .withHeader("Content-Type", "application/json"))
+        .willSetStateTo("Completed"));
     return urlPatternStatus;
   }
 

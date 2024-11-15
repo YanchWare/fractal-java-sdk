@@ -72,8 +72,6 @@ public abstract class BaseAzureStorageAccount extends PaaSDataStorage implements
   private AzureStorageAccountSasPolicy sasPolicy;
   private Boolean supportsHttpsTrafficOnly;
   private AzureStorageAccountBackup backup;
-  
-
 
   @Override
   public ProviderType getProvider() {

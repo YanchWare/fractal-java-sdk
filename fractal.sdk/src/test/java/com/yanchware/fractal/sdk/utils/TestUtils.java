@@ -5,10 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.yanchware.fractal.sdk.domain.blueprint.FractalIdValue;
-import com.yanchware.fractal.sdk.domain.environment.EnvironmentAggregate;
-import com.yanchware.fractal.sdk.domain.environment.EnvironmentIdValue;
-import com.yanchware.fractal.sdk.domain.environment.EnvironmentType;
-import com.yanchware.fractal.sdk.domain.environment.EnvironmentsFactory;
+import com.yanchware.fractal.sdk.domain.environment.*;
 import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemAggregate;
 import com.yanchware.fractal.sdk.domain.Component;
 import com.yanchware.fractal.sdk.domain.ComponentLink;
@@ -32,6 +29,7 @@ import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GoogleKube
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciContainerEngineForKubernetes;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciContainerEngineForKubernetes.OciContainerEngineForKubernetesBuilder;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.aws.AwsElasticKubernetesService.AwsElasticKubernetesServiceBuilder;
+import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import com.yanchware.fractal.sdk.domain.services.contracts.ComponentDto;
 import com.yanchware.fractal.sdk.domain.values.ComponentId;
 import io.github.resilience4j.retry.RetryRegistry;
@@ -280,7 +278,7 @@ public class TestUtils {
         .withName("db")
         .withSchema("test")
         .build();
-    
+
     return AzurePostgreSqlDbms.builder()
         .withId("dbpg")
         .withName("db-name")
@@ -333,32 +331,29 @@ public class TestUtils {
         .build();
   }
 
-  public static EnvironmentAggregate getEnvExample() {
-    var environmentsFactory = new EnvironmentsFactory(
-            HttpClient.newBuilder().build(),
-            new LocalSdkConfiguration(""),
-            RetryRegistry.ofDefaults());
-    return environmentsFactory.builder()
+  public static Environment getEnvExample() {
+    return ManagementEnvironment.builder()
         .withId(new EnvironmentIdValue(
-                EnvironmentType.PERSONAL,
-                UUID.fromString("2e114308-14ec-4d77-b610-490324fa1844"),
-                "test"))
+            EnvironmentType.PERSONAL,
+            UUID.fromString("2e114308-14ec-4d77-b610-490324fa1844"),
+            "test"))
         .withResourceGroup(UUID.randomUUID())
         .build();
   }
 
   public static LiveSystemAggregate getLiveSystemExample() {
     var liveSystemsFactory = new LiveSystemsFactory(
-            HttpClient.newBuilder().build(),
-            new LocalSdkConfiguration(""),
-            RetryRegistry.ofDefaults());
+        HttpClient.newBuilder().build(),
+        new LocalSdkConfiguration(""),
+        RetryRegistry.ofDefaults());
     return liveSystemsFactory.builder()
         .withId(new LiveSystemIdValue("test-resource-group", "business-platform-test"))
         .withFractalId(new FractalIdValue("test-resource-group", "business-platform-test", "v1.0"))
         .withDescription("Business platform")
+        .withStandardProvider(ProviderType.AZURE)
         .withComponent(getAksExample())
         .withComponent(getAzurePostgresExample())
-        .withEnvironment(getEnvExample())
+        .withEnvironmentId(getEnvExample().getId())
         .build();
   }
 
@@ -398,36 +393,36 @@ public class TestUtils {
 
   public static OciContainerEngineForKubernetesBuilder getDefaultOke() {
     return OciContainerEngineForKubernetes.builder()
-            .withId(ComponentId.from("test"))
-            .withRegion(EU_ZURICH_1);
+        .withId(ComponentId.from("test"))
+        .withRegion(EU_ZURICH_1);
   }
 
   public static AwsElasticKubernetesServiceBuilder getDefaultEks() {
     return AwsElasticKubernetesService.builder()
-            .withId(ComponentId.from("test"))
-            .withRegion(EU_NORTH_1);
+        .withId(ComponentId.from("test"))
+        .withRegion(EU_NORTH_1);
   }
 
   public static void assertGenericComponent(ComponentDto componentDto, Component comp, String type) {
     SoftAssertions.assertSoftly(softly -> softly.assertThat(componentDto)
-      .extracting(
-        ComponentDto::getId,
-        ComponentDto::getDisplayName,
-        ComponentDto::getDescription,
-        ComponentDto::getType,
-        ComponentDto::getVersion,
-        ComponentDto::isLocked,
-        ComponentDto::getDependencies,
-        ComponentDto::getLinks)
-      .containsExactly(
-        comp.getId().getValue(),
-        comp.getDisplayName(),
-        comp.getDescription(),
-        type,
-        DEFAULT_VERSION,
-        comp.isLocked(),
-        comp.getDependencies().stream().map(ComponentId::getValue).collect(toSet()),
-        comp.getLinks()));
+        .extracting(
+            ComponentDto::getId,
+            ComponentDto::getDisplayName,
+            ComponentDto::getDescription,
+            ComponentDto::getType,
+            ComponentDto::getVersion,
+            ComponentDto::isLocked,
+            ComponentDto::getDependencies,
+            ComponentDto::getLinks)
+        .containsExactly(
+            comp.getId().getValue(),
+            comp.getDisplayName(),
+            comp.getDescription(),
+            type,
+            DEFAULT_VERSION,
+            comp.isLocked(),
+            comp.getDependencies().stream().map(ComponentId::getValue).collect(toSet()),
+            comp.getLinks()));
   }
 
   public static String getJsonRepresentation(Object obj) {

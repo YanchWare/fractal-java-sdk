@@ -2,7 +2,7 @@ package com.yanchware.fractal.sdk.domain.livesystem;
 
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.blueprint.FractalIdValue;
-import com.yanchware.fractal.sdk.domain.environment.EnvironmentAggregate;
+import com.yanchware.fractal.sdk.domain.environment.EnvironmentIdValue;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import com.yanchware.fractal.sdk.utils.CollectionUtils;
 import io.github.resilience4j.retry.RetryRegistry;
@@ -67,8 +67,8 @@ public class LiveSystemsFactory {
             return builder;
         }
 
-        public LiveSystemBuilder withEnvironment(EnvironmentAggregate environment) {
-            liveSystem.setEnvironment(environment);
+        public LiveSystemBuilder withEnvironmentId(EnvironmentIdValue environmentId) {
+            liveSystem.setEnvironment(new EnvironmentReference(environmentId));
             return builder;
         }
 

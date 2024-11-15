@@ -6,13 +6,14 @@ import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.blueprint.FractalIdValue;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentIdValue;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentType;
-import com.yanchware.fractal.sdk.domain.environment.EnvironmentsFactory;
+import com.yanchware.fractal.sdk.domain.environment.ManagementEnvironment;
+import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureResourceGroup;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.cosmos.AzureCosmosGremlinDatabase;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.cosmos.AzureCosmosGremlinDbms;
-import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.domain.livesystem.service.LiveSystemService;
+import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
 import com.yanchware.fractal.sdk.utils.StringHandler;
 import io.github.resilience4j.retry.RetryRegistry;
@@ -37,7 +38,6 @@ public class LiveSystemServiceTest {
     SdkConfiguration sdkConfiguration = new LocalSdkConfiguration(wmRuntimeInfo.getHttpBaseUrl());
     var liveSystemsFactory = new LiveSystemsFactory(httpClient, sdkConfiguration, RetryRegistry.ofDefaults());
     var liveSystemsService = new LiveSystemService(httpClient, sdkConfiguration, RetryRegistry.ofDefaults());
-    var environmentsFactory = new EnvironmentsFactory(httpClient, sdkConfiguration, RetryRegistry.ofDefaults());
 
     var inputStream = getClass().getClassLoader()
         .getResourceAsStream("test-resources/postRequestToLiveSystemBody.json");
@@ -46,18 +46,20 @@ public class LiveSystemServiceTest {
 
     var postRequestToLiveSystemBody = StringHandler.getStringFromInputStream(inputStream);
 
-    var environment = environmentsFactory.builder()
+    var managementEnvironment = ManagementEnvironment.builder()
             .withId(new EnvironmentIdValue(
                     EnvironmentType.PERSONAL,
                     UUID.fromString("b2bd7eab-ee3d-4603-86ac-3112ff6b2175"),
                     "5d5bc38d-1d23-4d10-8"))
             .withResourceGroup(UUID.randomUUID())
             .build();
+    
     var liveSystem = liveSystemsFactory.builder()
             .withId(new LiveSystemIdValue("resourceGroupId", "livesystem-name"))
             .withFractalId(new FractalIdValue("resourceGroupId", "fractalName", "fractalVersion" ))
             .withDescription("prod")
-            .withEnvironment(environment)
+            .withEnvironmentId(managementEnvironment.getId())
+            .withStandardProvider(ProviderType.AZURE)
             .withComponent(AzureCosmosGremlinDbms.builder()
               .withId("cosmos-graph-1")
               .withMaxTotalThroughput(500)
@@ -84,7 +86,7 @@ public class LiveSystemServiceTest {
             liveSystem.getDescription(),
             null,
             liveSystem.blueprintMapFromLiveSystemComponents(),
-            liveSystem.getEnvironment().toDto());
+            liveSystem.getEnvironment());
 
     verify(postRequestedFor(urlPathEqualTo("/livesystems/")));
   }

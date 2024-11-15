@@ -18,68 +18,76 @@ import static com.yanchware.fractal.sdk.domain.environment.EnvironmentAggregate.
 @Slf4j
 @Getter
 public class AzureCloudAgent extends CloudAgentEntity {
-    public static final String TENANT_ID_PARAM_KEY = "tenantId";
-    public static final String SUBSCRIPTION_ID_PARAM_KEY = "subscriptionId";
+  public static final String TENANT_ID_PARAM_KEY = "tenantId";
+  public static final String SUBSCRIPTION_ID_PARAM_KEY = "subscriptionId";
 
-    private final AzureRegion region;
-    private final UUID tenantId;
-    private final UUID subscriptionId;
+  private final AzureRegion region;
+  private final UUID tenantId;
+  private final UUID subscriptionId;
+  
+  public AzureCloudAgent(
+      EnvironmentIdValue environmentId,
+      AzureRegion region,
+      UUID tenantId,
+      UUID subscriptionId,
+      Map<String, String> tags) {
+    super(environmentId, tags);
+    this.region = region;
+    this.tenantId = tenantId;
+    this.subscriptionId = subscriptionId;
+  }
 
-    public AzureCloudAgent(
-            EnvironmentIdValue environmentId,
-            EnvironmentService environmentService,
-            AzureRegion region,
-            UUID tenantId,
-            UUID subscriptionId,
-            Map<String, String> tags)
-    {
-        super(environmentId, environmentService, tags);
-        this.region = region;
-        this.tenantId = tenantId;
-        this.subscriptionId = subscriptionId;
+  @Override
+  public ProviderType getProvider() {
+    return ProviderType.AZURE;
+  }
+
+  @Override
+  public void initialize(EnvironmentService environmentService) throws InstantiatorException {
+    initialize(environmentService, null);
+  }
+
+  @Override
+  public void initialize(EnvironmentService environmentService, EnvironmentIdValue managementEnvironmentId) throws InstantiatorException {
+    var currentInitialization = environmentService.fetchCurrentAzureInitialization(environmentId);
+    
+    if(currentInitialization != null && currentInitialization.status().equals("Completed")) {
+      log.info("{} Cloud Agent initialization for environment '{}' completed successfully.",
+          currentInitialization.cloudProvider(), currentInitialization.environmentId());
+      return;
     }
 
-    @Override
-    public ProviderType getProvider() {
-        return ProviderType.AZURE;
+    if (currentInitialization == null ||
+        "Failed".equals(currentInitialization.status()) ||
+        "Cancelled".equals(currentInitialization.status())) {
+
+      environmentService.startAzureCloudAgentInitialization(
+          managementEnvironmentId,
+          environmentId,
+          tenantId,
+          subscriptionId,
+          region,
+          tags);
+      
+      checkInitializationStatus(() -> fetchCurrentAzureInitialization(environmentService));
+    } else {
+      checkInitializationStatus(() -> fetchCurrentAzureInitialization(environmentService));
     }
+  }
 
-    @Override
-    public void initialize() throws InstantiatorException {
-        var currentInitialization = environmentService.fetchCurrentAzureInitialization(environmentId);
+  @Override
+  public Map<String, Object> getConfigurationForEnvironmentParameters() {
+    return Map.of(
+        REGION_PARAM_KEY, region,
+        TENANT_ID_PARAM_KEY, tenantId,
+        SUBSCRIPTION_ID_PARAM_KEY, subscriptionId);
+  }
 
-        if (currentInitialization == null ||
-                "Failed".equals(currentInitialization.status()) ||
-                "Cancelled".equals(currentInitialization.status())) {
-
-            environmentService.startAzureCloudAgentInitialization(
-                    environmentId,
-                    tenantId,
-                    subscriptionId,
-                    region,
-                    tags);
-
-            log.info("New initialization started, checking initialization status for environment [id: '{}']", environmentId);
-            checkInitializationStatus(this::fetchCurrentAzureInitialization);
-        } else {
-            log.info("Checking initialization status for environment [id: '{}']", environmentId);
-            checkInitializationStatus(this::fetchCurrentAzureInitialization);
-        }
+  private InitializationRunResponse fetchCurrentAzureInitialization(EnvironmentService environmentService) {
+    try {
+      return environmentService.fetchCurrentAzureInitialization(environmentId);
+    } catch (InstantiatorException e) {
+      throw new RuntimeException(e);
     }
-
-    @Override
-    public Map<String, Object> getConfigurationForEnvironmentParameters() {
-        return Map.of(
-                REGION_PARAM_KEY, region,
-                TENANT_ID_PARAM_KEY, tenantId,
-                SUBSCRIPTION_ID_PARAM_KEY, subscriptionId);
-    }
-
-    private InitializationRunResponse fetchCurrentAzureInitialization() {
-        try {
-            return environmentService.fetchCurrentAzureInitialization(environmentId);
-        } catch (InstantiatorException e) {
-            throw new RuntimeException(e);
-        }
-    }
+  }
 }

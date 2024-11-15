@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.Service;
 import com.yanchware.fractal.sdk.domain.blueprint.FractalIdValue;
+import com.yanchware.fractal.sdk.domain.livesystem.EnvironmentReference;
 import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemIdValue;
 import com.yanchware.fractal.sdk.domain.exceptions.ComponentInstantiationException;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
@@ -11,9 +12,7 @@ import com.yanchware.fractal.sdk.domain.exceptions.ProviderException;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.*;
 import com.yanchware.fractal.sdk.domain.livesystem.service.commands.InstantiateLiveSystemCommandRequest;
 import com.yanchware.fractal.sdk.domain.livesystem.service.commands.UpdateLiveSystemCommandRequest;
-import com.yanchware.fractal.sdk.utils.EnvVarUtils;
 import com.yanchware.fractal.sdk.utils.HttpUtils;
-import com.yanchware.fractal.sdk.utils.LocalDebugUtils;
 import io.github.resilience4j.retry.Retry;
 import io.github.resilience4j.retry.RetryConfig;
 import io.github.resilience4j.retry.RetryRegistry;
@@ -41,10 +40,9 @@ public class LiveSystemService extends Service {
   private static final int CHECK_LIVE_SYSTEM_MUTATION_STATUS_MAX_ATTEMPTS = 55;
 
   public LiveSystemService(
-          HttpClient client,
-          SdkConfiguration sdkConfiguration,
-          RetryRegistry retryRegistry)
-  {
+      HttpClient client,
+      SdkConfiguration sdkConfiguration,
+      RetryRegistry retryRegistry) {
     super(client, sdkConfiguration, retryRegistry);
   }
 
@@ -89,12 +87,6 @@ public class LiveSystemService extends Service {
       String requestName,
       int[] acceptedResponses,
       HttpRequest request) throws IOException, InterruptedException, InstantiatorException, ProviderException {
-
-    if (EnvVarUtils.isLocalDebug()) {
-      request = LocalDebugUtils.getHttpRequestBuilder(request.uri(), sdkConfiguration)
-          .build();
-    }
-
     var livesystemIdStr = liveSystemId.toString();
     var response = client.send(request, HttpResponse.BodyHandlers.ofString());
     ensureAcceptableResponse(response, requestName, acceptedResponses);
@@ -179,10 +171,10 @@ public class LiveSystemService extends Service {
               liveSystemMutationResponse.status()));
     }
   }
-  
+
   private void logInstantiationCompleted(LiveSystemIdValue liveSystemId,
                                          Map<String, LiveSystemComponentDto> liveSystemMutationResponseComponents) {
-    log.info("LiveSystem [id: '{}'] instantiation completed: {}", 
+    log.info("LiveSystem [id: '{}'] instantiation completed: {}",
         liveSystemId,
         getStatusFromComponents(liveSystemMutationResponseComponents));
   }
@@ -351,11 +343,6 @@ public class LiveSystemService extends Service {
       int[] acceptedResponses,
       HttpRequest request) throws IOException, InterruptedException, InstantiatorException, ProviderException, ComponentInstantiationException {
 
-    if (EnvVarUtils.isLocalDebug()) {
-      request = LocalDebugUtils.getHttpRequestBuilder(request.uri(), sdkConfiguration)
-          .build();
-    }
-
     var response = client.send(request, HttpResponse.BodyHandlers.ofString());
     ensureAcceptableResponse(response, requestName, acceptedResponses);
 
@@ -437,26 +424,28 @@ public class LiveSystemService extends Service {
   }
 
   public LiveSystemMutationDto updateLiveSystem(
-          String liveSystemId,
-          FractalIdValue fractalId,
-          String description,
-          String provider,
-          Map<String, LiveSystemComponentDto> blueprintMap,
-          EnvironmentDto environmentDto
+      String liveSystemId,
+      FractalIdValue fractalId,
+      String description,
+      String provider,
+      Map<String, LiveSystemComponentDto> blueprintMap,
+      EnvironmentReference environmentReference
   ) throws InstantiatorException {
 
     var command = new UpdateLiveSystemCommandRequest(
-            liveSystemId,
-            fractalId.toString(),
-            description,
-            provider,
-            blueprintMap,
-            environmentDto);
+        liveSystemId,
+        fractalId.toString(),
+        description,
+        provider,
+        blueprintMap,
+        environmentReference);
 
     HttpRequest request;
     try {
       String serializedCommand = serialize(command);
-      log.info("Update LiveSystem message: {}", serializedCommand);
+
+      logLiveSystemInstantiation(liveSystemId);
+      
       request = HttpUtils.buildPutRequest(
           getLiveSystemUri(liveSystemId), sdkConfiguration, serializedCommand);
     } catch (JsonProcessingException e) {
@@ -487,25 +476,24 @@ public class LiveSystemService extends Service {
   }
 
   public LiveSystemMutationDto instantiateLiveSystem(
-          String liveSystemId,
-          FractalIdValue fractalId,
-          String description,
-          String provider,
-          Map<String, LiveSystemComponentDto> blueprintMap,
-          EnvironmentDto environmentDto) throws InstantiatorException
-  {
+      String liveSystemId,
+      FractalIdValue fractalId,
+      String description,
+      String provider,
+      Map<String, LiveSystemComponentDto> blueprintMap,
+      EnvironmentReference environmentReference) throws InstantiatorException {
     var command = new InstantiateLiveSystemCommandRequest(
-            liveSystemId,
-            fractalId.toString(),
-            description,
-            provider,
-            blueprintMap,
-            environmentDto);
+        liveSystemId,
+        fractalId.toString(),
+        description,
+        provider,
+        blueprintMap,
+        environmentReference);
 
     HttpRequest request;
     try {
       String serializedCommand = serialize(command);
-      log.info("Instantiate LiveSystem message: {}", serializedCommand);
+      logLiveSystemInstantiation(liveSystemId);
 
       var liveSystemUri = URI.create(String.format("%s/", getLiveSystemUri()));
       request = HttpUtils.buildPostRequest(liveSystemUri, sdkConfiguration, serializedCommand);
@@ -520,6 +508,10 @@ public class LiveSystemService extends Service {
         request,
         new int[]{200},
         LiveSystemMutationDto.class);
+  }
+
+  private void logLiveSystemInstantiation(String liveSystemId) {
+    log.info("Instantiating LiveSystem [id: '{}']", liveSystemId);
   }
 
   private URI getLiveSystemUri(String liveSystemId) {

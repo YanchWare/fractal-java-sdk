@@ -50,9 +50,7 @@ public class HttpUtils {
   public static HttpRequest.Builder getHttpRequestBuilder(URI uri,
                                                           SdkConfiguration sdkConfiguration,
                                                           Map<String, String> additionalHeaders) {
-    HttpRequest.Builder builder = EnvVarUtils.isLocalDebug() ?
-        LocalDebugUtils.getHttpRequestBuilder(uri, sdkConfiguration) :
-        HttpRequest.newBuilder()
+    var builder = HttpRequest.newBuilder()
             .uri(uri)
             .header(X_CLIENT_ID_HEADER, sdkConfiguration.getClientId())
             .header(X_CLIENT_SECRET_HEADER, sdkConfiguration.getClientSecret())
@@ -67,14 +65,27 @@ public class HttpUtils {
 
   public static void ensureAcceptableResponse(HttpResponse<String> response, String requestName, int[] acceptedResponses)
       throws InstantiatorException {
+    
+    
     if (Arrays.stream(acceptedResponses).noneMatch((x) -> x == response.statusCode())) {
-      String errorMessage = String.format(
-          "Attempted %s failed with response code: %s and body %s ",
-          requestName,
-          response.statusCode(),
-          response.body());
-      log.error(errorMessage);
-      throw new InstantiatorException(errorMessage);
+      var requestNameWords = StringHelper.toWords(requestName);
+      
+      if (response.body().contains("Token validation failed")) {
+        var errorMessage = String.format("Failed to %s. Token validation failed", requestNameWords);
+        log.error(errorMessage);
+
+        throw new InstantiatorException(errorMessage);
+      } else {
+        // For other errors, log the full response and throw InstantiatorException
+        String errorMessage = String.format(
+            "Failed to %s. %s",
+            requestNameWords,
+            response.body());
+        log.error(errorMessage);
+        throw new InstantiatorException(errorMessage);
+      }
     }
   }
+
+  
 }
