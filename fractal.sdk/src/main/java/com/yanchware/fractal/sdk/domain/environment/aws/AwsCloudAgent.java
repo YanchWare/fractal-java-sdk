@@ -72,6 +72,7 @@ public class AwsCloudAgent extends CloudAgentEntity {
     @Override
     protected Map<String, Object> getConfigurationForEnvironmentParameters() {
         return Map.of(
+                PROVIDER_PARAM_KEY, getProvider(),
                 REGION_PARAM_KEY, region,
                 ORGANIZATION_ID_PARAM_KEY, organizationId,
                 ACCOUNT_ID_PARAM_KEY, accountId

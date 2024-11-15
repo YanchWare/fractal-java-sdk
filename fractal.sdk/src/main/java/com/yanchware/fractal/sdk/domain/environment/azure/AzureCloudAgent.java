@@ -78,6 +78,7 @@ public class AzureCloudAgent extends CloudAgentEntity {
   @Override
   public Map<String, Object> getConfigurationForEnvironmentParameters() {
     return Map.of(
+        PROVIDER_PARAM_KEY, getProvider(),
         REGION_PARAM_KEY, region,
         TENANT_ID_PARAM_KEY, tenantId,
         SUBSCRIPTION_ID_PARAM_KEY, subscriptionId);
