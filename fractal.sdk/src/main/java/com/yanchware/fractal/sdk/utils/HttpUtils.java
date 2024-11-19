@@ -89,6 +89,15 @@ public class HttpUtils {
         log.error(errorMessage);
 
         throw new InstantiatorException(errorMessage);
+      } else if (response.statusCode() == 401) {
+        String errorMessage = formatErrorMessage(requestName,
+            "Invalid credentials provided. Please check your credentials or contact Fractal Cloud support " +
+                "if you do not have credentials or suspect a password issue.",
+            entityId);
+
+        log.error(errorMessage);
+
+        throw new InstantiatorException(errorMessage);
       } else {
         String errorMessage = formatErrorMessage(requestName, response.body(), entityId);
         log.error(errorMessage);
@@ -118,11 +127,11 @@ public class HttpUtils {
     }
   }
 
-  private static String formatErrorMessage(String requestName, String errorMessage, String entityId) {
-    return String.format("Failed to %s%s. %s",
+  public static String formatErrorMessage(String requestName, String errorMessage, String entityId) {
+    return String.format("Failed to %s%s.%s",
         StringHelper.toWords(requestName),
         StringUtils.isBlank(entityId) ? "" : String.format(" [id: '%s']", entityId),
-        errorMessage);
+        StringUtils.isBlank(errorMessage) ? "" : String.format(" %s", errorMessage));
   }
 
 

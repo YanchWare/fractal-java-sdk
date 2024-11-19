@@ -9,6 +9,6 @@ public record EnvironmentIdDto (
 
   @Override
   public String toString() {
-    return type + "\\" + ownerId + "\\" + shortName;
+    return type + "/" + ownerId + "/" + shortName;
   }
 }
