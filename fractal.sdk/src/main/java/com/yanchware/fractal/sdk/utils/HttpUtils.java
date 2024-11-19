@@ -1,5 +1,7 @@
 package com.yanchware.fractal.sdk.utils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import lombok.extern.slf4j.Slf4j;
@@ -63,29 +65,75 @@ public class HttpUtils {
     return builder;
   }
 
-  public static void ensureAcceptableResponse(HttpResponse<String> response, String requestName, int[] acceptedResponses)
-      throws InstantiatorException {
-    
-    
+  public static void ensureAcceptableResponse(HttpResponse<String> response,
+                                              String requestName,
+                                              int[] acceptedResponses) throws InstantiatorException {
+
+
+    ensureAcceptableResponse(response, requestName, null, acceptedResponses);
+  }
+
+  public static void ensureAcceptableResponse(HttpResponse<String> response,
+                                              String requestName,
+                                              String entityId,
+                                              int[] acceptedResponses) throws InstantiatorException {
+
+
     if (Arrays.stream(acceptedResponses).noneMatch((x) -> x == response.statusCode())) {
       var requestNameWords = StringHelper.toWords(requestName);
-      
+      handleStructuredError(response, requestNameWords, entityId);
+
       if (response.body().contains("Token validation failed")) {
-        var errorMessage = String.format("Failed to %s. Token validation failed", requestNameWords);
+        String errorMessage = formatErrorMessage(requestName, "Token validation failed", entityId);
+
+        log.error(errorMessage);
+
+        throw new InstantiatorException(errorMessage);
+      } else if (response.statusCode() == 401) {
+        String errorMessage = formatErrorMessage(requestName,
+            "Invalid credentials provided. Please check your credentials or contact Fractal Cloud support " +
+                "if you do not have credentials or suspect a password issue.",
+            entityId);
+
         log.error(errorMessage);
 
         throw new InstantiatorException(errorMessage);
       } else {
-        // For other errors, log the full response and throw InstantiatorException
-        String errorMessage = String.format(
-            "Failed to %s. %s",
-            requestNameWords,
-            response.body());
+        String errorMessage = formatErrorMessage(requestName, response.body(), entityId);
         log.error(errorMessage);
         throw new InstantiatorException(errorMessage);
       }
     }
   }
 
-  
+  private static void handleStructuredError(HttpResponse<String> response, 
+                                            String requestName,
+                                            String entityId) throws InstantiatorException {
+    try {
+      var jsonNode = SerializationUtils.deserialize(response.body(), JsonNode.class);
+      if (jsonNode.has("reasonCode") && jsonNode.has("message")) {
+        var reasonCode = jsonNode.get("reasonCode").asText();
+        var message = jsonNode.get("message").asText();
+
+        String errorMessage = formatErrorMessage(requestName,
+            String.format("Reason: %s, Message: %s", reasonCode, message),
+            entityId);
+        
+        log.error(errorMessage);
+        throw new InstantiatorException(errorMessage);
+      }
+    } catch (JsonProcessingException e) {
+      // Ignore the exception and fall back to the default error handling
+    }
+  }
+
+  public static String formatErrorMessage(String requestName, String errorMessage, String entityId) {
+    return String.format("Failed to %s%s.%s",
+        StringHelper.toWords(requestName),
+        StringUtils.isBlank(entityId) ? "" : String.format(" [id: '%s']", entityId),
+        StringUtils.isBlank(errorMessage) ? "" : String.format(" %s", errorMessage));
+  }
+
+
+
 }

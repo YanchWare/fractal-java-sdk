@@ -70,6 +70,7 @@ public class BlueprintService extends Service {
 
     return executeRequestWithRetries(
         "retrieveBlueprint",
+        fractalId.toString(),
         client,
         retryRegistry,
         HttpUtils.buildGetRequest(getBlueprintsUri(fractalId), sdkConfiguration),
