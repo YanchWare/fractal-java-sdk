@@ -53,6 +53,7 @@ public abstract class Service {
 
     protected static <T> T executeRequestWithRetries(
             String requestName,
+            String entityId,
             HttpClient client,
             RetryRegistry retryRegistry,
             HttpRequest request,
@@ -66,7 +67,7 @@ public abstract class Service {
         try {
             var result = Retry.decorateCheckedSupplier(retry, () -> {
                 HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-                ensureAcceptableResponse(response, requestName, acceptedResponses);
+                ensureAcceptableResponse(response, requestName, entityId, acceptedResponses);
 
                 if (response.statusCode() == 404) {
                     return null;

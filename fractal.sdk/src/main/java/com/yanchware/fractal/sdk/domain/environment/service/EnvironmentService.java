@@ -47,6 +47,7 @@ public class EnvironmentService extends Service {
       Map<String, Object> parameters) throws InstantiatorException {
     return executeRequestWithRetries(
         "createEnvironment",
+        environmentId.toString(),
         client,
         retryRegistry,
         HttpUtils.buildPostRequest(
@@ -68,6 +69,7 @@ public class EnvironmentService extends Service {
       Map<String, Object> parameters) throws InstantiatorException {
     return executeRequestWithRetries(
         "updateEnvironment",
+        environmentId.toString(),
         client,
         retryRegistry,
         HttpUtils.buildPutRequest(
@@ -83,6 +85,7 @@ public class EnvironmentService extends Service {
 
       return executeRequestWithRetries(
           "fetchEnvironment",
+          environmentId.toString(),
           client,
           retryRegistry,
           HttpUtils.buildGetRequest(
@@ -127,6 +130,7 @@ public class EnvironmentService extends Service {
 
     executeRequestWithRetries(
         "InitializeAzureSubscription",
+        environmentId.toString(),
         client,
         retryRegistry,
         HttpUtils.buildPostRequest(
@@ -174,6 +178,7 @@ public class EnvironmentService extends Service {
 
     executeRequestWithRetries(
         "InitializeAwsAccount",
+        environmentId.toString(),
         client,
         retryRegistry,
         HttpUtils.buildPostRequest(
@@ -213,6 +218,7 @@ public class EnvironmentService extends Service {
 
     executeRequestWithRetries(
         "InitializeGcpProject",
+        environmentId.toString(),
         client,
         retryRegistry,
         HttpUtils.buildPostRequest(
@@ -252,6 +258,7 @@ public class EnvironmentService extends Service {
 
     executeRequestWithRetries(
         "InitializeOciProject",
+        environmentId.toString(),
         client,
         retryRegistry,
         HttpUtils.buildPostRequest(
@@ -289,6 +296,7 @@ public class EnvironmentService extends Service {
     var providerStr = StringHelper.convertToTitleCase(provider.toString());
     var runRoot = executeRequestWithRetries(
         String.format("fetchCurrent%sInitialization", providerStr),
+        environmentId.toString(),
         client,
         retryRegistry,
         HttpUtils.buildGetRequest(

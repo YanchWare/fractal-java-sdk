@@ -38,6 +38,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 public class LiveSystemService extends Service {
 
   private static final int CHECK_LIVE_SYSTEM_MUTATION_STATUS_MAX_ATTEMPTS = 55;
+  protected static final Duration RETRIES_DELAY = Duration.ofMinutes(1L);
 
   public LiveSystemService(
       HttpClient client,
@@ -49,7 +50,7 @@ public class LiveSystemService extends Service {
   public void checkLiveSystemMutationStatus(
       LiveSystemIdValue liveSystemId,
       String liveSystemMutationId) throws InstantiatorException {
-    log.info("Starting operation [checkLiveSystemMutationStatus] for LiveSystem [id: '{}'] and mutation ['{}']",
+    log.info("Checking Live System mutation status [Live System id: '{}', mutation id: '{}']",
         liveSystemId.toString(), liveSystemMutationId);
 
     var requestName = "checkLiveSystemMutationStatus";
@@ -63,7 +64,7 @@ public class LiveSystemService extends Service {
     var retryConfig = RetryConfig.custom()
         .retryExceptions(InstantiatorException.class)
         .maxAttempts(CHECK_LIVE_SYSTEM_MUTATION_STATUS_MAX_ATTEMPTS)
-        .waitDuration(Duration.ofMinutes(1L))
+        .waitDuration(RETRIES_DELAY)
         .build();
 
     var retry = RetryRegistry.of(retryConfig).retry(requestName);
@@ -87,7 +88,7 @@ public class LiveSystemService extends Service {
       String requestName,
       int[] acceptedResponses,
       HttpRequest request) throws IOException, InterruptedException, InstantiatorException, ProviderException {
-    var livesystemIdStr = liveSystemId.toString();
+    var liveSystemIdStr = liveSystemId.toString();
     var response = client.send(request, HttpResponse.BodyHandlers.ofString());
     ensureAcceptableResponse(response, requestName, acceptedResponses);
 
@@ -106,15 +107,15 @@ public class LiveSystemService extends Service {
 
     if (liveSystemMutationResponse == null) {
       String message = String.format("The LiveSystem [%s] exists, but the LiveSystem's provider LiveSystem is still empty or not fully updated for mutation [%s]",
-          livesystemIdStr, liveSystemMutationId);
+          liveSystemIdStr, liveSystemMutationId);
       log.info(message);
       throw new InstantiatorException(message);
     }
 
     var liveSystemMutationResponseComponents = liveSystemMutationResponse.componentsById();
     if (liveSystemMutationResponseComponents == null) {
-      throw new ProviderException(String.format("LiveSystem [%s] instantiation failed for mutation [%s] as component list is null",
-          livesystemIdStr,
+      throw new ProviderException(String.format("Live System [%s] instantiation failed for mutation [%s] as component list is null",
+          liveSystemIdStr,
           liveSystemMutationId));
     }
 
@@ -124,27 +125,27 @@ public class LiveSystemService extends Service {
         return liveSystemMutationResponse;
       }
       case FAILED -> {
-        var messageToThrow = getFailedComponentsMessageToThrow(livesystemIdStr,
+        var messageToThrow = getFailedComponentsMessageToThrow(liveSystemIdStr,
             liveSystemMutationId,
             liveSystemMutationResponseComponents);
 
         if (StringUtils.isBlank(messageToThrow)) {
-          log.warn("LiveSystem [id: '{}'] instantiation failed but erorrMessage is not visible yet, retrying: {}", liveSystemId, getStatusFromComponents(liveSystemMutationResponseComponents));
+          log.warn("Live System [id: '{}'] instantiation failed but erorrMessage is not visible yet, retrying: {}", liveSystemId, getStatusFromComponents(liveSystemMutationResponseComponents));
           String timeoutExceptionMessage = String.format(
-              "LiveSystem [%s] instantiation wait timeout. Response is %s",
-              livesystemIdStr,
+              "Live System [%s] instantiation wait timeout. Response is %s",
+              liveSystemIdStr,
               response.body());
           throw new InstantiatorException(timeoutExceptionMessage);
         } else {
-          log.warn("LiveSystem [id: '{}'] instantiation failed: {}", liveSystemId, getStatusFromComponents(liveSystemMutationResponseComponents));
+          log.warn("Live System [id: '{}'] instantiation failed: {}", liveSystemId, getStatusFromComponents(liveSystemMutationResponseComponents));
           throw new ProviderException(messageToThrow);
         }
       }
       case CANCELLED -> {
-        log.warn("LiveSystem [id: '{}'] instantiation cancelled: {}", liveSystemId, getStatusFromComponents(liveSystemMutationResponseComponents));
+        log.warn("Live System [id: '{}'] instantiation cancelled: {}", liveSystemId, getStatusFromComponents(liveSystemMutationResponseComponents));
 
         var cancelledInstantiationMessage = String.format(
-            "LiveSystem [%s] instantiation did not complete for mutation [%s] as the latter has been cancelled by an operator",
+            "Live System [%s] instantiation did not complete for mutation [%s] as the latter has been cancelled by an operator",
             liveSystemId,
             liveSystemMutationId);
         throw new ProviderException(cancelledInstantiationMessage);
@@ -156,17 +157,18 @@ public class LiveSystemService extends Service {
           logInstantiationCompleted(liveSystemId, liveSystemMutationResponseComponents);
           return liveSystemMutationResponse;
         } else {
-          log.info("LiveSystem [id: '{}'] instantiation is in progress: {}", liveSystemId, getStatusFromComponents(liveSystemMutationResponseComponents));
+          log.info("Live System [id: '{}'] instantiation is in progress: {}. Next check in {} seconds ...", 
+              liveSystemId, getStatusFromComponents(liveSystemMutationResponseComponents), RETRIES_DELAY.toSeconds());
           String timeoutExceptionMessage = String.format(
-              "LiveSystem [%s] instantiation wait timeout. Response is %s",
-              livesystemIdStr,
+              "Live System [%s] instantiation wait timeout. Response is %s",
+              liveSystemIdStr,
               response.body());
           throw new InstantiatorException(timeoutExceptionMessage);
         }
       }
       default ->
-          throw new ProviderException(String.format("LiveSystem [%s] instantiation has an unknown state for mutation [%s]: [%s]",
-              livesystemIdStr,
+          throw new ProviderException(String.format("Live System [%s] instantiation has an unknown state for mutation [%s]: [%s]",
+              liveSystemIdStr,
               liveSystemMutationId,
               liveSystemMutationResponse.status()));
     }
@@ -174,7 +176,7 @@ public class LiveSystemService extends Service {
 
   private void logInstantiationCompleted(LiveSystemIdValue liveSystemId,
                                          Map<String, LiveSystemComponentDto> liveSystemMutationResponseComponents) {
-    log.info("LiveSystem [id: '{}'] instantiation completed: {}",
+    log.info("Live System [id: '{}'] instantiation completed: {}",
         liveSystemId,
         getStatusFromComponents(liveSystemMutationResponseComponents));
   }
@@ -206,7 +208,7 @@ public class LiveSystemService extends Service {
     } else {
       var messageToThrow = new StringBuilder();
       messageToThrow.append(
-          String.format("LiveSystem [id: '%s'] instantiation failed for mutation [id: '%s']. " +
+          String.format("Live System [id: '%s'] instantiation failed for mutation [id: '%s']. " +
                   "Failed components -> ",
               liveSystemId, liveSystemMutationId));
       for (var component : failedComponents) {
@@ -268,14 +270,14 @@ public class LiveSystemService extends Service {
     }
 
     if (response.statusCode() == 404) {
-      log.info("LiveSystem [id: '{}'] does not exist. Adding it ...", liveSystemId);
+      log.info("Live System [id: '{}'] does not exist. Adding it ...", liveSystemId);
       return null;
     }
 
     if (response.statusCode() != 200) {
       throw new InstantiatorException(
           String.format(
-              "Attempted Retrieve LiveSystem with response code: %s and body %s ",
+              "Attempted Retrieve Live System with response code: %s and body %s ",
               response.statusCode(),
               response.body()));
     }
@@ -294,6 +296,7 @@ public class LiveSystemService extends Service {
 
     return executeRequestWithRetries(
         "instantiateComponent",
+        liveSystemId.toString(),
         client,
         retryRegistry,
         request,
@@ -502,7 +505,8 @@ public class LiveSystemService extends Service {
     }
 
     return executeRequestWithRetries(
-        "instantiate",
+        "instantiateLiveSystem",
+        liveSystemId,
         client,
         retryRegistry,
         request,
@@ -511,7 +515,7 @@ public class LiveSystemService extends Service {
   }
 
   private void logLiveSystemInstantiation(String liveSystemId) {
-    log.info("Instantiating LiveSystem [id: '{}']", liveSystemId);
+    log.info("Instantiating Live System [id: '{}']", liveSystemId);
   }
 
   private URI getLiveSystemUri(String liveSystemId) {

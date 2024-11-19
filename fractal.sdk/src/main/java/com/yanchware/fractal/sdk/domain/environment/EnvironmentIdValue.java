@@ -10,7 +10,7 @@ public record EnvironmentIdValue(EnvironmentType type, UUID ownerId, String shor
 
     @Override
     public String toString(){
-        return String.format("%s\\%s\\%s", StringHelper.convertToTitleCase(type.name()), ownerId, shortName);
+        return String.format("%s/%s/%s", StringHelper.convertToTitleCase(type.name()), ownerId, shortName);
     }
 
     public EnvironmentIdDto toDto() {
