@@ -33,6 +33,7 @@ public abstract class BaseEnvironment implements Environment, Validatable {
   private String name;
   private Collection<UUID> resourceGroups;
   private Map<String, String> tags;
+  private Collection<Secret> secrets;
   private final Map<ProviderType, CloudAgentEntity> cloudAgentByProviderType;
 
   @Override
@@ -59,6 +60,7 @@ public abstract class BaseEnvironment implements Environment, Validatable {
     this.resourceGroups = new ArrayList<>();
     this.parameters = new HashMap<>();
     this.tags = new HashMap<>();
+    this.secrets = new ArrayList<>();
     this.cloudAgentByProviderType = new HashMap<>();
   }
 
@@ -175,6 +177,19 @@ public abstract class BaseEnvironment implements Environment, Validatable {
      */
     public B withTag(String key, String value) {
       return withTags(Map.of(key, value));
+    }
+
+    public B withSecret(Secret secret) {
+      return withSecrets(List.of(secret));
+    }
+
+    public B withSecrets(Collection<Secret> secrets) {
+      if (CollectionUtils.isBlank(secrets)) {
+        return builder;
+      }
+
+      environment.getSecrets().addAll(secrets);
+      return builder;
     }
 
     public T build() {
