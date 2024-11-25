@@ -304,45 +304,39 @@ public class EnvironmentService extends Service {
         SecretResponse[].class);
   }
 
-  public SecretResponse createSecret(EnvironmentIdValue environmentId, String secretName, String secretValue) throws InstantiatorException {
-    return executeRequestWithRetries(
+  public void createSecret(EnvironmentIdValue environmentId, String secretName, String secretValue) throws InstantiatorException {
+    executeRequestWithRetries(
         "createSecret",
-        environmentId.toString(),
         client,
         retryRegistry,
         HttpUtils.buildPostRequest(
             getSecretsUri(environmentId),
             sdkConfiguration,
             serializeSafely(new CreateSecretRequest(secretName, secretValue))),
-        new int[]{201},
-        SecretResponse.class);
+        new int[]{201});
   }
 
-  public SecretResponse updateSecret(EnvironmentIdValue environmentId, String secretName, String secretValue) throws InstantiatorException {
-    return executeRequestWithRetries(
+  public void updateSecret(EnvironmentIdValue environmentId, String secretName, String secretValue) throws InstantiatorException {
+    executeRequestWithRetries(
         "updateSecret",
-        environmentId.toString(),
         client,
         retryRegistry,
         HttpUtils.buildPutRequest(
             getSecretsUri(environmentId, secretName),
             sdkConfiguration,
             serializeSafely(new UpdateSecretRequest(secretValue))),
-        new int[]{200},
-        SecretResponse.class);
+        new int[]{200});
   }
 
   public void deleteSecret(EnvironmentIdValue environmentId, String secretName) throws InstantiatorException {
     executeRequestWithRetries(
         "deleteSecret",
-        environmentId.toString(),
         client,
         retryRegistry,
         HttpUtils.buildDeleteRequest(
             getSecretsUri(environmentId, secretName),
             sdkConfiguration),
-        new int[]{204},
-        String.class);
+        new int[]{204});
   }
 
   private InitializationRunResponse fetchCurrentInitialization(

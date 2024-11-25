@@ -324,6 +324,7 @@ public class Automaton {
 
   private static void instantiateEnvironment(EnvironmentAggregate environment) throws InstantiatorException {
     environment.createOrUpdate();
+    environment.manageSecrets();
     environment.initializeAgents();
   }
 
