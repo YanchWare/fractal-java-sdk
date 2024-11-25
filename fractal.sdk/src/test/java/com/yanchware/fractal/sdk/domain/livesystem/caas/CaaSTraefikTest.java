@@ -291,6 +291,8 @@ class CaaSTraefikTest extends TestWithFixture {
                 .build()
         ))
         .withPriorityClassName(a(String.class))
+        .withSecrets(List.of("secret-1", "secret-2"))
+        .withSecret("secret-3")
         .build();
 
     var json = TestUtils.getJsonRepresentation(traefik);
@@ -311,6 +313,7 @@ class CaaSTraefikTest extends TestWithFixture {
 
     assertThat(traefik.getNodeSelectors()).hasSize(2);
     assertThat(traefik.getTolerations()).hasSize(3);
+    assertThat(traefik.getSecrets()).hasSize(3);
   }
 
   private CaaSTraefik.TraefikBuilder traefikBuilder() {

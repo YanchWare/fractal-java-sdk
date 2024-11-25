@@ -45,6 +45,19 @@ public class HttpUtils {
         .build();
   }
 
+  public static HttpRequest buildDeleteRequest(URI uri, 
+                                               SdkConfiguration sdkConfiguration) {
+    return buildDeleteRequest(uri, sdkConfiguration, null);
+  }
+
+  public static HttpRequest buildDeleteRequest(URI uri,
+                                               SdkConfiguration sdkConfiguration,
+                                               Map<String, String> additionalHeaders) {
+    return getHttpRequestBuilder(uri, sdkConfiguration, additionalHeaders)
+        .DELETE()
+        .build();
+  }
+
   public static HttpRequest.Builder getHttpRequestBuilder(URI uri, SdkConfiguration sdkConfiguration) {
     return getHttpRequestBuilder(uri, sdkConfiguration, null);
   }
@@ -133,7 +146,4 @@ public class HttpUtils {
         StringUtils.isBlank(entityId) ? "" : String.format(" [id: '%s']", entityId),
         StringUtils.isBlank(errorMessage) ? "" : String.format(" %s", errorMessage));
   }
-
-
-
 }

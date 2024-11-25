@@ -206,6 +206,36 @@ class ManagementEnvironmentTest {
     assertThat(jsonEnvironment).isNotBlank();
   }
 
+  @Test
+  public void noValidationErrors_when_environmentCreatedWithSecrets() {
+    var managementEnvironment = ManagementEnvironment.builder()
+        .withId(new EnvironmentIdValue(
+            EnvironmentType.PERSONAL,
+            UUID.randomUUID(),
+            "production-001"))
+        .withAzureCloudAgent(
+            AzureRegion.AUSTRALIA_CENTRAL,
+            UUID.randomUUID(),
+            UUID.randomUUID())
+        .withResourceGroup(UUID.randomUUID())
+        .withSecret(new Secret("secret-1", "value-1"))
+        .withSecret(new Secret("secret-2", "value-2"))
+        .withSecrets(List.of(
+            new Secret("secret-3", "value-3"),
+            new Secret("secret-4", "value-4")
+        )).build();
+
+    assertThat(managementEnvironment.validate()).isEmpty();
+
+    var jsonEnvironment = TestUtils.getJsonRepresentation(managementEnvironment);
+    assertThat(jsonEnvironment).isNotBlank();
+
+    var secrets = managementEnvironment.getSecrets();
+
+    // Assert that the secrets has exactly 4 entries
+    assertThat(secrets).hasSize(4);
+  }
+
   private ManagementEnvironment generateBuilderWithInfo(String shortName) {
     return ManagementEnvironment.builder()
         .withId(new EnvironmentIdValue(
