@@ -311,7 +311,6 @@ class CaaSTraefikTest extends TestWithFixture {
 
     assertThat(traefik.getNodeSelectors()).hasSize(2);
     assertThat(traefik.getTolerations()).hasSize(3);
-    assertThat(traefik.getSecrets()).hasSize(3);
   }
 
   private CaaSTraefik.TraefikBuilder traefikBuilder() {

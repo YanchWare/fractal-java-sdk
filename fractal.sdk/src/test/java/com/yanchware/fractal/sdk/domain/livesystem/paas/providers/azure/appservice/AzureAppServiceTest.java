@@ -294,6 +294,9 @@ public class AzureAppServiceTest {
             .build())
         .withHostingEnvironmentProfileId("HostingEnvironmentProfileId")
         .withScmSiteAlsoStopped(true)
+        .withSecret("secret-1")
+        .withSecret("secret-2")
+        .withSecret("secret-3")
         .build();
 
     assertThat(webApp.getConfiguration().getApiManagementConfigId()).isEqualTo("withApiManagementConfigId");
@@ -359,6 +362,7 @@ public class AzureAppServiceTest {
     assertTrue(webApp.getCloningInfo().getOverwrite());
     assertThat(webApp.getHostingEnvironmentProfileId()).isEqualTo("HostingEnvironmentProfileId");
     assertTrue(webApp.getScmSiteAlsoStopped());
+    assertThat(webApp.getSecrets()).hasSize(3);
   }
 
   @Test

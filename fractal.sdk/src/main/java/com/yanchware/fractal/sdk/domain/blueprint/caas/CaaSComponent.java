@@ -27,7 +27,6 @@ public abstract class CaaSComponent extends Component {
   private Map<String, String> nodeSelectors;
   private List<Toleration> tolerations;
   private String priorityClassName;
-  private List<String> secrets;
 
   private String getNamespaceIsNullOrEmptyErrorMessage() {
     return String.format("[%s Validation] Namespace has not been defined and it is required", this.getClass().getSimpleName());
