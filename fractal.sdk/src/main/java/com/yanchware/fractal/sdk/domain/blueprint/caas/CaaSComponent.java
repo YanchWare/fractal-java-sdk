@@ -155,39 +155,6 @@ public abstract class CaaSComponent extends Component {
       component.setPriorityClassName(priorityClassName);
       return builder;
     }
-
-    /**
-     * <pre>
-     * Adds a single secret name to the component. 
-     * This secret should be defined in the environment associated with this component.</pre>
-     *
-     * @param secretName The name of the secret to add.
-     *
-     * @return The builder instance.
-     */
-    public B withSecret(String secretName) {
-      return withSecrets(List.of(secretName));
-    }
-
-    /**
-     * <pre>
-     * Adds a list of secret names to the component. 
-     * These secrets should be defined in the environment associated with this component.</pre>
-     *
-     * @param secrets The list of secret names to add.
-     *
-     * @return The builder instance.
-     */
-    public B withSecrets(List<String> secrets) {
-      if (component.getSecrets() == null) {
-        component.setSecrets(new ArrayList<>());
-      }
-      component.getSecrets().addAll(secrets);
-      return builder;
-    }
-
-    
-    
   }
   
   @Override

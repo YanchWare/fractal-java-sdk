@@ -291,8 +291,6 @@ class CaaSTraefikTest extends TestWithFixture {
                 .build()
         ))
         .withPriorityClassName(a(String.class))
-        .withSecrets(List.of("secret-1", "secret-2"))
-        .withSecret("secret-3")
         .build();
 
     var json = TestUtils.getJsonRepresentation(traefik);

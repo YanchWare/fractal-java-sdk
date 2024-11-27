@@ -89,6 +89,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
   private AzureWebAppRuntimeStack runtimeStack;
   private Map<String, List<Object>> dnsZoneConfig;
   private Collection<AzureWebAppDeploymentSlot> deploymentSlots;
+  private List<String> secrets;
 
 
   @Override
@@ -97,9 +98,9 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
   }
 
   protected AzureWebApp() {
-    
     roles = new ArrayList<>();
     deploymentSlots = new ArrayList<>();
+    secrets = new ArrayList<>();
   }
 
   @Override
