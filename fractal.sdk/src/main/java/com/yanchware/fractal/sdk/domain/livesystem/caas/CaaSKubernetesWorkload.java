@@ -29,6 +29,7 @@ public class CaaSKubernetesWorkload extends CaaSWorkload implements LiveSystemCo
     private String workloadSecretPasswordKey;
     private String serviceAccountName;
     private Boolean workloadIdentityEnabled;
+    private List<String> secrets;
 
     @Override
     public ProviderType getProvider(){

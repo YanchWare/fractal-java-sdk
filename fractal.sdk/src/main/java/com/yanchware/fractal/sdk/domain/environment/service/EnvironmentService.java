@@ -8,6 +8,7 @@ import com.yanchware.fractal.sdk.domain.environment.service.commands.*;
 import com.yanchware.fractal.sdk.domain.environment.service.dtos.EnvironmentResponse;
 import com.yanchware.fractal.sdk.domain.environment.service.dtos.InitializationRunResponse;
 import com.yanchware.fractal.sdk.domain.environment.service.dtos.InitializationRunRoot;
+import com.yanchware.fractal.sdk.domain.environment.service.dtos.SecretResponse;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.aws.AwsRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion;
@@ -290,6 +291,54 @@ public class EnvironmentService extends Service {
     return fetchCurrentInitialization(environmentId, ProviderType.OCI);
   }
 
+  public SecretResponse[] getSecrets(EnvironmentIdValue environmentId) throws InstantiatorException {
+    return executeRequestWithRetries(
+        "getSecrets",
+        environmentId.toString(),
+        client,
+        retryRegistry,
+        HttpUtils.buildGetRequest(
+            getSecretsUri(environmentId),
+            sdkConfiguration),
+        new int[]{200, 404},
+        SecretResponse[].class);
+  }
+
+  public void createSecret(EnvironmentIdValue environmentId, String secretName, String secretValue) throws InstantiatorException {
+    executeRequestWithRetries(
+        "createSecret",
+        client,
+        retryRegistry,
+        HttpUtils.buildPostRequest(
+            getSecretsUri(environmentId),
+            sdkConfiguration,
+            serializeSafely(new CreateSecretRequest(secretName, secretValue))),
+        new int[]{201});
+  }
+
+  public void updateSecret(EnvironmentIdValue environmentId, String secretName, String secretValue) throws InstantiatorException {
+    executeRequestWithRetries(
+        "updateSecret",
+        client,
+        retryRegistry,
+        HttpUtils.buildPutRequest(
+            getSecretsUri(environmentId, secretName),
+            sdkConfiguration,
+            serializeSafely(new UpdateSecretRequest(secretValue))),
+        new int[]{200});
+  }
+
+  public void deleteSecret(EnvironmentIdValue environmentId, String secretName) throws InstantiatorException {
+    executeRequestWithRetries(
+        "deleteSecret",
+        client,
+        retryRegistry,
+        HttpUtils.buildDeleteRequest(
+            getSecretsUri(environmentId, secretName),
+            sdkConfiguration),
+        new int[]{204});
+  }
+
   private InitializationRunResponse fetchCurrentInitialization(
       EnvironmentIdValue environmentId,
       ProviderType provider) throws InstantiatorException {
@@ -337,5 +386,23 @@ public class EnvironmentService extends Service {
 
   private URI getEnvironmentsUri(EnvironmentIdValue environmentId) {
     return getEnvironmentsUri(environmentId, "");
+  }
+
+  private URI getEnvironmentsSecretsUri(EnvironmentIdValue environmentId, String path) {
+    var basePath = String.format("%s/%s/%s/%s/secrets",
+        sdkConfiguration.getEnvironmentsEndpoint(),
+        environmentId.type(),
+        environmentId.ownerId(),
+        environmentId.shortName());
+
+    return getUriWithOptionalPath(basePath, path);
+  }
+
+  private URI getSecretsUri(EnvironmentIdValue environmentId, String secretName) {
+    return getEnvironmentsSecretsUri(environmentId, secretName);
+  }
+
+  private URI getSecretsUri(EnvironmentIdValue environmentId) {
+    return getEnvironmentsSecretsUri(environmentId, "");
   }
 }

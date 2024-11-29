@@ -33,6 +33,7 @@ public abstract class BaseEnvironment implements Environment, Validatable {
   private String name;
   private Collection<UUID> resourceGroups;
   private Map<String, String> tags;
+  private Collection<Secret> secrets;
   private final Map<ProviderType, CloudAgentEntity> cloudAgentByProviderType;
 
   @Override
@@ -59,6 +60,7 @@ public abstract class BaseEnvironment implements Environment, Validatable {
     this.resourceGroups = new ArrayList<>();
     this.parameters = new HashMap<>();
     this.tags = new HashMap<>();
+    this.secrets = new ArrayList<>();
     this.cloudAgentByProviderType = new HashMap<>();
   }
 
@@ -175,6 +177,37 @@ public abstract class BaseEnvironment implements Environment, Validatable {
      */
     public B withTag(String key, String value) {
       return withTags(Map.of(key, value));
+    }
+
+    /**
+     * <pre>
+     * Adds a single secret to the environment. This secret can be referenced by its name in 
+     * custom workload components that require access to sensitive information.</pre>
+     *
+     * @param secret The secret to add.
+     *
+     * @return The builder instance.
+     */
+    public B withSecret(Secret secret) {
+      return withSecrets(List.of(secret));
+    }
+
+    /**
+     * <pre>
+     * Adds a collection of secrets to the environment. These secrets can be referenced by their 
+     * names in custom workload components that require access to sensitive information.</pre>
+     *
+     * @param secrets The collection of secrets to add.
+     *
+     * @return The builder instance.
+     */
+    public B withSecrets(Collection<Secret> secrets) {
+      if (CollectionUtils.isBlank(secrets)) {
+        return builder;
+      }
+
+      environment.getSecrets().addAll(secrets);
+      return builder;
     }
 
     public T build() {

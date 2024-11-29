@@ -67,10 +67,14 @@ public class CaaSKubernetesCustomWorkloadTest {
         .withBranchName("branch-name")
         .withServiceAccountName(serviceAccountName)
         .withWorkloadIdentityEnabled(false)
+        .withSecret("secret-1")
+        .withSecret("secret-2")
+        .withSecret("secret-3")
         .build();
     
     assertThat(customWorkload.getServiceAccountName()).isEqualTo(serviceAccountName);
     assertThat(customWorkload.getWorkloadIdentityEnabled()).isFalse();
+    assertThat(customWorkload.getSecrets()).hasSize(3);
   }
 
   @Test

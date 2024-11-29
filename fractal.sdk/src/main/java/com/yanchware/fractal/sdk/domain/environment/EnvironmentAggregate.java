@@ -13,8 +13,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.http.HttpClient;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -64,6 +63,56 @@ public class EnvironmentAggregate {
     for (var operationalEnvironment : managementEnvironment.getOperationalEnvironments()) {
       initializeOperationalEnvironment(operationalEnvironment);
     }
+  }
+
+  public void manageSecrets() throws InstantiatorException {
+    manageEnvironmentSecrets(managementEnvironment.getId(), managementEnvironment.getSecrets());
+
+    for (var environment : managementEnvironment.getOperationalEnvironments()) {
+      manageEnvironmentSecrets(environment.getId(), environment.getSecrets());
+    }
+  }
+
+  private void manageEnvironmentSecrets(EnvironmentIdValue environmentId, Collection<Secret> environmentSecrets) throws InstantiatorException {
+    var existingSecrets = fetchExistingSecrets(environmentId);
+    
+    for (var secret : environmentSecrets) {
+      var secretName = secret.name();
+      var secretValue = secret.value();
+
+      if (existingSecrets.containsKey(secretName)) {
+        if (!existingSecrets.get(secretName).equals(secretValue)) {
+          log.info("Updating secret [name: '{}', environmentId: '{}']", secretName, environmentId);
+          service.updateSecret(environmentId, secretName, secretValue);
+        } else {
+          log.info("Secret is up-to-date [name: '{}', environmentId: '{}']", secretName, environmentId);
+        }
+        existingSecrets.remove(secretName);
+      } else {
+        log.info("Creating secret [name: '{}', environmentId: '{}']", secretName, environmentId);
+        service.createSecret(environmentId, secretName, secretValue);
+      }
+    }
+    
+    for (String secretName : existingSecrets.keySet()) {
+      log.info("Deleting secret [name: '{}', environmentId: '{}']", secretName, environmentId);
+
+      service.deleteSecret(environmentId, secretName);
+    }
+  }
+
+  private Map<String, String> fetchExistingSecrets(EnvironmentIdValue environmentId) throws InstantiatorException {
+    Map<String, String> existingSecrets = new HashMap<>();
+
+    var secrets = service.getSecrets(environmentId);
+
+    if (secrets != null) {
+      for (var secret : secrets) {
+        existingSecrets.put(secret.name(), secret.value());
+      }
+    }
+
+    return existingSecrets;
   }
 
   private void initializeOperationalEnvironment(OperationalEnvironment operationalEnvironment) throws InstantiatorException {

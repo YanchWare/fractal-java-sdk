@@ -4,6 +4,7 @@ import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureReg
 import com.yanchware.fractal.sdk.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -62,6 +63,31 @@ class OperationalEnvironmentTest {
 
     var jsonEnvironment = TestUtils.getJsonRepresentation(environment);
     assertThat(jsonEnvironment).isNotBlank();
+  }
+
+  @Test
+  public void noValidationErrors_when_environmentCreatedWithSecrets() {
+    var environment = OperationalEnvironment.builder()
+        .withShortName("production-001")
+        .withResourceGroup(UUID.randomUUID())
+        .withAzureSubscription(AzureRegion.WEST_EUROPE, UUID.randomUUID())
+        .withSecret(new Secret("secret-1","value-1"))
+        .withSecret(new Secret("secret-2","value-2"))
+        .withSecrets(List.of(
+            new Secret("secret-3","value-3"),
+            new Secret("secret-4","value-4")
+            ))
+        .build();
+
+    assertThat(environment.validate()).isEmpty();
+
+    var jsonEnvironment = TestUtils.getJsonRepresentation(environment);
+    assertThat(jsonEnvironment).isNotBlank();
+
+    var secrets = environment.getSecrets();
+
+    // Assert that the secrets has exactly 4 entries
+    assertThat(secrets).hasSize(4);
   }
 
   private void generateBuilderWithInfo(String shortName) {

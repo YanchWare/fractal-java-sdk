@@ -36,6 +36,10 @@ public interface CustomWorkload {
   Map<String, List<Object>> getDnsZoneConfig();
   void setDnsZoneConfig(Map<String, List<Object>> getDnsZoneConfig);
 
+  List<String> getSecrets();
+  void setSecrets(List<String> secrets);
+  
+
   static Collection<String> validateCustomWorkload(CustomWorkload customWorkload, String workloadType){
     final var SSH_KEY_PASS_SECRET_IS_EMPTY_TEMPLATE = "[%s Validation] privateSSHKeyPassphraseSecretId is either empty or blank and it is required";
     final var SSH_KEY_SECRET_IS_EMPTY_TEMPLATE = "[%s Validation] privateSSHKeySecretId is either empty or blank and it is required";
