@@ -75,8 +75,7 @@ public class EnvironmentAggregate {
 
   private void manageEnvironmentSecrets(EnvironmentIdValue environmentId, Collection<Secret> environmentSecrets) throws InstantiatorException {
     var existingSecrets = fetchExistingSecrets(environmentId);
-
-    // Create or update secrets
+    
     for (var secret : environmentSecrets) {
       var secretName = secret.name();
       var secretValue = secret.value();
@@ -94,8 +93,7 @@ public class EnvironmentAggregate {
         service.createSecret(environmentId, secretName, secretValue);
       }
     }
-
-    // Delete remaining secrets
+    
     for (String secretName : existingSecrets.keySet()) {
       log.info("Deleting secret [name: '{}', environmentId: '{}']", secretName, environmentId);
 
@@ -106,7 +104,7 @@ public class EnvironmentAggregate {
   private Map<String, String> fetchExistingSecrets(EnvironmentIdValue environmentId) throws InstantiatorException {
     Map<String, String> existingSecrets = new HashMap<>();
 
-    var secrets = service.getSecrets(environmentId); // Assuming you have a getSecrets method in EnvironmentService
+    var secrets = service.getSecrets(environmentId);
 
     if (secrets != null) {
       for (var secret : secrets) {
