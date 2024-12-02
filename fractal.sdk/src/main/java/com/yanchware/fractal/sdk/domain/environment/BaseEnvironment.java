@@ -34,6 +34,7 @@ public abstract class BaseEnvironment implements Environment, Validatable {
   private Collection<UUID> resourceGroups;
   private Map<String, String> tags;
   private Collection<Secret> secrets;
+  private Collection<CiCdProfile> ciCdProfiles;
   private final Map<ProviderType, CloudAgentEntity> cloudAgentByProviderType;
 
   @Override
@@ -61,6 +62,7 @@ public abstract class BaseEnvironment implements Environment, Validatable {
     this.parameters = new HashMap<>();
     this.tags = new HashMap<>();
     this.secrets = new ArrayList<>();
+    this.ciCdProfiles = new ArrayList<>();
     this.cloudAgentByProviderType = new HashMap<>();
   }
 
@@ -207,6 +209,31 @@ public abstract class BaseEnvironment implements Environment, Validatable {
       }
 
       environment.getSecrets().addAll(secrets);
+      return builder;
+    }
+
+    /**
+     * Adds a single CI/CD profile to the environment.
+     *
+     * @param ciCdProfile The CI/CD profile to add.
+     * @return The builder instance.
+     */
+    public B withCiCdProfile(CiCdProfile ciCdProfile) {
+      return withCiCdProfiles(List.of(ciCdProfile));
+    }
+
+    /**
+     * Adds a collection of CI/CD profiles to the environment.
+     *
+     * @param ciCdProfiles The collection of CI/CD profiles to add.
+     * @return The builder instance.
+     */
+    public B withCiCdProfiles(Collection<CiCdProfile> ciCdProfiles) {
+      if (CollectionUtils.isBlank(ciCdProfiles)) {
+        return builder;
+      }
+
+      environment.getCiCdProfiles().addAll(ciCdProfiles);
       return builder;
     }
 

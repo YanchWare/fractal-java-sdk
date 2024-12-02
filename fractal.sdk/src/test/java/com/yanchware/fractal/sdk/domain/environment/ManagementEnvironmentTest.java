@@ -236,6 +236,33 @@ class ManagementEnvironmentTest {
     assertThat(secrets).hasSize(4);
   }
 
+  @Test
+  public void noValidationErrors_when_environmentCreatedWithCiCdProfiles() {
+    var managementEnvironment = ManagementEnvironment.builder()
+        .withId(new EnvironmentIdValue(
+            EnvironmentType.PERSONAL,
+            UUID.randomUUID(),
+            "production-001"))
+        .withAzureCloudAgent(
+            AzureRegion.AUSTRALIA_CENTRAL,
+            UUID.randomUUID(),
+            UUID.randomUUID())
+        .withResourceGroup(UUID.randomUUID())
+        .withCiCdProfile(new CiCdProfile("default", "data", "pass"))
+        .withCiCdProfile(new CiCdProfile("default", "data2", "pass2"))
+        .withCiCdProfile(new CiCdProfile("custom", "data", "pass"))
+        .build();
+
+    assertThat(managementEnvironment.validate()).isEmpty();
+
+    var jsonEnvironment = TestUtils.getJsonRepresentation(managementEnvironment);
+    assertThat(jsonEnvironment).isNotBlank();
+
+    var ciCdProfiles = managementEnvironment.getCiCdProfiles();
+    
+    assertThat(ciCdProfiles).hasSize(2);
+  }
+
   private ManagementEnvironment generateBuilderWithInfo(String shortName) {
     return ManagementEnvironment.builder()
         .withId(new EnvironmentIdValue(
