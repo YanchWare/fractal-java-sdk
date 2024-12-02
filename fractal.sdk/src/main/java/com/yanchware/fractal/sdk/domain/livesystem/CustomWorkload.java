@@ -38,7 +38,9 @@ public interface CustomWorkload {
 
   List<String> getSecrets();
   void setSecrets(List<String> secrets);
-  
+
+  List<String> getCiCdProfiles();
+  void setCiCdProfiles(List<String> ciCdProfiles);
 
   static Collection<String> validateCustomWorkload(CustomWorkload customWorkload, String workloadType){
     final var SSH_KEY_PASS_SECRET_IS_EMPTY_TEMPLATE = "[%s Validation] privateSSHKeyPassphraseSecretId is either empty or blank and it is required";

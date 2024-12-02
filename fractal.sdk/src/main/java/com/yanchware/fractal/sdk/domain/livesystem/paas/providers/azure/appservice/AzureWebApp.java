@@ -90,6 +90,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
   private Map<String, List<Object>> dnsZoneConfig;
   private Collection<AzureWebAppDeploymentSlot> deploymentSlots;
   private List<String> secrets;
+  private List<String> ciCdProfiles;
 
 
   @Override
