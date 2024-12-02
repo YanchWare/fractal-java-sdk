@@ -155,4 +155,28 @@ public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload
     component.getSecrets().addAll(secrets);
     return builder;
   }
+
+  /**
+   * Adds a single CI/CD profile name to the component.
+   *
+   * @param profileName The name of the CI/CD profile to add.
+   * @return The builder instance.
+   */
+  public B withCiCdProfile(String profileName) {
+    return withCiCdProfiles(List.of(profileName));
+  }
+
+  /**
+   * Adds a list of CI/CD profile names to the component.
+   *
+   * @param profileNames The list of CI/CD profile names to add.
+   * @return The builder instance.
+   */
+  public B withCiCdProfiles(List<String> profileNames) {
+    if (component.getCiCdProfiles() == null) {
+      component.setCiCdProfiles(new ArrayList<>());
+    }
+    component.getCiCdProfiles().addAll(profileNames);
+    return builder;
+  }
 }
