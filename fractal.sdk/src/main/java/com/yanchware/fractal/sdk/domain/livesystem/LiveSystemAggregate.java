@@ -144,4 +144,8 @@ public class LiveSystemAggregate implements Validatable {
 
         return errors;
     }
+
+    public void delete() throws InstantiatorException {
+        service.deleteLiveSystem(getId().toString());
+    }
 }

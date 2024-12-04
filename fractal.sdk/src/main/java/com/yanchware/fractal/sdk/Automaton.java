@@ -93,7 +93,7 @@ public class Automaton {
    * @throws InstantiatorException if an error occurs during instantiation
    */
   public void instantiate(List<LiveSystemAggregate> liveSystems) throws InstantiatorException {
-    for (LiveSystemAggregate liveSystem : liveSystems) {
+    for (var liveSystem : liveSystems) {
       instantiateLiveSystem(liveSystem);
     }
   }
@@ -110,7 +110,7 @@ public class Automaton {
   {
     var liveSystemsMutations = new ArrayList<ImmutablePair<LiveSystemAggregate, LiveSystemMutationDto>>();
 
-    for (LiveSystemAggregate liveSystem : liveSystems) {
+    for (var liveSystem : liveSystems) {
       liveSystemsMutations.add(new ImmutablePair<>(liveSystem, instantiateLiveSystem(liveSystem)));
     }
 
@@ -120,6 +120,22 @@ public class Automaton {
                 liveSystemMutation.getKey(),
                 liveSystemMutation.getValue());
       }
+    }
+  }
+
+  /**
+   * Delete the live systems identified by the list of ids in input.
+   *
+   * @param liveSystemIds the list of ids of the live systems to be deleted
+   * @throws InstantiatorException if an error occurs during deletion
+   */
+  public void delete(List<LiveSystemIdValue> liveSystemIds) throws InstantiatorException {
+    for (var liveSystemId : liveSystemIds) {
+      var liveSystemAggregate = getLiveSystemBuilder()
+              .withId(liveSystemId)
+              .withStandardProvider(ProviderType.OCI)
+              .build();
+      liveSystemAggregate.delete();
     }
   }
 
