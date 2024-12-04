@@ -133,7 +133,8 @@ public class Automaton {
     for (var liveSystemId : liveSystemIds) {
       var liveSystemAggregate = getLiveSystemBuilder()
               .withId(liveSystemId)
-              .withStandardProvider(ProviderType.OCI)
+              // This is ignored for deletion.
+              .withStandardProvider(ProviderType.SAAS)
               .build();
       liveSystemAggregate.delete();
     }
