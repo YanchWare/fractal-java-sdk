@@ -52,7 +52,7 @@ import static com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.A
 import static com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureStorageAutoGrow.ENABLED;
 import static com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.appservice.valueobjects.AzureSkuName.B_GEN5_1;
 import static com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GcpMachine.E2_STANDARD2;
-import static com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GcpRegion.EU_WEST1;
+import static com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GcpRegion.EUROPE_WEST1;
 import static com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciRegion.EU_ZURICH_1;
 import static java.util.stream.Collectors.toSet;
 
@@ -139,7 +139,7 @@ public class TestUtils {
         .withId("gke-1")
         .withDescription("Test GKE cluster")
         .withDisplayName("GKE #1")
-        .withRegion(EU_WEST1)
+        .withRegion(EUROPE_WEST1)
         .withNetworkName("network-host")
         .withSubnetworkName("compute-tier-1")
         .withPodsRangeName("tier-1-pods")
@@ -300,7 +300,7 @@ public class TestUtils {
         .withId("dbpg")
         .withDescription("PostgreSQL")
         .withDisplayName("PostgreSQL")
-        .withRegion(EU_WEST1)
+        .withRegion(EUROPE_WEST1)
         .withNetwork("network")
         .withPeeringNetworkAddress("address")
         .withPeeringNetworkAddressDescription("address-desc")
@@ -384,7 +384,7 @@ public class TestUtils {
   public static GoogleKubernetesEngineBuilder getDefaultGke() {
     return GoogleKubernetesEngine.builder()
         .withId(ComponentId.from("test"))
-        .withRegion(EU_WEST1)
+        .withRegion(EUROPE_WEST1)
         .withNodePool(GcpNodePool.builder()
             .withName("gke")
             .withMachineType(E2_STANDARD2)

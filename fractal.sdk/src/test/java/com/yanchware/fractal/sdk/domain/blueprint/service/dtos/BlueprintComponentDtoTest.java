@@ -214,16 +214,14 @@ public class BlueprintComponentDtoTest {
         .containsExactlyInAnyOrder(
             gke.getNetworkName(),
             gke.getPodsRangeName(),
-            gke.getRegion().getId(),
+            gke.getRegion(),
             gke.getServicesRangeName(),
             gke.getSubnetworkName(),
             gke.getNodePools(),
             gke.getServiceIpRange(),
             gke.getPodIpRange(),
             gke.getSubnetworkIpRange(),
-            gke.getPriorityClasses()
-            //gke.getPodManagedIdentity()
-        ));
+            gke.getPriorityClasses()));
   }
 
   @Test
@@ -294,7 +292,7 @@ public class BlueprintComponentDtoTest {
     assertSoftly(softly -> {
       softly.assertThat(gcpPgBlueprintCompDto.getParameters().values()).as("Component Parameters")
           .containsExactlyInAnyOrder(
-              gcpPostgres.getRegion().getId(),
+              gcpPostgres.getRegion(),
               gcpPostgres.getNetwork(),
               gcpPostgres.getPeeringNetworkAddress(),
               gcpPostgres.getPeeringNetworkAddressDescription(),

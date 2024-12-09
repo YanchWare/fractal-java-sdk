@@ -1,58 +1,74 @@
 package com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp;
 
-import com.fasterxml.jackson.annotation.JsonValue;
-import org.apache.commons.lang3.NotImplementedException;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.yanchware.fractal.sdk.utils.ExtendableEnum;
 
 import java.util.Collection;
 
-public enum GcpRegion {
-  EAST_US1("us-east1"),
-  EAST_US4("us-east4"),
-  CENTRAL_US1("us-central1"),
-  US_WEST1("us-west1"),
-  EU_WEST4("europe-west4"),
-  EU_WEST1("europe-west1"),
-  EU_WEST3("europe-west3"),
-  EU_WEST2("europe-west2"),
-  EAST_ASIA1("asia-east1"),
-  SOUTHEAST_ASIA1("asia-southeast1"),
-  ASIA_NORTHEAST1("asia-northeast1-b"),
-  ASIA_SOUTH1("asia-south1"),
-  AUSTRALIA_SOUTHEAST1("australia-southeast1"),
-  SOUTH_AMERICAEAST1("southamerica-east1"),
-  EAST_ASIA2("asia-east2"),
-  ASIA_NORTHEAST2("asia-northeast2"),
-  ASIA_NORTHEAST3("asia-northeast3"),
-  ASIA_SOUTH2("asia-south2"),
-  SOUTHEAST_ASIA2("asia-southeast2"),
-  AUSTRALIA_SOUTHEAST2("australia-southeast2"),
-  EU_CENTRAL2("europe-central2"),
-  EU_NORTH1("europe-north1"),
-  EU_WEST6("europe-west6"),
-  NORTHAMERICA_NORTHEAST1("northamerica-northeast1"),
-  NORTHAMERICA_NORTHEAST2("northamerica-northeast2"),
-  US_WEST2("us-west2"),
-  US_WEST3("us-west3"),
-  US_WEST4("us-west4");
+/**
+ * Choose the GCP region that's right for you and your customers
+ */
+public class GcpRegion extends ExtendableEnum<GcpRegion> {
 
-  private final String id;
+    public static final GcpRegion AFRICA_SOUTH1 = fromString("africa-south1");
+    public static final GcpRegion ASIA_EAST1 = fromString("asia-east1");
+    public static final GcpRegion ASIA_EAST2 = fromString("asia-east2");
+    public static final GcpRegion ASIA_NORTHEAST1 = fromString("asia-northeast1-b");
+    public static final GcpRegion ASIA_NORTHEAST2 = fromString("asia-northeast2");
+    public static final GcpRegion ASIA_NORTHEAST3 = fromString("asia-northeast3");
+    public static final GcpRegion ASIA_SOUTH1 = fromString("asia-south1");
+    public static final GcpRegion ASIA_SOUTH2 = fromString("asia-south2");
+    public static final GcpRegion ASIA_SOUTHEAST1 = fromString("asia-southeast1");
+    public static final GcpRegion ASIA_SOUTHEAST2 = fromString("asia-southeast2");
+    public static final GcpRegion AUSTRALIA_SOUTHEAST1 = fromString("australia-southeast1");
+    public static final GcpRegion AUSTRALIA_SOUTHEAST2 = fromString("australia-southeast2");
+    public static final GcpRegion EUROPE_CENTRAL2 = fromString("europe-central2");
+    public static final GcpRegion EUROPE_NORTH1 = fromString("europe-north1");
+    public static final GcpRegion EUROPE_SOUTHWEST1 = fromString("europe-southwest1");
+    public static final GcpRegion EUROPE_WEST1 = fromString("europe-west1");
+    public static final GcpRegion EUROPE_WEST10 = fromString("europe-west10");
+    public static final GcpRegion EUROPE_WEST12 = fromString("europe-west12");
+    public static final GcpRegion EUROPE_WEST2 = fromString("europe-west2");
+    public static final GcpRegion EUROPE_WEST3 = fromString("europe-west3");
+    public static final GcpRegion EUROPE_WEST4 = fromString("europe-west4");
+    public static final GcpRegion EUROPE_WEST6 = fromString("europe-west6");
+    public static final GcpRegion EUROPE_WEST8 = fromString("europe-west8");
+    public static final GcpRegion EUROPE_WEST9 = fromString("europe-west9");
+    public static final GcpRegion ME_CENTRAL1 = fromString("me-central1");
+    public static final GcpRegion ME_CENTRAL2 = fromString("me-central2");
+    public static final GcpRegion ME_WEST1 = fromString("me-west1");
+    public static final GcpRegion NORTHAMERICA_NORTHEAST1 = fromString("northamerica-northeast1");
+    public static final GcpRegion NORTHAMERICA_NORTHEAST2 = fromString("northamerica-northeast2");
+    public static final GcpRegion NORTHAMERICA_SOUTH1 = fromString("northamerica-south1");
+    public static final GcpRegion SOUTHAMERICA_EAST1 = fromString("southamerica-east1");
+    public static final GcpRegion SOUTHAMERICA_WEST1 = fromString("southamerica-west1");
+    public static final GcpRegion US_CENTRAL1 = fromString("us-central1");
+    public static final GcpRegion US_EAST1 = fromString("us-east1");
+    public static final GcpRegion US_EAST4 = fromString("us-east4");
+    public static final GcpRegion US_EAST5 = fromString("us-east5");
+    public static final GcpRegion US_SOUTH1 = fromString("us-south1");
+    public static final GcpRegion US_WEST1 = fromString("us-west1");
+    public static final GcpRegion US_WEST2 = fromString("us-west2");
+    public static final GcpRegion US_WEST3 = fromString("us-west3");
+    public static final GcpRegion US_WEST4 = fromString("us-west4");
 
-  private GcpRegion(final String id) {
-    this.id = id;
-  }
+    /**
+     * Creates or finds a GcpRegion from its string representation.
+     *
+     * @param name a name to look for.
+     * @return the corresponding AwsRegion.
+     */
+    @JsonCreator
+    public static GcpRegion fromString(String name) {
+        return fromString(name, GcpRegion.class);
+    }
 
-  public Collection<GcpZone> getZones() {
-    // TODO: Implement
-    throw new NotImplementedException("GcpZone.getZones() - Not implemented");
-  }
-
-  @JsonValue
-  public String getId() {
-    return id;
-  }
-
-  @Override
-  public String toString() {
-    return id;
-  }
+    /**
+     * Gets known GcpRegion values.
+     *
+     * @return known GcpRegion values.
+     */
+    public static Collection<GcpRegion> values() {
+        return values(GcpRegion.class);
+    }
 }
