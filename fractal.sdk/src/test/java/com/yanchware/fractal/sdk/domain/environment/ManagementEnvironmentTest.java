@@ -177,7 +177,7 @@ class ManagementEnvironmentTest {
         .withResourceGroup(UUID.randomUUID())
         .withAwsCloudAgent(AwsRegion.EU_NORTH_1, UUID.randomUUID().toString(), UUID.randomUUID().toString())
         .withAzureCloudAgent(AzureRegion.WEST_EUROPE, UUID.randomUUID(), UUID.randomUUID())
-        .withGcpCloudAgent(GcpRegion.EU_WEST1, UUID.randomUUID().toString(), UUID.randomUUID().toString())
+        .withGcpCloudAgent(GcpRegion.EUROPE_WEST1, UUID.randomUUID().toString(), UUID.randomUUID().toString())
         .withOciCloudAgent(OciRegion.EU_ZURICH_1, UUID.randomUUID().toString(), UUID.randomUUID().toString())
         .withDnsZone(
             DnsZone.builder()

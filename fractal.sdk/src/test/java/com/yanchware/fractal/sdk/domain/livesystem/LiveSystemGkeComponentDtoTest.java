@@ -59,7 +59,7 @@ class LiveSystemGkeComponentDtoTest extends LiveSystemKubernetesComponentDtoTest
                         gke.getPodIpRange(),
                         gke.getPodsRangeName(),
                         gke.getPriorityClasses(),
-                        gke.getRegion().getId(),
+                        gke.getRegion(),
                         gke.getServiceIpRange(),
                         gke.getServicesRangeName(),
                         gke.getSubnetworkIpRange(),

@@ -314,7 +314,7 @@ class EnvironmentServiceTest {
     // When
     CloudAgentEntity cloudAgent = new GcpCloudAgent(
         mockEnvironment.getId(),
-        GcpRegion.EU_WEST1,
+        GcpRegion.EUROPE_WEST1,
         "organizationId",
         "projectId",
         Collections.emptyMap());
