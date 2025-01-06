@@ -6,6 +6,7 @@ plugins {
     `maven-publish`
     id("com.vanniktech.maven.publish") version "0.30.0"
     id("com.adarshr.test-logger") version "4.0.0"
+    id("com.mikepenz.aboutlibraries.plugin") version "11.4.0-b01"
 }
 
 group="com.yanchware"
