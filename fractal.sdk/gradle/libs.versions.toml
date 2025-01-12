@@ -20,6 +20,7 @@ org-junit-pioneer-junit-pioneer = "2.2.0"
 org-projectlombok-lombok = "1.18.34"
 org-slf4j-slf4j-api = "2.0.16"
 org-wiremock-wiremock = "3.9.1"
+mockito-core = "3.+"
 
 [libraries]
 ch-qos-logback-logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "ch-qos-logback-logback-classic" }
@@ -40,3 +41,4 @@ org-junit-pioneer-junit-pioneer = { module = "org.junit-pioneer:junit-pioneer", 
 org-projectlombok-lombok = { module = "org.projectlombok:lombok", version.ref = "org-projectlombok-lombok" }
 org-slf4j-slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "org-slf4j-slf4j-api" }
 org-wiremock-wiremock = { module = "org.wiremock:wiremock", version.ref = "org-wiremock-wiremock" }
+org-mockito-mockito-core = { module = "org.mockito:mockito-core", version.ref = "mockito-core" }

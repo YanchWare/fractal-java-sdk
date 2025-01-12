@@ -1,18 +1,16 @@
 package com.yanchware.fractal.sdk.domain.environment;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
+import com.yanchware.fractal.sdk.domain.environment.service.EnvironmentService;
 import com.yanchware.fractal.sdk.domain.environment.service.EnvironmentService;
 import com.yanchware.fractal.sdk.domain.environment.service.dtos.EnvironmentResponse;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.utils.SerializationUtils;
-import io.github.resilience4j.retry.RetryRegistry;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
-import java.net.http.HttpClient;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -27,16 +25,12 @@ public class EnvironmentAggregate {
   @Getter
   private ManagementEnvironment managementEnvironment;
 
-  public EnvironmentAggregate(
-      HttpClient client,
-      SdkConfiguration sdkConfiguration,
-      RetryRegistry retryRegistry) {
-    this.service = new EnvironmentService(client, sdkConfiguration, retryRegistry);
+  public EnvironmentAggregate(EnvironmentService environmentService) {
+    this.service = environmentService;
   }
 
   public void createOrUpdate() throws InstantiatorException {
     var managementEnvironmentId = managementEnvironment.getId();
-
 
     var existingEnvironment = service.fetch(managementEnvironmentId);
     if (existingEnvironment != null) {
