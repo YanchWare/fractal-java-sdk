@@ -74,19 +74,14 @@ public class EnvironmentAggregate {
   }
 
   private void manageEnvironmentSecrets(EnvironmentIdValue environmentId, Collection<Secret> environmentSecrets) throws InstantiatorException {
-    var existingSecrets = fetchExistingSecrets(environmentId);
+    var existingSecrets = fetchExistingSecretIds(environmentId);
     
     for (var secret : environmentSecrets) {
       var secretName = secret.name();
       var secretValue = secret.value();
 
-      if (existingSecrets.containsKey(secretName)) {
-        if (!existingSecrets.get(secretName).equals(secretValue)) {
-          log.info("Updating secret [name: '{}', environmentId: '{}']", secretName, environmentId);
-          service.updateSecret(environmentId, secretName, secretValue);
-        } else {
-          log.info("Secret is up-to-date [name: '{}', environmentId: '{}']", secretName, environmentId);
-        }
+      if (existingSecrets.contains(secretName)) {
+        service.updateSecret(environmentId, secretName, secretValue);
         existingSecrets.remove(secretName);
       } else {
         log.info("Creating secret [name: '{}', environmentId: '{}']", secretName, environmentId);
@@ -94,24 +89,22 @@ public class EnvironmentAggregate {
       }
     }
     
-    for (String secretName : existingSecrets.keySet()) {
-      log.info("Deleting secret [name: '{}', environmentId: '{}']", secretName, environmentId);
-
+    for (String secretName : existingSecrets) {
+      log.info("Deleting secret [name: '{}', environmentId: '{}'] as it is not present any longer on the live environment definition", secretName, environmentId);
       service.deleteSecret(environmentId, secretName);
     }
   }
 
-  private Map<String, String> fetchExistingSecrets(EnvironmentIdValue environmentId) throws InstantiatorException {
-    Map<String, String> existingSecrets = new HashMap<>();
+  private List<String> fetchExistingSecretIds(EnvironmentIdValue environmentId) throws InstantiatorException {
+    List<String> existingSecrets = new ArrayList<>();
 
     var secrets = service.getSecrets(environmentId);
 
     if (secrets != null) {
       for (var secret : secrets) {
-        existingSecrets.put(secret.name(), secret.value());
+        existingSecrets.add(secret.name());
       }
     }
-
     return existingSecrets;
   }
 
