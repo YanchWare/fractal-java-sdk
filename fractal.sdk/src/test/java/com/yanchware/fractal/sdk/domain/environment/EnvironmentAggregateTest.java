@@ -32,17 +32,8 @@ class EnvironmentAggregateTest {
             "production-001");
     var managementEnvironment = ManagementEnvironment.builder()
             .withId(envId)
-            .withAzureCloudAgent(
-                    AzureRegion.AUSTRALIA_CENTRAL,
-                    UUID.randomUUID(),
-                    UUID.randomUUID())
             .withResourceGroup(UUID.randomUUID())
-            .withSecret(new Secret("secret-1", "value-1"))
-            .withSecret(new Secret("secret-2", "value-2"))
-            .withSecrets(List.of(
-                    new Secret("secret-3", "value-3"),
-                    new Secret("secret-4", "value-4")
-            )).build();
+            .build();
     aggregate.setManagementEnvironment(managementEnvironment);
 
     var secrets = new SecretResponse[]{
