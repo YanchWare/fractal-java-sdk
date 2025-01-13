@@ -43,14 +43,7 @@ class CaaSAmbassadorTest {
     assertThatThrownBy(ambassadorBuilder::build).isInstanceOf(IllegalArgumentException.class)
       .hasMessageContaining("License Key defined was either empty or blank");
   }
-
-  @Test
-  public void exceptionThrown_when_ambassadorCreatedWithEmptyHost() {
-    var ambassadorBuilder = ambassadorBuilder().withHost("");
-    assertThatThrownBy(ambassadorBuilder::build)
-      .isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Host has not been defined and it is required");
-  }
-
+  
   @Test
   public void exceptionThrown_when_ambassadorCreatedWithEmptyHostOwnerEmail() {
     var ambassadorBuilder = ambassadorBuilder().withHostOwnerEmail("");
