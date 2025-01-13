@@ -36,6 +36,7 @@ dependencies {
     testImplementation(libs.org.wiremock.wiremock)
     testImplementation(libs.org.assertj.assertj.core)
     testImplementation(libs.com.flextrade.jfixture.jfixture)
+    testImplementation(libs.org.mockito.mockito.core)
     compileOnly(libs.org.projectlombok.lombok)
     annotationProcessor(libs.org.projectlombok.lombok)
     testCompileOnly(libs.org.projectlombok.lombok)
