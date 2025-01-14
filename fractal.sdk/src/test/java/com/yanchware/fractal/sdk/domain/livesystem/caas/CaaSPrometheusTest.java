@@ -35,16 +35,12 @@ class CaaSPrometheusTest {
 
     assertThatThrownBy(prometheusBuilder::build)
       .isInstanceOf(IllegalArgumentException.class)
-      .hasMessageContainingAll("[CaaSPrometheus Validation] ContainerPlatform defined was either empty or blank and it is required", "[CaaSPrometheus Validation] API Gateway URL has not been defined and it is required");
+      .hasMessageContainingAll("[CaaSPrometheus Validation] ContainerPlatform defined was either empty or blank and it is required");
   }
 
   @Test
-  public void exceptionThrown_when_ambassadorCreatedWithEmptyApiGatewayUrl() {
-    var prometheusBuilder = prometheusBuilder().withApiGatewayUrl("");
-
-    assertThatThrownBy(prometheusBuilder::build)
-      .isInstanceOf(IllegalArgumentException.class)
-      .hasMessageContaining("API Gateway URL has not been defined and it is required");
+  public void noValidationErrors_when_ambassadorCreatedWithEmptyApiGatewayUrl() {
+    assertThat(prometheusBuilder().withApiGatewayUrl("").build().validate()).isEmpty();
   }
 
   @Test

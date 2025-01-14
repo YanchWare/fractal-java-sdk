@@ -34,6 +34,7 @@ class EnvironmentAggregateTest {
             .withId(envId)
             .withResourceGroup(UUID.randomUUID())
             .build();
+
     aggregate.setManagementEnvironment(managementEnvironment);
 
     var secrets = new SecretResponse[]{
