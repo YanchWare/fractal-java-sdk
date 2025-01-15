@@ -4,6 +4,12 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum ComponentType {
   UNKNOWN("Unknown"),
+  IAAS_NETWORK("NetworkAndCompute.IaaS.Network"),
+  IAAS_SUBNET("NetworkAndCompute.IaaS.Subnet"),
+  IAAS_VIRTUAL_MACHINE("NetworkAndCompute.IaaS.VirtualMachine"),
+  IAAS_NAT_GATEWAY("NetworkAndCompute.IaaS.NatGateway"),
+  IAAS_ROUTE_TABLE("NetworkAndCompute.IaaS.RouteTable"),
+  IAAS_SECURITY_GROUP("NetworkAndCompute.IaaS.SecurityGroup"),
 
   CAAS_WORKLOAD("CustomWorkloads.CaaS.Workload"),
   CAAS_K8S_WORKLOAD("CustomWorkloads.CaaS.KubernetesWorkload"),

@@ -78,6 +78,7 @@ public class CaaSElasticLogging extends CaaSLoggingImpl implements LiveSystemCom
      * If true, APM will be instantiated part of the elastic logging solution
      * <p>
      * For more details check <a href="https://www.elastic.co/guide/en/apm/guide/current/index.html">APM documentation</a>
+     * </p>
      *
      * @param isApmRequired
      */
@@ -90,6 +91,7 @@ public class CaaSElasticLogging extends CaaSLoggingImpl implements LiveSystemCom
      * If true, Kibana will be instantiated part of the elastic logging solution
      * <p>
      * For more details check <a href="https://www.elastic.co/guide/en/kibana/index.html">Kibana documentation</a>
+     * </p>
      *
      * @param isKibanaRequired
      */
@@ -123,6 +125,7 @@ public class CaaSElasticLogging extends CaaSLoggingImpl implements LiveSystemCom
      * Storage that will be used for PersistentVolumeClaim
      * <p>
      * For more details check <a href="https://www.elastic.co/guide/en/cloud-on-k8s/master/k8s-volume-claim-templates.html">Elastic documentation</a>
+     * </p>
      *
      * @param storage
      */
@@ -135,8 +138,10 @@ public class CaaSElasticLogging extends CaaSLoggingImpl implements LiveSystemCom
      * Storage class name that will be used for PersistentVolumeClaim
      * <p>
      * Default: 'standard'
+     * </p>
      * <p>
      * For more details check <a href="https://www.elastic.co/guide/en/cloud-on-k8s/master/k8s-volume-claim-templates.html">Elastic documentation</a>
+     * </p>
      *
      * @param storageClassName
      */
@@ -150,6 +155,7 @@ public class CaaSElasticLogging extends CaaSLoggingImpl implements LiveSystemCom
      * Default: '8'
      * <p>
      * For more details check <a href="https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-managing-compute-resources.html#k8s-compute-resources-elasticsearch">Elastic documentation</a>
+     * </p>
      *
      * @param memory
      */
@@ -163,6 +169,7 @@ public class CaaSElasticLogging extends CaaSLoggingImpl implements LiveSystemCom
      * Default: '8'
      * <p>
      * For more details check <a href="https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-managing-compute-resources.html#k8s-compute-resources-elasticsearch">Elastic documentation</a>
+     * </p>
      *
      * @param cpu
      */

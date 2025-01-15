@@ -106,7 +106,7 @@ public class CaaSElasticDataStore extends CaaSSearchImpl implements LiveSystemCo
      * Storage that will be used for PersistentVolumeClaim
      * <p>
      * For more details check <a href="https://www.elastic.co/guide/en/cloud-on-k8s/master/k8s-volume-claim-templates.html">Elastic documentation</a>
-     *
+     * </p>
      * @param storage
      */
     public ElasticDataStoreBuilder withStorage(String storage) {
@@ -118,8 +118,10 @@ public class CaaSElasticDataStore extends CaaSSearchImpl implements LiveSystemCo
      * Storage class name that will be used for PersistentVolumeClaim
      * <p>
      * Default: 'standard'
+     * </p>
      * <p>
      * For more details check <a href="https://www.elastic.co/guide/en/cloud-on-k8s/master/k8s-volume-claim-templates.html">Elastic documentation</a>
+     * </p>
      *
      * @param storageClassName
      */
@@ -133,6 +135,7 @@ public class CaaSElasticDataStore extends CaaSSearchImpl implements LiveSystemCo
      * Default: '8'
      * <p>
      * For more details check <a href="https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-managing-compute-resources.html#k8s-compute-resources-elasticsearch">Elastic documentation</a>
+     * </p>
      *
      * @param memory
      */
@@ -146,6 +149,7 @@ public class CaaSElasticDataStore extends CaaSSearchImpl implements LiveSystemCo
      * Default: '8'
      * <p>
      * For more details check <a href="https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-managing-compute-resources.html#k8s-compute-resources-elasticsearch">Elastic documentation</a>
+     * </p>
      *
      * @param cpu
      */

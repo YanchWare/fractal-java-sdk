@@ -66,6 +66,7 @@ public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload
    * AppRoleAssignment or other custom role.
    * <p>
    * See {@link com.yanchware.fractal.sdk.domain.livesystem.caas.RoleType RoleType} for all role types supported
+   * </p>
    *
    * @param role
    */
@@ -78,6 +79,7 @@ public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload
    * AppRoleAssignment or other custom role.
    * <p>
    * See {@link com.yanchware.fractal.sdk.domain.livesystem.caas.RoleType RoleType} for all role types supported
+   * </p>
    *
    * @param roles
    */

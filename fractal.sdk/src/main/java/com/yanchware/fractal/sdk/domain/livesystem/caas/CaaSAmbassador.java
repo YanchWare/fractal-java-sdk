@@ -77,6 +77,7 @@ public class CaaSAmbassador extends CaaSAPIGatewayImpl {
      * Ambassador hostname
      * <p>
      * For more details please check <a href="https://www.getambassador.io/docs/edge-stack/latest/topics/running/tls#host">Ambassador documentation</a>
+     * </p>
      *
      * @param host
      */
@@ -89,6 +90,7 @@ public class CaaSAmbassador extends CaaSAPIGatewayImpl {
      * Ambassador host owner email used for ACME TLS
      * <p>
      * For more details please check <a href="https://www.getambassador.io/docs/edge-stack/latest/topics/running/tls#host">Ambassador documentation</a>
+     * </p>
      *
      * @param hostOwnerEmail
      */

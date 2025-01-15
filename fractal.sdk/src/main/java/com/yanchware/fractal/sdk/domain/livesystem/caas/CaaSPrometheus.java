@@ -68,6 +68,7 @@ public class CaaSPrometheus extends CaaSMonitoringImpl implements LiveSystemComp
      * <i>api.yourdomain.com</i>, then Prometheus can be accessed at <i>api.yourdomain.com/prometheus</i>.
      * <p>
      * This applies for all components available (Kibana, Grafana, Alert Manager)
+     * </p>
      *
      * @param apiGatewayUrl
      */
