@@ -13,15 +13,15 @@ import java.util.Collection;
 public final class AzureState extends ExtendableEnum<AzureState> {
 
   public static final AzureState PROVISIONING = fromString("Provisioning");
-  
+
   public static final AzureState DEPROVISIONING = fromString("Deprovisioning");
-  
+
   public static final AzureState SUCCEEDED = fromString("Succeeded");
-  
+
   public static final AzureState FAILED = fromString("Failed");
-  
+
   public static final AzureState NETWORK_SOURCE_DELETED = fromString("NetworkSourceDeleted");
-  
+
 
   /**
    * Creates or finds a State from its string representation.

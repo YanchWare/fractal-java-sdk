@@ -23,16 +23,19 @@ import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLengt
 @Setter
 public class AzureWebAppDeploymentSlot implements Validatable {
 
-  private final static String RUNTIME_STACK_AND_OPERATING_SYSTEM_MISMATCH_PATTERN = "[AzureWebAppDeploymentSlot Validation] The Runtime Stack and Operating System mismatches. Please choose %s or change Operating System to %s";
-  private final static String NAME_NOT_VALID = "[AzureWebAppDeploymentSlot Validation] The name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen, and must be between 2 and 59 characters";
-  private final static String CUSTOM_DOMAIN_NOT_VALID = "[AzureWebAppDeploymentSlot Validation] The CustomDomain must contain at least one period, cannot start or end with a period. CustomDomain are made up of letters, numbers, periods, and dashes.";
-  private final static String RUNTIME_STACK_IS_EMPTY = "[AzureWebAppDeploymentSlot Validation] The Runtime Stack is either empty or blank and it is required";
-  private final static String OPERATING_SYSTEM_IS_EMPTY = "[AzureWebAppDeploymentSlot Validation] The Operating System is either empty or blank and it is required";
-
-  
-
   @JsonIgnore
   public static final String TAG_KEY_IS_BLANK = "Tag key cannot be null or empty";
+  private final static String RUNTIME_STACK_AND_OPERATING_SYSTEM_MISMATCH_PATTERN = "[AzureWebAppDeploymentSlot " +
+    "Validation] The Runtime Stack and Operating System mismatches. Please choose %s or change Operating System to %s";
+  private final static String NAME_NOT_VALID = "[AzureWebAppDeploymentSlot Validation] The name only allow " +
+    "alphanumeric characters and hyphens, cannot start or end in a hyphen, and must be between 2 and 59 characters";
+  private final static String CUSTOM_DOMAIN_NOT_VALID = "[AzureWebAppDeploymentSlot Validation] The CustomDomain must" +
+    " contain at least one period, cannot start or end with a period. CustomDomain are made up of letters, numbers, " +
+    "periods, and dashes.";
+  private final static String RUNTIME_STACK_IS_EMPTY = "[AzureWebAppDeploymentSlot Validation] The Runtime Stack is " +
+    "either empty or blank and it is required";
+  private final static String OPERATING_SYSTEM_IS_EMPTY = "[AzureWebAppDeploymentSlot Validation] The Operating " +
+    "System is either empty or blank and it is required";
   private static final String TAG_VALUE_INVALID_FORMAT = "Tag value for key '%s' cannot be null or empty";
 
   private String name;
@@ -64,7 +67,7 @@ public class AzureWebAppDeploymentSlot implements Validatable {
   private Collection<String> customDomains;
   private AzureOsType operatingSystem;
   private AzureWebAppRuntimeStack runtimeStack;
-  
+
 
   AzureWebAppDeploymentSlot() {
     cloneSettingsFromWebApp = true;
@@ -78,7 +81,7 @@ public class AzureWebAppDeploymentSlot implements Validatable {
   public Collection<String> validate() {
     Collection<String> errors = new ArrayList<>();
 
-    if(!this.cloneSettingsFromWebApp) {
+    if (!this.cloneSettingsFromWebApp) {
 
 
       if (configuration == null && operatingSystem == null) {
@@ -91,14 +94,15 @@ public class AzureWebAppDeploymentSlot implements Validatable {
     }
 
     if (configuration != null
-        && StringUtils.isBlank(configuration.getDotnetVersion())
-        && StringUtils.isBlank(configuration.getJavaVersion())
-        && StringUtils.isBlank(configuration.getJavaContainerVersion())
-        && StringUtils.isBlank(configuration.getLinuxFxVersion())
-        && StringUtils.isBlank(configuration.getNodeVersion())
-        && StringUtils.isBlank(configuration.getPhpVersion())
-        && StringUtils.isBlank(configuration.getPythonVersion())
-        && StringUtils.isBlank(configuration.getWindowsFxVersion())) {
+      && StringUtils.isBlank(configuration.getDotnetVersion())
+      && StringUtils.isBlank(configuration.getJavaVersion())
+      && StringUtils.isBlank(configuration.getJavaContainerVersion())
+      && StringUtils.isBlank(configuration.getLinuxFxVersion())
+      && StringUtils.isBlank(configuration.getNodeVersion())
+      && StringUtils.isBlank(configuration.getPhpVersion())
+      && StringUtils.isBlank(configuration.getPythonVersion())
+      && StringUtils.isBlank(configuration.getWindowsFxVersion()))
+    {
 
       if (operatingSystem == null) {
         errors.add(OPERATING_SYSTEM_IS_EMPTY);
@@ -110,13 +114,17 @@ public class AzureWebAppDeploymentSlot implements Validatable {
     }
 
     if (operatingSystem == AzureOsType.LINUX
-        && runtimeStack instanceof AzureWebAppWindowsRuntimeStack) {
-      errors.add(String.format(RUNTIME_STACK_AND_OPERATING_SYSTEM_MISMATCH_PATTERN, "AzureWebAppLinuxRuntimeStack", "WINDOWS"));
+      && runtimeStack instanceof AzureWebAppWindowsRuntimeStack)
+    {
+      errors.add(String.format(RUNTIME_STACK_AND_OPERATING_SYSTEM_MISMATCH_PATTERN, "AzureWebAppLinuxRuntimeStack",
+        "WINDOWS"));
     }
 
     if (operatingSystem == AzureOsType.WINDOWS
-        && runtimeStack instanceof AzureWebAppLinuxRuntimeStack) {
-      errors.add(String.format(RUNTIME_STACK_AND_OPERATING_SYSTEM_MISMATCH_PATTERN, "AzureWebAppWindowsRuntimeStack", "LINUX"));
+      && runtimeStack instanceof AzureWebAppLinuxRuntimeStack)
+    {
+      errors.add(String.format(RUNTIME_STACK_AND_OPERATING_SYSTEM_MISMATCH_PATTERN, "AzureWebAppWindowsRuntimeStack",
+        "LINUX"));
     }
 
 
@@ -337,7 +345,7 @@ public class AzureWebAppDeploymentSlot implements Validatable {
       slot.setRuntimeStack(runtimeStack);
       return builder;
     }
-    
+
 
     public AzureWebAppDeploymentSlot build() {
       return slot;

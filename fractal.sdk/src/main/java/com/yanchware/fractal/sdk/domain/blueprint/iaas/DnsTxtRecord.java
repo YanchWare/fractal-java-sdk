@@ -18,12 +18,28 @@ import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 public class DnsTxtRecord extends DnsRecord {
   public static final String TXT_DNS_RECORD_TYPE = "TXT";
 
-  private final static String VALUES_NOT_VALID = "The combined length of all TXT records in a record set may not exceed 1024 characters";
+  private final static String VALUES_NOT_VALID = "The combined length of all TXT records in a record set may not " +
+    "exceed 1024 characters";
 
   private List<String> values;
 
   public static DnsTxtRecordBuilder builder() {
     return new DnsTxtRecordBuilder();
+  }
+
+  @Override
+  public Collection<String> validate() {
+    var errors = super.validate();
+
+    if (!isBlank(values)) {
+      var combinedTxt = String.join("", values);
+
+      if (combinedTxt.length() > 1024) {
+        errors.add(VALUES_NOT_VALID);
+      }
+    }
+
+    return errors;
   }
 
   public static class DnsTxtRecordBuilder extends DnsRecord.Builder<DnsTxtRecord, DnsTxtRecordBuilder> {
@@ -58,20 +74,5 @@ public class DnsTxtRecord extends DnsRecord {
     public DnsTxtRecord build() {
       return super.build();
     }
-  }
-
-  @Override
-  public Collection<String> validate() {
-    var errors = super.validate();
-
-    if (!isBlank(values)) {
-      var combinedTxt = String.join("", values);
-      
-      if(combinedTxt.length() > 1024) {
-        errors.add(VALUES_NOT_VALID);
-      }
-    }
-
-    return errors;
   }
 }

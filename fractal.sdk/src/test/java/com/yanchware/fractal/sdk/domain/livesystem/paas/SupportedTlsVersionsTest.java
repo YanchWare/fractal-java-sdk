@@ -9,9 +9,9 @@ class SupportedTlsVersionsTest {
   @Test
   public void shouldReturnProperValue() {
     assertAll(
-        () -> assertEquals(SupportedTlsVersions.fromString("1.0"), SupportedTlsVersions.ONE_ZERO),
-        () -> assertEquals(SupportedTlsVersions.fromString("1.1"), SupportedTlsVersions.ONE_ONE),
-        () -> assertEquals(SupportedTlsVersions.fromString("1.2"), SupportedTlsVersions.ONE_TWO)
+      () -> assertEquals(SupportedTlsVersions.fromString("1.0"), SupportedTlsVersions.ONE_ZERO),
+      () -> assertEquals(SupportedTlsVersions.fromString("1.1"), SupportedTlsVersions.ONE_ONE),
+      () -> assertEquals(SupportedTlsVersions.fromString("1.2"), SupportedTlsVersions.ONE_TWO)
     );
   }
 }

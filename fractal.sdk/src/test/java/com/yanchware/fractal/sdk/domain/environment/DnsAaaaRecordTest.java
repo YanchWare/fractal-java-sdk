@@ -16,8 +16,8 @@ class DnsAaaaRecordTest {
   @Test
   public void validationError_when_NameIsNull() {
     assertThatThrownBy(() -> DnsAaaaRecord.builder().withName(null).build())
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("[DnsAaaaRecord Validation] The Name must contain between 1 and 63 characters");
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("[DnsAaaaRecord Validation] The Name must contain between 1 and 63 characters");
   }
 
   @Test
@@ -27,10 +27,10 @@ class DnsAaaaRecordTest {
     var ipV6Address = "2001:db8:3333:4444:CCCC:DDDD:EEEE:FFFF";
 
     var record = DnsAaaaRecord.builder()
-        .withName(recordName)
-        .withTtl(duration)
-        .withIpV6Address(ipV6Address)
-            .build();
+      .withName(recordName)
+      .withTtl(duration)
+      .withIpV6Address(ipV6Address)
+      .build();
 
     assertThat(record.getName()).isEqualTo(recordName);
     assertThat(record.getTtl()).isEqualTo(duration);

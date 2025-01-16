@@ -12,7 +12,8 @@ import java.util.Collection;
 @Getter
 @Setter(AccessLevel.PRIVATE)
 public class PriorityClass implements Validatable {
-  private final static String VALUE_IS_NOT_ALLOWED = "[PriorityClass Validation] Value must be between 1 and 1_000_000_000";
+  private final static String VALUE_IS_NOT_ALLOWED = "[PriorityClass Validation] Value must be between 1 and " +
+    "1_000_000_000";
 
   private String name;
   private String description;
@@ -21,6 +22,17 @@ public class PriorityClass implements Validatable {
 
   public static PriorityClassBuilder builder() {
     return new PriorityClassBuilder();
+  }
+
+  @Override
+  public Collection<String> validate() {
+    Collection<String> errors = new ArrayList<>();
+
+    if (value == null || value < 1 || value > 1_000_000_000) {
+      errors.add(VALUE_IS_NOT_ALLOWED);
+    }
+
+    return errors;
   }
 
   public static class PriorityClassBuilder {
@@ -57,21 +69,10 @@ public class PriorityClass implements Validatable {
 
       if (!errors.isEmpty()) {
         throw new IllegalArgumentException(String.format("PriorityClass validation failed. Errors: %s",
-            Arrays.toString(errors.toArray())));
+          Arrays.toString(errors.toArray())));
       }
 
       return priorityClass;
     }
-  }
-
-  @Override
-  public Collection<String> validate() {
-    Collection<String> errors = new ArrayList<>();
-
-    if (value == null || value < 1 || value > 1_000_000_000) {
-      errors.add(VALUE_IS_NOT_ALLOWED);
-    }
-
-    return errors;
   }
 }

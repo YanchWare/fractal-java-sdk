@@ -13,11 +13,6 @@ public enum EnvironmentTypeDto {
     this.environmentType = environmentType;
   }
 
-  @JsonValue
-  public String getEnvironmentType() {
-    return environmentType;
-  }
-
   public static EnvironmentTypeDto fromString(String text) {
     for (var item : values()) {
       if (item.environmentType.equalsIgnoreCase(text)) {
@@ -25,6 +20,11 @@ public enum EnvironmentTypeDto {
       }
     }
     return null;
+  }
+
+  @JsonValue
+  public String getEnvironmentType() {
+    return environmentType;
   }
 
   @Override

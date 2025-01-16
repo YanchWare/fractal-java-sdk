@@ -56,7 +56,8 @@ class KafkaClusterTest {
                 .withKafkaTopics(List.of(
                         KafkaTopic.builder().withId(ComponentId.from("topic")).withDisplayName("kafka-topic").build()))
                 .withKafkaUsers(List.of(
-                        KafkaUser.builder().withId(ComponentId.from("user-1")).withDisplayName("kafka-user").withTopicReadACL("svcName").build())).build();
+                        KafkaUser.builder().withId(ComponentId.from("user-1")).withDisplayName("kafka-user")
+                        .withTopicReadACL("svcName").build())).build();
 
         assertThat(kafkaCluster)
                 .returns("azure-kafka", from(x -> x.getId().getValue()))

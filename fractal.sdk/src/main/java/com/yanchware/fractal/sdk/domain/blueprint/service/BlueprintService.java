@@ -4,11 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.Service;
 import com.yanchware.fractal.sdk.domain.blueprint.FractalIdValue;
-import com.yanchware.fractal.sdk.domain.blueprint.service.dtos.BlueprintComponentDto;
-import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.domain.blueprint.service.commands.CreateBlueprintCommandRequest;
 import com.yanchware.fractal.sdk.domain.blueprint.service.commands.UpdateBlueprintCommandRequest;
+import com.yanchware.fractal.sdk.domain.blueprint.service.dtos.BlueprintComponentDto;
 import com.yanchware.fractal.sdk.domain.blueprint.service.dtos.BlueprintDto;
+import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.utils.HttpUtils;
 import io.github.resilience4j.retry.RetryRegistry;
 import lombok.extern.slf4j.Slf4j;
@@ -28,10 +28,10 @@ public class BlueprintService extends Service {
   }
 
   public void createOrUpdate(
-          FractalIdValue fractalId,
-          String description,
-          boolean isPrivate,
-          Collection<BlueprintComponentDto> components) throws InstantiatorException
+    FractalIdValue fractalId,
+    String description,
+    boolean isPrivate,
+    Collection<BlueprintComponentDto> components) throws InstantiatorException
   {
     var command = new CreateBlueprintCommandRequest(description, isPrivate, components);
     log.info("Create or update blueprint [FractalId: '{}']", fractalId);
@@ -69,13 +69,13 @@ public class BlueprintService extends Service {
   protected BlueprintDto retrieve(FractalIdValue fractalId) throws InstantiatorException {
 
     return executeRequestWithRetries(
-        "retrieveBlueprint",
-        fractalId.toString(),
-        client,
-        retryRegistry,
-        HttpUtils.buildGetRequest(getBlueprintsUri(fractalId), sdkConfiguration),
-        new int[]{200, 404},
-        BlueprintDto.class);
+      "retrieveBlueprint",
+      fractalId.toString(),
+      client,
+      retryRegistry,
+      HttpUtils.buildGetRequest(getBlueprintsUri(fractalId), sdkConfiguration),
+      new int[]{200, 404},
+      BlueprintDto.class);
   }
 
   private URI getBlueprintsUri(FractalIdValue fractalId) {

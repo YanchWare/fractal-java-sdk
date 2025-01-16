@@ -22,15 +22,15 @@ class LiveSystemAksComponentDtoTest extends LiveSystemKubernetesComponentDtoTest
   @Test
   public void liveSystemComponentDto_matches_liveSystemComponents_withCorrectTypeForLiveSystem_forAks() {
     var factory = new LiveSystemsFactory(
-        HttpClient.newBuilder().build(),
-        new LocalSdkConfiguration(""),
-        RetryRegistry.ofDefaults());
+      HttpClient.newBuilder().build(),
+      new LocalSdkConfiguration(""),
+      RetryRegistry.ofDefaults());
     var aks = TestUtils.getAksExample();
     var liveSystem = factory.builder()
-        .withId(new LiveSystemIdValue("test", "test"))
-        .withStandardProvider(ProviderType.AZURE)
-        .withComponent(aks)
-        .build();
+      .withId(new LiveSystemIdValue("test", "test"))
+      .withStandardProvider(ProviderType.AZURE)
+      .withComponent(aks)
+      .build();
     var lsDtoMap = liveSystem.blueprintMapFromLiveSystemComponents();
     assertAks(aks, lsDtoMap);
     assertAksNodePool(aks, lsDtoMap);
@@ -40,9 +40,9 @@ class LiveSystemAksComponentDtoTest extends LiveSystemKubernetesComponentDtoTest
   private void assertAksNodePool(AzureKubernetesService aks, Map<String, LiveSystemComponentDto> lsDtoMap) {
     var dto = lsDtoMap.get(aks.getId().getValue());
     assertThat(dto.getParameters().get("nodePools"))
-        .asInstanceOf(InstanceOfAssertFactories.LIST)
-        .first()
-        .hasFieldOrProperty("labels");
+      .asInstanceOf(InstanceOfAssertFactories.LIST)
+      .first()
+      .hasFieldOrProperty("labels");
   }
 
   private void assertAks(AzureKubernetesService aks, Map<String, LiveSystemComponentDto> lsDtoMap) {
@@ -50,37 +50,37 @@ class LiveSystemAksComponentDtoTest extends LiveSystemKubernetesComponentDtoTest
     assertGenericComponent(dto, aks, ComponentType.PAAS_KUBERNETES.getId());
     assertThat(dto.getProvider()).isEqualTo(aks.getProvider());
     assertThat(dto.getParameters())
-        .extracting(
-            "addonProfiles",
-            "azureActiveDirectoryProfile",
-            "azureRegion",
-            "externalWorkspaceResourceId",
-            "kubernetesVersion",
-            "nodePools",
-            "outboundIps",
-            "podIpRange",
-            "podManagedIdentity",
-            "priorityClasses",
-            "roles",
-            "serviceIpRange",
-            "tags",
-            "vnetAddressSpaceIpRange",
-            "vnetSubnetAddressIpRange")
-        .containsExactly(
-            aks.getAddonProfiles(),
-            aks.getAzureActiveDirectoryProfile(),
-            aks.getAzureRegion(),
-            aks.getExternalWorkspaceResourceId(),
-            aks.getKubernetesVersion(),
-            aks.getNodePools(),
-            aks.getOutboundIps(),
-            aks.getPodIpRange(),
-            aks.getPodManagedIdentity(),
-            aks.getPriorityClasses(),
-            aks.getRoles(),
-            aks.getServiceIpRange(),
-            aks.getTags(),
-            aks.getVnetAddressSpaceIpRange(),
-            aks.getVnetSubnetAddressIpRange());
+      .extracting(
+        "addonProfiles",
+        "azureActiveDirectoryProfile",
+        "azureRegion",
+        "externalWorkspaceResourceId",
+        "kubernetesVersion",
+        "nodePools",
+        "outboundIps",
+        "podIpRange",
+        "podManagedIdentity",
+        "priorityClasses",
+        "roles",
+        "serviceIpRange",
+        "tags",
+        "vnetAddressSpaceIpRange",
+        "vnetSubnetAddressIpRange")
+      .containsExactly(
+        aks.getAddonProfiles(),
+        aks.getAzureActiveDirectoryProfile(),
+        aks.getAzureRegion(),
+        aks.getExternalWorkspaceResourceId(),
+        aks.getKubernetesVersion(),
+        aks.getNodePools(),
+        aks.getOutboundIps(),
+        aks.getPodIpRange(),
+        aks.getPodManagedIdentity(),
+        aks.getPriorityClasses(),
+        aks.getRoles(),
+        aks.getServiceIpRange(),
+        aks.getTags(),
+        aks.getVnetAddressSpaceIpRange(),
+        aks.getVnetSubnetAddressIpRange());
   }
 }

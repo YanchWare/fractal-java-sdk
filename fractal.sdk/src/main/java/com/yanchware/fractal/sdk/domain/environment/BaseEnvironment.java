@@ -24,17 +24,26 @@ import static com.yanchware.fractal.sdk.domain.blueprint.iaas.DnsZone.DNS_ZONES_
 @Getter
 @Setter
 public abstract class BaseEnvironment implements Environment, Validatable {
+  protected final static String SHORT_NAME_IS_NULL = "Environment ShortName has not been defined and it is required";
   private static final String CLOUD_AGENTS_PARAM_KEY = "agents";
   private static final String TAGS_PARAM_KEY = "tags";
-  protected final static String SHORT_NAME_IS_NULL = "Environment ShortName has not been defined and it is required";
-  private final static String RESOURCE_GROUPS_IS_EMPTY = "Environment ResourceGroups has not been defined and it is required";
+  private final static String RESOURCE_GROUPS_IS_EMPTY = "Environment ResourceGroups has not been defined and it is " +
+    "required";
 
   private final Map<String, Object> parameters;
+  private final Map<ProviderType, CloudAgentEntity> cloudAgentByProviderType;
   private String name;
   private Collection<UUID> resourceGroups;
   private Map<String, String> tags;
   private Collection<Secret> secrets;
-  private final Map<ProviderType, CloudAgentEntity> cloudAgentByProviderType;
+
+  protected BaseEnvironment() {
+    this.resourceGroups = new ArrayList<>();
+    this.parameters = new HashMap<>();
+    this.tags = new HashMap<>();
+    this.secrets = new ArrayList<>();
+    this.cloudAgentByProviderType = new HashMap<>();
+  }
 
   @Override
   public String getName() {
@@ -56,14 +65,6 @@ public abstract class BaseEnvironment implements Environment, Validatable {
     return parameters;
   }
 
-  protected BaseEnvironment() {
-    this.resourceGroups = new ArrayList<>();
-    this.parameters = new HashMap<>();
-    this.tags = new HashMap<>();
-    this.secrets = new ArrayList<>();
-    this.cloudAgentByProviderType = new HashMap<>();
-  }
-
   public void addTags(Map<String, String> tags) {
     Map<String, String> existingTags = (Map<String, String>) parameters.get(TAGS_PARAM_KEY);
     if (existingTags == null) {
@@ -75,12 +76,12 @@ public abstract class BaseEnvironment implements Environment, Validatable {
     this.tags.putAll(tags);
   }
 
-  public void addDnsZones(Collection<DnsZone> dnsZones){
+  public void addDnsZones(Collection<DnsZone> dnsZones) {
     try {
       parameters.put(DNS_ZONES_PARAM_KEY,
-          SerializationUtils.deserialize(
-              SerializationUtils.serialize(dnsZones),
-              DnsZone[].class));
+        SerializationUtils.deserialize(
+          SerializationUtils.serialize(dnsZones),
+          DnsZone[].class));
 
     } catch (JsonProcessingException e) {
       throw new RuntimeException(e);
@@ -107,15 +108,16 @@ public abstract class BaseEnvironment implements Environment, Validatable {
     registerCloudAgent(agent);
   }
 
-  private void registerCloudAgent(CloudAgentEntity cloudAgent){
+  private void registerCloudAgent(CloudAgentEntity cloudAgent) {
     if (cloudAgentByProviderType.containsKey(cloudAgent.getProvider())) {
       throw new IllegalArgumentException(
-          String.format("A Cloud agent for Provider %s has already been defined", cloudAgent.getProvider()));
+        String.format("A Cloud agent for Provider %s has already been defined", cloudAgent.getProvider()));
     }
 
     cloudAgentByProviderType.put(cloudAgent.getProvider(), cloudAgent);
 
-    Collection<Map<String, Object>> existingAgents = (Collection<Map<String, Object>>) getParameters().get(CLOUD_AGENTS_PARAM_KEY);
+    Collection<Map<String, Object>> existingAgents =
+      (Collection<Map<String, Object>>) getParameters().get(CLOUD_AGENTS_PARAM_KEY);
     if (existingAgents == null) {
       existingAgents = new ArrayList<>();
       getParameters().put(CLOUD_AGENTS_PARAM_KEY, existingAgents);
@@ -124,7 +126,18 @@ public abstract class BaseEnvironment implements Environment, Validatable {
     existingAgents.add(cloudAgent.getConfigurationForEnvironmentParameters());
   }
 
-  public static abstract class EnvironmentBuilder<T extends BaseEnvironment, B extends EnvironmentBuilder<T, B>>  {
+  @Override
+  public Collection<String> validate() {
+    Collection<String> errors = new ArrayList<>();
+
+    if (CollectionUtils.isBlank(resourceGroups)) {
+      errors.add(RESOURCE_GROUPS_IS_EMPTY);
+    }
+
+    return errors;
+  }
+
+  public static abstract class EnvironmentBuilder<T extends BaseEnvironment, B extends EnvironmentBuilder<T, B>> {
     protected T environment; // Protected to allow access in subclasses
     protected B builder;
 
@@ -132,9 +145,10 @@ public abstract class BaseEnvironment implements Environment, Validatable {
       environment = createEnvironment();
       builder = getBuilder();
     }
-    
+
 
     protected abstract T createEnvironment();
+
     protected abstract B getBuilder();
 
     public B withName(String name) {
@@ -181,11 +195,10 @@ public abstract class BaseEnvironment implements Environment, Validatable {
 
     /**
      * <pre>
-     * Adds a single secret to the environment. This secret can be referenced by its name in 
+     * Adds a single secret to the environment. This secret can be referenced by its name in
      * custom workload components that require access to sensitive information.</pre>
      *
      * @param secret The secret to add.
-     *
      * @return The builder instance.
      */
     public B withSecret(Secret secret) {
@@ -194,11 +207,10 @@ public abstract class BaseEnvironment implements Environment, Validatable {
 
     /**
      * <pre>
-     * Adds a collection of secrets to the environment. These secrets can be referenced by their 
+     * Adds a collection of secrets to the environment. These secrets can be referenced by their
      * names in custom workload components that require access to sensitive information.</pre>
      *
      * @param secrets The collection of secrets to add.
-     *
      * @return The builder instance.
      */
     public B withSecrets(Collection<Secret> secrets) {
@@ -215,22 +227,11 @@ public abstract class BaseEnvironment implements Environment, Validatable {
 
       if (!errors.isEmpty()) {
         throw new IllegalArgumentException(String.format(
-            "Environment validation failed. Errors: %s",
-            Arrays.toString(errors.toArray())));
+          "Environment validation failed. Errors: %s",
+          Arrays.toString(errors.toArray())));
       }
 
       return environment;
     }
-  }
-
-  @Override
-  public Collection<String> validate() {
-    Collection<String> errors = new ArrayList<>();
-
-    if (CollectionUtils.isBlank(resourceGroups)) {
-      errors.add(RESOURCE_GROUPS_IS_EMPTY);
-    }
-    
-    return errors;
   }
 }

@@ -14,13 +14,7 @@ import java.util.List;
 @Setter
 @ToString(callSuper = true)
 public class AzureLegacyStorageAccount extends BaseAzureStorageAccount {
-  @Override
-  public String getKind() {
-    return "Storage";
-  }
-
   private AzureStorageAccountFileService fileService;
-
   private Collection<AzureFileShare> fileShares;
 
   public AzureLegacyStorageAccount() {
@@ -29,6 +23,11 @@ public class AzureLegacyStorageAccount extends BaseAzureStorageAccount {
 
   public static AzureLegacyStorageAccountBuilder builder() {
     return new AzureLegacyStorageAccountBuilder();
+  }
+
+  @Override
+  public String getKind() {
+    return "Storage";
   }
 
   public static class AzureLegacyStorageAccountBuilder extends BaseAzureStorageAccount.Builder<AzureLegacyStorageAccount, AzureLegacyStorageAccountBuilder> {
@@ -57,7 +56,7 @@ public class AzureLegacyStorageAccount extends BaseAzureStorageAccount {
     public AzureLegacyStorageAccountBuilder withFileShare(AzureFileShare fileShare) {
       return withFileShares(List.of(fileShare));
     }
-    
+
     @Override
     protected AzureLegacyStorageAccount createComponent() {
       return new AzureLegacyStorageAccount();

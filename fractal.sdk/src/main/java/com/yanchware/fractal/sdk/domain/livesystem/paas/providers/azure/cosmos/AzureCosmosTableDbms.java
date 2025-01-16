@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_COSMOS_ACCOUNT;
 import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidLowercaseLettersNumbersAndHyphens;
 import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLength;
-import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_COSMOS_ACCOUNT;
 
 @Getter
 @Setter
@@ -24,7 +24,9 @@ import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_COSMOS_
 public class AzureCosmosTableDbms extends PaaSRelationalDbms implements LiveSystemComponent, AzureCosmosAccount {
 
   public static final String TYPE = PAAS_COSMOS_ACCOUNT.getId();
-  private final static String NAME_NOT_VALID = "[AzureCosmosTableDbms Validation] The name must only contains lowercase letters, numbers, and hyphens. The name must not start or end in a hyphen and must be between 3 and 44 characters long";
+  private final static String NAME_NOT_VALID = "[AzureCosmosTableDbms Validation] The name must only contains " +
+    "lowercase letters, numbers, and hyphens. The name must not start or end in a hyphen and must be between 3 and 44" +
+    " characters long";
 
   private String name;
   private Integer maxTotalThroughput;
@@ -37,12 +39,6 @@ public class AzureCosmosTableDbms extends PaaSRelationalDbms implements LiveSyst
   private Map<String, String> tags;
 
 
-  @Override
-  public ProviderType getProvider() {
-    return ProviderType.AZURE;
-  }
-
-
   protected AzureCosmosTableDbms() {
     cosmosEntities = new ArrayList<>();
   }
@@ -51,7 +47,28 @@ public class AzureCosmosTableDbms extends PaaSRelationalDbms implements LiveSyst
     return new AzureCosmosTableDbmsBuilder();
   }
 
-  public static class AzureCosmosTableDbmsBuilder extends AzureCosmosAccountBuilder<AzureCosmosTableDbms, AzureCosmosTableDbmsBuilder> {
+  @Override
+  public ProviderType getProvider() {
+    return ProviderType.AZURE;
+  }
+
+  public Collection<String> validate() {
+    Collection<String> errors = super.validate();
+    errors.addAll(AzureCosmosAccount.validateCosmosAccount(this, "Table DBMS"));
+
+    if (StringUtils.isNotBlank(name)) {
+      var hasValidCharacters = isValidLowercaseLettersNumbersAndHyphens(name);
+      var hasValidLengths = isValidStringLength(name, 3, 44);
+      if (!hasValidCharacters || !hasValidLengths) {
+        errors.add(NAME_NOT_VALID);
+      }
+    }
+
+    return errors;
+  }
+
+  public static class AzureCosmosTableDbmsBuilder extends AzureCosmosAccountBuilder<AzureCosmosTableDbms,
+    AzureCosmosTableDbmsBuilder> {
 
     @Override
     protected AzureCosmosTableDbms createComponent() {
@@ -62,21 +79,6 @@ public class AzureCosmosTableDbms extends PaaSRelationalDbms implements LiveSyst
     protected AzureCosmosTableDbmsBuilder getBuilder() {
       return this;
     }
-  }
-
-  public Collection<String> validate() {
-    Collection<String> errors = super.validate();
-    errors.addAll(AzureCosmosAccount.validateCosmosAccount(this, "Table DBMS"));
-
-    if(StringUtils.isNotBlank(name)) {
-      var hasValidCharacters = isValidLowercaseLettersNumbersAndHyphens(name);
-      var hasValidLengths = isValidStringLength(name, 3, 44);
-      if(!hasValidCharacters || !hasValidLengths) {
-        errors.add(NAME_NOT_VALID);
-      }
-    }
-    
-    return errors;
   }
 
 }

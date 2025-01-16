@@ -6,11 +6,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public interface OciResourceEntity extends ResourceEntity {
-  Compartment getCompartment();
-  void setCompartment(Compartment compartment);
-  OciRegion getOciRegion();
-  void setOciRegion(OciRegion region);
-
   static Collection<String> validateOciResourceEntity(OciResourceEntity resourceEntity, String entityName) {
     final var REGION_IS_NULL_TEMPLATE = "[OCI %s Validation] Region has not been defined and it is required";
 
@@ -22,4 +17,12 @@ public interface OciResourceEntity extends ResourceEntity {
 
     return errors;
   }
+
+  Compartment getCompartment();
+
+  void setCompartment(Compartment compartment);
+
+  OciRegion getOciRegion();
+
+  void setOciRegion(OciRegion region);
 }

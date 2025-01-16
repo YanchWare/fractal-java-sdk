@@ -24,12 +24,33 @@ import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidIpV6Ad
 public class DnsAaaaRecord extends DnsRecord {
   public static final String AAAA_DNS_RECORD_TYPE = "AAAA";
 
-  private final static String IP_V6_ADDRESS_NOT_VALID = "[DnsAaaaRecord Validation] ipV6Address does not contain a valid IP v6 address";
+  private final static String IP_V6_ADDRESS_NOT_VALID = "[DnsAaaaRecord Validation] ipV6Address does not contain a " +
+    "valid IP v6 address";
 
   private Set<String> ipV6Addresses;
 
   public static DnsAaaaRecordBuilder builder() {
     return new DnsAaaaRecordBuilder();
+  }
+
+  @Override
+  public Collection<String> validate() {
+    var errors = super.validate();
+
+    if (!isBlank(ipV6Addresses)) {
+      ipV6Addresses.stream()
+        .filter(StringUtils::isNotBlank)
+        .forEach(ipV6Address -> {
+          var hasValidCharacters = isValidIpV6Address(ipV6Address);
+          if (!hasValidCharacters) {
+            errors.add(IP_V6_ADDRESS_NOT_VALID);
+          }
+        });
+    }
+
+    return errors.stream()
+      .map(error -> "[DnsAaaaRecord Validation] " + error)
+      .collect(Collectors.toList());
   }
 
   public static class DnsAaaaRecordBuilder extends DnsRecord.Builder<DnsAaaaRecord, DnsAaaaRecordBuilder> {
@@ -64,25 +85,5 @@ public class DnsAaaaRecord extends DnsRecord {
     public DnsAaaaRecord build() {
       return super.build();
     }
-  }
-
-  @Override
-  public Collection<String> validate() {
-    var errors = super.validate();
-
-    if (!isBlank(ipV6Addresses)) {
-      ipV6Addresses.stream()
-          .filter(StringUtils::isNotBlank)
-          .forEach(ipV6Address -> {
-            var hasValidCharacters = isValidIpV6Address(ipV6Address);
-            if (!hasValidCharacters) {
-              errors.add(IP_V6_ADDRESS_NOT_VALID);
-            }
-          });
-    }
-
-    return errors.stream()
-        .map(error -> "[DnsAaaaRecord Validation] " + error)
-        .collect(Collectors.toList());
   }
 }

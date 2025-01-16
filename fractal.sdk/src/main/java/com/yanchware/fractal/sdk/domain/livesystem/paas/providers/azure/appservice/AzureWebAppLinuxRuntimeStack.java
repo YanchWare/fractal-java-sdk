@@ -37,7 +37,7 @@ public final class AzureWebAppLinuxRuntimeStack extends ExtendableEnum<AzureWebA
   public static final AzureWebAppLinuxRuntimeStack TOMCAT_9_0_JRE_8 = fromString("TOMCAT|9.0-jre8");
   public static final AzureWebAppLinuxRuntimeStack TOMCAT_8_5_JAVA_11 = fromString("TOMCAT|8.5-java11");
   public static final AzureWebAppLinuxRuntimeStack TOMCAT_8_5_JRE_8 = fromString("TOMCAT|8.5-jre8");
-  
+
   public AzureWebAppLinuxRuntimeStack() {
   }
 

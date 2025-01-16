@@ -32,11 +32,12 @@ public abstract class Service {
   }
 
   protected static void executeRequestWithRetries(
-      String requestName,
-      HttpClient client,
-      RetryRegistry retryRegistry,
-      HttpRequest request,
-      int[] acceptedResponses) throws InstantiatorException {
+    String requestName,
+    HttpClient client,
+    RetryRegistry retryRegistry,
+    HttpRequest request,
+    int[] acceptedResponses) throws InstantiatorException
+  {
 
     Retry retry = retryRegistry.retry(requestName);
 
@@ -49,19 +50,20 @@ public abstract class Service {
       }).get();
     } catch (Throwable ex) {
       throw new InstantiatorException(
-          String.format("All attempts to %s failed", StringHelper.toWords(requestName)),
-          ex);
+        String.format("All attempts to %s failed", StringHelper.toWords(requestName)),
+        ex);
     }
   }
 
   protected static <T> T executeRequestWithRetries(
-      String requestName,
-      String entityId,
-      HttpClient client,
-      RetryRegistry retryRegistry,
-      HttpRequest request,
-      int[] acceptedResponses,
-      Class<T> classRef) throws InstantiatorException {
+    String requestName,
+    String entityId,
+    HttpClient client,
+    RetryRegistry retryRegistry,
+    HttpRequest request,
+    int[] acceptedResponses,
+    Class<T> classRef) throws InstantiatorException
+  {
 
     Retry retry = retryRegistry.retry(requestName);
 
@@ -72,9 +74,11 @@ public abstract class Service {
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() == 401) {
-          var message = String.format("Invalid credentials provided. Please ensure the '%s' and '%s' environment variables are correctly set. Contact Fractal Cloud support if you need assistance with these credentials.",
-              CI_CD_SERVICE_ACCOUNT_NAME_KEY, CI_CD_SERVICE_ACCOUNT_SECRET_KEY);
-          
+          var message = String.format("Invalid credentials provided. Please ensure the '%s' and '%s' environment " +
+              "variables are correctly set. Contact Fractal Cloud support if you need assistance with these " +
+              "credentials.",
+            CI_CD_SERVICE_ACCOUNT_NAME_KEY, CI_CD_SERVICE_ACCOUNT_SECRET_KEY);
+
           String errorMessage = formatErrorMessage(requestName, message, entityId);
 
           log.error(errorMessage);
@@ -105,8 +109,8 @@ public abstract class Service {
     } catch (Throwable ex) {
       log.error("All attempts failed. {}", ex.getMessage()); // Improved log message
       throw new InstantiatorException(
-          String.format("%s. Please try again later or contact Fractal Cloud support if the issue persists.",
-              ex.getMessage())); // Improved exception message
+        String.format("%s. Please try again later or contact Fractal Cloud support if the issue persists.",
+          ex.getMessage())); // Improved exception message
     }
   }
 }

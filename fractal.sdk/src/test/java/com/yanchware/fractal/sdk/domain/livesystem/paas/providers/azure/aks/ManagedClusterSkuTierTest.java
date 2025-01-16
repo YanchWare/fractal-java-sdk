@@ -17,16 +17,16 @@ class ManagedClusterSkuTierTest {
   @Test
   public void fromString_shouldReturnCorrespondingManagedClusterSkuTier() {
     assertThat(ManagedClusterSkuTier.fromString("Premium"))
-        .as("fromString should return PREMIUM for 'Premium'")
-        .isEqualTo(ManagedClusterSkuTier.PREMIUM);
+      .as("fromString should return PREMIUM for 'Premium'")
+      .isEqualTo(ManagedClusterSkuTier.PREMIUM);
 
     assertThat(ManagedClusterSkuTier.fromString("Standard"))
-        .as("fromString should return STANDARD for 'Standard'")
-        .isEqualTo(ManagedClusterSkuTier.STANDARD);
+      .as("fromString should return STANDARD for 'Standard'")
+      .isEqualTo(ManagedClusterSkuTier.STANDARD);
 
     assertThat(ManagedClusterSkuTier.fromString("Free"))
-        .as("fromString should return FREE for 'Free'")
-        .isEqualTo(ManagedClusterSkuTier.FREE);
+      .as("fromString should return FREE for 'Free'")
+      .isEqualTo(ManagedClusterSkuTier.FREE);
   }
 
   @Test
@@ -34,9 +34,9 @@ class ManagedClusterSkuTierTest {
     Collection<ManagedClusterSkuTier> values = ManagedClusterSkuTier.values();
 
     assertThat(values)
-        .as("Values should contain PREMIUM, STANDARD, FREE and have exactly 3 values")
-        .containsExactlyInAnyOrder(ManagedClusterSkuTier.PREMIUM, 
-            ManagedClusterSkuTier.STANDARD,
-            ManagedClusterSkuTier.FREE);
+      .as("Values should contain PREMIUM, STANDARD, FREE and have exactly 3 values")
+      .containsExactlyInAnyOrder(ManagedClusterSkuTier.PREMIUM,
+        ManagedClusterSkuTier.STANDARD,
+        ManagedClusterSkuTier.FREE);
   }
 }

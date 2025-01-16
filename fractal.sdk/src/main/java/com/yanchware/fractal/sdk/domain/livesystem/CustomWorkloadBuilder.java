@@ -18,10 +18,12 @@ import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
  * our <a href="https://fractal.cloud/docs/docs-ht-create-kubernetes-workload">documentation page</a>
  * </p>
  */
-public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload, B extends CustomWorkloadBuilder<T, B>> extends Component.Builder<T, B> {
+public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload, B extends CustomWorkloadBuilder<T,
+  B>> extends Component.Builder<T, B> {
 
   /**
-   * The id of the vault secret containing the passphrase protecting the SSH private key used to access the code repository
+   * The id of the vault secret containing the passphrase protecting the SSH private key used to access the code
+   * repository
    *
    * @param privateSSHKeyPassphraseSecretId
    */
@@ -66,6 +68,7 @@ public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload
    * AppRoleAssignment or other custom role.
    * <p>
    * See {@link com.yanchware.fractal.sdk.domain.livesystem.caas.RoleType RoleType} for all role types supported
+   * </p>
    *
    * @param role
    */
@@ -74,10 +77,12 @@ public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload
   }
 
   /**
-   * This list of roles will be applied to the Custom Workload. It can vary from a specific Cloud Vendor BuiltIn role to an
+   * This list of roles will be applied to the Custom Workload. It can vary from a specific Cloud Vendor BuiltIn role
+   * to an
    * AppRoleAssignment or other custom role.
    * <p>
    * See {@link com.yanchware.fractal.sdk.domain.livesystem.caas.RoleType RoleType} for all role types supported
+   * </p>
    *
    * @param roles
    */
@@ -94,7 +99,8 @@ public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload
 
   /**
    * The id of the vault secret containing the Ocelot client id for this workload
-   * This is used for internal communication when <a href="https://fractal.cloud/docs/docs-ocelot">Ocelot</a> is also used in the environment
+   * This is used for internal communication when <a href="https://fractal.cloud/docs/docs-ocelot">Ocelot</a>
+   * is also used in the environment
    * If it is not provided, Fractal Cloud will generate it
    *
    * @param workloadSecretIdKey
@@ -106,7 +112,8 @@ public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload
 
   /**
    * The id of the vault secret containing the Ocelot client secret for this workload
-   * This is used for internal communication when <a href="https://fractal.cloud/docs/docs-ocelot">Ocelot</a> is also used in the environment
+   * This is used for internal communication when <a href="https://fractal.cloud/docs/docs-ocelot">Ocelot</a>
+   * is also used in the environment
    * If it is not provided, Fractal Cloud will generate it
    *
    * @param workloadSecretPasswordKey
@@ -128,11 +135,10 @@ public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload
 
   /**
    * <pre>
-   * Adds a single secret name to the component. 
+   * Adds a single secret name to the component.
    * This secret should be defined in the environment associated with this component.</pre>
    *
    * @param secretName The name of the secret to add.
-   *
    * @return The builder instance.
    */
   public B withSecret(String secretName) {
@@ -141,11 +147,10 @@ public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload
 
   /**
    * <pre>
-   * Adds a list of secret names to the component. 
+   * Adds a list of secret names to the component.
    * These secrets should be defined in the environment associated with this component.</pre>
    *
    * @param secrets The list of secret names to add.
-   *
    * @return The builder instance.
    */
   public B withSecrets(List<String> secrets) {

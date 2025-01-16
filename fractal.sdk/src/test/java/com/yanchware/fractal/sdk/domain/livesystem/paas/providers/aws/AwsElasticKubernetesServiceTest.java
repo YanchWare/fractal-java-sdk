@@ -2,8 +2,8 @@ package com.yanchware.fractal.sdk.domain.livesystem.paas.providers.aws;
 
 import org.junit.jupiter.api.Test;
 
-import static com.yanchware.fractal.sdk.utils.TestUtils.getDefaultEks;
 import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_KUBERNETES;
+import static com.yanchware.fractal.sdk.utils.TestUtils.getDefaultEks;
 import static org.assertj.core.api.Assertions.*;
 
 public class AwsElasticKubernetesServiceTest {

@@ -88,6 +88,75 @@ public class AzureWebAppConfiguration implements Validatable {
     return new AzureWebAppConfigurationBuilder();
   }
 
+  @Override
+  public Collection<String> validate() {
+    final var DUPLICATED_HOSTING_TYPES = "[AzureWebAppConfiguration Validation] Only one hosting configuration can be" +
+      " set. [%s] has already been set";
+    final var INCOMPLETE_JAVA_CONTAINER = "[AzureWebAppConfiguration Validation] Incomplete hosting types definition." +
+      " Both [javaContainer] and [javaContainerVersion] must be set";
+
+    var errors = new ArrayList<String>();
+
+    var versionType = "";
+
+    if (!StringUtils.isBlank(getDotnetVersion())) {
+      versionType = "DOTNET";
+    }
+
+    if (getJavaVersion() != null && !StringUtils.isBlank(getJavaVersion())) {
+      if (isNotBlank(versionType)) {
+        errors.add(String.format(DUPLICATED_HOSTING_TYPES, versionType));
+        return errors;
+      }
+      versionType = "JAVA";
+    }
+
+    if (getPythonVersion() != null && !StringUtils.isBlank(getPythonVersion())) {
+      if (isNotBlank(versionType)) {
+        errors.add(String.format(DUPLICATED_HOSTING_TYPES, versionType));
+        return errors;
+      }
+      versionType = "PYTHON";
+    }
+
+    if (getPhpVersion() != null && !StringUtils.isBlank(getPhpVersion())) {
+      if (isNotBlank(versionType)) {
+        errors.add(String.format(DUPLICATED_HOSTING_TYPES, versionType));
+        return errors;
+      }
+      versionType = "PHP";
+    }
+
+    if (getNodeVersion() != null && !StringUtils.isBlank(getNodeVersion())) {
+      if (isNotBlank(versionType)) {
+        errors.add(String.format(DUPLICATED_HOSTING_TYPES, versionType));
+        return errors;
+      }
+      versionType = "NODE";
+    }
+
+    if (getJavaContainer() != null && !StringUtils.isBlank(getJavaContainer()) &&
+      getJavaContainerVersion() != null && !StringUtils.isBlank(getJavaContainerVersion()))
+    {
+      if (isNotBlank(versionType)) {
+        errors.add(String.format(DUPLICATED_HOSTING_TYPES, versionType));
+        return errors;
+      }
+    } else if ((getJavaContainer() == null || StringUtils.isBlank(getJavaContainer())) &&
+      getJavaContainerVersion() != null && !StringUtils.isBlank(getJavaContainerVersion()))
+    {
+      errors.add(INCOMPLETE_JAVA_CONTAINER);
+      return errors;
+    } else if (getJavaContainer() != null && !StringUtils.isBlank(getJavaContainer()) &&
+      (getJavaContainerVersion() == null || StringUtils.isBlank(getJavaContainerVersion())))
+    {
+      errors.add(INCOMPLETE_JAVA_CONTAINER);
+      return errors;
+    }
+
+    return errors;
+  }
+
   public static class AzureWebAppConfigurationBuilder {
     private final AzureWebAppConfiguration configuration;
     private final AzureWebAppConfigurationBuilder builder;
@@ -412,76 +481,11 @@ public class AzureWebAppConfiguration implements Validatable {
 
       if (!errors.isEmpty()) {
         throw new IllegalArgumentException(String.format(
-            "AzureWebAppConfiguration validation failed. Errors: %s",
-            Arrays.toString(errors.toArray())));
+          "AzureWebAppConfiguration validation failed. Errors: %s",
+          Arrays.toString(errors.toArray())));
       }
 
       return configuration;
     }
-  }
-
-
-  @Override
-  public Collection<String> validate() {
-    final var DUPLICATED_HOSTING_TYPES = "[AzureWebAppConfiguration Validation] Only one hosting configuration can be set. [%s] has already been set";
-    final var INCOMPLETE_JAVA_CONTAINER = "[AzureWebAppConfiguration Validation] Incomplete hosting types definition. Both [javaContainer] and [javaContainerVersion] must be set";
-
-    var errors = new ArrayList<String>();
-
-    var versionType = "";
-
-    if (!StringUtils.isBlank(getDotnetVersion())) {
-      versionType = "DOTNET";
-    }
-
-    if (getJavaVersion() != null && !StringUtils.isBlank(getJavaVersion())) {
-      if (isNotBlank(versionType)) {
-        errors.add(String.format(DUPLICATED_HOSTING_TYPES, versionType));
-        return errors;
-      }
-      versionType = "JAVA";
-    }
-
-    if (getPythonVersion() != null && !StringUtils.isBlank(getPythonVersion())) {
-      if (isNotBlank(versionType)) {
-        errors.add(String.format(DUPLICATED_HOSTING_TYPES, versionType));
-        return errors;
-      }
-      versionType = "PYTHON";
-    }
-
-    if (getPhpVersion() != null && !StringUtils.isBlank(getPhpVersion())) {
-      if (isNotBlank(versionType)) {
-        errors.add(String.format(DUPLICATED_HOSTING_TYPES, versionType));
-        return errors;
-      }
-      versionType = "PHP";
-    }
-
-    if (getNodeVersion() != null && !StringUtils.isBlank(getNodeVersion())) {
-      if (isNotBlank(versionType)) {
-        errors.add(String.format(DUPLICATED_HOSTING_TYPES, versionType));
-        return errors;
-      }
-      versionType = "NODE";
-    }
-
-    if (getJavaContainer() != null && !StringUtils.isBlank(getJavaContainer()) &&
-        getJavaContainerVersion() != null && !StringUtils.isBlank(getJavaContainerVersion())) {
-      if (isNotBlank(versionType)) {
-        errors.add(String.format(DUPLICATED_HOSTING_TYPES, versionType));
-        return errors;
-      }
-    } else if ((getJavaContainer() == null || StringUtils.isBlank(getJavaContainer())) &&
-        getJavaContainerVersion() != null && !StringUtils.isBlank(getJavaContainerVersion())) {
-      errors.add(INCOMPLETE_JAVA_CONTAINER);
-      return errors;
-    } else if (getJavaContainer() != null && !StringUtils.isBlank(getJavaContainer()) &&
-        (getJavaContainerVersion() == null || StringUtils.isBlank(getJavaContainerVersion()))) {
-      errors.add(INCOMPLETE_JAVA_CONTAINER);
-      return errors;
-    }
-
-    return errors;
   }
 }

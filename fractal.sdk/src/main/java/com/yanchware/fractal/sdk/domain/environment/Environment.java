@@ -8,9 +8,14 @@ import java.util.UUID;
 
 public interface Environment {
   EnvironmentIdValue getId();
+
   String getName();
+
   Collection<UUID> getResourceGroups();
+
   Map<String, String> getTags();
+
   Map<String, Object> getParameters();
+
   EnvironmentDto toDto();
 }

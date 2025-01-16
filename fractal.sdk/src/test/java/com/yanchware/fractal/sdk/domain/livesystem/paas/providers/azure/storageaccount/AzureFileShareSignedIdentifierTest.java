@@ -7,7 +7,7 @@ import java.time.OffsetDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AzureFileShareSignedIdentifierTest {
-  
+
   @Test
   public void validSignedIdentifierCreated_when_BuilderUsedWithValidValues() {
     String testId = "testId";
@@ -16,15 +16,15 @@ public class AzureFileShareSignedIdentifierTest {
     String permission = "rwx";
 
     AzureFileShareAccessPolicy testPolicy = AzureFileShareAccessPolicy.builder()
-        .withStartTime(startTime)
-        .withExpiryTime(expiryTime)
-        .withPermission(permission)
-        .build();
+      .withStartTime(startTime)
+      .withExpiryTime(expiryTime)
+      .withPermission(permission)
+      .build();
 
     AzureFileShareSignedIdentifier signedIdentifier = AzureFileShareSignedIdentifier.builder()
-        .withId(testId)
-        .withAccessPolicy(testPolicy)
-        .build();
+      .withId(testId)
+      .withAccessPolicy(testPolicy)
+      .build();
 
     assertEquals(testId, signedIdentifier.getId());
     assertEquals(testPolicy, signedIdentifier.getAccessPolicy());
@@ -37,15 +37,15 @@ public class AzureFileShareSignedIdentifierTest {
     String permission = "rwx";
 
     AzureFileShareAccessPolicy testPolicy = AzureFileShareAccessPolicy.builder()
-        .withStartTime(startTime)
-        .withExpiryTime(expiryTime)
-        .withPermission(permission)
-        .build();
-    
+      .withStartTime(startTime)
+      .withExpiryTime(expiryTime)
+      .withPermission(permission)
+      .build();
+
     Exception exception = assertThrows(IllegalArgumentException.class, () ->
-        AzureFileShareSignedIdentifier.builder()
-            .withAccessPolicy(testPolicy)
-            .build()
+      AzureFileShareSignedIdentifier.builder()
+        .withAccessPolicy(testPolicy)
+        .build()
     );
 
     assertTrue(exception.getMessage().contains("ID cannot be null or empty."));
@@ -54,9 +54,9 @@ public class AzureFileShareSignedIdentifierTest {
   @Test
   public void exceptionThrown_when_AccessPolicyIsNull() {
     Exception exception = assertThrows(IllegalArgumentException.class, () ->
-        AzureFileShareSignedIdentifier.builder()
-            .withId("validId")
-            .build()
+      AzureFileShareSignedIdentifier.builder()
+        .withId("validId")
+        .build()
     );
 
     assertTrue(exception.getMessage().contains("Access policy cannot be null."));

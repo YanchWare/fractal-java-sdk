@@ -24,6 +24,21 @@ public class DnsCaaRecord extends DnsRecord {
     return new DnsCaaRecordBuilder();
   }
 
+  @Override
+  public Collection<String> validate() {
+    var errors = super.validate();
+
+    if (!isBlank(recordData)) {
+      for (var data : recordData) {
+        errors.addAll(data.validate());
+      }
+    }
+
+    return errors.stream()
+      .map(error -> "[DnsCaaRecord Validation] " + error)
+      .collect(Collectors.toList());
+  }
+
   public static class DnsCaaRecordBuilder extends Builder<DnsCaaRecord, DnsCaaRecordBuilder> {
     @Override
     protected DnsCaaRecord createRecord() {
@@ -56,20 +71,5 @@ public class DnsCaaRecord extends DnsRecord {
     public DnsCaaRecord build() {
       return super.build();
     }
-  }
-
-  @Override
-  public Collection<String> validate() {
-    var errors = super.validate();
-
-    if (!isBlank(recordData)) {
-      for (var data : recordData) {
-        errors.addAll(data.validate());
-      }
-    }
-
-    return errors.stream()
-        .map(error -> "[DnsCaaRecord Validation] " + error)
-        .collect(Collectors.toList());
   }
 }

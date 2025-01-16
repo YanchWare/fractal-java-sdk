@@ -6,7 +6,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
@@ -23,6 +26,11 @@ public class ComponentLink implements Validatable {
 
   public static ComponentLinkBuilder builder() {
     return new ComponentLinkBuilder();
+  }
+
+  @Override
+  public Collection<String> validate() {
+    return ComponentId.validate(componentId);
   }
 
   public static class ComponentLinkBuilder {
@@ -73,16 +81,11 @@ public class ComponentLink implements Validatable {
 
       if (!errors.isEmpty()) {
         throw new IllegalArgumentException(String.format(
-            "ComponentLink validation failed. Errors: %s",
-            Arrays.toString(errors.toArray())));
+          "ComponentLink validation failed. Errors: %s",
+          Arrays.toString(errors.toArray())));
       }
 
       return componentLink;
     }
-  }
-
-  @Override
-  public Collection<String> validate() {
-    return ComponentId.validate(componentId);
   }
 }

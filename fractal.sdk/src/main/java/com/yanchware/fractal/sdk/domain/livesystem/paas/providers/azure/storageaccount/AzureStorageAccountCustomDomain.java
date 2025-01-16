@@ -29,7 +29,7 @@ public class AzureStorageAccountCustomDomain {
 
     /**
      * <pre>
-     * Sets the custom domain name assigned to the storage account. 
+     * Sets the custom domain name assigned to the storage account.
      * Name is the CNAME source.
      * </pre>
      */

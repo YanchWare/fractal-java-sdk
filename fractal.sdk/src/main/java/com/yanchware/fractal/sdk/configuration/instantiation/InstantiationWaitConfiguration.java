@@ -50,7 +50,8 @@ public class InstantiationWaitConfiguration {
     public InstantiationWaitConfiguration build() {
 
       if (configuration.waitForInstantiation
-          && configuration.timeoutMinutes == null) {
+        && configuration.timeoutMinutes == null)
+      {
         configuration.setTimeoutMinutes(DEFAULT_LIVE_SYSTEM_INSTANTIATION_WAIT_TIMEOUT_MINUTES);
       }
 

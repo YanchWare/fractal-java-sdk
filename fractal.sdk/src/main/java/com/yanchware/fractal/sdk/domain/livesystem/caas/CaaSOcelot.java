@@ -52,6 +52,7 @@ public class CaaSOcelot extends CaaSServiceMeshSecurityImpl implements LiveSyste
      * Ocelot host address that will be visible for API communication
      * <p>
      * For more details check <a href="https://fractal.cloud/docs/docs-ocelot">Ocelot documentation</a>
+     * </p>
      *
      * @param host
      */

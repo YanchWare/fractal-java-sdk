@@ -14,8 +14,8 @@ class CaaSAmbassadorTest {
     assertThatThrownBy(() -> CaaSAmbassador.builder()
       .withId("")
       .build())
-    .isInstanceOf(IllegalArgumentException.class)
-    .hasMessageContainingAll("A valid component id cannot be null, empty or contain spaces");
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContainingAll("A valid component id cannot be null, empty or contain spaces");
   }
 
   @Test
@@ -23,8 +23,8 @@ class CaaSAmbassadorTest {
     assertThatThrownBy(() -> CaaSAmbassador.builder()
       .withId(ComponentId.from("ambassador"))
       .build())
-    .isInstanceOf(IllegalArgumentException.class)
-    .hasMessageContaining("[CaaSAmbassador Validation] Namespace has not been defined and it is required");
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("[CaaSAmbassador Validation] Namespace has not been defined and it is required");
   }
 
   @Test
@@ -33,8 +33,9 @@ class CaaSAmbassadorTest {
       .withNamespace("ambassador")
       .withContainerPlatform("")
       .build())
-    .isInstanceOf(IllegalArgumentException.class)
-      .hasMessageContaining("[CaaSAmbassador Validation] ContainerPlatform defined was either empty or blank and it is required");
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("[CaaSAmbassador Validation] ContainerPlatform defined was either empty or blank and it " +
+        "is required");
   }
 
   @Test
@@ -43,19 +44,21 @@ class CaaSAmbassadorTest {
     assertThatThrownBy(ambassadorBuilder::build).isInstanceOf(IllegalArgumentException.class)
       .hasMessageContaining("License Key defined was either empty or blank");
   }
-  
+
   @Test
   public void exceptionThrown_when_ambassadorCreatedWithEmptyHostOwnerEmail() {
     var ambassadorBuilder = ambassadorBuilder().withHostOwnerEmail("");
     assertThatThrownBy(ambassadorBuilder::build)
-      .isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Host Owner Email has not been defined and it is required");
+      .isInstanceOf(IllegalArgumentException.class).hasMessageContaining("Host Owner Email has not been defined and " +
+        "it is required");
   }
 
   @Test
   public void exceptionThrown_when_ambassadorCreatedWithEmptyAcmeProviderAuthority() {
     var ambassadorBuilder = ambassadorBuilder().withAcmeProviderAuthority("");
     assertThatThrownBy(ambassadorBuilder::build)
-      .isInstanceOf(IllegalArgumentException.class).hasMessageContaining("[CaaSAmbassador Validation] Automated Certificate Management Environment (ACME) Provider Authority has not been defined and it is required");
+      .isInstanceOf(IllegalArgumentException.class).hasMessageContaining("[CaaSAmbassador Validation] Automated " +
+        "Certificate Management Environment (ACME) Provider Authority has not been defined and it is required");
   }
 
   @Test
@@ -78,11 +81,11 @@ class CaaSAmbassadorTest {
 
   private CaaSAmbassador.AmbassadorBuilder ambassadorBuilder() {
     return CaaSAmbassador.builder()
-        .withId("ambassador")
-        .withNamespace("ambassador")
-        .withHost("host")
-        .withHostOwnerEmail("email@email.com")
-        .withAcmeProviderAuthority("authority")
-        .withTlsSecretName("tls");
+      .withId("ambassador")
+      .withNamespace("ambassador")
+      .withHost("host")
+      .withHostOwnerEmail("email@email.com")
+      .withAcmeProviderAuthority("authority")
+      .withTlsSecretName("tls");
   }
 }

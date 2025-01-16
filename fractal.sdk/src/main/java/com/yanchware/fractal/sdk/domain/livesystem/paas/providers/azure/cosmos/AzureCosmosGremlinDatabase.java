@@ -20,50 +20,47 @@ import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_COSMOS_
 @ToString(callSuper = true)
 public class AzureCosmosGremlinDatabase extends PaaSGraphDatabase implements LiveSystemComponent, AzureCosmosEntity {
 
-    public static final String TYPE = PAAS_COSMOS_GREMLIN_DATABASE.getId();
+  public static final String TYPE = PAAS_COSMOS_GREMLIN_DATABASE.getId();
+  private String name;
+  private int throughput;
+  private int maxThroughput;
+  private AzureRegion azureRegion;
+  private AzureResourceGroup azureResourceGroup;
+  private Map<String, String> tags;
+  @Setter(AccessLevel.PRIVATE)
+  private String entityName = "Gremlin Database";
 
-    public static AzureCosmosGremlinDatabaseBuilder builder() {
-        return new AzureCosmosGremlinDatabaseBuilder();
-    }
+  public static AzureCosmosGremlinDatabaseBuilder builder() {
+    return new AzureCosmosGremlinDatabaseBuilder();
+  }
 
-    private String name;
-    private int throughput;
-    private int maxThroughput;
-    private AzureRegion azureRegion;
-    private AzureResourceGroup azureResourceGroup;
-    private Map<String, String> tags;
+  @Override
+  public ProviderType getProvider() {
+    return ProviderType.AZURE;
+  }
 
-    @Setter(AccessLevel.PRIVATE)
-    private String entityName = "Gremlin Database";
+  @Override
+  public Collection<String> validate() {
+    return super.validate();
+  }
 
-
+  public static class AzureCosmosGremlinDatabaseBuilder extends AzureCosmosEntityBuilder<AzureCosmosGremlinDatabase,
+    AzureCosmosGremlinDatabaseBuilder> {
     @Override
-    public ProviderType getProvider() {
-        return ProviderType.AZURE;
-    }
-
-
-    public static class AzureCosmosGremlinDatabaseBuilder extends AzureCosmosEntityBuilder<AzureCosmosGremlinDatabase, AzureCosmosGremlinDatabaseBuilder> {
-        @Override
-        protected AzureCosmosGremlinDatabase createComponent() {
-            return new AzureCosmosGremlinDatabase();
-        }
-
-        @Override
-        protected AzureCosmosGremlinDatabaseBuilder getBuilder() {
-            return this;
-        }
-
-        @Override
-        public AzureCosmosGremlinDatabase build() {
-            component.setType(PAAS_COSMOS_GREMLIN_DATABASE);
-            return super.build();
-        }
-
+    protected AzureCosmosGremlinDatabase createComponent() {
+      return new AzureCosmosGremlinDatabase();
     }
 
     @Override
-    public Collection<String> validate() {
-        return super.validate();
+    protected AzureCosmosGremlinDatabaseBuilder getBuilder() {
+      return this;
     }
+
+    @Override
+    public AzureCosmosGremlinDatabase build() {
+      component.setType(PAAS_COSMOS_GREMLIN_DATABASE);
+      return super.build();
+    }
+
+  }
 }

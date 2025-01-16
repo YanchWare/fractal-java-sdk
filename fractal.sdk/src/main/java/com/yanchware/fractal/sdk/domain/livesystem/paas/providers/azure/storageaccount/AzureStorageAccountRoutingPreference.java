@@ -18,7 +18,7 @@ public class AzureStorageAccountRoutingPreference {
   private Boolean publishInternetEndpoints;
   private Boolean publishMicrosoftEndpoints;
   private AzureRoutingChoice routingChoice;
-  
+
 
   public static AzureStorageAccountRoutingPreferenceBuilder builder() {
     return new AzureStorageAccountRoutingPreferenceBuilder();
@@ -42,7 +42,7 @@ public class AzureStorageAccountRoutingPreference {
       instance.setPublishInternetEndpoints(publishInternetEndpoints);
       return builder;
     }
-    
+
     /**
      * <pre>
      * A boolean flag which indicates whether microsoft routing storage endpoints are to be published
@@ -52,7 +52,7 @@ public class AzureStorageAccountRoutingPreference {
       instance.setPublishMicrosoftEndpoints(publishMicrosoftEndpoints);
       return builder;
     }
-    
+
     /**
      * <pre>
      * Routing Choice defines the kind of network routing opted by the user.
@@ -62,7 +62,7 @@ public class AzureStorageAccountRoutingPreference {
       instance.setRoutingChoice(routingChoice);
       return builder;
     }
-    
+
     public AzureStorageAccountRoutingPreference build() {
       return instance;
     }

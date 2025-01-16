@@ -32,13 +32,13 @@ public class BlueprintComponentDtoTest {
 
     assertGenericComponent(prometheusDto, prometheus, CaaSMonitoring.TYPE);
     assertSoftly(softly -> softly
-        .assertThat(prometheusDto.getParameters().values())
-        .as("Component Parameters")
-        .containsExactlyInAnyOrder(
-            prometheus.getApiGatewayUrl(),
-            prometheus.getNamespace(),
-            aksId
-        ));
+      .assertThat(prometheusDto.getParameters().values())
+      .as("Component Parameters")
+      .containsExactlyInAnyOrder(
+        prometheus.getApiGatewayUrl(),
+        prometheus.getNamespace(),
+        aksId
+      ));
   }
 
   @Test
@@ -52,16 +52,16 @@ public class BlueprintComponentDtoTest {
 
     assertGenericComponent(ambassadorDto, ambassador, CaaSAPIGateway.TYPE);
     assertSoftly(softly -> softly
-        .assertThat(ambassadorDto.getParameters().values())
-        .as("Component Parameters")
-        .containsExactlyInAnyOrder(
-            ambassador.getHost(),
-            ambassador.getHostOwnerEmail(),
-            ambassador.getAcmeProviderAuthority(),
-            ambassador.getTlsSecretName(),
-            ambassador.getNamespace(),
-            aksId
-        ));
+      .assertThat(ambassadorDto.getParameters().values())
+      .as("Component Parameters")
+      .containsExactlyInAnyOrder(
+        ambassador.getHost(),
+        ambassador.getHostOwnerEmail(),
+        ambassador.getAcmeProviderAuthority(),
+        ambassador.getTlsSecretName(),
+        ambassador.getNamespace(),
+        aksId
+      ));
   }
 
   @Test
@@ -76,17 +76,17 @@ public class BlueprintComponentDtoTest {
 
     assertGenericComponent(ocelotDto, ocelot, CaaSServiceMeshSecurity.TYPE);
     assertSoftly(softly -> softly
-        .assertThat(ocelotDto.getParameters().values())
-        .as("Component Parameters")
-        .containsExactlyInAnyOrder(
-            ocelot.getNamespace(),
-            ocelot.getHost(),
-            ocelot.getHostOwnerEmail(),
-            ocelot.getCorsOrigins(),
-            ocelot.getCookieMaxAgeSec(),
-            ocelot.getPathPrefix(),
-            aksId
-        ));
+      .assertThat(ocelotDto.getParameters().values())
+      .as("Component Parameters")
+      .containsExactlyInAnyOrder(
+        ocelot.getNamespace(),
+        ocelot.getHost(),
+        ocelot.getHostOwnerEmail(),
+        ocelot.getCorsOrigins(),
+        ocelot.getCookieMaxAgeSec(),
+        ocelot.getPathPrefix(),
+        aksId
+      ));
   }
 
   @Test
@@ -100,20 +100,20 @@ public class BlueprintComponentDtoTest {
 
     assertGenericComponent(elasticLoggingDto, elasticLogging, CaaSLogging.TYPE);
     assertSoftly(softly -> softly
-        .assertThat(elasticLoggingDto.getParameters().values())
-        .as("Component Parameters")
-        .containsExactlyInAnyOrder(
-            elasticLogging.getNamespace(),
-            elasticLogging.isApmRequired(),
-            elasticLogging.isKibanaRequired(),
-            elasticLogging.getElasticVersion(),
-            elasticLogging.getElasticInstances(),
-            elasticLogging.getStorage(),
-            elasticLogging.getStorageClassName(),
-            elasticLogging.getMemory(),
-            elasticLogging.getCpu(),
-            aksId
-        ));
+      .assertThat(elasticLoggingDto.getParameters().values())
+      .as("Component Parameters")
+      .containsExactlyInAnyOrder(
+        elasticLogging.getNamespace(),
+        elasticLogging.isApmRequired(),
+        elasticLogging.isKibanaRequired(),
+        elasticLogging.getElasticVersion(),
+        elasticLogging.getElasticInstances(),
+        elasticLogging.getStorage(),
+        elasticLogging.getStorageClassName(),
+        elasticLogging.getMemory(),
+        elasticLogging.getCpu(),
+        aksId
+      ));
   }
 
   @Test
@@ -127,19 +127,19 @@ public class BlueprintComponentDtoTest {
 
     assertGenericComponent(elasticDataStoreDto, elasticDataStore, CaaSSearch.TYPE);
     assertSoftly(softly -> softly
-        .assertThat(elasticDataStoreDto.getParameters().values())
-        .as("Component Parameters")
-        .containsExactlyInAnyOrder(
-            elasticDataStore.getNamespace(),
-            elasticDataStore.isKibanaRequired(),
-            elasticDataStore.getElasticVersion(),
-            elasticDataStore.getElasticInstances(),
-            elasticDataStore.getStorage(),
-            elasticDataStore.getStorageClassName(),
-            elasticDataStore.getMemory(),
-            elasticDataStore.getCpu(),
-            aksId
-        ));
+      .assertThat(elasticDataStoreDto.getParameters().values())
+      .as("Component Parameters")
+      .containsExactlyInAnyOrder(
+        elasticDataStore.getNamespace(),
+        elasticDataStore.isKibanaRequired(),
+        elasticDataStore.getElasticVersion(),
+        elasticDataStore.getElasticInstances(),
+        elasticDataStore.getStorage(),
+        elasticDataStore.getStorageClassName(),
+        elasticDataStore.getMemory(),
+        elasticDataStore.getCpu(),
+        aksId
+      ));
   }
 
   @Test
@@ -153,18 +153,18 @@ public class BlueprintComponentDtoTest {
 
     assertGenericComponent(k8sWorkloadDto, k8sWorkload, CaaSWorkload.TYPE);
     assertSoftly(softly -> softly
-        .assertThat(k8sWorkloadDto.getParameters().values())
-        .as("Component Parameters")
-        .containsExactlyInAnyOrder(
-            k8sWorkload.getNamespace(),
-            k8sWorkload.getPrivateSSHKeyPassphraseSecretId(),
-            k8sWorkload.getPrivateSSHKeySecretId(),
-            k8sWorkload.getSshRepositoryURI(),
-            k8sWorkload.getRoles(),
-            k8sWorkload.getRepoId(),
-            k8sWorkload.getBranchName(),
-            aksId
-        ));
+      .assertThat(k8sWorkloadDto.getParameters().values())
+      .as("Component Parameters")
+      .containsExactlyInAnyOrder(
+        k8sWorkload.getNamespace(),
+        k8sWorkload.getPrivateSSHKeyPassphraseSecretId(),
+        k8sWorkload.getPrivateSSHKeySecretId(),
+        k8sWorkload.getSshRepositoryURI(),
+        k8sWorkload.getRoles(),
+        k8sWorkload.getRepoId(),
+        k8sWorkload.getBranchName(),
+        aksId
+      ));
   }
 
   @Test
@@ -176,28 +176,28 @@ public class BlueprintComponentDtoTest {
     var aksDto = getBlueprintComponentDto(blueprintComponentDtoList, aks.getId().getValue());
     assertGenericComponent(aksDto, aks, PaaSContainerPlatform.TYPE);
     assertSoftly(softly -> softly
-        .assertThat(aksDto.getParameters().values())
-        .as("Component Parameters")
-        .containsExactlyInAnyOrder(
-            aks.getAzureRegion(),
-            aks.getAzureActiveDirectoryProfile(),
-            aks.getNodePools(),
-            aks.getServiceIpRange(),
-            aks.getPodIpRange(),
-            aks.getVnetAddressSpaceIpRange(),
-            aks.getVnetSubnetAddressIpRange(),
-            aks.getPriorityClasses(),
-            aks.getPodManagedIdentity(),
-            aks.getExternalWorkspaceResourceId(),
-            aks.getOutboundIps(),
-            aks.getAddonProfiles(),
-            aks.getRoles(),
-            aks.getKubernetesVersion(),
-            aks.getTags(),
-            aks.getWindowsAdminUsername(),
-            aks.getWorkloadIdentityEnabled(),
-            aks.getManagedClusterSkuTier()
-        ));
+      .assertThat(aksDto.getParameters().values())
+      .as("Component Parameters")
+      .containsExactlyInAnyOrder(
+        aks.getAzureRegion(),
+        aks.getAzureActiveDirectoryProfile(),
+        aks.getNodePools(),
+        aks.getServiceIpRange(),
+        aks.getPodIpRange(),
+        aks.getVnetAddressSpaceIpRange(),
+        aks.getVnetSubnetAddressIpRange(),
+        aks.getPriorityClasses(),
+        aks.getPodManagedIdentity(),
+        aks.getExternalWorkspaceResourceId(),
+        aks.getOutboundIps(),
+        aks.getAddonProfiles(),
+        aks.getRoles(),
+        aks.getKubernetesVersion(),
+        aks.getTags(),
+        aks.getWindowsAdminUsername(),
+        aks.getWorkloadIdentityEnabled(),
+        aks.getManagedClusterSkuTier()
+      ));
   }
 
   @Test
@@ -209,19 +209,19 @@ public class BlueprintComponentDtoTest {
     var gkeDto = getBlueprintComponentDto(blueprintComponentDtoList, gke.getId().getValue());
     assertGenericComponent(gkeDto, gke, PaaSContainerPlatform.TYPE);
     assertSoftly(softly -> softly
-        .assertThat(gkeDto.getParameters().values())
-        .as("Component Parameters")
-        .containsExactlyInAnyOrder(
-            gke.getNetworkName(),
-            gke.getPodsRangeName(),
-            gke.getRegion(),
-            gke.getServicesRangeName(),
-            gke.getSubnetworkName(),
-            gke.getNodePools(),
-            gke.getServiceIpRange(),
-            gke.getPodIpRange(),
-            gke.getSubnetworkIpRange(),
-            gke.getPriorityClasses()));
+      .assertThat(gkeDto.getParameters().values())
+      .as("Component Parameters")
+      .containsExactlyInAnyOrder(
+        gke.getNetworkName(),
+        gke.getPodsRangeName(),
+        gke.getRegion(),
+        gke.getServicesRangeName(),
+        gke.getSubnetworkName(),
+        gke.getNodePools(),
+        gke.getServiceIpRange(),
+        gke.getPodIpRange(),
+        gke.getSubnetworkIpRange(),
+        gke.getPriorityClasses()));
   }
 
   @Test
@@ -236,22 +236,23 @@ public class BlueprintComponentDtoTest {
     assertGenericComponent(azurePgBlueprintCompDto, apg, PaaSRelationalDbms.TYPE);
     assertSoftly(softly -> {
       softly.assertThat(azurePgBlueprintCompDto.getParameters().values()).as("Component Parameters")
-          .containsExactlyInAnyOrder(
-              apg.getAzureRegion(),
-              apg.getRootUser(),
-              apg.getSkuName().getId(),
-              apg.getStorageAutoGrow().getId(),
-              apg.getStorageMB(),
-              apg.getBackupRetentionDays(),
-              apg.getName()
-          );
+        .containsExactlyInAnyOrder(
+          apg.getAzureRegion(),
+          apg.getRootUser(),
+          apg.getSkuName().getId(),
+          apg.getStorageAutoGrow().getId(),
+          apg.getStorageMB(),
+          apg.getBackupRetentionDays(),
+          apg.getName()
+        );
       softly.assertThat(azurePgBlueprintCompDto.getDependencies()).as("Component Dependencies").isEmpty();
       softly.assertThat(azurePgBlueprintCompDto.getLinks()).as("Component Links").isEmpty();
     });
 
     //assert postgres db#1
     var azurePgDbBlueprintCompDto = blueprintComponentDtoList.get(1);
-    Optional<PaaSPostgreSqlDatabase> db1Optional = apg.getDatabases().stream().filter(x -> x.getId().getValue().equals(azurePgDbBlueprintCompDto.getId())).findFirst();
+    Optional<PaaSPostgreSqlDatabase> db1Optional =
+      apg.getDatabases().stream().filter(x -> x.getId().getValue().equals(azurePgDbBlueprintCompDto.getId())).findFirst();
     assertThat(db1Optional).isPresent();
     var db1 = db1Optional.get();
     assertGenericComponent(azurePgDbBlueprintCompDto, db1, PaaSRelationalDatabase.TYPE);
@@ -259,14 +260,15 @@ public class BlueprintComponentDtoTest {
       softly.assertThat(azurePgDbBlueprintCompDto.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(
         db1.getName(),
         db1.getSchema(),
-        ((AzureResourceEntity)db1).getAzureRegion());
+        ((AzureResourceEntity) db1).getAzureRegion());
       softly.assertThat(azurePgDbBlueprintCompDto.getDependencies()).as("Component Dependencies").containsExactly(apg.getId().getValue());
       softly.assertThat(azurePgDbBlueprintCompDto.getLinks()).as("Component Links").isEmpty();
     });
 
     //assert postgres db#2
     var azurePgDbBlueprintCompDto2 = blueprintComponentDtoList.get(2);
-    Optional<PaaSPostgreSqlDatabase> db2Optional = apg.getDatabases().stream().filter(x -> x.getId().getValue().equals(azurePgDbBlueprintCompDto2.getId())).findFirst();
+    Optional<PaaSPostgreSqlDatabase> db2Optional =
+      apg.getDatabases().stream().filter(x -> x.getId().getValue().equals(azurePgDbBlueprintCompDto2.getId())).findFirst();
     assertThat(db2Optional).isPresent();
     var db2 = db2Optional.get();
     assertGenericComponent(azurePgDbBlueprintCompDto2, db2, PaaSRelationalDatabase.TYPE);
@@ -274,7 +276,7 @@ public class BlueprintComponentDtoTest {
       softly.assertThat(azurePgDbBlueprintCompDto2.getParameters().values()).as("Component Parameters").containsExactlyInAnyOrder(
         db2.getSchema(),
         db2.getName(),
-        ((AzureResourceEntity)db1).getAzureRegion());
+        ((AzureResourceEntity) db1).getAzureRegion());
       softly.assertThat(azurePgDbBlueprintCompDto2.getDependencies()).as("Component Dependencies").containsExactly(apg.getId().getValue());
       softly.assertThat(azurePgDbBlueprintCompDto2.getLinks()).as("Component Links").containsAll(apg.getLinks());
     });
@@ -291,24 +293,30 @@ public class BlueprintComponentDtoTest {
     assertGenericComponent(gcpPgBlueprintCompDto, gcpPostgres, PaaSRelationalDbms.TYPE);
     assertSoftly(softly -> {
       softly.assertThat(gcpPgBlueprintCompDto.getParameters().values()).as("Component Parameters")
-          .containsExactlyInAnyOrder(
-              gcpPostgres.getRegion(),
-              gcpPostgres.getNetwork(),
-              gcpPostgres.getPeeringNetworkAddress(),
-              gcpPostgres.getPeeringNetworkAddressDescription(),
-              gcpPostgres.getPeeringNetworkName(),
-              gcpPostgres.getPeeringNetworkPrefix()
-          );
+        .containsExactlyInAnyOrder(
+          gcpPostgres.getRegion(),
+          gcpPostgres.getNetwork(),
+          gcpPostgres.getPeeringNetworkAddress(),
+          gcpPostgres.getPeeringNetworkAddressDescription(),
+          gcpPostgres.getPeeringNetworkName(),
+          gcpPostgres.getPeeringNetworkPrefix()
+        );
       softly.assertThat(gcpPgBlueprintCompDto.getDependencies()).as("Component Dependencies").isEmpty();
       softly.assertThat(gcpPgBlueprintCompDto.getLinks()).as("Component Links").isEmpty();
     });
   }
 
-  private BlueprintComponentDto getBlueprintComponentDto(List<BlueprintComponentDto> blueprintComponentDtoList, String compId) {
+  private BlueprintComponentDto getBlueprintComponentDto(
+    List<BlueprintComponentDto> blueprintComponentDtoList,
+    String compId)
+  {
     return blueprintComponentDtoList.stream().filter(dto -> dto.getId().equals(compId)).findFirst().orElse(null);
   }
 
-  private void assertComponentSize(KubernetesCluster kubernetesCluster, List<BlueprintComponentDto> blueprintComponentDtos) {
+  private void assertComponentSize(
+    KubernetesCluster kubernetesCluster,
+    List<BlueprintComponentDto> blueprintComponentDtos)
+  {
     int componentSize = 1; //containerPlatform itself
     componentSize += kubernetesCluster.getK8sWorkloadInstances().size();
     componentSize += kubernetesCluster.getMonitoringInstances().size();

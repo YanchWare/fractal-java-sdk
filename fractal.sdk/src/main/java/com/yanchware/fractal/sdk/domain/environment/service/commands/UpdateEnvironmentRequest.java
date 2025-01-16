@@ -7,4 +7,6 @@ import java.util.UUID;
 public record UpdateEnvironmentRequest(
   String name,
   Collection<UUID> resourceGroups,
-  Map<String, Object> parameters){}
+  Map<String, Object> parameters)
+{
+}

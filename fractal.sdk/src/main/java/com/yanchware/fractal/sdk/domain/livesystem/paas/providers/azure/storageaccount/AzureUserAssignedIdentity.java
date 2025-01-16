@@ -6,7 +6,7 @@ import lombok.Setter;
 
 /**
  * <pre>
- * UserAssignedIdentity for the resource.  
+ * UserAssignedIdentity for the resource.
  * </pre>
  */
 @Getter
@@ -28,7 +28,7 @@ public class AzureUserAssignedIdentity {
       this.instance = new AzureUserAssignedIdentity();
       this.builder = this;
     }
-    
+
     /**
      * <pre>
      * The client ID of the identity.

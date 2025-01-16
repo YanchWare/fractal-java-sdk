@@ -5,8 +5,10 @@ import com.yanchware.fractal.sdk.domain.blueprint.service.dtos.BlueprintComponen
 
 import java.util.Collection;
 
-public record CreateBlueprintCommandRequest (
-    String description,
-    @JsonProperty("private")
-    boolean isPrivate,
-    Collection<BlueprintComponentDto> components) { }
+public record CreateBlueprintCommandRequest(
+  String description,
+  @JsonProperty("private")
+  boolean isPrivate,
+  Collection<BlueprintComponentDto> components)
+{
+}

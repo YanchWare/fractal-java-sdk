@@ -20,7 +20,8 @@ import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLengt
  * Secret values cannot be empty or null.</pre>
  */
 public record Secret(String name, String value) {
-  private final static String NAME_NOT_VALID = "[Secret Validation] The name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen, and must be between 1 and 127 characters";
+  private final static String NAME_NOT_VALID = "[Secret Validation] The name only allow alphanumeric characters and " +
+    "hyphens, cannot start or end in a hyphen, and must be between 1 and 127 characters";
   private final static String VALUE_NOT_VALID = "[Secret Validation] The value cannot be empty or null";
 
   /**
@@ -38,8 +39,8 @@ public record Secret(String name, String value) {
 
     if (!errors.isEmpty()) {
       throw new IllegalArgumentException(String.format(
-          "Secret validation failed. Errors: %s",
-          Arrays.toString(errors.toArray())));
+        "Secret validation failed. Errors: %s",
+        Arrays.toString(errors.toArray())));
     }
   }
 

@@ -12,26 +12,28 @@ public class AzureRelayTest {
   @Test
   public void exceptionThrown_when_idIsLessThan6Characters() {
     assertThatThrownBy(() -> AzureRelay.builder().withId("comp-id").withName("test").build())
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("valid Relay name must be between 6 and 50 characters of length");
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("valid Relay name must be between 6 and 50 characters of length");
   }
 
   @Test
   public void exceptionThrown_when_idIsMoreThan50Characters() {
-    assertThatThrownBy(() -> AzureRelay.builder().withId("comp-id").withName("ttttttttttttttttttttttttttttttttttttttttttttttttttt").build())
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("valid Relay name must be between 6 and 50 characters of length");
+    assertThatThrownBy(() -> AzureRelay.builder().withId("comp-id").withName(
+      "ttttttttttttttttttttttttttttttttttttttttttttttttttt").build())
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("valid Relay name must be between 6 and 50 characters of length");
   }
 
   @Test
   public void noValidationErrors_when_relayHasRequiredFields() {
-    AzureResourceGroup azureResourceGroup = AzureResourceGroup.builder().withName("az-group").withRegion(WEST_EUROPE).build();
+    AzureResourceGroup azureResourceGroup =
+      AzureResourceGroup.builder().withName("az-group").withRegion(WEST_EUROPE).build();
     var relay = AzureRelay.builder()
-        .withId("relay-test-x")
-        .withName("relay-test-x")
-        .withRegion(AzureRegion.WEST_EUROPE)
-        .withAzureResourceGroup(azureResourceGroup)
-        .build();
+      .withId("relay-test-x")
+      .withName("relay-test-x")
+      .withRegion(AzureRegion.WEST_EUROPE)
+      .withAzureResourceGroup(azureResourceGroup)
+      .build();
     assertThat(relay.validate()).isEmpty();
   }
 }

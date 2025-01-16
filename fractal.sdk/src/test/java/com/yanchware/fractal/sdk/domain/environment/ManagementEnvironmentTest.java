@@ -23,29 +23,29 @@ class ManagementEnvironmentTest {
   @Test
   public void exceptionThrown_when_environmentCreatedWithNullShortName() {
     assertThatThrownBy(() -> generateBuilderWithInfo(null))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("Environment ShortName has not been defined and it is required");
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("Environment ShortName has not been defined and it is required");
   }
 
   @Test
   public void exceptionThrown_when_environmentCreatedWithEmptyShortName() {
     assertThatThrownBy(() -> generateBuilderWithInfo(""))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("Environment ShortName has not been defined and it is required");
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("Environment ShortName has not been defined and it is required");
   }
 
   @Test
   public void exceptionThrown_when_environmentCreatedWithBlankShortName() {
     assertThatThrownBy(() -> generateBuilderWithInfo("   "))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("Environment ShortName has not been defined and it is required");
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("Environment ShortName has not been defined and it is required");
   }
 
   @Test
   public void exceptionThrown_when_environmentCreatedWithUppercaseShortName() {
     assertThatThrownBy(() -> generateBuilderWithInfo("Production-001"))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("Environment ShortName must only contain lowercase letters, numbers, and dashes.");
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("Environment ShortName must only contain lowercase letters, numbers, and dashes.");
   }
 
   @Test
@@ -57,30 +57,30 @@ class ManagementEnvironmentTest {
   @Test
   public void noValidationErrors_when_environmentCreatedWithDnsZone() {
     var managementEnvironment = ManagementEnvironment.builder()
-        .withId(new EnvironmentIdValue(
-            EnvironmentType.PERSONAL,
-            UUID.randomUUID(),
-            "production-001"))
-        .withResourceGroup(UUID.randomUUID())
-        .withDnsZone(
-            DnsZone.builder()
-                .withName("dns.name")
-                .withRecords(Map.of("componentId", List.of(
-                    DnsAaaaRecord.builder()
-                        .withName("name")
-                        .withIpV6Address("2001:db8:3333:4444:CCCC:DDDD:EEEE:FFFF")
-                        .withTtl(Duration.ofMinutes(1))
-                        .build(),
-                    DnsPtrRecord.builder()
-                        .withName("name")
-                        .withDomainName("")
-                        .withTtl(Duration.ofMinutes(1))
-                        .build()
-                )))
-                .withParameter("key", "value")
-                .isPrivate(false)
-                .build())
-        .build();
+      .withId(new EnvironmentIdValue(
+        EnvironmentType.PERSONAL,
+        UUID.randomUUID(),
+        "production-001"))
+      .withResourceGroup(UUID.randomUUID())
+      .withDnsZone(
+        DnsZone.builder()
+          .withName("dns.name")
+          .withRecords(Map.of("componentId", List.of(
+            DnsAaaaRecord.builder()
+              .withName("name")
+              .withIpV6Address("2001:db8:3333:4444:CCCC:DDDD:EEEE:FFFF")
+              .withTtl(Duration.ofMinutes(1))
+              .build(),
+            DnsPtrRecord.builder()
+              .withName("name")
+              .withDomainName("")
+              .withTtl(Duration.ofMinutes(1))
+              .build()
+          )))
+          .withParameter("key", "value")
+          .isPrivate(false)
+          .build())
+      .build();
 
     assertThat(managementEnvironment.validate()).isEmpty();
 
@@ -92,34 +92,34 @@ class ManagementEnvironmentTest {
   @Test
   public void noValidationErrors_when_environmentCreatedWithRegionTenantIdAndSubscriptionId() {
     var managementEnvironment = ManagementEnvironment.builder()
-        .withId(new EnvironmentIdValue(
-            EnvironmentType.PERSONAL,
-            UUID.randomUUID(),
-            "production-001"))
-        .withAzureCloudAgent(
-            AzureRegion.AUSTRALIA_CENTRAL,
-            UUID.randomUUID(),
-            UUID.randomUUID())
-        .withResourceGroup(UUID.randomUUID())
-        .withDnsZone(
-            DnsZone.builder()
-                .withName("dns.name")
-                .withRecords(Map.of("componentId", List.of(
-                    DnsAaaaRecord.builder()
-                        .withName("name")
-                        .withIpV6Address("2001:db8:3333:4444:CCCC:DDDD:EEEE:FFFF")
-                        .withTtl(Duration.ofMinutes(1))
-                        .build(),
-                    DnsPtrRecord.builder()
-                        .withName("name")
-                        .withDomainName("")
-                        .withTtl(Duration.ofMinutes(1))
-                        .build()
-                )))
-                .withParameter("key", "value")
-                .isPrivate(false)
-                .build())
-        .build();
+      .withId(new EnvironmentIdValue(
+        EnvironmentType.PERSONAL,
+        UUID.randomUUID(),
+        "production-001"))
+      .withAzureCloudAgent(
+        AzureRegion.AUSTRALIA_CENTRAL,
+        UUID.randomUUID(),
+        UUID.randomUUID())
+      .withResourceGroup(UUID.randomUUID())
+      .withDnsZone(
+        DnsZone.builder()
+          .withName("dns.name")
+          .withRecords(Map.of("componentId", List.of(
+            DnsAaaaRecord.builder()
+              .withName("name")
+              .withIpV6Address("2001:db8:3333:4444:CCCC:DDDD:EEEE:FFFF")
+              .withTtl(Duration.ofMinutes(1))
+              .build(),
+            DnsPtrRecord.builder()
+              .withName("name")
+              .withDomainName("")
+              .withTtl(Duration.ofMinutes(1))
+              .build()
+          )))
+          .withParameter("key", "value")
+          .isPrivate(false)
+          .build())
+      .build();
 
     assertThat(managementEnvironment.validate()).isEmpty();
 
@@ -130,19 +130,19 @@ class ManagementEnvironmentTest {
   @Test
   public void noValidationErrors_when_environmentCreatedWithTags() {
     var managementEnvironment = ManagementEnvironment.builder()
-        .withId(new EnvironmentIdValue(
-            EnvironmentType.PERSONAL,
-            UUID.randomUUID(),
-            "production-001"))
-        .withAzureCloudAgent(
-            AzureRegion.AUSTRALIA_CENTRAL,
-            UUID.randomUUID(),
-            UUID.randomUUID())
-        .withResourceGroup(UUID.randomUUID())
-        .withTags(Map.of("key1", "value1", "key2", "value2"))
-        .withTag("key1", "value2")
-        .withTag("key3", "value3")
-        .build();
+      .withId(new EnvironmentIdValue(
+        EnvironmentType.PERSONAL,
+        UUID.randomUUID(),
+        "production-001"))
+      .withAzureCloudAgent(
+        AzureRegion.AUSTRALIA_CENTRAL,
+        UUID.randomUUID(),
+        UUID.randomUUID())
+      .withResourceGroup(UUID.randomUUID())
+      .withTags(Map.of("key1", "value1", "key2", "value2"))
+      .withTag("key1", "value2")
+      .withTag("key3", "value3")
+      .build();
 
     assertThat(managementEnvironment.validate()).isEmpty();
 
@@ -161,44 +161,44 @@ class ManagementEnvironmentTest {
     var environmentType = EnvironmentType.PERSONAL;
 
     var operationalEnvironment = OperationalEnvironment.builder()
-        .withShortName("operational-001")
-        .withResourceGroup(UUID.randomUUID())
-        .withAzureSubscription(AzureRegion.WEST_EUROPE, UUID.randomUUID())
-        .withTag("key1", "value1")
-        .withTag("key2", "value3")
-        .withTag("key3", "value4")
-        .build();
+      .withShortName("operational-001")
+      .withResourceGroup(UUID.randomUUID())
+      .withAzureSubscription(AzureRegion.WEST_EUROPE, UUID.randomUUID())
+      .withTag("key1", "value1")
+      .withTag("key2", "value3")
+      .withTag("key3", "value4")
+      .build();
 
     var managementEnvironment = ManagementEnvironment.builder()
-        .withId(new EnvironmentIdValue(
-            environmentType,
-            ownerId,
-            "production-001"))
-        .withResourceGroup(UUID.randomUUID())
-        .withAwsCloudAgent(AwsRegion.EU_NORTH_1, UUID.randomUUID().toString(), UUID.randomUUID().toString())
-        .withAzureCloudAgent(AzureRegion.WEST_EUROPE, UUID.randomUUID(), UUID.randomUUID())
-        .withGcpCloudAgent(GcpRegion.EUROPE_WEST1, UUID.randomUUID().toString(), UUID.randomUUID().toString())
-        .withOciCloudAgent(OciRegion.EU_ZURICH_1, UUID.randomUUID().toString(), UUID.randomUUID().toString())
-        .withDnsZone(
-            DnsZone.builder()
-                .withName("dns.name")
-                .withRecords(Map.of("componentId", List.of(
-                    DnsAaaaRecord.builder()
-                        .withName("name")
-                        .withIpV6Address("2001:db8:3333:4444:CCCC:DDDD:EEEE:FFFF")
-                        .withTtl(Duration.ofMinutes(1))
-                        .build(),
-                    DnsPtrRecord.builder()
-                        .withName("name")
-                        .withDomainName("")
-                        .withTtl(Duration.ofMinutes(1))
-                        .build()
-                )))
-                .withParameter("key", "value")
-                .isPrivate(false)
-                .build())
-        .withOperationalEnvironment(operationalEnvironment)
-        .build();
+      .withId(new EnvironmentIdValue(
+        environmentType,
+        ownerId,
+        "production-001"))
+      .withResourceGroup(UUID.randomUUID())
+      .withAwsCloudAgent(AwsRegion.EU_NORTH_1, UUID.randomUUID().toString(), UUID.randomUUID().toString())
+      .withAzureCloudAgent(AzureRegion.WEST_EUROPE, UUID.randomUUID(), UUID.randomUUID())
+      .withGcpCloudAgent(GcpRegion.EUROPE_WEST1, UUID.randomUUID().toString(), UUID.randomUUID().toString())
+      .withOciCloudAgent(OciRegion.EU_ZURICH_1, UUID.randomUUID().toString(), UUID.randomUUID().toString())
+      .withDnsZone(
+        DnsZone.builder()
+          .withName("dns.name")
+          .withRecords(Map.of("componentId", List.of(
+            DnsAaaaRecord.builder()
+              .withName("name")
+              .withIpV6Address("2001:db8:3333:4444:CCCC:DDDD:EEEE:FFFF")
+              .withTtl(Duration.ofMinutes(1))
+              .build(),
+            DnsPtrRecord.builder()
+              .withName("name")
+              .withDomainName("")
+              .withTtl(Duration.ofMinutes(1))
+              .build()
+          )))
+          .withParameter("key", "value")
+          .isPrivate(false)
+          .build())
+      .withOperationalEnvironment(operationalEnvironment)
+      .build();
 
     assertThat(managementEnvironment.validate()).isEmpty();
 
@@ -209,21 +209,21 @@ class ManagementEnvironmentTest {
   @Test
   public void noValidationErrors_when_environmentCreatedWithSecrets() {
     var managementEnvironment = ManagementEnvironment.builder()
-        .withId(new EnvironmentIdValue(
-            EnvironmentType.PERSONAL,
-            UUID.randomUUID(),
-            "production-001"))
-        .withAzureCloudAgent(
-            AzureRegion.AUSTRALIA_CENTRAL,
-            UUID.randomUUID(),
-            UUID.randomUUID())
-        .withResourceGroup(UUID.randomUUID())
-        .withSecret(new Secret("secret-1", "value-1"))
-        .withSecret(new Secret("secret-2", "value-2"))
-        .withSecrets(List.of(
-            new Secret("secret-3", "value-3"),
-            new Secret("secret-4", "value-4")
-        )).build();
+      .withId(new EnvironmentIdValue(
+        EnvironmentType.PERSONAL,
+        UUID.randomUUID(),
+        "production-001"))
+      .withAzureCloudAgent(
+        AzureRegion.AUSTRALIA_CENTRAL,
+        UUID.randomUUID(),
+        UUID.randomUUID())
+      .withResourceGroup(UUID.randomUUID())
+      .withSecret(new Secret("secret-1", "value-1"))
+      .withSecret(new Secret("secret-2", "value-2"))
+      .withSecrets(List.of(
+        new Secret("secret-3", "value-3"),
+        new Secret("secret-4", "value-4")
+      )).build();
 
     assertThat(managementEnvironment.validate()).isEmpty();
 
@@ -238,11 +238,11 @@ class ManagementEnvironmentTest {
 
   private ManagementEnvironment generateBuilderWithInfo(String shortName) {
     return ManagementEnvironment.builder()
-        .withId(new EnvironmentIdValue(
-            EnvironmentType.PERSONAL,
-            UUID.randomUUID(),
-            shortName))
-        .withResourceGroup(UUID.randomUUID())
-        .build();
+      .withId(new EnvironmentIdValue(
+        EnvironmentType.PERSONAL,
+        UUID.randomUUID(),
+        shortName))
+      .withResourceGroup(UUID.randomUUID())
+      .build();
   }
 }

@@ -21,8 +21,11 @@ import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_STORAGE
 @Getter
 @Setter(AccessLevel.PROTECTED)
 public class AzureBlobContainer extends PaaSStorageContainer implements LiveSystemComponent, Validatable {
-  private static final Pattern NAME_PATTERN = Pattern.compile("^[a-z0-9](?:[a-z0-9]|(?<=[a-z0-9])-(?=[a-z0-9])){1,61}[a-z0-9]$");
-  private static final String INVALID_NAME_MESSAGE = "This name may only contain lowercase letters, numbers, and hyphens, and must begin with a letter or a number. Each hyphen must be preceded and followed by a non-hyphen character. The name must also be between 3 and 63 characters long";
+  private static final Pattern NAME_PATTERN = Pattern.compile("^[a-z0-9](?:[a-z0-9]|(?<=[a-z0-9])-(?=[a-z0-9])){1," +
+    "61}[a-z0-9]$");
+  private static final String INVALID_NAME_MESSAGE = "This name may only contain lowercase letters, numbers, and " +
+    "hyphens, and must begin with a letter or a number. Each hyphen must be preceded and followed by a non-hyphen " +
+    "character. The name must also be between 3 and 63 characters long";
 
 
   private String name;
@@ -36,14 +39,13 @@ public class AzureBlobContainer extends PaaSStorageContainer implements LiveSyst
   private AzureRegion azureRegion;
   private AzureResourceGroup azureResourceGroup;
 
+  public static AzureBlobContainerBuilder builder() {
+    return new AzureBlobContainerBuilder();
+  }
 
   @Override
   public ProviderType getProvider() {
     return ProviderType.AZURE;
-  }
-
-  public static AzureBlobContainerBuilder builder() {
-    return new AzureBlobContainerBuilder();
   }
 
   @Override
@@ -91,13 +93,14 @@ public class AzureBlobContainer extends PaaSStorageContainer implements LiveSyst
     /**
      * <pre>
      * Sets the name for the Azure Blob Container.
-     * 
-     * The name must be a valid Azure Blob Container name, adhering to Azure naming requirements. 
-     * It may only contain lowercase letters, numbers, and hyphens, and must begin and end with a letter or a number. 
-     * Each hyphen must be preceded and followed by a non-hyphen character. 
+     *
+     * The name must be a valid Azure Blob Container name, adhering to Azure naming requirements.
+     * It may only contain lowercase letters, numbers, and hyphens, and must begin and end with a letter or a number.
+     * Each hyphen must be preceded and followed by a non-hyphen character.
      * The name must also be between 3 and 63 characters long.</pre>
      *
-     * @param name A <code>String</code> representing the name for the Azure Blob Container. Must follow Azure naming conventions.
+     * @param name A <code>String</code> representing the name for the Azure Blob Container. Must follow Azure naming
+     *            conventions.
      * @return The builder instance for chaining.
      */
     public AzureBlobContainerBuilder withName(String name) {
@@ -108,9 +111,9 @@ public class AzureBlobContainer extends PaaSStorageContainer implements LiveSyst
     /**
      * <pre>
      * Sets the default encryption scope for the Azure Blob Container.
-     * 
-     * This defines the encryption mechanism used for the Blob Container. 
-     * Setting a default encryption scope enables specifying the encryption key 
+     *
+     * This defines the encryption mechanism used for the Blob Container.
+     * Setting a default encryption scope enables specifying the encryption key
      * to be used for storing the blobs in this container.</pre>
      *
      * @param defaultEncryptionScope A <code>String</code> representing the default encryption scope.
@@ -124,8 +127,8 @@ public class AzureBlobContainer extends PaaSStorageContainer implements LiveSyst
     /**
      * <pre>
      * Specifies whether the encryption scope override should be denied for the Azure Blob Container.
-     * 
-     * When set to <code>true</code>, it prevents the clients from specifying an encryption scope other than the default 
+     *
+     * When set to <code>true</code>, it prevents the clients from specifying an encryption scope other than the default
      * for this container. This ensures that all blobs in the container are encrypted under the same scope.</pre>
      *
      * @param denyEncryptionScopeOverride A <code>Boolean</code> indicating whether to deny encryption scope override.
@@ -139,8 +142,8 @@ public class AzureBlobContainer extends PaaSStorageContainer implements LiveSyst
     /**
      * <pre>
      * Enables or disables the NFSv3 'all squash' feature for the Azure Blob Container.
-     * 
-     * When enabled, all user access is mapped to anonymous access. 
+     *
+     * When enabled, all user access is mapped to anonymous access.
      * This can be useful in scenarios where you do not want to maintain user identities for access to the container.</pre>
      *
      * @param enableNfsV3AllSquash A <code>Boolean</code> indicating whether to enable NFSv3 all squash.
@@ -154,9 +157,9 @@ public class AzureBlobContainer extends PaaSStorageContainer implements LiveSyst
     /**
      * <pre>
      * Enables or disables the NFSv3 'root squash' feature for the Azure Blob Container.
-     * 
-     * When enabled, it maps the root user access to an anonymous user access. 
-     * This is a security feature to prevent a root user on the client machine from having root privileges 
+     *
+     * When enabled, it maps the root user access to an anonymous user access.
+     * This is a security feature to prevent a root user on the client machine from having root privileges
      * on the container.</pre>
      *
      * @param enableNfsV3RootSquash A <code>Boolean</code> indicating whether to enable NFSv3 root squash.
@@ -170,11 +173,12 @@ public class AzureBlobContainer extends PaaSStorageContainer implements LiveSyst
     /**
      * <pre>
      * Sets the immutable storage with versioning configuration for the Azure Blob Container.
-     * 
-     * Immutable storage with versioning helps protect your data from accidental or malicious modification and deletion. 
+     *
+     * Immutable storage with versioning helps protect your data from accidental or malicious modification and deletion.
      * It's useful for scenarios where data preservation is critical.</pre>
      *
-     * @param immutableStorageWithVersioning An instance of {@link AzureBlobContainerImmutableStorageWithVersioning} representing the configuration settings.
+     * @param immutableStorageWithVersioning An instance of {@link AzureBlobContainerImmutableStorageWithVersioning}
+     *                                      representing the configuration settings.
      * @return The builder instance for chaining.
      */
     public AzureBlobContainerBuilder withImmutableStorageWithVersioning(AzureBlobContainerImmutableStorageWithVersioning immutableStorageWithVersioning) {
@@ -185,8 +189,8 @@ public class AzureBlobContainer extends PaaSStorageContainer implements LiveSyst
     /**
      * <pre>
      * Sets the metadata for the Azure Blob Container.
-     * 
-     * Metadata is represented as a collection of key-value pairs that can be used to store additional information 
+     *
+     * Metadata is represented as a collection of key-value pairs that can be used to store additional information
      * about the container. Each key and value must be a non-null and non-empty string.</pre>
      *
      * @param metadata A <code>Map&lt;String, String&gt;</code> containing the metadata key-value pairs.
@@ -200,19 +204,20 @@ public class AzureBlobContainer extends PaaSStorageContainer implements LiveSyst
     /**
      * <pre>
      * Sets the level of public access allowed for the Azure Blob Container.
-     * 
-     * Determines the accessibility of the data within the container from the internet based on the specified level 
+     *
+     * Determines the accessibility of the data within the container from the internet based on the specified level
      * of public access:
      *   - {@link AzureBlobContainerPublicAccess#CONTAINER}: Full public read access for both container and blob data.
-     *   - {@link AzureBlobContainerPublicAccess#BLOB}: Public read access for blob data only; container data is not 
+     *   - {@link AzureBlobContainerPublicAccess#BLOB}: Public read access for blob data only; container data is not
      *     accessible publicly.
-     *   - {@link AzureBlobContainerPublicAccess#NONE}: No public read access; data within the container can only be 
+     *   - {@link AzureBlobContainerPublicAccess#NONE}: No public read access; data within the container can only be
      *     accessed with appropriate authorization.
      *
-     * This setting is crucial for controlling the exposure of data stored in Azure Blob Containers to the public 
+     * This setting is crucial for controlling the exposure of data stored in Azure Blob Containers to the public
      * internet.</pre>
      *
-     * @param publicAccess An instance of {@link AzureBlobContainerPublicAccess} representing the desired level of public access.
+     * @param publicAccess An instance of {@link AzureBlobContainerPublicAccess} representing the desired level of
+     *                     public access.
      * @return The builder instance for chaining, allowing for fluent configuration of the {@link AzureBlobContainer}.
      */
     public AzureBlobContainerBuilder withPublicAccess(AzureBlobContainerPublicAccess publicAccess) {

@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_COSMOS_ACCOUNT;
 import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidLowercaseLettersNumbersAndHyphens;
 import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLength;
-import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_COSMOS_ACCOUNT;
 
 @Getter
 @Setter
@@ -25,7 +25,9 @@ public class AzureCosmosNoSqlDbms extends PaaSDocumentDbms implements LiveSystem
 
   public static final String TYPE = PAAS_COSMOS_ACCOUNT.getId();
 
-  private final static String NAME_NOT_VALID = "[AzureCosmosNoSqlDbms Validation] The name must only contains lowercase letters, numbers, and hyphens. The name must not start or end in a hyphen and must be between 3 and 44 characters long";
+  private final static String NAME_NOT_VALID = "[AzureCosmosNoSqlDbms Validation] The name must only contains " +
+    "lowercase letters, numbers, and hyphens. The name must not start or end in a hyphen and must be between 3 and 44" +
+    " characters long";
 
   private String name;
   private Integer maxTotalThroughput;
@@ -33,15 +35,8 @@ public class AzureCosmosNoSqlDbms extends PaaSDocumentDbms implements LiveSystem
   private AzureRegion azureRegion;
   private AzureResourceGroup azureResourceGroup;
   private Map<String, String> tags;
-
-  @Override
-  public ProviderType getProvider() {
-    return ProviderType.AZURE;
-  }
-
   private Collection<AzureCosmosNoSqlDatabase> cosmosEntities;
   private AzureCosmosBackupPolicy backupPolicy;
-
   protected AzureCosmosNoSqlDbms() {
     cosmosEntities = new ArrayList<>();
   }
@@ -50,7 +45,28 @@ public class AzureCosmosNoSqlDbms extends PaaSDocumentDbms implements LiveSystem
     return new AzureCosmosNoSqlDbmsBuilder();
   }
 
-  public static class AzureCosmosNoSqlDbmsBuilder extends AzureCosmosAccountBuilder<AzureCosmosNoSqlDbms, AzureCosmosNoSqlDbmsBuilder> {
+  @Override
+  public ProviderType getProvider() {
+    return ProviderType.AZURE;
+  }
+
+  public Collection<String> validate() {
+    Collection<String> errors = super.validate();
+    errors.addAll(AzureCosmosAccount.validateCosmosAccount(this, "NoSql DBMS"));
+
+    if (StringUtils.isNotBlank(name)) {
+      var hasValidCharacters = isValidLowercaseLettersNumbersAndHyphens(name);
+      var hasValidLengths = isValidStringLength(name, 3, 44);
+      if (!hasValidCharacters || !hasValidLengths) {
+        errors.add(NAME_NOT_VALID);
+      }
+    }
+
+    return errors;
+  }
+
+  public static class AzureCosmosNoSqlDbmsBuilder extends AzureCosmosAccountBuilder<AzureCosmosNoSqlDbms,
+    AzureCosmosNoSqlDbmsBuilder> {
 
     @Override
     protected AzureCosmosNoSqlDbms createComponent() {
@@ -61,21 +77,6 @@ public class AzureCosmosNoSqlDbms extends PaaSDocumentDbms implements LiveSystem
     protected AzureCosmosNoSqlDbmsBuilder getBuilder() {
       return this;
     }
-  }
-
-  public Collection<String> validate() {
-    Collection<String> errors = super.validate();
-    errors.addAll(AzureCosmosAccount.validateCosmosAccount(this, "NoSql DBMS"));
-
-    if(StringUtils.isNotBlank(name)) {
-      var hasValidCharacters = isValidLowercaseLettersNumbersAndHyphens(name);
-      var hasValidLengths = isValidStringLength(name, 3, 44);
-      if(!hasValidCharacters || !hasValidLengths) {
-        errors.add(NAME_NOT_VALID);
-      }
-    }
-    
-    return errors;
   }
 
 }

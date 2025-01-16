@@ -12,13 +12,13 @@ public class AzureResourceGroupTest {
     var region = AzureRegion.WEST_EUROPE;
 
     var azureResourceGroup = AzureResourceGroup.builder()
-        .withName(resourceGroupName)
-        .withRegion(region)
-        .build();
+      .withName(resourceGroupName)
+      .withRegion(region)
+      .build();
 
     assertThat(azureResourceGroup)
-        .extracting("name", "region")
-        .contains(resourceGroupName, region);
+      .extracting("name", "region")
+      .contains(resourceGroupName, region);
   }
 
   @Test
@@ -26,22 +26,22 @@ public class AzureResourceGroupTest {
     var resourceGroupName = "resourceGroupName";
 
     var azureResourceGroup = AzureResourceGroup.builder()
-        .withName(resourceGroupName)
-        .withRegion(AzureRegion.fromString("eastus2"))
-        .build();
+      .withName(resourceGroupName)
+      .withRegion(AzureRegion.fromString("eastus2"))
+      .build();
 
     assertThat(azureResourceGroup)
-        .extracting("name", "region")
-        .contains(resourceGroupName, AzureRegion.EAST_US2);
+      .extracting("name", "region")
+      .contains(resourceGroupName, AzureRegion.EAST_US2);
   }
 
   @Test
   public void validationError_when_AzureResourceGroupWithWrongNameAsStringBuilt() {
     assertThatThrownBy(() -> AzureResourceGroup.builder()
-        .withName("")
-        .withRegion(AzureRegion.fromString("wrong_enum"))
-        .build())
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("[AzureResourceGroup Validation] Name cannot be null or empty");
+      .withName("")
+      .withRegion(AzureRegion.fromString("wrong_enum"))
+      .build())
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("[AzureResourceGroup Validation] Name cannot be null or empty");
   }
 }

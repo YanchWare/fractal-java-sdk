@@ -20,15 +20,23 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 public class AzureNodePool implements Validatable {
   private final static String NAME_REGEX = "^[a-z\\d]+$";
   private final static String NAME_IS_BLANK = "[AzureNodePool Validation] Name has not been defined and it is required";
-  private final static String NAME_ONLY_LOWERCASE_ALPHANUMERIC = "[AzureNodePool Validation] Name should only contain lowercase alphanumeric characters";
-  private final static String LINUX_NAME_IS_TOO_LONG = "[AzureNodePool Validation] Name for node with Linux OS Type should be between 1 and 12 characters";
-  private final static String WINDOWS_NAME_IS_TOO_LONG = "[AzureNodePool Validation] Name for node with Windows OS Type should be between 1 and 6 characters";
+  private final static String NAME_ONLY_LOWERCASE_ALPHANUMERIC = "[AzureNodePool Validation] Name should only contain" +
+    " lowercase alphanumeric characters";
+  private final static String LINUX_NAME_IS_TOO_LONG = "[AzureNodePool Validation] Name for node with Linux OS Type " +
+    "should be between 1 and 12 characters";
+  private final static String WINDOWS_NAME_IS_TOO_LONG = "[AzureNodePool Validation] Name for node with Windows OS " +
+    "Type should be between 1 and 6 characters";
   private final static String DISK_SIZE_UNDER_30GB = "[AzureNodePool Validation] Disk size must be at least 30GB";
-  private final static String SYSTEM_POOL_MODE_WINDOWS = "[AzureNodePool Validation] Pool Mode is set to SYSTEM but that is not supported for a Windows node pool";
-  private final static String MAX_NODE_COUNT = "[AzureNodePool Validation] Max node count must be a positive integer (> 0)";
-  private final static String MIN_NODE_COUNT_IS_NULL = "[AzureNodePool Validation] MinNodeCount has not been defined and it is required when autoscaling is enabled";
-  private final static String MAX_NODE_COUNT_IS_NULL = "[AzureNodePool Validation] MaxNodeCount has not been defined and it is required when autoscaling is enabled";
-  private final static String MACHINE_TYPE_IS_NULL = "[AzureNodePool Validation] Machine Type has not been defined and it is required";
+  private final static String SYSTEM_POOL_MODE_WINDOWS = "[AzureNodePool Validation] Pool Mode is set to SYSTEM but " +
+    "that is not supported for a Windows node pool";
+  private final static String MAX_NODE_COUNT = "[AzureNodePool Validation] Max node count must be a positive integer " +
+    "(> 0)";
+  private final static String MIN_NODE_COUNT_IS_NULL = "[AzureNodePool Validation] MinNodeCount has not been defined " +
+    "and it is required when autoscaling is enabled";
+  private final static String MAX_NODE_COUNT_IS_NULL = "[AzureNodePool Validation] MaxNodeCount has not been defined " +
+    "and it is required when autoscaling is enabled";
+  private final static String MACHINE_TYPE_IS_NULL = "[AzureNodePool Validation] Machine Type has not been defined " +
+    "and it is required";
   private final static Integer MIN_NUMBER_OF_USER_NODE_POOLS = 0;
   private final static Integer MIN_NUMBER_OF_SYSTEM_NODE_POOLS = 1;
   private final static Integer MAX_NUMBER_OF_NODE_POOLS = 1000;
@@ -60,6 +68,103 @@ public class AzureNodePool implements Validatable {
     return new AzureNodePoolBuilder();
   }
 
+  @Override
+  public Collection<String> validate() {
+
+    Collection<String> errors = new ArrayList<>();
+
+    if (isBlank(this.name)) {
+      errors.add(NAME_IS_BLANK);
+    }
+
+    if (!isBlank(this.name) && !this.name.matches(NAME_REGEX)) {
+      errors.add(NAME_ONLY_LOWERCASE_ALPHANUMERIC);
+    }
+
+    if (!isBlank(this.name) && this.osType == AzureOsType.LINUX && this.name.length() > 12) {
+      errors.add(LINUX_NAME_IS_TOO_LONG);
+    }
+
+    if (!isBlank(this.name) && this.osType == AzureOsType.WINDOWS && this.name.length() > 6) {
+      errors.add(WINDOWS_NAME_IS_TOO_LONG);
+    }
+
+    if (this.machineType == null) {
+      errors.add(MACHINE_TYPE_IS_NULL);
+    }
+
+    if (this.diskSizeGb != null && this.diskSizeGb < 30) {
+      errors.add(DISK_SIZE_UNDER_30GB);
+    }
+
+    if (this.agentPoolMode == AzureAgentPoolMode.SYSTEM && this.osType == AzureOsType.WINDOWS) {
+      errors.add(SYSTEM_POOL_MODE_WINDOWS);
+    }
+
+    if (this.initialNodeCount != null && this.agentPoolMode == AzureAgentPoolMode.USER) {
+      validateIntegerInRange("InitialNodeCount", this.initialNodeCount, MIN_NUMBER_OF_USER_NODE_POOLS,
+        MAX_NUMBER_OF_NODE_POOLS, errors);
+    }
+
+    if (this.initialNodeCount != null && this.agentPoolMode == AzureAgentPoolMode.SYSTEM) {
+      validateIntegerInRange("InitialNodeCount", this.initialNodeCount, MIN_NUMBER_OF_SYSTEM_NODE_POOLS,
+        MAX_NUMBER_OF_NODE_POOLS, errors);
+    }
+
+    if (this.maxNodeCount != null && this.agentPoolMode == AzureAgentPoolMode.USER) {
+      validateIntegerInRange("MaxNodeCount", this.maxNodeCount, MIN_NUMBER_OF_USER_NODE_POOLS,
+        MAX_NUMBER_OF_NODE_POOLS, errors);
+    }
+
+    if (this.maxNodeCount != null && this.agentPoolMode == AzureAgentPoolMode.SYSTEM) {
+      validateIntegerInRange("MaxNodeCount", this.maxNodeCount, MIN_NUMBER_OF_SYSTEM_NODE_POOLS,
+        MAX_NUMBER_OF_NODE_POOLS, errors);
+    }
+
+    if (this.minNodeCount != null && this.agentPoolMode == AzureAgentPoolMode.USER) {
+      validateIntegerInRange("MinNodeCount", this.minNodeCount, MIN_NUMBER_OF_USER_NODE_POOLS,
+        MAX_NUMBER_OF_NODE_POOLS, errors);
+    }
+
+    if (this.minNodeCount != null && this.agentPoolMode == AzureAgentPoolMode.SYSTEM) {
+      validateIntegerInRange("MinNodeCount", this.minNodeCount, MIN_NUMBER_OF_SYSTEM_NODE_POOLS,
+        MAX_NUMBER_OF_NODE_POOLS, errors);
+    }
+
+    if (this.maxPodsPerNode != null) {
+      validateIntegerInRange("MaxPodsPerNode", this.maxPodsPerNode, MIN_NUMBER_OF_PODS_PER_NODE,
+        MAX_NUMBER_OF_PODS_PER_NODE, errors);
+    }
+
+    if (this.autoscalingEnabled) {
+      if (this.maxNodeCount == null) {
+        errors.add(MAX_NODE_COUNT_IS_NULL);
+      }
+
+      if (this.minNodeCount == null) {
+        errors.add(MIN_NODE_COUNT_IS_NULL);
+      }
+    }
+
+    if (this.osType == AzureOsType.LINUX &&
+      this.osSku != null && (
+      this.osSku.equals(AzureOsSku.WINDOWS2019) ||
+        this.osSku.equals(AzureOsSku.WINDOWS2022)))
+    {
+      errors.add("Windows OS SKU cannot be used with Linux OS Type");
+    }
+
+    if (this.osType == AzureOsType.WINDOWS &&
+      this.osSku != null &&
+      (this.osSku.equals(AzureOsSku.UBUNTU) ||
+        this.osSku.equals(AzureOsSku.AZURE_LINUX) ||
+        this.osSku.equals(AzureOsSku.CBLMARINER)))
+    {
+      errors.add("Linux OS SKU cannot be used with Windows OS Type");
+    }
+
+    return errors;
+  }
 
   public static class AzureNodePoolBuilder {
     private final AzureNodePool nodePool;
@@ -89,7 +194,7 @@ public class AzureNodePool implements Validatable {
       nodePool.setMaxNodeCount(maxNodeCount);
       return builder;
     }
-    
+
     public AzureNodePoolBuilder withMaxSurge(Integer maxSurge) {
       nodePool.setMaxSurge(maxSurge);
       return builder;
@@ -98,14 +203,15 @@ public class AzureNodePool implements Validatable {
     /**
      * <pre>
      * Sets the drain timeout for nodes in the node pool.
-     * 
-     * This method configures the amount of time, in minutes, to wait for the eviction of pods and their graceful 
-     * termination on each node during an upgrade process. The specified timeout period respects the constraints 
+     *
+     * This method configures the amount of time, in minutes, to wait for the eviction of pods and their graceful
+     * termination on each node during an upgrade process. The specified timeout period respects the constraints
      * imposed by pod disruption budgets. If the operation exceeds this timeout, the upgrade is considered to have failed.
-     * 
+     *
      * If this parameter is not explicitly set, a default timeout of 30 minutes is applied.</pre>
      *
-     * @param drainTimeoutInMinutes the drain timeout in minutes to be set for the node pool; if null, the default timeout is applied
+     * @param drainTimeoutInMinutes the drain timeout in minutes to be set for the node pool; if null, the default
+     *                              timeout is applied
      * @return this {@code AzureNodePoolBuilder} instance with the updated drain timeout setting
      */
     public AzureNodePoolBuilder withDrainTimeoutInMinutes(Integer drainTimeoutInMinutes) {
@@ -157,7 +263,7 @@ public class AzureNodePool implements Validatable {
       }
 
       nodeTaints.forEach(nodeTaint -> nodePool.getNodeTaints()
-          .add(nodeTaint.toString()));
+        .add(nodeTaint.toString()));
 
       return builder;
     }
@@ -191,99 +297,10 @@ public class AzureNodePool implements Validatable {
 
       if (!errors.isEmpty()) {
         throw new IllegalArgumentException(String.format("AzureNodePool validation failed. Errors: %s",
-            Arrays.toString(errors.toArray())));
+          Arrays.toString(errors.toArray())));
       }
 
       return nodePool;
     }
-  }
-
-  @Override
-  public Collection<String> validate() {
-
-    Collection<String> errors = new ArrayList<>();
-
-    if (isBlank(this.name)) {
-      errors.add(NAME_IS_BLANK);
-    }
-
-    if (!isBlank(this.name) && !this.name.matches(NAME_REGEX)) {
-      errors.add(NAME_ONLY_LOWERCASE_ALPHANUMERIC);
-    }
-
-    if (!isBlank(this.name) && this.osType == AzureOsType.LINUX && this.name.length() > 12) {
-      errors.add(LINUX_NAME_IS_TOO_LONG);
-    }
-
-    if (!isBlank(this.name) && this.osType == AzureOsType.WINDOWS && this.name.length() > 6) {
-      errors.add(WINDOWS_NAME_IS_TOO_LONG);
-    }
-
-    if (this.machineType == null) {
-      errors.add(MACHINE_TYPE_IS_NULL);
-    }
-
-    if (this.diskSizeGb != null && this.diskSizeGb < 30) {
-      errors.add(DISK_SIZE_UNDER_30GB);
-    }
-
-    if (this.agentPoolMode == AzureAgentPoolMode.SYSTEM && this.osType == AzureOsType.WINDOWS) {
-      errors.add(SYSTEM_POOL_MODE_WINDOWS);
-    }
-
-    if (this.initialNodeCount != null && this.agentPoolMode == AzureAgentPoolMode.USER) {
-      validateIntegerInRange("InitialNodeCount", this.initialNodeCount, MIN_NUMBER_OF_USER_NODE_POOLS, MAX_NUMBER_OF_NODE_POOLS, errors);
-    }
-
-    if (this.initialNodeCount != null && this.agentPoolMode == AzureAgentPoolMode.SYSTEM) {
-      validateIntegerInRange("InitialNodeCount", this.initialNodeCount, MIN_NUMBER_OF_SYSTEM_NODE_POOLS, MAX_NUMBER_OF_NODE_POOLS, errors);
-    }
-
-    if (this.maxNodeCount != null && this.agentPoolMode == AzureAgentPoolMode.USER) {
-      validateIntegerInRange("MaxNodeCount", this.maxNodeCount, MIN_NUMBER_OF_USER_NODE_POOLS, MAX_NUMBER_OF_NODE_POOLS, errors);
-    }
-
-    if (this.maxNodeCount != null && this.agentPoolMode == AzureAgentPoolMode.SYSTEM) {
-      validateIntegerInRange("MaxNodeCount", this.maxNodeCount, MIN_NUMBER_OF_SYSTEM_NODE_POOLS, MAX_NUMBER_OF_NODE_POOLS, errors);
-    }
-
-    if (this.minNodeCount != null && this.agentPoolMode == AzureAgentPoolMode.USER) {
-      validateIntegerInRange("MinNodeCount", this.minNodeCount, MIN_NUMBER_OF_USER_NODE_POOLS, MAX_NUMBER_OF_NODE_POOLS, errors);
-    }
-
-    if (this.minNodeCount != null && this.agentPoolMode == AzureAgentPoolMode.SYSTEM) {
-      validateIntegerInRange("MinNodeCount", this.minNodeCount, MIN_NUMBER_OF_SYSTEM_NODE_POOLS, MAX_NUMBER_OF_NODE_POOLS, errors);
-    }
-
-    if (this.maxPodsPerNode != null) {
-      validateIntegerInRange("MaxPodsPerNode", this.maxPodsPerNode, MIN_NUMBER_OF_PODS_PER_NODE, MAX_NUMBER_OF_PODS_PER_NODE, errors);
-    }
-
-    if (this.autoscalingEnabled) {
-      if (this.maxNodeCount == null) {
-        errors.add(MAX_NODE_COUNT_IS_NULL);
-      }
-
-      if (this.minNodeCount == null) {
-        errors.add(MIN_NODE_COUNT_IS_NULL);
-      }
-    }
-
-    if (this.osType == AzureOsType.LINUX &&
-        this.osSku != null && (
-        this.osSku.equals(AzureOsSku.WINDOWS2019) ||
-            this.osSku.equals(AzureOsSku.WINDOWS2022))) {
-      errors.add("Windows OS SKU cannot be used with Linux OS Type");
-    }
-
-    if (this.osType == AzureOsType.WINDOWS &&
-        this.osSku != null &&
-        (this.osSku.equals(AzureOsSku.UBUNTU) ||
-            this.osSku.equals(AzureOsSku.AZURE_LINUX) ||
-            this.osSku.equals(AzureOsSku.CBLMARINER))) {
-      errors.add("Linux OS SKU cannot be used with Windows OS Type");
-    }
-
-    return errors;
   }
 }

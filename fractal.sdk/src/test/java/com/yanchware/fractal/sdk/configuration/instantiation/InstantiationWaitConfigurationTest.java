@@ -18,8 +18,8 @@ class InstantiationWaitConfigurationTest {
   @Test
   void testWaitForInstantiation() {
     InstantiationWaitConfiguration config = InstantiationWaitConfiguration.builder()
-        .withWaitForInstantiation(true)
-        .build();
+      .withWaitForInstantiation(true)
+      .build();
 
     assertThat(config.isWaitForInstantiation()).isTrue();
     assertThat(config.getTimeoutMinutes()).isEqualTo(DEFAULT_LIVE_SYSTEM_INSTANTIATION_WAIT_TIMEOUT_MINUTES);
@@ -28,9 +28,9 @@ class InstantiationWaitConfigurationTest {
   @Test
   void testCustomTimeout() {
     InstantiationWaitConfiguration config = InstantiationWaitConfiguration.builder()
-        .withWaitForInstantiation(true)
-        .withTimeoutMinutes(30)
-        .build();
+      .withWaitForInstantiation(true)
+      .withTimeoutMinutes(30)
+      .build();
 
     assertThat(config.isWaitForInstantiation()).isTrue();
     assertThat(config.getTimeoutMinutes()).isEqualTo(30);

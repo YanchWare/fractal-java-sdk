@@ -19,6 +19,32 @@ public class JaegerTracing implements Validatable {
     return new JaegerTracingBuilder();
   }
 
+  @Override
+  public Collection<String> validate() {
+    Collection<String> errors = new ArrayList<>();
+
+    if (collectorEndpoint != null && !collectorEndpoint.isEmpty()) {
+      if (localAgentPort != null) {
+        errors.add("localAgentPort should not be provided when collectorEndpoint is provided");
+      }
+      if (localAgentUrlPath != null && !localAgentUrlPath.isEmpty()) {
+        errors.add("localAgentUrlPath should not be provided when collectorEndpoint is provided");
+      }
+    } else {
+      if (localAgentUrlPath == null || localAgentUrlPath.isEmpty()) {
+        errors.add("localAgentUrlPath must be defined");
+      }
+
+      if (localAgentPort == null) {
+        errors.add("localAgentPort must be defined");
+      } else if (localAgentPort < 1 || localAgentPort > 65535) {
+        errors.add("localAgentPort must be between 1 and 65535");
+      }
+    }
+
+    return errors;
+  }
+
   public static class JaegerTracingBuilder {
     private final JaegerTracing jaeger;
     private final JaegerTracingBuilder builder;
@@ -32,7 +58,7 @@ public class JaegerTracing implements Validatable {
       jaeger.collectorEndpoint = collectorEndpoint;
       return builder;
     }
-    
+
 
     public JaegerTracingBuilder withLocalAgentPort(Integer localAgentPort) {
       jaeger.localAgentPort = localAgentPort;
@@ -49,36 +75,10 @@ public class JaegerTracing implements Validatable {
 
       if (!errors.isEmpty()) {
         throw new IllegalArgumentException(String.format("JaegerTracingBuilder validation failed. Errors: %s",
-            Arrays.toString(errors.toArray())));
+          Arrays.toString(errors.toArray())));
       }
 
       return jaeger;
     }
-  }
-
-  @Override
-  public Collection<String> validate() {
-    Collection<String> errors = new ArrayList<>();
-
-    if (collectorEndpoint != null && !collectorEndpoint.isEmpty()) {
-      if (localAgentPort != null) {
-        errors.add("localAgentPort should not be provided when collectorEndpoint is provided");
-      }
-      if (localAgentUrlPath != null && !localAgentUrlPath.isEmpty()) {
-        errors.add("localAgentUrlPath should not be provided when collectorEndpoint is provided");
-      }
-    } else {
-      if (localAgentUrlPath == null || localAgentUrlPath.isEmpty()) {
-        errors.add("localAgentUrlPath must be defined");
-      }
-     
-      if (localAgentPort == null) {
-        errors.add("localAgentPort must be defined");
-      } else if (localAgentPort < 1 || localAgentPort > 65535) {
-        errors.add("localAgentPort must be between 1 and 65535");
-      }
-    }
-
-    return errors;
   }
 }

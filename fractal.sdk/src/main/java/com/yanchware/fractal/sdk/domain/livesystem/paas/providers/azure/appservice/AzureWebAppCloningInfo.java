@@ -11,8 +11,8 @@ import java.util.Map;
 @Builder(setterPrefix = "with")
 public class AzureWebAppCloningInfo {
   /**
-   * Application setting overrides for cloned app. 
-   * If specified, these settings override the settings cloned from source app. 
+   * Application setting overrides for cloned app.
+   * If specified, these settings override the settings cloned from source app.
    * Otherwise, application settings from source app are retained.
    */
   private Map<String, String> appSettingsOverrides;
@@ -33,7 +33,7 @@ public class AzureWebAppCloningInfo {
   private Boolean configureLoadBalancing;
 
   /**
-   * Correlation ID of cloning operation. 
+   * Correlation ID of cloning operation.
    * This ID ties multiple cloning operations together to use the same snapshot.
    */
   private String correlationId;
@@ -49,9 +49,11 @@ public class AzureWebAppCloningInfo {
   private Boolean overwrite;
 
   /**
-   * ARM resource ID of the source app. 
-   * App resource ID is of the form /subscriptions/{subId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{siteName} for production slots 
-   * and /subscriptions/{subId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{siteName}/slots/{slotName} for other slots.
+   * ARM resource ID of the source app.
+   * App resource ID is of the form /subscriptions/{subId}/resourceGroups/{resourceGroupName}/providers/Microsoft
+   * .Web/sites/{siteName} for production slots
+   * and /subscriptions/{subId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Web/sites/{siteName}/slots/{
+   * slotName} for other slots.
    */
   private String sourceWebAppId;
 
@@ -61,15 +63,16 @@ public class AzureWebAppCloningInfo {
   private String sourceWebAppLocation;
 
   /**
-   * ARM resource ID of the Traffic Manager profile to use, if it exists. 
-   * Traffic Manager resource ID is of the form /subscriptions/{subId}/resourceGroups/{resourceGroupName}/providers/Microsoft.Network/trafficManagerProfiles/{profileName}.
+   * ARM resource ID of the Traffic Manager profile to use, if it exists.
+   * Traffic Manager resource ID is of the form /subscriptions/{subId}/resourceGroups/{resourceGroupName}/providers
+   * /Microsoft.Network/trafficManagerProfiles/{profileName}.
    */
   private String trafficManagerProfileId;
 
   /**
-   * Name of Traffic Manager profile to create. 
+   * Name of Traffic Manager profile to create.
    * This is only needed if Traffic Manager profile does not already exist.
    */
   private String trafficManagerProfileName;
-  
+
 }

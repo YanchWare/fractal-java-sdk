@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
-public record InitializationStepResponse (
+public record InitializationStepResponse(
   UUID id,
   String name,
   String description,
@@ -16,4 +16,6 @@ public record InitializationStepResponse (
   String status,
   Integer retryCount,
   Date createdAt,
-  Date updatedAt){ }
+  Date updatedAt)
+{
+}

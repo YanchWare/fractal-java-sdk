@@ -16,10 +16,11 @@ import java.util.Collection;
 @Setter(AccessLevel.PRIVATE)
 @Builder(setterPrefix = "with")
 public class AzureOutboundIp implements Validatable {
-  private static final String NAME_IS_EMPTY_OR_TOO_LONG = "[AzureOutboundIp Validation] name is empty or it exceeds 80 characters";
+  private static final String NAME_IS_EMPTY_OR_TOO_LONG = "[AzureOutboundIp Validation] name is empty or it exceeds " +
+    "80 characters";
   private String name;
   private AzureResourceGroup azureResourceGroup;
-  
+
   private AzureOutboundIp() {
   }
 
@@ -27,11 +28,22 @@ public class AzureOutboundIp implements Validatable {
     return new AzureOutboundIpBuilder();
   }
 
+  @Override
+  public Collection<String> validate() {
+    Collection<String> errors = new ArrayList<>();
+
+    if (StringUtils.isBlank(name) || name.length() > 80) {
+      errors.add(NAME_IS_EMPTY_OR_TOO_LONG);
+    }
+
+    return errors;
+  }
+
   public static class AzureOutboundIpBuilder {
     private final AzureOutboundIp component;
     private final AzureOutboundIpBuilder builder;
 
-    public AzureOutboundIpBuilder () {
+    public AzureOutboundIpBuilder() {
       component = createComponent();
       builder = getBuilder();
     }
@@ -48,34 +60,23 @@ public class AzureOutboundIp implements Validatable {
       component.setName(outboundIpName);
       return builder;
     }
-    
+
     public AzureOutboundIpBuilder withAzureResourceGroup(AzureResourceGroup azureResourceGroup) {
       component.setAzureResourceGroup(azureResourceGroup);
       return builder;
     }
 
-    public AzureOutboundIp build(){
+    public AzureOutboundIp build() {
       Collection<String> errors = component.validate();
 
       if (!errors.isEmpty()) {
         throw new IllegalArgumentException(String.format(
-            "AzureOutboundIp validation failed. Errors: %s",
-            Arrays.toString(errors.toArray())));
+          "AzureOutboundIp validation failed. Errors: %s",
+          Arrays.toString(errors.toArray())));
       }
 
       return component;
     }
-  }
-
-  @Override
-  public Collection<String> validate() {
-    Collection<String> errors = new ArrayList<>();
-
-    if (StringUtils.isBlank(name) || name.length() > 80) {
-      errors.add(NAME_IS_EMPTY_OR_TOO_LONG);
-    }
-
-    return errors;
   }
 
 }

@@ -16,7 +16,8 @@ import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 @Getter
 @Setter(AccessLevel.PRIVATE)
 public class GoogleKubernetesEngine extends KubernetesCluster {
-  private final static String EMPTY_NODE_POOL = "[GoogleKubernetesEngine Validation] Node pool list is null or empty and at least one node pool is required";
+  private final static String EMPTY_NODE_POOL = "[GoogleKubernetesEngine Validation] Node pool list is null or empty " +
+    "and at least one node pool is required";
 
   private String networkName;
   private String subnetworkName;
@@ -31,16 +32,31 @@ public class GoogleKubernetesEngine extends KubernetesCluster {
     nodePools = new ArrayList<>();
   }
 
+  public static GoogleKubernetesEngineBuilder builder() {
+    return new GoogleKubernetesEngineBuilder();
+  }
+
   @Override
   public ProviderType getProvider() {
     return GCP;
   }
 
-  public static GoogleKubernetesEngineBuilder builder() {
-    return new GoogleKubernetesEngineBuilder();
+  @Override
+  public Collection<String> validate() {
+    Collection<String> errors = super.validate();
+    if (isBlank(nodePools)) {
+      errors.add(EMPTY_NODE_POOL);
+    }
+
+    nodePools.stream()
+      .map(GcpNodePool::validate)
+      .forEach(errors::addAll);
+
+    return errors;
   }
 
-  public static class GoogleKubernetesEngineBuilder extends Builder<GoogleKubernetesEngine, GoogleKubernetesEngineBuilder> {
+  public static class GoogleKubernetesEngineBuilder extends Builder<GoogleKubernetesEngine,
+    GoogleKubernetesEngineBuilder> {
 
     @Override
     protected GoogleKubernetesEngine createComponent() {
@@ -98,20 +114,6 @@ public class GoogleKubernetesEngine extends KubernetesCluster {
       component.getNodePools().addAll(nodePools);
       return builder;
     }
-  }
-
-  @Override
-  public Collection<String> validate() {
-    Collection<String> errors = super.validate();
-    if (isBlank(nodePools)) {
-      errors.add(EMPTY_NODE_POOL);
-    }
-
-    nodePools.stream()
-        .map(GcpNodePool::validate)
-        .forEach(errors::addAll);
-
-    return errors;
   }
 
 }

@@ -10,23 +10,23 @@ public class AzureStorageKeyTypeTest {
   @Test
   public void azureStorageKeyTypeConstants_shouldNotBeNull() {
     assertThat(AzureStorageKeyType.SERVICE)
-        .as("SERVICE constant should not be null")
-        .isNotNull();
+      .as("SERVICE constant should not be null")
+      .isNotNull();
 
     assertThat(AzureStorageKeyType.ACCOUNT)
-        .as("ACCOUNT constant should not be null")
-        .isNotNull();
+      .as("ACCOUNT constant should not be null")
+      .isNotNull();
   }
 
   @Test
   public void fromString_shouldReturnCorrespondingAzureStorageKeyType() {
     assertThat(AzureStorageKeyType.fromString("Service"))
-        .as("fromString should return SERVICE for 'Service'")
-        .isEqualTo(AzureStorageKeyType.SERVICE);
-    
+      .as("fromString should return SERVICE for 'Service'")
+      .isEqualTo(AzureStorageKeyType.SERVICE);
+
     assertThat(AzureStorageKeyType.fromString("Account"))
-        .as("fromString should return ACCOUNT for 'Account'")
-        .isEqualTo(AzureStorageKeyType.ACCOUNT);
+      .as("fromString should return ACCOUNT for 'Account'")
+      .isEqualTo(AzureStorageKeyType.ACCOUNT);
   }
 
   @Test
@@ -34,7 +34,7 @@ public class AzureStorageKeyTypeTest {
     Collection<AzureStorageKeyType> values = AzureStorageKeyType.values();
 
     assertThat(values)
-        .as("Values should contain SERVICE, and ACCOUNT and have exactly 2 values")
-        .containsExactlyInAnyOrder(AzureStorageKeyType.SERVICE, AzureStorageKeyType.ACCOUNT);
+      .as("Values should contain SERVICE, and ACCOUNT and have exactly 2 values")
+      .containsExactlyInAnyOrder(AzureStorageKeyType.SERVICE, AzureStorageKeyType.ACCOUNT);
   }
 }

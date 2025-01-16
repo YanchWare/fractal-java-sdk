@@ -16,9 +16,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_SERVICE_BUS_RELAY;
 import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidLowercaseLettersNumbersAndHyphens;
 import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLength;
-import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_SERVICE_BUS_RELAY;
 
 @Getter
 @Setter
@@ -27,14 +27,37 @@ public class AzureRelay extends PaaSMessaging implements AzureResourceEntity, Li
   private static final Integer ID_MIN_LENGTH = 6;
   private static final Integer ID_MAX_LENGTH = 50;
   private final static String NAME_LENGTH_MISMATCH_TEMPLATE =
-      "[AzureRelay validation] Relay name is illegal. A valid Relay name must be between " + ID_MIN_LENGTH +
-          " and " + ID_MAX_LENGTH + " characters of length";
+    "[AzureRelay validation] Relay name is illegal. A valid Relay name must be between " + ID_MIN_LENGTH +
+      " and " + ID_MAX_LENGTH + " characters of length";
   private String name;
   private AzureRegion azureRegion;
   private AzureResourceGroup azureResourceGroup;
   private Map<String, String> tags;
 
   protected AzureRelay() {
+  }
+
+  public static AzureRelayBuilder builder() {
+    return new AzureRelayBuilder();
+  }
+
+  @Override
+  public Collection<String> validate() {
+    var errors = super.validate();
+
+    if (StringUtils.isNotBlank(name)) {
+      var hasValidCharacters = isValidLowercaseLettersNumbersAndHyphens(name);
+      var hasValidLengths = isValidStringLength(name, ID_MIN_LENGTH, ID_MAX_LENGTH);
+      if (!hasValidCharacters || !hasValidLengths) {
+        errors.add(NAME_LENGTH_MISMATCH_TEMPLATE);
+      }
+    }
+    return errors;
+  }
+
+  @Override
+  public ProviderType getProvider() {
+    return ProviderType.AZURE;
   }
 
   public static class AzureRelayBuilder extends Component.Builder<AzureRelay, AzureRelayBuilder> {
@@ -107,28 +130,5 @@ public class AzureRelay extends PaaSMessaging implements AzureResourceEntity, Li
       component.setType(PAAS_SERVICE_BUS_RELAY);
       return super.build();
     }
-  }
-
-  @Override
-  public Collection<String> validate() {
-    var errors = super.validate();
-
-    if (StringUtils.isNotBlank(name)) {
-      var hasValidCharacters = isValidLowercaseLettersNumbersAndHyphens(name);
-      var hasValidLengths = isValidStringLength(name, ID_MIN_LENGTH, ID_MAX_LENGTH);
-      if (!hasValidCharacters || !hasValidLengths) {
-        errors.add(NAME_LENGTH_MISMATCH_TEMPLATE);
-      }
-    }
-    return errors;
-  }
-
-  @Override
-  public ProviderType getProvider() {
-    return ProviderType.AZURE;
-  }
-
-  public static AzureRelayBuilder builder() {
-    return new AzureRelayBuilder();
   }
 }

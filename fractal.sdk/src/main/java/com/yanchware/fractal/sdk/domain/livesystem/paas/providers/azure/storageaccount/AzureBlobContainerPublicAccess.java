@@ -6,31 +6,31 @@ import com.fasterxml.jackson.annotation.JsonValue;
 /**
  * <pre>
  * Represents the level of public access granted to an Azure Blob Container.
- * 
+ *
  * This enum specifies the accessibility of the data within the container from the internet:
- * 
+ *
  *   &diams; <code><strong>CONTAINER</strong></code> Indicates full public read access for container and blob data.
- *   &diams; <code><strong>BLOB</strong></code> Indicates public read access for blobs only. Container data is not 
+ *   &diams; <code><strong>BLOB</strong></code> Indicates public read access for blobs only. Container data is not
  *      available publicly.
- *   &diams; <code><strong>NONE</strong></code> Indicates no public read access. Data within the container can only 
+ *   &diams; <code><strong>NONE</strong></code> Indicates no public read access. Data within the container can only
  *      be accessed with an appropriate authorization.
  * </pre>
  */
 
 public enum AzureBlobContainerPublicAccess {
   /**
-   * Full public read access for container and blob data. 
+   * Full public read access for container and blob data.
    */
   CONTAINER("Container"),
 
   /**
-   * Public read access for blobs only. 
+   * Public read access for blobs only.
    * Container data is not available publicly.
    */
   BLOB("Blob"),
 
   /**
-   * No public read access. 
+   * No public read access.
    * Data within the container can only be accessed with appropriate authorization.
    */
   NONE("None");
@@ -62,7 +62,9 @@ public enum AzureBlobContainerPublicAccess {
     return null;
   }
 
-  /** {@inheritDoc} */
+  /**
+   * {@inheritDoc}
+   */
   @JsonValue
   @Override
   public String toString() {

@@ -10,23 +10,23 @@ public class AzureFileShareEnabledProtocolsTest {
   @Test
   public void azureFileShareEnabledProtocolsConstants_shouldNotBeNull() {
     assertThat(AzureFileShareEnabledProtocols.NFS)
-        .as("NFS constant should not be null")
-        .isNotNull();
+      .as("NFS constant should not be null")
+      .isNotNull();
 
     assertThat(AzureFileShareEnabledProtocols.SMB)
-        .as("SMB constant should not be null")
-        .isNotNull();
+      .as("SMB constant should not be null")
+      .isNotNull();
   }
 
   @Test
   public void fromString_shouldReturnCorrespondingAzureFileShareEnabledProtocols() {
     assertThat(AzureFileShareEnabledProtocols.fromString("NFS"))
-        .as("fromString should return NFS for 'NFS'")
-        .isEqualTo(AzureFileShareEnabledProtocols.NFS);
-    
+      .as("fromString should return NFS for 'NFS'")
+      .isEqualTo(AzureFileShareEnabledProtocols.NFS);
+
     assertThat(AzureFileShareEnabledProtocols.fromString("SMB"))
-        .as("fromString should return SMB for 'SMB'")
-        .isEqualTo(AzureFileShareEnabledProtocols.SMB);
+      .as("fromString should return SMB for 'SMB'")
+      .isEqualTo(AzureFileShareEnabledProtocols.SMB);
   }
 
   @Test
@@ -34,8 +34,8 @@ public class AzureFileShareEnabledProtocolsTest {
     Collection<AzureFileShareEnabledProtocols> values = AzureFileShareEnabledProtocols.values();
 
     assertThat(values)
-        .as("Values should contain NFS, and SMB and have exactly 2 values")
-        .containsExactlyInAnyOrder(AzureFileShareEnabledProtocols.NFS, 
-            AzureFileShareEnabledProtocols.SMB);
+      .as("Values should contain NFS, and SMB and have exactly 2 values")
+      .containsExactlyInAnyOrder(AzureFileShareEnabledProtocols.NFS,
+        AzureFileShareEnabledProtocols.SMB);
   }
 }

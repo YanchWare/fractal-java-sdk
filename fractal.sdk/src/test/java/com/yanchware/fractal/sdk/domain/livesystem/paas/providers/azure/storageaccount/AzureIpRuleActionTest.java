@@ -10,15 +10,15 @@ public class AzureIpRuleActionTest {
   @Test
   public void azureNetworkActionConstants_shouldNotBeNull() {
     assertThat(AzureNetworkAction.ALLOW)
-        .as("ALLOW constant should not be null")
-        .isNotNull();
+      .as("ALLOW constant should not be null")
+      .isNotNull();
   }
 
   @Test
   public void fromString_shouldReturnCorrespondingAzureNetworkAction() {
     assertThat(AzureNetworkAction.fromString("Allow"))
-        .as("fromString should return ALLOW for 'Allow'")
-        .isEqualTo(AzureNetworkAction.ALLOW);
+      .as("fromString should return ALLOW for 'Allow'")
+      .isEqualTo(AzureNetworkAction.ALLOW);
   }
 
   @Test
@@ -26,7 +26,7 @@ public class AzureIpRuleActionTest {
     Collection<AzureNetworkAction> values = AzureNetworkAction.values();
 
     assertThat(values)
-        .as("Values should contain ALLOW and have exactly 1 value")
-        .containsExactlyInAnyOrder(AzureNetworkAction.ALLOW);
+      .as("Values should contain ALLOW and have exactly 1 value")
+      .containsExactlyInAnyOrder(AzureNetworkAction.ALLOW);
   }
 }

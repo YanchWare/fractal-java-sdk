@@ -19,130 +19,133 @@ import static com.yanchware.fractal.sdk.domain.values.ComponentType.CAAS_K8S_WOR
 @Setter
 @ToString(callSuper = true)
 public class CaaSKubernetesWorkload extends CaaSWorkload implements LiveSystemComponent, CustomWorkload {
-    private String privateSSHKeyPassphraseSecretId;
-    private String privateSSHKeySecretId;
-    private String sshRepositoryURI;
-    private String repoId;
-    private String branchName;
-    private List<CustomWorkloadRole> roles;
-    private String workloadSecretIdKey;
-    private String workloadSecretPasswordKey;
-    private String serviceAccountName;
-    private Boolean workloadIdentityEnabled;
-    private List<String> secrets;
+  private String privateSSHKeyPassphraseSecretId;
+  private String privateSSHKeySecretId;
+  private String sshRepositoryURI;
+  private String repoId;
+  private String branchName;
+  private List<CustomWorkloadRole> roles;
+  private String workloadSecretIdKey;
+  private String workloadSecretPasswordKey;
+  private String serviceAccountName;
+  private Boolean workloadIdentityEnabled;
+  private List<String> secrets;
+
+  protected CaaSKubernetesWorkload() {
+
+    roles = new ArrayList<>();
+    this.setRecreateOnFailure(true);
+  }
+
+  public static KubernetesWorkloadBuilder builder() {
+    return new KubernetesWorkloadBuilder();
+  }
+
+  @Override
+  public ProviderType getProvider() {
+    return ProviderType.CAAS;
+  }
+
+  @Override
+  public Collection<String> validate() {
+    Collection<String> errors = super.validate();
+    errors.addAll(CustomWorkload.validateCustomWorkload(this, "Kubernetes Workload"));
+    return errors;
+  }
+
+  public static class KubernetesWorkloadBuilder extends CustomWorkloadBuilder<CaaSKubernetesWorkload,
+    KubernetesWorkloadBuilder> {
 
     @Override
-    public ProviderType getProvider(){
-        return ProviderType.CAAS;
-    }
-
-    protected CaaSKubernetesWorkload() {
-        
-        roles = new ArrayList<>();
-        this.setRecreateOnFailure(true);
+    protected CaaSKubernetesWorkload createComponent() {
+      return new CaaSKubernetesWorkload();
     }
 
     @Override
-    public Collection<String> validate() {
-        Collection<String> errors = super.validate();
-        errors.addAll(CustomWorkload.validateCustomWorkload(this, "Kubernetes Workload"));
-        return errors;
+    protected KubernetesWorkloadBuilder getBuilder() {
+      return this;
     }
 
-    public static KubernetesWorkloadBuilder builder() {
-        return new KubernetesWorkloadBuilder();
+    /**
+     * Namespace where the workload will be instantiated
+     *
+     * @param namespace
+     */
+    public KubernetesWorkloadBuilder withNamespace(String namespace) {
+      component.setNamespace(namespace);
+      return builder;
     }
 
-
-    public static class KubernetesWorkloadBuilder extends CustomWorkloadBuilder<CaaSKubernetesWorkload, KubernetesWorkloadBuilder> {
-
-        @Override
-        protected CaaSKubernetesWorkload createComponent() {
-            return new CaaSKubernetesWorkload();
-        }
-
-        @Override
-        protected KubernetesWorkloadBuilder getBuilder() {
-            return this;
-        }
-
-        /**
-         * Namespace where the workload will be instantiated
-         * @param namespace
-         */
-        public KubernetesWorkloadBuilder withNamespace(String namespace) {
-            component.setNamespace(namespace);
-            return builder;
-        }
-
-        /**
-         * The id of the container platform where the workload will be instantiated
-         * @param containerPlatform
-         */
-        public KubernetesWorkloadBuilder withContainerPlatform(String containerPlatform) {
-            component.setContainerPlatform(containerPlatform);
-            return builder;
-        }
-
-        public KubernetesWorkloadBuilder withDnsZoneConfig(String dnsZoneName, DnsRecord dnsRecord) {
-            if (component.getDnsZoneConfig() == null) {
-                component.setDnsZoneConfig(new HashMap<>());
-            }
-
-            if (!component.getDnsZoneConfig().containsKey(dnsZoneName)) {
-                component.getDnsZoneConfig().put(dnsZoneName, new ArrayList<>());
-            }
-
-            component.getDnsZoneConfig().get(dnsZoneName).add(SerializationUtils.convertValueToMap(dnsRecord));
-
-            return builder;
-        }
-
-        public KubernetesWorkloadBuilder withDnsZoneConfig(String dnsZoneName, Collection<DnsRecord> dnsRecords) {
-            dnsRecords.forEach(dnsRecord -> withDnsZoneConfig(dnsZoneName, dnsRecord));
-            return builder;
-        }
-
-        public KubernetesWorkloadBuilder withDnsZoneConfig(Map<? extends String, ? extends Collection<DnsRecord>> dnsRecordsMap) {
-            if (dnsRecordsMap == null || dnsRecordsMap.isEmpty()) {
-                return builder;
-            }
-
-            dnsRecordsMap.forEach((key, value) -> {
-                for (var dnsRecord : value) {
-                    withDnsZoneConfig(key, dnsRecord);
-                }
-            });
-
-            return builder;
-        }
-
-        /**
-         * <pre>
-         * Sets the ServiceAccount name for the Kubernetes workload. 
-         * This name is crucial for configuring workload identity by linking the Kubernetes ServiceAccount 
-         * to Azure User Managed Identity.</pre>
-         */
-        public KubernetesWorkloadBuilder withServiceAccountName(String serviceAccountName) {
-            component.setServiceAccountName(serviceAccountName);
-            return builder;
-        }
-
-        /**
-         * <pre>
-         * Enables or disables the Workload Identity for the Kubernetes workload.
-         * By default, Fractal Cloud Agent sets this to true.</pre>
-         * @param workloadIdentityEnabled A boolean flag to enable or disable Workload Identity.
-         */
-        public KubernetesWorkloadBuilder withWorkloadIdentityEnabled(boolean workloadIdentityEnabled) {
-            component.setWorkloadIdentityEnabled(workloadIdentityEnabled);
-            return builder;
-        }
-
-        @Override
-        public CaaSKubernetesWorkload build() {
-            component.setType(CAAS_K8S_WORKLOAD);
-            return super.build();
-        }
+    /**
+     * The id of the container platform where the workload will be instantiated
+     *
+     * @param containerPlatform
+     */
+    public KubernetesWorkloadBuilder withContainerPlatform(String containerPlatform) {
+      component.setContainerPlatform(containerPlatform);
+      return builder;
     }
+
+    public KubernetesWorkloadBuilder withDnsZoneConfig(String dnsZoneName, DnsRecord dnsRecord) {
+      if (component.getDnsZoneConfig() == null) {
+        component.setDnsZoneConfig(new HashMap<>());
+      }
+
+      if (!component.getDnsZoneConfig().containsKey(dnsZoneName)) {
+        component.getDnsZoneConfig().put(dnsZoneName, new ArrayList<>());
+      }
+
+      component.getDnsZoneConfig().get(dnsZoneName).add(SerializationUtils.convertValueToMap(dnsRecord));
+
+      return builder;
+    }
+
+    public KubernetesWorkloadBuilder withDnsZoneConfig(String dnsZoneName, Collection<DnsRecord> dnsRecords) {
+      dnsRecords.forEach(dnsRecord -> withDnsZoneConfig(dnsZoneName, dnsRecord));
+      return builder;
+    }
+
+    public KubernetesWorkloadBuilder withDnsZoneConfig(Map<? extends String, ? extends Collection<DnsRecord>> dnsRecordsMap) {
+      if (dnsRecordsMap == null || dnsRecordsMap.isEmpty()) {
+        return builder;
+      }
+
+      dnsRecordsMap.forEach((key, value) -> {
+        for (var dnsRecord : value) {
+          withDnsZoneConfig(key, dnsRecord);
+        }
+      });
+
+      return builder;
+    }
+
+    /**
+     * <pre>
+     * Sets the ServiceAccount name for the Kubernetes workload.
+     * This name is crucial for configuring workload identity by linking the Kubernetes ServiceAccount
+     * to Azure User Managed Identity.</pre>
+     */
+    public KubernetesWorkloadBuilder withServiceAccountName(String serviceAccountName) {
+      component.setServiceAccountName(serviceAccountName);
+      return builder;
+    }
+
+    /**
+     * <pre>
+     * Enables or disables the Workload Identity for the Kubernetes workload.
+     * By default, Fractal Cloud Agent sets this to true.</pre>
+     *
+     * @param workloadIdentityEnabled A boolean flag to enable or disable Workload Identity.
+     */
+    public KubernetesWorkloadBuilder withWorkloadIdentityEnabled(boolean workloadIdentityEnabled) {
+      component.setWorkloadIdentityEnabled(workloadIdentityEnabled);
+      return builder;
+    }
+
+    @Override
+    public CaaSKubernetesWorkload build() {
+      component.setType(CAAS_K8S_WORKLOAD);
+      return super.build();
+    }
+  }
 }

@@ -17,28 +17,28 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @ToString(callSuper = true)
 public abstract class CaaSLoggingImpl extends CaaSLogging implements LiveSystemComponent {
 
-    private String storage;
-    private String storageClassName;
-    private int memory;
-    private int cpu;
+  private String storage;
+  private String storageClassName;
+  private int memory;
+  private int cpu;
 
-    @Override
-    public ProviderType getProvider(){
-        return ProviderType.CAAS;
+  @Override
+  public ProviderType getProvider() {
+    return ProviderType.CAAS;
+  }
+
+  @Override
+  public Collection<String> validate() {
+    Collection<String> errors = super.validate();
+
+    if (isBlank(storage)) {
+      errors.add(getStorageIsBlankErrorMessage());
     }
 
-    @Override
-    public Collection<String> validate() {
-        Collection<String> errors = super.validate();
+    return errors;
+  }
 
-        if (isBlank(storage)) {
-            errors.add(getStorageIsBlankErrorMessage());
-        }
-
-        return errors;
-    }
-
-    private String getStorageIsBlankErrorMessage() {
-        return String.format("[%s Validation] Storage has not been defined and it is required", this.getClass().getName());
-    }
+  private String getStorageIsBlankErrorMessage() {
+    return String.format("[%s Validation] Storage has not been defined and it is required", this.getClass().getName());
+  }
 }

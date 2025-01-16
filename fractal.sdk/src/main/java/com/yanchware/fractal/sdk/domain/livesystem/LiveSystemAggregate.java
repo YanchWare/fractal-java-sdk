@@ -23,129 +23,134 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Slf4j
 @Setter(AccessLevel.PROTECTED)
 public class LiveSystemAggregate implements Validatable {
-    private final static String ID_IS_NULL = "[LiveSystem Validation] Id has not been defined and it is required";
-    private final static String NAME_IS_NULL = "[LiveSystem Validation] Name has not been defined and it is required";
-    private final static String RESOURCE_GROUP_ID_IS_NULL = "[LiveSystem Validation] ResourceGroupId has not been defined and it is required'";
-    private final static String PROVIDER_ID_IS_NULL = "[LiveSystem Validation] Provider has not been defined and it is required'";
-    private final static String EMPTY_COMPONENT_LIST = "[LiveSystem Validation] Components list is null or empty and at least one component is required";
-    private final LiveSystemService service;
+  private final static String ID_IS_NULL = "[LiveSystem Validation] Id has not been defined and it is required";
+  private final static String NAME_IS_NULL = "[LiveSystem Validation] Name has not been defined and it is required";
+  private final static String RESOURCE_GROUP_ID_IS_NULL = "[LiveSystem Validation] ResourceGroupId has not been " +
+    "defined and it is required'";
+  private final static String PROVIDER_ID_IS_NULL = "[LiveSystem Validation] Provider has not been defined and it is " +
+    "required'";
+  private final static String EMPTY_COMPONENT_LIST = "[LiveSystem Validation] Components list is null or empty and at" +
+    " least one component is required";
+  private final LiveSystemService service;
 
-    @Getter
-    private LiveSystemIdValue id;
-    @Getter
-    private FractalIdValue fractalId;
-    @Getter
-    private String description;
-    @Getter
-    private EnvironmentReference environment;
-    @Getter
-    private Date created;
-    @Getter
-    private Date lastUpdated;
-    @Getter
-    private Collection<LiveSystemComponent> components;
-    @Getter
-    private ProviderType provider;
+  @Getter
+  private LiveSystemIdValue id;
+  @Getter
+  private FractalIdValue fractalId;
+  @Getter
+  private String description;
+  @Getter
+  private EnvironmentReference environment;
+  @Getter
+  private Date created;
+  @Getter
+  private Date lastUpdated;
+  @Getter
+  private Collection<LiveSystemComponent> components;
+  @Getter
+  private ProviderType provider;
 
-    protected LiveSystemAggregate(
-            HttpClient client,
-            SdkConfiguration sdkConfiguration,
-            RetryRegistry retryRegistry)
-    {
-        service = new LiveSystemService(client, sdkConfiguration, retryRegistry);
-        components = new ArrayList<>();
+  protected LiveSystemAggregate(
+    HttpClient client,
+    SdkConfiguration sdkConfiguration,
+    RetryRegistry retryRegistry)
+  {
+    service = new LiveSystemService(client, sdkConfiguration, retryRegistry);
+    components = new ArrayList<>();
+  }
+
+  private static LiveSystemComponentDto toLiveSystemComponentDto(
+    LiveSystemComponent component,
+    Map<String, Object> allFields)
+  {
+    return LiveSystemComponentDto.builder()
+      .withFields(allFields)
+      .withType(String.valueOf(allFields.get(COMPONENT_TYPE)))
+      .withStatus(LiveSystemComponentStatusDto.Instantiating)
+      .withOutputFields(emptyMap())
+      .withLastUpdated(new Date())
+      .withProvider(component.getProvider())
+      .build();
+  }
+
+  // TODO FRA-1870: Use entity instead of LiveSystemComponentMutationDto
+  public LiveSystemComponentMutationDto instantiateComponent(String componentId) throws InstantiatorException {
+    return service.instantiateComponent(id, componentId);
+  }
+
+  public LiveSystemComponentMutationDto getComponentMutationStatus(String componentId, String mutationId)
+    throws InstantiatorException
+  {
+    return service.getComponentMutationStatus(getId().toString(), componentId, mutationId);
+  }
+
+  // TODO FRA-1870: Use entity instead of LiveSystemMutationDto
+  public LiveSystemMutationDto instantiate() throws InstantiatorException {
+
+    if (components == null || components.isEmpty()) {
+      throw new InstantiatorException(EMPTY_COMPONENT_LIST);
     }
 
-    // TODO FRA-1870: Use entity instead of LiveSystemComponentMutationDto
-    public LiveSystemComponentMutationDto instantiateComponent(String componentId) throws InstantiatorException {
-        return service.instantiateComponent(id, componentId);
+    if (service.retrieveLiveSystem(getId()) != null) {
+      return service.updateLiveSystem(
+        getId().toString(),
+        fractalId,
+        description,
+        provider.toString(),
+        blueprintMapFromLiveSystemComponents(),
+        environment);
     }
 
-    public LiveSystemComponentMutationDto getComponentMutationStatus(String componentId, String mutationId)
-            throws InstantiatorException
-    {
-        return service.getComponentMutationStatus(getId().toString(), componentId, mutationId);
+    return service.instantiateLiveSystem(
+      getId().toString(),
+      fractalId,
+      description,
+      provider.toString(),
+      blueprintMapFromLiveSystemComponents(),
+      environment);
+  }
+
+  public void checkLiveSystemMutationStatus(String liveSystemMutationId) throws InstantiatorException {
+    service.checkLiveSystemMutationStatus(getId(), liveSystemMutationId);
+  }
+
+  protected Map<String, LiveSystemComponentDto> blueprintMapFromLiveSystemComponents() {
+    Map<String, LiveSystemComponentDto> map = new HashMap<>();
+    for (LiveSystemComponent comp : getComponents()) {
+      List<Map<String, Object>> listOfComponents = ReflectionUtils.buildComponents(comp);
+      for (var component : listOfComponents) {
+        LiveSystemComponentDto componentDto = toLiveSystemComponentDto(comp, component);
+        map.put(componentDto.getId(), componentDto);
+      }
+    }
+    return map;
+  }
+
+  @Override
+  public Collection<String> validate() {
+    Collection<String> errors = new ArrayList<>();
+
+    if (id == null) {
+      errors.add(ID_IS_NULL);
+      return errors;
     }
 
-    // TODO FRA-1870: Use entity instead of LiveSystemMutationDto
-    public LiveSystemMutationDto instantiate() throws InstantiatorException {
-
-        if (components == null || components.isEmpty()) {
-            throw new InstantiatorException(EMPTY_COMPONENT_LIST);
-        }
-
-        if (service.retrieveLiveSystem(getId()) != null) {
-            return service.updateLiveSystem(
-                    getId().toString(),
-                    fractalId,
-                    description,
-                    provider.toString(),
-                    blueprintMapFromLiveSystemComponents(),
-                    environment);
-        }
-
-        return service.instantiateLiveSystem(
-                getId().toString(),
-                fractalId,
-                description,
-                provider.toString(),
-                blueprintMapFromLiveSystemComponents(),
-                environment);
+    if (isBlank(id.name())) {
+      errors.add(NAME_IS_NULL);
     }
 
-    public void checkLiveSystemMutationStatus(String liveSystemMutationId) throws InstantiatorException {
-        service.checkLiveSystemMutationStatus(getId(), liveSystemMutationId);
+    if (isBlank(id.resourceGroupId())) {
+      errors.add(RESOURCE_GROUP_ID_IS_NULL);
     }
 
-    protected Map<String, LiveSystemComponentDto> blueprintMapFromLiveSystemComponents() {
-        Map<String, LiveSystemComponentDto> map = new HashMap<>();
-        for (LiveSystemComponent comp : getComponents()) {
-            List<Map<String, Object>> listOfComponents = ReflectionUtils.buildComponents(comp);
-            for (var component : listOfComponents) {
-                LiveSystemComponentDto componentDto = toLiveSystemComponentDto(comp, component);
-                map.put(componentDto.getId(), componentDto);
-            }
-        }
-        return map;
+    if (provider == null) {
+      errors.add(PROVIDER_ID_IS_NULL);
     }
 
-    private static LiveSystemComponentDto toLiveSystemComponentDto(LiveSystemComponent component, Map<String, Object> allFields) {
-        return LiveSystemComponentDto.builder()
-                .withFields(allFields)
-                .withType(String.valueOf(allFields.get(COMPONENT_TYPE)))
-                .withStatus(LiveSystemComponentStatusDto.Instantiating)
-                .withOutputFields(emptyMap())
-                .withLastUpdated(new Date())
-                .withProvider(component.getProvider())
-                .build();
-    }
+    return errors;
+  }
 
-
-    @Override
-    public Collection<String> validate() {
-        Collection<String> errors = new ArrayList<>();
-
-        if (id == null) {
-            errors.add(ID_IS_NULL);
-            return errors;
-        }
-
-        if (isBlank(id.name())) {
-            errors.add(NAME_IS_NULL);
-        }
-
-        if (isBlank(id.resourceGroupId())) {
-            errors.add(RESOURCE_GROUP_ID_IS_NULL);
-        }
-
-        if (provider == null) {
-            errors.add(PROVIDER_ID_IS_NULL);
-        }
-
-        return errors;
-    }
-
-    public void delete() throws InstantiatorException {
-        service.deleteLiveSystem(getId().toString());
-    }
+  public void delete() throws InstantiatorException {
+    service.deleteLiveSystem(getId().toString());
+  }
 }

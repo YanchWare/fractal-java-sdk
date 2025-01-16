@@ -20,49 +20,46 @@ import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_COSMOS_
 @ToString(callSuper = true)
 public class AzureCosmosTableEntity extends PaaSRelationalDatabase implements LiveSystemComponent, AzureCosmosEntity {
 
-    public static final String TYPE = PAAS_COSMOS_TABLE.getId();
+  public static final String TYPE = PAAS_COSMOS_TABLE.getId();
+  private String name;
+  private int throughput;
+  private int maxThroughput;
+  private AzureRegion azureRegion;
+  private AzureResourceGroup azureResourceGroup;
+  private Map<String, String> tags;
+  @Setter(AccessLevel.PRIVATE)
+  private String entityName = "Table Entity";
 
-    public static AzureCosmosTableEntityBuilder builder() {
-        return new AzureCosmosTableEntityBuilder();
-    }
+  public static AzureCosmosTableEntityBuilder builder() {
+    return new AzureCosmosTableEntityBuilder();
+  }
 
-    private String name;
-    private int throughput;
+  @Override
+  public ProviderType getProvider() {
+    return ProviderType.AZURE;
+  }
 
-    private int maxThroughput;
-    private AzureRegion azureRegion;
-    private AzureResourceGroup azureResourceGroup;
-    private Map<String, String> tags;
+  @Override
+  public Collection<String> validate() {
+    return super.validate();
+  }
 
-    @Setter(AccessLevel.PRIVATE)
-    private String entityName = "Table Entity";
-
+  public static class AzureCosmosTableEntityBuilder extends AzureCosmosEntityBuilder<AzureCosmosTableEntity,
+    AzureCosmosTableEntityBuilder> {
     @Override
-    public ProviderType getProvider() {
-        return ProviderType.AZURE;
-    }
-
-
-    public static class AzureCosmosTableEntityBuilder extends AzureCosmosEntityBuilder<AzureCosmosTableEntity, AzureCosmosTableEntityBuilder> {
-        @Override
-        protected AzureCosmosTableEntity createComponent() {
-            return new AzureCosmosTableEntity();
-        }
-
-        @Override
-        protected AzureCosmosTableEntityBuilder getBuilder() {
-            return this;
-        }
-
-        @Override
-        public AzureCosmosTableEntity build() {
-            component.setType(PAAS_COSMOS_TABLE);
-            return super.build();
-        }
+    protected AzureCosmosTableEntity createComponent() {
+      return new AzureCosmosTableEntity();
     }
 
     @Override
-    public Collection<String> validate() {
-        return super.validate();
+    protected AzureCosmosTableEntityBuilder getBuilder() {
+      return this;
     }
+
+    @Override
+    public AzureCosmosTableEntity build() {
+      component.setType(PAAS_COSMOS_TABLE);
+      return super.build();
+    }
+  }
 }

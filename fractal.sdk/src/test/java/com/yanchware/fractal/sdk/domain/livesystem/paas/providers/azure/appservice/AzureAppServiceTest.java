@@ -25,30 +25,30 @@ public class AzureAppServiceTest {
   @Test
   public void exceptionThrown_when_workloadBuiltWithNullId() {
     assertThatThrownBy(() -> builder().withId("").build()).
-        isInstanceOf(IllegalArgumentException.class).
-        hasMessageContaining("Component Id is illegal");
+      isInstanceOf(IllegalArgumentException.class).
+      hasMessageContaining("Component Id is illegal");
   }
 
   @Test
   public void exceptionThrown_when_workloadBuiltWithEmptyValues() {
     assertThatThrownBy(() -> generateBuilder().build()).
-        isInstanceOf(IllegalArgumentException.class).
-        hasMessageContainingAll(
-            "privateSSHKeyPassphraseSecretId is either empty or blank",
-            "privateSSHKeySecretId is either empty or blank",
-            "sshRepositoryURI is either empty or blank",
-            "repoId is either empty or blank");
+      isInstanceOf(IllegalArgumentException.class).
+      hasMessageContainingAll(
+        "privateSSHKeyPassphraseSecretId is either empty or blank",
+        "privateSSHKeySecretId is either empty or blank",
+        "sshRepositoryURI is either empty or blank",
+        "repoId is either empty or blank");
   }
 
   @Test
   public void typeIsWebApp_when_workloadBuiltWithAllRequiredValues() {
     var builder = generateBuilder()
-        .withPrivateSSHKeyPassphraseSecretId("svc-private-ssh-key-pass")
-        .withPrivateSSHKeySecretId("svc-private-ssh-key-secret")
-        .withSSHRepositoryURI("ssh")
-        .withRepoId("repo-id")
-        .withBranchName("branch-name")
-        .withConfiguration(AzureWebAppConfiguration.builder().withDotnetVersion("DOTNET:***").build());
+      .withPrivateSSHKeyPassphraseSecretId("svc-private-ssh-key-pass")
+      .withPrivateSSHKeySecretId("svc-private-ssh-key-secret")
+      .withSSHRepositoryURI("ssh")
+      .withRepoId("repo-id")
+      .withBranchName("branch-name")
+      .withConfiguration(AzureWebAppConfiguration.builder().withDotnetVersion("DOTNET:***").build());
     assertThat(builder.build().getType()).isEqualTo(PAAS_WEBAPP);
     assertThatCode(builder::build).doesNotThrowAnyException();
   }
@@ -56,91 +56,93 @@ public class AzureAppServiceTest {
   @Test
   public void exceptionThrown_when_workloadBuiltWithWorkloadSecretIdKeyEmpty() {
     var builder = generateBuilder()
-        .withPrivateSSHKeyPassphraseSecretId("svc-private-ssh-key-pass")
-        .withPrivateSSHKeySecretId("svc-private-ssh-key-secret")
-        .withSSHRepositoryURI("ssh")
-        .withRepoId("repo-id")
-        .withSecretIdKey("");
+      .withPrivateSSHKeyPassphraseSecretId("svc-private-ssh-key-pass")
+      .withPrivateSSHKeySecretId("svc-private-ssh-key-secret")
+      .withSSHRepositoryURI("ssh")
+      .withRepoId("repo-id")
+      .withSecretIdKey("");
     assertThatThrownBy(builder::build).
-        isInstanceOf(IllegalArgumentException.class).
-        hasMessageContaining("Workload Secret Id Key is either empty or blank");
+      isInstanceOf(IllegalArgumentException.class).
+      hasMessageContaining("Workload Secret Id Key is either empty or blank");
   }
 
   @Test
   public void exceptionThrown_when_workloadBuiltWithBranchNameKeyEmpty() {
     var builder = generateBuilder()
-        .withPrivateSSHKeyPassphraseSecretId("svc-private-ssh-key-pass")
-        .withPrivateSSHKeySecretId("svc-private-ssh-key-secret")
-        .withSSHRepositoryURI("ssh")
-        .withRepoId("repo-id")
-        .withBranchName("");
+      .withPrivateSSHKeyPassphraseSecretId("svc-private-ssh-key-pass")
+      .withPrivateSSHKeySecretId("svc-private-ssh-key-secret")
+      .withSSHRepositoryURI("ssh")
+      .withRepoId("repo-id")
+      .withBranchName("");
     assertThatThrownBy(builder::build).
-        isInstanceOf(IllegalArgumentException.class).
-        hasMessageContaining("branchName is either empty or blank and it is required");
+      isInstanceOf(IllegalArgumentException.class).
+      hasMessageContaining("branchName is either empty or blank and it is required");
   }
 
   @Test
   public void exceptionThrown_when_workloadBuiltWithWorkloadSecretPasswordKeyEmpty() {
     var builder = generateBuilder()
-        .withPrivateSSHKeyPassphraseSecretId("svc-private-ssh-key-pass")
-        .withPrivateSSHKeySecretId("svc-private-ssh-key-secret")
-        .withSSHRepositoryURI("ssh")
-        .withRepoId("repo-id")
-        .withSecretPasswordKey("");
+      .withPrivateSSHKeyPassphraseSecretId("svc-private-ssh-key-pass")
+      .withPrivateSSHKeySecretId("svc-private-ssh-key-secret")
+      .withSSHRepositoryURI("ssh")
+      .withRepoId("repo-id")
+      .withSecretPasswordKey("");
     assertThatThrownBy(builder::build).
-        isInstanceOf(IllegalArgumentException.class).
-        hasMessageContaining("Workload Secret Password Key is either empty or blank");
+      isInstanceOf(IllegalArgumentException.class).
+      hasMessageContaining("Workload Secret Password Key is either empty or blank");
   }
 
   @Test
   public void exceptionThrown_when_mixingWindowsRuntimeStackWithLinuxOs() {
     var builder = generateSampleBuilder()
-        .withOperatingSystem(AzureOsType.LINUX)
-        .withRuntimeStack(AzureWebAppWindowsRuntimeStack.DOTNET_7);
+      .withOperatingSystem(AzureOsType.LINUX)
+      .withRuntimeStack(AzureWebAppWindowsRuntimeStack.DOTNET_7);
     assertThatThrownBy(builder::build).
-        isInstanceOf(IllegalArgumentException.class).
-        hasMessageContaining("The Runtime Stack and Operating System mismatches. Please choose AzureWebAppLinuxRuntimeStack or change Operating System to WINDOWS");
+      isInstanceOf(IllegalArgumentException.class).
+      hasMessageContaining("The Runtime Stack and Operating System mismatches. Please choose " +
+        "AzureWebAppLinuxRuntimeStack or change Operating System to WINDOWS");
   }
 
   @Test
   public void exceptionThrown_when_mixingLinuxRuntimeStackWithWindowsOs() {
     var builder = generateSampleBuilder()
-        .withOperatingSystem(AzureOsType.WINDOWS)
-        .withRuntimeStack(AzureWebAppLinuxRuntimeStack.DOTNET_CORE_7_0);
+      .withOperatingSystem(AzureOsType.WINDOWS)
+      .withRuntimeStack(AzureWebAppLinuxRuntimeStack.DOTNET_CORE_7_0);
     assertThatThrownBy(builder::build).
-        isInstanceOf(IllegalArgumentException.class).
-        hasMessageContaining("The Runtime Stack and Operating System mismatches. Please choose AzureWebAppWindowsRuntimeStack or change Operating System to LINUX");
+      isInstanceOf(IllegalArgumentException.class).
+      hasMessageContaining("The Runtime Stack and Operating System mismatches. Please choose " +
+        "AzureWebAppWindowsRuntimeStack or change Operating System to LINUX");
   }
 
   @Test
   public void exceptionThrown_when_mixingJavaAndDotnetHosting() {
     var builder = AzureWebAppConfiguration.builder()
-            .withDotnetVersion("DOTNETCORE:7.0")
-            .withJavaVersion("JAVA:17-java17");
-    
+      .withDotnetVersion("DOTNETCORE:7.0")
+      .withJavaVersion("JAVA:17-java17");
+
     assertThatThrownBy(builder::build).
-        isInstanceOf(IllegalArgumentException.class).
-        hasMessageContaining("Only one hosting configuration can be set. [DOTNET] has already been set");
+      isInstanceOf(IllegalArgumentException.class).
+      hasMessageContaining("Only one hosting configuration can be set. [DOTNET] has already been set");
   }
 
   @Test
   public void exceptionThrown_when_mixingJavaAndPhpHosting() {
     var builder = AzureWebAppConfiguration.builder()
-            .withJavaVersion("JAVA:17-java17")
-            .withPhpVersion("PHP:8.1");
-    
+      .withJavaVersion("JAVA:17-java17")
+      .withPhpVersion("PHP:8.1");
+
     assertThatThrownBy(builder::build).
-        isInstanceOf(IllegalArgumentException.class).
-        hasMessageContaining("Only one hosting configuration can be set. [JAVA] has already been set]");
+      isInstanceOf(IllegalArgumentException.class).
+      hasMessageContaining("Only one hosting configuration can be set. [JAVA] has already been set]");
   }
 
   @Test
   public void hostingIsDotnet_when_settingDotnetVersion() {
     var builder = generateSampleBuilder()
-        .withConfiguration(AzureWebAppConfiguration.builder()
-            .withDotnetVersion("DOTNETCORE:7.0")
-            .build()
-        );
+      .withConfiguration(AzureWebAppConfiguration.builder()
+        .withDotnetVersion("DOTNETCORE:7.0")
+        .build()
+      );
     assertThat(builder.build().getConfiguration().getDotnetVersion()).isEqualTo("DOTNETCORE:7.0");
     assertThatCode(builder::build).doesNotThrowAnyException();
   }
@@ -148,12 +150,12 @@ public class AzureAppServiceTest {
   @Test
   public void hostingIsPhp_when_settingPhpVersion() {
     var builder = generateSampleBuilder()
-        .withOperatingSystem(AzureOsType.LINUX)
-        .withRuntimeStack(AzureWebAppLinuxRuntimeStack.DOTNET_CORE_6_0)
-        .withConfiguration(AzureWebAppConfiguration.builder()
-            .withPhpVersion("PHP:8.1")
-            .build()
-        );
+      .withOperatingSystem(AzureOsType.LINUX)
+      .withRuntimeStack(AzureWebAppLinuxRuntimeStack.DOTNET_CORE_6_0)
+      .withConfiguration(AzureWebAppConfiguration.builder()
+        .withPhpVersion("PHP:8.1")
+        .build()
+      );
     assertThat(builder.build().getConfiguration().getPhpVersion()).isEqualTo("PHP:8.1");
     assertThat(builder.build().getConfiguration().getPythonVersion()).isEqualTo(null);
     assertThatCode(builder::build).doesNotThrowAnyException();
@@ -162,11 +164,11 @@ public class AzureAppServiceTest {
   @Test
   public void hostingIsJavaContainer_when_settingJavaContainerHosting() {
     var builder = generateSampleBuilder()
-        .withConfiguration(AzureWebAppConfiguration.builder()
-            .withJavaContainer("xxx")
-            .withJavaContainerVersion("yyy")
-            .build()
-        );
+      .withConfiguration(AzureWebAppConfiguration.builder()
+        .withJavaContainer("xxx")
+        .withJavaContainerVersion("yyy")
+        .build()
+      );
     assertThat(builder.build().getConfiguration().getJavaContainer()).isEqualTo("xxx");
     assertThat(builder.build().getConfiguration().getJavaContainerVersion()).isEqualTo("yyy");
     assertThat(builder.build().getConfiguration().getDotnetVersion()).isEqualTo(null);
@@ -179,125 +181,128 @@ public class AzureAppServiceTest {
   @Test
   public void exceptionThrown_when_missingJavaContainerVersionHosting() {
     var builder = AzureWebAppConfiguration.builder()
-            .withJavaContainer("xxx");
-    
+      .withJavaContainer("xxx");
+
     assertThatThrownBy(builder::build).
-        isInstanceOf(IllegalArgumentException.class).
-        hasMessageContaining("Incomplete hosting types definition. Both [javaContainer] and [javaContainerVersion] must be set");
+      isInstanceOf(IllegalArgumentException.class).
+      hasMessageContaining("Incomplete hosting types definition. Both [javaContainer] and [javaContainerVersion] must" +
+        " be set");
   }
 
   @Test
   public void exceptionThrown_when_missingJavaContainerHosting() {
     var builder = AzureWebAppConfiguration.builder()
-            .withJavaContainerVersion("yyy");
-    
+      .withJavaContainerVersion("yyy");
+
     assertThatThrownBy(builder::build).
-        isInstanceOf(IllegalArgumentException.class).
-        hasMessageContaining("Incomplete hosting types definition. Both [javaContainer] and [javaContainerVersion] must be set");
+      isInstanceOf(IllegalArgumentException.class).
+      hasMessageContaining("Incomplete hosting types definition. Both [javaContainer] and [javaContainerVersion] must" +
+        " be set");
   }
 
   @Test
   public void exceptionThrown_when_missingRuntimeStack() {
     var builder = generateSampleBuilder()
-        .withConfiguration(AzureWebAppConfiguration.builder().build());
+      .withConfiguration(AzureWebAppConfiguration.builder().build());
     assertThatThrownBy(builder::build).
-        isInstanceOf(IllegalArgumentException.class).
-        hasMessageContaining("[AzureWebApp Validation] The Runtime Stack is either empty or blank and it is required");
+      isInstanceOf(IllegalArgumentException.class).
+      hasMessageContaining("[AzureWebApp Validation] The Runtime Stack is either empty or blank and it is required");
   }
 
   @Test
   public void exceptionThrown_when_wrongCustomDomain() {
     var builder = generateSampleBuilder()
-        .withCustomDomain("wrong");
+      .withCustomDomain("wrong");
     assertThatThrownBy(builder::build).
-        isInstanceOf(IllegalArgumentException.class).
-        hasMessageContaining("[AzureWebApp Validation] The CustomDomain must contain at least one period, cannot start or end with a period. CustomDomain are made up of letters, numbers, periods, and dashes");
+      isInstanceOf(IllegalArgumentException.class).
+      hasMessageContaining("[AzureWebApp Validation] The CustomDomain must contain at least one period, cannot start " +
+        "or end with a period. CustomDomain are made up of letters, numbers, periods, and dashes");
   }
 
   @Test
   public void returns_without_errors_when_settingConfiguration() {
     var webApp = generateSampleBuilder()
-        .withOperatingSystem(AzureOsType.LINUX)
-        .withRuntimeStack(AzureWebAppLinuxRuntimeStack.JAVA_17)
-        .withConfiguration(AzureWebAppConfiguration.builder()
-            .withJavaVersion("java version")
-            .withApiManagementConfigId("withApiManagementConfigId")
-            .withApiDefinitionUrl("apiDefinitionUrl")
-            .withCorsSettings(AzureWebAppCorsSettings.builder()
-                .withSupportCredentials(true)
-                .build())
-            .withHttp20Enabled(true)
-            .withHttpLoggingEnabled(true)
-            .withMinTlsVersion(SupportedTlsVersions.ONE_ONE)
-            .withRequestTracingEnabled(true)
-            .withTracingOptions("withTracingOptions")
-            .withWebSocketsEnabled(true)
-            .withJavaVersion("java version")
-            .withAppSettings(new HashMap<>())
-            .withAlwaysOn(true)
-            .withAppCommandLine("appCommandLine")
-            .withAutoSwapSlotName("autoSwapSlotName")
-            .withConnectionStrings(new ArrayList<>())
-            .withDefaultDocuments(new ArrayList<>())
-            .withDocumentRoot("documentRoot")
-            .withNumberOfWorkers(1)
-            .withUse32BitWorkerProcess(true)
-            .withRemoteDebuggingEnabled(true)
-            .withRemoteDebuggingVersion("remoteDebuggingVersion")
-            .withWebsiteTimeZone("websiteTimezone")
-            .withJavaVersion("java version")
-            .withAcrUseManagedIdentityCredentials(true)
-            .withAcrUserManagedIdentityId("acrUserManagedIdentityId")
-            .withDetailedErrorLoggingEnabled(true)
-            .withFtpsState(AzureFtpsState.FTPS_ONLY)
-            .withFunctionAppScaleLimit(1)
-            .withFunctionsRuntimeScaleMonitoringEnabled(true)
-            .withHealthCheckPath("healthCheckPath")
-            .withKeyVaultReferenceIdentity("keyVaultReferenceIdentity")
-            .withLimits(AzureSiteLimits.builder()
-                .withMaxDiskSizeInMb(100)
-                .withMaxMemoryInMb(128)
-                .withMaxPercentageCpu(50.0)
-                .build())
-            .withLocalMySqlEnabled(true)
-            .withLogsDirectorySizeLimit(100)
-            .withManagedServiceIdentityId(1)
-            .withMinimumElasticInstanceCount(1)
-            .withPreWarmedInstanceCount(1)
-            .withPublicNetworkAccess("publicNetworkAccess")
-            .withPublishingUsername("publishingUsername")
-            .withVnetName("vnetName")
-            .withVnetRouteAllEnabled(true)
-            .withVnetPrivatePortsCount(1)
-            .withXManagedServiceIdentityId(1)
-            .build()
-        )
-        .withClientAffinityEnabled(true)
-        .withClientCertEnabled(true)
-        .withClientCertExclusionPaths("withClientCertExclusionPaths")
-        .withClientCertMode(AzureAppServiceClientCertMode.REQUIRED)
-        .withHttpsOnly(true)
-        .withContainerSize(100)
-        .withCustomDomainVerificationId("customDomainVerificationId")
-        .withDailyMemoryTimeQuota(100)
-        .withEnabled(true)
-        .withHostNamesDisabled(true)
-        .withHyperV(true)
-        .withRedundancyMode(AzureAppServiceRedundancyMode.GEO_REDUNDANT)
-        .withReserved(true)
-        .withStorageAccountRequired(true)
-        .withVirtualNetworkSubnetId("virtualNetworkSubnetId")
-        .withVnetContentShareEnabled(true)
-        .withVnetImagePullEnabled(true)
-        .withCloningInfo(AzureWebAppCloningInfo.builder()
-            .withOverwrite(true)
-            .build())
-        .withHostingEnvironmentProfileId("HostingEnvironmentProfileId")
-        .withScmSiteAlsoStopped(true)
-        .withSecret("secret-1")
-        .withSecret("secret-2")
-        .withSecret("secret-3")
-        .build();
+      .withOperatingSystem(AzureOsType.LINUX)
+      .withRuntimeStack(AzureWebAppLinuxRuntimeStack.JAVA_17)
+      .withConfiguration(AzureWebAppConfiguration.builder()
+        .withJavaVersion("java version")
+        .withApiManagementConfigId("withApiManagementConfigId")
+        .withApiDefinitionUrl("apiDefinitionUrl")
+        .withCorsSettings(AzureWebAppCorsSettings.builder()
+          .withSupportCredentials(true)
+          .build())
+        .withHttp20Enabled(true)
+        .withHttpLoggingEnabled(true)
+        .withMinTlsVersion(SupportedTlsVersions.ONE_ONE)
+        .withRequestTracingEnabled(true)
+        .withTracingOptions("withTracingOptions")
+        .withWebSocketsEnabled(true)
+        .withJavaVersion("java version")
+        .withAppSettings(new HashMap<>())
+        .withAlwaysOn(true)
+        .withAppCommandLine("appCommandLine")
+        .withAutoSwapSlotName("autoSwapSlotName")
+        .withConnectionStrings(new ArrayList<>())
+        .withDefaultDocuments(new ArrayList<>())
+        .withDocumentRoot("documentRoot")
+        .withNumberOfWorkers(1)
+        .withUse32BitWorkerProcess(true)
+        .withRemoteDebuggingEnabled(true)
+        .withRemoteDebuggingVersion("remoteDebuggingVersion")
+        .withWebsiteTimeZone("websiteTimezone")
+        .withJavaVersion("java version")
+        .withAcrUseManagedIdentityCredentials(true)
+        .withAcrUserManagedIdentityId("acrUserManagedIdentityId")
+        .withDetailedErrorLoggingEnabled(true)
+        .withFtpsState(AzureFtpsState.FTPS_ONLY)
+        .withFunctionAppScaleLimit(1)
+        .withFunctionsRuntimeScaleMonitoringEnabled(true)
+        .withHealthCheckPath("healthCheckPath")
+        .withKeyVaultReferenceIdentity("keyVaultReferenceIdentity")
+        .withLimits(AzureSiteLimits.builder()
+          .withMaxDiskSizeInMb(100)
+          .withMaxMemoryInMb(128)
+          .withMaxPercentageCpu(50.0)
+          .build())
+        .withLocalMySqlEnabled(true)
+        .withLogsDirectorySizeLimit(100)
+        .withManagedServiceIdentityId(1)
+        .withMinimumElasticInstanceCount(1)
+        .withPreWarmedInstanceCount(1)
+        .withPublicNetworkAccess("publicNetworkAccess")
+        .withPublishingUsername("publishingUsername")
+        .withVnetName("vnetName")
+        .withVnetRouteAllEnabled(true)
+        .withVnetPrivatePortsCount(1)
+        .withXManagedServiceIdentityId(1)
+        .build()
+      )
+      .withClientAffinityEnabled(true)
+      .withClientCertEnabled(true)
+      .withClientCertExclusionPaths("withClientCertExclusionPaths")
+      .withClientCertMode(AzureAppServiceClientCertMode.REQUIRED)
+      .withHttpsOnly(true)
+      .withContainerSize(100)
+      .withCustomDomainVerificationId("customDomainVerificationId")
+      .withDailyMemoryTimeQuota(100)
+      .withEnabled(true)
+      .withHostNamesDisabled(true)
+      .withHyperV(true)
+      .withRedundancyMode(AzureAppServiceRedundancyMode.GEO_REDUNDANT)
+      .withReserved(true)
+      .withStorageAccountRequired(true)
+      .withVirtualNetworkSubnetId("virtualNetworkSubnetId")
+      .withVnetContentShareEnabled(true)
+      .withVnetImagePullEnabled(true)
+      .withCloningInfo(AzureWebAppCloningInfo.builder()
+        .withOverwrite(true)
+        .build())
+      .withHostingEnvironmentProfileId("HostingEnvironmentProfileId")
+      .withScmSiteAlsoStopped(true)
+      .withSecret("secret-1")
+      .withSecret("secret-2")
+      .withSecret("secret-3")
+      .build();
 
     assertThat(webApp.getConfiguration().getApiManagementConfigId()).isEqualTo("withApiManagementConfigId");
     assertThat(webApp.getConfiguration().getApiDefinitionUrl()).isEqualTo("apiDefinitionUrl");
@@ -375,66 +380,66 @@ public class AzureAppServiceTest {
 
 
     var resourceGroup = AzureResourceGroup.builder()
-        .withName("new-resource-group")
-        .withRegion(selectedRegion)
-        .build();
+      .withName("new-resource-group")
+      .withRegion(selectedRegion)
+      .build();
 
     var appServicePlan = AzureAppServicePlan.builder()
-        .withName(appServicePlanName)
-        .withAzureResourceGroup(resourceGroup)
-        .withRegion(selectedRegion)
-        .withOperatingSystem(selectedOperatingSystem)
-        .withPricingPlan(selectedPricingPlan)
-        .withZoneRedundancyEnabled()
-        .withTags(tags)
-        .build();
-    
+      .withName(appServicePlanName)
+      .withAzureResourceGroup(resourceGroup)
+      .withRegion(selectedRegion)
+      .withOperatingSystem(selectedOperatingSystem)
+      .withPricingPlan(selectedPricingPlan)
+      .withZoneRedundancyEnabled()
+      .withTags(tags)
+      .build();
+
     var certificate = AzureKeyVaultCertificate.builder()
-        .withKeyVaultId("key-vault-id")
-        .withName("certificate-name")
-        .build();
+      .withKeyVaultId("key-vault-id")
+      .withName("certificate-name")
+      .build();
 
     var webApp = generateSampleBuilder()
-        .withOperatingSystem(AzureOsType.WINDOWS)
-        .withRuntimeStack(AzureWebAppWindowsRuntimeStack.JAVA_8_TOMCAT_10_0)
-        .withAppServicePlan(appServicePlan)
-        .withConfiguration(AzureWebAppConfiguration.builder()
-            .withJavaVersion("java version")
-            .build()) 
-        .withCertificate(certificate)
-        .withCustomDomain("custom.domain.com")
-        .withCustomDomain("custom1.domain.com")
-        .withResourceGroup(resourceGroup)
-        .withTags(tags)
-        .build();
+      .withOperatingSystem(AzureOsType.WINDOWS)
+      .withRuntimeStack(AzureWebAppWindowsRuntimeStack.JAVA_8_TOMCAT_10_0)
+      .withAppServicePlan(appServicePlan)
+      .withConfiguration(AzureWebAppConfiguration.builder()
+        .withJavaVersion("java version")
+        .build())
+      .withCertificate(certificate)
+      .withCustomDomain("custom.domain.com")
+      .withCustomDomain("custom1.domain.com")
+      .withResourceGroup(resourceGroup)
+      .withTags(tags)
+      .build();
 
     var json = TestUtils.getJsonRepresentation(webApp);
-    
+
     assertThat(json).isNotBlank();
-    
+
     assertThat(appServicePlan.getName()).isEqualTo(appServicePlanName);
     assertThat(appServicePlan.getTags().size()).isEqualTo(1);
     assertThat(appServicePlan.getTags()).isEqualTo(tags);
-    
-    
+
+
     assertThat(webApp.getAppServicePlan()).isEqualTo(appServicePlan);
     assertThat(webApp.getTags().size()).isEqualTo(1);
     assertThat(webApp.getTags()).isEqualTo(tags);
   }
-  
+
   private AzureWebApp.AzureWebAppBuilder generateBuilder() {
     return builder().withId("webapp");
   }
 
   private AzureWebApp.AzureWebAppBuilder generateSampleBuilder() {
     return generateBuilder()
-        .withPrivateSSHKeyPassphraseSecretId("svc-private-ssh-key-pass")
-        .withPrivateSSHKeySecretId("svc-private-ssh-key-secret")
-        .withSSHRepositoryURI("ssh")
-        .withRepoId("repo-id")
-        .withBranchName("env/test")
-        .withSecretPasswordKey("***")
-        .withRegion(AzureRegion.WEST_EUROPE);
+      .withPrivateSSHKeyPassphraseSecretId("svc-private-ssh-key-pass")
+      .withPrivateSSHKeySecretId("svc-private-ssh-key-secret")
+      .withSSHRepositoryURI("ssh")
+      .withRepoId("repo-id")
+      .withBranchName("env/test")
+      .withSecretPasswordKey("***")
+      .withRegion(AzureRegion.WEST_EUROPE);
   }
 
 }

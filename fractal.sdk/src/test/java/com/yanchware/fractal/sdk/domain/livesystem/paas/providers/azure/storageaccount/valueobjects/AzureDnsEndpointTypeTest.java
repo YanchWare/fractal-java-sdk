@@ -10,23 +10,23 @@ public class AzureDnsEndpointTypeTest {
   @Test
   public void azureDnsEndpointTypeConstants_shouldNotBeNull() {
     assertThat(AzureDnsEndpointType.STANDARD)
-        .as("STANDARD constant should not be null")
-        .isNotNull();
+      .as("STANDARD constant should not be null")
+      .isNotNull();
 
     assertThat(AzureDnsEndpointType.AZURE_DNS_ZONE)
-        .as("AZURE_DNS_ZONE constant should not be null")
-        .isNotNull();
+      .as("AZURE_DNS_ZONE constant should not be null")
+      .isNotNull();
   }
 
   @Test
   public void fromString_shouldReturnCorrespondingAzureDnsEndpointType() {
     assertThat(AzureDnsEndpointType.fromString("Standard"))
-        .as("fromString should return STANDARD for 'Standard'")
-        .isEqualTo(AzureDnsEndpointType.STANDARD);
+      .as("fromString should return STANDARD for 'Standard'")
+      .isEqualTo(AzureDnsEndpointType.STANDARD);
 
     assertThat(AzureDnsEndpointType.fromString("AzureDnsZone"))
-        .as("fromString should return STANDARD for 'Standard'")
-        .isEqualTo(AzureDnsEndpointType.AZURE_DNS_ZONE);
+      .as("fromString should return STANDARD for 'Standard'")
+      .isEqualTo(AzureDnsEndpointType.AZURE_DNS_ZONE);
   }
 
   @Test
@@ -34,7 +34,7 @@ public class AzureDnsEndpointTypeTest {
     Collection<AzureDnsEndpointType> values = AzureDnsEndpointType.values();
 
     assertThat(values)
-        .as("Values should contain STANDARD, and AZURE_DNS_ZONE and have exactly 2 values")
-        .containsExactlyInAnyOrder(AzureDnsEndpointType.STANDARD, AzureDnsEndpointType.AZURE_DNS_ZONE);
+      .as("Values should contain STANDARD, and AZURE_DNS_ZONE and have exactly 2 values")
+      .containsExactlyInAnyOrder(AzureDnsEndpointType.STANDARD, AzureDnsEndpointType.AZURE_DNS_ZONE);
   }
 }

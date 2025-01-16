@@ -22,54 +22,62 @@ import static java.net.http.HttpRequest.BodyPublishers.ofString;
 public class HttpUtils {
   public static HttpRequest buildGetRequest(URI uri, SdkConfiguration sdkConfiguration) {
     return getHttpRequestBuilder(uri, sdkConfiguration)
-        .GET()
-        .build();
+      .GET()
+      .build();
   }
 
   public static HttpRequest buildPutRequest(URI uri, SdkConfiguration sdkConfiguration, String payload) {
     return getHttpRequestBuilder(uri, sdkConfiguration)
-        .PUT(ofString(payload))
-        .build();
+      .PUT(ofString(payload))
+      .build();
   }
 
   public static HttpRequest buildPostRequest(URI uri, SdkConfiguration sdkConfiguration, String payload) {
     return buildPostRequest(uri, sdkConfiguration, payload, null);
   }
 
-  public static HttpRequest buildPostRequest(URI uri, SdkConfiguration sdkConfiguration,
-                                             String payload,
-                                             Map<String, String> additionalHeaders) {
+  public static HttpRequest buildPostRequest(
+    URI uri, SdkConfiguration sdkConfiguration,
+    String payload,
+    Map<String, String> additionalHeaders)
+  {
 
     return getHttpRequestBuilder(uri, sdkConfiguration, additionalHeaders)
-        .POST(StringUtils.isBlank(payload) ? noBody() : ofString(payload))
-        .build();
+      .POST(StringUtils.isBlank(payload) ? noBody() : ofString(payload))
+      .build();
   }
 
-  public static HttpRequest buildDeleteRequest(URI uri, 
-                                               SdkConfiguration sdkConfiguration) {
+  public static HttpRequest buildDeleteRequest(
+    URI uri,
+    SdkConfiguration sdkConfiguration)
+  {
     return buildDeleteRequest(uri, sdkConfiguration, null);
   }
 
-  public static HttpRequest buildDeleteRequest(URI uri,
-                                               SdkConfiguration sdkConfiguration,
-                                               Map<String, String> additionalHeaders) {
+  public static HttpRequest buildDeleteRequest(
+    URI uri,
+    SdkConfiguration sdkConfiguration,
+    Map<String, String> additionalHeaders)
+  {
     return getHttpRequestBuilder(uri, sdkConfiguration, additionalHeaders)
-        .DELETE()
-        .build();
+      .DELETE()
+      .build();
   }
 
   public static HttpRequest.Builder getHttpRequestBuilder(URI uri, SdkConfiguration sdkConfiguration) {
     return getHttpRequestBuilder(uri, sdkConfiguration, null);
   }
 
-  public static HttpRequest.Builder getHttpRequestBuilder(URI uri,
-                                                          SdkConfiguration sdkConfiguration,
-                                                          Map<String, String> additionalHeaders) {
+  public static HttpRequest.Builder getHttpRequestBuilder(
+    URI uri,
+    SdkConfiguration sdkConfiguration,
+    Map<String, String> additionalHeaders)
+  {
     var builder = HttpRequest.newBuilder()
-            .uri(uri)
-            .header(X_CLIENT_ID_HEADER, sdkConfiguration.getClientId())
-            .header(X_CLIENT_SECRET_HEADER, sdkConfiguration.getClientSecret())
-            .header("Content-Type", "application/json");
+      .uri(uri)
+      .header(X_CLIENT_ID_HEADER, sdkConfiguration.getClientId())
+      .header(X_CLIENT_SECRET_HEADER, sdkConfiguration.getClientSecret())
+      .header("Content-Type", "application/json");
 
     if (additionalHeaders != null) {
       additionalHeaders.forEach(builder::header);
@@ -78,18 +86,22 @@ public class HttpUtils {
     return builder;
   }
 
-  public static void ensureAcceptableResponse(HttpResponse<String> response,
-                                              String requestName,
-                                              int[] acceptedResponses) throws InstantiatorException {
+  public static void ensureAcceptableResponse(
+    HttpResponse<String> response,
+    String requestName,
+    int[] acceptedResponses) throws InstantiatorException
+  {
 
 
     ensureAcceptableResponse(response, requestName, null, acceptedResponses);
   }
 
-  public static void ensureAcceptableResponse(HttpResponse<String> response,
-                                              String requestName,
-                                              String entityId,
-                                              int[] acceptedResponses) throws InstantiatorException {
+  public static void ensureAcceptableResponse(
+    HttpResponse<String> response,
+    String requestName,
+    String entityId,
+    int[] acceptedResponses) throws InstantiatorException
+  {
 
 
     if (Arrays.stream(acceptedResponses).noneMatch((x) -> x == response.statusCode())) {
@@ -104,9 +116,9 @@ public class HttpUtils {
         throw new InstantiatorException(errorMessage);
       } else if (response.statusCode() == 401) {
         String errorMessage = formatErrorMessage(requestName,
-            "Invalid credentials provided. Please check your credentials or contact Fractal Cloud support " +
-                "if you do not have credentials or suspect a password issue.",
-            entityId);
+          "Invalid credentials provided. Please check your credentials or contact Fractal Cloud support " +
+            "if you do not have credentials or suspect a password issue.",
+          entityId);
 
         log.error(errorMessage);
 
@@ -119,9 +131,11 @@ public class HttpUtils {
     }
   }
 
-  private static void handleStructuredError(HttpResponse<String> response, 
-                                            String requestName,
-                                            String entityId) throws InstantiatorException {
+  private static void handleStructuredError(
+    HttpResponse<String> response,
+    String requestName,
+    String entityId) throws InstantiatorException
+  {
     try {
       var jsonNode = SerializationUtils.deserialize(response.body(), JsonNode.class);
       if (jsonNode.has("reasonCode") && jsonNode.has("message")) {
@@ -129,9 +143,9 @@ public class HttpUtils {
         var message = jsonNode.get("message").asText();
 
         String errorMessage = formatErrorMessage(requestName,
-            String.format("Reason: %s, Message: %s", reasonCode, message),
-            entityId);
-        
+          String.format("Reason: %s, Message: %s", reasonCode, message),
+          entityId);
+
         log.error(errorMessage);
         throw new InstantiatorException(errorMessage);
       }
@@ -142,8 +156,8 @@ public class HttpUtils {
 
   public static String formatErrorMessage(String requestName, String errorMessage, String entityId) {
     return String.format("Failed to %s%s.%s",
-        StringHelper.toWords(requestName),
-        StringUtils.isBlank(entityId) ? "" : String.format(" [id: '%s']", entityId),
-        StringUtils.isBlank(errorMessage) ? "" : String.format(" %s", errorMessage));
+      StringHelper.toWords(requestName),
+      StringUtils.isBlank(entityId) ? "" : String.format(" [id: '%s']", entityId),
+      StringUtils.isBlank(errorMessage) ? "" : String.format(" %s", errorMessage));
   }
 }

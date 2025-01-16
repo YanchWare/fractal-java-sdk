@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AzureOsSkuTest {
-  
+
   @Test
   public void testAzureLinuxInstance() {
     assertEquals("AzureLinux", AzureOsSku.AZURE_LINUX.toString());

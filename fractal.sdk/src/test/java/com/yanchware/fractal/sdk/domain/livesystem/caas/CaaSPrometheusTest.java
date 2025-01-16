@@ -35,7 +35,8 @@ class CaaSPrometheusTest {
 
     assertThatThrownBy(prometheusBuilder::build)
       .isInstanceOf(IllegalArgumentException.class)
-      .hasMessageContainingAll("[CaaSPrometheus Validation] ContainerPlatform defined was either empty or blank and it is required");
+      .hasMessageContainingAll("[CaaSPrometheus Validation] ContainerPlatform defined was either empty or blank and " +
+        "it is required");
   }
 
   @Test
@@ -56,8 +57,8 @@ class CaaSPrometheusTest {
 
   private CaaSPrometheus.PrometheusBuilder prometheusBuilder() {
     return CaaSPrometheus.builder()
-        .withId("prometheus")
-        .withNamespace("prometheus")
-        .withApiGatewayUrl("apiGatewayUrl");
+      .withId("prometheus")
+      .withNamespace("prometheus")
+      .withApiGatewayUrl("apiGatewayUrl");
   }
 }

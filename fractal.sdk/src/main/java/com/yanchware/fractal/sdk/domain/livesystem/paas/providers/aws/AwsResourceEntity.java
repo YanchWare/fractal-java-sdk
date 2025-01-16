@@ -6,9 +6,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public interface AwsResourceEntity extends ResourceEntity {
-  AwsRegion getAwsRegion();
-  void setAwsRegion(AwsRegion region);
-
   static Collection<String> validateAwsResourceEntity(AwsResourceEntity resourceEntity, String entityName) {
     final var REGION_IS_NULL_TEMPLATE = "[AWS %s Validation] Region has not been defined and it is required";
 
@@ -20,4 +17,8 @@ public interface AwsResourceEntity extends ResourceEntity {
 
     return errors;
   }
+
+  AwsRegion getAwsRegion();
+
+  void setAwsRegion(AwsRegion region);
 }

@@ -16,8 +16,8 @@ class DnsARecordTest {
   @Test
   public void validationError_when_NameIsNull() {
     assertThatThrownBy(() -> DnsARecord.builder().withName(null).build())
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("[DnsARecord Validation] The Name must contain between 1 and 63 characters");
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("[DnsARecord Validation] The Name must contain between 1 and 63 characters");
   }
 
   @Test
@@ -28,24 +28,24 @@ class DnsARecordTest {
     var ipV4Address2 = "2.2.2.2";
 
     var record = DnsARecord.builder()
-        .withName(recordName)
-        .withTtl(duration)
-        .withIpV4Address(ipV4Address)
-        .withIpV4Address(ipV4Address2)
-        .build();
+      .withName(recordName)
+      .withTtl(duration)
+      .withIpV4Address(ipV4Address)
+      .withIpV4Address(ipV4Address2)
+      .build();
 
     assertThat(record.getName()).isEqualTo(recordName);
     assertThat(record.getTtl()).isEqualTo(duration);
     assertThat(record.getIpV4Addresses().size()).isEqualTo(2);
     assertThat(record.getIpV4Addresses())
-        .containsExactly(ipV4Address, ipV4Address2);
+      .containsExactly(ipV4Address, ipV4Address2);
 
     var jsonRecord = TestUtils.getJsonNodeRepresentation(record);
     assertThat(jsonRecord).isNotNull();
     assertThat(jsonRecord.has("@type")).isNotNull();
     assertEquals(A_DNS_RECORD_TYPE, jsonRecord.get("@type").textValue());
   }
-  
+
   @Test
   public void dnsARecordHasAllFields() {
     var recordName = "ARecord";
@@ -54,17 +54,17 @@ class DnsARecordTest {
     var ipV4Address2 = "2.2.2.2";
 
     var record = DnsARecord.builder()
-        .withName(recordName)
-        .withTtl(duration)
-        .withIpV4Address(ipV4Address)
-        .withIpV4Address(ipV4Address2)
-        .build();
+      .withName(recordName)
+      .withTtl(duration)
+      .withIpV4Address(ipV4Address)
+      .withIpV4Address(ipV4Address2)
+      .build();
 
     assertThat(record.getName()).isEqualTo(recordName);
     assertThat(record.getTtl()).isEqualTo(duration);
     assertThat(record.getIpV4Addresses().size()).isEqualTo(2);
     assertThat(record.getIpV4Addresses())
-        .containsExactly(ipV4Address, ipV4Address2);
+      .containsExactly(ipV4Address, ipV4Address2);
 
     var jsonRecord = TestUtils.getJsonNodeRepresentation(record);
     assertThat(jsonRecord).isNotNull();

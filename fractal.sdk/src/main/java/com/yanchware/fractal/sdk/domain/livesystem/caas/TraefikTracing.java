@@ -15,6 +15,17 @@ public class TraefikTracing implements Validatable {
     return new TraefikTracingBuilder();
   }
 
+  @Override
+  public Collection<String> validate() {
+    Collection<String> errors = new ArrayList<>();
+
+    if (jaeger == null) {
+      errors.add("JaegerTracing instance cannot be null.");
+    }
+
+    return errors;
+  }
+
   public static class TraefikTracingBuilder {
     private final TraefikTracing tracing;
     private final TraefikTracingBuilder builder;
@@ -34,21 +45,10 @@ public class TraefikTracing implements Validatable {
 
       if (!errors.isEmpty()) {
         throw new IllegalArgumentException(String.format("TraefikTracingBuilder validation failed. Errors: %s",
-            Arrays.toString(errors.toArray())));
+          Arrays.toString(errors.toArray())));
       }
 
       return tracing;
     }
-  }
-
-  @Override
-  public Collection<String> validate() {
-    Collection<String> errors = new ArrayList<>();
-
-    if (jaeger == null) {
-      errors.add("JaegerTracing instance cannot be null.");
-    }
-
-    return errors;
   }
 }

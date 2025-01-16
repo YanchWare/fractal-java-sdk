@@ -9,7 +9,7 @@ plugins {
     id("com.mikepenz.aboutlibraries.plugin") version "11.4.0-b01"
 }
 
-group="com.yanchware"
+group = "com.yanchware"
 
 repositories {
     mavenLocal()

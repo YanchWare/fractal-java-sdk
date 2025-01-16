@@ -14,7 +14,7 @@ import java.util.Collection;
 @Setter(AccessLevel.PRIVATE)
 public class AzureFileShareSignedIdentifier implements Validatable {
   private String id;
-  
+
   private AzureFileShareAccessPolicy accessPolicy;
 
   public static AzureFileShareSignedIdentifierBuilder builder() {
@@ -24,11 +24,11 @@ public class AzureFileShareSignedIdentifier implements Validatable {
   @Override
   public Collection<String> validate() {
     Collection<String> errors = new ArrayList<>();
-    
+
     if (StringUtils.isBlank(id)) {
       errors.add("ID cannot be null or empty.");
     }
-    
+
     if (accessPolicy == null) {
       errors.add("Access policy cannot be null.");
     } else {
@@ -70,7 +70,7 @@ public class AzureFileShareSignedIdentifier implements Validatable {
 
       if (!errors.isEmpty()) {
         throw new IllegalArgumentException(String.format("AzureFileShareSignedIdentifier validation failed. Errors: %s",
-            Arrays.toString(errors.toArray())));
+          Arrays.toString(errors.toArray())));
       }
 
       return signedIdentifier;

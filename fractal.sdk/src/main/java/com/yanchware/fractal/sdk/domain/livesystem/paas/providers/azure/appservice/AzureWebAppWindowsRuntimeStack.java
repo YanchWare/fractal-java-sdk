@@ -31,6 +31,7 @@ public class AzureWebAppWindowsRuntimeStack extends ExtendableEnum<AzureWebAppWi
   public static final AzureWebAppWindowsRuntimeStack JAVA_1_8_TOMCAT_8_5 = fromString("java|1.8|TOMCAT|8.5");
   public static final AzureWebAppWindowsRuntimeStack JAVA_11_TOMCAT_8_5 = fromString("java|11|TOMCAT|8.5");
   public static final AzureWebAppWindowsRuntimeStack JAVA_17_TOMCAT_8_5 = fromString("java|17|TOMCAT|8.5");
+
   public AzureWebAppWindowsRuntimeStack() {
   }
 

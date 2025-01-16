@@ -14,6 +14,13 @@ public enum AzureCosmosBackupPolicyType {
     this.value = value;
   }
 
+  public static AzureCosmosBackupPolicyType fromString(String redundancy) {
+    return Arrays.stream(values())
+      .filter(t -> t.value.equalsIgnoreCase(redundancy))
+      .findFirst()
+      .orElse(null);
+  }
+
   @JsonValue
   public String getValue() {
     return value;
@@ -24,11 +31,4 @@ public enum AzureCosmosBackupPolicyType {
     return value;
   }
 
-  public static AzureCosmosBackupPolicyType fromString(String redundancy) {
-    return Arrays.stream(values())
-        .filter(t -> t.value.equalsIgnoreCase(redundancy))
-        .findFirst()
-        .orElse(null);
-  }
-    
 }
