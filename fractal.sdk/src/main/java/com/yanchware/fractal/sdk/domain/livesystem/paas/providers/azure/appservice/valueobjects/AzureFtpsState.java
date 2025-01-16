@@ -6,20 +6,20 @@ import com.yanchware.fractal.sdk.utils.ExtendableEnum;
 import java.util.Collection;
 
 public final class AzureFtpsState extends ExtendableEnum<AzureFtpsState> {
-    public static final AzureFtpsState ALL_ALLOWED = fromString("AllAllowed");
-    public static final AzureFtpsState DISABLED = fromString("Disabled");
-    public static final AzureFtpsState FTPS_ONLY = fromString("FtpsOnly");
-    
-    public AzureFtpsState() {
-    }
+  public static final AzureFtpsState ALL_ALLOWED = fromString("AllAllowed");
+  public static final AzureFtpsState DISABLED = fromString("Disabled");
+  public static final AzureFtpsState FTPS_ONLY = fromString("FtpsOnly");
 
-    @JsonCreator
-    public static AzureFtpsState fromString(String name) {
-        return fromString(name, AzureFtpsState.class);
-    }
+  public AzureFtpsState() {
+  }
 
-    public static Collection<AzureFtpsState> values() {
+  @JsonCreator
+  public static AzureFtpsState fromString(String name) {
+    return fromString(name, AzureFtpsState.class);
+  }
 
-        return values(AzureFtpsState.class);
-    }
+  public static Collection<AzureFtpsState> values() {
+
+    return values(AzureFtpsState.class);
+  }
 }

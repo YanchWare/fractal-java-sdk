@@ -17,7 +17,8 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
 public class CaaSTraefik extends CaaSAPIGatewayImpl {
-  private final static String OIDC_IS_PARTIAL = "[CaaSTraefik Validation] OIDC has been partially configured. You must provide all required values or none of them";
+  private final static String OIDC_IS_PARTIAL = "[CaaSTraefik Validation] OIDC has been partially configured. You " +
+    "must provide all required values or none of them";
   private final static String NO_ENTRY_POINTS = "[CaaSTraefik Validation] Traefik should have at least one entrypoint";
   private final static String NO_HOSTNAME = "[CaaSTraefik Validation] Traefik should have a hostname";
 
@@ -37,6 +38,39 @@ public class CaaSTraefik extends CaaSAPIGatewayImpl {
 
   public static TraefikBuilder builder() {
     return new TraefikBuilder();
+  }
+
+  @Override
+  public Collection<String> validate() {
+    Collection<String> errors = super.validate();
+
+    if (!allBlank() && !allDefined()) {
+      errors.add(OIDC_IS_PARTIAL);
+    }
+
+    if (isBlank(hostname)) {
+      errors.add(NO_HOSTNAME);
+    }
+
+    if (entryPoints == null || entryPoints.isEmpty()) {
+      errors.add(NO_ENTRY_POINTS);
+    }
+
+    return errors;
+  }
+
+  private boolean allBlank() {
+    return isBlank(oidcIssuerUrl)
+      && isBlank(oidcClientId)
+      && isBlank(oidcClientSecretId)
+      && isBlank(forwardAuthSecretId);
+  }
+
+  private boolean allDefined() {
+    return !isBlank(oidcIssuerUrl)
+      && !isBlank(oidcClientId)
+      && !isBlank(oidcClientSecretId)
+      && !isBlank(forwardAuthSecretId);
   }
 
   public static class TraefikBuilder extends Builder<CaaSTraefik, TraefikBuilder> {
@@ -138,7 +172,8 @@ public class CaaSTraefik extends CaaSAPIGatewayImpl {
 
     /**
      * Configures Traefik's forward authentication settings.
-     * For more details check <a href="https://doc.traefik.io/traefik/middlewares/http/forwardauth/">Traefik documentation</a>
+     * For more details check
+     * <a href="https://doc.traefik.io/traefik/middlewares/http/forwardauth/">Traefik documentation</a>
      *
      * @param forwardAuthSettings settings for forward authentication.
      * @return the current builder instance
@@ -225,39 +260,6 @@ public class CaaSTraefik extends CaaSAPIGatewayImpl {
       component.setType(CAAS_TRAEFIK);
       return super.build();
     }
-  }
-
-  @Override
-  public Collection<String> validate() {
-    Collection<String> errors = super.validate();
-
-    if (!allBlank() && !allDefined()) {
-      errors.add(OIDC_IS_PARTIAL);
-    }
-
-    if (isBlank(hostname)) {
-      errors.add(NO_HOSTNAME);
-    }
-
-    if (entryPoints == null || entryPoints.isEmpty()) {
-      errors.add(NO_ENTRY_POINTS);
-    }
-
-    return errors;
-  }
-
-  private boolean allBlank() {
-    return isBlank(oidcIssuerUrl)
-        && isBlank(oidcClientId)
-        && isBlank(oidcClientSecretId)
-        && isBlank(forwardAuthSecretId);
-  }
-
-  private boolean allDefined() {
-    return !isBlank(oidcIssuerUrl)
-        && !isBlank(oidcClientId)
-        && !isBlank(oidcClientSecretId)
-        && !isBlank(forwardAuthSecretId);
   }
 
 }

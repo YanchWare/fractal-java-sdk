@@ -10,11 +10,11 @@ import java.util.Collection;
  */
 public final class AzureTlsVersion extends ExtendableEnum<AzureTlsVersion> {
   public static final AzureTlsVersion TLS1_0 = fromString("TLS1_0");
-  
+
   public static final AzureTlsVersion TLS1_1 = fromString("TLS1_1");
-  
+
   public static final AzureTlsVersion TLS1_2 = fromString("TLS1_2");
-  
+
 
   /**
    * Creates or finds a AzureTlsVersion from its string representation.

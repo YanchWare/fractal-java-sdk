@@ -19,30 +19,53 @@ import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidLetter
 @Getter
 @Setter(AccessLevel.PROTECTED)
 @JsonTypeInfo(
-    use = JsonTypeInfo.Id.NAME,
-    property = "@type"
+  use = JsonTypeInfo.Id.NAME,
+  property = "@type"
 )
 @JsonSubTypes({
-    @JsonSubTypes.Type(value = DnsAaaaRecord.class, name = DnsAaaaRecord.AAAA_DNS_RECORD_TYPE),
-    @JsonSubTypes.Type(value = DnsARecord.class, name = A_DNS_RECORD_TYPE),
-    @JsonSubTypes.Type(value = DnsCaaRecord.class, name = DnsCaaRecord.CAA_DNS_RECORD_TYPE),
-    @JsonSubTypes.Type(value = DnsCNameRecord.class, name = DnsCNameRecord.CNAME_DNS_RECORD_TYPE),
-    @JsonSubTypes.Type(value = DnsMxRecord.class, name = DnsMxRecord.MX_DNS_RECORD_TYPE),
-    @JsonSubTypes.Type(value = DnsNsRecord.class, name = DnsNsRecord.NS_DNS_RECORD_TYPE),
-    @JsonSubTypes.Type(value = DnsPtrRecord.class, name = DnsPtrRecord.PTR_DNS_RECORD_TYPE),
-    @JsonSubTypes.Type(value = DnsSrvRecord.class, name = DnsSrvRecord.SRV_DNS_RECORD_TYPE),
-    @JsonSubTypes.Type(value = DnsTxtRecord.class, name = DnsTxtRecord.TXT_DNS_RECORD_TYPE)
+  @JsonSubTypes.Type(value = DnsAaaaRecord.class, name = DnsAaaaRecord.AAAA_DNS_RECORD_TYPE),
+  @JsonSubTypes.Type(value = DnsARecord.class, name = A_DNS_RECORD_TYPE),
+  @JsonSubTypes.Type(value = DnsCaaRecord.class, name = DnsCaaRecord.CAA_DNS_RECORD_TYPE),
+  @JsonSubTypes.Type(value = DnsCNameRecord.class, name = DnsCNameRecord.CNAME_DNS_RECORD_TYPE),
+  @JsonSubTypes.Type(value = DnsMxRecord.class, name = DnsMxRecord.MX_DNS_RECORD_TYPE),
+  @JsonSubTypes.Type(value = DnsNsRecord.class, name = DnsNsRecord.NS_DNS_RECORD_TYPE),
+  @JsonSubTypes.Type(value = DnsPtrRecord.class, name = DnsPtrRecord.PTR_DNS_RECORD_TYPE),
+  @JsonSubTypes.Type(value = DnsSrvRecord.class, name = DnsSrvRecord.SRV_DNS_RECORD_TYPE),
+  @JsonSubTypes.Type(value = DnsTxtRecord.class, name = DnsTxtRecord.TXT_DNS_RECORD_TYPE)
 })
 public abstract class DnsRecord implements Validatable {
   private final static String NAME_NOT_VALID = "The Name must contain between 1 and 63 characters. " +
-      "It must only contain letters, numbers, underscores, and/or dashes. " +
-      "Each label should be separated from other labels by a period. " +
-      "A wildcard ('*' character) is permitted either as the single character in the name, or as the first label in the name. " +
-      "An empty value, or a single '@' character is permitted for record sets at the zone apex (except for CNAME record sets)";
+    "It must only contain letters, numbers, underscores, and/or dashes. " +
+    "Each label should be separated from other labels by a period. " +
+    "A wildcard ('*' character) is permitted either as the single character in the name, or as the first label in the" +
+    " name. " +
+    "An empty value, or a single '@' character is permitted for record sets at the zone apex (except for CNAME record" +
+    " sets)";
 
   private Duration ttl;
 
   private String name;
+
+  @Override
+  public Collection<String> validate() {
+    Collection<String> errors = new ArrayList<>();
+
+    if (StringUtils.isBlank(name)) {
+      errors.add(NAME_NOT_VALID);
+    }
+
+    if (StringUtils.isNotBlank(name)) {
+      if (!name.equals("@")) {
+        var hasValidCharacters = isValidLettersNumbersUnderscoresDashesAndPeriodsAndPeriodIsNotRequired(name);
+
+        if (!hasValidCharacters || name.length() > 63) {
+          errors.add(NAME_NOT_VALID);
+        }
+      }
+    }
+
+    return errors;
+  }
 
   public abstract static class Builder<T extends DnsRecord, B extends Builder<T, B>> {
     protected final T record;
@@ -54,6 +77,7 @@ public abstract class DnsRecord implements Validatable {
     }
 
     protected abstract T createRecord();
+
     protected abstract B getBuilder();
 
     public B withName(String name) {
@@ -71,33 +95,12 @@ public abstract class DnsRecord implements Validatable {
 
       if (!errors.isEmpty()) {
         throw new IllegalArgumentException(String.format(
-            "DnsRecord '%s' validation failed. Errors: %s",
-            this.getClass().getSimpleName(),
-            Arrays.toString(errors.toArray())));
+          "DnsRecord '%s' validation failed. Errors: %s",
+          this.getClass().getSimpleName(),
+          Arrays.toString(errors.toArray())));
       }
 
       return record;
     }
-  }
-
-  @Override
-  public Collection<String> validate() {
-    Collection<String> errors = new ArrayList<>();
-
-    if (StringUtils.isBlank(name)) {
-      errors.add(NAME_NOT_VALID);
-    }
-
-    if (StringUtils.isNotBlank(name)) {
-      if(!name.equals("@")) {
-        var hasValidCharacters = isValidLettersNumbersUnderscoresDashesAndPeriodsAndPeriodIsNotRequired(name);
-
-        if (!hasValidCharacters || name.length() > 63) {
-          errors.add(NAME_NOT_VALID);
-        }
-      }
-    }
-
-    return errors;
   }
 }

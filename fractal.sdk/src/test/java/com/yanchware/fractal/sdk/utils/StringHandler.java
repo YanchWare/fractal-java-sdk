@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 public class StringHandler {
   public static String getStringFromInputStream(InputStream inputStream, String delimiter) {
     return new BufferedReader(new InputStreamReader(inputStream))
-        .lines().parallel().collect(Collectors.joining(delimiter));
+      .lines().parallel().collect(Collectors.joining(delimiter));
   }
 
   public static String getStringFromInputStream(InputStream inputStream) {

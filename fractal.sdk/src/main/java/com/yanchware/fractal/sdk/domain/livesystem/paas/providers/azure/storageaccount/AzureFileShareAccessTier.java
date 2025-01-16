@@ -6,8 +6,8 @@ import com.yanchware.fractal.sdk.utils.ExtendableEnum;
 import java.util.Collection;
 
 /**
- * Access tier for specific share. 
- * GpV2 account can choose between TransactionOptimized (default), Hot, and Cool. 
+ * Access tier for specific share.
+ * GpV2 account can choose between TransactionOptimized (default), Hot, and Cool.
  * FileStorage account can choose Premium.
  */
 public final class AzureFileShareAccessTier extends ExtendableEnum<AzureFileShareAccessTier> {

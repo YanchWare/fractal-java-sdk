@@ -7,7 +7,7 @@ public enum AzureStorageAccountAccessTier {
   HOT("Hot"),
   COOL("Cool"),
   PREMIUM("Premium");
-  
+
   private final String id;
 
   AzureStorageAccountAccessTier(final String id) {
@@ -27,7 +27,7 @@ public enum AzureStorageAccountAccessTier {
     }
     return null;
   }
-  
+
   @JsonValue
   public String getId() {
     return id;

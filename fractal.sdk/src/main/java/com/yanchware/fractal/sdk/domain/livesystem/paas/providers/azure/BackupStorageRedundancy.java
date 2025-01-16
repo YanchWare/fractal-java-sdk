@@ -15,6 +15,13 @@ public enum BackupStorageRedundancy {
     this.value = value;
   }
 
+  public static BackupStorageRedundancy fromString(String redundancy) {
+    return Arrays.stream(values())
+      .filter(r -> r.value.equalsIgnoreCase(redundancy))
+      .findFirst()
+      .orElse(null);
+  }
+
   @JsonValue
   public String getValue() {
     return value;
@@ -23,12 +30,5 @@ public enum BackupStorageRedundancy {
   @Override
   public String toString() {
     return value;
-  }
-
-  public static BackupStorageRedundancy fromString(String redundancy) {
-    return Arrays.stream(values())
-        .filter(r -> r.value.equalsIgnoreCase(redundancy))
-        .findFirst()
-        .orElse(null);
   }
 }

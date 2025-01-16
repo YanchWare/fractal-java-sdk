@@ -52,6 +52,43 @@ public class AzureCdnProfile extends PaaSNetworkCdnProfile implements AzureResou
     return ProviderType.AZURE;
   }
 
+  @Override
+  public Collection<String> validate() {
+    Collection<String> errors = super.validate();
+    if (identity != null && identity.getType() == null) {
+      errors.add("[AzureCdnProfile Validation] Type is required when identity is provided.");
+    }
+
+    var nameToValidate = name != null ? name : getId().getValue();
+    if (nameToValidate != null) {
+      if ((nameToValidate.isEmpty() || nameToValidate.length() > 260)) {
+        errors.add("[AzureCdnProfile Validation] The profile name must be between 1 and 260 characters long.");
+      }
+
+      if (!NAME_PATTERN.matcher(nameToValidate).matches()) {
+        errors.add("[AzureCdnProfile Validation] The profile name must start and end with a letter or number and can " +
+          "only contain letters, numbers, and hyphens.");
+      }
+    }
+
+    var isSkuAllowed = sku == AzureCdnSku.STANDARD_AZURE_FRONT_DOOR || sku == AzureCdnSku.PREMIUM_AZURE_FRONT_DOOR;
+    if (originResponseTimeoutSeconds != null && !isSkuAllowed) {
+      errors.add("[AzureCdnProfile Validation] OriginResponseTimeoutSeconds can only be provided when sku is " +
+        "STANDARD_AZURE_FRONT_DOOR or PREMIUM_AZURE_FRONT_DOOR.");
+    }
+
+    if (originResponseTimeoutSeconds != null) {
+      if (originResponseTimeoutSeconds < 16) {
+        errors.add("[AzureCdnProfile Validation] Property 'OriginResponseTimeoutSeconds' must be 16 or greater.");
+      } else if (originResponseTimeoutSeconds > 240) {
+        errors.add("[AzureCdnProfile Validation] Property 'OriginResponseTimeoutSeconds' exceeds the allowed limit of" +
+          " 240.");
+      }
+    }
+
+    return errors;
+  }
+
   public static class AzureCdnProfileBuilder extends Component.Builder<AzureCdnProfile, AzureCdnProfileBuilder> {
 
     @Override
@@ -68,6 +105,7 @@ public class AzureCdnProfile extends PaaSNetworkCdnProfile implements AzureResou
      * <pre>
      * Configures the identity for the CDN Profile, allowing for both system assigned and user assigned identities.
      * This identity is used for authentication within Azure to access or modify the CDN Profile.</pre>
+     *
      * @param identity The managed service identity configuration.
      * @return The builder instance for chaining.
      */
@@ -80,14 +118,15 @@ public class AzureCdnProfile extends PaaSNetworkCdnProfile implements AzureResou
      * <pre>
      * Sets the name for the Azure CDN Profile. The name must be unique within the resource group and must follow Azure's
      * naming conventions.
-     * 
+     *
      * Validation rules:
      *   - Name can contain letters, numbers, and hyphens.
      *   - The first and last characters must be a letter or a number.
      *   - Maximum length is 260 characters.
      *   - Minimum length is 1 character.
-     * 
+     *
      * Attempting to set a name that violates these rules will result in a validation error.</pre>
+     *
      * @param name The unique name of the CDN Profile.
      * @return The builder instance for chaining.
      */
@@ -100,15 +139,15 @@ public class AzureCdnProfile extends PaaSNetworkCdnProfile implements AzureResou
      * <pre>
      * Configures the origin response timeout in seconds for forwarding requests to the CDN origin. This setting determines
      * how long the CDN waits for a response from the origin server before the request is considered failed.
-     * 
+     *
      * Setting an appropriate timeout is crucial for optimizing content delivery performance, balancing the need for content
      * freshness against minimizing user-perceived latency.
-     * 
+     *
      * <strong>Note on acceptable values:</strong>
      *   - The value must be an integer between 16 and 240, inclusive. Values outside this range will be rejected.
      *   - Choosing a value too close to the lower limit may lead to increased failed requests during intermittent
      *     network instability, while setting it too high could cause unnecessary delays for your users.</pre>
-     * 
+     *
      * @param originResponseTimeoutSeconds The desired number of seconds to wait for a response from the origin server.
      * @return The builder instance for chaining further configuration calls.
      */
@@ -122,8 +161,8 @@ public class AzureCdnProfile extends PaaSNetworkCdnProfile implements AzureResou
      * Specifies the SKU (Stock Keeping Unit) for the Azure CDN Profile, which determines the pricing tier, feature
      * set, and the provider of the CDN services. The SKU choice impacts various aspects of the CDN service,
      * including global distribution capabilities, content acceleration, security features, and cost.
-     * 
-     * The <code><strong>AzureCdnSku</strong></code> is an extendable enum, allowing for future expansion. 
+     *
+     * The <code><strong>AzureCdnSku</strong></code> is an extendable enum, allowing for future expansion.
      * Current predefined SKUs include:
      *   - <code><strong>STANDARD_EDGIO</strong></code> Standard tier provided by Verizon. Suitable for general content delivery needs
      *      with a balance of performance and cost.
@@ -135,14 +174,15 @@ public class AzureCdnProfile extends PaaSNetworkCdnProfile implements AzureResou
      *      for global and dynamic content acceleration.
      *   - <code><strong>PREMIUM_AZURE_FRONT_DOOR</strong></code> The premium version of Azure Front Door services, providing additional
      *      security and optimization features for highly dynamic and secure applications.</pre>
-     * 
-     * @important.note Direct SKU updates post-creation of the CDN profile are not supported through this SDK. Changing the SKU
-     *     requires creating a new CDN profile with the desired SKU and, if necessary, deleting the old one. 
-     *     Selecting the correct SKU is crucial for aligning service capabilities with your application needs and
-     *     budget. Review the detailed comparison of features and pricing in Azure CDN documentation to make an
-     *     informed choice.
+     *
      * @param sku The desired SKU for the CDN Profile, selected from the predefined <code>AzureCdnSku</code> values.
      * @return The builder instance for chaining further configuration calls.
+     * @important.note Direct SKU updates post-creation of the CDN profile are not supported through this SDK.
+     * Changing the SKU
+     * requires creating a new CDN profile with the desired SKU and, if necessary, deleting the old one.
+     * Selecting the correct SKU is crucial for aligning service capabilities with your application needs and
+     * budget. Review the detailed comparison of features and pricing in Azure CDN documentation to make an
+     * informed choice.
      */
     public AzureCdnProfileBuilder withSku(AzureCdnSku sku) {
       component.setSku(sku);
@@ -153,7 +193,7 @@ public class AzureCdnProfile extends PaaSNetworkCdnProfile implements AzureResou
      * <pre>
      * Configures the Azure region where the CDN Profile will be deployed. The region is a critical
      * configuration that dictates the geographical location of the deployed resources, affecting
-     * latency, availability, and compliance. Utilizing the {@link AzureRegion} allows for flexibility in specifying 
+     * latency, availability, and compliance. Utilizing the {@link AzureRegion} allows for flexibility in specifying
      * regions, accommodating cases where specific regions might not be explicitly listed in the enum.
      *
      * In scenarios where automation scripts or tools require dynamic region specification or if a
@@ -166,6 +206,7 @@ public class AzureCdnProfile extends PaaSNetworkCdnProfile implements AzureResou
      * builder.withRegion(AzureRegion.EAST_US); // Using a predefined region
      * builder.withRegion(AzureRegion.fromString("custom_region_name")); // Extending the enum for a custom or future region
      * </pre>
+     *
      * @param region the Azure region as an {@link AzureRegion} where the Web App will be deployed.
      *               This can either be one of the predefined regions or an extended enum value
      *               created through <code>AzureRegion.fromString(String name)</code>.
@@ -203,44 +244,10 @@ public class AzureCdnProfile extends PaaSNetworkCdnProfile implements AzureResou
       return builder;
     }
 
-    public AzureCdnProfile build(){
+    public AzureCdnProfile build() {
       component.setType(PAAS_CDN_PROFILE);
       return super.build();
     }
-    
-  }
 
-  @Override
-  public Collection<String> validate() {
-    Collection<String> errors = super.validate();
-    if (identity != null && identity.getType() == null) {
-      errors.add("[AzureCdnProfile Validation] Type is required when identity is provided.");
-    }
-
-    var nameToValidate = name != null ? name : getId().getValue();
-    if (nameToValidate != null){
-      if((nameToValidate.isEmpty() || nameToValidate.length() > 260)) {
-        errors.add("[AzureCdnProfile Validation] The profile name must be between 1 and 260 characters long.");
-      }
-
-      if (!NAME_PATTERN.matcher(nameToValidate).matches()) {
-        errors.add("[AzureCdnProfile Validation] The profile name must start and end with a letter or number and can only contain letters, numbers, and hyphens.");
-      }
-    }
-    
-    var isSkuAllowed = sku == AzureCdnSku.STANDARD_AZURE_FRONT_DOOR || sku == AzureCdnSku.PREMIUM_AZURE_FRONT_DOOR;
-    if (originResponseTimeoutSeconds != null && !isSkuAllowed) {
-      errors.add("[AzureCdnProfile Validation] OriginResponseTimeoutSeconds can only be provided when sku is STANDARD_AZURE_FRONT_DOOR or PREMIUM_AZURE_FRONT_DOOR.");
-    }
-
-    if (originResponseTimeoutSeconds != null) {
-      if (originResponseTimeoutSeconds < 16) {
-        errors.add("[AzureCdnProfile Validation] Property 'OriginResponseTimeoutSeconds' must be 16 or greater.");
-      } else if (originResponseTimeoutSeconds > 240) {
-        errors.add("[AzureCdnProfile Validation] Property 'OriginResponseTimeoutSeconds' exceeds the allowed limit of 240.");
-      }
-    }
-    
-    return errors;
   }
 }

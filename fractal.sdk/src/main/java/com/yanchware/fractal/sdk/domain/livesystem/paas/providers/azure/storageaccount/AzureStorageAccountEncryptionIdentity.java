@@ -27,7 +27,7 @@ public class AzureStorageAccountEncryptionIdentity {
 
     /**
      * <pre>
-     * ClientId of the multi-tenant application to be used in conjunction with the user-assigned identity 
+     * ClientId of the multi-tenant application to be used in conjunction with the user-assigned identity
      * for cross-tenant customer-managed-keys server-side encryption on the storage account.
      * </pre>
      */

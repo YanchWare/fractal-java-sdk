@@ -7,8 +7,9 @@ import java.util.Map;
 import java.util.UUID;
 
 public record CreateEnvironmentRequest(
-        EnvironmentIdValue managementEnvironmentId,
-        String name,
-        Collection<UUID> resourceGroups,
-        Map<String, Object> parameters) {
+  EnvironmentIdValue managementEnvironmentId,
+  String name,
+  Collection<UUID> resourceGroups,
+  Map<String, Object> parameters)
+{
 }

@@ -2,7 +2,6 @@ package com.yanchware.fractal.sdk.domain.environment;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.domain.environment.service.EnvironmentService;
-import com.yanchware.fractal.sdk.domain.environment.service.EnvironmentService;
 import com.yanchware.fractal.sdk.domain.environment.service.dtos.EnvironmentResponse;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.utils.SerializationUtils;
@@ -39,19 +38,19 @@ public class EnvironmentAggregate {
       } else {
         log.info("Updating existing Management Environment [id: '{}']", managementEnvironmentId);
         service.update(
-            managementEnvironmentId,
-            managementEnvironment.getName(),
-            managementEnvironment.getResourceGroups(),
-            managementEnvironment.getParameters());
-      }
-    } else {
-      log.info("Creating new Management Environment [id: '{}']", managementEnvironmentId);
-      service.create(
-          null,
           managementEnvironmentId,
           managementEnvironment.getName(),
           managementEnvironment.getResourceGroups(),
           managementEnvironment.getParameters());
+      }
+    } else {
+      log.info("Creating new Management Environment [id: '{}']", managementEnvironmentId);
+      service.create(
+        null,
+        managementEnvironmentId,
+        managementEnvironment.getName(),
+        managementEnvironment.getResourceGroups(),
+        managementEnvironment.getParameters());
     }
 
     for (var operationalEnvironment : managementEnvironment.getOperationalEnvironments()) {
@@ -67,9 +66,12 @@ public class EnvironmentAggregate {
     }
   }
 
-  private void manageEnvironmentSecrets(EnvironmentIdValue environmentId, Collection<Secret> environmentSecrets) throws InstantiatorException {
+  private void manageEnvironmentSecrets(
+    EnvironmentIdValue environmentId,
+    Collection<Secret> environmentSecrets) throws InstantiatorException
+  {
     var existingSecrets = fetchExistingSecretIds(environmentId);
-    
+
     for (var secret : environmentSecrets) {
       var secretName = secret.name();
       var secretValue = secret.value();
@@ -82,9 +84,10 @@ public class EnvironmentAggregate {
         service.createSecret(environmentId, secretName, secretValue);
       }
     }
-    
+
     for (String secretName : existingSecrets) {
-      log.info("Deleting secret [name: '{}', environmentId: '{}'] as it is not present any longer on the live environment definition", secretName, environmentId);
+      log.info("Deleting secret [name: '{}', environmentId: '{}'] as it is not present any longer on the live " +
+        "environment definition", secretName, environmentId);
       service.deleteSecret(environmentId, secretName);
     }
   }
@@ -112,19 +115,19 @@ public class EnvironmentAggregate {
       } else {
         log.info("Updating existing Operational Environment [id: '{}']", environmentId);
         service.update(
-            environmentId,
-            operationalEnvironment.getName(),
-            operationalEnvironment.getResourceGroups(),
-            operationalEnvironment.getParameters());
-      }
-    } else {
-      log.info("Creating new Operational Environment [id: '{}']", environmentId);
-      service.create(
-          managementEnvironment.getId(),
           environmentId,
           operationalEnvironment.getName(),
           operationalEnvironment.getResourceGroups(),
           operationalEnvironment.getParameters());
+      }
+    } else {
+      log.info("Creating new Operational Environment [id: '{}']", environmentId);
+      service.create(
+        managementEnvironment.getId(),
+        environmentId,
+        operationalEnvironment.getName(),
+        operationalEnvironment.getResourceGroups(),
+        operationalEnvironment.getParameters());
     }
   }
 
@@ -135,15 +138,17 @@ public class EnvironmentAggregate {
    * @return true if the environments are equal, false otherwise
    */
   private boolean doesNotNeedUpdate(Environment environment, EnvironmentResponse existingEnvironmentResponse) {
-    if (existingEnvironmentResponse == null) return false;
+    if (existingEnvironmentResponse == null) {
+      return false;
+    }
 
     var environmentIdInResponse = existingEnvironmentResponse.id();
     return Objects.equals(environmentIdInResponse.type().toString(), environment.getId().type().toString()) &&
-        Objects.equals(environmentIdInResponse.ownerId(), environment.getId().ownerId()) &&
-        Objects.equals(environmentIdInResponse.shortName(), environment.getId().shortName()) &&
-        Objects.equals(existingEnvironmentResponse.name(), environment.getName()) &&
-        Objects.equals(existingEnvironmentResponse.resourceGroups(), environment.getResourceGroups()) &&
-        mapsEqual(existingEnvironmentResponse.parameters(), environment.getParameters());
+      Objects.equals(environmentIdInResponse.ownerId(), environment.getId().ownerId()) &&
+      Objects.equals(environmentIdInResponse.shortName(), environment.getId().shortName()) &&
+      Objects.equals(existingEnvironmentResponse.name(), environment.getName()) &&
+      Objects.equals(existingEnvironmentResponse.resourceGroups(), environment.getResourceGroups()) &&
+      mapsEqual(existingEnvironmentResponse.parameters(), environment.getParameters());
   }
 
   /**
@@ -180,9 +185,9 @@ public class EnvironmentAggregate {
             for (var operationalEnvironment : managementEnvironment.getOperationalEnvironments()) {
 
               var operationalAgent = operationalEnvironment.getCloudAgentByProviderType()
-                  .values()
-                  .stream().filter(a -> a.getProvider() == providerType)
-                  .findFirst();
+                .values()
+                .stream().filter(a -> a.getProvider() == providerType)
+                .findFirst();
 
               if (operationalAgent.isPresent()) {
                 operationalAgent.get().initialize(service, managementEnvironment.getId());

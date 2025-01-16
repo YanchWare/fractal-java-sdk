@@ -31,7 +31,7 @@ public class AzureStorageAccountSasPolicy {
 
     /**
      * <pre>
-     * The SAS expiration action. 
+     * The SAS expiration action.
      * Can only be Log.
      * </pre>
      */
@@ -39,7 +39,7 @@ public class AzureStorageAccountSasPolicy {
       instance.setExpirationAction(expirationAction);
       return builder;
     }
-    
+
     /**
      * <pre>
      * The SAS expiration period, DD.HH:MM:SS

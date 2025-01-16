@@ -40,11 +40,11 @@ public class AzureVirtualNetworkRule {
       instance.setAction(action);
       return builder;
     }
-    
+
     /**
      * <pre>
      * Resource ID of a subnet.
-     * 
+     *
      * For example:
      *  /subscriptions/{subscriptionId}/resourceGroups/{groupName}/providers/Microsoft.Network/virtualNetworks/{vnetName}/subnets/{subnetName}.
      * </pre>
@@ -53,7 +53,7 @@ public class AzureVirtualNetworkRule {
       instance.setVirtualNetworkResourceId(virtualNetworkResourceId);
       return builder;
     }
-    
+
     /**
      * <pre>
      * Gets the state of virtual network rule.

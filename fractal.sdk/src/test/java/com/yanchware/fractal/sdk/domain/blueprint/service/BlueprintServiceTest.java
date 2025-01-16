@@ -3,9 +3,9 @@ package com.yanchware.fractal.sdk.domain.blueprint.service;
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import com.yanchware.fractal.sdk.domain.blueprint.FractalIdValue;
-import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.domain.blueprint.service.commands.CreateBlueprintCommandRequest;
 import com.yanchware.fractal.sdk.domain.blueprint.service.dtos.BlueprintComponentDto;
+import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
 import com.yanchware.fractal.sdk.utils.StringHandler;
 import io.github.resilience4j.retry.RetryRegistry;
@@ -22,52 +22,52 @@ import static org.assertj.core.api.Assertions.assertThat;
 @WireMockTest
 public class BlueprintServiceTest {
 
-    @Test
-    public void urlPathMatching_when_postRequestToBlueprint(WireMockRuntimeInfo wmRuntimeInfo) throws InstantiatorException {
-        var httpClient = HttpClient.newBuilder()
-          .version(HttpClient.Version.HTTP_2)
-          .build();
-        var sdkConfiguration = new LocalSdkConfiguration(wmRuntimeInfo.getHttpBaseUrl());
-        var blueprintService = new BlueprintService(httpClient, sdkConfiguration, RetryRegistry.ofDefaults());
+  @Test
+  public void urlPathMatching_when_postRequestToBlueprint(WireMockRuntimeInfo wmRuntimeInfo) throws InstantiatorException {
+    var httpClient = HttpClient.newBuilder()
+      .version(HttpClient.Version.HTTP_2)
+      .build();
+    var sdkConfiguration = new LocalSdkConfiguration(wmRuntimeInfo.getHttpBaseUrl());
+    var blueprintService = new BlueprintService(httpClient, sdkConfiguration, RetryRegistry.ofDefaults());
 
-        var inputStream = getClass().getClassLoader()
-            .getResourceAsStream("test-resources/postRequestToBlueprintBody.json");
+    var inputStream = getClass().getClassLoader()
+      .getResourceAsStream("test-resources/postRequestToBlueprintBody.json");
 
-        assertThat(inputStream).isNotNull();
+    assertThat(inputStream).isNotNull();
 
-        var postRequestToBlueprintBody = StringHandler.getStringFromInputStream(inputStream);
-        
-        stubFor(post(urlPathMatching("/blueprints/resource-group/fr/fr"))
-          .withRequestBody(equalToJson(postRequestToBlueprintBody))
-          .willReturn(aResponse()
-            .withStatus(202)
-            .withHeader("Content-Type", "application/json")));
+    var postRequestToBlueprintBody = StringHandler.getStringFromInputStream(inputStream);
 
-        blueprintService.create(
-                buildBlueprintRequest(),
-                new FractalIdValue("resource-group", "fr", "fr"));
+    stubFor(post(urlPathMatching("/blueprints/resource-group/fr/fr"))
+      .withRequestBody(equalToJson(postRequestToBlueprintBody))
+      .willReturn(aResponse()
+        .withStatus(202)
+        .withHeader("Content-Type", "application/json")));
 
-        verify(postRequestedFor(urlPathEqualTo("/blueprints/resource-group/fr/fr")));
-    }
+    blueprintService.create(
+      buildBlueprintRequest(),
+      new FractalIdValue("resource-group", "fr", "fr"));
 
-    private CreateBlueprintCommandRequest buildBlueprintRequest() {
-        return new CreateBlueprintCommandRequest(
-                "desc",
-                true,
-                List.of(buildBlueprintComponent()));
-    }
+    verify(postRequestedFor(urlPathEqualTo("/blueprints/resource-group/fr/fr")));
+  }
 
-    private BlueprintComponentDto buildBlueprintComponent() {
-        return BlueprintComponentDto.builder()
-                .withId("0001")
-                .withDisplayName("blueprint basic")
-                .withDescription("blueprint basic desc")
-                .withType("type")
-                .withVersion("V0.1")
-                .withParameters(emptyMap())
-                .withDependencies(emptySet())
-                .withLinks(emptySet())
-                .withOutputFields(emptySet())
-                .build();
-    }
+  private CreateBlueprintCommandRequest buildBlueprintRequest() {
+    return new CreateBlueprintCommandRequest(
+      "desc",
+      true,
+      List.of(buildBlueprintComponent()));
+  }
+
+  private BlueprintComponentDto buildBlueprintComponent() {
+    return BlueprintComponentDto.builder()
+      .withId("0001")
+      .withDisplayName("blueprint basic")
+      .withDescription("blueprint basic desc")
+      .withType("type")
+      .withVersion("V0.1")
+      .withParameters(emptyMap())
+      .withDependencies(emptySet())
+      .withLinks(emptySet())
+      .withOutputFields(emptySet())
+      .build();
+  }
 }

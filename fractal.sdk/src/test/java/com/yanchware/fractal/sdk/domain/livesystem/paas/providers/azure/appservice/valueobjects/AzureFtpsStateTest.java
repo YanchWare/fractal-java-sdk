@@ -9,9 +9,9 @@ class AzureFtpsStateTest {
   @Test
   public void shouldReturnProperValue() {
     assertAll(
-        () -> assertEquals(AzureFtpsState.fromString("AllAllowed"), AzureFtpsState.ALL_ALLOWED),
-        () -> assertEquals(AzureFtpsState.fromString("Disabled"), AzureFtpsState.DISABLED),
-        () -> assertEquals(AzureFtpsState.fromString("FtpsOnly"), AzureFtpsState.FTPS_ONLY)
+      () -> assertEquals(AzureFtpsState.fromString("AllAllowed"), AzureFtpsState.ALL_ALLOWED),
+      () -> assertEquals(AzureFtpsState.fromString("Disabled"), AzureFtpsState.DISABLED),
+      () -> assertEquals(AzureFtpsState.fromString("FtpsOnly"), AzureFtpsState.FTPS_ONLY)
     );
   }
 }

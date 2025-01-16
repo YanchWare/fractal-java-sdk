@@ -23,6 +23,19 @@ public class DnsMxRecord extends DnsRecord {
     return new DnsMxRecordBuilder();
   }
 
+  @Override
+  public Collection<String> validate() {
+    var errors = super.validate();
+
+    if (!isBlank(recordData)) {
+      for (var data : recordData) {
+        errors.addAll(data.validate());
+      }
+    }
+
+    return errors;
+  }
+
   public static class DnsMxRecordBuilder extends Builder<DnsMxRecord, DnsMxRecordBuilder> {
     @Override
     protected DnsMxRecord createRecord() {
@@ -55,18 +68,5 @@ public class DnsMxRecord extends DnsRecord {
     public DnsMxRecord build() {
       return super.build();
     }
-  }
-
-  @Override
-  public Collection<String> validate() {
-    var errors = super.validate();
-
-    if (!isBlank(recordData)) {
-      for (var data : recordData) {
-        errors.addAll(data.validate());
-      }
-    }
-
-    return errors;
   }
 }

@@ -10,13 +10,13 @@ import java.util.Collection;
 @ToString(callSuper = true)
 public abstract class CaaSMonitoringImpl extends CaaSMonitoring implements LiveSystemComponent {
 
-    @Override
-    public ProviderType getProvider(){
-        return ProviderType.CAAS;
-    }
+  @Override
+  public ProviderType getProvider() {
+    return ProviderType.CAAS;
+  }
 
-    @Override
-    public Collection<String> validate() {
-        return super.validate();
-    }
+  @Override
+  public Collection<String> validate() {
+    return super.validate();
+  }
 }

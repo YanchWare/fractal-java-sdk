@@ -9,23 +9,23 @@ class UnmanagedSecurityComponentTest {
   @Test
   public void exceptionThrown_when_componentBuiltWithNullId() {
     assertThatThrownBy(() -> UnmanagedSecurityComponent.builder().withId("").build()).
-        isInstanceOf(IllegalArgumentException.class).
-        hasMessageContaining("Component Id is illegal");
+      isInstanceOf(IllegalArgumentException.class).
+      hasMessageContaining("Component Id is illegal");
   }
 
   @Test
   public void exceptionThrown_when_componentBuiltWithEmptyValues() {
     assertThatThrownBy(() -> UnmanagedSecurityComponent.builder().withId("external-security").build()).
-        isInstanceOf(IllegalArgumentException.class).
-        hasMessageContaining("Secret Value has not been defined and it is required");
+      isInstanceOf(IllegalArgumentException.class).
+      hasMessageContaining("Secret Value has not been defined and it is required");
   }
 
   @Test
   public void typeIsExternalSecurityComponent_when_BuiltWithAllRequiredValues() {
     var secretValue = "aSecretValue";
     var builder = UnmanagedSecurityComponent.builder()
-        .withId("external-security")
-        .withSecretValue(secretValue);
+      .withId("external-security")
+      .withSecretValue(secretValue);
     assertThatCode(builder::build).doesNotThrowAnyException();
     assertThat(builder.build().getType()).isEqualTo(SAAS_UNMANAGED_SECURITY);
     assertThat(builder.build().getSecretName()).isBlank();
@@ -37,10 +37,10 @@ class UnmanagedSecurityComponentTest {
     var secretName = "aSecretName";
     var secretValue = "aSecretValue";
     var builder = UnmanagedSecurityComponent.builder()
-        .withId("external-security")
-        .withSecretName(secretName)
-        .withSecretValue(secretValue);
-    
+      .withId("external-security")
+      .withSecretName(secretName)
+      .withSecretValue(secretValue);
+
     assertThatCode(builder::build).doesNotThrowAnyException();
     assertThat(builder.build().getType()).isEqualTo(SAAS_UNMANAGED_SECURITY);
     assertThat(builder.build().getSecretName()).isNotBlank();

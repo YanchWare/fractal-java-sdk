@@ -9,8 +9,8 @@ class AzureManagedPipelineModeTest {
   @Test
   public void shouldReturnProperValue() {
     assertAll(
-        () -> assertEquals(AzureManagedPipelineMode.fromString("Classic"), AzureManagedPipelineMode.CLASSIC),
-        () -> assertEquals(AzureManagedPipelineMode.fromString("Integrated"), AzureManagedPipelineMode.INTEGRATED)
+      () -> assertEquals(AzureManagedPipelineMode.fromString("Classic"), AzureManagedPipelineMode.CLASSIC),
+      () -> assertEquals(AzureManagedPipelineMode.fromString("Integrated"), AzureManagedPipelineMode.INTEGRATED)
     );
   }
 }

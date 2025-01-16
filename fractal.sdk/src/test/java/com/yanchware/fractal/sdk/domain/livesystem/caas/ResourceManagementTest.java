@@ -23,10 +23,10 @@ class ResourceManagementTest {
     ResourceManagement resourceManagement = builder.withRequests(requests).build();
 
     assertThat(resourceManagement.getRequests())
-        .as("Resource requests should be correctly assigned")
-        .isNotNull()
-        .usingRecursiveComparison()
-        .isEqualTo(requests);
+      .as("Resource requests should be correctly assigned")
+      .isNotNull()
+      .usingRecursiveComparison()
+      .isEqualTo(requests);
   }
 
   @Test
@@ -38,9 +38,9 @@ class ResourceManagementTest {
     ResourceManagement resourceManagement = builder.withLimits(limits).build();
 
     assertThat(resourceManagement.getLimits())
-        .as("Resource limits should be correctly assigned")
-        .isNotNull()
-        .usingRecursiveComparison()
-        .isEqualTo(limits);
+      .as("Resource limits should be correctly assigned")
+      .isNotNull()
+      .usingRecursiveComparison()
+      .isEqualTo(limits);
   }
 }

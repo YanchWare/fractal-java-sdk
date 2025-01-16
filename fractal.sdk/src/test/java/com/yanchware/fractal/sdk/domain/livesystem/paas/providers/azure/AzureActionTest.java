@@ -16,12 +16,12 @@ public class AzureActionTest {
   @Test
   public void fromString_shouldReturnCorrespondingAzureAction() {
     assertThat(AzureAction.fromString("Allow"))
-        .as("fromString should return ALLOW for 'Allow'")
-        .isEqualTo(AzureAction.ALLOW);
+      .as("fromString should return ALLOW for 'Allow'")
+      .isEqualTo(AzureAction.ALLOW);
 
     assertThat(AzureAction.fromString("Deny"))
-        .as("fromString should return DENY for 'Deny'")
-        .isEqualTo(AzureAction.DENY);
+      .as("fromString should return DENY for 'Deny'")
+      .isEqualTo(AzureAction.DENY);
   }
 
   @Test
@@ -29,7 +29,7 @@ public class AzureActionTest {
     Collection<AzureAction> values = AzureAction.values();
 
     assertThat(values)
-        .as("Values should contain ALLOW, DENY and have exactly 2 values")
-        .containsExactlyInAnyOrder(AzureAction.ALLOW, AzureAction.DENY);
+      .as("Values should contain ALLOW, DENY and have exactly 2 values")
+      .containsExactlyInAnyOrder(AzureAction.ALLOW, AzureAction.DENY);
   }
 }

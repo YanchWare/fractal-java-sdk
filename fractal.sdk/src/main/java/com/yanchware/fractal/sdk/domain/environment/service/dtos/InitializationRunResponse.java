@@ -6,12 +6,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-public record InitializationRunResponse (
+public record InitializationRunResponse(
   UUID id,
   EnvironmentIdDto environmentId,
   String cloudProvider,
   List<InitializationStepResponse> steps,
   String status,
   String requester,
-  Date createdAt){ }
+  Date createdAt)
+{
+}
 

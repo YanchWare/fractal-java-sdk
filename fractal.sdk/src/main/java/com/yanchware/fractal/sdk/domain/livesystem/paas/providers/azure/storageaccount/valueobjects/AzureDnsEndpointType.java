@@ -6,8 +6,8 @@ import com.yanchware.fractal.sdk.utils.ExtendableEnum;
 import java.util.Collection;
 
 /**
- * Allows you to specify the type of endpoint. 
- * Set this to AzureDNSZone to create a large number of accounts in a single subscription, 
+ * Allows you to specify the type of endpoint.
+ * Set this to AzureDNSZone to create a large number of accounts in a single subscription,
  * which creates accounts in an Azure DNS Zone and the endpoint URL will have an alphanumeric DNS Zone identifier.
  */
 public final class AzureDnsEndpointType extends ExtendableEnum<AzureDnsEndpointType> {

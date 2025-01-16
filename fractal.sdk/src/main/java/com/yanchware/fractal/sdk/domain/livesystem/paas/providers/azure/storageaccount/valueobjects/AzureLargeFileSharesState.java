@@ -12,7 +12,7 @@ import java.util.Collection;
  */
 public final class AzureLargeFileSharesState extends ExtendableEnum<AzureLargeFileSharesState> {
   public static final AzureLargeFileSharesState DISABLED = fromString("Disabled");
-  
+
   public static final AzureLargeFileSharesState ENABLED = fromString("Enabled");
 
   /**

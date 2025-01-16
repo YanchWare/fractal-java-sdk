@@ -18,20 +18,20 @@ public class AzureFileShareAccessTierTest {
   @Test
   public void fromString_shouldReturnCorrespondingAzureFileShareAccessTier() {
     assertThat(AzureFileShareAccessTier.fromString("Cool"))
-        .as("fromString should return COOL for 'Cool'")
-        .isEqualTo(AzureFileShareAccessTier.COOL);
-    
+      .as("fromString should return COOL for 'Cool'")
+      .isEqualTo(AzureFileShareAccessTier.COOL);
+
     assertThat(AzureFileShareAccessTier.fromString("Hot"))
-        .as("fromString should return HOT for 'Hot'")
-        .isEqualTo(AzureFileShareAccessTier.HOT);
-    
+      .as("fromString should return HOT for 'Hot'")
+      .isEqualTo(AzureFileShareAccessTier.HOT);
+
     assertThat(AzureFileShareAccessTier.fromString("Premium"))
-        .as("fromString should return PREMIUM for 'Premium'")
-        .isEqualTo(AzureFileShareAccessTier.PREMIUM);
-    
+      .as("fromString should return PREMIUM for 'Premium'")
+      .isEqualTo(AzureFileShareAccessTier.PREMIUM);
+
     assertThat(AzureFileShareAccessTier.fromString("TransactionOptimized"))
-        .as("fromString should return TRANSACTION_OPTIMIZED for 'TransactionOptimized'")
-        .isEqualTo(AzureFileShareAccessTier.TRANSACTION_OPTIMIZED);
+      .as("fromString should return TRANSACTION_OPTIMIZED for 'TransactionOptimized'")
+      .isEqualTo(AzureFileShareAccessTier.TRANSACTION_OPTIMIZED);
   }
 
   @Test
@@ -39,10 +39,10 @@ public class AzureFileShareAccessTierTest {
     Collection<AzureFileShareAccessTier> values = AzureFileShareAccessTier.values();
 
     assertThat(values)
-        .as("Values should contain COOL, HOT, PREMIUM, and TRANSACTION_OPTIMIZED and have exactly 4 values")
-        .containsExactlyInAnyOrder(AzureFileShareAccessTier.COOL,
-            AzureFileShareAccessTier.HOT,
-            AzureFileShareAccessTier.PREMIUM,
-            AzureFileShareAccessTier.TRANSACTION_OPTIMIZED);
+      .as("Values should contain COOL, HOT, PREMIUM, and TRANSACTION_OPTIMIZED and have exactly 4 values")
+      .containsExactlyInAnyOrder(AzureFileShareAccessTier.COOL,
+        AzureFileShareAccessTier.HOT,
+        AzureFileShareAccessTier.PREMIUM,
+        AzureFileShareAccessTier.TRANSACTION_OPTIMIZED);
   }
 }

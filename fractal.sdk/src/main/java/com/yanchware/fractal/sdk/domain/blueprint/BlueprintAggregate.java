@@ -12,30 +12,30 @@ import java.util.Collection;
 
 @Getter
 public class BlueprintAggregate {
-    private final BlueprintService service;
-    private final FractalIdValue fractalId;
-    private final String description;
-    private final boolean isPrivate;
-    private final Collection<BlueprintComponentDto> components;
+  private final BlueprintService service;
+  private final FractalIdValue fractalId;
+  private final String description;
+  private final boolean isPrivate;
+  private final Collection<BlueprintComponentDto> components;
 
-    public BlueprintAggregate(
-            HttpClient client,
-            SdkConfiguration sdkConfiguration,
-            RetryRegistry retryRegistry,
-            FractalIdValue fractalId,
-            String description,
-            boolean isPrivate,
-            // TODO FRA-1870: We should find a way to fix this instead to have DTOs in the Aggregate 🤮
-            Collection<BlueprintComponentDto> components)
-    {
-        this.fractalId = fractalId;
-        this.description = description;
-        this.isPrivate = isPrivate;
-        this.components = components;
-        this.service = new BlueprintService(client, sdkConfiguration, retryRegistry);
-    }
+  public BlueprintAggregate(
+    HttpClient client,
+    SdkConfiguration sdkConfiguration,
+    RetryRegistry retryRegistry,
+    FractalIdValue fractalId,
+    String description,
+    boolean isPrivate,
+    // TODO FRA-1870: We should find a way to fix this instead to have DTOs in the Aggregate 🤮
+    Collection<BlueprintComponentDto> components)
+  {
+    this.fractalId = fractalId;
+    this.description = description;
+    this.isPrivate = isPrivate;
+    this.components = components;
+    this.service = new BlueprintService(client, sdkConfiguration, retryRegistry);
+  }
 
-    public void createOrUpdate() throws InstantiatorException {
-        service.createOrUpdate(fractalId, description, isPrivate, components);
-    }
+  public void createOrUpdate() throws InstantiatorException {
+    service.createOrUpdate(fractalId, description, isPrivate, components);
+  }
 }

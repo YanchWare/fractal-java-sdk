@@ -16,28 +16,28 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Setter(AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 public abstract class CaaSSearchImpl extends CaaSSearch implements LiveSystemComponent {
-    private String storage;
-    private String storageClassName;
-    private Integer memory;
-    private Integer cpu;
+  private String storage;
+  private String storageClassName;
+  private Integer memory;
+  private Integer cpu;
 
-    @Override
-    public ProviderType getProvider(){
-        return ProviderType.CAAS;
+  @Override
+  public ProviderType getProvider() {
+    return ProviderType.CAAS;
+  }
+
+  @Override
+  public Collection<String> validate() {
+    Collection<String> errors = super.validate();
+
+    if (isBlank(storage)) {
+      errors.add(getStorageIsBlankErrorMessage());
     }
 
-    @Override
-    public Collection<String> validate() {
-        Collection<String> errors = super.validate();
+    return errors;
+  }
 
-        if (isBlank(storage)) {
-            errors.add(getStorageIsBlankErrorMessage());
-        }
-
-        return errors;
-    }
-
-    private String getStorageIsBlankErrorMessage() {
-        return String.format("[%s Validation] Storage has not been defined and it is required", this.getClass().getName());
-    }
+  private String getStorageIsBlankErrorMessage() {
+    return String.format("[%s Validation] Storage has not been defined and it is required", this.getClass().getName());
+  }
 }

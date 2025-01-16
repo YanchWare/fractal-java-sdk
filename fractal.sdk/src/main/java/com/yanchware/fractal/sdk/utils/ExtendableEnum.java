@@ -13,10 +13,11 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Getter
 public abstract class ExtendableEnum<T extends ExtendableEnum<T>> {
-  private static final Map<Class<?>, ConcurrentHashMap<String, ? extends ExtendableEnum<?>>> VALUES = new ConcurrentHashMap<>();
+  private static final Map<Class<?>, ConcurrentHashMap<String, ? extends ExtendableEnum<?>>> VALUES =
+    new ConcurrentHashMap<>();
 
   private String name;
-  
+
   @JsonIgnore
   private Class<T> clazz;
 
@@ -25,31 +26,32 @@ public abstract class ExtendableEnum<T extends ExtendableEnum<T>> {
       return null;
     } else {
       var clazzValues = (ConcurrentHashMap) VALUES.computeIfAbsent(clazz,
-          (key) -> new ConcurrentHashMap());
+        (key) -> new ConcurrentHashMap());
 
       var value = (ExtendableEnum) clazzValues.get(name);
       if (value != null) {
-        return (T)value;
+        return (T) value;
       } else {
         try {
           value = clazz.getDeclaredConstructor().newInstance();
-          return (T)value.nameAndAddValue(name, value, clazz);
-        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException var5) {
+          return (T) value.nameAndAddValue(name, value, clazz);
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException |
+                 InvocationTargetException var5) {
           return null;
         }
       }
     }
   }
 
+  protected static <T extends ExtendableEnum<T>> Collection<T> values(Class<T> clazz) {
+    return new ArrayList(VALUES.getOrDefault(clazz, new ConcurrentHashMap<>()).values());
+  }
+
   T nameAndAddValue(String name, T value, Class<T> clazz) {
     this.name = name;
     this.clazz = clazz;
     ((ConcurrentHashMap) VALUES.get(clazz)).put(name, value);
-    return (T)this;
-  }
-
-  protected static <T extends ExtendableEnum<T>> Collection<T> values(Class<T> clazz) {
-    return new ArrayList(VALUES.getOrDefault(clazz, new ConcurrentHashMap<>()).values());
+    return (T) this;
   }
 
   @JsonValue

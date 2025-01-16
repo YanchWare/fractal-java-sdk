@@ -15,50 +15,54 @@ import static com.yanchware.fractal.sdk.utils.ValidationUtils.validateIntegerInR
 @Getter
 @Setter(AccessLevel.PRIVATE)
 public class AzureCosmosBackupPolicy implements Validatable {
-  private final static String BACKUP_STORAGE_REDUNDANCY_IS_BLANK = "[AzureCosmosBackupPolicy Validation] BackupStorageRedundancy has not been defined and it is required";
-  private final static String BACKUP_POLICY_TYPE_IS_BLANK = "[AzureCosmosBackupPolicy Validation] BackupPolicyType has not been defined and it is required";
+  private final static String BACKUP_STORAGE_REDUNDANCY_IS_BLANK = "[AzureCosmosBackupPolicy Validation] " +
+    "BackupStorageRedundancy has not been defined and it is required";
+  private final static String BACKUP_POLICY_TYPE_IS_BLANK = "[AzureCosmosBackupPolicy Validation] BackupPolicyType " +
+    "has not been defined and it is required";
   private Integer backupIntervalInMinutes;
   private Integer backupRetentionIntervalInHours;
   private BackupStorageRedundancy backupStorageRedundancy;
   private AzureCosmosBackupPolicyType backupPolicyType;
 
-  public static AzureCosmosBackupPolicyBuilder builder() {
-    return new AzureCosmosBackupPolicyBuilder();
+  public AzureCosmosBackupPolicy() {
   }
 
-  public AzureCosmosBackupPolicy() {
+  public static AzureCosmosBackupPolicyBuilder builder() {
+    return new AzureCosmosBackupPolicyBuilder();
   }
 
   @Override
   public Collection<String> validate() {
     Collection<String> errors = new ArrayList<>();
 
-    if(this.backupPolicyType == null) {
+    if (this.backupPolicyType == null) {
       errors.add(BACKUP_STORAGE_REDUNDANCY_IS_BLANK);
     }
-    
-    if(this.backupPolicyType == AzureCosmosBackupPolicyType.PERIODIC) {
-      if(this.backupIntervalInMinutes != null) {
-        validateIntegerInRange("[AzureCosmosPeriodicModeBackupPolicy Validation] BackupIntervalInMinutes", this.backupIntervalInMinutes, 60, 1440, errors);
 
-        if(this.backupStorageRedundancy == null) {
+    if (this.backupPolicyType == AzureCosmosBackupPolicyType.PERIODIC) {
+      if (this.backupIntervalInMinutes != null) {
+        validateIntegerInRange("[AzureCosmosPeriodicModeBackupPolicy Validation] BackupIntervalInMinutes",
+          this.backupIntervalInMinutes, 60, 1440, errors);
+
+        if (this.backupStorageRedundancy == null) {
           errors.add(BACKUP_STORAGE_REDUNDANCY_IS_BLANK);
         }
       }
 
-      if(this.backupRetentionIntervalInHours != null) {
-        validateIntegerInRange("[AzureCosmosPeriodicModeBackupPolicy Validation] BackupRetentionIntervalInHours", this.backupRetentionIntervalInHours, 8, 720, errors);
+      if (this.backupRetentionIntervalInHours != null) {
+        validateIntegerInRange("[AzureCosmosPeriodicModeBackupPolicy Validation] BackupRetentionIntervalInHours",
+          this.backupRetentionIntervalInHours, 8, 720, errors);
       }
     }
-    
+
     return errors;
   }
 
-  public static class AzureCosmosBackupPolicyBuilder{
+  public static class AzureCosmosBackupPolicyBuilder {
     private final AzureCosmosBackupPolicy backupPolicy;
     private final AzureCosmosBackupPolicyBuilder builder;
 
-    public AzureCosmosBackupPolicyBuilder () {
+    public AzureCosmosBackupPolicyBuilder() {
       backupPolicy = createComponent();
       builder = getBuilder();
     }
@@ -91,17 +95,17 @@ public class AzureCosmosBackupPolicy implements Validatable {
       return builder;
     }
 
-    public AzureCosmosBackupPolicy build(){
+    public AzureCosmosBackupPolicy build() {
       Collection<String> errors = backupPolicy.validate();
 
       if (!errors.isEmpty()) {
         throw new IllegalArgumentException(String.format(
-            "AzureCosmosPeriodicModeBackupPolicy validation failed. Errors: %s",
-            Arrays.toString(errors.toArray())));
+          "AzureCosmosPeriodicModeBackupPolicy validation failed. Errors: %s",
+          Arrays.toString(errors.toArray())));
       }
 
       return backupPolicy;
     }
   }
-    
+
 }

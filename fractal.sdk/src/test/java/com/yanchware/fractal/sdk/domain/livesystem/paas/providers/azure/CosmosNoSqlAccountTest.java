@@ -1,4 +1,3 @@
-
 package com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure;
 
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.cosmos.AzureCosmosNoSqlDatabase;

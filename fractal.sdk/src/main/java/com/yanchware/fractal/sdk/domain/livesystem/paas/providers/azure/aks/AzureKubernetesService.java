@@ -23,11 +23,17 @@ import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLengt
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
 public class AzureKubernetesService extends KubernetesCluster implements AzureResourceEntity {
-  private final static String EMPTY_NODE_POOL = "[AzureKubernetesService Validation] Node pool list is null or empty and at least one node pool is required";
-  private final static String REGION_IS_NULL = "[AzureKubernetesService Validation] Region is not specified and it is required";
-  private final static String VNET_ADDRESS_SPACE_RANGE_NOT_VALID = "[KubernetesCluster Validation] VNet Address Space IP Range does not contain a valid ip with mask";
-  private final static String VNET_SUBNET_ADDRESS_IP_RANGE_NOT_VALID = "[KubernetesCluster Validation] VNet Subnet Address IP Range does not contain a valid ip with mask";
-  private final static String NAME_NOT_VALID = "[KubernetesCluster Validation] The name can contain only letters, numbers, underscores, and hyphens. The name must start and end with a letter or number and must be between 1 and 63 characters long";
+  private final static String EMPTY_NODE_POOL = "[AzureKubernetesService Validation] Node pool list is null or empty " +
+    "and at least one node pool is required";
+  private final static String REGION_IS_NULL = "[AzureKubernetesService Validation] Region is not specified and it is" +
+    " required";
+  private final static String VNET_ADDRESS_SPACE_RANGE_NOT_VALID = "[KubernetesCluster Validation] VNet Address Space" +
+    " IP Range does not contain a valid ip with mask";
+  private final static String VNET_SUBNET_ADDRESS_IP_RANGE_NOT_VALID = "[KubernetesCluster Validation] VNet Subnet " +
+    "Address IP Range does not contain a valid ip with mask";
+  private final static String NAME_NOT_VALID = "[KubernetesCluster Validation] The name can contain only letters, " +
+    "numbers, underscores, and hyphens. The name must start and end with a letter or number and must be between 1 and" +
+    " 63 characters long";
   private String vnetAddressSpaceIpRange;
   private String vnetSubnetAddressIpRange;
   @Setter
@@ -56,16 +62,53 @@ public class AzureKubernetesService extends KubernetesCluster implements AzureRe
     managedClusterSkuTier = ManagedClusterSkuTier.FREE;
   }
 
+  public static AzureKubernetesServiceBuilder builder() {
+    return new AzureKubernetesServiceBuilder();
+  }
+
   @Override
   public ProviderType getProvider() {
     return ProviderType.AZURE;
   }
 
-  public static AzureKubernetesServiceBuilder builder() {
-    return new AzureKubernetesServiceBuilder();
+  @Override
+  public Collection<String> validate() {
+
+    Collection<String> errors = super.validate();
+    errors.addAll(AzureResourceEntity.validateAzureResourceEntity(this, "Kubernetes Service"));
+
+    if (StringUtils.isNotBlank(name)) {
+      var isAlphaNumerics = isValidAlphanumericsUnderscoresHyphens(name);
+      var hasValidLengths = isValidStringLength(name, 1, 63);
+      if (!isAlphaNumerics || !hasValidLengths) {
+        errors.add(NAME_NOT_VALID);
+      }
+    }
+
+    if (azureRegion == null) {
+      errors.add(REGION_IS_NULL);
+    }
+
+    if (nodePools.isEmpty()) {
+      errors.add(EMPTY_NODE_POOL);
+    }
+
+    isPresentAndValidIpRange(vnetAddressSpaceIpRange, errors, VNET_ADDRESS_SPACE_RANGE_NOT_VALID);
+    isPresentAndValidIpRange(vnetSubnetAddressIpRange, errors, VNET_SUBNET_ADDRESS_IP_RANGE_NOT_VALID);
+
+    nodePools.stream()
+      .map(AzureNodePool::validate)
+      .forEach(errors::addAll);
+
+    outboundIps.stream()
+      .map(AzureOutboundIp::validate)
+      .forEach(errors::addAll);
+
+    return errors;
   }
 
-  public static class AzureKubernetesServiceBuilder extends Builder<AzureKubernetesService, AzureKubernetesServiceBuilder> {
+  public static class AzureKubernetesServiceBuilder extends Builder<AzureKubernetesService,
+    AzureKubernetesServiceBuilder> {
 
     @Override
     protected AzureKubernetesService createComponent() {
@@ -130,12 +173,12 @@ public class AzureKubernetesService extends KubernetesCluster implements AzureRe
     public AzureKubernetesServiceBuilder withOutboundIp(AzureOutboundIp outboundIp) {
       return withOutboundIps(List.of(outboundIp));
     }
-    
+
     public AzureKubernetesServiceBuilder withExternalWorkspaceResourceId(String externalWorkspaceResourceId) {
       component.setExternalWorkspaceResourceId(externalWorkspaceResourceId);
       return builder;
     }
-    
+
     public AzureKubernetesServiceBuilder withAddonProfile(AzureKubernetesAddonProfile addonProfile) {
       return withAddonProfiles(List.of(addonProfile));
     }
@@ -182,11 +225,11 @@ public class AzureKubernetesService extends KubernetesCluster implements AzureRe
       if (component.getTags() == null) {
         withTags(new HashMap<>());
       }
-      
+
       component.getTags().put(key, value);
       return builder;
     }
-    
+
     public AzureKubernetesServiceBuilder withActiveDirectoryProfile(AzureActiveDirectoryProfile aadProfile) {
       component.setAzureActiveDirectoryProfile(aadProfile);
       return builder;
@@ -201,42 +244,6 @@ public class AzureKubernetesService extends KubernetesCluster implements AzureRe
       component.setManagedClusterSkuTier(managedClusterSkuTier);
       return builder;
     }
-  }
-
-  @Override
-  public Collection<String> validate() {
-
-    Collection<String> errors = super.validate();
-    errors.addAll(AzureResourceEntity.validateAzureResourceEntity(this, "Kubernetes Service"));
-
-    if(StringUtils.isNotBlank(name)) {
-      var isAlphaNumerics = isValidAlphanumericsUnderscoresHyphens(name);
-      var hasValidLengths = isValidStringLength(name, 1, 63);
-      if(!isAlphaNumerics || !hasValidLengths) {
-        errors.add(NAME_NOT_VALID);
-      }
-    }
-    
-    if (azureRegion == null) {
-      errors.add(REGION_IS_NULL);
-    }
-    
-    if (nodePools.isEmpty()) {
-      errors.add(EMPTY_NODE_POOL);
-    }
-
-    isPresentAndValidIpRange(vnetAddressSpaceIpRange, errors, VNET_ADDRESS_SPACE_RANGE_NOT_VALID);
-    isPresentAndValidIpRange(vnetSubnetAddressIpRange, errors, VNET_SUBNET_ADDRESS_IP_RANGE_NOT_VALID);
-
-    nodePools.stream()
-        .map(AzureNodePool::validate)
-        .forEach(errors::addAll);
-    
-    outboundIps.stream()
-        .map(AzureOutboundIp::validate)
-        .forEach(errors::addAll);
-
-    return errors;
   }
 
 }

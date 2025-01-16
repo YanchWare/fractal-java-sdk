@@ -15,26 +15,28 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_KUBERNETES;
 import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 import static com.yanchware.fractal.sdk.utils.ValidationUtils.isPresentAndValidIpRange;
-import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_KUBERNETES;
 
 /**
  * <p>
- *   Builder class to represent a Kubernetes cluster.
+ * Builder class to represent a Kubernetes cluster.
  * </p>
  * <br>
  * <p>
- *  For more details about creating a Kubernetes cluster using Fractal Cloud check out 
- *  our <a href="https://fractal.cloud/docs/docs-ht-create-kubernetes-cluster">documentation page</a>
+ * For more details about creating a Kubernetes cluster using Fractal Cloud check out
+ * our <a href="https://fractal.cloud/docs/docs-ht-create-kubernetes-cluster">documentation page</a>
  * </p>
  */
 @Getter
 @Setter(AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 public abstract class KubernetesCluster extends PaaSContainerPlatform implements LiveSystemComponent {
-  private final static String SERVICE_IP_RANGE_NOT_VALID = "[KubernetesCluster Validation] Service IP Range does not contain a valid ip with mask";
-  private final static String POD_RANGE_NOT_VALID = "[KubernetesCluster Validation] Pod IP Range does not contain a valid ip with mask";
+  private final static String SERVICE_IP_RANGE_NOT_VALID = "[KubernetesCluster Validation] Service IP Range does not " +
+    "contain a valid ip with mask";
+  private final static String POD_RANGE_NOT_VALID = "[KubernetesCluster Validation] Pod IP Range does not contain a " +
+    "valid ip with mask";
   private String serviceIpRange;
   private String podIpRange;
 
@@ -58,6 +60,52 @@ public abstract class KubernetesCluster extends PaaSContainerPlatform implements
     serviceMeshSecurityInstances = new ArrayList<>();
     loggingInstances = new ArrayList<>();
     documentDBInstances = new ArrayList<>();
+  }
+
+  @Override
+  public Collection<String> validate() {
+    Collection<String> errors = super.validate();
+
+    isPresentAndValidIpRange(serviceIpRange, errors, SERVICE_IP_RANGE_NOT_VALID);
+    isPresentAndValidIpRange(podIpRange, errors, POD_RANGE_NOT_VALID);
+
+    priorityClasses.stream()
+      .map(PriorityClass::validate)
+      .forEach(errors::addAll);
+    k8sWorkloadInstances.stream()
+      .map(CaaSWorkload::validate)
+      .forEach(errors::addAll);
+    monitoringInstances.stream()
+      .map(CaaSMonitoring::validate)
+      .forEach(errors::addAll);
+    apiGatewayInstances.stream()
+      .map(CaaSAPIGateway::validate)
+      .forEach(errors::addAll);
+    serviceMeshSecurityInstances.stream()
+      .map(CaaSServiceMeshSecurity::validate)
+      .forEach(errors::addAll);
+    loggingInstances.stream()
+      .map(CaaSLogging::validate)
+      .forEach(errors::addAll);
+    documentDBInstances.stream()
+      .map(CaaSSearch::validate)
+      .forEach(errors::addAll);
+
+    if (podManagedIdentity != null) {
+      errors.addAll(podManagedIdentity.validate());
+    }
+
+    //FRA-684 - Add error until we implement in GCP
+    if (this.getProvider().equals(ProviderType.GCP)) {
+      if (podManagedIdentity != null) {
+        errors.add("Pod Managed Identity is not fully supported yet for GCP");
+      }
+      if (!priorityClasses.isEmpty()) {
+        errors.add("Priority classes are not fully supported yet for GCP");
+      }
+    }
+
+    return errors;
   }
 
   public static abstract class Builder<T extends KubernetesCluster, B extends Builder<T, B>> extends Component.Builder<T, B> {
@@ -233,52 +281,10 @@ public abstract class KubernetesCluster extends PaaSContainerPlatform implements
     @Override
     public T build() {
       component.setType(PAAS_KUBERNETES);
-      
+
       return super.build();
     }
 
-  }
-
-  @Override
-  public Collection<String> validate() {
-    Collection<String> errors = super.validate();
-
-    isPresentAndValidIpRange(serviceIpRange, errors, SERVICE_IP_RANGE_NOT_VALID);
-    isPresentAndValidIpRange(podIpRange, errors, POD_RANGE_NOT_VALID);
-
-    priorityClasses.stream()
-        .map(PriorityClass::validate)
-        .forEach(errors::addAll);
-    k8sWorkloadInstances.stream()
-        .map(CaaSWorkload::validate)
-        .forEach(errors::addAll);
-    monitoringInstances.stream()
-        .map(CaaSMonitoring::validate)
-        .forEach(errors::addAll);
-    apiGatewayInstances.stream()
-        .map(CaaSAPIGateway::validate)
-        .forEach(errors::addAll);
-    serviceMeshSecurityInstances.stream()
-        .map(CaaSServiceMeshSecurity::validate)
-        .forEach(errors::addAll);
-    loggingInstances.stream()
-        .map(CaaSLogging::validate)
-        .forEach(errors::addAll);
-    documentDBInstances.stream()
-        .map(CaaSSearch::validate)
-        .forEach(errors::addAll);
-
-    if(podManagedIdentity != null) {
-      errors.addAll(podManagedIdentity.validate());
-    }
-
-    //FRA-684 - Add error until we implement in GCP
-    if(this.getProvider().equals(ProviderType.GCP)) {
-      if(podManagedIdentity != null) errors.add("Pod Managed Identity is not fully supported yet for GCP");
-      if(!priorityClasses.isEmpty()) errors.add("Priority classes are not fully supported yet for GCP");
-    }
-    
-    return errors;
   }
 
 }

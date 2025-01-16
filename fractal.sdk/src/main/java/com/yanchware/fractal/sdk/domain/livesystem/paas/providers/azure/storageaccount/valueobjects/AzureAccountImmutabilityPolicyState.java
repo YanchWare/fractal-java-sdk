@@ -7,13 +7,13 @@ import java.util.Collection;
 
 /**
  * <pre>
- * The ImmutabilityPolicy state defines the mode of the policy. 
- * 
- * Disabled state disables the policy. 
- * 
- * Unlocked state allows increase and decrease of immutability retention time 
- * and also allows toggling allowProtectedAppendWrites property. 
- * 
+ * The ImmutabilityPolicy state defines the mode of the policy.
+ *
+ * Disabled state disables the policy.
+ *
+ * Unlocked state allows increase and decrease of immutability retention time
+ * and also allows toggling allowProtectedAppendWrites property.
+ *
  * Locked state only allows the increase of the immutability retention time.
  * </pre>
  */

@@ -1,4 +1,3 @@
-
 package com.yanchware.fractal.sdk.domain.livesystem.saas;
 
 import com.yanchware.fractal.sdk.utils.TestUtils;
@@ -11,23 +10,23 @@ class UnmanagedStorageAccountTest {
   @Test
   public void exceptionThrown_when_componentBuiltWithNullId() {
     assertThatThrownBy(() -> UnmanagedStorageComponent.builder().withId("").build()).
-        isInstanceOf(IllegalArgumentException.class).
-        hasMessageContaining("Component Id is illegal");
+      isInstanceOf(IllegalArgumentException.class).
+      hasMessageContaining("Component Id is illegal");
   }
 
   @Test
   public void exceptionThrown_when_componentBuiltWithEmptyValues() {
     assertThatThrownBy(() -> UnmanagedStorageComponent.builder().withId("unmanaged-storage").build()).
-        isInstanceOf(IllegalArgumentException.class).
-        hasMessageContaining("Secret Value has not been defined and it is required");
+      isInstanceOf(IllegalArgumentException.class).
+      hasMessageContaining("Secret Value has not been defined and it is required");
   }
 
   @Test
   public void typeIsUnmanagedStorageComponent_when_BuiltWithAllRequiredValues() {
     var secretValue = "aSecretValue";
     var builder = UnmanagedStorageComponent.builder()
-        .withId("unmanaged-storage")
-        .withSecretValue(secretValue);
+      .withId("unmanaged-storage")
+      .withSecretValue(secretValue);
     assertThatCode(builder::build).doesNotThrowAnyException();
     assertThat(builder.build().getType()).isEqualTo(SAAS_UNMANAGED_STORAGE);
     assertThat(builder.build().getSecretName()).isBlank();
@@ -39,10 +38,10 @@ class UnmanagedStorageAccountTest {
     var secretName = "aSecretName";
     var secretValue = "aSecretValue";
     var builder = UnmanagedStorageComponent.builder()
-        .withId("unmanaged-storage")
-        .withSecretName(secretName)
-        .withSecretValue(secretValue);
-    
+      .withId("unmanaged-storage")
+      .withSecretName(secretName)
+      .withSecretValue(secretValue);
+
     assertThatCode(builder::build).doesNotThrowAnyException();
     assertThat(builder.build().getType()).isEqualTo(SAAS_UNMANAGED_STORAGE);
     assertThat(builder.build().getSecretName()).isNotBlank();
@@ -55,12 +54,12 @@ class UnmanagedStorageAccountTest {
     var secretName = "aSecretName";
     var secretValue = "aSecretValue";
     var builder = UnmanagedStorageComponent.builder()
-        .withId("unmanaged-storage")
-        .withSecretName(secretName)
-        .withSecretValue(secretValue);
+      .withId("unmanaged-storage")
+      .withSecretName(secretName)
+      .withSecretValue(secretValue);
 
     var json = TestUtils.getJsonRepresentation(builder.build());
-    
+
     assertThatCode(builder::build).doesNotThrowAnyException();
     assertThat(builder.build().getType()).isEqualTo(SAAS_UNMANAGED_STORAGE);
     assertThat(json).isNotBlank();

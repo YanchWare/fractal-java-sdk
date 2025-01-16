@@ -15,7 +15,9 @@ import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidLetter
 public class DnsZone implements Validatable {
   public final static String DNS_ZONES_PARAM_KEY = "dnsZones";
 
-  private final static String NAME_NOT_VALID = "[DnsZone Validation] The name must contain no more than 253 characters, excluding a trailing period and must be between 2 and 34 labels. Each label must only contain letters, numbers, underscores, and/or dashes. Each label should be separated from other labels by a period";
+  private final static String NAME_NOT_VALID = "[DnsZone Validation] The name must contain no more than 253 " +
+    "characters, excluding a trailing period and must be between 2 and 34 labels. Each label must only contain " +
+    "letters, numbers, underscores, and/or dashes. Each label should be separated from other labels by a period";
 
   private String name;
   private boolean isPrivate;
@@ -24,6 +26,27 @@ public class DnsZone implements Validatable {
 
   public static DnsZoneBuilder builder() {
     return new DnsZoneBuilder();
+  }
+
+  @Override
+  public Collection<String> validate() {
+    Collection<String> errors = new ArrayList<>();
+
+    if (StringUtils.isBlank(name)) {
+      errors.add(NAME_NOT_VALID);
+    }
+
+    if (StringUtils.isNotBlank(name)) {
+      var nameWithoutTrailingPeriod = StringUtils.stripEnd(name, ".");
+
+      var hasValidCharacters = isValidLettersNumbersUnderscoresDashesAndPeriods(name);
+
+      if (!hasValidCharacters || nameWithoutTrailingPeriod.length() > 253) {
+        errors.add(NAME_NOT_VALID);
+      }
+    }
+
+    return errors;
   }
 
   public static class DnsZoneBuilder {
@@ -53,7 +76,7 @@ public class DnsZone implements Validatable {
       if (!dnsZone.getRecords().containsKey(componentId)) {
         dnsZone.getRecords().put(componentId, new ArrayList<>());
       }
-      
+
       dnsZone.getRecords().get(componentId).add(dnsRecord);
 
       return builder;
@@ -102,32 +125,10 @@ public class DnsZone implements Validatable {
 
       if (!errors.isEmpty()) {
         throw new IllegalArgumentException(String.format("DnsZone validation failed. Errors: %s",
-            Arrays.toString(errors.toArray())));
+          Arrays.toString(errors.toArray())));
       }
 
       return dnsZone;
     }
-  }
-
-
-  @Override
-  public Collection<String> validate() {
-    Collection<String> errors = new ArrayList<>();
-
-    if (StringUtils.isBlank(name)) {
-      errors.add(NAME_NOT_VALID);
-    }
-
-    if (StringUtils.isNotBlank(name)) {
-      var nameWithoutTrailingPeriod = StringUtils.stripEnd(name, ".");
-
-      var hasValidCharacters = isValidLettersNumbersUnderscoresDashesAndPeriods(name);
-
-      if (!hasValidCharacters || nameWithoutTrailingPeriod.length() > 253) {
-        errors.add(NAME_NOT_VALID);
-      }
-    }
-
-    return errors;
   }
 }

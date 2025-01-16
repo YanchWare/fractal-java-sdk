@@ -12,7 +12,8 @@ import java.util.Map;
 
 import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_COSMOS_ACCOUNT;
 
-public abstract class AzureCosmosAccountBuilder<T extends Component & AzureCosmosAccount, B extends AzureCosmosAccountBuilder<T, B>> extends Component.Builder<T, B> {
+public abstract class AzureCosmosAccountBuilder<T extends Component & AzureCosmosAccount,
+  B extends AzureCosmosAccountBuilder<T, B>> extends Component.Builder<T, B> {
 
   private static final String PUBLIC_NETWORK_ACCESS_ENABLED_MODE = "Enabled";
   private static final String PUBLIC_NETWORK_ACCESS_DISABLED_MODE = "Disabled";

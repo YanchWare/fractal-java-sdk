@@ -13,7 +13,7 @@ import java.util.Collection;
 @Getter
 @Setter(AccessLevel.PRIVATE)
 public class AzureFileShareAccessPolicy implements Validatable {
-  
+
   private OffsetDateTime expiryTime;
   private String permission;
   private OffsetDateTime startTime;
@@ -25,17 +25,17 @@ public class AzureFileShareAccessPolicy implements Validatable {
   @Override
   public Collection<String> validate() {
     Collection<String> errors = new ArrayList<>();
-    
+
     if (expiryTime == null) {
       errors.add("Expiry time cannot be null");
     } else if (startTime != null && expiryTime.isBefore(startTime)) {
       errors.add("Expiry time must be after start time");
     }
-    
+
     if (permission == null || permission.trim().isEmpty()) {
       errors.add("Permission cannot be null or empty");
     }
-    
+
     if (startTime == null) {
       errors.add("Start time cannot be null");
     }
@@ -87,7 +87,7 @@ public class AzureFileShareAccessPolicy implements Validatable {
 
       if (!errors.isEmpty()) {
         throw new IllegalArgumentException(String.format("AzureFileShareAccessPolicy validation failed. Errors: %s",
-            Arrays.toString(errors.toArray())));
+          Arrays.toString(errors.toArray())));
       }
 
       return accessPolicy;

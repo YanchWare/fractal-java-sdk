@@ -13,11 +13,6 @@ import java.util.Collection;
  * <a href="https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/resource-name-rules">Azure naming limitations</a>
  */
 public interface AzureResourceEntity extends ResourceEntity {
-  AzureResourceGroup getAzureResourceGroup();
-  void setAzureResourceGroup(AzureResourceGroup azureResourceGroup);
-  AzureRegion getAzureRegion();
-  void setAzureRegion(AzureRegion region);
-
   static Collection<String> validateAzureResourceEntity(AzureResourceEntity resourceEntity, String entityName) {
     final var REGION_IS_NULL_TEMPLATE = "[Azure %s Validation] Region has not been defined and it is required";
 
@@ -29,4 +24,12 @@ public interface AzureResourceEntity extends ResourceEntity {
 
     return errors;
   }
+
+  AzureResourceGroup getAzureResourceGroup();
+
+  void setAzureResourceGroup(AzureResourceGroup azureResourceGroup);
+
+  AzureRegion getAzureRegion();
+
+  void setAzureRegion(AzureRegion region);
 }

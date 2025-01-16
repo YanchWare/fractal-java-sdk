@@ -20,7 +20,7 @@ public class SourceControlType extends ExtendableEnum<SourceControlType> {
   public static final SourceControlType TFS = fromString("Tfs");
   public static final SourceControlType VSO = fromString("VSO");
   public static final SourceControlType VSTSRM = fromString("VSTSRM");
-  
+
   public SourceControlType() {
   }
 

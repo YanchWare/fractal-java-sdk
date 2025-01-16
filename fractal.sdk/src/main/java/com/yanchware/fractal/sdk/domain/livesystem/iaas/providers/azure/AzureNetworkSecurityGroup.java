@@ -19,15 +19,15 @@ import java.util.Map;
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
 public class AzureNetworkSecurityGroup extends IaaSSecurityGroup implements AzureResourceEntity, LiveSystemComponent {
-    private AzureRegion azureRegion;
-    private AzureResourceGroup azureResourceGroup;
-    private Map<String, String> tags;
+  private AzureRegion azureRegion;
+  private AzureResourceGroup azureResourceGroup;
+  private Map<String, String> tags;
 
-    private List<Rule> rules;
+  private List<Rule> rules;
 
-    @Override
-    public ProviderType getProvider() {
-        return ProviderType.AZURE;
-    }
+  @Override
+  public ProviderType getProvider() {
+    return ProviderType.AZURE;
+  }
 
 }

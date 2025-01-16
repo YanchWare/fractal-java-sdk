@@ -12,12 +12,12 @@ import java.util.Collection;
  * Taints are a mechanism in Kubernetes used to evict pods from nodes. If a pod does not tolerate a taint,
  * the effect of the taint determines what happens to the pod on that node.
  *
- * 
+ *
  * The effects include:
  * - NoSchedule: Pods that do not tolerate this effect are not scheduled on the node.
  * - PreferNoSchedule: The scheduler tries to avoid scheduling pods that do not tolerate this effect on the node,
  *                     but it is not a strict requirement.
- * - NoExecute: Pods that are already running on the node and do not tolerate this effect are evicted. 
+ * - NoExecute: Pods that are already running on the node and do not tolerate this effect are evicted.
  *               New pods that do not tolerate this effect are not scheduled on the node.
  * </pre>
  */

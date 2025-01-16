@@ -25,8 +25,10 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
 public class CaaSElasticDataStore extends CaaSSearchImpl implements LiveSystemComponent {
-  private final static String ELASTIC_INSTANCES_NEGATIVE_OR_ZERO = "[CaaSElasticDataStore Validation] Elastic Instances defined was either 0 or negative and it needs to be greater than 0";
-  private final static String VERSION_IS_BLANK = "[CaaSElasticDataStore Validation] Elastic Version has not been defined and it is required";
+  private final static String ELASTIC_INSTANCES_NEGATIVE_OR_ZERO = "[CaaSElasticDataStore Validation] Elastic " +
+    "Instances defined was either 0 or negative and it needs to be greater than 0";
+  private final static String VERSION_IS_BLANK = "[CaaSElasticDataStore Validation] Elastic Version has not been " +
+    "defined and it is required";
 
   private boolean isKibanaRequired;
   private String elasticVersion;
@@ -38,6 +40,21 @@ public class CaaSElasticDataStore extends CaaSSearchImpl implements LiveSystemCo
 
   public static ElasticDataStoreBuilder builder() {
     return new ElasticDataStoreBuilder();
+  }
+
+  @Override
+  public Collection<String> validate() {
+    Collection<String> errors = super.validate();
+
+    if (elasticInstances <= 0) {
+      errors.add(ELASTIC_INSTANCES_NEGATIVE_OR_ZERO);
+    }
+
+    if (isBlank(elasticVersion)) {
+      errors.add(VERSION_IS_BLANK);
+    }
+
+    return errors;
   }
 
   public static class ElasticDataStoreBuilder extends Builder<CaaSElasticDataStore, ElasticDataStoreBuilder> {
@@ -105,8 +122,10 @@ public class CaaSElasticDataStore extends CaaSSearchImpl implements LiveSystemCo
     /**
      * Storage that will be used for PersistentVolumeClaim
      * <p>
-     * For more details check <a href="https://www.elastic.co/guide/en/cloud-on-k8s/master/k8s-volume-claim-templates.html">Elastic documentation</a>
+     * For more details check
+     * <a href="https://www.elastic.co/guide/en/cloud-on-k8s/master/k8s-volume-claim-templates.html">Elastic documentation</a>
      * </p>
+     *
      * @param storage
      */
     public ElasticDataStoreBuilder withStorage(String storage) {
@@ -120,7 +139,8 @@ public class CaaSElasticDataStore extends CaaSSearchImpl implements LiveSystemCo
      * Default: 'standard'
      * </p>
      * <p>
-     * For more details check <a href="https://www.elastic.co/guide/en/cloud-on-k8s/master/k8s-volume-claim-templates.html">Elastic documentation</a>
+     * For more details check
+     * <a href="https://www.elastic.co/guide/en/cloud-on-k8s/master/k8s-volume-claim-templates.html">Elastic documentation</a>
      * </p>
      *
      * @param storageClassName
@@ -134,7 +154,8 @@ public class CaaSElasticDataStore extends CaaSSearchImpl implements LiveSystemCo
      * Amount of memory, in gigabytes, that will be used for requests and limits
      * Default: '8'
      * <p>
-     * For more details check <a href="https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-managing-compute-resources.html#k8s-compute-resources-elasticsearch">Elastic documentation</a>
+     * For more details check
+     * <a href="https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-managing-compute-resources.html#k8s-compute-resources-elasticsearch">Elastic documentation</a>
      * </p>
      *
      * @param memory
@@ -148,7 +169,8 @@ public class CaaSElasticDataStore extends CaaSSearchImpl implements LiveSystemCo
      * CPU resources that will be used for requests and limits
      * Default: '8'
      * <p>
-     * For more details check <a href="https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-managing-compute-resources.html#k8s-compute-resources-elasticsearch">Elastic documentation</a>
+     * For more details check
+     * <a href="https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-managing-compute-resources.html#k8s-compute-resources-elasticsearch">Elastic documentation</a>
      * </p>
      *
      * @param cpu
@@ -163,20 +185,5 @@ public class CaaSElasticDataStore extends CaaSSearchImpl implements LiveSystemCo
       component.setType(CAAS_ELASTIC_DATASTORE);
       return super.build();
     }
-  }
-
-  @Override
-  public Collection<String> validate() {
-    Collection<String> errors = super.validate();
-
-    if (elasticInstances <= 0) {
-      errors.add(ELASTIC_INSTANCES_NEGATIVE_OR_ZERO);
-    }
-
-    if (isBlank(elasticVersion)) {
-      errors.add(VERSION_IS_BLANK);
-    }
-
-    return errors;
   }
 }

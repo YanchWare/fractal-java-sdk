@@ -5,10 +5,9 @@ import com.yanchware.fractal.sdk.utils.ExtendableEnum;
 
 import java.util.Collection;
 
-public final class AzureKubernetesAddon extends ExtendableEnum<AzureKubernetesAddon>  {
+public final class AzureKubernetesAddon extends ExtendableEnum<AzureKubernetesAddon> {
   /**
    * Configure ingress with automatic public DNS name creation
-   * 
    */
   public static final AzureKubernetesAddon HTTP_APPLICATION_ROUTING = fromString("httpApplicationRouting");
 
@@ -23,8 +22,9 @@ public final class AzureKubernetesAddon extends ExtendableEnum<AzureKubernetesAd
   public static final AzureKubernetesAddon VIRTUAL_NODE = fromString("aciConnectorLinux");
 
   /**
-   * Enable Azure policy. 
-   * The Azure Policy add-on for AKS enables at-scale enforcements and safeguards on your clusters in a centralized, consistent manner
+   * Enable Azure policy.
+   * The Azure Policy add-on for AKS enables at-scale enforcements and safeguards on your clusters in a centralized,
+   * consistent manner
    */
   public static final AzureKubernetesAddon AZURE_POLICY = fromString("azurepolicy");
 

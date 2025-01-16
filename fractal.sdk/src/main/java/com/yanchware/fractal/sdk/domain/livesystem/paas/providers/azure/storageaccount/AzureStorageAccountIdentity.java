@@ -43,8 +43,8 @@ public class AzureStorageAccountIdentity {
 
     /**
      * <pre>
-     * Sets a list of key value pairs that describe the set of User Assigned identities that will be used with this storage account. 
-     * The key is the ARM resource identifier of the identity. 
+     * Sets a list of key value pairs that describe the set of User Assigned identities that will be used with this storage account.
+     * The key is the ARM resource identifier of the identity.
      * Only 1 User Assigned identity is permitted here.
      * </pre>
      */
@@ -55,11 +55,14 @@ public class AzureStorageAccountIdentity {
 
     /**
      * <pre>
-     * Key value pair that describe User Assigned identity that will be used with this storage account. 
-     * The key is the ARM resource identifier of the identity. 
+     * Key value pair that describe User Assigned identity that will be used with this storage account.
+     * The key is the ARM resource identifier of the identity.
      * </pre>
      */
-    public AzureStorageAccountIdentityBuilder withUserAssignedIdentity(String key, AzureUserAssignedIdentity userAssignedIdentity) {
+    public AzureStorageAccountIdentityBuilder withUserAssignedIdentity(
+      String key,
+      AzureUserAssignedIdentity userAssignedIdentity)
+    {
       if (identity.getUserAssignedIdentities() == null) {
         withUserAssignedIdentities(new HashMap<>());
       }
@@ -73,5 +76,5 @@ public class AzureStorageAccountIdentity {
       return identity;
     }
   }
-  
+
 }

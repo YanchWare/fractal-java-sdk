@@ -9,7 +9,6 @@ import lombok.ToString;
 import java.util.Collection;
 
 import static com.yanchware.fractal.sdk.domain.values.ComponentType.CAAS_PROMETHEUS;
-import static org.apache.commons.lang3.StringUtils.isBlank;
 
 /**
  * <p>
@@ -29,6 +28,11 @@ public class CaaSPrometheus extends CaaSMonitoringImpl implements LiveSystemComp
 
   public static PrometheusBuilder builder() {
     return new PrometheusBuilder();
+  }
+
+  @Override
+  public Collection<String> validate() {
+    return super.validate();
   }
 
   public static class PrometheusBuilder extends Builder<CaaSPrometheus, PrometheusBuilder> {
@@ -64,7 +68,8 @@ public class CaaSPrometheus extends CaaSMonitoringImpl implements LiveSystemComp
     }
 
     /**
-     * If specified, Prometheus will be made available at the URL specified below. For example, if the parameter is set to
+     * If specified, Prometheus will be made available at the URL specified below. For example, if the parameter is
+     * set to
      * <i>api.yourdomain.com</i>, then Prometheus can be accessed at <i>api.yourdomain.com/prometheus</i>.
      * <p>
      * This applies for all components available (Kibana, Grafana, Alert Manager)
@@ -82,10 +87,5 @@ public class CaaSPrometheus extends CaaSMonitoringImpl implements LiveSystemComp
       component.setType(CAAS_PROMETHEUS);
       return super.build();
     }
-  }
-
-  @Override
-  public Collection<String> validate() {
-      return super.validate();
   }
 }

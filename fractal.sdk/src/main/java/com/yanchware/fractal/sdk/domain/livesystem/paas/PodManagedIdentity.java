@@ -16,11 +16,16 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Setter(AccessLevel.PRIVATE)
 @Builder(setterPrefix = "with")
 public class PodManagedIdentity implements Validatable {
-  private final static String NAME_IS_BLANK = "[PodManagedIdentity Validation] Name has not been defined and it is required";
-  private final static String NAMESPACE_IS_BLANK = "[PodManagedIdentity Validation] Namespace has not been defined and it is required";
-  private final static String ENABLE_IS_BLANK = "[PodManagedIdentity Validation] Enable has not been defined and it is required";
-  private final static String EXCEPTION_POD_LABELS_IS_BLANK = "[PodManagedIdentity Validation] Exception pod labels has not been defined and it is required";
-  private final static String ALLOW_NETWORK_PLUGIN_KUBE_NET_IS_BLANK = "[PodManagedIdentity Validation] AllowNetworkPluginKubeNet has not been defined and it is required";
+  private final static String NAME_IS_BLANK = "[PodManagedIdentity Validation] Name has not been defined and it is " +
+    "required";
+  private final static String NAMESPACE_IS_BLANK = "[PodManagedIdentity Validation] Namespace has not been defined " +
+    "and it is required";
+  private final static String ENABLE_IS_BLANK = "[PodManagedIdentity Validation] Enable has not been defined and it " +
+    "is required";
+  private final static String EXCEPTION_POD_LABELS_IS_BLANK = "[PodManagedIdentity Validation] Exception pod labels " +
+    "has not been defined and it is required";
+  private final static String ALLOW_NETWORK_PLUGIN_KUBE_NET_IS_BLANK = "[PodManagedIdentity Validation] " +
+    "AllowNetworkPluginKubeNet has not been defined and it is required";
 
   private String name;
   private String namespace;

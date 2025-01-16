@@ -29,6 +29,26 @@ public class DnsARecord extends DnsRecord {
     return new DnsARecordBuilder();
   }
 
+  @Override
+  public Collection<String> validate() {
+    var errors = super.validate();
+
+    if (!isBlank(ipV4Addresses)) {
+      ipV4Addresses.stream()
+        .filter(StringUtils::isNotBlank)
+        .forEach(ipV4Address -> {
+          var hasValidCharacters = isValidIpV4Address(ipV4Address);
+          if (!hasValidCharacters) {
+            errors.add(IP_V4_ADDRESS_NOT_VALID);
+          }
+        });
+    }
+
+    return errors.stream()
+      .map(error -> "[DnsARecord Validation] " + error)
+      .collect(Collectors.toList());
+  }
+
   public static class DnsARecordBuilder extends DnsRecord.Builder<DnsARecord, DnsARecordBuilder> {
     @Override
     protected DnsARecord createRecord() {
@@ -61,25 +81,5 @@ public class DnsARecord extends DnsRecord {
     public DnsARecord build() {
       return super.build();
     }
-  }
-
-  @Override
-  public Collection<String> validate() {
-    var errors = super.validate();
-
-    if (!isBlank(ipV4Addresses)) {
-      ipV4Addresses.stream()
-          .filter(StringUtils::isNotBlank)
-          .forEach(ipV4Address -> {
-            var hasValidCharacters = isValidIpV4Address(ipV4Address);
-            if (!hasValidCharacters) {
-              errors.add(IP_V4_ADDRESS_NOT_VALID);
-            }
-          });
-    }
-    
-    return errors.stream()
-        .map(error -> "[DnsARecord Validation] " + error)
-        .collect(Collectors.toList());
   }
 }

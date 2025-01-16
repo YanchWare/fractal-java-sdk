@@ -14,7 +14,8 @@ import java.util.List;
 @Getter
 @Setter(AccessLevel.PRIVATE)
 public class AzureActiveDirectoryProfile implements Validatable {
-  private static final String ADMIN_GROUP_OBJECT_IDS_IS_EMPTY = "[AzureActiveDirectoryProfile Validation] adminGroupObjectIDs is empty but it is required";
+  private static final String ADMIN_GROUP_OBJECT_IDS_IS_EMPTY = "[AzureActiveDirectoryProfile Validation] " +
+    "adminGroupObjectIDs is empty but it is required";
   @JsonProperty("managed")
   private Boolean managed;
   @JsonProperty("enableAzureRBAC")
@@ -23,19 +24,30 @@ public class AzureActiveDirectoryProfile implements Validatable {
   private List<String> adminGroupObjectIDs;
 
 
-  public static AzureActiveDirectoryProfileBuilder builder() {
-    return new AzureActiveDirectoryProfileBuilder();
-  }
-  
   private AzureActiveDirectoryProfile() {
   }
 
+  public static AzureActiveDirectoryProfileBuilder builder() {
+    return new AzureActiveDirectoryProfileBuilder();
+  }
+
+  @Override
+  public Collection<String> validate() {
+    Collection<String> errors = new ArrayList<>();
+
+    if (adminGroupObjectIDs != null && adminGroupObjectIDs.size() == 0) {
+      errors.add(ADMIN_GROUP_OBJECT_IDS_IS_EMPTY);
+    }
+
+    return errors;
+  }
+
   //Builder Class
-  public static class AzureActiveDirectoryProfileBuilder{
+  public static class AzureActiveDirectoryProfileBuilder {
     private final AzureActiveDirectoryProfile aadProfile;
     private final AzureActiveDirectoryProfileBuilder builder;
 
-    public AzureActiveDirectoryProfileBuilder () {
+    public AzureActiveDirectoryProfileBuilder() {
       aadProfile = createComponent();
       builder = getBuilder();
     }
@@ -71,28 +83,17 @@ public class AzureActiveDirectoryProfile implements Validatable {
       return withAdminGroupObjectIDs(List.of(adminGroupObjectId));
     }
 
-    public AzureActiveDirectoryProfile build(){
+    public AzureActiveDirectoryProfile build() {
       Collection<String> errors = aadProfile.validate();
 
       if (!errors.isEmpty()) {
         throw new IllegalArgumentException(String.format(
-            "AzureActiveDirectoryProfile validation failed. Errors: %s",
-            Arrays.toString(errors.toArray())));
+          "AzureActiveDirectoryProfile validation failed. Errors: %s",
+          Arrays.toString(errors.toArray())));
       }
-      
+
       return aadProfile;
     }
 
-  }
-
-  @Override
-  public Collection<String> validate() {
-    Collection<String> errors = new ArrayList<>();
-
-    if (adminGroupObjectIDs != null && adminGroupObjectIDs.size() == 0) {
-      errors.add(ADMIN_GROUP_OBJECT_IDS_IS_EMPTY);
-    }
-    
-    return errors;
   }
 }

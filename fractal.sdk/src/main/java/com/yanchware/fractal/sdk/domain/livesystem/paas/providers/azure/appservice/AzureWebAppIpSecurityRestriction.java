@@ -28,22 +28,23 @@ public class AzureWebAppIpSecurityRestriction {
   private Map<String, List<String>> headers;
 
   /**
-   * IP address the security restriction is valid for. 
-   * It can be in form of pure ipv4 address (required SubnetMask property) or CIDR notation such as ipv4/mask (leading bit match). 
+   * IP address the security restriction is valid for.
+   * It can be in form of pure ipv4 address (required SubnetMask property) or CIDR notation such as ipv4/mask
+   * (leading bit match).
    * For CIDR, SubnetMask property must not be specified.
    */
   private String ipAddress;
-  
+
   /**
    * IP restriction rule name.
    */
   private String name;
-  
+
   /**
    * Priority of IP restriction rule.
    */
   private Integer priority;
-  
+
   /**
    * Subnet mask for the range of IP addresses the restriction is valid for.
    */

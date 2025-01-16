@@ -11,7 +11,7 @@ import java.util.Collection;
 public final class AzureActiveDirectoryAccountType extends ExtendableEnum<AzureActiveDirectoryAccountType> {
   public static final AzureActiveDirectoryAccountType USER = fromString("User");
   public static final AzureActiveDirectoryAccountType COMPUTER = fromString("Computer");
-  
+
   @JsonCreator
   public static AzureActiveDirectoryAccountType fromString(String name) {
     return fromString(name, AzureActiveDirectoryAccountType.class);

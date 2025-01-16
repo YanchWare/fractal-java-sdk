@@ -15,13 +15,13 @@ public class AzureFileStorageAccountTest extends TestWithFixture {
   @Test
   public void kindIsValid_when_ValidationPasses() throws JsonProcessingException {
     var storage = AzureFileStorageAccount.builder()
-        .withId(aComponentId())
-        .withName(aLowerCaseAlphanumericString(10))
-        .withDisplayName(aAlphanumericString(50))
-        .withRegion(a(AzureRegion.class))
-        .withResourceGroup(a(AzureResourceGroup.class))
-        .withTag(a(String.class), a(String.class))
-        .build();
+      .withId(aComponentId())
+      .withName(aLowerCaseAlphanumericString(10))
+      .withDisplayName(aAlphanumericString(50))
+      .withRegion(a(AzureRegion.class))
+      .withResourceGroup(a(AzureResourceGroup.class))
+      .withTag(a(String.class), a(String.class))
+      .build();
     assertTrue(storage.validate().isEmpty());
 
     var json = TestUtils.getJsonRepresentation(storage);
@@ -42,43 +42,43 @@ public class AzureFileStorageAccountTest extends TestWithFixture {
     var storageName = aLowerCaseAlphanumericString(10);
     var storageDisplayName = aAlphanumericString(50, false, false, " ");
     var storageRegion = AzureRegion.WEST_EUROPE;
-    
+
     var storage = AzureFileStorageAccount.builder()
-        .withId(storageId)
-        .withName(storageName)
-        .withDisplayName(storageDisplayName)
+      .withId(storageId)
+      .withName(storageName)
+      .withDisplayName(storageDisplayName)
+      .withRegion(storageRegion)
+      .withResourceGroup(AzureResourceGroup.builder()
+        .withName(aLowerCaseAlphanumericString(10))
         .withRegion(storageRegion)
-        .withResourceGroup(AzureResourceGroup.builder()
-            .withName(aLowerCaseAlphanumericString(10))
-            .withRegion(storageRegion)
-            .build())
-        .withFileShare(AzureFileShare.builder()
-            .withId(aLowerCaseAlphanumericString(10, true, "-"))
-            .withName(aLowerCaseAlphanumericString(10, true, "-"))
-            .withDisplayName(aAlphanumericString(50))
-            .withEnabledProtocols(AzureFileShareEnabledProtocols.SMB)
-            .withShareQuota(100)
-            .withAccessTier(a(AzureFileShareAccessTier.class))
-            .build())
-        .withFileShare(AzureFileShare.builder()
-            .withId(aLowerCaseAlphanumericString(10, true, "-"))
-            .withName(aLowerCaseAlphanumericString(10, true, "-"))
-            .withDisplayName(aAlphanumericString(50))
-            .withEnabledProtocols(AzureFileShareEnabledProtocols.NFS)
-            .withRootSquash(a(AzureFileShareRootSquashType.class))
-            .withShareQuota(100)
-            .withAccessTier(a(AzureFileShareAccessTier.class))
-            .build())
-        .withTag(a(String.class), a(String.class))
-        .build();
-    
+        .build())
+      .withFileShare(AzureFileShare.builder()
+        .withId(aLowerCaseAlphanumericString(10, true, "-"))
+        .withName(aLowerCaseAlphanumericString(10, true, "-"))
+        .withDisplayName(aAlphanumericString(50))
+        .withEnabledProtocols(AzureFileShareEnabledProtocols.SMB)
+        .withShareQuota(100)
+        .withAccessTier(a(AzureFileShareAccessTier.class))
+        .build())
+      .withFileShare(AzureFileShare.builder()
+        .withId(aLowerCaseAlphanumericString(10, true, "-"))
+        .withName(aLowerCaseAlphanumericString(10, true, "-"))
+        .withDisplayName(aAlphanumericString(50))
+        .withEnabledProtocols(AzureFileShareEnabledProtocols.NFS)
+        .withRootSquash(a(AzureFileShareRootSquashType.class))
+        .withShareQuota(100)
+        .withAccessTier(a(AzureFileShareAccessTier.class))
+        .build())
+      .withTag(a(String.class), a(String.class))
+      .build();
+
     assertThat(storage.validate().isEmpty()).isTrue();
     assertThat(storage.getId().getValue()).isEqualTo(storageId);
     assertThat(storage.getName()).isEqualTo(storageName);
     assertThat(storage.getDisplayName()).isEqualTo(storageDisplayName);
     assertThat(storage.getAzureRegion()).isEqualTo(storageRegion);
     assertThat(storage.getAzureResourceGroup().getRegion()).isEqualTo(storageRegion);
-    
+
     var json = TestUtils.getJsonRepresentation(storage);
     assertThat(json).isNotBlank();
 

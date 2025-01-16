@@ -34,53 +34,56 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Slf4j
 public class RestEnvironmentService extends Service implements EnvironmentService {
   public RestEnvironmentService(
-      HttpClient client,
-      SdkConfiguration sdkConfiguration,
-      RetryRegistry retryRegistry) {
+    HttpClient client,
+    SdkConfiguration sdkConfiguration,
+    RetryRegistry retryRegistry)
+  {
     super(client, sdkConfiguration, retryRegistry);
   }
 
   @Override
   public EnvironmentResponse create(
-      EnvironmentIdValue managementEnvironmentId,
-      EnvironmentIdValue environmentId,
-      String name,
-      Collection<UUID> resourceGroups,
-      Map<String, Object> parameters) throws InstantiatorException {
+    EnvironmentIdValue managementEnvironmentId,
+    EnvironmentIdValue environmentId,
+    String name,
+    Collection<UUID> resourceGroups,
+    Map<String, Object> parameters) throws InstantiatorException
+  {
     return executeRequestWithRetries(
-        "createEnvironment",
-        environmentId.toString(),
-        client,
-        retryRegistry,
-        HttpUtils.buildPostRequest(
-            getEnvironmentsUri(environmentId),
-            sdkConfiguration,
-            serializeSafely(new CreateEnvironmentRequest(
-                managementEnvironmentId,
-                name,
-                resourceGroups,
-                parameters))),
-        new int[]{201},
-        EnvironmentResponse.class);
+      "createEnvironment",
+      environmentId.toString(),
+      client,
+      retryRegistry,
+      HttpUtils.buildPostRequest(
+        getEnvironmentsUri(environmentId),
+        sdkConfiguration,
+        serializeSafely(new CreateEnvironmentRequest(
+          managementEnvironmentId,
+          name,
+          resourceGroups,
+          parameters))),
+      new int[]{201},
+      EnvironmentResponse.class);
   }
 
   @Override
   public EnvironmentResponse update(
-      EnvironmentIdValue environmentId,
-      String name,
-      Collection<UUID> resourceGroups,
-      Map<String, Object> parameters) throws InstantiatorException {
+    EnvironmentIdValue environmentId,
+    String name,
+    Collection<UUID> resourceGroups,
+    Map<String, Object> parameters) throws InstantiatorException
+  {
     return executeRequestWithRetries(
-        "updateEnvironment",
-        environmentId.toString(),
-        client,
-        retryRegistry,
-        HttpUtils.buildPutRequest(
-            getEnvironmentsUri(environmentId),
-            sdkConfiguration,
-            serializeSafely(new UpdateEnvironmentRequest(name, resourceGroups, parameters))),
-        new int[]{200},
-        EnvironmentResponse.class);
+      "updateEnvironment",
+      environmentId.toString(),
+      client,
+      retryRegistry,
+      HttpUtils.buildPutRequest(
+        getEnvironmentsUri(environmentId),
+        sdkConfiguration,
+        serializeSafely(new UpdateEnvironmentRequest(name, resourceGroups, parameters))),
+      new int[]{200},
+      EnvironmentResponse.class);
   }
 
   @Override
@@ -88,45 +91,47 @@ public class RestEnvironmentService extends Service implements EnvironmentServic
     try {
 
       return executeRequestWithRetries(
-          "fetchEnvironment",
-          environmentId.toString(),
-          client,
-          retryRegistry,
-          HttpUtils.buildGetRequest(
-              getEnvironmentsUri(environmentId),
-              sdkConfiguration),
-          new int[]{200, 404},
-          EnvironmentResponse.class);
+        "fetchEnvironment",
+        environmentId.toString(),
+        client,
+        retryRegistry,
+        HttpUtils.buildGetRequest(
+          getEnvironmentsUri(environmentId),
+          sdkConfiguration),
+        new int[]{200, 404},
+        EnvironmentResponse.class);
     } catch (Exception e) {
       log.error("An unexpected error occurred while fetching the environment [id: '{}']. " +
-              "Please try again later or contact Fractal Cloud support if the issue persists.",
-          environmentId);
-      
+          "Please try again later or contact Fractal Cloud support if the issue persists.",
+        environmentId);
+
       System.exit(1);
-      
+
       return null;
-      
+
     }
   }
 
   @Override
   public void startAzureCloudAgentInitialization(
-      EnvironmentIdValue managementEnvironmentId,
-      EnvironmentIdValue environmentId,
-      UUID tenantId,
-      UUID subscriptionId,
-      AzureRegion region,
-      Map<String, String> tags) throws InstantiatorException {
+    EnvironmentIdValue managementEnvironmentId,
+    EnvironmentIdValue environmentId,
+    UUID tenantId,
+    UUID subscriptionId,
+    AzureRegion region,
+    Map<String, String> tags) throws InstantiatorException
+  {
     var azureSpClientId = sdkConfiguration.getAzureSpClientId();
     if (isBlank(azureSpClientId)) {
       throw new IllegalArgumentException(
-          String.format("The environment variable %s is required and it has not been defined", AZURE_SP_CLIENT_ID_KEY));
+        String.format("The environment variable %s is required and it has not been defined", AZURE_SP_CLIENT_ID_KEY));
     }
 
     var azureSpClientSecret = sdkConfiguration.getAzureSpClientSecret();
     if (isBlank(azureSpClientSecret)) {
       throw new IllegalArgumentException(
-          String.format("The environment variable %s is required and it has not been defined", AZURE_SP_CLIENT_SECRET_KEY));
+        String.format("The environment variable %s is required and it has not been defined",
+          AZURE_SP_CLIENT_SECRET_KEY));
     }
 
     Map<String, String> additionalHeaders = new HashMap<>();
@@ -134,47 +139,48 @@ public class RestEnvironmentService extends Service implements EnvironmentServic
     additionalHeaders.put(X_AZURE_SP_CLIENT_SECRET_HEADER, azureSpClientSecret);
 
     executeRequestWithRetries(
-        "InitializeAzureSubscription",
-        environmentId.toString(),
-        client,
-        retryRegistry,
-        HttpUtils.buildPostRequest(
-            getEnvironmentsUri(environmentId, "initializer/azure/initialize"),
-            sdkConfiguration,
-            serializeSafely(new AzureSubscriptionInitializationRequest(
-                managementEnvironmentId,
-                tenantId,
-                subscriptionId,
-                region.toString(),
-                tags)),
-            additionalHeaders),
-        new int[]{202},
-        EnvironmentResponse.class);
+      "InitializeAzureSubscription",
+      environmentId.toString(),
+      client,
+      retryRegistry,
+      HttpUtils.buildPostRequest(
+        getEnvironmentsUri(environmentId, "initializer/azure/initialize"),
+        sdkConfiguration,
+        serializeSafely(new AzureSubscriptionInitializationRequest(
+          managementEnvironmentId,
+          tenantId,
+          subscriptionId,
+          region.toString(),
+          tags)),
+        additionalHeaders),
+      new int[]{202},
+      EnvironmentResponse.class);
   }
 
   @Override
   public void startAwsCloudAgentInitialization(
-      EnvironmentIdValue environmentId,
-      String organizationId,
-      String accountId,
-      AwsRegion region,
-      Map<String, String> tags) throws InstantiatorException {
+    EnvironmentIdValue environmentId,
+    String organizationId,
+    String accountId,
+    AwsRegion region,
+    Map<String, String> tags) throws InstantiatorException
+  {
     var awsAccessKeyId = sdkConfiguration.getAwsAccessKeyId();
     if (isBlank(awsAccessKeyId)) {
       throw new IllegalArgumentException(
-          String.format("The environment variable %s is required and it has not been defined", AWS_ACCESS_KEY_ID_KEY));
+        String.format("The environment variable %s is required and it has not been defined", AWS_ACCESS_KEY_ID_KEY));
     }
 
     var awsSecretAccessKey = sdkConfiguration.getAwsSecretAccessKey();
     if (isBlank(awsSecretAccessKey)) {
       throw new IllegalArgumentException(
-          String.format("The environment variable %s is required and it has not been defined", AWS_SECRET_ACCESS_KEY));
+        String.format("The environment variable %s is required and it has not been defined", AWS_SECRET_ACCESS_KEY));
     }
 
     var awsSessionToken = sdkConfiguration.getAwsSessionToken();
     if (isBlank(awsSessionToken)) {
       throw new IllegalArgumentException(
-          String.format("The environment variable %s is required and it has not been defined", AWS_SESSION_TOKEN_KEY));
+        String.format("The environment variable %s is required and it has not been defined", AWS_SESSION_TOKEN_KEY));
     }
 
     Map<String, String> additionalHeaders = new HashMap<>();
@@ -183,40 +189,43 @@ public class RestEnvironmentService extends Service implements EnvironmentServic
     additionalHeaders.put(X_AWS_SESSION_TOKEN_HEADER, awsSessionToken);
 
     executeRequestWithRetries(
-        "InitializeAwsAccount",
-        environmentId.toString(),
-        client,
-        retryRegistry,
-        HttpUtils.buildPostRequest(
-            getEnvironmentsUri(environmentId, "initializer/aws/initialize"),
-            sdkConfiguration,
-            serializeSafely(new AwsAccountInitializationRequest(
-                organizationId,
-                accountId,
-                region.toString(),
-                tags)),
-            additionalHeaders),
-        new int[]{202},
-        EnvironmentResponse.class);
+      "InitializeAwsAccount",
+      environmentId.toString(),
+      client,
+      retryRegistry,
+      HttpUtils.buildPostRequest(
+        getEnvironmentsUri(environmentId, "initializer/aws/initialize"),
+        sdkConfiguration,
+        serializeSafely(new AwsAccountInitializationRequest(
+          organizationId,
+          accountId,
+          region.toString(),
+          tags)),
+        additionalHeaders),
+      new int[]{202},
+      EnvironmentResponse.class);
   }
 
   @Override
   public void startGcpCloudAgentInitialization(
-      EnvironmentIdValue environmentId,
-      String organizationId,
-      String projectId,
-      GcpRegion region,
-      Map<String, String> tags) throws InstantiatorException {
+    EnvironmentIdValue environmentId,
+    String organizationId,
+    String projectId,
+    GcpRegion region,
+    Map<String, String> tags) throws InstantiatorException
+  {
     var gcpServiceAccountEMail = sdkConfiguration.getGcpServiceAccountEMail();
     if (isBlank(gcpServiceAccountEMail)) {
       throw new IllegalArgumentException(
-          String.format("The environment variable %s is required and it has not been defined", GCP_SERVICE_ACCOUNT_EMAIL_KEY));
+        String.format("The environment variable %s is required and it has not been defined",
+          GCP_SERVICE_ACCOUNT_EMAIL_KEY));
     }
 
     var gcpServiceAccountCredentials = sdkConfiguration.getGcpServiceAccountCredentials();
     if (isBlank(gcpServiceAccountCredentials)) {
       throw new IllegalArgumentException(
-          String.format("The environment variable %s is required and it has not been defined", GCP_SERVICE_ACCOUNT_CREDENTIALS_KEY));
+        String.format("The environment variable %s is required and it has not been defined",
+          GCP_SERVICE_ACCOUNT_CREDENTIALS_KEY));
     }
 
     Map<String, String> additionalHeaders = new HashMap<>();
@@ -224,40 +233,43 @@ public class RestEnvironmentService extends Service implements EnvironmentServic
     additionalHeaders.put(X_GCP_SERVICE_ACCOUNT_CREDENTIALS_HEADER, gcpServiceAccountCredentials);
 
     executeRequestWithRetries(
-        "InitializeGcpProject",
-        environmentId.toString(),
-        client,
-        retryRegistry,
-        HttpUtils.buildPostRequest(
-            getEnvironmentsUri(environmentId, "initializer/gcp/initialize"),
-            sdkConfiguration,
-            serializeSafely(new GcpProjectInitializationRequest(
-                organizationId,
-                projectId,
-                region.toString(),
-                tags)),
-            additionalHeaders),
-        new int[]{202},
-        EnvironmentResponse.class);
+      "InitializeGcpProject",
+      environmentId.toString(),
+      client,
+      retryRegistry,
+      HttpUtils.buildPostRequest(
+        getEnvironmentsUri(environmentId, "initializer/gcp/initialize"),
+        sdkConfiguration,
+        serializeSafely(new GcpProjectInitializationRequest(
+          organizationId,
+          projectId,
+          region.toString(),
+          tags)),
+        additionalHeaders),
+      new int[]{202},
+      EnvironmentResponse.class);
   }
 
   @Override
   public void startOciCloudAgentInitialization(
-      EnvironmentIdValue environmentId,
-      String tenancyId,
-      String compartmentId,
-      OciRegion region,
-      Map<String, String> tags) throws InstantiatorException {
+    EnvironmentIdValue environmentId,
+    String tenancyId,
+    String compartmentId,
+    OciRegion region,
+    Map<String, String> tags) throws InstantiatorException
+  {
     var ociServiceAccountId = sdkConfiguration.getOciServiceAccountId();
     if (isBlank(ociServiceAccountId)) {
       throw new IllegalArgumentException(
-          String.format("The environment variable %s is required and it has not been defined", OCI_SERVICE_ACCOUNT_ID_KEY));
+        String.format("The environment variable %s is required and it has not been defined",
+          OCI_SERVICE_ACCOUNT_ID_KEY));
     }
 
     var ociServiceAccountCendentials = sdkConfiguration.getOciServiceAccountCendentials();
     if (isBlank(ociServiceAccountCendentials)) {
       throw new IllegalArgumentException(
-          String.format("The environment variable %s is required and it has not been defined", OCI_SERVICE_ACCOUNT_CREDENTIALS_KEY));
+        String.format("The environment variable %s is required and it has not been defined",
+          OCI_SERVICE_ACCOUNT_CREDENTIALS_KEY));
     }
 
     Map<String, String> additionalHeaders = new HashMap<>();
@@ -265,21 +277,21 @@ public class RestEnvironmentService extends Service implements EnvironmentServic
     additionalHeaders.put(X_OCI_SERVICE_ACCOUNT_CREDENTIALS_HEADER, ociServiceAccountCendentials);
 
     executeRequestWithRetries(
-        "InitializeOciProject",
-        environmentId.toString(),
-        client,
-        retryRegistry,
-        HttpUtils.buildPostRequest(
-            getEnvironmentsUri(environmentId, "initializer/oci/initialize"),
-            sdkConfiguration,
-            serializeSafely(new GcpProjectInitializationRequest(
-                tenancyId,
-                compartmentId,
-                region.toString(),
-                tags)),
-            additionalHeaders),
-        new int[]{202},
-        EnvironmentResponse.class);
+      "InitializeOciProject",
+      environmentId.toString(),
+      client,
+      retryRegistry,
+      HttpUtils.buildPostRequest(
+        getEnvironmentsUri(environmentId, "initializer/oci/initialize"),
+        sdkConfiguration,
+        serializeSafely(new GcpProjectInitializationRequest(
+          tenancyId,
+          compartmentId,
+          region.toString(),
+          tags)),
+        additionalHeaders),
+      new int[]{202},
+      EnvironmentResponse.class);
   }
 
   @Override
@@ -305,69 +317,78 @@ public class RestEnvironmentService extends Service implements EnvironmentServic
   @Override
   public SecretResponse[] getSecrets(EnvironmentIdValue environmentId) throws InstantiatorException {
     return executeRequestWithRetries(
-        "getSecrets",
-        environmentId.toString(),
-        client,
-        retryRegistry,
-        HttpUtils.buildGetRequest(
-            getSecretsUri(environmentId),
-            sdkConfiguration),
-        new int[]{200, 404},
-        SecretResponse[].class);
+      "getSecrets",
+      environmentId.toString(),
+      client,
+      retryRegistry,
+      HttpUtils.buildGetRequest(
+        getSecretsUri(environmentId),
+        sdkConfiguration),
+      new int[]{200, 404},
+      SecretResponse[].class);
   }
 
   @Override
-  public void createSecret(EnvironmentIdValue environmentId, String secretName, String secretValue) throws InstantiatorException {
+  public void createSecret(
+    EnvironmentIdValue environmentId,
+    String secretName,
+    String secretValue) throws InstantiatorException
+  {
     executeRequestWithRetries(
-        "createSecret",
-        client,
-        retryRegistry,
-        HttpUtils.buildPostRequest(
-            getSecretsUri(environmentId),
-            sdkConfiguration,
-            serializeSafely(new CreateSecretRequest(secretName, secretValue))),
-        new int[]{201});
+      "createSecret",
+      client,
+      retryRegistry,
+      HttpUtils.buildPostRequest(
+        getSecretsUri(environmentId),
+        sdkConfiguration,
+        serializeSafely(new CreateSecretRequest(secretName, secretValue))),
+      new int[]{201});
   }
 
   @Override
-  public void updateSecret(EnvironmentIdValue environmentId, String secretName, String secretValue) throws InstantiatorException {
+  public void updateSecret(
+    EnvironmentIdValue environmentId,
+    String secretName,
+    String secretValue) throws InstantiatorException
+  {
     executeRequestWithRetries(
-        "updateSecret",
-        client,
-        retryRegistry,
-        HttpUtils.buildPutRequest(
-            getSecretsUri(environmentId, secretName),
-            sdkConfiguration,
-            serializeSafely(new UpdateSecretRequest(secretValue))),
-        new int[]{200});
+      "updateSecret",
+      client,
+      retryRegistry,
+      HttpUtils.buildPutRequest(
+        getSecretsUri(environmentId, secretName),
+        sdkConfiguration,
+        serializeSafely(new UpdateSecretRequest(secretValue))),
+      new int[]{200});
   }
 
   @Override
   public void deleteSecret(EnvironmentIdValue environmentId, String secretName) throws InstantiatorException {
     executeRequestWithRetries(
-        "deleteSecret",
-        client,
-        retryRegistry,
-        HttpUtils.buildDeleteRequest(
-            getSecretsUri(environmentId, secretName),
-            sdkConfiguration),
-        new int[]{204});
+      "deleteSecret",
+      client,
+      retryRegistry,
+      HttpUtils.buildDeleteRequest(
+        getSecretsUri(environmentId, secretName),
+        sdkConfiguration),
+      new int[]{204});
   }
 
   private InitializationRunResponse fetchCurrentInitialization(
-      EnvironmentIdValue environmentId,
-      ProviderType provider) throws InstantiatorException {
+    EnvironmentIdValue environmentId,
+    ProviderType provider) throws InstantiatorException
+  {
     var providerStr = StringHelper.convertToTitleCase(provider.toString());
     var runRoot = executeRequestWithRetries(
-        String.format("fetchCurrent%sInitialization", providerStr),
-        environmentId.toString(),
-        client,
-        retryRegistry,
-        HttpUtils.buildGetRequest(
-            getEnvironmentsUri(environmentId, String.format("initializer/%s/status", providerStr.toLowerCase())),
-            sdkConfiguration),
-        new int[]{200, 404},
-        InitializationRunRoot.class);
+      String.format("fetchCurrent%sInitialization", providerStr),
+      environmentId.toString(),
+      client,
+      retryRegistry,
+      HttpUtils.buildGetRequest(
+        getEnvironmentsUri(environmentId, String.format("initializer/%s/status", providerStr.toLowerCase())),
+        sdkConfiguration),
+      new int[]{200, 404},
+      InitializationRunRoot.class);
 
     return runRoot == null ? null : runRoot.initializationRun();
   }
@@ -391,10 +412,10 @@ public class RestEnvironmentService extends Service implements EnvironmentServic
 
   private URI getEnvironmentsUri(EnvironmentIdValue environmentId, String path) {
     var basePath = String.format("%s/%s/%s/%s",
-        sdkConfiguration.getEnvironmentsEndpoint(),
-        environmentId.type(),
-        environmentId.ownerId(),
-        environmentId.shortName());
+      sdkConfiguration.getEnvironmentsEndpoint(),
+      environmentId.type(),
+      environmentId.ownerId(),
+      environmentId.shortName());
 
     return getUriWithOptionalPath(basePath, path);
   }
@@ -405,10 +426,10 @@ public class RestEnvironmentService extends Service implements EnvironmentServic
 
   private URI getEnvironmentsSecretsUri(EnvironmentIdValue environmentId, String path) {
     var basePath = String.format("%s/%s/%s/%s/secrets",
-        sdkConfiguration.getEnvironmentsEndpoint(),
-        environmentId.type(),
-        environmentId.ownerId(),
-        environmentId.shortName());
+      sdkConfiguration.getEnvironmentsEndpoint(),
+      environmentId.type(),
+      environmentId.ownerId(),
+      environmentId.shortName());
 
     return getUriWithOptionalPath(basePath, path);
   }

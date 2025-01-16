@@ -18,24 +18,21 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Getter
 public class ManagementEnvironment extends BaseEnvironment {
   private final static String OWNER_ID_IS_NULL = "Environment OwnerId has not been defined and it is required";
-
+  private final List<OperationalEnvironment> operationalEnvironments;
   @Setter(AccessLevel.PRIVATE)
   private EnvironmentIdValue id;
 
-  private final List<OperationalEnvironment> operationalEnvironments;
-
   public ManagementEnvironment() {
     operationalEnvironments = new ArrayList<>();
-  }
-
-  public EnvironmentDto toDto() {
-    return new EnvironmentDto(getId().toDto(), getParameters());
   }
 
   public static ManagementEnvironmentBuilder builder() {
     return new ManagementEnvironmentBuilder();
   }
 
+  public EnvironmentDto toDto() {
+    return new EnvironmentDto(getId().toDto(), getParameters());
+  }
 
   @Override
   public Collection<String> validate() {
@@ -61,7 +58,8 @@ public class ManagementEnvironment extends BaseEnvironment {
   }
 
   @SuppressWarnings("unchecked")
-  public static class ManagementEnvironmentBuilder extends EnvironmentBuilder<ManagementEnvironment, ManagementEnvironmentBuilder> { // Specify Builder type
+  public static class ManagementEnvironmentBuilder extends EnvironmentBuilder<ManagementEnvironment,
+    ManagementEnvironmentBuilder> { // Specify Builder type
 
     public ManagementEnvironmentBuilder withId(EnvironmentIdValue environmentId) {
       environment.setId(environmentId);
@@ -131,35 +129,35 @@ public class ManagementEnvironment extends BaseEnvironment {
         Map<String, Object> config = entry.getValue();
 
         CloudAgentEntity managementAgent = environment.getCloudAgentByProviderType().get(provider);
-        
-        if(managementAgent == null) {
+
+        if (managementAgent == null) {
           continue;
         }
 
         switch (provider) {
           case AWS:
             operationalEnvironment.registerAwsCloudAgent(
-                (AwsRegion) config.get("region"),
-                getPropertyFromManagementAgent(provider, "organizationId"),
-                (String) config.get("accountId"));
+              (AwsRegion) config.get("region"),
+              getPropertyFromManagementAgent(provider, "organizationId"),
+              (String) config.get("accountId"));
             break;
           case AZURE:
             operationalEnvironment.registerAzureCloudAgent(
-                (AzureRegion) config.get("region"),
-                getPropertyFromManagementAgent(provider, "tenantId"),
-                (UUID) config.get("subscriptionId"));
+              (AzureRegion) config.get("region"),
+              getPropertyFromManagementAgent(provider, "tenantId"),
+              (UUID) config.get("subscriptionId"));
             break;
           case GCP:
             operationalEnvironment.registerGcpCloudAgent(
-                (GcpRegion) config.get("region"),
-                getPropertyFromManagementAgent(provider, "organizationId"),
-                (String) config.get("projectId"));
+              (GcpRegion) config.get("region"),
+              getPropertyFromManagementAgent(provider, "organizationId"),
+              (String) config.get("projectId"));
             break;
           case OCI:
             operationalEnvironment.registerOciCloudAgent(
-                (OciRegion) config.get("region"),
-                getPropertyFromManagementAgent(provider, "tenancyId"),
-                (String) config.get("compartmentId"));
+              (OciRegion) config.get("region"),
+              getPropertyFromManagementAgent(provider, "tenancyId"),
+              (String) config.get("compartmentId"));
             break;
           default:
             throw new IllegalArgumentException("Unsupported cloud provider: " + provider);
@@ -177,10 +175,11 @@ public class ManagementEnvironment extends BaseEnvironment {
       try {
         var field = cloudAgent.getClass().getDeclaredField(propertyName);
         field.setAccessible(true);
-        
+
         return (T) field.get(cloudAgent);
       } catch (NoSuchFieldException | IllegalAccessException e) {
-        throw new RuntimeException("Error getting property " + propertyName + " from " + providerType + " Cloud Agent", e);
+        throw new RuntimeException("Error getting property " + propertyName + " from " + providerType + " Cloud " +
+          "Agent", e);
       }
     }
   }

@@ -34,7 +34,8 @@ public class AzureFilesIdentityBasedAuthentication {
      * <pre>Required if directoryServiceOptions are AD, optional if they are AADKERB.</pre>
      */
     public AzureFilesIdentityBasedAuthenticationBuilder withActiveDirectoryProperties(
-        AzureActiveDirectoryProperties activeDirectoryProperties) {
+      AzureActiveDirectoryProperties activeDirectoryProperties)
+    {
       azureFilesIdentityBasedAuthentication.setActiveDirectoryProperties(activeDirectoryProperties);
       return builder;
     }
@@ -43,7 +44,8 @@ public class AzureFilesIdentityBasedAuthentication {
      * <pre>Default share permission for users using Kerberos authentication if RBAC role is not assigned.</pre>
      */
     public AzureFilesIdentityBasedAuthenticationBuilder withDefaultSharePermission(
-        AzureDefaultSharePermission defaultSharePermission) {
+      AzureDefaultSharePermission defaultSharePermission)
+    {
       azureFilesIdentityBasedAuthentication.setDefaultSharePermission(defaultSharePermission);
       return builder;
     }
@@ -52,7 +54,8 @@ public class AzureFilesIdentityBasedAuthentication {
      * <pre>Indicates the directory service used. Note that this enum may be extended in the future.</pre>
      */
     public AzureFilesIdentityBasedAuthenticationBuilder withDirectoryServiceOptions(
-        AzureDirectoryServiceOptions directoryServiceOptions) {
+      AzureDirectoryServiceOptions directoryServiceOptions)
+    {
       azureFilesIdentityBasedAuthentication.setDirectoryServiceOptions(directoryServiceOptions);
       return builder;
     }

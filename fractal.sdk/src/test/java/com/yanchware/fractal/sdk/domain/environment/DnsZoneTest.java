@@ -18,40 +18,44 @@ class DnsZoneTest {
   @Test
   public void validationError_when_NameIsNull() {
     assertThatThrownBy(() -> DnsZone.builder().withName(null).build())
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("[DnsZone Validation] The name must contain no more than 253 characters");
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("[DnsZone Validation] The name must contain no more than 253 characters");
   }
 
   @Test
   public void validationError_when_NameWithoutPeriod() {
     assertThatThrownBy(() -> DnsZone.builder().withName("NameWithoutPeriod").build())
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("[DnsZone Validation] The name must contain no more than 253 characters");
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("[DnsZone Validation] The name must contain no more than 253 characters");
   }
 
   @Test
   public void validationError_when_NameTooLong() {
     assertThatThrownBy(() -> DnsZone.builder()
-        .withName("NameTooLong.NameTooLongNameTooLong.NameTooLongNameTooLong.NameTooLongNameTooLong.NameTooLongNameTooLong.NameTooLongNameTooLong.NameTooLongNameTooLong.NameTooLongNameTooLong.NameTooLongNameTooLong.NameTooLongNameTooLong.NameTooLongNameTooLong.NameTooLongNameTooLong")
-        .build())
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("[DnsZone Validation] The name must contain no more than 253 characters");
+      .withName("NameTooLong.NameTooLongNameTooLong.NameTooLongNameTooLong.NameTooLongNameTooLong" +
+        ".NameTooLongNameTooLong.NameTooLongNameTooLong.NameTooLongNameTooLong.NameTooLongNameTooLong" +
+        ".NameTooLongNameTooLong.NameTooLongNameTooLong.NameTooLongNameTooLong.NameTooLongNameTooLong")
+      .build())
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("[DnsZone Validation] The name must contain no more than 253 characters");
   }
 
   @Test
   public void noValidationErrors_when_NameIs254CharsWithTrailingPeriod() {
     assertThat(DnsZone.builder()
-        .withName("NameTooLong.NameTooLongNameTooLong.NameTooLongNameTooLong.NameTooLongNameTooLong.NameTooLongNameTooLong.NameTooLongNameTooLong.NameTooLongNameTooLong.NameTooLongNameTooLong.NameTooLongNameTooLong.NameTooLongNameTooLong.NameTooLongNameTooLong.NameTooLong.")
-        .build()
-        .validate()).isEmpty();
+      .withName("NameTooLong.NameTooLongNameTooLong.NameTooLongNameTooLong.NameTooLongNameTooLong" +
+        ".NameTooLongNameTooLong.NameTooLongNameTooLong.NameTooLongNameTooLong.NameTooLongNameTooLong" +
+        ".NameTooLongNameTooLong.NameTooLongNameTooLong.NameTooLongNameTooLong.NameTooLong.")
+      .build()
+      .validate()).isEmpty();
   }
 
   @Test
   public void noValidationErrors_when_NameEndsWithPeriod() {
     assertThat(DnsZone.builder()
-        .withName("fractal.cloud.")
-        .build()
-        .validate()).isEmpty();
+      .withName("fractal.cloud.")
+      .build()
+      .validate()).isEmpty();
   }
 
   @Test
@@ -61,16 +65,16 @@ class DnsZoneTest {
     var isDnsZonePrivate = true;
 
     var dnsRecords = Map.of("componentId", List.of(
-        DnsAaaaRecord.builder()
-            .withName("aaaaRecord")
-            .withIpV6Address("2001:db8:3333:4444:5555:6666:7777:8888")
-            .withTtl(Duration.ofMinutes(1))
-            .build(),
-        DnsPtrRecord.builder()
-            .withName("name")
-            .withDomainNames(List.of(""))
-            .withTtl(Duration.ofMinutes(1))
-            .build()
+      DnsAaaaRecord.builder()
+        .withName("aaaaRecord")
+        .withIpV6Address("2001:db8:3333:4444:5555:6666:7777:8888")
+        .withTtl(Duration.ofMinutes(1))
+        .build(),
+      DnsPtrRecord.builder()
+        .withName("name")
+        .withDomainNames(List.of(""))
+        .withTtl(Duration.ofMinutes(1))
+        .build()
     ));
 
     var parametersMap = new HashMap<String, Object>();
@@ -78,12 +82,12 @@ class DnsZoneTest {
     parametersMap.put("subscriptionId", "/subscription/id");
 
     var dnsZone = DnsZone
-        .builder()
-        .withName(dnsZoneName)
-        .withRecords(dnsRecords)
-        .withParameters(parametersMap)
-        .isPrivate(isDnsZonePrivate)
-        .build();
+      .builder()
+      .withName(dnsZoneName)
+      .withRecords(dnsRecords)
+      .withParameters(parametersMap)
+      .isPrivate(isDnsZonePrivate)
+      .build();
 
     assertThat(dnsZone.getName()).isEqualTo(dnsZoneName);
     assertThat(dnsZone.isPrivate()).isEqualTo(isDnsZonePrivate);

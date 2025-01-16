@@ -22,23 +22,27 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 public class OperationalEnvironment extends BaseEnvironment {
   @JsonIgnore
   private final Map<ProviderType, Map<String, Object>> cloudProviders = new HashMap<>();
-  
+
   @Setter(AccessLevel.PROTECTED)
   private EnvironmentIdValue managementEnvironmentId;
-  
+
 
   @Setter(AccessLevel.PRIVATE)
   private String shortName;
 
+  public static OperationalEnvironmentBuilder builder() {
+    return new OperationalEnvironmentBuilder();
+  }
+
   @Override
   public EnvironmentIdValue getId() {
-    if(this.managementEnvironmentId == null) {
+    if (this.managementEnvironmentId == null) {
       return null;
     }
-    
+
     return new EnvironmentIdValue(managementEnvironmentId.type(),
-        managementEnvironmentId.ownerId(),
-        shortName);
+      managementEnvironmentId.ownerId(),
+      shortName);
   }
 
   @Override
@@ -64,11 +68,8 @@ public class OperationalEnvironment extends BaseEnvironment {
     return errors;
   }
 
-  public static OperationalEnvironmentBuilder builder() {
-    return new OperationalEnvironmentBuilder();
-  }
-
-  public static class OperationalEnvironmentBuilder extends EnvironmentBuilder<OperationalEnvironment, OperationalEnvironmentBuilder> {
+  public static class OperationalEnvironmentBuilder extends EnvironmentBuilder<OperationalEnvironment,
+    OperationalEnvironmentBuilder> {
 
     public OperationalEnvironmentBuilder withShortName(String shortName) {
       environment.setShortName(shortName);

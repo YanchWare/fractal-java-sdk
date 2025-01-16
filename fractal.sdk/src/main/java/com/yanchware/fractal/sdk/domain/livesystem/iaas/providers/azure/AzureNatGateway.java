@@ -17,13 +17,13 @@ import java.util.Map;
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
 public class AzureNatGateway extends IaaSNatGateway implements AzureResourceEntity, LiveSystemComponent {
-    private AzureRegion azureRegion;
-    private AzureResourceGroup azureResourceGroup;
-    private Map<String, String> tags;
+  private AzureRegion azureRegion;
+  private AzureResourceGroup azureResourceGroup;
+  private Map<String, String> tags;
 
-    @Override
-    public ProviderType getProvider() {
-        return ProviderType.AZURE;
-    }
+  @Override
+  public ProviderType getProvider() {
+    return ProviderType.AZURE;
+  }
 
 }

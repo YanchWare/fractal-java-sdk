@@ -23,11 +23,11 @@ public class LiveSystemTest {
   @BeforeEach
   public void setup() {
     factory = new LiveSystemsFactory(
-            HttpClient.newBuilder().build(),
-            new LocalSdkConfiguration(""),
-            RetryRegistry.ofDefaults());
+      HttpClient.newBuilder().build(),
+      new LocalSdkConfiguration(""),
+      RetryRegistry.ofDefaults());
   }
-  
+
   @Test
   public void multipleValidationErrors_when_liveSystemHasNoFields() {
     assertThatThrownBy(() -> factory.builder().build()).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll("Id has not been defined");
@@ -71,10 +71,10 @@ public class LiveSystemTest {
   @Test
   public void multipleValidationErrors_when_liveSystemHasNoComponents() {
     assertThatThrownBy(() -> factory.builder()
-            .withId(new LiveSystemIdValue("res/group", "ls"))
-            .withStandardProvider(ProviderType.AWS)
-            .build().instantiate()).isInstanceOf(InstantiatorException.class)
-            .hasMessageContaining("Components list is null or empty and at least one component is required");
+      .withId(new LiveSystemIdValue("res/group", "ls"))
+      .withStandardProvider(ProviderType.AWS)
+      .build().instantiate()).isInstanceOf(InstantiatorException.class)
+      .hasMessageContaining("Components list is null or empty and at least one component is required");
   }
 
   @Test
@@ -84,11 +84,11 @@ public class LiveSystemTest {
 
   private LiveSystemAggregate generateBuilder() {
     return factory.builder()
-        .withId(new LiveSystemIdValue("res/group", "ls"))
-        .withStandardProvider(ProviderType.AZURE)
-        .withComponent(
-            getDefaultAks()
-                .build())
-        .build();
+      .withId(new LiveSystemIdValue("res/group", "ls"))
+      .withStandardProvider(ProviderType.AZURE)
+      .withComponent(
+        getDefaultAks()
+          .build())
+      .build();
   }
 }

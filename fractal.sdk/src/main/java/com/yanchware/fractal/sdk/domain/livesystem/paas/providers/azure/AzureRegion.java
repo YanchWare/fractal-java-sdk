@@ -9,7 +9,7 @@ import java.util.Collection;
  * Choose the Azure region that's right for you and your customers
  */
 public final class AzureRegion extends ExtendableEnum<AzureRegion> {
- 
+
   public static final AzureRegion EAST_US = fromString("eastus");
   public static final AzureRegion SOUTH_CENTRAL_US = fromString("southcentralus");
   public static final AzureRegion WEST_US2 = fromString("westus2");

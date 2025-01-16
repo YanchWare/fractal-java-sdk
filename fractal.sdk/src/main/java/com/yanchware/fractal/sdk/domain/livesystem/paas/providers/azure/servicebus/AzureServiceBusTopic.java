@@ -31,6 +31,21 @@ public class AzureServiceBusTopic extends PaaSMessageEntity implements LiveSyste
   protected AzureServiceBusTopic() {
   }
 
+  public static AzureServiceBusQueueBuilder builder() {
+    return new AzureServiceBusQueueBuilder();
+  }
+
+  @Override
+  public Collection<String> validate() {
+    Collection<String> errors = super.validate();
+    return errors;
+  }
+
+  @Override
+  public ProviderType getProvider() {
+    return ProviderType.AZURE;
+  }
+
   public static class AzureServiceBusQueueBuilder extends Builder<AzureServiceBusTopic, AzureServiceBusQueueBuilder> {
 
     @Override
@@ -45,6 +60,7 @@ public class AzureServiceBusTopic extends PaaSMessageEntity implements LiveSyste
 
     /**
      * Idle after which the topic is automatically deleted
+     *
      * @param autoDeleteOnIdle
      */
     public AzureServiceBusQueueBuilder withAutoDeleteOnIdle(Duration autoDeleteOnIdle) {
@@ -54,6 +70,7 @@ public class AzureServiceBusTopic extends PaaSMessageEntity implements LiveSyste
 
     /**
      * Duration after which the message expires
+     *
      * @param defaultMessageTimeToLive
      */
     public AzureServiceBusQueueBuilder withDefaultMessageTimeToLive(Duration defaultMessageTimeToLive) {
@@ -63,6 +80,7 @@ public class AzureServiceBusTopic extends PaaSMessageEntity implements LiveSyste
 
     /**
      * Duration of duplicate detection history
+     *
      * @param duplicateDetectionHistoryTimeWindow
      */
     public AzureServiceBusQueueBuilder withDuplicateDetectionHistoryTimeWindow(Duration duplicateDetectionHistoryTimeWindow) {
@@ -72,6 +90,7 @@ public class AzureServiceBusTopic extends PaaSMessageEntity implements LiveSyste
 
     /**
      * Indicates if Express Entities are enabled
+     *
      * @param enableExpress
      */
     public AzureServiceBusQueueBuilder withEnableExpress(Boolean enableExpress) {
@@ -81,6 +100,7 @@ public class AzureServiceBusTopic extends PaaSMessageEntity implements LiveSyste
 
     /**
      * Indicates if batched operations are enabled
+     *
      * @param enableBatchedOperations
      */
     public AzureServiceBusQueueBuilder withEnableBatchedOperations(Boolean enableBatchedOperations) {
@@ -90,6 +110,7 @@ public class AzureServiceBusTopic extends PaaSMessageEntity implements LiveSyste
 
     /**
      * Indicates if the topic will be partitioned across multiple message brokers
+     *
      * @param enablePartitioning
      */
     public AzureServiceBusQueueBuilder withEnablePartitioning(Boolean enablePartitioning) {
@@ -99,6 +120,7 @@ public class AzureServiceBusTopic extends PaaSMessageEntity implements LiveSyste
 
     /**
      * Maximum size of the topic in megabytes
+     *
      * @param maxSizeInMegabytes
      */
     public AzureServiceBusQueueBuilder withMaxSizeInMegabytes(Integer maxSizeInMegabytes) {
@@ -108,6 +130,7 @@ public class AzureServiceBusTopic extends PaaSMessageEntity implements LiveSyste
 
     /**
      * Maximum size of message payload in kilobytes
+     *
      * @param maxMessageSizeInKilobytes
      */
     public AzureServiceBusQueueBuilder withMaxMessageSizeInKilobytes(Long maxMessageSizeInKilobytes) {
@@ -117,6 +140,7 @@ public class AzureServiceBusTopic extends PaaSMessageEntity implements LiveSyste
 
     /**
      * Indicates if the topic requires duplicate detection
+     *
      * @param requiresDuplicateDetection
      */
     public AzureServiceBusQueueBuilder withRequiresDuplicateDetection(Boolean requiresDuplicateDetection) {
@@ -126,6 +150,7 @@ public class AzureServiceBusTopic extends PaaSMessageEntity implements LiveSyste
 
     /**
      * Indicates if the topic supports ordering
+     *
      * @param supportOrdering
      */
     public AzureServiceBusQueueBuilder withSupportOrdering(Boolean supportOrdering) {
@@ -138,20 +163,5 @@ public class AzureServiceBusTopic extends PaaSMessageEntity implements LiveSyste
       component.setType(PAAS_SERVICE_BUS_TOPIC);
       return super.build();
     }
-  }
-
-  @Override
-  public Collection<String> validate() {
-    Collection<String> errors = super.validate();
-    return errors;
-  }
-
-  @Override
-  public ProviderType getProvider() {
-    return ProviderType.AZURE;
-  }
-
-  public static AzureServiceBusQueueBuilder builder() {
-    return new AzureServiceBusQueueBuilder();
   }
 }

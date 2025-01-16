@@ -1,4 +1,3 @@
-
 package com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure;
 
 import com.yanchware.fractal.sdk.TestWithFixture;
@@ -20,19 +19,20 @@ public abstract class CosmosEntityTest<T extends AzureCosmosEntityBuilder<? exte
   @Test
   public void exceptionThrown_when_componentBuiltWithEmptyValues() {
     assertThat(AzureCosmosEntity.validateCosmosEntity(getBuilder().withId("a-legal-id").build()))
-        .isNotEmpty()
-        .anyMatch(x -> x.contains("Region has not been defined and it is required"));
+      .isNotEmpty()
+      .anyMatch(x -> x.contains("Region has not been defined and it is required"));
   }
 
   @Test
   public void exceptionThrown_when_throughputLargerThanMaxThroughput() {
     assertThat(AzureCosmosEntity.validateCosmosEntity(getBuilder()
-        .withId("a-legal-id")
-        .withMaxThroughput(a(Integer.class))
-        .withThroughput(a(Integer.class))
-        .build()))
-        .isNotEmpty()
-        .anyMatch(x -> x.contains("Defined both throughput and max throughput. Only one of them can be defined and not both"));
+      .withId("a-legal-id")
+      .withMaxThroughput(a(Integer.class))
+      .withThroughput(a(Integer.class))
+      .build()))
+      .isNotEmpty()
+      .anyMatch(x -> x.contains("Defined both throughput and max throughput. Only one of them can be defined and not " +
+        "both"));
   }
 
   @Test
@@ -40,31 +40,33 @@ public abstract class CosmosEntityTest<T extends AzureCosmosEntityBuilder<? exte
     var cosmosAccount = String.format("comp-%s", a(String.class));
     var throughput = a(Integer.class);
     var builder = getBuilder()
-        .withId("a-legal-id")
-        .withName("a-legal-name")
-        .withCosmosAccount(ComponentId.from(cosmosAccount))
-        .withMaxThroughput(throughput + 1)
-        .withThroughput(throughput);
+      .withId("a-legal-id")
+      .withName("a-legal-name")
+      .withCosmosAccount(ComponentId.from(cosmosAccount))
+      .withMaxThroughput(throughput + 1)
+      .withThroughput(throughput);
 
     var component = builder.build();
 
     assertThat(component.getType()).isEqualTo(getExpectedType());
     assertThat(component)
-        .asInstanceOf(InstanceOfAssertFactories.type(AzureCosmosEntity.class))
-        .extracting(AzureCosmosEntity::getMaxThroughput, AzureCosmosEntity::getThroughput)
-        .containsExactly(throughput + 1, throughput);
+      .asInstanceOf(InstanceOfAssertFactories.type(AzureCosmosEntity.class))
+      .extracting(AzureCosmosEntity::getMaxThroughput, AzureCosmosEntity::getThroughput)
+      .containsExactly(throughput + 1, throughput);
   }
 
   @Test
   public void exceptionThrown_when_nameIsToLong() {
     var throughput = a(Integer.class);
     assertThat(AzureCosmosEntity.validateCosmosEntity(getBuilder()
-        .withId("a-legal-id")
-        .withName("MaximumLengthOfDatabaseOrContainerName_MaximumLengthOfDatabaseOrContainerName_MaximumLengthOfDatabaseOrContainerName_MaximumLengthOfDatabaseOrContainerName_MaximumLengthOfDatabaseOrContainerName_MaximumLengthOfDatabaseOrContainerName_MaximumLengthOfDatabaseOrContainerName")
-        .withMaxThroughput(throughput + 1)
-        .withThroughput(throughput)
-        .build()))
-        .isNotEmpty()
-        .anyMatch(x -> x.contains("The Name is invalid. Ensure to provide a unique non-empty string less than '255' characters"));
+      .withId("a-legal-id")
+      .withName(
+        "MaximumLengthOfDatabaseOrContainerName_MaximumLengthOfDatabaseOrContainerName_MaximumLengthOfDatabaseOrContainerName_MaximumLengthOfDatabaseOrContainerName_MaximumLengthOfDatabaseOrContainerName_MaximumLengthOfDatabaseOrContainerName_MaximumLengthOfDatabaseOrContainerName")
+      .withMaxThroughput(throughput + 1)
+      .withThroughput(throughput)
+      .build()))
+      .isNotEmpty()
+      .anyMatch(x -> x.contains("The Name is invalid. Ensure to provide a unique non-empty string less than '255' " +
+        "characters"));
   }
 }

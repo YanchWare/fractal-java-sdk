@@ -42,7 +42,8 @@ public class EnvVarSdkConfiguration implements SdkConfiguration {
 
   /**
    * Gets the BOT client ID or Cloud Agent Client ID from environment variables.
-   * The environment variable key is {@value com.yanchware.fractal.sdk.configuration.Constants#CI_CD_SERVICE_ACCOUNT_NAME_KEY}.
+   * The environment variable key is
+   * {@value com.yanchware.fractal.sdk.configuration.Constants#CI_CD_SERVICE_ACCOUNT_NAME_KEY}.
    *
    * @return the BOT client ID or Cloud Agent Client ID
    * @throws IllegalArgumentException if the client ID environment variable is not set
@@ -52,14 +53,16 @@ public class EnvVarSdkConfiguration implements SdkConfiguration {
     var clientId = System.getenv(CI_CD_SERVICE_ACCOUNT_NAME_KEY);
     if (isBlank(clientId)) {
       throw new IllegalArgumentException(
-          String.format("The environment variable %s is required and it has not been defined", CI_CD_SERVICE_ACCOUNT_NAME_KEY));
+        String.format("The environment variable %s is required and it has not been defined",
+          CI_CD_SERVICE_ACCOUNT_NAME_KEY));
     }
     return clientId;
   }
 
   /**
    * Gets the BOT client secret or Cloud Agent Client secret from environment variables.
-   * The environment variable key is {@value com.yanchware.fractal.sdk.configuration.Constants#CI_CD_SERVICE_ACCOUNT_SECRET_KEY}.
+   * The environment variable key is
+   * {@value com.yanchware.fractal.sdk.configuration.Constants#CI_CD_SERVICE_ACCOUNT_SECRET_KEY}.
    *
    * @return the BOT client secret or Cloud Agent Client secret
    * @throws IllegalArgumentException if the client secret environment variable is not set
@@ -69,7 +72,8 @@ public class EnvVarSdkConfiguration implements SdkConfiguration {
     var clientSecret = System.getenv(CI_CD_SERVICE_ACCOUNT_SECRET_KEY);
     if (isBlank(clientSecret)) {
       throw new IllegalArgumentException(
-          String.format("The environment variable %s is required and it has not been defined", CI_CD_SERVICE_ACCOUNT_SECRET_KEY));
+        String.format("The environment variable %s is required and it has not been defined",
+          CI_CD_SERVICE_ACCOUNT_SECRET_KEY));
     }
     return clientSecret;
   }
@@ -87,7 +91,8 @@ public class EnvVarSdkConfiguration implements SdkConfiguration {
 
   /**
    * Gets the Azure service principal client secret from environment variables.
-   * The environment variable key is {@value com.yanchware.fractal.sdk.configuration.Constants#AZURE_SP_CLIENT_SECRET_KEY}.
+   * The environment variable key is
+   * {@value com.yanchware.fractal.sdk.configuration.Constants#AZURE_SP_CLIENT_SECRET_KEY}.
    *
    * @return the Azure service principal client secret
    */
@@ -120,7 +125,8 @@ public class EnvVarSdkConfiguration implements SdkConfiguration {
 
   /**
    * Gets the URI of the environments endpoint from environment variables or default.
-   * The environment variable key is {@value com.yanchware.fractal.sdk.configuration.Constants#ENVIRONMENTS_ENDPOINT_KEY}.
+   * The environment variable key is
+   * {@value com.yanchware.fractal.sdk.configuration.Constants#ENVIRONMENTS_ENDPOINT_KEY}.
    *
    * @return the URI of the environments endpoint
    */
@@ -164,7 +170,8 @@ public class EnvVarSdkConfiguration implements SdkConfiguration {
 
   /**
    * Gets the GCP service account email from environment variables.
-   * The environment variable key is {@value com.yanchware.fractal.sdk.configuration.Constants#GCP_SERVICE_ACCOUNT_EMAIL_KEY}.
+   * The environment variable key is
+   * {@value com.yanchware.fractal.sdk.configuration.Constants#GCP_SERVICE_ACCOUNT_EMAIL_KEY}.
    *
    * @return the GCP service account email
    */
@@ -175,7 +182,8 @@ public class EnvVarSdkConfiguration implements SdkConfiguration {
 
   /**
    * Gets the GCP service account credentials from environment variables.
-   * The environment variable key is {@value com.yanchware.fractal.sdk.configuration.Constants#GCP_SERVICE_ACCOUNT_CREDENTIALS_KEY}.
+   * The environment variable key is
+   * {@value com.yanchware.fractal.sdk.configuration.Constants#GCP_SERVICE_ACCOUNT_CREDENTIALS_KEY}.
    *
    * @return the GCP service account credentials
    */
@@ -186,7 +194,8 @@ public class EnvVarSdkConfiguration implements SdkConfiguration {
 
   /**
    * Gets the OCI service account ID from environment variables.
-   * The environment variable key is {@value com.yanchware.fractal.sdk.configuration.Constants#OCI_SERVICE_ACCOUNT_ID_KEY}.
+   * The environment variable key is
+   * {@value com.yanchware.fractal.sdk.configuration.Constants#OCI_SERVICE_ACCOUNT_ID_KEY}.
    *
    * @return the OCI service account ID
    */
@@ -197,7 +206,8 @@ public class EnvVarSdkConfiguration implements SdkConfiguration {
 
   /**
    * Gets the OCI service account credentials from environment variables.
-   * The environment variable key is {@value com.yanchware.fractal.sdk.configuration.Constants#OCI_SERVICE_ACCOUNT_CREDENTIALS_KEY}.
+   * The environment variable key is
+   * {@value com.yanchware.fractal.sdk.configuration.Constants#OCI_SERVICE_ACCOUNT_CREDENTIALS_KEY}.
    *
    * @return the OCI service account credentials
    */

@@ -14,30 +14,50 @@ import java.util.Map;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 /*
-  Private key certificates (.pfx) can be used for TLS/SSL bindings and can be loaded to the certificate store for your app to consume. 
+  Private key certificates (.pfx) can be used for TLS/SSL bindings and can be loaded to the certificate store for
+  your app to consume.
  */
 @Getter
 @NoArgsConstructor
 public class AzureKeyVaultCertificate extends AzureProxyResource implements Validatable {
-  private final static String KEY_VAULT_ID_IS_BLANK = "[AzureKeyVaultCertificate Validation] KeyVaultId has not been defined and it is required";
-  private final static String NAME_IS_BLANK = "[AzureKeyVaultCertificate Validation] Name has not been defined and it is required";
-  
+  private final static String KEY_VAULT_ID_IS_BLANK = "[AzureKeyVaultCertificate Validation] KeyVaultId has not been " +
+    "defined and it is required";
+  private final static String NAME_IS_BLANK = "[AzureKeyVaultCertificate Validation] Name has not been defined and it" +
+    " is required";
+
   private String keyVaultId;
   private String password;
 
-  public AzureKeyVaultCertificate(String name,
-                                  AzureRegion region,
-                                  Map<String, String> tags,
-                                  String keyVaultId,
-                                  String password) {
+  public AzureKeyVaultCertificate(
+    String name,
+    AzureRegion region,
+    Map<String, String> tags,
+    String keyVaultId,
+    String password)
+  {
     super(name, region, tags);
-    
+
     this.keyVaultId = keyVaultId;
     this.password = password;
   }
 
   public static Builder builder() {
     return new Builder();
+  }
+
+  @Override
+  public Collection<String> validate() {
+    Collection<String> errors = new ArrayList<>();
+
+    if (isBlank(keyVaultId)) {
+      errors.add(KEY_VAULT_ID_IS_BLANK);
+    }
+
+    if (isBlank(getName())) {
+      errors.add(NAME_IS_BLANK);
+    }
+
+    return errors;
   }
 
   public static class Builder extends AzureProxyResource.Builder<Builder> {
@@ -55,34 +75,18 @@ public class AzureKeyVaultCertificate extends AzureProxyResource implements Vali
     }
 
     @Override
-    public AzureKeyVaultCertificate build(){
+    public AzureKeyVaultCertificate build() {
       var certificate = new AzureKeyVaultCertificate(name, region, tags, keyVaultId, password);
       Collection<String> errors = certificate.validate();
 
       if (!errors.isEmpty()) {
         throw new IllegalArgumentException(String.format(
-            "AzureKeyVaultCertificate validation failed. Errors: %s",
-            Arrays.toString(errors.toArray())));
+          "AzureKeyVaultCertificate validation failed. Errors: %s",
+          Arrays.toString(errors.toArray())));
       }
 
       return certificate;
     }
 
-  }
-
-
-  @Override
-  public Collection<String> validate() {
-    Collection<String> errors = new ArrayList<>();
-
-    if (isBlank(keyVaultId)) {
-      errors.add(KEY_VAULT_ID_IS_BLANK);
-    }
-
-    if (isBlank(getName())) {
-      errors.add(NAME_IS_BLANK);
-    }
-
-    return errors;
   }
 }

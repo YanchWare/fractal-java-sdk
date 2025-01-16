@@ -10,23 +10,23 @@ public class AzureStorageAccountKeySourceTest {
   @Test
   public void azureStorageAccountKeySourceConstants_shouldNotBeNull() {
     assertThat(AzureStorageAccountKeySource.MICROSOFT_STORAGE)
-        .as("MICROSOFT_STORAGE constant should not be null")
-        .isNotNull();
+      .as("MICROSOFT_STORAGE constant should not be null")
+      .isNotNull();
 
     assertThat(AzureStorageAccountKeySource.MICROSOFT_KEYVAULT)
-        .as("MICROSOFT_KEYVAULT constant should not be null")
-        .isNotNull();
+      .as("MICROSOFT_KEYVAULT constant should not be null")
+      .isNotNull();
   }
 
   @Test
   public void fromString_shouldReturnCorrespondingAzureStorageAccountKeySource() {
     assertThat(AzureStorageAccountKeySource.fromString("Microsoft.Storage"))
-        .as("fromString should return MICROSOFT_STORAGE for 'Microsoft.Storage'")
-        .isEqualTo(AzureStorageAccountKeySource.MICROSOFT_STORAGE);
+      .as("fromString should return MICROSOFT_STORAGE for 'Microsoft.Storage'")
+      .isEqualTo(AzureStorageAccountKeySource.MICROSOFT_STORAGE);
 
     assertThat(AzureStorageAccountKeySource.fromString("Microsoft.Keyvault"))
-        .as("fromString should return MICROSOFT_KEYVAULT for 'Microsoft.Keyvault'")
-        .isEqualTo(AzureStorageAccountKeySource.MICROSOFT_KEYVAULT);
+      .as("fromString should return MICROSOFT_KEYVAULT for 'Microsoft.Keyvault'")
+      .isEqualTo(AzureStorageAccountKeySource.MICROSOFT_KEYVAULT);
   }
 
   @Test
@@ -34,8 +34,8 @@ public class AzureStorageAccountKeySourceTest {
     Collection<AzureStorageAccountKeySource> values = AzureStorageAccountKeySource.values();
 
     assertThat(values)
-        .as("Values should contain MICROSOFT_STORAGE, and MICROSOFT_KEYVAULT and have exactly 2 values")
-        .containsExactlyInAnyOrder(AzureStorageAccountKeySource.MICROSOFT_STORAGE,
-            AzureStorageAccountKeySource.MICROSOFT_KEYVAULT);
+      .as("Values should contain MICROSOFT_STORAGE, and MICROSOFT_KEYVAULT and have exactly 2 values")
+      .containsExactlyInAnyOrder(AzureStorageAccountKeySource.MICROSOFT_STORAGE,
+        AzureStorageAccountKeySource.MICROSOFT_KEYVAULT);
   }
 }

@@ -18,51 +18,49 @@ import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_COSMOS_
 @Getter
 @Setter
 @ToString(callSuper = true)
-public class AzureCosmosPostgreSqlDatabase extends PaaSRelationalDatabase implements LiveSystemComponent, AzureCosmosEntity {
+public class AzureCosmosPostgreSqlDatabase extends PaaSRelationalDatabase implements LiveSystemComponent,
+  AzureCosmosEntity {
 
-    public static final String TYPE = PAAS_COSMOS_POSTGRESQL_DATABASE.getId();
+  public static final String TYPE = PAAS_COSMOS_POSTGRESQL_DATABASE.getId();
+  private String name;
+  private int throughput;
+  private int maxThroughput;
+  private AzureRegion azureRegion;
+  private AzureResourceGroup azureResourceGroup;
+  private Map<String, String> tags;
+  @Setter(AccessLevel.PRIVATE)
+  private String entityName = "PostgreSql Database";
 
-    public static AzureCosmosPostgreSqlDatabaseBuilder builder() {
-        return new AzureCosmosPostgreSqlDatabaseBuilder();
-    }
+  public static AzureCosmosPostgreSqlDatabaseBuilder builder() {
+    return new AzureCosmosPostgreSqlDatabaseBuilder();
+  }
 
-    private String name;
-    private int throughput;
-    private int maxThroughput;
-    private AzureRegion azureRegion;
-    private AzureResourceGroup azureResourceGroup;
-    private Map<String, String> tags;
+  @Override
+  public ProviderType getProvider() {
+    return ProviderType.AZURE;
+  }
 
-    @Setter(AccessLevel.PRIVATE)
-    private String entityName = "PostgreSql Database";
+  @Override
+  public Collection<String> validate() {
+    return super.validate();
+  }
 
+  public static class AzureCosmosPostgreSqlDatabaseBuilder extends AzureCosmosEntityBuilder<AzureCosmosPostgreSqlDatabase, AzureCosmosPostgreSqlDatabaseBuilder> {
     @Override
-    public ProviderType getProvider() {
-        return ProviderType.AZURE;
-    }
-
-
-    public static class AzureCosmosPostgreSqlDatabaseBuilder extends AzureCosmosEntityBuilder<AzureCosmosPostgreSqlDatabase, AzureCosmosPostgreSqlDatabaseBuilder> {
-        @Override
-        protected AzureCosmosPostgreSqlDatabase createComponent() {
-            return new AzureCosmosPostgreSqlDatabase();
-        }
-
-        @Override
-        protected AzureCosmosPostgreSqlDatabaseBuilder getBuilder() {
-            return this;
-        }
-
-        @Override
-        public AzureCosmosPostgreSqlDatabase build() {
-            component.setType(PAAS_COSMOS_POSTGRESQL_DATABASE);
-            return super.build();
-        }
-
+    protected AzureCosmosPostgreSqlDatabase createComponent() {
+      return new AzureCosmosPostgreSqlDatabase();
     }
 
     @Override
-    public Collection<String> validate() {
-        return super.validate();
+    protected AzureCosmosPostgreSqlDatabaseBuilder getBuilder() {
+      return this;
     }
+
+    @Override
+    public AzureCosmosPostgreSqlDatabase build() {
+      component.setType(PAAS_COSMOS_POSTGRESQL_DATABASE);
+      return super.build();
+    }
+
+  }
 }

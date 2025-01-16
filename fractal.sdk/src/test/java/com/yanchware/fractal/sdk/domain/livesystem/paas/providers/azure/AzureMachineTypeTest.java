@@ -13,13 +13,13 @@ public class AzureMachineTypeTest {
     var newValue = AzureMachineType.fromString("This_Not_Exist_For_Sure");
     assertThat(AzureMachineType.values()).contains(newValue);
   }
-  
+
   @Test
   @Order(2)
   public void correctValues_when_customEnum() {
     var valueToExtend = "This_Not_Exist_For_Sure";
     var enumValue = AzureMachineType.fromString(valueToExtend);
-    
+
     assertThat(valueToExtend).isEqualTo(enumValue.toString());
   }
 

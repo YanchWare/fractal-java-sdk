@@ -17,75 +17,81 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Setter(AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 public abstract class PaaSPostgreSqlDatabase extends PaaSRelationalDatabase implements LiveSystemComponent {
-    private final static String COLLATION_IS_BLANK = "PostgreSQLDB collation defined was either empty or blank and it is required";
-    private final static String SCHEMA_IS_BLANK = "PostgreSQLDB schema defined was either empty or blank and it is required";
+  private final static String COLLATION_IS_BLANK = "PostgreSQLDB collation defined was either empty or blank and it " +
+    "is required";
+  private final static String SCHEMA_IS_BLANK = "PostgreSQLDB schema defined was either empty or blank and it is " +
+    "required";
 
-    private String name;
-    private PostgreSqlCharset charset;
-    private String collation;
-    private String schema;
+  private String name;
+  private PostgreSqlCharset charset;
+  private String collation;
+  private String schema;
 
-    protected PaaSPostgreSqlDatabase() {
+  protected PaaSPostgreSqlDatabase() {
+  }
+
+  @Override
+  public Collection<String> validate() {
+    Collection<String> errors = super.validate();
+
+    if (collation != null && isBlank(collation)) {
+      errors.add(COLLATION_IS_BLANK);
     }
 
+    if (schema != null && isBlank(schema)) {
+      errors.add(SCHEMA_IS_BLANK);
+    }
 
-    public static abstract class Builder<T extends PaaSPostgreSqlDatabase, B extends PaaSPostgreSqlDatabase.Builder<T, B>> extends Component.Builder<T, B> {
+    return errors;
+  }
 
-        /**
-         * Name of the database
-         * @param name
-         */
-        public B withName(String name) {
-            component.setName(name);
-            return builder;
-        }
+  public static abstract class Builder<T extends PaaSPostgreSqlDatabase, B extends PaaSPostgreSqlDatabase.Builder<T,
+    B>> extends Component.Builder<T, B> {
 
-        /**
-         * Charset of the database
-         * @param charset
-         */
-        public B withCharset(PostgreSqlCharset charset) {
-            component.setCharset(charset);
-            return builder;
-        }
+    /**
+     * Name of the database
+     *
+     * @param name
+     */
+    public B withName(String name) {
+      component.setName(name);
+      return builder;
+    }
 
-        /**
-         * Collation of the database
-         * @param collation
-         */
-        public B withCollation(String collation) {
-            component.setCollation(collation);
-            return builder;
-        }
+    /**
+     * Charset of the database
+     *
+     * @param charset
+     */
+    public B withCharset(PostgreSqlCharset charset) {
+      component.setCharset(charset);
+      return builder;
+    }
 
-        /**
-         * Schema of the database
-         * @param schema
-         */
-        public B withSchema(String schema) {
-            component.setSchema(schema);
-            return builder;
-        }
+    /**
+     * Collation of the database
+     *
+     * @param collation
+     */
+    public B withCollation(String collation) {
+      component.setCollation(collation);
+      return builder;
+    }
 
-        @Override
-        public T build() {
-            component.setType(PAAS_POSTGRESQL_DATABASE);
-            return super.build();
-        }
+    /**
+     * Schema of the database
+     *
+     * @param schema
+     */
+    public B withSchema(String schema) {
+      component.setSchema(schema);
+      return builder;
     }
 
     @Override
-    public Collection<String> validate() {
-        Collection<String> errors = super.validate();
-
-        if(collation != null && isBlank(collation)) {
-            errors.add(COLLATION_IS_BLANK);
-        }
-
-        if(schema != null && isBlank(schema)) {
-            errors.add(SCHEMA_IS_BLANK);
-        }
-
-        return errors;
+    public T build() {
+      component.setType(PAAS_POSTGRESQL_DATABASE);
+      return super.build();
     }
+  }
 }

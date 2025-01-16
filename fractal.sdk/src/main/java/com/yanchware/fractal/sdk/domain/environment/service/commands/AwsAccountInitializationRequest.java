@@ -6,4 +6,6 @@ public record AwsAccountInitializationRequest(
   String organizationId,
   String accountId,
   String region,
-  Map<String, String> tags){}
+  Map<String, String> tags)
+{
+}

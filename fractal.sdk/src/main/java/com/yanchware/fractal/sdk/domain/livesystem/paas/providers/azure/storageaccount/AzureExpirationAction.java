@@ -7,7 +7,7 @@ import java.util.Collection;
 
 /**
  * <pre>
- * The SAS expiration action. 
+ * The SAS expiration action.
  * Can only be Log.
  * </pre>
  */

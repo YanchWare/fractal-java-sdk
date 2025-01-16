@@ -14,9 +14,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_COSMOS_ACCOUNT;
 import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidLowercaseLettersNumbersAndHyphens;
 import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLength;
-import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_COSMOS_ACCOUNT;
 
 @Getter
 @Setter
@@ -25,7 +25,9 @@ public class AzureCosmosPostgreSqlDbms extends PaaSRelationalDbms implements Liv
 
   public static final String TYPE = PAAS_COSMOS_ACCOUNT.getId();
 
-  private final static String NAME_NOT_VALID = "[AzureCosmosPostgreSqlDbms Validation] The name must only contains lowercase letters, numbers, and hyphens. The name must not start or end in a hyphen and must be between 3 and 40 characters long";
+  private final static String NAME_NOT_VALID = "[AzureCosmosPostgreSqlDbms Validation] The name must only contains " +
+    "lowercase letters, numbers, and hyphens. The name must not start or end in a hyphen and must be between 3 and 40" +
+    " characters long";
 
 
   private String name;
@@ -34,15 +36,8 @@ public class AzureCosmosPostgreSqlDbms extends PaaSRelationalDbms implements Liv
   private AzureRegion azureRegion;
   private AzureResourceGroup azureResourceGroup;
   private Map<String, String> tags;
-
-  @Override
-  public ProviderType getProvider() {
-    return ProviderType.AZURE;
-  }
-
   private Collection<AzureCosmosPostgreSqlDatabase> cosmosEntities;
   private AzureCosmosBackupPolicy backupPolicy;
-
   protected AzureCosmosPostgreSqlDbms() {
     cosmosEntities = new ArrayList<>();
   }
@@ -51,7 +46,28 @@ public class AzureCosmosPostgreSqlDbms extends PaaSRelationalDbms implements Liv
     return new AzureCosmosPostgreSqlDbmsBuilder();
   }
 
-  public static class AzureCosmosPostgreSqlDbmsBuilder extends AzureCosmosAccountBuilder<AzureCosmosPostgreSqlDbms, AzureCosmosPostgreSqlDbmsBuilder> {
+  @Override
+  public ProviderType getProvider() {
+    return ProviderType.AZURE;
+  }
+
+  public Collection<String> validate() {
+    Collection<String> errors = super.validate();
+    errors.addAll(AzureCosmosAccount.validateCosmosAccount(this, "PostgreSql DBMS"));
+
+    if (StringUtils.isNotBlank(name)) {
+      var hasValidCharacters = isValidLowercaseLettersNumbersAndHyphens(name);
+      var hasValidLengths = isValidStringLength(name, 3, 40);
+      if (!hasValidCharacters || !hasValidLengths) {
+        errors.add(NAME_NOT_VALID);
+      }
+    }
+
+    return errors;
+  }
+
+  public static class AzureCosmosPostgreSqlDbmsBuilder extends AzureCosmosAccountBuilder<AzureCosmosPostgreSqlDbms,
+    AzureCosmosPostgreSqlDbmsBuilder> {
 
     @Override
     protected AzureCosmosPostgreSqlDbms createComponent() {
@@ -62,21 +78,6 @@ public class AzureCosmosPostgreSqlDbms extends PaaSRelationalDbms implements Liv
     protected AzureCosmosPostgreSqlDbmsBuilder getBuilder() {
       return this;
     }
-  }
-
-  public Collection<String> validate() {
-    Collection<String> errors = super.validate();
-    errors.addAll(AzureCosmosAccount.validateCosmosAccount(this, "PostgreSql DBMS"));
-
-    if(StringUtils.isNotBlank(name)) {
-      var hasValidCharacters = isValidLowercaseLettersNumbersAndHyphens(name);
-      var hasValidLengths = isValidStringLength(name, 3, 40);
-      if(!hasValidCharacters || !hasValidLengths) {
-        errors.add(NAME_NOT_VALID);
-      }
-    }
-    
-    return errors;
   }
 
 }

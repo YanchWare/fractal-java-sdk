@@ -8,8 +8,8 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public abstract class CaaSAPIGatewayImpl extends CaaSAPIGateway implements LiveSystemComponent {
 
-    @Override
-    public ProviderType getProvider(){
-        return ProviderType.CAAS;
-    }
+  @Override
+  public ProviderType getProvider() {
+    return ProviderType.CAAS;
+  }
 }

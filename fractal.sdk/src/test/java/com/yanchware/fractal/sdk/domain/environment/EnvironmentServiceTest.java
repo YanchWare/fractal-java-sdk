@@ -34,23 +34,30 @@ class EnvironmentServiceTest {
   private ManagementEnvironment mockEnvironment;
   private EnvironmentService environmentService;
 
+  private static String replacePlaceholders(String json, Map<String, String> placeholders) {
+    for (Map.Entry<String, String> entry : placeholders.entrySet()) {
+      json = json.replace(entry.getKey(), entry.getValue());
+    }
+    return json;
+  }
+
   @BeforeEach
   void setUp(WireMockRuntimeInfo wmRuntimeInfo) {
     var httpClient = HttpClient.newBuilder()
-        .version(HttpClient.Version.HTTP_2)
-        .build();
+      .version(HttpClient.Version.HTTP_2)
+      .build();
 
     var sdkConfiguration = new LocalSdkConfiguration(wmRuntimeInfo.getHttpBaseUrl());
     mockEnvironment = ManagementEnvironment.builder()
-        .withId(new EnvironmentIdValue(
-            EnvironmentType.PERSONAL,
-            UUID.randomUUID(),
-            "test-env"
-        ))
-        .withName("Test Environment")
-        .withResourceGroup(UUID.randomUUID())
-        .build();
-    
+      .withId(new EnvironmentIdValue(
+        EnvironmentType.PERSONAL,
+        UUID.randomUUID(),
+        "test-env"
+      ))
+      .withName("Test Environment")
+      .withResourceGroup(UUID.randomUUID())
+      .build();
+
     environmentService = new RestEnvironmentService(httpClient, sdkConfiguration, RetryRegistry.ofDefaults());
   }
 
@@ -63,33 +70,33 @@ class EnvironmentServiceTest {
     String parametersJson = serialize(mockEnvironment.toDto().parameters());
 
     var jsonResponse = String.format("""
-            {
-                "id": {
-                    "type": "%s",
-                    "ownerId": "%s",
-                    "shortName": "%s"
-                },
-                "name": "%s",
-                "resourceGroups": %s,
-                "parameters": %s,
-                "status": "Active",
-                "createdAt": "2024-05-20T21:30:27.045813+00:00",
-                "createdBy": "tests@yanchware.com",
-                "updatedAt": "2024-05-20T21:30:27.045813+00:00",
-                "updatedBy": "tests@yanchware.com"
-            }
-            """, mockEnvironment.getId().type(),
-        mockEnvironment.getId().ownerId(),
-        mockEnvironment.getId().shortName(),
-        mockEnvironment.getName(),
-        resourceGroupsJson,
-        parametersJson);
+        {
+            "id": {
+                "type": "%s",
+                "ownerId": "%s",
+                "shortName": "%s"
+            },
+            "name": "%s",
+            "resourceGroups": %s,
+            "parameters": %s,
+            "status": "Active",
+            "createdAt": "2024-05-20T21:30:27.045813+00:00",
+            "createdBy": "tests@yanchware.com",
+            "updatedAt": "2024-05-20T21:30:27.045813+00:00",
+            "updatedBy": "tests@yanchware.com"
+        }
+        """, mockEnvironment.getId().type(),
+      mockEnvironment.getId().ownerId(),
+      mockEnvironment.getId().shortName(),
+      mockEnvironment.getName(),
+      resourceGroupsJson,
+      parametersJson);
 
     stubFor(get(urlPattern)
-        .willReturn(aResponse()
-            .withStatus(200)
-            .withBody(jsonResponse)
-            .withHeader("Content-Type", "application/json")));
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(jsonResponse)
+        .withHeader("Content-Type", "application/json")));
 
     // When
     var response = environmentService.fetch(mockEnvironment.getId());
@@ -113,44 +120,44 @@ class EnvironmentServiceTest {
     var urlPattern = urlPathMatching("/environments/.*/.*/.*");
 
     var jsonResponse = String.format("""
-            {
-                "id": {
-                    "type": "%s",
-                    "ownerId": "%s",
-                    "shortName": "%s"
-                },
-                "name": "%s",
-                "resourceGroups": [
-                    "ebc34d36-532c-45b4-aed9-94c2596d3840"
-                ],
-                "parameters": null,
-                "status": "Active",
-                "createdAt": "2024-05-20T21:30:27.045813+00:00",
-                "createdBy": "tests@yanchware.com",
-                "updatedAt": "2024-05-20T21:30:27.045813+00:00",
-                "updatedBy": "tests@yanchware.com"
-            }
-            """, mockEnvironment.getId().type(),
-        mockEnvironment.getId().ownerId(),
-        mockEnvironment.getId().shortName(),
-        mockEnvironment.getName());
+        {
+            "id": {
+                "type": "%s",
+                "ownerId": "%s",
+                "shortName": "%s"
+            },
+            "name": "%s",
+            "resourceGroups": [
+                "ebc34d36-532c-45b4-aed9-94c2596d3840"
+            ],
+            "parameters": null,
+            "status": "Active",
+            "createdAt": "2024-05-20T21:30:27.045813+00:00",
+            "createdBy": "tests@yanchware.com",
+            "updatedAt": "2024-05-20T21:30:27.045813+00:00",
+            "updatedBy": "tests@yanchware.com"
+        }
+        """, mockEnvironment.getId().type(),
+      mockEnvironment.getId().ownerId(),
+      mockEnvironment.getId().shortName(),
+      mockEnvironment.getName());
 
     stubFor(get(urlPattern)
-        .willReturn(aResponse()
-            .withStatus(200)
-            .withBody(jsonResponse)
-            .withHeader("Content-Type", "application/json")));
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(jsonResponse)
+        .withHeader("Content-Type", "application/json")));
 
     stubFor(put(urlPattern)
-        .willReturn(aResponse()
-            .withStatus(200)));
+      .willReturn(aResponse()
+        .withStatus(200)));
 
     // When
     environmentService.update(
-        mockEnvironment.getId(),
-        mockEnvironment.getName(),
-        mockEnvironment.getResourceGroups(),
-        mockEnvironment.toDto().parameters());
+      mockEnvironment.getId(),
+      mockEnvironment.getName(),
+      mockEnvironment.getResourceGroups(),
+      mockEnvironment.toDto().parameters());
 
     // Then
     verify(1, putRequestedFor(urlPattern));
@@ -163,21 +170,21 @@ class EnvironmentServiceTest {
     var urlPattern = urlPathMatching("/environments/.*/.*/.*");
 
     stubFor(get(urlPattern)
-        .willReturn(aResponse()
-            .withStatus(404)));
+      .willReturn(aResponse()
+        .withStatus(404)));
 
     // Add stub for POST request
     stubFor(post(urlPattern)
-        .willReturn(aResponse()
-            .withStatus(201)));
+      .willReturn(aResponse()
+        .withStatus(201)));
 
     // When
     environmentService.create(
-        null,
-        mockEnvironment.getId(),
-        mockEnvironment.getName(),
-        mockEnvironment.getResourceGroups(),
-        mockEnvironment.toDto().parameters());
+      null,
+      mockEnvironment.getId(),
+      mockEnvironment.getName(),
+      mockEnvironment.getResourceGroups(),
+      mockEnvironment.toDto().parameters());
 
 
     // Then
@@ -191,40 +198,40 @@ class EnvironmentServiceTest {
     var urlPattern = urlPathMatching("/environments/.*/.*/.*");
 
     var jsonResponse = String.format("""
-            {
-                "id": {
-                    "type": "%s",
-                    "ownerId": "%s",
-                    "shortName": "%s"
-                },
-                "name": "%s",
-                "resourceGroups": [
-                    "ebc34d36-532c-45b4-aed9-94c2596d3840"
-                ],
-                "parameters": null,
-                "status": "Active",
-                "createdAt": "2024-05-20T21:30:27.045813+00:00",
-                "createdBy": "tests@yanchware.com",
-                "updatedAt": "2024-05-20T21:30:27.045813+00:00",
-                "updatedBy": "tests@yanchware.com"
-            }
-            """, mockEnvironment.getId().type(),
-        mockEnvironment.getId().ownerId(),
-        mockEnvironment.getId().shortName(),
-        mockEnvironment.toDto().parameters());
+        {
+            "id": {
+                "type": "%s",
+                "ownerId": "%s",
+                "shortName": "%s"
+            },
+            "name": "%s",
+            "resourceGroups": [
+                "ebc34d36-532c-45b4-aed9-94c2596d3840"
+            ],
+            "parameters": null,
+            "status": "Active",
+            "createdAt": "2024-05-20T21:30:27.045813+00:00",
+            "createdBy": "tests@yanchware.com",
+            "updatedAt": "2024-05-20T21:30:27.045813+00:00",
+            "updatedBy": "tests@yanchware.com"
+        }
+        """, mockEnvironment.getId().type(),
+      mockEnvironment.getId().ownerId(),
+      mockEnvironment.getId().shortName(),
+      mockEnvironment.toDto().parameters());
 
     stubFor(put(urlPattern)
-        .willReturn(aResponse()
-            .withStatus(200)
-            .withBody(jsonResponse)
-            .withHeader("Content-Type", "application/json")));
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(jsonResponse)
+        .withHeader("Content-Type", "application/json")));
 
     // When
     var response = environmentService.update(
-        mockEnvironment.getId(),
-        mockEnvironment.getName(),
-        mockEnvironment.getResourceGroups(),
-        mockEnvironment.toDto().parameters());
+      mockEnvironment.getId(),
+      mockEnvironment.getName(),
+      mockEnvironment.getResourceGroups(),
+      mockEnvironment.toDto().parameters());
 
 
     // Then
@@ -242,20 +249,21 @@ class EnvironmentServiceTest {
     var urlPattern = urlPathMatching("/environments/.*/.*/.*/initializer/azure/status");
 
     var inputStream = getClass().getClassLoader()
-        .getResourceAsStream("test-resources/fetchCurrentInitializationInProgressResponse.json");
+      .getResourceAsStream("test-resources/fetchCurrentInitializationInProgressResponse.json");
 
     assertThat(inputStream).isNotNull();
 
     var fetchCurrentInitializationResponse = StringHandler.getStringFromInputStream(inputStream);
 
     // Replace the placeholders
-    fetchCurrentInitializationResponse = replacePlaceholders(fetchCurrentInitializationResponse, getEnvironmentIdPlaceholders());
+    fetchCurrentInitializationResponse = replacePlaceholders(fetchCurrentInitializationResponse,
+      getEnvironmentIdPlaceholders());
 
     stubFor(get(urlPattern)
-        .willReturn(aResponse()
-            .withStatus(200)
-            .withBody(fetchCurrentInitializationResponse)
-            .withHeader("Content-Type", "application/json")));
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(fetchCurrentInitializationResponse)
+        .withHeader("Content-Type", "application/json")));
 
     // When
     var response = environmentService.fetchCurrentAzureInitialization(mockEnvironment.getId());
@@ -278,11 +286,11 @@ class EnvironmentServiceTest {
 
     // When
     CloudAgentEntity cloudAgent = new AwsCloudAgent(
-        mockEnvironment.getId(),
-        AwsRegion.EU_NORTH_1,
-        "organizationId",
-        "accountId",
-        Collections.emptyMap());
+      mockEnvironment.getId(),
+      AwsRegion.EU_NORTH_1,
+      "organizationId",
+      "accountId",
+      Collections.emptyMap());
     cloudAgent.initialize(environmentService);
 
     // Then
@@ -296,11 +304,11 @@ class EnvironmentServiceTest {
 
     // When
     CloudAgentEntity cloudAgent = new AzureCloudAgent(
-        mockEnvironment.getId(),
-        AzureRegion.WEST_EUROPE,
-        UUID.randomUUID(),
-        UUID.randomUUID(),
-        Collections.emptyMap());
+      mockEnvironment.getId(),
+      AzureRegion.WEST_EUROPE,
+      UUID.randomUUID(),
+      UUID.randomUUID(),
+      Collections.emptyMap());
     cloudAgent.initialize(environmentService);
 
     // Then
@@ -314,11 +322,11 @@ class EnvironmentServiceTest {
 
     // When
     CloudAgentEntity cloudAgent = new GcpCloudAgent(
-        mockEnvironment.getId(),
-        GcpRegion.EUROPE_WEST1,
-        "organizationId",
-        "projectId",
-        Collections.emptyMap());
+      mockEnvironment.getId(),
+      GcpRegion.EUROPE_WEST1,
+      "organizationId",
+      "projectId",
+      Collections.emptyMap());
     cloudAgent.initialize(environmentService);
 
     // Then
@@ -332,11 +340,11 @@ class EnvironmentServiceTest {
 
     // When
     CloudAgentEntity cloudAgent = new OciCloudAgent(
-        mockEnvironment.getId(),
-        OciRegion.EU_ZURICH_1,
-        "tenancyId",
-        "compartmentId",
-        Collections.emptyMap());
+      mockEnvironment.getId(),
+      OciRegion.EU_ZURICH_1,
+      "tenancyId",
+      "compartmentId",
+      Collections.emptyMap());
     cloudAgent.initialize(environmentService);
 
     // Then
@@ -348,61 +356,56 @@ class EnvironmentServiceTest {
     var placeholders = getEnvironmentIdPlaceholders();
 
     var inputStreamInProgress = getClass().getClassLoader()
-        .getResourceAsStream("test-resources/fetchCurrentInitializationInProgressResponse.json");
+      .getResourceAsStream("test-resources/fetchCurrentInitializationInProgressResponse.json");
     assertThat(inputStreamInProgress).isNotNull();
 
     var fetchCurrentInitializationInProgressResponse = StringHandler.getStringFromInputStream(inputStreamInProgress);
-    fetchCurrentInitializationInProgressResponse = replacePlaceholders(fetchCurrentInitializationInProgressResponse, placeholders);
+    fetchCurrentInitializationInProgressResponse = replacePlaceholders(fetchCurrentInitializationInProgressResponse,
+      placeholders);
 
     // Mocking fetchCurrentInitialization response for "Completed" status
     var inputStreamCompleted = getClass().getClassLoader()
-        .getResourceAsStream("test-resources/fetchCurrentInitializationCompletedResponse.json");
+      .getResourceAsStream("test-resources/fetchCurrentInitializationCompletedResponse.json");
     assertThat(inputStreamCompleted).isNotNull();
 
     var fetchCurrentInitializationCompletedResponse = StringHandler.getStringFromInputStream(inputStreamCompleted);
-    fetchCurrentInitializationCompletedResponse = replacePlaceholders(fetchCurrentInitializationCompletedResponse, placeholders);
+    fetchCurrentInitializationCompletedResponse = replacePlaceholders(fetchCurrentInitializationCompletedResponse,
+      placeholders);
 
     stubFor(get(urlPatternStatus)
-        .inScenario("Initialization Scenario")
-        .whenScenarioStateIs(Scenario.STARTED)
-        .willReturn(aResponse()
-            .withStatus(200)
-            .withBody(fetchCurrentInitializationInProgressResponse)
-            .withHeader("Content-Type", "application/json"))
-        .willSetStateTo("InProgress1"));
+      .inScenario("Initialization Scenario")
+      .whenScenarioStateIs(Scenario.STARTED)
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(fetchCurrentInitializationInProgressResponse)
+        .withHeader("Content-Type", "application/json"))
+      .willSetStateTo("InProgress1"));
 
     stubFor(get(urlPatternStatus)
-        .inScenario("Initialization Scenario")
-        .whenScenarioStateIs("InProgress1")
-        .willReturn(aResponse()
-            .withStatus(200)
-            .withBody(fetchCurrentInitializationInProgressResponse)
-            .withHeader("Content-Type", "application/json"))
-        .willSetStateTo("InProgress2"));
+      .inScenario("Initialization Scenario")
+      .whenScenarioStateIs("InProgress1")
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(fetchCurrentInitializationInProgressResponse)
+        .withHeader("Content-Type", "application/json"))
+      .willSetStateTo("InProgress2"));
 
     stubFor(get(urlPatternStatus)
-        .inScenario("Initialization Scenario")
-        .whenScenarioStateIs("InProgress2")
-        .willReturn(aResponse()
-            .withStatus(200)
-            .withBody(fetchCurrentInitializationCompletedResponse)
-            .withHeader("Content-Type", "application/json"))
-        .willSetStateTo("Completed"));
+      .inScenario("Initialization Scenario")
+      .whenScenarioStateIs("InProgress2")
+      .willReturn(aResponse()
+        .withStatus(200)
+        .withBody(fetchCurrentInitializationCompletedResponse)
+        .withHeader("Content-Type", "application/json"))
+      .willSetStateTo("Completed"));
     return urlPatternStatus;
   }
 
   private Map<String, String> getEnvironmentIdPlaceholders() {
     return Map.of(
-        "$ENVIRONMENT_TYPE", mockEnvironment.getId().type().toString(),
-        "$ENVIRONMENT_OWNER_ID", mockEnvironment.getId().ownerId().toString(),
-        "$ENVIRONMENT_SHORT_NAME", mockEnvironment.getId().shortName()
+      "$ENVIRONMENT_TYPE", mockEnvironment.getId().type().toString(),
+      "$ENVIRONMENT_OWNER_ID", mockEnvironment.getId().ownerId().toString(),
+      "$ENVIRONMENT_SHORT_NAME", mockEnvironment.getId().shortName()
     );
-  }
-
-  private static String replacePlaceholders(String json, Map<String, String> placeholders) {
-    for (Map.Entry<String, String> entry : placeholders.entrySet()) {
-      json = json.replace(entry.getKey(), entry.getValue());
-    }
-    return json;
   }
 }

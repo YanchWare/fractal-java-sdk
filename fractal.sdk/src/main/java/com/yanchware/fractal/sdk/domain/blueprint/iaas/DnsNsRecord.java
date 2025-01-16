@@ -19,13 +19,44 @@ import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidLetter
 public class DnsNsRecord extends DnsRecord {
   public static final String NS_DNS_RECORD_TYPE = "NS";
 
-  private final static String NAME_SERVER_NOT_VALID_PATTERN = "The nameServer value ['%s'], concatenated with its zone name, must contain no more than 253 characters, excluding a trailing period. It must be between 2 and 34 labels. Each label must only contain letters, numbers, underscores, and/or dashes. Each label should be separated from other labels by a period. Each label must contain between 1 and 63 characters.";
-  private final static String NAME_SERVER_LABEL_NOT_VALID_PATTERN = "The nameServer ['%s'] label must contain between 1 and 63 characters";
+  private final static String NAME_SERVER_NOT_VALID_PATTERN = "The nameServer value ['%s'], concatenated with its " +
+    "zone name, must contain no more than 253 characters, excluding a trailing period. It must be between 2 and 34 " +
+    "labels. Each label must only contain letters, numbers, underscores, and/or dashes. Each label should be " +
+    "separated from other labels by a period. Each label must contain between 1 and 63 characters.";
+  private final static String NAME_SERVER_LABEL_NOT_VALID_PATTERN = "The nameServer ['%s'] label must contain between" +
+    " 1 and 63 characters";
 
   private List<String> nameServers;
 
   public static DnsNsRecordBuilder builder() {
     return new DnsNsRecordBuilder();
+  }
+
+  @Override
+  public Collection<String> validate() {
+    var errors = super.validate();
+
+    if (!isBlank(nameServers)) {
+      for (var nameServer : nameServers) {
+        var hasValidCharacters = isValidLettersNumbersUnderscoresDashesAndPeriodsAndPeriodIsNotRequired(nameServer);
+
+        if (nameServer.contains(".")) {
+          for (String label : nameServer.split("\\.")) {
+            if (label.length() > 63) {
+              errors.add(String.format(NAME_SERVER_LABEL_NOT_VALID_PATTERN, label));
+            }
+          }
+        }
+
+        var withoutTrailingPeriod = StringUtils.stripEnd(nameServer, ".");
+
+        if (!hasValidCharacters || withoutTrailingPeriod.length() > 253) {
+          errors.add(String.format(NAME_SERVER_NOT_VALID_PATTERN, nameServer));
+        }
+      }
+    }
+
+    return errors;
   }
 
   public static class DnsNsRecordBuilder extends DnsRecord.Builder<DnsNsRecord, DnsNsRecordBuilder> {
@@ -60,32 +91,5 @@ public class DnsNsRecord extends DnsRecord {
     public DnsNsRecord build() {
       return super.build();
     }
-  }
-
-  @Override
-  public Collection<String> validate() {
-    var errors = super.validate();
-
-    if (!isBlank(nameServers)) {
-      for (var nameServer : nameServers) {
-        var hasValidCharacters = isValidLettersNumbersUnderscoresDashesAndPeriodsAndPeriodIsNotRequired(nameServer);
-
-        if (nameServer.contains(".")) {
-          for (String label : nameServer.split("\\.")) {
-            if (label.length() > 63) {
-              errors.add(String.format(NAME_SERVER_LABEL_NOT_VALID_PATTERN, label));
-            }
-          }
-        }
-
-        var withoutTrailingPeriod = StringUtils.stripEnd(nameServer, ".");
-
-        if (!hasValidCharacters || withoutTrailingPeriod.length() > 253) {
-          errors.add(String.format(NAME_SERVER_NOT_VALID_PATTERN, nameServer));
-        }
-      }
-    }
-
-    return errors;
   }
 }

@@ -31,12 +31,12 @@ public class ResourceManagement {
      * <pre>
      * Specifies the resource requests for a container.</pre>
      *
-     * @important.note <strong>If you choose to customize these values, please be aware that Fractal Cloud cannot guarantee the functionality of the deployment. 
-     * <br>You bear full responsibility for ensuring the correctness of your configuration. 
-     * <br>Misconfiguration can lead to application failures or resource allocation issues. 
-     * <br>Be mindful of the suffix case and the units of measurement to avoid common pitfalls.</strong>
-     *
      * @param requests The desired resource requests for the container, including CPU and memory specifications.
+     * @important.note <strong>If you choose to customize these values, please be aware that Fractal Cloud cannot
+     * guarantee the functionality of the deployment.
+     * <br>You bear full responsibility for ensuring the correctness of your configuration.
+     * <br>Misconfiguration can lead to application failures or resource allocation issues.
+     * <br>Be mindful of the suffix case and the units of measurement to avoid common pitfalls.</strong>
      */
     public ResourceManagementBuilder withRequests(ContainerResources requests) {
       resourceManagement.setRequests(requests);
@@ -46,13 +46,13 @@ public class ResourceManagement {
     /**
      * <pre>
      * Specifies the resource limits for a container.</pre>
-     * 
-     * @important.note <strong>If you choose to customize these values, please be aware that Fractal Cloud cannot guarantee the functionality of the deployment. 
-     * <br>You bear full responsibility for ensuring the correctness of your configuration. 
-     * <br>Misconfiguration can lead to application failures or resource allocation issues. 
-     * <br>Be mindful of the suffix case and the units of measurement to avoid common pitfalls.</strong>
-     * 
+     *
      * @param limits The desired resource limits for the container, including CPU and memory specifications.
+     * @important.note <strong>If you choose to customize these values, please be aware that Fractal Cloud cannot
+     * guarantee the functionality of the deployment.
+     * <br>You bear full responsibility for ensuring the correctness of your configuration.
+     * <br>Misconfiguration can lead to application failures or resource allocation issues.
+     * <br>Be mindful of the suffix case and the units of measurement to avoid common pitfalls.</strong>
      */
     public ResourceManagementBuilder withLimits(ContainerResources limits) {
       resourceManagement.setLimits(limits);

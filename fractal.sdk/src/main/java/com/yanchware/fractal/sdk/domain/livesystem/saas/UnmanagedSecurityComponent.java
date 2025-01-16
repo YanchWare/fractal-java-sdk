@@ -16,21 +16,34 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
 public class UnmanagedSecurityComponent extends com.yanchware.fractal.sdk.domain.blueprint.saas.UnmanagedSecurityComponent implements LiveSystemComponent {
-  private final static String SECRET_VALUE_IS_BLANK = "[SaaSUnmanagedSecurityComponent Validation] Secret Value has not been defined and it is required";
+  private final static String SECRET_VALUE_IS_BLANK = "[SaaSUnmanagedSecurityComponent Validation] Secret Value has " +
+    "not been defined and it is required";
 
   private String secretName;
   private String secretValue;
+
+  public static ExternalSecurityComponentBuilder builder() {
+    return new ExternalSecurityComponentBuilder();
+  }
 
   @Override
   public ProviderType getProvider() {
     return ProviderType.SAAS;
   }
 
-  public static ExternalSecurityComponentBuilder builder() {
-    return new ExternalSecurityComponentBuilder();
+  @Override
+  public Collection<String> validate() {
+    Collection<String> errors = super.validate();
+
+    if (isBlank(secretValue)) {
+      errors.add(SECRET_VALUE_IS_BLANK);
+    }
+
+    return errors;
   }
 
-  public static class ExternalSecurityComponentBuilder extends Builder<UnmanagedSecurityComponent, ExternalSecurityComponentBuilder> {
+  public static class ExternalSecurityComponentBuilder extends Builder<UnmanagedSecurityComponent,
+    ExternalSecurityComponentBuilder> {
 
     @Override
     protected UnmanagedSecurityComponent createComponent() {
@@ -44,7 +57,7 @@ public class UnmanagedSecurityComponent extends com.yanchware.fractal.sdk.domain
 
     /**
      * Sets the name of the secret.
-     * 
+     *
      * @param secretName The name of the secret.
      * @return The builder instance for method chaining.
      */
@@ -55,7 +68,7 @@ public class UnmanagedSecurityComponent extends com.yanchware.fractal.sdk.domain
 
     /**
      * Sets the value of the secret.
-     * 
+     *
      * @param secretValue The value of the secret.
      * @return The builder instance for method chaining.
      */
@@ -69,16 +82,5 @@ public class UnmanagedSecurityComponent extends com.yanchware.fractal.sdk.domain
       component.setType(SAAS_UNMANAGED_SECURITY);
       return super.build();
     }
-  }
-
-  @Override
-  public Collection<String> validate() {
-    Collection<String> errors = super.validate();
-
-    if (isBlank(secretValue)) {
-      errors.add(SECRET_VALUE_IS_BLANK);
-    }
-
-    return errors;
   }
 }
