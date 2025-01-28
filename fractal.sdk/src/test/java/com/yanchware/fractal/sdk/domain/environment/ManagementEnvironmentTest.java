@@ -248,9 +248,8 @@ class ManagementEnvironmentTest {
             UUID.randomUUID(),
             UUID.randomUUID())
         .withResourceGroup(UUID.randomUUID())
-        .withCiCdProfile(new CiCdProfile("default", "data", "pass"))
-        .withCiCdProfile(new CiCdProfile("default", "data2", "pass2"))
-        .withCiCdProfile(new CiCdProfile("custom", "data", "pass"))
+        .withCiCdProfile(new CiCdProfile("default", "Default", "data", "pass"))
+        .withCiCdProfile(new CiCdProfile("custom", "Custom","data", "pass"))
         .build();
 
     assertThat(managementEnvironment.validate()).isEmpty();
