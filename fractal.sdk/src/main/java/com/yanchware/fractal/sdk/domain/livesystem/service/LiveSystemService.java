@@ -25,7 +25,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.util.Collections;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static com.yanchware.fractal.sdk.utils.HttpUtils.ensureAcceptableResponse;
@@ -528,5 +530,32 @@ public class LiveSystemService extends Service {
 
   private URI getLiveSystemMutationUri(String liveSystemId, String mutationId) {
     return URI.create(String.format("%s/mutations/%s", getLiveSystemUri(liveSystemId), mutationId));
+  }
+
+  public void deleteLiveSystem(String liveSystemId) throws InstantiatorException {
+    HttpResponse<String> response;
+    try {
+      response = client.send(
+              HttpUtils.buildDeleteRequest(getLiveSystemUri(liveSystemId), sdkConfiguration),
+              HttpResponse.BodyHandlers.ofString()
+      );
+    } catch (IOException | InterruptedException e) {
+      throw new InstantiatorException("Attempted deletion of LiveSystem failed", e);
+    }
+
+    if (response.statusCode() == 404) {
+      log.info("Attempted deletion of non-existing Live System with id [id: '{}']", liveSystemId);
+      return;
+    }
+
+    if (response.statusCode() != 200) {
+      throw new InstantiatorException(
+              String.format(
+                      "Attempted deletion of Live System failed with response code: %s and body %s ",
+                      response.statusCode(),
+                      response.body()));
+    }
+
+    log.info("Live System with id [id: '{}'] has been marked for deletion", liveSystemId);
   }
 }

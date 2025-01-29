@@ -9,206 +9,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class AzureRegionTest {
 
   @Test
-  public void azureActionConstants_shouldNotBeNull() {
-    assertThat(AzureRegion.EAST_US)
-        .as("EAST_US constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.EAST_US2)
-        .as("EAST_US2 constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.SOUTH_CENTRAL_US)
-        .as("SOUTH_CENTRAL_US constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.WEST_US2)
-        .as("WEST_US2 constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.WEST_US_3)
-        .as("WEST_US_3 constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.AUSTRALIA_EAST)
-        .as("AUSTRALIA_EAST constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.SOUTHEAST_ASIA)
-        .as("SOUTHEAST_ASIA constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.NORTH_EUROPE)
-        .as("NORTH_EUROPE constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.SWEDEN_CENTRAL)
-        .as("SWEDEN_CENTRAL constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.UK_SOUTH)
-        .as("UK_SOUTH constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.WEST_EUROPE)
-        .as("WEST_EUROPE constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.CENTRAL_US)
-        .as("CENTRAL_US constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.SOUTH_AFRICA_NORTH)
-        .as("SOUTH_AFRICA_NORTH constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.CENTRAL_INDIA)
-        .as("CENTRAL_INDIA constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.EAST_ASIA)
-        .as("EAST_ASIA constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.JAPAN_EAST)
-        .as("JAPAN_EAST constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.KOREA_CENTRAL)
-        .as("KOREA_CENTRAL constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.CANADA_CENTRAL)
-        .as("CANADA_CENTRAL constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.FRANCE_CENTRAL)
-        .as("FRANCE_CENTRAL constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.GERMANY_WEST_CENTRAL)
-        .as("GERMANY_WEST_CENTRAL constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.ITALY_NORTH)
-        .as("ITALY_NORTH constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.NORWAY_EAST)
-        .as("NORWAY_EAST constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.POLAND_CENTRAL)
-        .as("POLAND_CENTRAL constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.SWITZERLAND_NORTH)
-        .as("SWITZERLAND_NORTH constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.UAE_NORTH)
-        .as("UAE_NORTH constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.BRAZIL_SOUTH)
-        .as("BRAZIL_SOUTH constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.ISRAEL_CENTRAL)
-        .as("ISRAEL_CENTRAL constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.QATAR_CENTRAL)
-        .as("QATAR_CENTRAL constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.NORTH_CENTRAL_US)
-        .as("NORTH_CENTRAL_US constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.WEST_US)
-        .as("WEST_US constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.JAPAN_WEST)
-        .as("JAPAN_WEST constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.JIO_INDIA_WEST)
-        .as("JIO_INDIA_WEST constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.WEST_CENTRAL_US)
-        .as("WEST_CENTRAL_US constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.SOUTH_AFRICA_WEST)
-        .as("SOUTH_AFRICA_WEST constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.AUSTRALIA_CENTRAL)
-        .as("AUSTRALIA_CENTRAL constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.AUSTRALIA_CENTRAL2)
-        .as("AUSTRALIA_CENTRAL2 constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.AUSTRALIA_SOUTHEAST)
-        .as("AUSTRALIA_SOUTHEAST constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.JIO_INDIA_CENTRAL)
-        .as("JIO_INDIA_CENTRAL constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.KOREA_SOUTH)
-        .as("KOREA_SOUTH constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.SOUTH_INDIA)
-        .as("SOUTH_INDIA constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.WEST_INDIA)
-        .as("WEST_INDIA constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.CANADA_EAST)
-        .as("CANADA_EAST constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.FRANCE_SOUTH)
-        .as("FRANCE_SOUTH constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.GERMANY_NORTH)
-        .as("GERMANY_NORTH constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.NORWAY_WEST)
-        .as("NORWAY_WEST constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.SWITZERLAND_WEST)
-        .as("SWITZERLAND_WEST constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.UK_WEST)
-        .as("UK_WEST constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.UAE_CENTRAL)
-        .as("UAE_CENTRAL constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.BRAZIL_SOUTHEAST)
-        .as("BRAZIL_SOUTHEAST constant should not be null")
-        .isNotNull();
-
-    assertThat(AzureRegion.GLOBAL)
-        .as("GLOBAL constant should not be null")
-        .isNotNull();
+  public void azureActionConstants_shouldNotBeBlank() {
+    AzureRegion.values().forEach(x ->
+            assertThat(x.toString()).isNotBlank());
   }
 
   @Test
@@ -231,7 +34,7 @@ public class AzureRegionTest {
 
     assertThat(AzureRegion.fromString("westus3"))
         .as("fromString should return WEST_US_3 for 'westus3'")
-        .isEqualTo(AzureRegion.WEST_US_3);
+        .isEqualTo(AzureRegion.WEST_US3);
 
     assertThat(AzureRegion.fromString("australiaeast"))
         .as("fromString should return AUSTRALIA_EAST for 'australiaeast'")
@@ -281,6 +84,10 @@ public class AzureRegionTest {
         .as("fromString should return KOREA_CENTRAL for 'koreacentral'")
         .isEqualTo(AzureRegion.KOREA_CENTRAL);
 
+    assertThat(AzureRegion.fromString("newzealandnorth"))
+        .as("fromString should return NEWZEALAND_NORTH for 'newzealandnorth'")
+        .isEqualTo(AzureRegion.NEWZEALAND_NORTH);
+
     assertThat(AzureRegion.fromString("canadacentral"))
         .as("fromString should return CANADA_CENTRAL for 'canadacentral'")
         .isEqualTo(AzureRegion.CANADA_CENTRAL);
@@ -305,9 +112,17 @@ public class AzureRegionTest {
         .as("fromString should return POLAND_CENTRAL for 'polandcentral'")
         .isEqualTo(AzureRegion.POLAND_CENTRAL);
 
+    assertThat(AzureRegion.fromString("spaincentral"))
+        .as("fromString should return SPAIN_CENTRAL for 'spaincentral'")
+        .isEqualTo(AzureRegion.SPAIN_CENTRAL);
+
     assertThat(AzureRegion.fromString("switzerlandnorth"))
         .as("fromString should return SWITZERLAND_NORTH for 'switzerlandnorth'")
         .isEqualTo(AzureRegion.SWITZERLAND_NORTH);
+
+    assertThat(AzureRegion.fromString("mexicocentral"))
+        .as("fromString should return SWITZERLAND_NORTH for 'mexicocentral'")
+        .isEqualTo(AzureRegion.MEXICO_CENTRAL);
 
     assertThat(AzureRegion.fromString("uaenorth"))
         .as("fromString should return UAE_NORTH for 'uaenorth'")
@@ -321,9 +136,153 @@ public class AzureRegionTest {
         .as("fromString should return ISRAEL_CENTRAL for 'israelcentral'")
         .isEqualTo(AzureRegion.ISRAEL_CENTRAL);
 
-    assertThat(AzureRegion.fromString("qatarcentral"))
-        .as("fromString should return QATAR_CENTRAL for 'qatarcentral'")
-        .isEqualTo(AzureRegion.QATAR_CENTRAL);
+    assertThat(AzureRegion.fromString("centralusstage"))
+        .as("fromString should return CENTRAL_US_STAGE for 'qatarcencentralusstagetral'")
+        .isEqualTo(AzureRegion.CENTRAL_US_STAGE);
+
+    assertThat(AzureRegion.fromString("eastusstage"))
+        .as("fromString should return EAST_US_STAGE for 'eastusstage'")
+        .isEqualTo(AzureRegion.EAST_US_STAGE);
+
+    assertThat(AzureRegion.fromString("eastus2stage"))
+        .as("fromString should return EAST_US2_STAGE for 'eastus2stage'")
+        .isEqualTo(AzureRegion.EAST_US2_STAGE);
+
+    assertThat(AzureRegion.fromString("northcentralusstage"))
+        .as("fromString should return NORTH_CENTRAL_US_STAGE for 'northcentralusstage'")
+        .isEqualTo(AzureRegion.NORTH_CENTRAL_US_STAGE);
+
+    assertThat(AzureRegion.fromString("southcentralusstage"))
+        .as("fromString should return SOUTH_CENTRAL_US_STAGE for 'southcentralusstage'")
+        .isEqualTo(AzureRegion.SOUTH_CENTRAL_US_STAGE);
+
+    assertThat(AzureRegion.fromString("westusstage"))
+        .as("fromString should return WEST_US_STAGE for 'westusstage'")
+        .isEqualTo(AzureRegion.WEST_US_STAGE);
+
+    assertThat(AzureRegion.fromString("westus2stage"))
+        .as("fromString should return WEST_US2_STAGE for 'westus2stage'")
+        .isEqualTo(AzureRegion.WEST_US2_STAGE);
+
+    assertThat(AzureRegion.fromString("asia"))
+        .as("fromString should return ASIA for 'asia'")
+        .isEqualTo(AzureRegion.ASIA);
+
+    assertThat(AzureRegion.fromString("asiapacific"))
+        .as("fromString should return ASIA_PACIFIC for 'asiapacific'")
+        .isEqualTo(AzureRegion.ASIA_PACIFIC);
+
+    assertThat(AzureRegion.fromString("australia"))
+        .as("fromString should return AUSTRALIA for 'australia'")
+        .isEqualTo(AzureRegion.AUSTRALIA);
+
+    assertThat(AzureRegion.fromString("brazil"))
+        .as("fromString should return BRAZIL for 'brazil'")
+        .isEqualTo(AzureRegion.BRAZIL);
+
+    assertThat(AzureRegion.fromString("canada"))
+        .as("fromString should return CANADA for 'canada'")
+        .isEqualTo(AzureRegion.CANADA);
+
+    assertThat(AzureRegion.fromString("europe"))
+        .as("fromString should return EUROPE for 'europe'")
+        .isEqualTo(AzureRegion.EUROPE);
+
+    assertThat(AzureRegion.fromString("france"))
+        .as("fromString should return FRANCE for 'france'")
+        .isEqualTo(AzureRegion.FRANCE);
+
+    assertThat(AzureRegion.fromString("germany"))
+        .as("fromString should return GERMANY for 'germany'")
+        .isEqualTo(AzureRegion.GERMANY);
+
+    assertThat(AzureRegion.fromString("global"))
+        .as("fromString should return GLOBAL for 'global'")
+        .isEqualTo(AzureRegion.GLOBAL);
+
+    assertThat(AzureRegion.fromString("india"))
+        .as("fromString should return INDIA for 'india'")
+        .isEqualTo(AzureRegion.INDIA);
+
+    assertThat(AzureRegion.fromString("israel"))
+        .as("fromString should return ISRAEL for 'israel'")
+        .isEqualTo(AzureRegion.ISRAEL);
+
+    assertThat(AzureRegion.fromString("italy"))
+        .as("fromString should return ITALY for 'italy'")
+        .isEqualTo(AzureRegion.ITALY);
+
+    assertThat(AzureRegion.fromString("japan"))
+        .as("fromString should return JAPAN for 'japan'")
+        .isEqualTo(AzureRegion.JAPAN);
+
+    assertThat(AzureRegion.fromString("korea"))
+        .as("fromString should return KOREA for 'korea'")
+        .isEqualTo(AzureRegion.KOREA);
+
+    assertThat(AzureRegion.fromString("newzealand"))
+        .as("fromString should return NEWZEALAND for 'newzealand'")
+        .isEqualTo(AzureRegion.NEWZEALAND);
+
+    assertThat(AzureRegion.fromString("norway"))
+        .as("fromString should return NORWAY for 'norway'")
+        .isEqualTo(AzureRegion.NORWAY);
+
+    assertThat(AzureRegion.fromString("poland"))
+        .as("fromString should return POLAND for 'poland'")
+        .isEqualTo(AzureRegion.POLAND);
+
+    assertThat(AzureRegion.fromString("qatar"))
+        .as("fromString should return QATAR for 'qatar'")
+        .isEqualTo(AzureRegion.QATAR);
+
+    assertThat(AzureRegion.fromString("singapore"))
+        .as("fromString should return SINGAPORE for 'singapore'")
+        .isEqualTo(AzureRegion.SINGAPORE);
+
+    assertThat(AzureRegion.fromString("southafrica"))
+        .as("fromString should return SOUTHAFRICA for 'southafrica'")
+        .isEqualTo(AzureRegion.SOUTHAFRICA);
+
+    assertThat(AzureRegion.fromString("sweden"))
+        .as("fromString should return SWEDEN for 'sweden'")
+        .isEqualTo(AzureRegion.SWEDEN);
+
+    assertThat(AzureRegion.fromString("switzerland"))
+        .as("fromString should return SWITZERLAND for 'switzerland'")
+        .isEqualTo(AzureRegion.SWITZERLAND);
+
+    assertThat(AzureRegion.fromString("uae"))
+        .as("fromString should return UAE for 'uae'")
+        .isEqualTo(AzureRegion.UAE);
+
+    assertThat(AzureRegion.fromString("uk"))
+        .as("fromString should return UK for 'uk'")
+        .isEqualTo(AzureRegion.UK);
+
+    assertThat(AzureRegion.fromString("unitedstates"))
+        .as("fromString should return UNITEDSTATES for 'unitedstates'")
+        .isEqualTo(AzureRegion.UNITEDSTATES);
+
+    assertThat(AzureRegion.fromString("unitedstateseuap"))
+        .as("fromString should return UNITEDSTATES_EUAP for 'unitedstateseuap'")
+        .isEqualTo(AzureRegion.UNITEDSTATES_EUAP);
+
+    assertThat(AzureRegion.fromString("eastasiastage"))
+        .as("fromString should return EAST_ASIA_STAGE for 'eastasiastage'")
+        .isEqualTo(AzureRegion.EAST_ASIA_STAGE);
+
+    assertThat(AzureRegion.fromString("southeastasiastage"))
+        .as("fromString should return SOUTHEAST_ASIA_STAGE for 'southeastasiastage'")
+        .isEqualTo(AzureRegion.SOUTHEAST_ASIA_STAGE);
+
+    assertThat(AzureRegion.fromString("brazilus"))
+        .as("fromString should return BRAZIL_US for 'brazilus'")
+        .isEqualTo(AzureRegion.BRAZIL_US);
+
+    assertThat(AzureRegion.fromString("eastusstg"))
+        .as("fromString should return EAST_US_STG for 'eastusstg'")
+        .isEqualTo(AzureRegion.EAST_US_STG);
 
     assertThat(AzureRegion.fromString("northcentralus"))
         .as("fromString should return NORTH_CENTRAL_US for 'northcentralus'")
@@ -340,6 +299,18 @@ public class AzureRegionTest {
     assertThat(AzureRegion.fromString("jioindiawest"))
         .as("fromString should return JIO_INDIA_WEST for 'jioindiawest'")
         .isEqualTo(AzureRegion.JIO_INDIA_WEST);
+
+    assertThat(AzureRegion.fromString("centraluseuap"))
+        .as("fromString should return CENTRAL_US_EUAP for 'centraluseuap'")
+        .isEqualTo(AzureRegion.CENTRAL_US_EUAP);
+
+    assertThat(AzureRegion.fromString("eastus2euap"))
+        .as("fromString should return EAST_US_EUAP for 'eastus2euap'")
+        .isEqualTo(AzureRegion.EAST_US_EUAP);
+
+    assertThat(AzureRegion.fromString("southcentralusstg"))
+        .as("fromString should return SOUTH_CENTRAL_US_STG for 'southcentralusstg'")
+        .isEqualTo(AzureRegion.SOUTH_CENTRAL_US_STG);
 
     assertThat(AzureRegion.fromString("westcentralus"))
         .as("fromString should return WEST_CENTRAL_US for 'westcentralus'")
@@ -409,8 +380,8 @@ public class AzureRegionTest {
         .as("fromString should return BRAZIL_SOUTHEAST for 'brazilsoutheast'")
         .isEqualTo(AzureRegion.BRAZIL_SOUTHEAST);
 
-    assertThat(AzureRegion.fromString("Global"))
-        .as("fromString should return GLOBAL for 'Global'")
+    assertThat(AzureRegion.fromString("global"))
+        .as("fromString should return GLOBAL for 'global'")
         .isEqualTo(AzureRegion.GLOBAL);
   }
 
@@ -420,11 +391,11 @@ public class AzureRegionTest {
     
     assertThat(values)
         .as("Values should contain all specified AzureRegions")
-        .contains(AzureRegion.EAST_US,
-            AzureRegion.EAST_US2,
+        .contains(
+            AzureRegion.EAST_US,
             AzureRegion.SOUTH_CENTRAL_US,
             AzureRegion.WEST_US2,
-            AzureRegion.WEST_US_3,
+            AzureRegion.WEST_US3,
             AzureRegion.AUSTRALIA_EAST,
             AzureRegion.SOUTHEAST_ASIA,
             AzureRegion.NORTH_EUROPE,
@@ -437,21 +408,65 @@ public class AzureRegionTest {
             AzureRegion.EAST_ASIA,
             AzureRegion.JAPAN_EAST,
             AzureRegion.KOREA_CENTRAL,
+            AzureRegion.NEWZEALAND_NORTH,
             AzureRegion.CANADA_CENTRAL,
             AzureRegion.FRANCE_CENTRAL,
             AzureRegion.GERMANY_WEST_CENTRAL,
             AzureRegion.ITALY_NORTH,
             AzureRegion.NORWAY_EAST,
             AzureRegion.POLAND_CENTRAL,
+            AzureRegion.SPAIN_CENTRAL,
             AzureRegion.SWITZERLAND_NORTH,
+            AzureRegion.MEXICO_CENTRAL,
             AzureRegion.UAE_NORTH,
             AzureRegion.BRAZIL_SOUTH,
             AzureRegion.ISRAEL_CENTRAL,
             AzureRegion.QATAR_CENTRAL,
+            AzureRegion.CENTRAL_US_STAGE,
+            AzureRegion.EAST_US_STAGE,
+            AzureRegion.EAST_US2_STAGE,
+            AzureRegion.NORTH_CENTRAL_US_STAGE,
+            AzureRegion.SOUTH_CENTRAL_US_STAGE,
+            AzureRegion.WEST_US_STAGE,
+            AzureRegion.WEST_US2_STAGE,
+            AzureRegion.ASIA,
+            AzureRegion.ASIA_PACIFIC,
+            AzureRegion.AUSTRALIA,
+            AzureRegion.BRAZIL,
+            AzureRegion.CANADA,
+            AzureRegion.EUROPE,
+            AzureRegion.FRANCE,
+            AzureRegion.GERMANY,
+            AzureRegion.GLOBAL,
+            AzureRegion.INDIA,
+            AzureRegion.ISRAEL,
+            AzureRegion.ITALY,
+            AzureRegion.JAPAN,
+            AzureRegion.KOREA,
+            AzureRegion.NEWZEALAND,
+            AzureRegion.NORWAY,
+            AzureRegion.POLAND,
+            AzureRegion.QATAR,
+            AzureRegion.SINGAPORE,
+            AzureRegion.SOUTHAFRICA,
+            AzureRegion.SWEDEN,
+            AzureRegion.SWITZERLAND,
+            AzureRegion.UAE,
+            AzureRegion.UK,
+            AzureRegion.UNITEDSTATES,
+            AzureRegion.UNITEDSTATES_EUAP,
+            AzureRegion.EAST_ASIA_STAGE,
+            AzureRegion.SOUTHEAST_ASIA_STAGE,
+            AzureRegion.BRAZIL_US,
+            AzureRegion.EAST_US2,
+            AzureRegion.EAST_US_STG,
             AzureRegion.NORTH_CENTRAL_US,
             AzureRegion.WEST_US,
             AzureRegion.JAPAN_WEST,
             AzureRegion.JIO_INDIA_WEST,
+            AzureRegion.CENTRAL_US_EUAP,
+            AzureRegion.EAST_US_EUAP,
+            AzureRegion.SOUTH_CENTRAL_US_STG,
             AzureRegion.WEST_CENTRAL_US,
             AzureRegion.SOUTH_AFRICA_WEST,
             AzureRegion.AUSTRALIA_CENTRAL,
@@ -468,7 +483,6 @@ public class AzureRegionTest {
             AzureRegion.SWITZERLAND_WEST,
             AzureRegion.UK_WEST,
             AzureRegion.UAE_CENTRAL,
-            AzureRegion.BRAZIL_SOUTHEAST,
-            AzureRegion.GLOBAL);
+            AzureRegion.BRAZIL_SOUTHEAST);
   }
 }

@@ -3,9 +3,13 @@ import com.vanniktech.maven.publish.SonatypeHost
 
 plugins {
     `java-library`
+    `maven-publish`
     id("com.vanniktech.maven.publish") version "0.30.0"
     id("com.adarshr.test-logger") version "4.0.0"
+    id("com.mikepenz.aboutlibraries.plugin") version "11.4.0-b01"
 }
+
+group="com.yanchware"
 
 repositories {
     mavenLocal()
@@ -32,6 +36,7 @@ dependencies {
     testImplementation(libs.org.wiremock.wiremock)
     testImplementation(libs.org.assertj.assertj.core)
     testImplementation(libs.com.flextrade.jfixture.jfixture)
+    testImplementation(libs.org.mockito.mockito.core)
     compileOnly(libs.org.projectlombok.lombok)
     annotationProcessor(libs.org.projectlombok.lombok)
     testCompileOnly(libs.org.projectlombok.lombok)

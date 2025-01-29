@@ -24,7 +24,6 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
 public class CaaSAmbassador extends CaaSAPIGatewayImpl {
-  private final static String HOST_IS_BLANK = "[CaaSAmbassador Validation] Host has not been defined and it is required";
   private final static String HOST_OWNER_EMAIL_IS_BLANK = "[CaaSAmbassador Validation] Host Owner Email has not been defined and it is required";
   private final static String ACME_PROVIDER_AUTHORITY_IS_BLANK = "[CaaSAmbassador Validation] Automated Certificate Management Environment (ACME) Provider Authority has not been defined and it is required";
   private final static String LICENSE_IS_BLANK = "[CaaSAmbassador Validation] License Key defined was either empty or blank and it is required";
@@ -140,10 +139,6 @@ public class CaaSAmbassador extends CaaSAPIGatewayImpl {
   @Override
   public Collection<String> validate() {
     Collection<String> errors = super.validate();
-
-    if (isBlank(host)) {
-      errors.add(HOST_IS_BLANK);
-    }
 
     if (isBlank(hostOwnerEmail)) {
       errors.add(HOST_OWNER_EMAIL_IS_BLANK);

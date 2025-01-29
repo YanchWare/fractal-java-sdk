@@ -25,7 +25,6 @@ public class OperationalEnvironment extends BaseEnvironment {
   
   @Setter(AccessLevel.PROTECTED)
   private EnvironmentIdValue managementEnvironmentId;
-  
 
   @Setter(AccessLevel.PRIVATE)
   private String shortName;
