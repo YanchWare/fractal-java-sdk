@@ -1,6 +1,8 @@
 package com.yanchware.fractal.sdk.domain.environment.service;
 
+import com.yanchware.fractal.sdk.domain.environment.CiCdProfile;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentIdValue;
+import com.yanchware.fractal.sdk.domain.environment.service.dtos.CiCdProfileResponse;
 import com.yanchware.fractal.sdk.domain.environment.service.dtos.EnvironmentResponse;
 import com.yanchware.fractal.sdk.domain.environment.service.dtos.InitializationRunResponse;
 import com.yanchware.fractal.sdk.domain.environment.service.dtos.SecretResponse;
@@ -23,6 +25,7 @@ public interface EnvironmentService {
             Map<String, Object> parameters) throws InstantiatorException;
 
     EnvironmentResponse update(
+            EnvironmentIdValue managementEnvironmentId,
             EnvironmentIdValue environmentId,
             String name,
             Collection<UUID> resourceGroups,
@@ -67,4 +70,5 @@ public interface EnvironmentService {
     void createSecret(EnvironmentIdValue environmentId, String secretName, String secretValue) throws InstantiatorException;
     void updateSecret(EnvironmentIdValue environmentId, String secretName, String secretValue) throws InstantiatorException;
     void deleteSecret(EnvironmentIdValue environmentId, String secretName) throws InstantiatorException;
+    CiCdProfileResponse[] manageCiCdProfiles(EnvironmentIdValue environmentId, Collection<CiCdProfile> ciCdProfiles) throws InstantiatorException;
 }
