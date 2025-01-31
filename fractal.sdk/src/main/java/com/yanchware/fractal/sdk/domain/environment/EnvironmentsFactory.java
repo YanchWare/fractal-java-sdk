@@ -1,6 +1,8 @@
 package com.yanchware.fractal.sdk.domain.environment;
 
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
+import com.yanchware.fractal.sdk.domain.environment.service.EnvironmentService;
+import com.yanchware.fractal.sdk.domain.environment.service.RestEnvironmentService;
 import io.github.resilience4j.retry.RetryRegistry;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +31,7 @@ public class EnvironmentsFactory {
     }
 
     protected EnvironmentAggregate create(HttpClient client, SdkConfiguration sdkConfiguration, RetryRegistry retryRegistry) {
-      return new EnvironmentAggregate(client, sdkConfiguration, retryRegistry);
+      return new EnvironmentAggregate(new RestEnvironmentService(client, sdkConfiguration, retryRegistry));
     }
 
     protected EnvironmentBuilder getBuilder() {

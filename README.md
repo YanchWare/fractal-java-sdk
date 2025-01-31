@@ -39,15 +39,14 @@ The code created by the users referring to this SDK needs to run in a CI/CD envi
 
 This means that tests and design of the SDK needs to be done accordingly (nice output of warnings and errors. Error exit on error in order to block pipeline, secrets through env vars and/or cli inputs, etc).
 
+## Local Development
 
-## Documentation template
+Publish snapshot versions to local maven repository through gradle, executing the following command:
 
-Intro + Drawing
-Arguments (required & optional - specify defaults) - java code example with comments to the fields + detailed
-Examples (maybe with tabs for each provider)
+`./gradlew -Pversion=LOCAL-SNAPSHOT clean publishToMavenLocal`
 
+### SSL Certificate Management Script for Local Development
 
-## SSL Certificate Management Script for Local Development
 This script (local-dev/importLocalSslCertToJavaKeystore.sh) is designed to manage SSL certificates for local development environments, specifically addressing the PKIX path building failed error often encountered in Java applications. It automates the process of exporting an SSL certificate from a specified domain and port and importing it into the Java keystore.
 
 ### Script Overview  

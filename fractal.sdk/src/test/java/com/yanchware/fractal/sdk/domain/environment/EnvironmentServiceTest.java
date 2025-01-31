@@ -9,6 +9,7 @@ import com.yanchware.fractal.sdk.domain.environment.azure.AzureCloudAgent;
 import com.yanchware.fractal.sdk.domain.environment.gcp.GcpCloudAgent;
 import com.yanchware.fractal.sdk.domain.environment.oci.OciCloudAgent;
 import com.yanchware.fractal.sdk.domain.environment.service.EnvironmentService;
+import com.yanchware.fractal.sdk.domain.environment.service.RestEnvironmentService;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.aws.AwsRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GcpRegion;
@@ -50,7 +51,7 @@ class EnvironmentServiceTest {
         .withResourceGroup(UUID.randomUUID())
         .build();
     
-    environmentService = new EnvironmentService(httpClient, sdkConfiguration, RetryRegistry.ofDefaults());
+    environmentService = new RestEnvironmentService(httpClient, sdkConfiguration, RetryRegistry.ofDefaults());
   }
 
   @Test
@@ -314,7 +315,7 @@ class EnvironmentServiceTest {
     // When
     CloudAgentEntity cloudAgent = new GcpCloudAgent(
         mockEnvironment.getId(),
-        GcpRegion.EU_WEST1,
+        GcpRegion.EUROPE_WEST1,
         "organizationId",
         "projectId",
         Collections.emptyMap());

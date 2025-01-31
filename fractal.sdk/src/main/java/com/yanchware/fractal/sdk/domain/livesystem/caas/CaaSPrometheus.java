@@ -25,8 +25,6 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
 public class CaaSPrometheus extends CaaSMonitoringImpl implements LiveSystemComponent {
-  private final static String API_GATEWAY_URL_IS_BLANK = "[CaaSPrometheus Validation] API Gateway URL has not been defined and it is required";
-
   private String apiGatewayUrl;
 
   public static PrometheusBuilder builder() {
@@ -87,12 +85,6 @@ public class CaaSPrometheus extends CaaSMonitoringImpl implements LiveSystemComp
 
   @Override
   public Collection<String> validate() {
-    Collection<String> errors = super.validate();
-
-    if (isBlank(apiGatewayUrl)) {
-      errors.add(API_GATEWAY_URL_IS_BLANK);
-    }
-
-    return errors;
+      return super.validate();
   }
 }
