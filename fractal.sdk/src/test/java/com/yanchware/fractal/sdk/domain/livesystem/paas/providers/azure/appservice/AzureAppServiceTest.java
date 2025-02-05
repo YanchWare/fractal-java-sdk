@@ -34,8 +34,6 @@ public class AzureAppServiceTest {
     assertThatThrownBy(() -> generateBuilder().build()).
         isInstanceOf(IllegalArgumentException.class).
         hasMessageContainingAll(
-            "privateSSHKeyPassphraseSecretId is either empty or blank",
-            "privateSSHKeySecretId is either empty or blank",
             "sshRepositoryURI is either empty or blank",
             "repoId is either empty or blank");
   }

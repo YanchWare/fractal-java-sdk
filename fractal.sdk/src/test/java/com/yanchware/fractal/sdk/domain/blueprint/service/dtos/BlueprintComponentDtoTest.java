@@ -196,7 +196,8 @@ public class BlueprintComponentDtoTest {
             aks.getTags(),
             aks.getWindowsAdminUsername(),
             aks.getWorkloadIdentityEnabled(),
-            aks.getManagedClusterSkuTier()
+            aks.getManagedClusterSkuTier(),
+            aks.isPrivateClusterDisabled()
         ));
   }
 
