@@ -43,8 +43,6 @@ public interface CustomWorkload {
   void setCiCdProfiles(List<String> ciCdProfiles);
 
   static Collection<String> validateCustomWorkload(CustomWorkload customWorkload, String workloadType){
-    final var SSH_KEY_PASS_SECRET_IS_EMPTY_TEMPLATE = "[%s Validation] privateSSHKeyPassphraseSecretId is either empty or blank and it is required";
-    final var SSH_KEY_SECRET_IS_EMPTY_TEMPLATE = "[%s Validation] privateSSHKeySecretId is either empty or blank and it is required";
     final var SSH_REPO_URI_IS_EMPTY_TEMPLATE = "[%s Validation] sshRepositoryURI is either empty or blank and it is required";
     final var REPO_ID_IS_EMPTY_TEMPLATE = "[%s Validation] repoId is either empty or blank and it is required";
     final var BRANCH_NAME_IS_EMPTY_TEMPLATE = "[%s Validation] branchName is either empty or blank and it is required";
@@ -52,14 +50,6 @@ public interface CustomWorkload {
     final var WORKLOAD_SECRET_PASSWORD_KEY_IS_EMPTY_TEMPLATE = "[%s Validation] Workload Secret Password Key is either empty or blank and it is required";
 
     var errors = new ArrayList<String>();
-
-    if (StringUtils.isBlank(customWorkload.getPrivateSSHKeyPassphraseSecretId())) {
-      errors.add(String.format(SSH_KEY_PASS_SECRET_IS_EMPTY_TEMPLATE, workloadType));
-    }
-
-    if (StringUtils.isBlank(customWorkload.getPrivateSSHKeySecretId())) {
-      errors.add(String.format(SSH_KEY_SECRET_IS_EMPTY_TEMPLATE, workloadType));
-    }
 
     if (StringUtils.isBlank(customWorkload.getSshRepositoryURI())) {
       errors.add(String.format(SSH_REPO_URI_IS_EMPTY_TEMPLATE, workloadType));
@@ -82,6 +72,7 @@ public interface CustomWorkload {
     if (workloadSecretPasswordKey != null && StringUtils.isBlank(workloadSecretPasswordKey)) {
       errors.add(String.format(WORKLOAD_SECRET_PASSWORD_KEY_IS_EMPTY_TEMPLATE, workloadType));
     }
+
     return errors;
   }
 }

@@ -36,8 +36,6 @@ public class CaaSKubernetesCustomWorkloadTest {
         isInstanceOf(IllegalArgumentException.class).
         hasMessageContainingAll(
             "Namespace has not been defined and it is required",
-            "privateSSHKeyPassphraseSecretId is either empty or blank",
-            "privateSSHKeySecretId is either empty or blank",
             "sshRepositoryURI is either empty or blank",
             "repoId is either empty or blank");
   }

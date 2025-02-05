@@ -41,6 +41,17 @@ public class AzureKubernetesServiceTest {
   }
 
   @Test
+  public void noValidationErrors_when_aksHasRequiredFieldsAndPrivateClusterDisabled() {
+    var aks = getDefaultAks()
+            .disablePrivateCluster()
+            .build();
+
+    assertThat(aks.validate()).isEmpty();
+
+    assertThat(aks.isPrivateClusterDisabled()).isTrue();
+  }
+
+  @Test
   public void noValidationErrors_when_getAksBuilderHasRequiredFields() {
     var aks = getAksBuilder().build();
     var json = TestUtils.getJsonRepresentation(aks);

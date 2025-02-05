@@ -43,6 +43,7 @@ public class AzureKubernetesService extends KubernetesCluster implements AzureRe
   private AzureActiveDirectoryProfile azureActiveDirectoryProfile;
   private String kubernetesVersion;
   private ManagedClusterSkuTier managedClusterSkuTier;
+  private boolean privateClusterDisabled;
 
   @Setter
   private Map<String, String> tags;
@@ -54,6 +55,7 @@ public class AzureKubernetesService extends KubernetesCluster implements AzureRe
     nodePools = new ArrayList<>();
     outboundIps = new ArrayList<>();
     managedClusterSkuTier = ManagedClusterSkuTier.FREE;
+    privateClusterDisabled = false;
   }
 
   @Override
@@ -199,6 +201,11 @@ public class AzureKubernetesService extends KubernetesCluster implements AzureRe
 
     public AzureKubernetesServiceBuilder withManagedClusterSkuTier(ManagedClusterSkuTier managedClusterSkuTier) {
       component.setManagedClusterSkuTier(managedClusterSkuTier);
+      return builder;
+    }
+
+    public AzureKubernetesServiceBuilder disablePrivateCluster() {
+      component.setPrivateClusterDisabled(true);
       return builder;
     }
   }
