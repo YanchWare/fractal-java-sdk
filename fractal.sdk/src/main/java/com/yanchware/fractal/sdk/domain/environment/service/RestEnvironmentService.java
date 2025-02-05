@@ -3,12 +3,10 @@ package com.yanchware.fractal.sdk.domain.environment.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.Service;
+import com.yanchware.fractal.sdk.domain.environment.CiCdProfile;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentIdValue;
 import com.yanchware.fractal.sdk.domain.environment.service.commands.*;
-import com.yanchware.fractal.sdk.domain.environment.service.dtos.EnvironmentResponse;
-import com.yanchware.fractal.sdk.domain.environment.service.dtos.InitializationRunResponse;
-import com.yanchware.fractal.sdk.domain.environment.service.dtos.InitializationRunRoot;
-import com.yanchware.fractal.sdk.domain.environment.service.dtos.SecretResponse;
+import com.yanchware.fractal.sdk.domain.environment.service.dtos.*;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.aws.AwsRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion;
@@ -66,6 +64,7 @@ public class RestEnvironmentService extends Service implements EnvironmentServic
 
   @Override
   public EnvironmentResponse update(
+      EnvironmentIdValue managementEnvironmentId,
       EnvironmentIdValue environmentId,
       String name,
       Collection<UUID> resourceGroups,
@@ -78,7 +77,7 @@ public class RestEnvironmentService extends Service implements EnvironmentServic
         HttpUtils.buildPutRequest(
             getEnvironmentsUri(environmentId),
             sdkConfiguration,
-            serializeSafely(new UpdateEnvironmentRequest(name, resourceGroups, parameters))),
+            serializeSafely(new UpdateEnvironmentRequest(managementEnvironmentId, name, resourceGroups, parameters))),
         new int[]{200},
         EnvironmentResponse.class);
   }
@@ -354,6 +353,21 @@ public class RestEnvironmentService extends Service implements EnvironmentServic
         new int[]{204});
   }
 
+  @Override
+  public CiCdProfileResponse[] manageCiCdProfiles(EnvironmentIdValue environmentId, Collection<CiCdProfile> ciCdProfiles) throws InstantiatorException {
+    return executeRequestWithRetries(
+            "manageCiCdProfiles",
+            environmentId.toString(),
+            client,
+            retryRegistry,
+            HttpUtils.buildPostRequest(
+                    getCiCdProfilesBulkUri(environmentId),
+                    sdkConfiguration,
+                    serializeSafely(ciCdProfiles)),
+            new int[]{201, 404},
+            CiCdProfileResponse[].class);
+  }
+
   private InitializationRunResponse fetchCurrentInitialization(
       EnvironmentIdValue environmentId,
       ProviderType provider) throws InstantiatorException {
@@ -419,5 +433,15 @@ public class RestEnvironmentService extends Service implements EnvironmentServic
 
   private URI getSecretsUri(EnvironmentIdValue environmentId) {
     return getEnvironmentsSecretsUri(environmentId, "");
+  }
+
+  private URI getCiCdProfilesBulkUri(EnvironmentIdValue environmentId) {
+    var ciCdProfileEndpoint = String.format("%s/%s/%s/%s/ci-cd-profiles",
+            sdkConfiguration.getEnvironmentsEndpoint(),
+            environmentId.type(),
+            environmentId.ownerId(),
+            environmentId.shortName());
+
+    return getUriWithOptionalPath(ciCdProfileEndpoint, "bulk");
   }
 }

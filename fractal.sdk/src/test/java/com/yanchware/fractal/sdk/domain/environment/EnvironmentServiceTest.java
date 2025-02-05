@@ -147,6 +147,7 @@ class EnvironmentServiceTest {
 
     // When
     environmentService.update(
+            null,
         mockEnvironment.getId(),
         mockEnvironment.getName(),
         mockEnvironment.getResourceGroups(),
@@ -221,6 +222,7 @@ class EnvironmentServiceTest {
 
     // When
     var response = environmentService.update(
+            null,
         mockEnvironment.getId(),
         mockEnvironment.getName(),
         mockEnvironment.getResourceGroups(),

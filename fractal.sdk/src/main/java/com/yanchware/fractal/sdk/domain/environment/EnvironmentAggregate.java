@@ -47,6 +47,7 @@ public class EnvironmentAggregate {
                 log.info("Updating existing Management Environment [id: '{}']", managementEnvironmentId);
                 service.update(
                         managementEnvironmentId,
+                        managementEnvironmentId,
                         managementEnvironment.getName(),
                         managementEnvironment.getResourceGroups(),
                         managementEnvironment.getParameters());
@@ -64,6 +65,25 @@ public class EnvironmentAggregate {
         }
 
         return existingEnvironment.status().equalsIgnoreCase("deleted");
+    }
+
+    public void manageCiCdProfiles() throws InstantiatorException {
+        var managementEnvironmentId = managementEnvironment.getId();
+
+        log.info("Managing CI/CD profiles for management environment [id: {}]", managementEnvironmentId);
+
+        var profilesResponse = service.manageCiCdProfiles(managementEnvironmentId, managementEnvironment.getCiCdProfiles());
+
+        log.info("Managed {} CI/CD profiles for management environment [id: {}]", profilesResponse.length, managementEnvironmentId);
+
+        for (var environment : managementEnvironment.getOperationalEnvironments()) {
+            var environmentId = environment.getId();
+            log.info("Managing CI/CD profiles for operational environment [id: {}]", environmentId);
+
+            profilesResponse = service.manageCiCdProfiles(environmentId, environment.getCiCdProfiles());
+
+            log.info("Managed {} CI/CD profiles for operational environment [id: {}]", profilesResponse.length, environmentId);
+        }
     }
 
     public void manageSecrets() throws InstantiatorException {
@@ -128,6 +148,7 @@ public class EnvironmentAggregate {
             } else {
                 log.info("Updating existing Operational Environment [id: '{}']", environmentId);
                 service.update(
+                        managementEnvironment.getId(),
                         environmentId,
                         operationalEnvironment.getName(),
                         operationalEnvironment.getResourceGroups(),
