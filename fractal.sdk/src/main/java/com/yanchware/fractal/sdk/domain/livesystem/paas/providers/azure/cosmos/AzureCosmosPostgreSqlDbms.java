@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_COSMOS_POSTGRESQL_CLUSTER;
 import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidLowercaseLettersNumbersAndHyphens;
 import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLength;
 import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_COSMOS_ACCOUNT;
@@ -23,10 +24,8 @@ import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_COSMOS_
 @ToString(callSuper = true)
 public class AzureCosmosPostgreSqlDbms extends PaaSRelationalDbms implements LiveSystemComponent, AzureCosmosAccount {
 
-  public static final String TYPE = PAAS_COSMOS_ACCOUNT.getId();
-
+  public static final String TYPE = PAAS_COSMOS_POSTGRESQL_CLUSTER.getId();
   private final static String NAME_NOT_VALID = "[AzureCosmosPostgreSqlDbms Validation] The name must only contains lowercase letters, numbers, and hyphens. The name must not start or end in a hyphen and must be between 3 and 40 characters long";
-
 
   private String name;
   private Integer maxTotalThroughput;
