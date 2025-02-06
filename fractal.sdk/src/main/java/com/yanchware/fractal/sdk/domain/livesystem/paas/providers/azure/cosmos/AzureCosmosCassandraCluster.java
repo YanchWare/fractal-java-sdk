@@ -25,7 +25,6 @@ public class AzureCosmosCassandraCluster extends PaaSCassandra implements AzureR
   private final static String ILLEGAL_AMOUNT_OF_HOURS_BETWEEN_BACKUP = "Cosmos Cassandra Cluster periodic backup feature needs a value of hours between backups that is larger or equal to 1";
   private final static String NAME_NOT_VALID = "[AzureCosmosCassandraCluster Validation] The name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen, and must be between 3 and 44 characters long";
 
-
   private String cassandraVersion;
   private boolean useCassandraAuthentication;
   private boolean isDeallocated;
