@@ -42,6 +42,7 @@ public enum ComponentType {
   PAAS_COSMOS_NOSQL_DATABASE("Storage.PaaS.CosmosDbNoSqlDatabase"),
   PAAS_COSMOS_TABLE("Storage.PaaS.CosmosDbTable"),
   PAAS_COSMOS_ACCOUNT("Storage.PaaS.CosmosDbAccount"),
+  PAAS_COSMOS_POSTGRESQL_CLUSTER("Storage.PaaS.CosmosDbPostgresSqlCluster"),
   PAAS_DOCUMENT_DBMS("Storage.PaaS.DocumentDbms"),
   PAAS_DOCUMENT_DATABASE("Storage.PaaS.DocumentDatabase"),
   PAAS_KEY_VALUE_DBMS("Storage.PaaS.KeyValueDbms"),
