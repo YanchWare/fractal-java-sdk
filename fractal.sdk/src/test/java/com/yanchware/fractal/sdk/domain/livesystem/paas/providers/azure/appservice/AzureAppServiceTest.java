@@ -295,7 +295,7 @@ public class AzureAppServiceTest {
         .withSecret("secret-1")
         .withSecret("secret-2")
         .withSecret("secret-3")
-        .withCiCdProfile("default")
+        .withCiCdProfileShortName("default")
         .build();
 
     assertThat(webApp.getConfiguration().getApiManagementConfigId()).isEqualTo("withApiManagementConfigId");
