@@ -30,7 +30,7 @@ public class CaaSKubernetesWorkload extends CaaSWorkload implements LiveSystemCo
     private String serviceAccountName;
     private Boolean workloadIdentityEnabled;
     private List<String> secrets;
-    private List<String> ciCdProfiles;
+    private String ciCdProfileShortName;
 
     @Override
     public ProviderType getProvider(){

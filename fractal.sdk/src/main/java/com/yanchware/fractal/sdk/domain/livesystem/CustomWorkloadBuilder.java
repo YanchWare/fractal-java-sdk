@@ -157,26 +157,16 @@ public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload
   }
 
   /**
-   * Adds a single CI/CD profile name to the component.
+   * Adds a CI/CD profile short name to the component. 
+   * This is to specify which CI/CD profile should be used by the component.
+   * The profile should be defined at the Environment level.
+   * This method only adds a reference to the profile by its short name.
    *
-   * @param profileName The name of the CI/CD profile to add.
+   * @param profileShortName The short name of the CI/CD profile to add.
    * @return The builder instance.
    */
-  public B withCiCdProfile(String profileName) {
-    return withCiCdProfiles(List.of(profileName));
-  }
-
-  /**
-   * Adds a list of CI/CD profile names to the component.
-   *
-   * @param profileNames The list of CI/CD profile names to add.
-   * @return The builder instance.
-   */
-  public B withCiCdProfiles(List<String> profileNames) {
-    if (component.getCiCdProfiles() == null) {
-      component.setCiCdProfiles(new ArrayList<>());
-    }
-    component.getCiCdProfiles().addAll(profileNames);
+  public B withCiCdProfileShortName(String profileShortName) {
+    component.setCiCdProfileShortName(profileShortName);
     return builder;
   }
 }
