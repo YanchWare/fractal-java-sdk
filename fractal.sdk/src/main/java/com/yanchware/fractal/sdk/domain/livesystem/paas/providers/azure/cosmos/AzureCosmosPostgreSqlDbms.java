@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.*;
 
 import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_COSMOS_POSTGRESQL_CLUSTER;
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_COSMOS_POSTGRESQL_DATABASE;
 import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidLowercaseLettersNumbersAndHyphens;
 import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLength;
 
@@ -286,6 +287,12 @@ public class AzureCosmosPostgreSqlDbms extends PaaSPostgreSqlDbms implements Liv
     public AzureCosmosPostgreSqlDbmsBuilder withAzureResourceGroup(AzureResourceGroup azureResourceGroup) {
       component.setAzureResourceGroup(azureResourceGroup);
       return builder;
+    }
+
+    @Override
+    public AzureCosmosPostgreSqlDbms build() {
+      component.setType(PAAS_COSMOS_POSTGRESQL_CLUSTER);
+      return super.build();
     }
   }
 
