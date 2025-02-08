@@ -2,7 +2,7 @@ package com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.appserv
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum AzureSkuName {
+public enum AzureAppServiceSkuName {
   B_GEN5_1("B_Gen5_1"),
   B_GEN5_2("B_Gen5_2"),
   GP_GEN5_2("GP_Gen5_2"),
@@ -19,7 +19,7 @@ public enum AzureSkuName {
 
   private final String id;
 
-  AzureSkuName(final String id) {
+  AzureAppServiceSkuName(final String id) {
     this.id = id;
   }
 

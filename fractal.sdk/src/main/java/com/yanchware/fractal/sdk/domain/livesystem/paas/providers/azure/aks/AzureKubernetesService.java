@@ -1,5 +1,6 @@
 package com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.aks;
 
+import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.KubernetesCluster;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.RoleAssignment;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion;
@@ -22,7 +23,7 @@ import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLengt
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
-public class AzureKubernetesService extends KubernetesCluster implements AzureResourceEntity {
+public class AzureKubernetesService extends KubernetesCluster implements AzureResourceEntity, LiveSystemComponent {
   private final static String EMPTY_NODE_POOL = "[AzureKubernetesService Validation] Node pool list is null or empty and at least one node pool is required";
   private final static String REGION_IS_NULL = "[AzureKubernetesService Validation] Region is not specified and it is required";
   private final static String VNET_ADDRESS_SPACE_RANGE_NOT_VALID = "[KubernetesCluster Validation] VNet Address Space IP Range does not contain a valid ip with mask";

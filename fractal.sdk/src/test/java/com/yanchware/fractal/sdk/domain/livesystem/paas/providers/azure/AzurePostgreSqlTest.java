@@ -9,7 +9,7 @@ import java.util.Optional;
 import static com.yanchware.fractal.sdk.domain.livesystem.paas.PostgreSqlCharset.UTF8;
 import static com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion.WEST_EUROPE;
 import static com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureStorageAutoGrow.ENABLED;
-import static com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.appservice.valueobjects.AzureSkuName.B_GEN5_1;
+import static com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.appservice.valueobjects.AzureAppServiceSkuName.B_GEN5_1;
 import static com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType.AZURE;
 import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_POSTGRESQL_DBMS;
 import static org.assertj.core.api.Assertions.*;
@@ -36,7 +36,7 @@ public class AzurePostgreSqlTest {
     var azurePg = AzurePostgreSqlDbms.builder()
         .withId(ComponentId.from("azure-pg"))
         .withRegion(WEST_EUROPE)
-        .withStorageMB(1234)
+        .withStorageGb(1234)
         .withBackupRetentionDays(6);
     assertThatThrownBy(azurePg::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
         "[AzurePostgreSQL Validation] Backup Retention Days must be between 7 and 35 days");
@@ -47,7 +47,7 @@ public class AzurePostgreSqlTest {
     var azurePg = AzurePostgreSqlDbms.builder()
         .withId(ComponentId.from("azure-pg"))
         .withRegion(WEST_EUROPE)
-        .withStorageMB(1234)
+        .withStorageGb(1234)
         .withBackupRetentionDays(36);
     assertThatThrownBy(azurePg::build).isInstanceOf(IllegalArgumentException.class).hasMessageContainingAll(
         "[AzurePostgreSQL Validation] Backup Retention Days must be between 7 and 35 days");
@@ -67,7 +67,7 @@ public class AzurePostgreSqlTest {
         .withRootUser("rootUser")
         .withSkuName(B_GEN5_1)
         .withStorageAutoGrow(ENABLED)
-        .withStorageMB(5 * 1024)
+        .withStorageGb(5 * 1024)
         .withBackupRetentionDays(12)
         .withDatabase(AzurePostgreSqlDatabase.builder()
             .withId(ComponentId.from("db-1"))
@@ -84,7 +84,7 @@ public class AzurePostgreSqlTest {
         .returns("rootUser", from(AzurePostgreSqlDbms::getRootUser))
         .returns(B_GEN5_1, from(AzurePostgreSqlDbms::getSkuName))
         .returns(ENABLED, from(AzurePostgreSqlDbms::getStorageAutoGrow))
-        .returns(5 * 1024, from(AzurePostgreSqlDbms::getStorageMB))
+        .returns(5 * 1024, from(AzurePostgreSqlDbms::getStorageGb))
         .returns(12, from(AzurePostgreSqlDbms::getBackupRetentionDays))
         .returns(1, from(x -> x.getDatabases().size()));
     Optional<PaaSPostgreSqlDatabase> postgreSqlDbOptional = azurePostgreSql.getDatabases().stream().findFirst();
