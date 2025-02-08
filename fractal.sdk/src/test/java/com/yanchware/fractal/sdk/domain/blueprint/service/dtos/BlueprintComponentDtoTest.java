@@ -242,7 +242,7 @@ public class BlueprintComponentDtoTest {
               apg.getRootUser(),
               apg.getSkuName().getId(),
               apg.getStorageAutoGrow().getId(),
-              apg.getStorageMB(),
+              apg.getStorageGb(),
               apg.getBackupRetentionDays(),
               apg.getName()
           );

@@ -1,7 +1,8 @@
 package com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure;
 
+import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.PaaSPostgreSqlDbms;
-import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.appservice.valueobjects.AzureSkuName;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.appservice.valueobjects.AzureAppServiceSkuName;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import com.yanchware.fractal.sdk.utils.CollectionUtils;
 import lombok.AccessLevel;
@@ -18,11 +19,11 @@ import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLengt
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
-public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms implements AzureResourceEntity {
+public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms implements AzureResourceEntity, LiveSystemComponent {
 
   private final static String REGION_IS_NULL = "[AzurePostgreSQL Validation] Region has not been defined and it is required";
 
-  private final static String INVALID_STORAGE_MB = "[AzurePostgreSQL Validation] Storage MB is less than minimum requirement of 5 GB";
+  private final static String INVALID_STORAGE_GB = "[AzurePostgreSQL Validation] Storage GB is less than minimum requirement of 5 GB";
 
   private final static String INVALID_BACKUP_RETENTION_DAYS = "[AzurePostgreSQL Validation] Backup Retention Days must be between 7 and 35 days";
 
@@ -35,11 +36,11 @@ public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms implements AzureReso
   @Setter
   private AzureResourceGroup azureResourceGroup;
 
-  private AzureSkuName skuName;
+  private AzureAppServiceSkuName skuName;
 
   private AzureStorageAutoGrow storageAutoGrow;
 
-  private Integer storageMB;
+  private Integer storageGb;
 
   private Integer backupRetentionDays;
 
@@ -123,7 +124,7 @@ public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms implements AzureReso
      * SKU name for PostgreSql DBMS
      * @param skuName
      */
-    public AzurePostgreSqlBuilder withSkuName(AzureSkuName skuName) {
+    public AzurePostgreSqlBuilder withSkuName(AzureAppServiceSkuName skuName) {
       component.setSkuName(skuName);
       return builder;
     }
@@ -138,11 +139,11 @@ public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms implements AzureReso
     }
 
     /**
-     * PostgreSql DBMS storage in MB
-     * @param storageMB
+     * PostgreSql DBMS storage in GB
+     * @param storageGb
      */
-    public AzurePostgreSqlBuilder withStorageMB(int storageMB) {
-      component.setStorageMB(storageMB);
+    public AzurePostgreSqlBuilder withStorageGb(int storageGb) {
+      component.setStorageGb(storageGb);
       return builder;
     }
 
@@ -203,8 +204,8 @@ public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms implements AzureReso
       errors.add(REGION_IS_NULL);
     }
 
-    if (storageMB != null && storageMB < 5 * 1024) {
-      errors.add(INVALID_STORAGE_MB);
+    if (storageGb != null && storageGb < 5) {
+      errors.add(INVALID_STORAGE_GB);
     }
 
     if (backupRetentionDays != null && (backupRetentionDays < 7 || backupRetentionDays > 35)) {

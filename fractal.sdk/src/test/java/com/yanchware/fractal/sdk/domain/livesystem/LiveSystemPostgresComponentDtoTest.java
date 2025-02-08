@@ -50,7 +50,7 @@ class LiveSystemPostgresComponentDtoTest {
                 "rootUser",
                 "skuName",
                 "storageAutoGrow",
-                "storageMB")
+                "storageGb")
             .containsExactly(
                 postgres.getAzureRegion(),
                 postgres.getBackupRetentionDays(),
@@ -58,7 +58,7 @@ class LiveSystemPostgresComponentDtoTest {
                 postgres.getRootUser(),
                 postgres.getSkuName().getId(),
                 postgres.getStorageAutoGrow().getId(),
-                postgres.getStorageMB());
+                postgres.getStorageGb());
     }
 
     private void assertPostgresDb(Map<String, LiveSystemComponentDto> lsDtoMap, AzurePostgreSqlDatabase database) {

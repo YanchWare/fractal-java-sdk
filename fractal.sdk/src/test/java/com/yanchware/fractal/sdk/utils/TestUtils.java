@@ -50,7 +50,7 @@ import static com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.A
 import static com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureOsType.LINUX;
 import static com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion.WEST_EUROPE;
 import static com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureStorageAutoGrow.ENABLED;
-import static com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.appservice.valueobjects.AzureSkuName.B_GEN5_1;
+import static com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.appservice.valueobjects.AzureAppServiceSkuName.B_GEN5_1;
 import static com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GcpMachine.E2_STANDARD2;
 import static com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GcpRegion.EUROPE_WEST1;
 import static com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciRegion.EU_ZURICH_1;
@@ -288,7 +288,7 @@ public class TestUtils {
         .withRootUser("rootUser")
         .withSkuName(B_GEN5_1)
         .withStorageAutoGrow(ENABLED)
-        .withStorageMB(5 * 1024)
+        .withStorageGb(5)
         .withBackupRetentionDays(12)
         .withDatabase(postgreSqlDatabase)
         .withDatabase(getAzurePostgresDbExample())
