@@ -31,8 +31,9 @@ public class AzureCosmosPostgreSqlDatabase extends PaaSPostgreSqlDatabase {
 
     @Override
     public AzureCosmosPostgreSqlDatabase build() {
+      super.build();
       component.setType(PAAS_COSMOS_POSTGRESQL_DATABASE);
-      return super.build();
+      return component;
     }
   }
 }
