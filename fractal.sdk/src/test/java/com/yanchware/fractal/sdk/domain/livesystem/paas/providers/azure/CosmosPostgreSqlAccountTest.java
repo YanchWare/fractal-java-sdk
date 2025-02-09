@@ -5,8 +5,6 @@ import com.yanchware.fractal.sdk.TestWithFixture;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.cosmos.*;
 import org.junit.jupiter.api.Test;
 
-import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import static com.yanchware.fractal.sdk.domain.values.ComponentType.*;
@@ -17,13 +15,6 @@ public class CosmosPostgreSqlAccountTest extends TestWithFixture {
 
   AzureCosmosPostgreSqlDbms.AzureCosmosPostgreSqlDbmsBuilder getBuilder() {
     return new AzureCosmosPostgreSqlDbms.AzureCosmosPostgreSqlDbmsBuilder();
-  }
-
-  Collection<AzureCosmosPostgreSqlDatabase> getValidCosmosEntities() {
-    return List.of(
-      aPostgreSqlDb("db-a"),
-      aPostgreSqlDb("db-b"),
-      aPostgreSqlDb("db-c"));
   }
 
   @Test
@@ -60,23 +51,17 @@ public class CosmosPostgreSqlAccountTest extends TestWithFixture {
 
   @Test
   public void typeIsAsExpected_when_BuiltWithSingleEntity() {
-    var entity = getValidCosmosEntities().stream().findFirst().orElse(null);
-    assertThat(entity).isNotNull();
     var builder = getBuilder()
       .withId("a-legal-id")
-      .withRegion(AzureRegion.EAST_ASIA)
-      .withDatabase(entity);
+      .withRegion(AzureRegion.EAST_ASIA);
 
     var component = builder.build();
 
     assertThat(component.getType()).isEqualTo(PAAS_COSMOS_POSTGRESQL_CLUSTER);
-    assertThat(component.getDatabases().stream().findFirst().get().getType()).isEqualTo(PAAS_COSMOS_POSTGRESQL_DATABASE);
   }
 
   @Test
   public void propertiesAreAsExpected() {
-    var entity = getValidCosmosEntities().stream().findFirst().orElse(null);
-    assertThat(entity).isNotNull();
     var backupRetentionDays = a(Integer.class);
     var coordinatorCores = a(Integer.class);
     var coordinatorStorageGb = a(Integer.class);
@@ -109,8 +94,7 @@ public class CosmosPostgreSqlAccountTest extends TestWithFixture {
       .withStorageGb(storageGb)
       .withReplicationRole(replicationRole)
       .withStorageAutoGrow(storageAutoGrow)
-      .withSubnetAddressCidr(subnetAddressCidr)
-      .withDatabase(entity);
+      .withSubnetAddressCidr(subnetAddressCidr);
 
     var component = builder.build();
     assertThat(component).extracting(
@@ -145,10 +129,5 @@ public class CosmosPostgreSqlAccountTest extends TestWithFixture {
         replicationRole,
         storageAutoGrow,
         subnetAddressCidr);
-  }
-
-  private AzureCosmosPostgreSqlDatabase aPostgreSqlDb(String id) {
-    return AzureCosmosPostgreSqlDatabase.builder()
-      .withId(id).build();
   }
 }

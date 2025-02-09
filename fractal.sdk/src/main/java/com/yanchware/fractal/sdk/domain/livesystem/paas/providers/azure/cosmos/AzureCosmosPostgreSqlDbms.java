@@ -4,18 +4,16 @@ import com.yanchware.fractal.sdk.domain.blueprint.paas.PaaSRelationalDbms;
 import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.PaaSPostgreSqlDbms;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.*;
-import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.aks.AzureOutboundIp;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
-import com.yanchware.fractal.sdk.utils.CollectionUtils;
 import lombok.Getter;
 import lombok.Setter;
+
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
 import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_COSMOS_POSTGRESQL_CLUSTER;
-import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_COSMOS_POSTGRESQL_DATABASE;
 import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidLowercaseLettersNumbersAndHyphens;
 import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLength;
 
@@ -69,34 +67,6 @@ public class AzureCosmosPostgreSqlDbms extends PaaSPostgreSqlDbms implements Liv
     @Override
     protected AzureCosmosPostgreSqlDbmsBuilder getBuilder() {
       return this;
-    }
-
-    /**
-     * Database definition to be created part of this DBMS
-     * @param db
-     */
-    public AzureCosmosPostgreSqlDbmsBuilder withDatabase(AzureCosmosPostgreSqlDatabase db) {
-      return withDatabases(List.of(db));
-    }
-
-    /**
-     * List of databases to be created part of this DBMS
-     * @param dbs
-     */
-    public AzureCosmosPostgreSqlDbmsBuilder withDatabases(Collection<? extends AzureCosmosPostgreSqlDatabase> dbs) {
-      if (CollectionUtils.isBlank(dbs)) {
-        return builder;
-      }
-
-      if (component.getDatabases() == null) {
-        component.setDatabases(new ArrayList<>());
-      }
-
-      dbs.forEach(db -> {
-        db.getDependencies().add(component.getId());
-      });
-      component.getDatabases().addAll(dbs);
-      return builder;
     }
 
     /**

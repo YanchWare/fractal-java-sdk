@@ -34,7 +34,6 @@ public enum ComponentType {
   PAAS_RELATIONAL_DATABASE("Storage.PaaS.RelationalDatabase"),
   PAAS_RELATIONAL_DBMS("Storage.PaaS.RelationalDbms"),
   PAAS_DATA_STORAGE("Storage.PaaS.DataStorage"),
-  PAAS_COSMOS_POSTGRESQL_DATABASE("Storage.PaaS.CosmosDbPostgreSqlDatabase"),
   PAAS_GRAPH_DATABASE("Storage.PaaS.GraphDatabase"),
   PAAS_GRAPH_DBMS("Storage.PaaS.GraphDbms"),
   PAAS_COSMOS_GREMLIN_DATABASE("Storage.PaaS.CosmosDbGremlinDatabase"),
