@@ -11,6 +11,7 @@ import com.yanchware.fractal.sdk.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -46,6 +47,105 @@ class ManagementEnvironmentTest {
     assertThatThrownBy(() -> generateBuilderWithInfo("Production-001"))
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining("Environment ShortName must only contain lowercase letters, numbers, and dashes.");
+  }
+
+  @Test
+  public void exceptionThrown_when_environmentCreatedWithCiCdProfilesButWithoutDefaultCiCdProfile() {
+    assertThatThrownBy(() -> generateBuilderWithId("production-001")
+            .withCiCdProfile(new CiCdProfile("default", "Default", "data", "pass"))
+            .withCiCdProfile(new CiCdProfile("custom", "Custom","data", "pass"))
+            .build())
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("A default CI/CD profile must be set if additional CI/CD profiles are defined");
+  }
+
+  @Test
+  void exceptionThrown_when_environmentCreatedWithEmptyCiCdProfileShortName() {
+    assertThatThrownBy(() -> generateBuilderWithId("production-001")
+            .withDefaultCiCdProfile(new CiCdProfile("", "Default", "data", "pass")) // Empty short name
+            .build())
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("The Short Name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen, and must be between 1 and 127 characters"); // Assuming SHORT_NAME_NOT_VALID is your validation message
+  }
+
+  @Test
+  void exceptionThrown_when_environmentCreatedWithNullCiCdProfile() {
+    assertThatThrownBy(() -> generateBuilderWithId("production-001")
+            .withDefaultCiCdProfile(null) // Null profile
+            .build())
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("The default CI/CD profile cannot be null"); // Or a more specific message
+  }
+
+  @Test
+  void exceptionThrown_when_environmentCreatedWithDuplicateCiCdProfileShortNames() {
+    assertThatThrownBy(() -> generateBuilderWithId("production-001")
+            .withDefaultCiCdProfile(new CiCdProfile("default", "Default", "data", "pass"))
+            .withCiCdProfile(new CiCdProfile("default", "Custom", "data", "pass"))
+            .build())
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("CI/CD profile short names must be unique, including the default profile");
+  }
+
+  @Test
+  void exceptionThrown_when_nonDefaultCiCdProfileShortNamesAreDuplicated() {
+    assertThatThrownBy(() -> generateBuilderWithId("production-001")
+            .withDefaultCiCdProfile(new CiCdProfile("default", "Default", "data", "pass"))
+            .withCiCdProfile(new CiCdProfile("custom", "Custom", "data", "pass"))
+            .withCiCdProfile(new CiCdProfile("custom", "Custom", "data", "pass"))
+            .build())
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("CI/CD profile short names must be unique, including the default profile");
+  }
+
+  @Test
+  void exceptionThrown_when_environmentCreatedWithDuplicateSecretNames() {
+    assertThatThrownBy(() -> generateBuilderWithId("production-001")
+            .withSecret(new Secret("my-secret", "value1"))
+            .withSecret(new Secret("my-secret", "value2"))
+            .build())
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Secret names must be unique");
+  }
+
+  @Test
+  void exceptionThrown_when_environmentCreatedWithNullSecret() {
+    assertThatThrownBy(() -> generateBuilderWithId("production-001")
+            .withSecret(null)
+            .build())
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("The secret cannot be null");
+  }
+
+  @Test
+  void exceptionThrown_when_environmentCreatedWithInvalidDnsZone() {
+    assertThatThrownBy(() -> generateBuilderWithId("production-001")
+            .withDnsZone(DnsZone.builder().withName("").build())
+            .build())
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("DnsZone validation failed");
+  }
+
+  @Test
+  void exceptionThrown_when_environmentCreatedWithInvalidOperationalEnvironment() {
+    assertThatThrownBy(() -> generateBuilderWithId("production-001")
+            .withOperationalEnvironment(OperationalEnvironment.builder().withShortName("").build())
+            .build())
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Environment validation failed");
+  }
+
+  @Test
+  void exceptionThrown_when_environmentCreatedWithEmptyResourceGroups() {
+    assertThatThrownBy(() -> ManagementEnvironment.builder()
+            .withId(new EnvironmentIdValue(
+                    EnvironmentType.PERSONAL,
+                    UUID.randomUUID(),
+                    "production-001"))
+            .withResourceGroups(Collections.emptyList()) // Empty resource groups
+            .build())
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Environment ResourceGroups has not been defined and it is required");
   }
 
   @Test
@@ -248,11 +348,13 @@ class ManagementEnvironmentTest {
             UUID.randomUUID(),
             UUID.randomUUID())
         .withResourceGroup(UUID.randomUUID())
-        .withCiCdProfile(new CiCdProfile("default", "Default", "data", "pass"))
-        .withCiCdProfile(new CiCdProfile("custom", "Custom","data", "pass"))
+        .withDefaultCiCdProfile(new CiCdProfile("default", "Default", "data", "pass"))
+        .withCiCdProfile(new CiCdProfile("custom", "Custom", "data", "pass"))
+        .withCiCdProfile(new CiCdProfile("additional", "Additional","data", "pass"))
         .build();
 
     assertThat(managementEnvironment.validate()).isEmpty();
+    assertThat(managementEnvironment.getDefaultCiCdProfile()).isNotNull();
 
     var jsonEnvironment = TestUtils.getJsonRepresentation(managementEnvironment);
     assertThat(jsonEnvironment).isNotBlank();
@@ -262,13 +364,60 @@ class ManagementEnvironmentTest {
     assertThat(ciCdProfiles).hasSize(2);
   }
 
+  @Test
+  public void noValidationErrors_when_environmentCreatedWithDnsZones() {
+    var managementEnvironment = generateBuilderWithId("production-001")
+            .withDnsZones(List.of(
+                    DnsZone.builder()
+                            .withName("dns.name1")
+                            .build(),
+                    DnsZone.builder()
+                            .withName("dns.name2")
+                            .build()
+            ))
+            .build();
+
+    assertThat(managementEnvironment.validate()).isEmpty();
+
+    var jsonEnvironment = TestUtils.getJsonRepresentation(managementEnvironment);
+    assertThat(jsonEnvironment).isNotBlank();
+  }
+
+  @Test
+  public void noValidationErrors_when_environmentCreatedWithResourceGroups() {
+    var managementEnvironment = ManagementEnvironment.builder()
+            .withId(new EnvironmentIdValue(
+                    EnvironmentType.PERSONAL,
+                    UUID.randomUUID(),
+                    "production-001"))
+            .withResourceGroups(List.of(UUID.randomUUID(), UUID.randomUUID()))
+            .build();
+
+    assertThat(managementEnvironment.validate()).isEmpty();
+  }
+
+  @Test
+  public void noValidationErrors_when_environmentCreatedWithTag() {
+    var managementEnvironment = generateBuilderWithId("production-001")
+            .withTag("key1", "value1")
+            .build();
+
+    assertThat(managementEnvironment.validate()).isEmpty();
+    
+    var tags = managementEnvironment.getTags();
+    assertThat(tags).hasSize(1);
+  }
+
   private ManagementEnvironment generateBuilderWithInfo(String shortName) {
+    return generateBuilderWithId(shortName).build();
+  }
+
+  private ManagementEnvironment.ManagementEnvironmentBuilder generateBuilderWithId(String shortName) {
     return ManagementEnvironment.builder()
-        .withId(new EnvironmentIdValue(
-            EnvironmentType.PERSONAL,
-            UUID.randomUUID(),
-            shortName))
-        .withResourceGroup(UUID.randomUUID())
-        .build();
+            .withId(new EnvironmentIdValue(
+                    EnvironmentType.PERSONAL,
+                    UUID.randomUUID(),
+                    shortName))
+            .withResourceGroup(UUID.randomUUID());
   }
 }

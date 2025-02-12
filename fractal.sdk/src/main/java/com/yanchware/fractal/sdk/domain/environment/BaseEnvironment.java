@@ -28,12 +28,18 @@ public abstract class BaseEnvironment implements Environment, Validatable {
   private static final String TAGS_PARAM_KEY = "tags";
   protected final static String SHORT_NAME_IS_NULL = "Environment ShortName has not been defined and it is required";
   private final static String RESOURCE_GROUPS_IS_EMPTY = "Environment ResourceGroups has not been defined and it is required";
+  private final static String SECRET_IS_NULL = "[Secret Validation] The secret cannot be null";
+  private final static String DEFAULT_CI_CD_PROFILE_IS_NULL = "[CI/CD Profile Validation] The default CI/CD profile cannot be null";
+  private final static String DEFAULT_CI_CD_PROFILE_IS_MISSING = "[CI/CD Profile Validation] A default CI/CD profile must be set if additional CI/CD profiles are defined";
+  private final static String CI_CD_PROFILE_SHORT_NAME_NOT_UNIQUE = "[CI/CD Profile Validation] CI/CD profile short names must be unique, including the default profile";
+  private final static String SECRET_NAMES_NOT_UNIQUE = "[Secret Validation] Secret names must be unique";
 
   private final Map<String, Object> parameters;
   private String name;
   private Collection<UUID> resourceGroups;
   private Map<String, String> tags;
   private Collection<Secret> secrets;
+  private CiCdProfile defaultCiCdProfile;
   private Collection<CiCdProfile> ciCdProfiles;
   private final Map<ProviderType, CloudAgentEntity> cloudAgentByProviderType;
 
@@ -191,6 +197,10 @@ public abstract class BaseEnvironment implements Environment, Validatable {
      * @return The builder instance.
      */
     public B withSecret(Secret secret) {
+      if (secret == null) {
+        throw new IllegalArgumentException(SECRET_IS_NULL);
+      }
+      
       return withSecrets(List.of(secret));
     }
 
@@ -209,6 +219,21 @@ public abstract class BaseEnvironment implements Environment, Validatable {
       }
 
       environment.getSecrets().addAll(secrets);
+      return builder;
+    }
+
+    /**
+     * Adds a default CI/CD profile to the environment.
+     *
+     * @param ciCdProfile The CI/CD profile to add.
+     * @return The builder instance.
+     */
+    public B withDefaultCiCdProfile(CiCdProfile ciCdProfile) {
+      if (ciCdProfile == null) {
+        throw new IllegalArgumentException(DEFAULT_CI_CD_PROFILE_IS_NULL);
+      }
+      
+      environment.setDefaultCiCdProfile(ciCdProfile);
       return builder;
     }
 
@@ -257,7 +282,27 @@ public abstract class BaseEnvironment implements Environment, Validatable {
     if (CollectionUtils.isBlank(resourceGroups)) {
       errors.add(RESOURCE_GROUPS_IS_EMPTY);
     }
-    
+
+    if (!CollectionUtils.isBlank(secrets)) {
+      if (secrets.size()!= new HashSet<>(secrets.stream().map(Secret::name).toList()).size()) {
+        errors.add(SECRET_NAMES_NOT_UNIQUE);
+      }
+    }
+
+    if (!CollectionUtils.isBlank(ciCdProfiles)) {
+      if (defaultCiCdProfile == null) {
+        errors.add(DEFAULT_CI_CD_PROFILE_IS_MISSING);
+      } else {
+        // Check for duplicate profile names, including the default profile
+        Set<String> profileNames = new HashSet<>();
+        profileNames.add(defaultCiCdProfile.shortName());
+        profileNames.addAll(ciCdProfiles.stream().map(CiCdProfile::shortName).toList());
+        if (profileNames.size() != ciCdProfiles.size() + 1) { // +1 for the default profile
+          errors.add(CI_CD_PROFILE_SHORT_NAME_NOT_UNIQUE);
+        }
+      }
+    }
+
     return errors;
   }
 }
