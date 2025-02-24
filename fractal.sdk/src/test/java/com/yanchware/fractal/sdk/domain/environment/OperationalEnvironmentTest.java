@@ -52,8 +52,8 @@ class OperationalEnvironmentTest {
     @Test
     void exceptionThrown_when_environmentCreatedWithDuplicateSecretNames() {
         assertThatThrownBy(() -> generateBuilder("operational-001")
-                .withSecret(new Secret("my-secret", "value1"))
-                .withSecret(new Secret("my-secret", "value2"))
+                .withSecret(new Secret("my-secret", "My Secret Display Name","My Secret Description", "value1"))
+                .withSecret(new Secret("my-secret", "My Secret Display Name","My Secret Description", "value2"))
                 .build())
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("Secret names must be unique");
@@ -168,11 +168,11 @@ class OperationalEnvironmentTest {
                 .withAzureSubscription(
                         AzureRegion.JAPAN,
                         UUID.randomUUID())
-                .withSecret(new Secret("secret-1", "value-1"))
-                .withSecret(new Secret("secret-2", "value-2"))
+                .withSecret(new Secret("secret-1", "My Secret Display Name","My Secret Description", "value-1"))
+                .withSecret(new Secret("secret-2", "My Secret Display Name","My Secret Description", "value-2"))
                 .withSecrets(List.of(
-                        new Secret("secret-3", "value-3"),
-                        new Secret("secret-4", "value-4")
+                        new Secret("secret-3", "My Secret Display Name","My Secret Description", "value-3"),
+                        new Secret("secret-4", "My Secret Display Name","My Secret Description", "value-4")
                 ))
                 .build();
 

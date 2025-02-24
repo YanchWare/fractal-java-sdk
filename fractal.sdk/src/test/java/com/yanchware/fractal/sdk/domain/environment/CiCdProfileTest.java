@@ -14,7 +14,7 @@ class CiCdProfileTest {
     
     @Test
     void exceptionThrown_when_shortNameIsEmpty() {
-        assertThatThrownBy(() -> new CiCdProfile("", "My Profile", "ssh-key-data", "passphrase"))
+        assertThatThrownBy(() -> new CiCdProfile("", "My Profile", "","ssh-key-data", "passphrase"))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("The Short Name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen, and must be between 1 and 127 characters");
     }
@@ -109,6 +109,14 @@ class CiCdProfileTest {
         CiCdProfile profile = new CiCdProfile(shortName, VALID_DISPLAY_NAME, VALID_SSH_KEY_DATA, VALID_PASSPHRASE);
         assertThat(profile).isNotNull();
         assertThat(profile.shortName()).isEqualTo(shortName);
+    }
+
+    @Test
+    void noValidationErrors_when_descriptionIsNotNull() {
+        String description = "This is a test description.";
+        CiCdProfile profile = new CiCdProfile(VALID_SHORT_NAME, VALID_DISPLAY_NAME, description, VALID_SSH_KEY_DATA, VALID_PASSPHRASE);
+        assertThat(profile).isNotNull();
+        assertThat(profile.description()).isEqualTo(description);
     }
 
     @Test

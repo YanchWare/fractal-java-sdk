@@ -2,6 +2,7 @@ package com.yanchware.fractal.sdk.domain.environment;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.domain.environment.service.EnvironmentService;
+import com.yanchware.fractal.sdk.domain.environment.service.commands.CreateCiCdProfileRequest;
 import com.yanchware.fractal.sdk.domain.environment.service.dtos.EnvironmentResponse;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.utils.SerializationUtils;
@@ -9,8 +10,11 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -50,7 +54,8 @@ public class EnvironmentAggregate {
                         managementEnvironmentId,
                         managementEnvironment.getName(),
                         managementEnvironment.getResourceGroups(),
-                        managementEnvironment.getParameters());
+                        managementEnvironment.getParameters(),
+                        existingEnvironment.defaultCiCdProfileShortName());
             }
         }
 
@@ -68,65 +73,118 @@ public class EnvironmentAggregate {
     }
 
     public void manageCiCdProfiles() throws InstantiatorException {
-        var managementEnvironmentId = managementEnvironment.getId();
+        manageProfilesForEnvironment(managementEnvironment); // Manage profiles for management environment
 
-        log.info("Managing CI/CD profiles for management environment [id: {}]", managementEnvironmentId);
+        for (var environment: managementEnvironment.getOperationalEnvironments()) {
+            manageProfilesForEnvironment(environment); // Manage profiles for each operational environment
+        }
+    }
 
-        var profilesResponse = service.manageCiCdProfiles(managementEnvironmentId, managementEnvironment.getCiCdProfiles());
+    void manageProfilesForEnvironment(BaseEnvironment environment) throws InstantiatorException {
+        var environmentId = environment.getId();
+        var defaultProfile = environment.getDefaultCiCdProfile();
 
-        log.info("Managed {} CI/CD profiles for management environment [id: {}]", profilesResponse.length, managementEnvironmentId);
+        var existingEnvironment = service.fetch(environmentId);
+        var currentDefaultProfileShortName = existingEnvironment.defaultCiCdProfileShortName();
 
-        for (var environment : managementEnvironment.getOperationalEnvironments()) {
-            var environmentId = environment.getId();
-            log.info("Managing CI/CD profiles for operational environment [id: {}]", environmentId);
+        var environmentTier = environment instanceof ManagementEnvironment ? "Management" : "Operational";
 
-            profilesResponse = service.manageCiCdProfiles(environmentId, environment.getCiCdProfiles());
+        if (defaultProfile != null) {
+            handleDefaultProfile(environmentTier, environment, environmentId, defaultProfile, currentDefaultProfileShortName);
+        } else {
+            handleRemovedDefaultProfile(environmentTier, environment, environmentId, currentDefaultProfileShortName);
+        }
+    }
 
-            log.info("Managed {} CI/CD profiles for operational environment [id: {}]", profilesResponse.length, environmentId);
+    private void handleDefaultProfile(String environmentTier,
+                                      BaseEnvironment environment, 
+                                      EnvironmentIdValue environmentId, 
+                                      CiCdProfile defaultProfile, 
+                                      String currentDefaultProfileShortName) throws InstantiatorException {
+        var requests = new ArrayList<CreateCiCdProfileRequest>();
+        requests.add(CreateCiCdProfileRequest.fromProfile(defaultProfile));
+
+        for (var profile: environment.getCiCdProfiles()) {
+            requests.add(CreateCiCdProfileRequest.fromProfile(profile));
+        }
+
+        log.info("Managing CI/CD profiles for {} environment [id: {}]",
+                environmentTier, environmentId);
+
+        var profilesResponse = service.manageCiCdProfiles(environmentId, requests);
+
+        log.info("Managed {} CI/CD profiles for {} environment [id: {}]", profilesResponse.length,
+                environmentTier, environmentId);
+        
+        if (!defaultProfile.shortName().equals(currentDefaultProfileShortName)) {
+            updateEnvironmentWithDefaultProfile(environmentTier, environment, environmentId, defaultProfile.shortName());
+        }
+    }
+
+    private void updateEnvironmentWithDefaultProfile(String environmentTier,
+                                                     BaseEnvironment environment, 
+                                                     EnvironmentIdValue environmentId, 
+                                                     String shortName) throws InstantiatorException {
+        var managementEnvironmentId = environmentId;
+
+        if (environment instanceof OperationalEnvironment operationalEnvironment) {
+            managementEnvironmentId = operationalEnvironment.getManagementEnvironmentId();
+        }
+
+        log.info("Updating {} Environment [id: '{}'] with new default CI/CD profile short name",
+                environmentTier,
+                environmentId);
+
+        service.update(
+                managementEnvironmentId,
+                environmentId,
+                environment.getName(),
+                environment.getResourceGroups(),
+                environment.getParameters(),
+                shortName);
+    }
+
+    private void handleRemovedDefaultProfile(String environmentTier,
+                                             BaseEnvironment environment, 
+                                             EnvironmentIdValue environmentId, 
+                                             String currentDefaultProfileShortName) throws InstantiatorException {
+        if (StringUtils.isNotBlank(currentDefaultProfileShortName)) {
+            var managementEnvironmentId = environmentId;
+
+            if (environment instanceof OperationalEnvironment operationalEnvironment) {
+                managementEnvironmentId = operationalEnvironment.getManagementEnvironmentId();
+                environmentTier = "Operational";
+            }
+
+            log.info("Updating {} Environment [id: '{}'] to remove default CI/CD profile", environmentTier, environmentId);
+
+            service.update(
+                    managementEnvironmentId,
+                    environmentId,
+                    environment.getName(),
+                    environment.getResourceGroups(),
+                    environment.getParameters(),
+                    null);
         }
     }
 
     public void manageSecrets() throws InstantiatorException {
-        manageEnvironmentSecrets(managementEnvironment.getId(), managementEnvironment.getSecrets());
+        var managementEnvironmentId = managementEnvironment.getId();
+
+        log.info("Managing Secrets for Management environment [id: {}]", managementEnvironmentId);
+
+        var secretsResponse = service.manageSecrets(managementEnvironmentId, managementEnvironment.getSecrets());
+
+        log.info("Managed {} Secrets for Management environment [id: {}]", secretsResponse.length, managementEnvironmentId);
 
         for (var environment : managementEnvironment.getOperationalEnvironments()) {
-            manageEnvironmentSecrets(environment.getId(), environment.getSecrets());
+            var environmentId = environment.getId();
+            log.info("Managing Secrets for Operational environment [id: {}]", environmentId);
+
+            secretsResponse = service.manageSecrets(environmentId, environment.getSecrets());
+
+            log.info("Managed {} Secrets for Operational environment [id: {}]", secretsResponse.length, environmentId);
         }
-    }
-
-    private void manageEnvironmentSecrets(EnvironmentIdValue environmentId, Collection<Secret> environmentSecrets) throws InstantiatorException {
-        var existingSecrets = fetchExistingSecretIds(environmentId);
-
-        for (var secret : environmentSecrets) {
-            var secretName = secret.name();
-            var secretValue = secret.value();
-
-            if (existingSecrets.contains(secretName)) {
-                service.updateSecret(environmentId, secretName, secretValue);
-                existingSecrets.remove(secretName);
-            } else {
-                log.info("Creating secret [name: '{}', environmentId: '{}']", secretName, environmentId);
-                service.createSecret(environmentId, secretName, secretValue);
-            }
-        }
-
-        for (String secretName : existingSecrets) {
-            log.info("Deleting secret [name: '{}', environmentId: '{}'] as it is not present any longer on the live environment definition", secretName, environmentId);
-            service.deleteSecret(environmentId, secretName);
-        }
-    }
-
-    private List<String> fetchExistingSecretIds(EnvironmentIdValue environmentId) throws InstantiatorException {
-        List<String> existingSecrets = new ArrayList<>();
-
-        var secrets = service.getSecrets(environmentId);
-
-        if (secrets != null) {
-            for (var secret : secrets) {
-                existingSecrets.add(secret.name());
-            }
-        }
-        return existingSecrets;
     }
 
     private void initializeOperationalEnvironment(OperationalEnvironment operationalEnvironment) throws InstantiatorException {
@@ -152,7 +210,8 @@ public class EnvironmentAggregate {
                         environmentId,
                         operationalEnvironment.getName(),
                         operationalEnvironment.getResourceGroups(),
-                        operationalEnvironment.getParameters());
+                        operationalEnvironment.getParameters(),
+                        existingEnvironment.defaultCiCdProfileShortName());
             }
         }
     }

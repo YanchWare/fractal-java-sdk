@@ -3,12 +3,12 @@ package com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.service
 import com.yanchware.fractal.sdk.domain.Component;
 import com.yanchware.fractal.sdk.domain.blueprint.paas.PaaSMessaging;
 import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemComponent;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureIdentityType;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureResourceEntity;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureResourceGroup;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.servicebus.valueobjects.Encryption;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.servicebus.valueobjects.ServiceBusSku;
-import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureIdentityType;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,10 +17,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_SERVICE_BUS_NAMESPACE;
 import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidLowercaseLettersNumbersAndHyphens;
 import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLength;
-import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_SERVICE_BUS_NAMESPACE;
 
 @Getter
 @Setter

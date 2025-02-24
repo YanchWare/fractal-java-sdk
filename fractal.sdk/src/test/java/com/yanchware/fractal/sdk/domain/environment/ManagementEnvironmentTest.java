@@ -101,8 +101,8 @@ class ManagementEnvironmentTest {
   @Test
   void exceptionThrown_when_environmentCreatedWithDuplicateSecretNames() {
     assertThatThrownBy(() -> generateBuilderWithId("production-001")
-            .withSecret(new Secret("my-secret", "value1"))
-            .withSecret(new Secret("my-secret", "value2"))
+            .withSecret(new Secret("my-secret", "My Secret Display Name","My Secret Description", "value1"))
+            .withSecret(new Secret("my-secret", "My Secret Display Name 2","My Secret Description 2", "value2"))
             .build())
             .isInstanceOf(IllegalArgumentException.class)
             .hasMessageContaining("Secret names must be unique");
@@ -318,11 +318,11 @@ class ManagementEnvironmentTest {
             UUID.randomUUID(),
             UUID.randomUUID())
         .withResourceGroup(UUID.randomUUID())
-        .withSecret(new Secret("secret-1", "value-1"))
-        .withSecret(new Secret("secret-2", "value-2"))
+        .withSecret(new Secret("secret-1", "Secret Display Name","Secret Description", "value-1"))
+        .withSecret(new Secret("secret-2", "Secret 2 Display Name","Secret 2 Description", "value-2"))
         .withSecrets(List.of(
-            new Secret("secret-3", "value-3"),
-            new Secret("secret-4", "value-4")
+            new Secret("secret-3", "Secret 3 Display Name","Secret 3 Description", "value-3"),
+            new Secret("secret-4", "Secret 4 Display Name","Secret 4 Description", "value-4")
         )).build();
 
     assertThat(managementEnvironment.validate()).isEmpty();

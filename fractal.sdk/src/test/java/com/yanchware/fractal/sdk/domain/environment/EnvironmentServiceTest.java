@@ -151,7 +151,8 @@ class EnvironmentServiceTest {
         mockEnvironment.getId(),
         mockEnvironment.getName(),
         mockEnvironment.getResourceGroups(),
-        mockEnvironment.toDto().parameters());
+        mockEnvironment.toDto().parameters(),
+            null);
 
     // Then
     verify(1, putRequestedFor(urlPattern));
@@ -226,7 +227,8 @@ class EnvironmentServiceTest {
         mockEnvironment.getId(),
         mockEnvironment.getName(),
         mockEnvironment.getResourceGroups(),
-        mockEnvironment.toDto().parameters());
+        mockEnvironment.toDto().parameters(),
+            null);
 
 
     // Then

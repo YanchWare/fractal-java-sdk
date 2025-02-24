@@ -1,7 +1,8 @@
 package com.yanchware.fractal.sdk.domain.environment.service;
 
-import com.yanchware.fractal.sdk.domain.environment.CiCdProfile;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentIdValue;
+import com.yanchware.fractal.sdk.domain.environment.Secret;
+import com.yanchware.fractal.sdk.domain.environment.service.commands.CreateCiCdProfileRequest;
 import com.yanchware.fractal.sdk.domain.environment.service.dtos.CiCdProfileResponse;
 import com.yanchware.fractal.sdk.domain.environment.service.dtos.EnvironmentResponse;
 import com.yanchware.fractal.sdk.domain.environment.service.dtos.InitializationRunResponse;
@@ -29,7 +30,8 @@ public interface EnvironmentService {
             EnvironmentIdValue environmentId,
             String name,
             Collection<UUID> resourceGroups,
-            Map<String, Object> parameters) throws InstantiatorException;
+            Map<String, Object> parameters,
+            String defaultCiCdProfileShortName) throws InstantiatorException;
 
     EnvironmentResponse fetch(EnvironmentIdValue environmentId) throws InstantiatorException;
 
@@ -66,9 +68,6 @@ public interface EnvironmentService {
     InitializationRunResponse fetchCurrentAzureInitialization(EnvironmentIdValue environmentId) throws InstantiatorException;
     InitializationRunResponse fetchCurrentGcpInitialization(EnvironmentIdValue environmentId) throws InstantiatorException;
     InitializationRunResponse fetchCurrentOciInitialization(EnvironmentIdValue environmentId) throws InstantiatorException;
-    SecretResponse[] getSecrets(EnvironmentIdValue environmentId) throws InstantiatorException;
-    void createSecret(EnvironmentIdValue environmentId, String secretName, String secretValue) throws InstantiatorException;
-    void updateSecret(EnvironmentIdValue environmentId, String secretName, String secretValue) throws InstantiatorException;
-    void deleteSecret(EnvironmentIdValue environmentId, String secretName) throws InstantiatorException;
-    CiCdProfileResponse[] manageCiCdProfiles(EnvironmentIdValue environmentId, Collection<CiCdProfile> ciCdProfiles) throws InstantiatorException;
+    CiCdProfileResponse[] manageCiCdProfiles(EnvironmentIdValue environmentId, Collection<CreateCiCdProfileRequest> ciCdProfiles) throws InstantiatorException;
+    SecretResponse[] manageSecrets(EnvironmentIdValue environmentId, Collection<Secret> secrets) throws InstantiatorException;
 }

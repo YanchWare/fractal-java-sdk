@@ -7,34 +7,58 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidAlphanumericsHyphens;
-import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLength;
 
 /**
  * <pre>
  * Represents a secret that can be associated with an environment.
  * Secrets are used to store sensitive information, such as passwords or API keys.
  *
- * Secret names can only contain alphanumeric characters and hyphens, cannot start or end with a hyphen,
- * and must be between 1 and 127 characters long.
+ * Secret short names can only contain alphanumeric characters and hyphens, cannot start or end with a hyphen.
  *
  * Secret values cannot be empty or null.</pre>
  */
-public record Secret(String name, String value) {
-  private final static String NAME_NOT_VALID = "[Secret Validation] The name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen, and must be between 1 and 127 characters";
+public record Secret(String shortName, String displayName, String description, String value) {
+  private final static String SHORT_NAME_NOT_VALID = "[Secret Validation] The Short Name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen";
+  private final static String DISPLAY_NAME_NOT_VALID = "[Secret Validation] The Display Name cannot be empty or null";
   private final static String VALUE_NOT_VALID = "[Secret Validation] The value cannot be empty or null";
 
   /**
-   * <pre>Creates a new {@code Secret} with the specified name and value.
+   * <pre>Creates a new {@code Secret} with the specified short name, display name, and value.
    *
-   * @param name  The name of the secret. Secret name can only contain alphanumeric characters and hyphens,
-   *              cannot start or end with a hyphen, and must be between 1 and 127 characters long.
-   * @param value The value of the secret. Secret value cannot be empty or null.
+   * @param shortName    The short name of the secret, which must adhere to the following constraints:
+   *                     <ul>
+   *                       <li>Must not be empty or null.</li>
+   *                       <li>Must not start or end with a hyphen.</li>
+   *                       <li>Must only contain alphanumeric characters and hyphens.</li>
+   *                     </ul>
+   * @param displayName The display name of the secret, which must not be empty or null.
+   * @param value       The value of the secret, which must not be empty or null.
    *
-   * @throws IllegalArgumentException If the secret name or value is invalid.
+   * @throws IllegalArgumentException If the secret short name, display name, or value is invalid.
+   * </pre>
+   */
+  public Secret(String shortName, String displayName, String value) {
+    this(shortName, displayName, null, value);
+  }
+
+  /**
+   * <pre>Creates a new {@code Secret} with the specified short name, display name, description, and value.
+   *
+   * @param shortName    The short name of the secret, which must adhere to the following constraints:
+   *                     <ul>
+   *                       <li>Must not be empty or null.</li>
+   *                       <li>Must not start or end with a hyphen.</li>
+   *                       <li>Must only contain alphanumeric characters and hyphens.</li>
+   *                     </ul>
+   * @param displayName The display name of the secret, which must not be empty or null.
+   * @param description A description of the secret (optional).
+   * @param value       The value of the secret, which must not be empty or null.
+   *
+   * @throws IllegalArgumentException If the secret short name, display name, or value is invalid.
    * </pre>
    */
   public Secret {
-    Collection<String> errors = validate(name, value);
+    Collection<String> errors = validate(shortName, displayName, value);
 
     if (!errors.isEmpty()) {
       throw new IllegalArgumentException(String.format(
@@ -46,25 +70,29 @@ public record Secret(String name, String value) {
   /**
    * <pre>Validates the secret name and value.
    *
-   * @param name  The name of the secret to validate.
+   * @param shortName  The shortName of the secret to validate.
+   * @param displayName  The displayName of the secret to validate.
    * @param value The value of the secret to validate.
    *
    * @return A collection of error messages, or an empty collection if the secret is valid.
    * </pre>
    */
-  private Collection<String> validate(String name, String value) {
+  private Collection<String> validate(String shortName, String displayName, String value) {
     var errors = new ArrayList<String>();
 
-    if (StringUtils.isBlank(name)) {
-      errors.add(NAME_NOT_VALID);
+    if (StringUtils.isBlank(shortName)) {
+      errors.add(SHORT_NAME_NOT_VALID);
     }
 
-    if (!StringUtils.isBlank(name)) {
-      var hasValidCharacters = isValidAlphanumericsHyphens(name);
-      var hasValidLengths = isValidStringLength(name, 1, 127);
-      if (!hasValidCharacters || !hasValidLengths) {
-        errors.add(NAME_NOT_VALID);
+    if (!StringUtils.isBlank(shortName)) {
+      var hasValidCharacters = isValidAlphanumericsHyphens(shortName);
+      if (!hasValidCharacters) {
+        errors.add(SHORT_NAME_NOT_VALID);
       }
+    }
+
+    if (StringUtils.isBlank(displayName)) {
+      errors.add(DISPLAY_NAME_NOT_VALID);
     }
 
     if (StringUtils.isBlank(value)) {

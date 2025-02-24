@@ -2,8 +2,8 @@ package com.yanchware.fractal.sdk.domain.livesystem.caas;
 
 import com.jayway.jsonpath.JsonPath;
 import com.yanchware.fractal.sdk.TestWithFixture;
-import com.yanchware.fractal.sdk.utils.TestUtils;
 import com.yanchware.fractal.sdk.domain.values.ComponentId;
+import com.yanchware.fractal.sdk.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

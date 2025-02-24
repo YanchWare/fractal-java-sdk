@@ -3,15 +3,19 @@ package com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.cosmos;
 import com.yanchware.fractal.sdk.domain.blueprint.paas.PaaSRelationalDbms;
 import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.PaaSPostgreSqlDbms;
-import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.*;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureResourceEntity;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureResourceGroup;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureStorageAutoGrow;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import lombok.Getter;
 import lombok.Setter;
-
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_COSMOS_POSTGRESQL_CLUSTER;
 import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidLowercaseLettersNumbersAndHyphens;

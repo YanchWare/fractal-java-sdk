@@ -1,8 +1,8 @@
 package com.yanchware.fractal.sdk.domain.blueprint;
 
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
-import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemAggregate;
 import com.yanchware.fractal.sdk.domain.blueprint.service.dtos.BlueprintComponentDto;
+import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemAggregate;
 import io.github.resilience4j.retry.RetryRegistry;
 
 import java.net.http.HttpClient;

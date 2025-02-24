@@ -2,8 +2,6 @@ package com.yanchware.fractal.sdk.domain.livesystem.service.dtos;
 
 import com.yanchware.fractal.sdk.domain.livesystem.caas.*;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.KubernetesCluster;
-import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.LiveSystemComponentDto;
-import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import com.yanchware.fractal.sdk.domain.values.ComponentType;
 
 import java.util.Map;
@@ -90,8 +88,8 @@ public class LiveSystemKubernetesComponentDtoTest {
                         component.getBranchName(),
                         component.getContainerPlatform(),
                         component.getNamespace(),
-                        component.getPrivateSSHKeyPassphraseSecretId(),
-                        component.getPrivateSSHKeySecretId(),
+                        component.getPrivateSSHKeyPassphraseEnvironmentSecretShortName(),
+                        component.getPrivateSSHKeyEnvironmentSecretShortName(),
                         component.getRepoId(),
                         component.getRoles());
     }

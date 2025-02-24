@@ -15,9 +15,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_KUBERNETES;
 import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 import static com.yanchware.fractal.sdk.utils.ValidationUtils.isPresentAndValidIpRange;
-import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_KUBERNETES;
 
 /**
  * <p>

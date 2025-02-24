@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.Map;
 
 public interface CustomWorkload {
-  String getPrivateSSHKeyPassphraseSecretId();
-  void setPrivateSSHKeyPassphraseSecretId(String privateSSHKeyPassphraseSecretId);
+  String getPrivateSSHKeyPassphraseEnvironmentSecretShortName();
+  void setPrivateSSHKeyPassphraseEnvironmentSecretShortName(String privateSSHKeyPassphraseEnvironmentSecretShortName);
 
-  String getPrivateSSHKeySecretId();
-  void setPrivateSSHKeySecretId(String privateSSHKeySecretId);
+  String getPrivateSSHKeyEnvironmentSecretShortName();
+  void setPrivateSSHKeyEnvironmentSecretShortName(String privateSSHKeyEnvironmentSecretShortName);
 
   String getSshRepositoryURI();
   void setSshRepositoryURI(String SshRepositoryURI);
@@ -36,8 +36,8 @@ public interface CustomWorkload {
   Map<String, List<Object>> getDnsZoneConfig();
   void setDnsZoneConfig(Map<String, List<Object>> getDnsZoneConfig);
 
-  List<String> getSecrets();
-  void setSecrets(List<String> secrets);
+  List<String> getEnvironmentSecretShortNames();
+  void setEnvironmentSecretShortNames(List<String> secrets);
 
   String getCiCdProfileShortName();
   void setCiCdProfileShortName(String ciCdProfileShortName);

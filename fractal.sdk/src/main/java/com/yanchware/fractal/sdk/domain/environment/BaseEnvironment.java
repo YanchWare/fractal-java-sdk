@@ -32,7 +32,7 @@ public abstract class BaseEnvironment implements Environment, Validatable {
   private final static String DEFAULT_CI_CD_PROFILE_IS_NULL = "[CI/CD Profile Validation] The default CI/CD profile cannot be null";
   private final static String DEFAULT_CI_CD_PROFILE_IS_MISSING = "[CI/CD Profile Validation] A default CI/CD profile must be set if additional CI/CD profiles are defined";
   private final static String CI_CD_PROFILE_SHORT_NAME_NOT_UNIQUE = "[CI/CD Profile Validation] CI/CD profile short names must be unique, including the default profile";
-  private final static String SECRET_NAMES_NOT_UNIQUE = "[Secret Validation] Secret names must be unique";
+  private final static String SECRET_SHORT_NAMES_NOT_UNIQUE = "[Secret Validation] Secret short names must be unique";
 
   private final Map<String, Object> parameters;
   private String name;
@@ -284,8 +284,8 @@ public abstract class BaseEnvironment implements Environment, Validatable {
     }
 
     if (!CollectionUtils.isBlank(secrets)) {
-      if (secrets.size()!= new HashSet<>(secrets.stream().map(Secret::name).toList()).size()) {
-        errors.add(SECRET_NAMES_NOT_UNIQUE);
+      if (secrets.size() != new HashSet<>(secrets.stream().map(Secret::shortName).toList()).size()) {
+        errors.add(SECRET_SHORT_NAMES_NOT_UNIQUE);
       }
     }
 

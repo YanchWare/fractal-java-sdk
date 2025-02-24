@@ -7,32 +7,48 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidAlphanumericsHyphens;
-import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLength;
 
-/**
- * Represents a CI/CD profile with configuration details for continuous integration and continuous deployment.
- *
- * <p>A CI/CD profile includes:</p>
- * <ul>
- *   <li>ShortName: A unique name for the profile.</li>
- *   <li>DisplayName: A display name for the profile.</li>
- *   <li>SSH Private Key Data: The data of the SSH private key used for authentication.</li>
- *   <li>SSH Private Key Passphrase: (Optional) The passphrase for the SSH private key.</li>
- * </ul>
- *
- * @param shortName               The shortName of the CI/CD profile.
- * @param displayName             The displayName of the CI/CD profile.
- * @param sshPrivateKeyData       The SSH private key data.
- * @param sshPrivateKeyPassphrase The SSH private key passphrase (optional).
- */
-public record CiCdProfile(String shortName, String displayName, String sshPrivateKeyData, String sshPrivateKeyPassphrase) {
-  private final static String SHORT_NAME_NOT_VALID = "[CI/CD Profile Validation] The Short Name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen, and must be between 1 and 127 characters";
+public record CiCdProfile(String shortName, String displayName, String description, String sshPrivateKeyData, String sshPrivateKeyPassphrase) {
+  private final static String SHORT_NAME_NOT_VALID = "[CI/CD Profile Validation] The Short Name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen";
   private final static String DISPLAY_NAME_NOT_VALID = "[CI/CD Profile Validation] The Display Name cannot be empty or null";
   private final static String SSH_PRIVATE_KEY_DATA_NOT_VALID = "[CI/CD Profile Validation] The SSH Private Key Data cannot be empty or null";
 
   /**
+   * Creates a new CI/CD profile with the specified parameters, without a description.
+   *
+   * <p>This constructor provides a concise way to create a CI/CD profile when a description is not needed.
+   *
+   * @param shortName               The short name of the CI/CD profile, which must adhere to the following constraints:
+   *                                <ul>
+   *                                  <li>Must not be empty or null.</li>
+   *                                  <li>Must not start or end with a hyphen.</li>
+   *                                  <li>Must only contain alphanumeric characters and hyphens.</li>
+   *                                </ul>
+   * @param displayName             The display name of the CI/CD profile.
+   * @param sshPrivateKeyData       The SSH private key data.
+   * @param sshPrivateKeyPassphrase The SSH private key passphrase.
+   * @throws IllegalArgumentException if the validation of the profile fails.
+   */
+  public CiCdProfile(String shortName, String displayName, String sshPrivateKeyData, String sshPrivateKeyPassphrase) {
+    this(shortName, displayName, null, sshPrivateKeyData, sshPrivateKeyPassphrase);
+  }
+
+  /**
    * Creates a new CI/CD profile with the specified parameters.
    *
+   * <p>This constructor allows for the creation of a CI/CD profile with description.
+   * If a description is not needed, you can use the constructor overload that omits the {@code description} parameter.</p>
+   *
+   * @param shortName               The short name of the CI/CD profile, which must adhere to the following constraints:
+   *                                <ul>
+   *                                  <li>Must not be empty or null.</li>
+   *                                  <li>Must not start or end with a hyphen.</li>
+   *                                  <li>Must only contain alphanumeric characters and hyphens.</li>
+   *                                </ul>
+   * @param displayName             The display name of the CI/CD profile, which must not be empty or null.
+   * @param description             A description of the profile.
+   * @param sshPrivateKeyData       The SSH private key data, which must not be empty or null.
+   * @param sshPrivateKeyPassphrase The SSH private key passphrase.
    * @throws IllegalArgumentException if the validation of the profile fails.
    */
   public CiCdProfile {
@@ -59,8 +75,7 @@ public record CiCdProfile(String shortName, String displayName, String sshPrivat
 
     if (!StringUtils.isBlank(shortName)) {
       var hasValidCharacters = isValidAlphanumericsHyphens(shortName);
-      var hasValidLengths = isValidStringLength(shortName, 1, 127);
-      if (!hasValidCharacters || !hasValidLengths) {
+      if (!hasValidCharacters) {
         errors.add(SHORT_NAME_NOT_VALID);
       }
     }

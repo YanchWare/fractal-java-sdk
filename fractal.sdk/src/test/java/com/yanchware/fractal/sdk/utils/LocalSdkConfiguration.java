@@ -80,7 +80,7 @@ public class LocalSdkConfiguration implements SdkConfiguration {
   }
 
   @Override
-  public String getOciServiceAccountCendentials() {
+  public String getOciServiceAccountCredentials() {
     return "xxx";
   }
 }

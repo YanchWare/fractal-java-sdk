@@ -2,7 +2,6 @@ package com.yanchware.fractal.sdk.utils;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yanchware.fractal.sdk.domain.Validatable;
-
 import com.yanchware.fractal.sdk.domain.blueprint.BlueprintComponent;
 import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;

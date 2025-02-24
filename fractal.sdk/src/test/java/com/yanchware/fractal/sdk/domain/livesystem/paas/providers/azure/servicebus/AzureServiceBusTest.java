@@ -1,12 +1,12 @@
 package com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.servicebus;
 
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureIdentityType;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureResourceGroup;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.servicebus.valueobjects.Encryption;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.servicebus.valueobjects.KeySource;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.servicebus.valueobjects.ServiceBusSku;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.servicebus.valueobjects.ServiceBusSkuTier;
-import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureIdentityType;
 import com.yanchware.fractal.sdk.domain.values.ComponentId;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.Test;

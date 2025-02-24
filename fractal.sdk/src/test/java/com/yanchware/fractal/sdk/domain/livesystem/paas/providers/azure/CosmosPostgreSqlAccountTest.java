@@ -2,12 +2,15 @@
 package com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure;
 
 import com.yanchware.fractal.sdk.TestWithFixture;
-import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.cosmos.*;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.cosmos.AzureCosmosPostgreSqlDbms;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.cosmos.AzureCosmosPostgreSqlDbmsSkuName;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.cosmos.HighAvailabilityMode;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.cosmos.ReplicationRole;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-import static com.yanchware.fractal.sdk.domain.values.ComponentType.*;
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_COSMOS_POSTGRESQL_CLUSTER;
 import static java.util.Map.entry;
 import static org.assertj.core.api.Assertions.assertThat;
 

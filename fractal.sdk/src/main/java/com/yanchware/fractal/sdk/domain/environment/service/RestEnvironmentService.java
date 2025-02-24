@@ -3,8 +3,8 @@ package com.yanchware.fractal.sdk.domain.environment.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.Service;
-import com.yanchware.fractal.sdk.domain.environment.CiCdProfile;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentIdValue;
+import com.yanchware.fractal.sdk.domain.environment.Secret;
 import com.yanchware.fractal.sdk.domain.environment.service.commands.*;
 import com.yanchware.fractal.sdk.domain.environment.service.dtos.*;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
@@ -68,7 +68,8 @@ public class RestEnvironmentService extends Service implements EnvironmentServic
       EnvironmentIdValue environmentId,
       String name,
       Collection<UUID> resourceGroups,
-      Map<String, Object> parameters) throws InstantiatorException {
+      Map<String, Object> parameters,
+      String defaultCiCdProfileShortName) throws InstantiatorException {
     return executeRequestWithRetries(
         "updateEnvironment",
         environmentId.toString(),
@@ -77,7 +78,7 @@ public class RestEnvironmentService extends Service implements EnvironmentServic
         HttpUtils.buildPutRequest(
             getEnvironmentsUri(environmentId),
             sdkConfiguration,
-            serializeSafely(new UpdateEnvironmentRequest(managementEnvironmentId, name, resourceGroups, parameters))),
+            serializeSafely(new UpdateEnvironmentRequest(managementEnvironmentId, name, resourceGroups, parameters, defaultCiCdProfileShortName))),
         new int[]{200},
         EnvironmentResponse.class);
   }
@@ -253,15 +254,15 @@ public class RestEnvironmentService extends Service implements EnvironmentServic
           String.format("The environment variable %s is required and it has not been defined", OCI_SERVICE_ACCOUNT_ID_KEY));
     }
 
-    var ociServiceAccountCendentials = sdkConfiguration.getOciServiceAccountCendentials();
-    if (isBlank(ociServiceAccountCendentials)) {
+    var ociServiceAccountCredentials = sdkConfiguration.getOciServiceAccountCredentials();
+    if (isBlank(ociServiceAccountCredentials)) {
       throw new IllegalArgumentException(
           String.format("The environment variable %s is required and it has not been defined", OCI_SERVICE_ACCOUNT_CREDENTIALS_KEY));
     }
 
     Map<String, String> additionalHeaders = new HashMap<>();
     additionalHeaders.put(X_OCI_SERVICE_ACCOUNT_ID_HEADER, ociServiceAccountId);
-    additionalHeaders.put(X_OCI_SERVICE_ACCOUNT_CREDENTIALS_HEADER, ociServiceAccountCendentials);
+    additionalHeaders.put(X_OCI_SERVICE_ACCOUNT_CREDENTIALS_HEADER, ociServiceAccountCredentials);
 
     executeRequestWithRetries(
         "InitializeOciProject",
@@ -302,59 +303,7 @@ public class RestEnvironmentService extends Service implements EnvironmentServic
   }
 
   @Override
-  public SecretResponse[] getSecrets(EnvironmentIdValue environmentId) throws InstantiatorException {
-    return executeRequestWithRetries(
-        "getSecrets",
-        environmentId.toString(),
-        client,
-        retryRegistry,
-        HttpUtils.buildGetRequest(
-            getSecretsUri(environmentId),
-            sdkConfiguration),
-        new int[]{200, 404},
-        SecretResponse[].class);
-  }
-
-  @Override
-  public void createSecret(EnvironmentIdValue environmentId, String secretName, String secretValue) throws InstantiatorException {
-    executeRequestWithRetries(
-        "createSecret",
-        client,
-        retryRegistry,
-        HttpUtils.buildPostRequest(
-            getSecretsUri(environmentId),
-            sdkConfiguration,
-            serializeSafely(new CreateSecretRequest(secretName, secretValue))),
-        new int[]{201});
-  }
-
-  @Override
-  public void updateSecret(EnvironmentIdValue environmentId, String secretName, String secretValue) throws InstantiatorException {
-    executeRequestWithRetries(
-        "updateSecret",
-        client,
-        retryRegistry,
-        HttpUtils.buildPutRequest(
-            getSecretsUri(environmentId, secretName),
-            sdkConfiguration,
-            serializeSafely(new UpdateSecretRequest(secretValue))),
-        new int[]{200});
-  }
-
-  @Override
-  public void deleteSecret(EnvironmentIdValue environmentId, String secretName) throws InstantiatorException {
-    executeRequestWithRetries(
-        "deleteSecret",
-        client,
-        retryRegistry,
-        HttpUtils.buildDeleteRequest(
-            getSecretsUri(environmentId, secretName),
-            sdkConfiguration),
-        new int[]{204});
-  }
-
-  @Override
-  public CiCdProfileResponse[] manageCiCdProfiles(EnvironmentIdValue environmentId, Collection<CiCdProfile> ciCdProfiles) throws InstantiatorException {
+  public CiCdProfileResponse[] manageCiCdProfiles(EnvironmentIdValue environmentId, Collection<CreateCiCdProfileRequest> ciCdProfiles) throws InstantiatorException {
     return executeRequestWithRetries(
             "manageCiCdProfiles",
             environmentId.toString(),
@@ -366,6 +315,21 @@ public class RestEnvironmentService extends Service implements EnvironmentServic
                     serializeSafely(ciCdProfiles)),
             new int[]{201, 404},
             CiCdProfileResponse[].class);
+  }
+
+  @Override
+  public SecretResponse[] manageSecrets(EnvironmentIdValue environmentId, Collection<Secret> secrets) throws InstantiatorException {
+    return executeRequestWithRetries(
+            "manageSecrets",
+            environmentId.toString(),
+            client,
+            retryRegistry,
+            HttpUtils.buildPostRequest(
+                    getSecretsBulkUri(environmentId),
+                    sdkConfiguration,
+                    serializeSafely(secrets)),
+            new int[]{201, 404},
+            SecretResponse[].class);
   }
 
   private InitializationRunResponse fetchCurrentInitialization(
@@ -417,22 +381,16 @@ public class RestEnvironmentService extends Service implements EnvironmentServic
     return getEnvironmentsUri(environmentId, "");
   }
 
-  private URI getEnvironmentsSecretsUri(EnvironmentIdValue environmentId, String path) {
+
+
+  private URI getSecretsBulkUri(EnvironmentIdValue environmentId) {
     var basePath = String.format("%s/%s/%s/%s/secrets",
-        sdkConfiguration.getEnvironmentsEndpoint(),
-        environmentId.type(),
-        environmentId.ownerId(),
-        environmentId.shortName());
+            sdkConfiguration.getEnvironmentsEndpoint(),
+            environmentId.type(),
+            environmentId.ownerId(),
+            environmentId.shortName());
 
-    return getUriWithOptionalPath(basePath, path);
-  }
-
-  private URI getSecretsUri(EnvironmentIdValue environmentId, String secretName) {
-    return getEnvironmentsSecretsUri(environmentId, secretName);
-  }
-
-  private URI getSecretsUri(EnvironmentIdValue environmentId) {
-    return getEnvironmentsSecretsUri(environmentId, "");
+    return getUriWithOptionalPath(basePath, "bulk");
   }
 
   private URI getCiCdProfilesBulkUri(EnvironmentIdValue environmentId) {
