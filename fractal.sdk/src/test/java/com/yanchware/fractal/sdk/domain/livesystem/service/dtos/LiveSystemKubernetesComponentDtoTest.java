@@ -80,8 +80,8 @@ public class LiveSystemKubernetesComponentDtoTest {
                         "branchName",
                         "containerPlatform",
                         "namespace",
-                        "privateSSHKeyPassphraseSecretId",
-                        "privateSSHKeySecretId",
+                        "privateSSHKeyPassphraseEnvironmentSecretShortName",
+                        "privateSSHKeyEnvironmentSecretShortName",
                         "repoId",
                         "roles")
                 .containsExactly(

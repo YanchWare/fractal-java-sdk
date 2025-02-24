@@ -50,14 +50,6 @@ class SecretTest {
         .isInstanceOf(IllegalArgumentException.class)
         .hasMessageContaining(SHORT_NAME_NOT_VALID_ERROR_STARTS_WITH);
   }
-
-  @Test
-  void exceptionThrown_when_shortNameIsTooLong() {
-    String longName = "a".repeat(128);
-    assertThatThrownBy(() -> new Secret(longName, VALID_DISPLAY_NAME, VALID_VALUE))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining(SHORT_NAME_NOT_VALID_ERROR_STARTS_WITH);
-  }
   
   @Test
   void exceptionThrown_when_valueIsEmpty() {

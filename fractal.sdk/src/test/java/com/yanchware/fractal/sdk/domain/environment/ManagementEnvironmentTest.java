@@ -65,7 +65,7 @@ class ManagementEnvironmentTest {
             .withDefaultCiCdProfile(new CiCdProfile("", "Default", "data", "pass")) // Empty short name
             .build())
             .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("The Short Name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen, and must be between 1 and 127 characters"); // Assuming SHORT_NAME_NOT_VALID is your validation message
+            .hasMessageContaining("The Short Name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen"); // Assuming SHORT_NAME_NOT_VALID is your validation message
   }
 
   @Test
@@ -105,7 +105,7 @@ class ManagementEnvironmentTest {
             .withSecret(new Secret("my-secret", "My Secret Display Name 2","My Secret Description 2", "value2"))
             .build())
             .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining("Secret names must be unique");
+            .hasMessageContaining("Secret short names must be unique");
   }
 
   @Test

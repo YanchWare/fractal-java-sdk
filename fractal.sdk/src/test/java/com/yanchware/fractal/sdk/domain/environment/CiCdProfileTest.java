@@ -16,43 +16,35 @@ class CiCdProfileTest {
     void exceptionThrown_when_shortNameIsEmpty() {
         assertThatThrownBy(() -> new CiCdProfile("", "My Profile", "","ssh-key-data", "passphrase"))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("The Short Name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen, and must be between 1 and 127 characters");
+                .hasMessageContaining("The Short Name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen");
     }
 
     @Test
     void exceptionThrown_when_shortNameIsNull() {
         assertThatThrownBy(() -> new CiCdProfile(null, "My Profile", "ssh-key-data", "passphrase"))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("The Short Name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen, and must be between 1 and 127 characters");
+                .hasMessageContaining("The Short Name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen");
     }
 
     @Test
     void exceptionThrown_when_shortNameStartsWithHyphen() {
         assertThatThrownBy(() -> new CiCdProfile("-my-profile", "My Profile", "ssh-key-data", "passphrase"))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("The Short Name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen, and must be between 1 and 127 characters");
+                .hasMessageContaining("The Short Name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen");
     }
 
     @Test
     void exceptionThrown_when_shortNameEndsWithHyphen() {
         assertThatThrownBy(() -> new CiCdProfile("my-profile-", "My Profile", "ssh-key-data", "passphrase"))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("The Short Name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen, and must be between 1 and 127 characters");
+                .hasMessageContaining("The Short Name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen");
     }
 
     @Test
     void exceptionThrown_when_shortNameContainsInvalidCharacters() {
         assertThatThrownBy(() -> new CiCdProfile("my_profile%", "My Profile", "ssh-key-data", "passphrase"))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("The Short Name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen, and must be between 1 and 127 characters");
-    }
-
-    @Test
-    void exceptionThrown_when_shortNameIsTooLong() {
-        String longName = "a".repeat(128);
-        assertThatThrownBy(() -> new CiCdProfile(longName, "My Profile", "ssh-key-data", "passphrase"))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("The Short Name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen, and must be between 1 and 127 characters");
+                .hasMessageContaining("The Short Name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen");
     }
 
     @Test

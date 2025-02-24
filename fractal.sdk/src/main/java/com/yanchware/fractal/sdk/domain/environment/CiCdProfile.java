@@ -79,6 +79,8 @@ public record CiCdProfile(String shortName, String displayName, String descripti
         errors.add(SHORT_NAME_NOT_VALID);
       }
     }
+    
+    
 
     if (StringUtils.isBlank(displayName)) {
       errors.add(DISPLAY_NAME_NOT_VALID);
