@@ -44,8 +44,8 @@ public class CaaSKubernetesCustomWorkloadTest {
   public void typeIsKubernetes_when_workloadBuiltWithAllRequiredValues() {
     var builder = generateBuilder()
         .withNamespace("fractal")
-        .withPrivateSSHKeyPassphraseSecretId("svc-private-ssh-key-pass")
-        .withPrivateSSHKeySecretId("svc-private-ssh-key-secret")
+        .withPrivateSSHKeyPassphraseEnvironmentSecretShortName("svc-private-ssh-key-pass")
+        .withPrivateSSHKeyEnvironmentSecretShortName("svc-private-ssh-key-secret")
         .withSSHRepositoryURI("ssh")
         .withRepoId("repo-id")
         .withBranchName("branch-name");
@@ -58,29 +58,31 @@ public class CaaSKubernetesCustomWorkloadTest {
     var serviceAccountName = "required-service-account-name";
     var customWorkload = generateBuilder()
         .withNamespace("fractal")
-        .withPrivateSSHKeyPassphraseSecretId("svc-private-ssh-key-pass")
-        .withPrivateSSHKeySecretId("svc-private-ssh-key-secret")
+        .withPrivateSSHKeyPassphraseEnvironmentSecretShortName("svc-private-ssh-key-pass")
+        .withPrivateSSHKeyEnvironmentSecretShortName("svc-private-ssh-key-secret")
         .withSSHRepositoryURI("ssh")
         .withRepoId("repo-id")
         .withBranchName("branch-name")
         .withServiceAccountName(serviceAccountName)
         .withWorkloadIdentityEnabled(false)
-        .withSecret("secret-1")
-        .withSecret("secret-2")
-        .withSecret("secret-3")
+        .withEnvironmentSecretShortName("secret-1")
+        .withEnvironmentSecretShortName("secret-2")
+        .withEnvironmentSecretShortName("secret-3")
+        .withCiCdProfileShortName("ci-cd-profile-name")
         .build();
     
     assertThat(customWorkload.getServiceAccountName()).isEqualTo(serviceAccountName);
     assertThat(customWorkload.getWorkloadIdentityEnabled()).isFalse();
-    assertThat(customWorkload.getSecrets()).hasSize(3);
+    assertThat(customWorkload.getEnvironmentSecretShortNames()).hasSize(3);
+    assertThat(customWorkload.getCiCdProfileShortName()).isEqualTo("ci-cd-profile-name");
   }
 
   @Test
   public void exceptionThrown_when_workloadBuiltWithWorkloadSecretIdKeyEmpty() {
     var builder = generateBuilder()
         .withNamespace("fractal")
-        .withPrivateSSHKeyPassphraseSecretId("svc-private-ssh-key-pass")
-        .withPrivateSSHKeySecretId("svc-private-ssh-key-secret")
+        .withPrivateSSHKeyPassphraseEnvironmentSecretShortName("svc-private-ssh-key-pass")
+        .withPrivateSSHKeyEnvironmentSecretShortName("svc-private-ssh-key-secret")
         .withSSHRepositoryURI("ssh")
         .withRepoId("repo-id")
         .withSecretIdKey("");
@@ -93,8 +95,8 @@ public class CaaSKubernetesCustomWorkloadTest {
   public void exceptionThrown_when_workloadBuiltWithBranchNameKeyEmpty() {
     var builder = generateBuilder()
         .withNamespace("fractal")
-        .withPrivateSSHKeyPassphraseSecretId("svc-private-ssh-key-pass")
-        .withPrivateSSHKeySecretId("svc-private-ssh-key-secret")
+        .withPrivateSSHKeyPassphraseEnvironmentSecretShortName("svc-private-ssh-key-pass")
+        .withPrivateSSHKeyEnvironmentSecretShortName("svc-private-ssh-key-secret")
         .withSSHRepositoryURI("ssh")
         .withRepoId("repo-id")
         .withBranchName("");
@@ -107,8 +109,8 @@ public class CaaSKubernetesCustomWorkloadTest {
   public void exceptionThrown_when_workloadBuiltWithWorkloadSecretPasswordKeyEmpty() {
     var builder = generateBuilder()
         .withNamespace("fractal")
-        .withPrivateSSHKeyPassphraseSecretId("svc-private-ssh-key-pass")
-        .withPrivateSSHKeySecretId("svc-private-ssh-key-secret")
+        .withPrivateSSHKeyPassphraseEnvironmentSecretShortName("svc-private-ssh-key-pass")
+        .withPrivateSSHKeyEnvironmentSecretShortName("svc-private-ssh-key-secret")
         .withSSHRepositoryURI("ssh")
         .withRepoId("repo-id")
         .withSecretPasswordKey("");

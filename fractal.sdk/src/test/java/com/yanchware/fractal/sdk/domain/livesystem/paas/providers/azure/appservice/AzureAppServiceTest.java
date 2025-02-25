@@ -41,8 +41,8 @@ public class AzureAppServiceTest {
   @Test
   public void typeIsWebApp_when_workloadBuiltWithAllRequiredValues() {
     var builder = generateBuilder()
-        .withPrivateSSHKeyPassphraseSecretId("svc-private-ssh-key-pass")
-        .withPrivateSSHKeySecretId("svc-private-ssh-key-secret")
+        .withPrivateSSHKeyPassphraseEnvironmentSecretShortName("svc-private-ssh-key-pass")
+        .withPrivateSSHKeyEnvironmentSecretShortName("svc-private-ssh-key-secret")
         .withSSHRepositoryURI("ssh")
         .withRepoId("repo-id")
         .withBranchName("branch-name")
@@ -54,8 +54,8 @@ public class AzureAppServiceTest {
   @Test
   public void exceptionThrown_when_workloadBuiltWithWorkloadSecretIdKeyEmpty() {
     var builder = generateBuilder()
-        .withPrivateSSHKeyPassphraseSecretId("svc-private-ssh-key-pass")
-        .withPrivateSSHKeySecretId("svc-private-ssh-key-secret")
+        .withPrivateSSHKeyPassphraseEnvironmentSecretShortName("svc-private-ssh-key-pass")
+        .withPrivateSSHKeyEnvironmentSecretShortName("svc-private-ssh-key-secret")
         .withSSHRepositoryURI("ssh")
         .withRepoId("repo-id")
         .withSecretIdKey("");
@@ -67,8 +67,8 @@ public class AzureAppServiceTest {
   @Test
   public void exceptionThrown_when_workloadBuiltWithBranchNameKeyEmpty() {
     var builder = generateBuilder()
-        .withPrivateSSHKeyPassphraseSecretId("svc-private-ssh-key-pass")
-        .withPrivateSSHKeySecretId("svc-private-ssh-key-secret")
+        .withPrivateSSHKeyPassphraseEnvironmentSecretShortName("svc-private-ssh-key-pass")
+        .withPrivateSSHKeyEnvironmentSecretShortName("svc-private-ssh-key-secret")
         .withSSHRepositoryURI("ssh")
         .withRepoId("repo-id")
         .withBranchName("");
@@ -80,8 +80,8 @@ public class AzureAppServiceTest {
   @Test
   public void exceptionThrown_when_workloadBuiltWithWorkloadSecretPasswordKeyEmpty() {
     var builder = generateBuilder()
-        .withPrivateSSHKeyPassphraseSecretId("svc-private-ssh-key-pass")
-        .withPrivateSSHKeySecretId("svc-private-ssh-key-secret")
+        .withPrivateSSHKeyPassphraseEnvironmentSecretShortName("svc-private-ssh-key-pass")
+        .withPrivateSSHKeyEnvironmentSecretShortName("svc-private-ssh-key-secret")
         .withSSHRepositoryURI("ssh")
         .withRepoId("repo-id")
         .withSecretPasswordKey("");
@@ -292,9 +292,9 @@ public class AzureAppServiceTest {
             .build())
         .withHostingEnvironmentProfileId("HostingEnvironmentProfileId")
         .withScmSiteAlsoStopped(true)
-        .withSecret("secret-1")
-        .withSecret("secret-2")
-        .withSecret("secret-3")
+        .withEnvironmentSecretShortName("secret-1")
+        .withEnvironmentSecretShortName("secret-2")
+        .withEnvironmentSecretShortName("secret-3")
         .withCiCdProfileShortName("default")
         .build();
 
@@ -361,7 +361,7 @@ public class AzureAppServiceTest {
     assertTrue(webApp.getCloningInfo().getOverwrite());
     assertThat(webApp.getHostingEnvironmentProfileId()).isEqualTo("HostingEnvironmentProfileId");
     assertTrue(webApp.getScmSiteAlsoStopped());
-    assertThat(webApp.getSecrets()).hasSize(3);
+    assertThat(webApp.getEnvironmentSecretShortNames()).hasSize(3);
   }
 
   @Test
@@ -427,8 +427,8 @@ public class AzureAppServiceTest {
 
   private AzureWebApp.AzureWebAppBuilder generateSampleBuilder() {
     return generateBuilder()
-        .withPrivateSSHKeyPassphraseSecretId("svc-private-ssh-key-pass")
-        .withPrivateSSHKeySecretId("svc-private-ssh-key-secret")
+        .withPrivateSSHKeyPassphraseEnvironmentSecretShortName("svc-private-ssh-key-pass")
+        .withPrivateSSHKeyEnvironmentSecretShortName("svc-private-ssh-key-secret")
         .withSSHRepositoryURI("ssh")
         .withRepoId("repo-id")
         .withBranchName("env/test")

@@ -4,17 +4,21 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.yanchware.fractal.sdk.domain.blueprint.FractalIdValue;
-import com.yanchware.fractal.sdk.domain.environment.*;
-import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemAggregate;
 import com.yanchware.fractal.sdk.domain.Component;
 import com.yanchware.fractal.sdk.domain.ComponentLink;
+import com.yanchware.fractal.sdk.domain.blueprint.FractalIdValue;
+import com.yanchware.fractal.sdk.domain.environment.Environment;
+import com.yanchware.fractal.sdk.domain.environment.EnvironmentIdValue;
+import com.yanchware.fractal.sdk.domain.environment.EnvironmentType;
+import com.yanchware.fractal.sdk.domain.environment.ManagementEnvironment;
+import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemAggregate;
 import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemIdValue;
 import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemsFactory;
 import com.yanchware.fractal.sdk.domain.livesystem.caas.*;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.PodManagedIdentity;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.RoleAssignment;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.aws.AwsElasticKubernetesService;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.aws.AwsElasticKubernetesService.AwsElasticKubernetesServiceBuilder;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureOsSku;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzurePostgreSqlDatabase;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzurePostgreSqlDbms;
@@ -28,7 +32,6 @@ import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GoogleKube
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GoogleKubernetesEngine.GoogleKubernetesEngineBuilder;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciContainerEngineForKubernetes;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciContainerEngineForKubernetes.OciContainerEngineForKubernetesBuilder;
-import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.aws.AwsElasticKubernetesService.AwsElasticKubernetesServiceBuilder;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import com.yanchware.fractal.sdk.domain.services.contracts.ComponentDto;
 import com.yanchware.fractal.sdk.domain.values.ComponentId;
@@ -186,8 +189,8 @@ public class TestUtils {
         .withDescription("Fractal Service on K8S")
         .withDisplayName("Fractal SVC")
         .withNamespace("fractal")
-        .withPrivateSSHKeyPassphraseSecretId("fractal-private-passphrase")
-        .withPrivateSSHKeySecretId("fractal-private-ssh")
+        .withPrivateSSHKeyPassphraseEnvironmentSecretShortName("fractal-private-passphrase")
+        .withPrivateSSHKeyEnvironmentSecretShortName("fractal-private-ssh")
         .withSSHRepositoryURI("ssh-uri")
         .withRepoId("fractal-svc-id")
         .withBranchName("env/fractal-test")

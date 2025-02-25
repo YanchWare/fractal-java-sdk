@@ -1,17 +1,14 @@
 package com.yanchware.fractal.sdk.domain.livesystem.service.dtos;
 
-import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.domain.services.contracts.ComponentDto;
-import com.yanchware.fractal.sdk.utils.ReflectionUtils;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.*;
-
-import static com.yanchware.fractal.sdk.configuration.Constants.COMPONENT_TYPE;
-import static java.util.Collections.emptyMap;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Data
 @EqualsAndHashCode(callSuper = true)

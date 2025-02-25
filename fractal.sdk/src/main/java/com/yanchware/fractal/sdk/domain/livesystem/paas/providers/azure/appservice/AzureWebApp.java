@@ -1,7 +1,7 @@
 package com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.appservice;
 
-import com.yanchware.fractal.sdk.domain.blueprint.paas.PaaSWorkload;
 import com.yanchware.fractal.sdk.domain.blueprint.iaas.DnsRecord;
+import com.yanchware.fractal.sdk.domain.blueprint.paas.PaaSWorkload;
 import com.yanchware.fractal.sdk.domain.livesystem.CustomWorkload;
 import com.yanchware.fractal.sdk.domain.livesystem.CustomWorkloadBuilder;
 import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemComponent;
@@ -23,11 +23,11 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
+import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_WEBAPP;
 import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidAlphanumericsHyphens;
 import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidLettersNumbersPeriodsAndHyphens;
 import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLength;
-import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_WEBAPP;
 
 /**
  * <pre>
@@ -48,8 +48,8 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
   private final static String OPERATING_SYSTEM_IS_EMPTY = "[AzureWebApp Validation] The Operating System is either empty or blank and it is required";
 
   private String name;
-  private String privateSSHKeyPassphraseSecretId;
-  private String privateSSHKeySecretId;
+  private String privateSSHKeyPassphraseEnvironmentSecretShortName;
+  private String privateSSHKeyEnvironmentSecretShortName;
   private String sshRepositoryURI;
   private String repoId;
   private String branchName;
@@ -89,7 +89,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
   private AzureWebAppRuntimeStack runtimeStack;
   private Map<String, List<Object>> dnsZoneConfig;
   private Collection<AzureWebAppDeploymentSlot> deploymentSlots;
-  private List<String> secrets;
+  private List<String> environmentSecretShortNames;
   private String ciCdProfileShortName;
 
 
@@ -101,7 +101,7 @@ public class AzureWebApp extends PaaSWorkload implements AzureResourceEntity, Li
   protected AzureWebApp() {
     roles = new ArrayList<>();
     deploymentSlots = new ArrayList<>();
-    secrets = new ArrayList<>();
+    environmentSecretShortNames = new ArrayList<>();
   }
 
   @Override

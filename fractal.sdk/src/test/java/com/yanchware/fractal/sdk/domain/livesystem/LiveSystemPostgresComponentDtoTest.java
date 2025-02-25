@@ -4,9 +4,9 @@ import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzurePos
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzurePostgreSqlDbms;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.LiveSystemComponentDto;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
+import com.yanchware.fractal.sdk.domain.values.ComponentType;
 import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
 import com.yanchware.fractal.sdk.utils.TestUtils;
-import com.yanchware.fractal.sdk.domain.values.ComponentType;
 import io.github.resilience4j.retry.RetryRegistry;
 import org.junit.jupiter.api.Test;
 

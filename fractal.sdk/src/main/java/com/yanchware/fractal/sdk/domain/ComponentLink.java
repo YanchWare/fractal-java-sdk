@@ -6,7 +6,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 @Getter
 @Setter(AccessLevel.PRIVATE)
@@ -26,8 +29,8 @@ public class ComponentLink implements Validatable {
   }
 
   public static class ComponentLinkBuilder {
-    private ComponentLink componentLink;
-    private ComponentLinkBuilder builder;
+    private final ComponentLink componentLink;
+    private final ComponentLinkBuilder builder;
 
     public ComponentLinkBuilder() {
       componentLink = createComponentLink();

@@ -202,7 +202,7 @@ public class EnvVarSdkConfiguration implements SdkConfiguration {
    * @return the OCI service account credentials
    */
   @Override
-  public String getOciServiceAccountCendentials() {
+  public String getOciServiceAccountCredentials() {
     return System.getenv(OCI_SERVICE_ACCOUNT_CREDENTIALS_KEY);
   }
 

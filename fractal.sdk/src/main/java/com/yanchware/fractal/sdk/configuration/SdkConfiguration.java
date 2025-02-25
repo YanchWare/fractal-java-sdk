@@ -103,5 +103,5 @@ public interface SdkConfiguration {
    *
    * @return the OCI Service Account Credentials
    */
-  String getOciServiceAccountCendentials();
+  String getOciServiceAccountCredentials();
 }

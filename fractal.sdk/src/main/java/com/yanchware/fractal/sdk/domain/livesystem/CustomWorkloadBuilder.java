@@ -21,29 +21,41 @@ import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
 public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload, B extends CustomWorkloadBuilder<T, B>> extends Component.Builder<T, B> {
 
   /**
-   * The id of the vault secret containing the passphrase protecting the SSH private key used to access the code repository
+   * <pre>
+   * Sets the short name of the environment secret containing the passphrase protecting the SSH private key 
+   * used to access the code repository.
    *
-   * @param privateSSHKeyPassphraseSecretId
+   * This secret should be defined at the Environment level.
+   * </pre>
+   *
+   * @param privateSSHKeyPassphraseEnvironmentSecretShortName The short name of the environment secret.
+   * @return The builder instance.
    */
-  public B withPrivateSSHKeyPassphraseSecretId(String privateSSHKeyPassphraseSecretId) {
-    component.setPrivateSSHKeyPassphraseSecretId(privateSSHKeyPassphraseSecretId);
+  public B withPrivateSSHKeyPassphraseEnvironmentSecretShortName(String privateSSHKeyPassphraseEnvironmentSecretShortName) {
+    component.setPrivateSSHKeyPassphraseEnvironmentSecretShortName(privateSSHKeyPassphraseEnvironmentSecretShortName);
     return builder;
   }
 
   /**
-   * The id of the vault secret containing the SSH private key used to access the code repository
+   * <pre>
+   * Sets the short name of the environment secret containing the SSH private key used to access the code repository.
    *
-   * @param privateSSHKeySecretId
+   * This secret should be defined at the Environment level.
+   * </pre>
+   *
+   * @param privateSSHKeyEnvironmentSecretShortName The short name of the environment secret.
+   * @return The builder instance.
    */
-  public B withPrivateSSHKeySecretId(String privateSSHKeySecretId) {
-    component.setPrivateSSHKeySecretId(privateSSHKeySecretId);
+  public B withPrivateSSHKeyEnvironmentSecretShortName(String privateSSHKeyEnvironmentSecretShortName) {
+    component.setPrivateSSHKeyEnvironmentSecretShortName(privateSSHKeyEnvironmentSecretShortName);
     return builder;
   }
 
   /**
    * The SSH uri of the repository
    *
-   * @param sshRepositoryURI
+   * @param sshRepositoryURI the SSH URI of the repository.
+   * @return The builder instance.
    */
   public B withSSHRepositoryURI(String sshRepositoryURI) {
     component.setSshRepositoryURI(sshRepositoryURI);
@@ -51,10 +63,13 @@ public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload
   }
 
   /**
-   * The ID of the repository as it is in the version control solution of your choice. The repoId needs to match the
-   * repository id that is being sent by the webhook
+   * <pre>
+   * The ID of the repository as it is in the version control solution of your choice. 
+   * The repoId needs to match the repository ID that is being sent by the webhook.
+   * </pre>
    *
-   * @param repoId
+   * @param repoId The ID of the repository.
+   * @return The builder instance.
    */
   public B withRepoId(String repoId) {
     component.setRepoId(repoId);
@@ -62,24 +77,30 @@ public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload
   }
 
   /**
-   * This role will be applied to the Custom Workload. It can vary from a specific Cloud Vendor BuiltIn role to an
-   * AppRoleAssignment or other custom role.
+   * <pre>
+   * Adds a role to the Custom Workload. 
+   * The role can vary from a specific Cloud Vendor Built-in role to an AppRoleAssignment or other custom role.
+   * </pre>
    * <p>
    * See {@link com.yanchware.fractal.sdk.domain.livesystem.caas.RoleType RoleType} for all role types supported
    *
-   * @param role
+   * @param role The role to add.
+   * @return The builder instance.
    */
   public B withRole(CustomWorkloadRole role) {
     return withRoles(List.of(role));
   }
 
   /**
-   * This list of roles will be applied to the Custom Workload. It can vary from a specific Cloud Vendor BuiltIn role to an
-   * AppRoleAssignment or other custom role.
+   * <pre>
+   * Adds a list of roles to the Custom Workload. 
+   * The roles can vary from specific Cloud Vendor Built-in roles to AppRoleAssignments or other custom roles.
+   * </pre>
    * <p>
    * See {@link com.yanchware.fractal.sdk.domain.livesystem.caas.RoleType RoleType} for all role types supported
    *
-   * @param roles
+   * @param roles The list of roles to add.
+   * @return The builder instance.
    */
   public B withRoles(List<CustomWorkloadRole> roles) {
     if (isBlank(roles)) {
@@ -93,11 +114,14 @@ public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload
   }
 
   /**
-   * The id of the vault secret containing the Ocelot client id for this workload
-   * This is used for internal communication when <a href="https://fractal.cloud/docs/docs-ocelot">Ocelot</a> is also used in the environment
-   * If it is not provided, Fractal Cloud will generate it
+   * <pre>
+   * Sets the ID of the vault secret containing the Ocelot client ID for this workload.
+   * This is used for internal communication when <a href="https://fractal.cloud/docs/docs-ocelot">Ocelot</a> is also used in the environment.
+   * If it is not provided, Fractal Cloud will generate it.
+   * </pre>
    *
-   * @param workloadSecretIdKey
+   * @param workloadSecretIdKey The ID of the vault secret.
+   * @return The builder instance.
    */
   public B withSecretIdKey(String workloadSecretIdKey) {
     component.setWorkloadSecretIdKey(workloadSecretIdKey);
@@ -105,11 +129,14 @@ public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload
   }
 
   /**
-   * The id of the vault secret containing the Ocelot client secret for this workload
-   * This is used for internal communication when <a href="https://fractal.cloud/docs/docs-ocelot">Ocelot</a> is also used in the environment
-   * If it is not provided, Fractal Cloud will generate it
+   * <pre>
+   * Sets the ID of the vault secret containing the Ocelot client secret for this workload.
+   * This is used for internal communication when <a href="https://fractal.cloud/docs/docs-ocelot">Ocelot</a> is also used in the environment.
+   * If it is not provided, Fractal Cloud will generate it.
+   * </pre>
    *
-   * @param workloadSecretPasswordKey
+   * @param workloadSecretPasswordKey The ID of the vault secret.
+   * @return The builder instance.
    */
   public B withSecretPasswordKey(String workloadSecretPasswordKey) {
     component.setWorkloadSecretPasswordKey(workloadSecretPasswordKey);
@@ -117,9 +144,10 @@ public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload
   }
 
   /**
-   * The branch name to indicate from where to clone the repository that will be deployed
+   * The branch name to indicate from where to clone the repository that will be deployed.
    *
-   * @param branchName
+   * @param branchName The branch name.
+   * @return The builder instance.
    */
   public B withBranchName(String branchName) {
     component.setBranchName(branchName);
@@ -128,15 +156,14 @@ public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload
 
   /**
    * <pre>
-   * Adds a single secret name to the component. 
+   * Adds a single secret short name to the component. 
    * This secret should be defined in the environment associated with this component.</pre>
    *
-   * @param secretName The name of the secret to add.
-   *
+   * @param environmentSecretShortNames The short name of the secret to add.
    * @return The builder instance.
    */
-  public B withSecret(String secretName) {
-    return withSecrets(List.of(secretName));
+  public B withEnvironmentSecretShortName(String environmentSecretShortNames) {
+    return withEnvironmentSecretShortNames(List.of(environmentSecretShortNames));
   }
 
   /**
@@ -144,15 +171,14 @@ public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload
    * Adds a list of secret names to the component. 
    * These secrets should be defined in the environment associated with this component.</pre>
    *
-   * @param secrets The list of secret names to add.
-   *
+   * @param environmentSecretShortNames The list of secret names to add.
    * @return The builder instance.
    */
-  public B withSecrets(List<String> secrets) {
-    if (component.getSecrets() == null) {
-      component.setSecrets(new ArrayList<>());
+  public B withEnvironmentSecretShortNames(List<String> environmentSecretShortNames) {
+    if (component.getEnvironmentSecretShortNames() == null) {
+      component.setEnvironmentSecretShortNames(new ArrayList<>());
     }
-    component.getSecrets().addAll(secrets);
+    component.getEnvironmentSecretShortNames().addAll(environmentSecretShortNames);
     return builder;
   }
 

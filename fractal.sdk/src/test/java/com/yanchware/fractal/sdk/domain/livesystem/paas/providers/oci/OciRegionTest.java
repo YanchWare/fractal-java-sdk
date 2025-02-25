@@ -1,6 +1,5 @@
 package com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci;
 
-import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciRegion;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;

@@ -1,6 +1,5 @@
 package com.yanchware.fractal.sdk.domain.livesystem.paas.providers.aws;
 
-import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.aws.AwsRegion;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;

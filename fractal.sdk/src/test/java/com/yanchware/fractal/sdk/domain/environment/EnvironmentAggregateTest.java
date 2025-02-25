@@ -3,17 +3,11 @@ package com.yanchware.fractal.sdk.domain.environment;
 import com.yanchware.fractal.sdk.domain.environment.service.EnvironmentService;
 import com.yanchware.fractal.sdk.domain.environment.service.dtos.SecretResponse;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
-import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.EnvironmentIdDto;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.EnvironmentTypeDto;
-import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
-import io.github.resilience4j.retry.RetryRegistry;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.net.http.HttpClient;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 import static org.mockito.Mockito.mock;
@@ -48,7 +42,7 @@ class EnvironmentAggregateTest {
                     new Date(),
                     "Whoever")
     };
-    when(mockedEnvironmentService.getSecrets(envId)).thenReturn(secrets);
+    when(mockedEnvironmentService.manageSecrets(envId, managementEnvironment.getSecrets())).thenReturn(secrets);
 
     aggregate.manageSecrets();
   }

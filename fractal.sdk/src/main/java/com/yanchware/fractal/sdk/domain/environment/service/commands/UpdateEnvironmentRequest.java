@@ -10,5 +10,6 @@ public record UpdateEnvironmentRequest(
         EnvironmentIdValue managementEnvironmentId,
         String name,
         Collection<UUID> resourceGroups,
-        Map<String, Object> parameters) {
+        Map<String, Object> parameters,
+        String defaultCiCdProfileShortName) {
 }

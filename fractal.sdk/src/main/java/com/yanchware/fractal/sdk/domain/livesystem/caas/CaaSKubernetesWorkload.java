@@ -19,8 +19,8 @@ import static com.yanchware.fractal.sdk.domain.values.ComponentType.CAAS_K8S_WOR
 @Setter
 @ToString(callSuper = true)
 public class CaaSKubernetesWorkload extends CaaSWorkload implements LiveSystemComponent, CustomWorkload {
-    private String privateSSHKeyPassphraseSecretId;
-    private String privateSSHKeySecretId;
+    private String privateSSHKeyPassphraseEnvironmentSecretShortName;
+    private String privateSSHKeyEnvironmentSecretShortName;
     private String sshRepositoryURI;
     private String repoId;
     private String branchName;
@@ -29,7 +29,7 @@ public class CaaSKubernetesWorkload extends CaaSWorkload implements LiveSystemCo
     private String workloadSecretPasswordKey;
     private String serviceAccountName;
     private Boolean workloadIdentityEnabled;
-    private List<String> secrets;
+    private List<String> environmentSecretShortNames;
     private String ciCdProfileShortName;
 
     @Override
@@ -68,8 +68,12 @@ public class CaaSKubernetesWorkload extends CaaSWorkload implements LiveSystemCo
         }
 
         /**
-         * Namespace where the workload will be instantiated
-         * @param namespace
+         * <pre>
+         * Sets the namespace where the workload will be instantiated.
+         * </pre>
+         *
+         * @param namespace The namespace for the workload.
+         * @return The builder instance.
          */
         public KubernetesWorkloadBuilder withNamespace(String namespace) {
             component.setNamespace(namespace);
@@ -77,14 +81,25 @@ public class CaaSKubernetesWorkload extends CaaSWorkload implements LiveSystemCo
         }
 
         /**
-         * The id of the container platform where the workload will be instantiated
-         * @param containerPlatform
+         * <pre>
+         * Sets the ID of the container platform where the workload will be instantiated.
+         * </pre>
+         *
+         * @param containerPlatform The ID of the container platform.
+         * @return The builder instance.
          */
         public KubernetesWorkloadBuilder withContainerPlatform(String containerPlatform) {
             component.setContainerPlatform(containerPlatform);
             return builder;
         }
 
+        /**
+         * Adds a DNS zone configuration with a single DNS record.
+         *
+         * @param dnsZoneName The name of the DNS zone.
+         * @param dnsRecord   The DNS record to add.
+         * @return The builder instance.
+         */
         public KubernetesWorkloadBuilder withDnsZoneConfig(String dnsZoneName, DnsRecord dnsRecord) {
             if (component.getDnsZoneConfig() == null) {
                 component.setDnsZoneConfig(new HashMap<>());
@@ -99,11 +114,24 @@ public class CaaSKubernetesWorkload extends CaaSWorkload implements LiveSystemCo
             return builder;
         }
 
+        /**
+         * Adds a DNS zone configuration with a collection of DNS records.
+         *
+         * @param dnsZoneName The name of the DNS zone.
+         * @param dnsRecords  The collection of DNS records to add.
+         * @return The builder instance.
+         */
         public KubernetesWorkloadBuilder withDnsZoneConfig(String dnsZoneName, Collection<DnsRecord> dnsRecords) {
             dnsRecords.forEach(dnsRecord -> withDnsZoneConfig(dnsZoneName, dnsRecord));
             return builder;
         }
 
+        /**
+         * Adds DNS zone configurations from a map of DNS zone names to collections of DNS records.
+         *
+         * @param dnsRecordsMap The map of DNS zone configurations.
+         * @return The builder instance.
+         */
         public KubernetesWorkloadBuilder withDnsZoneConfig(Map<? extends String, ? extends Collection<DnsRecord>> dnsRecordsMap) {
             if (dnsRecordsMap == null || dnsRecordsMap.isEmpty()) {
                 return builder;
@@ -123,6 +151,9 @@ public class CaaSKubernetesWorkload extends CaaSWorkload implements LiveSystemCo
          * Sets the ServiceAccount name for the Kubernetes workload. 
          * This name is crucial for configuring workload identity by linking the Kubernetes ServiceAccount 
          * to Azure User Managed Identity.</pre>
+         *
+         * @param serviceAccountName The name of the ServiceAccount.
+         * @return The builder instance.
          */
         public KubernetesWorkloadBuilder withServiceAccountName(String serviceAccountName) {
             component.setServiceAccountName(serviceAccountName);
@@ -133,7 +164,9 @@ public class CaaSKubernetesWorkload extends CaaSWorkload implements LiveSystemCo
          * <pre>
          * Enables or disables the Workload Identity for the Kubernetes workload.
          * By default, Fractal Cloud Agent sets this to true.</pre>
+         *
          * @param workloadIdentityEnabled A boolean flag to enable or disable Workload Identity.
+         * @return The builder instance.
          */
         public KubernetesWorkloadBuilder withWorkloadIdentityEnabled(boolean workloadIdentityEnabled) {
             component.setWorkloadIdentityEnabled(workloadIdentityEnabled);
