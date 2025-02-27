@@ -30,27 +30,27 @@ class EnvironmentTypeTest {
     void should_throwException_when_inputIsNull() {
         assertThatThrownBy(() -> EnvironmentType.fromString(null))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Environment type cannot be null or blank");
+                .hasMessageContaining("Environment type cannot be null or blank");
     }
 
     @Test
     void should_throwException_when_inputIsEmpty() {
         assertThatThrownBy(() -> EnvironmentType.fromString(""))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Environment type cannot be null or blank");
+                .hasMessageContaining("Environment type cannot be null or blank");
     }
 
     @Test
     void should_throwException_when_inputIsBlank() {
         assertThatThrownBy(() -> EnvironmentType.fromString("  "))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Environment type cannot be null or blank");
+                .hasMessageContaining("Environment type cannot be null or blank");
     }
 
     @Test
     void should_throwException_when_inputIsInvalid() {
         assertThatThrownBy(() -> EnvironmentType.fromString("InvalidType"))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage("Invalid environment type: InvalidType");
+                .hasMessageContaining("Invalid environment type: 'InvalidType'");
     }
 }

@@ -2,6 +2,8 @@ package com.yanchware.fractal.sdk.domain.environment;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import java.util.Arrays;
+
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 public enum EnvironmentType {
@@ -21,7 +23,9 @@ public enum EnvironmentType {
 
   public static EnvironmentType fromString(String text) {
     if(isBlank(text)) {
-      throw new IllegalArgumentException("Environment type cannot be null or blank");
+      throw new IllegalArgumentException(
+              String.format("Environment type cannot be null or blank. Allowed values: %s", 
+                      Arrays.toString(EnvironmentType.values())));
     }
 
     for (var item : EnvironmentType.values()) {
@@ -30,7 +34,9 @@ public enum EnvironmentType {
       }
     }
 
-    throw new IllegalArgumentException("Invalid environment type: " + text);
+    throw new IllegalArgumentException(
+            String.format("Invalid environment type: '%s'. Allowed values: %s", 
+                    text, Arrays.toString(EnvironmentType.values())));
   }
 
   @Override
