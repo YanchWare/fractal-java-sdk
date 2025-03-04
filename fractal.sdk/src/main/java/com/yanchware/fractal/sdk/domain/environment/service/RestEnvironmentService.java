@@ -110,6 +110,24 @@ public class RestEnvironmentService extends Service implements EnvironmentServic
   }
 
   @Override
+  public EnvironmentResponse tryGetById(EnvironmentIdValue environmentId) {
+      try {
+          return executeRequestWithRetries(
+                  "fetchEnvironmentById",
+                  environmentId.toString(),
+                  client,
+                  retryRegistry,
+                  HttpUtils.buildGetRequest(
+                          getEnvironmentsUri(environmentId),
+                          sdkConfiguration),
+                  new int[]{200, 400, 404},
+                  EnvironmentResponse.class);
+      } catch (InstantiatorException e) {
+          return null;
+      }
+  }
+
+  @Override
   public void startAzureCloudAgentInitialization(
       EnvironmentIdValue managementEnvironmentId,
       EnvironmentIdValue environmentId,

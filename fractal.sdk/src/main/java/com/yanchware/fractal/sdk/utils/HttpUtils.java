@@ -95,8 +95,10 @@ public class HttpUtils {
     if (Arrays.stream(acceptedResponses).noneMatch((x) -> x == response.statusCode())) {
       var requestNameWords = StringHelper.toWords(requestName);
       handleStructuredError(response, requestNameWords, entityId);
-
-      if (response.body().contains("Token validation failed")) {
+      
+      var responseBody = response.body();
+      
+      if (responseBody.contains("Token validation failed")) {
         String errorMessage = formatErrorMessage(requestName, "Token validation failed", entityId);
 
         log.error(errorMessage);

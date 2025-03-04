@@ -34,6 +34,8 @@ public interface EnvironmentService {
             String defaultCiCdProfileShortName) throws InstantiatorException;
 
     EnvironmentResponse fetch(EnvironmentIdValue environmentId) throws InstantiatorException;
+    
+    EnvironmentResponse tryGetById(EnvironmentIdValue environmentId);
 
     void startAzureCloudAgentInitialization(
             EnvironmentIdValue managementEnvironmentId,

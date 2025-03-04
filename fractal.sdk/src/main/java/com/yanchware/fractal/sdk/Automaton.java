@@ -169,8 +169,7 @@ public class Automaton {
                                    String customWorkloadComponentId,
                                    String commitId,
                                    InstantiationConfiguration config)
-          throws ComponentInstantiationException, InstantiatorException
-  {
+          throws ComponentInstantiationException, InstantiatorException {
     if (isBlank(liveSystemId.resourceGroupId())) {
       throw new ComponentInstantiationException("Resource group ID cannot be blank.");
     }
