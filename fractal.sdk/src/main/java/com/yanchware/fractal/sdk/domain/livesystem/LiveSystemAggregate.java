@@ -168,7 +168,7 @@ public class LiveSystemAggregate implements Validatable {
         try {
             var existingEnvironment = environmentService.tryGetById(environmentId);
             if (existingEnvironment == null) {
-                throw new EnvironmentNotFoundException( // Use a more specific exception type
+                throw new EnvironmentNotFoundException(
                         String.format("Unable to %s. Environment [id: '%s'] not found.", action, environmentId));
             }
         } catch (EnvironmentNotFoundException e) {
