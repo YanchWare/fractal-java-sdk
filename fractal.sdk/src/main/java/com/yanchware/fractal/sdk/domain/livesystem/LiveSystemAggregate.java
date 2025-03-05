@@ -3,6 +3,11 @@ package com.yanchware.fractal.sdk.domain.livesystem;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.Validatable;
 import com.yanchware.fractal.sdk.domain.blueprint.FractalIdValue;
+import com.yanchware.fractal.sdk.domain.environment.EnvironmentIdValue;
+import com.yanchware.fractal.sdk.domain.environment.service.EnvironmentService;
+import com.yanchware.fractal.sdk.domain.environment.service.RestEnvironmentService;
+import com.yanchware.fractal.sdk.domain.exceptions.EnvironmentException;
+import com.yanchware.fractal.sdk.domain.exceptions.EnvironmentNotFoundException;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.domain.livesystem.service.LiveSystemService;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.*;
@@ -29,6 +34,7 @@ public class LiveSystemAggregate implements Validatable {
     private final static String PROVIDER_ID_IS_NULL = "[LiveSystem Validation] Provider has not been defined and it is required'";
     private final static String EMPTY_COMPONENT_LIST = "[LiveSystem Validation] Components list is null or empty and at least one component is required";
     private final LiveSystemService service;
+    private final EnvironmentService environmentService;
 
     @Getter
     private LiveSystemIdValue id;
@@ -53,11 +59,16 @@ public class LiveSystemAggregate implements Validatable {
             RetryRegistry retryRegistry)
     {
         service = new LiveSystemService(client, sdkConfiguration, retryRegistry);
+        environmentService = new RestEnvironmentService(client, sdkConfiguration, retryRegistry);
         components = new ArrayList<>();
     }
 
     // TODO FRA-1870: Use entity instead of LiveSystemComponentMutationDto
     public LiveSystemComponentMutationDto instantiateComponent(String componentId) throws InstantiatorException {
+        var action = String.format("instantiate component [id: '%s']", componentId);
+        
+        ensureEnvironmentExists(environment.id(), action);
+
         return service.instantiateComponent(id, componentId);
     }
 
@@ -73,6 +84,9 @@ public class LiveSystemAggregate implements Validatable {
         if (components == null || components.isEmpty()) {
             throw new InstantiatorException(EMPTY_COMPONENT_LIST);
         }
+
+        ensureEnvironmentExists(environment.id(), 
+                String.format("instantiate LiveSystem [id: '%s']", id));
 
         if (service.retrieveLiveSystem(getId()) != null) {
             return service.updateLiveSystem(
@@ -146,6 +160,21 @@ public class LiveSystemAggregate implements Validatable {
     }
 
     public void delete() throws InstantiatorException {
+        ensureEnvironmentExists(environment.id(), String.format("delete LiveSystem [id: '%s']", id));
         service.deleteLiveSystem(getId().toString());
+    }
+
+    private void ensureEnvironmentExists(EnvironmentIdValue environmentId, String action) throws EnvironmentException, EnvironmentNotFoundException {
+        try {
+            var existingEnvironment = environmentService.tryGetById(environmentId);
+            if (existingEnvironment == null) {
+                throw new EnvironmentNotFoundException(
+                        String.format("Unable to %s. Environment [id: '%s'] not found.", action, environmentId));
+            }
+        } catch (EnvironmentNotFoundException e) {
+            throw e;
+        } catch (Exception e) {
+            throw new EnvironmentException("Failed to check environment existence", e);
+        }
     }
 }

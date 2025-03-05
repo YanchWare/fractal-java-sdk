@@ -2,6 +2,7 @@ package com.yanchware.fractal.sdk.domain;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
+import com.yanchware.fractal.sdk.domain.exceptions.EnvironmentException;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.utils.StringHelper;
 import io.github.resilience4j.retry.Retry;
@@ -93,7 +94,15 @@ public abstract class Service {
           log.error("Attempted {} has come up with empty or null body contents", requestNameLog);
           return null;
         }
-
+        
+        if(requestName.equals("fetchEnvironmentById")) {
+          if(bodyContents.contains("Guid should contain 32 digits")) {
+            return null;
+          } else {
+            throw new EnvironmentException(String.format("Environment [id: '%s'] not found", entityId));
+          }
+        }
+       
         try {
           return deserialize(bodyContents, classRef);
         } catch (JsonProcessingException e) {
