@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
+import java.util.Objects;
 
 import static com.yanchware.fractal.sdk.domain.environment.EnvironmentAggregate.REGION_PARAM_KEY;
 
@@ -84,5 +85,23 @@ public class OciCloudAgent extends CloudAgentEntity {
         } catch (InstantiatorException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        OciCloudAgent member = (OciCloudAgent) o;
+
+      return region.equals(member.region)
+        && tenancyId.equals(member.tenancyId)
+        && compartmentId.equals(member.compartmentId)
+        && environmentId.equals(member.environmentId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(region, tenancyId, compartmentId,  environmentId);
     }
 }

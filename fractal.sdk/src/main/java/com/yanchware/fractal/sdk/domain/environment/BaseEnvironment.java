@@ -116,9 +116,14 @@ public abstract class BaseEnvironment implements Environment, Validatable {
   }
 
   private void registerCloudAgent(CloudAgentEntity cloudAgent){
-    if (cloudAgentByProviderType.containsKey(cloudAgent.getProvider())) {
-      throw new IllegalArgumentException(
+    if (cloudAgentByProviderType.containsKey(cloudAgent.getProvider()))
+    {
+      if (!cloudAgent.equals(cloudAgentByProviderType.get(cloudAgent.getProvider()))) {
+        throw new IllegalArgumentException(
           String.format("A Cloud agent for Provider %s has already been defined", cloudAgent.getProvider()));
+      } else {
+        cloudAgentByProviderType.remove(cloudAgent.getProvider());
+      }
     }
 
     cloudAgentByProviderType.put(cloudAgent.getProvider(), cloudAgent);

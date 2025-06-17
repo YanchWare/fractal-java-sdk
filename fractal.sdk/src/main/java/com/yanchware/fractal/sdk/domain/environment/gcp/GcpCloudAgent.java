@@ -2,6 +2,7 @@ package com.yanchware.fractal.sdk.domain.environment.gcp;
 
 import com.yanchware.fractal.sdk.domain.environment.CloudAgentEntity;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentIdValue;
+import com.yanchware.fractal.sdk.domain.environment.oci.OciCloudAgent;
 import com.yanchware.fractal.sdk.domain.environment.service.EnvironmentService;
 import com.yanchware.fractal.sdk.domain.environment.service.dtos.InitializationRunResponse;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
@@ -11,6 +12,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
+import java.util.Objects;
 
 import static com.yanchware.fractal.sdk.domain.environment.EnvironmentAggregate.REGION_PARAM_KEY;
 
@@ -85,5 +87,23 @@ public class GcpCloudAgent extends CloudAgentEntity {
         } catch (InstantiatorException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        GcpCloudAgent member = (GcpCloudAgent) o;
+
+        return region.equals(member.region)
+          && organizationId.equals(member.organizationId)
+          && projectId.equals(member.projectId)
+          && environmentId.equals(member.environmentId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(region, organizationId, projectId,  environmentId);
     }
 }

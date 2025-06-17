@@ -2,6 +2,7 @@ package com.yanchware.fractal.sdk.domain.environment.azure;
 
 import com.yanchware.fractal.sdk.domain.environment.CloudAgentEntity;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentIdValue;
+import com.yanchware.fractal.sdk.domain.environment.oci.OciCloudAgent;
 import com.yanchware.fractal.sdk.domain.environment.service.EnvironmentService;
 import com.yanchware.fractal.sdk.domain.environment.service.dtos.InitializationRunResponse;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
@@ -11,6 +12,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 import static com.yanchware.fractal.sdk.domain.environment.EnvironmentAggregate.REGION_PARAM_KEY;
@@ -92,5 +94,23 @@ public class AzureCloudAgent extends CloudAgentEntity {
         } catch (InstantiatorException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        AzureCloudAgent member = (AzureCloudAgent) o;
+
+        return region.equals(member.region)
+          && tenantId.equals(member.tenantId)
+          && subscriptionId.equals(member.subscriptionId)
+          && environmentId.equals(member.environmentId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(region, tenantId, subscriptionId,  environmentId);
     }
 }
