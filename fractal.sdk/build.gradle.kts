@@ -51,7 +51,9 @@ java.sourceCompatibility = JavaVersion.VERSION_21
 mavenPublishing {
     coordinates("com.yanchware", "fractal.sdk")
     publishToMavenCentral(SonatypeHost.CENTRAL_PORTAL, automaticRelease = true)
-    signAllPublications()
+    if ( !project.hasProperty("skip.signing") ) {
+        signAllPublications();
+    }
 
     pom {
         name = "Fractal Java SDK"

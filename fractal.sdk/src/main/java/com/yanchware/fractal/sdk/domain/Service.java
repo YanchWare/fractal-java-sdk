@@ -98,8 +98,6 @@ public abstract class Service {
         if(requestName.equals("fetchEnvironmentById")) {
           if(bodyContents.contains("Guid should contain 32 digits")) {
             return null;
-          } else {
-            throw new EnvironmentException(String.format("Environment [id: '%s'] not found", entityId));
           }
         }
        
