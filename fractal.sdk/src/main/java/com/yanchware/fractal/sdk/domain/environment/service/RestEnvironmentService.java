@@ -190,15 +190,12 @@ public class RestEnvironmentService extends Service implements EnvironmentServic
     }
 
     var awsSessionToken = sdkConfiguration.getAwsSessionToken();
-    if (isBlank(awsSessionToken)) {
-      throw new IllegalArgumentException(
-          String.format("The environment variable %s is required and it has not been defined", AWS_SESSION_TOKEN_KEY));
-    }
-
     Map<String, String> additionalHeaders = new HashMap<>();
     additionalHeaders.put(X_AWS_ACCESS_KEY_ID_HEADER, awsAccessKeyId);
     additionalHeaders.put(X_AWS_SECRET_ACCESS_KEY_HEADER, awsSecretAccessKey);
-    additionalHeaders.put(X_AWS_SESSION_TOKEN_HEADER, awsSessionToken);
+    if(!isBlank(awsSessionToken)) {
+      additionalHeaders.put(X_AWS_SESSION_TOKEN_HEADER, awsSessionToken);
+    }
 
     executeRequestWithRetries(
         "InitializeAwsAccount",

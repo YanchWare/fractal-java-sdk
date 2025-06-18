@@ -4,9 +4,10 @@ import com.vanniktech.maven.publish.SonatypeHost
 plugins {
     `java-library`
     `maven-publish`
-    id("com.vanniktech.maven.publish") version "0.30.0"
+    id("com.vanniktech.maven.publish") version "0.32.0"
     id("com.adarshr.test-logger") version "4.0.0"
     id("com.mikepenz.aboutlibraries.plugin") version "11.4.0-b01"
+    id("com.github.ben-manes.versions") version "0.52.0"
 }
 
 group="com.yanchware"
