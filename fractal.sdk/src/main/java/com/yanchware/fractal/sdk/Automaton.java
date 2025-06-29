@@ -6,6 +6,7 @@ import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.configuration.instantiation.InstantiationConfiguration;
 import com.yanchware.fractal.sdk.domain.blueprint.BlueprintFactory;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentAggregate;
+import com.yanchware.fractal.sdk.domain.environment.EnvironmentIdValue;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentsFactory;
 import com.yanchware.fractal.sdk.domain.exceptions.ComponentInstantiationException;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
@@ -132,10 +133,11 @@ public class Automaton {
    * @param liveSystemIds the list of ids of the live systems to be deleted
    * @throws InstantiatorException if an error occurs during deletion
    */
-  public void delete(List<LiveSystemIdValue> liveSystemIds) throws InstantiatorException {
+  public void delete(EnvironmentIdValue environmentId, List<LiveSystemIdValue> liveSystemIds) throws InstantiatorException {
     for (var liveSystemId : liveSystemIds) {
       var liveSystemAggregate = getLiveSystemBuilder()
               .withId(liveSystemId)
+              .withEnvironmentId(environmentId)
               // This is ignored for deletion.
               .withStandardProvider(ProviderType.SAAS)
               .build();
