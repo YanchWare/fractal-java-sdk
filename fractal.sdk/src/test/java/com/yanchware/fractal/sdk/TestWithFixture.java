@@ -1,6 +1,10 @@
 package com.yanchware.fractal.sdk;
 
 import com.flextrade.jfixture.JFixture;
+import com.yanchware.fractal.sdk.domain.environment.service.dtos.EnvironmentResponse;
+import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.EnvironmentIdDto;
+import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.EnvironmentTypeDto;
+import com.yanchware.fractal.sdk.utils.EnvironmentIdDtoBuilder;
 import com.yanchware.fractal.sdk.utils.ExtendableEnum;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -18,6 +22,7 @@ public class TestWithFixture {
   @BeforeEach
   public void init() {
     fixture = new JFixture();
+    fixture.addBuilderToStartOfPipeline(new EnvironmentIdDtoBuilder());
     random = new Random();
   }
 
@@ -38,10 +43,8 @@ public class TestWithFixture {
   }
 
   protected String aLowerCaseAlphanumericString(int length) {
-
     return aAlphanumericString(length, true, false,null);
   }
-
 
   /**
    * Generates a positive integer less than or equal to 999
