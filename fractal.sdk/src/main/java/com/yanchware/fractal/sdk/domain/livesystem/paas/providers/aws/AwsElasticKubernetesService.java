@@ -5,9 +5,11 @@ import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.net.util.SubnetUtils;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidAlphanumericsUnderscoresHyphens;
@@ -22,6 +24,9 @@ public class AwsElasticKubernetesService extends KubernetesCluster implements Aw
     private AwsRegion awsRegion;
     private Map<String, String> tags;
     private String name;
+    private String vpcCidrBlock;
+    private List<String> privateSubnetCidrs;
+    private Integer desiredAvailabilityZoneCount;
 
     @Override
     public ProviderType getProvider() {
@@ -66,6 +71,21 @@ public class AwsElasticKubernetesService extends KubernetesCluster implements Aw
             component.getTags().put(key, value);
             return builder;
         }
+
+        public AwsElasticKubernetesServiceBuilder withVpcCidrBlock(String cidrBlock) {
+            component.setVpcCidrBlock(cidrBlock);
+            return builder;
+        }
+
+        public AwsElasticKubernetesServiceBuilder withPrivateSubnetCidrs(List<String> cidrs) {
+            component.setPrivateSubnetCidrs(cidrs);
+            return builder;
+        }
+
+        public AwsElasticKubernetesServiceBuilder withDesiredAvailabilityZoneCount(int count) {
+            component.setDesiredAvailabilityZoneCount(count);
+            return builder;
+        }
     }
 
     @Override
@@ -86,6 +106,92 @@ public class AwsElasticKubernetesService extends KubernetesCluster implements Aw
             errors.add(REGION_IS_NULL);
         }
 
+        if (StringUtils.isNotBlank(vpcCidrBlock)) {
+            try {
+                var vpcUtils = new SubnetUtils(vpcCidrBlock);
+                int vpcPrefix = Integer.parseInt(vpcCidrBlock.split("/")[1]);
+
+                if (vpcPrefix < 16 || vpcPrefix > 24) {
+                    errors.add("[AwsElasticKubernetesService Validation] vpcCidrBlock mask must be between /16 and /24");
+                }
+
+                if (privateSubnetCidrs != null) {
+                    for (String subnet : privateSubnetCidrs) {
+                        try {
+                            var subnetUtils = new SubnetUtils(subnet);
+                            int subnetPrefix = Integer.parseInt(subnet.split("/")[1]);
+
+                            if (subnetPrefix <= vpcPrefix) {
+                                errors.add(String.format(
+                                        "[AwsElasticKubernetesService Validation] Subnet %s mask must be greater than VPC's (%s)", subnet, vpcCidrBlock));
+                            }
+
+                            if (!vpcUtils.getInfo().isInRange(subnetUtils.getInfo().getAddress())) {
+                                errors.add(String.format(
+                                        "[AwsElasticKubernetesService Validation] Subnet %s is not within the VPC CIDR range %s",
+                                        subnet, vpcCidrBlock));
+                            }
+                        } catch (IllegalArgumentException e) {
+                            errors.add(String.format("[AwsElasticKubernetesService Validation] Invalid CIDR format: %s", subnet));
+                        }
+                    }
+
+                    // Optional: check subnet CIDRs do not overlap
+                    for (int i = 0; i < privateSubnetCidrs.size(); i++) {
+                        for (int j = i + 1; j < privateSubnetCidrs.size(); j++) {
+                            if (cidrOverlaps(privateSubnetCidrs.get(i), privateSubnetCidrs.get(j))) {
+                                errors.add(String.format(
+                                        "[AwsElasticKubernetesService Validation] Subnet CIDRs %s and %s overlap",
+                                        privateSubnetCidrs.get(i), privateSubnetCidrs.get(j)));
+                            }
+                        }
+                    }
+                }
+            } catch (IllegalArgumentException e) {
+                errors.add("[AwsElasticKubernetesService Validation] vpcCidrBlock is not a valid CIDR");
+            }
+        }
+
+        if (desiredAvailabilityZoneCount != null) {
+            if (desiredAvailabilityZoneCount <= 0) {
+                errors.add("[AwsElasticKubernetesService Validation] desiredAvailabilityZoneCount must be greater than 0");
+            }
+
+            if (desiredAvailabilityZoneCount > 3) {
+                errors.add("[AwsElasticKubernetesService Validation] desiredAvailabilityZoneCount cannot be greater than 3 (AWS best practice)");
+            }
+
+            if (privateSubnetCidrs != null && privateSubnetCidrs.size() != desiredAvailabilityZoneCount) {
+                errors.add(String.format(
+                        "[AwsElasticKubernetesService Validation] privateSubnetCidrs size (%d) must match desiredAvailabilityZoneCount (%d)",
+                        privateSubnetCidrs.size(), desiredAvailabilityZoneCount
+                ));
+            }
+        }
+
         return errors;
+    }
+
+    private boolean cidrOverlaps(String cidr1, String cidr2) {
+        SubnetUtils subnet1 = new SubnetUtils(cidr1);
+        SubnetUtils subnet2 = new SubnetUtils(cidr2);
+
+        var info1 = subnet1.getInfo();
+        var info2 = subnet2.getInfo();
+
+        return !(ipLessThan(info1.getHighAddress(), info2.getLowAddress())
+                || ipLessThan(info2.getHighAddress(), info1.getLowAddress()));
+    }
+
+    private boolean ipLessThan(String ip1, String ip2) {
+        String[] a = ip1.split("\\.");
+        String[] b = ip2.split("\\.");
+
+        for (int i = 0; i < 4; i++) {
+            int diff = Integer.parseInt(a[i]) - Integer.parseInt(b[i]);
+            if (diff < 0) return true;
+            if (diff > 0) return false;
+        }
+        return false; // equal IPs means not less than
     }
 }
