@@ -72,16 +72,57 @@ public class AwsElasticKubernetesService extends KubernetesCluster implements Aw
             return builder;
         }
 
+        /**
+         * Sets the VPC CIDR block for the EKS cluster.
+         * <p>
+         * Must be a valid CIDR block between /16 and /24 (inclusive).
+         * If not set, the default {@code 172.33.0.0/16} will be used.
+         *
+         * @param cidrBlock the VPC CIDR block (e.g., {@code "10.0.0.0/16"})
+         * @return the builder instance
+         */
         public AwsElasticKubernetesServiceBuilder withVpcCidrBlock(String cidrBlock) {
             component.setVpcCidrBlock(cidrBlock);
             return builder;
         }
 
+        /**
+         * Sets the private subnet CIDRs for the EKS cluster.
+         * <p>
+         * Each CIDR must:
+         * <ul>
+         *   <li>Be within the configured VPC CIDR block</li>
+         *   <li>Have a longer prefix than the VPC CIDR (e.g., /20 if VPC is /16)</li>
+         *   <li>Not overlap with other subnets</li>
+         * </ul>
+         * <br>
+         * <strong>Default (if not explicitly set):</strong>
+         * Derived from the VPC CIDR prefix:
+         * <ul>
+         *   <li>{@code <vpcPrefix>.128.0/20}</li>
+         *   <li>{@code <vpcPrefix>.144.0/20}</li>
+         *   <li>{@code <vpcPrefix>.160.0/20}</li>
+         * </ul>
+         *
+         * @param cidrs list of private subnet CIDRs
+         * @return the builder instance
+         */
         public AwsElasticKubernetesServiceBuilder withPrivateSubnetCidrs(List<String> cidrs) {
             component.setPrivateSubnetCidrs(cidrs);
             return builder;
         }
 
+        /**
+         * Sets how many availability zones the EKS cluster should span.
+         * <p>
+         * Must be a value between 1 and 3 (inclusive), in accordance with AWS best practices.
+         * If set, the number of private subnets provided must match this count.
+         * <br>
+         * <strong>Default:</strong> 3 availability zones
+         *
+         * @param count number of desired availability zones
+         * @return the builder instance
+         */
         public AwsElasticKubernetesServiceBuilder withDesiredAvailabilityZoneCount(int count) {
             component.setDesiredAvailabilityZoneCount(count);
             return builder;
