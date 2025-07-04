@@ -29,6 +29,7 @@ dependencies {
     implementation(libs.io.github.resilience4j.resilience4j.core)
     implementation(libs.io.github.resilience4j.resilience4j.retry)
     implementation(libs.org.slf4j.slf4j.api)
+    implementation(libs.commons.net)
     testImplementation(libs.com.jayway.jsonpath.json.path)
     testImplementation(libs.org.junit.jupiter.junit.jupiter.api)
     testImplementation(libs.org.junit.jupiter.junit.jupiter.engine)
