@@ -11,6 +11,7 @@ import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.aws.AwsRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GcpRegion;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.hetzner.HetznerRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import com.yanchware.fractal.sdk.utils.HttpUtils;
@@ -287,7 +288,7 @@ public class RestEnvironmentService extends Service implements EnvironmentServic
         HttpUtils.buildPostRequest(
             getEnvironmentsUri(environmentId, "initializer/oci/initialize"),
             sdkConfiguration,
-            serializeSafely(new GcpProjectInitializationRequest(
+            serializeSafely(new OciCompartmentInitializationRequest(
                 tenancyId,
                 compartmentId,
                 region.toString(),
@@ -295,6 +296,46 @@ public class RestEnvironmentService extends Service implements EnvironmentServic
             additionalHeaders),
         new int[]{202},
         EnvironmentResponse.class);
+  }
+
+  @Override
+  public void startHetznerCloudAgentInitialization(
+    EnvironmentIdValue environmentId,
+    String projectId,
+    HetznerRegion region,
+    Map<String, String> tags) throws InstantiatorException
+  {
+    var hetznerServiceAccountId = sdkConfiguration.getHetznerServiceAccountId();
+    if (isBlank(hetznerServiceAccountId)) {
+      throw new IllegalArgumentException(
+        String.format("The environment variable %s is required and it has not been defined", HETZNER_SERVICE_ACCOUNT_ID_KEY));
+    }
+
+    var hetznerServiceAccountCredentials = sdkConfiguration.getHetznerServiceAccountCredentials();
+    if (isBlank(hetznerServiceAccountCredentials)) {
+      throw new IllegalArgumentException(
+        String.format("The environment variable %s is required and it has not been defined", HETZNER_SERVICE_ACCOUNT_CREDENTIALS_KEY));
+    }
+
+    Map<String, String> additionalHeaders = new HashMap<>();
+    additionalHeaders.put(X_HETZNER_SERVICE_ACCOUNT_ID_HEADER, hetznerServiceAccountId);
+    additionalHeaders.put(X_HETZNER_SERVICE_ACCOUNT_CREDENTIALS_HEADER, hetznerServiceAccountCredentials);
+
+    executeRequestWithRetries(
+      "InitializeHetznerProject",
+      environmentId.toString(),
+      client,
+      retryRegistry,
+      HttpUtils.buildPostRequest(
+        getEnvironmentsUri(environmentId, "initializer/hetzner/initialize"),
+        sdkConfiguration,
+        serializeSafely(new HetznerProjectInitializationRequest(
+          projectId,
+          region.toString(),
+          tags)),
+        additionalHeaders),
+      new int[]{202},
+      EnvironmentResponse.class);
   }
 
   @Override
@@ -315,6 +356,11 @@ public class RestEnvironmentService extends Service implements EnvironmentServic
   @Override
   public InitializationRunResponse fetchCurrentOciInitialization(EnvironmentIdValue environmentId) throws InstantiatorException {
     return fetchCurrentInitialization(environmentId, ProviderType.OCI);
+  }
+
+  @Override
+  public InitializationRunResponse fetchCurrentHetznerInitialization(EnvironmentIdValue environmentId) throws InstantiatorException {
+    return fetchCurrentInitialization(environmentId, ProviderType.HETZNER);
   }
 
   @Override
