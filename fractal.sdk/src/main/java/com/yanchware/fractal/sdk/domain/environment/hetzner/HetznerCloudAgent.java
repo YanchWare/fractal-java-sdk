@@ -36,7 +36,7 @@ public class HetznerCloudAgent extends CloudAgentEntity {
 
     @Override
     public ProviderType getProvider() {
-        return ProviderType.OCI;
+        return ProviderType.HETZNER;
     }
 
     @Override

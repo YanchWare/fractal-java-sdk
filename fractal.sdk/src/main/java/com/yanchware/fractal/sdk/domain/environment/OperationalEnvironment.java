@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.aws.AwsRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GcpRegion;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.hetzner.HetznerRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.EnvironmentDto;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
@@ -71,6 +72,14 @@ public class OperationalEnvironment extends BaseEnvironment {
 
     public OperationalEnvironmentBuilder withShortName(String shortName) {
       environment.setShortName(shortName);
+      return builder;
+    }
+
+    public OperationalEnvironmentBuilder withHetznerProject(HetznerRegion region, String projectId) {
+      var config = new HashMap<String, Object>();
+      config.put("region", region);
+      config.put("projectId", projectId);
+      environment.cloudProviders.put(ProviderType.HETZNER, config);
       return builder;
     }
 
