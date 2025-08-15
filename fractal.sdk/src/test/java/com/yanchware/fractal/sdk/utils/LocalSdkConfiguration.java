@@ -85,12 +85,7 @@ public class LocalSdkConfiguration implements SdkConfiguration {
   }
 
   @Override
-  public String getHetznerServiceAccountId() {
-    return "xxx";
-  }
-
-  @Override
-  public String getHetznerServiceAccountCredentials() {
+  public String getHetznerToken() {
     return "xxx";
   }
 }

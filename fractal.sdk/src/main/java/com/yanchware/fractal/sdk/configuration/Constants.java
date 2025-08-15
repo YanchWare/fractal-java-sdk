@@ -17,8 +17,7 @@ public class Constants {
   public static final String X_GCP_SERVICE_ACCOUNT_CREDENTIALS_HEADER = "X-GCP-Service-Account-Credentials";
   public static final String X_OCI_SERVICE_ACCOUNT_ID_HEADER = "X-OCI-Service-Account-Id";
   public static final String X_OCI_SERVICE_ACCOUNT_CREDENTIALS_HEADER = "X-OCI-Service-Account-Credentials";
-  public static final String X_HETZNER_SERVICE_ACCOUNT_ID_HEADER = "X-Hetzner-Service-Account-Id";
-  public static final String X_HETZNER_SERVICE_ACCOUNT_CREDENTIALS_HEADER = "X-Hetzner-Service-Account-Credentials";
+  public static final String X_HETZNER_TOKEN_HEADER = "X-Hetzner-Token";
 
   public static final String CI_CD_SERVICE_ACCOUNT_NAME_KEY = "CI_CD_SERVICE_ACCOUNT_NAME";
   public static final String CI_CD_SERVICE_ACCOUNT_SECRET_KEY = "CI_CD_SERVICE_ACCOUNT_SECRET";
@@ -31,8 +30,7 @@ public class Constants {
   public static final String GCP_SERVICE_ACCOUNT_CREDENTIALS_KEY = "GCP_SERVICE_ACCOUNT_CREDENTIALS";
   public static final String OCI_SERVICE_ACCOUNT_ID_KEY = "OCI_SERVICE_ACCOUNT_ID";
   public static final String OCI_SERVICE_ACCOUNT_CREDENTIALS_KEY = "OCI_SERVICE_ACCOUNT_CREDENTIALS";
-  public static final String HETZNER_SERVICE_ACCOUNT_ID_KEY = "HETZNER_SERVICE_ACCOUNT_ID";
-  public static final String HETZNER_SERVICE_ACCOUNT_CREDENTIALS_KEY = "HETZNER_SERVICE_ACCOUNT_CREDENTIALS";
+  public static final String HETZNER_TOKEN_KEY = "HETZNER_TOKEN";
   public static final String BLUEPRINT_TYPE = "blueprintType";
 
   public static final String COMPONENT_TYPE = "type";

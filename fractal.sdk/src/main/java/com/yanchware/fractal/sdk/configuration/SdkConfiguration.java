@@ -106,16 +106,9 @@ public interface SdkConfiguration {
   String getOciServiceAccountCredentials();
 
   /**
-   * Gets the Hetzner Service Account ID.
+   * Gets the Hetzner Token.
    *
-   * @return the Hetzner Service Account ID
+   * @return the Hetzner Token
    */
-  String getHetznerServiceAccountId();
-
-  /**
-   * Gets the Hetzner Service Account Credentials.
-   *
-   * @return the Hetzner Service Account Credentials
-   */
-  String getHetznerServiceAccountCredentials();
+  String getHetznerToken();
 }

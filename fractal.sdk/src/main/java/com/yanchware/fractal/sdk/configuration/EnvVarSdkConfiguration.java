@@ -207,13 +207,8 @@ public class EnvVarSdkConfiguration implements SdkConfiguration {
   }
 
   @Override
-  public String getHetznerServiceAccountId() {
-    return System.getenv(HETZNER_SERVICE_ACCOUNT_ID_KEY);
-  }
-
-  @Override
-  public String getHetznerServiceAccountCredentials() {
-    return System.getenv(HETZNER_SERVICE_ACCOUNT_CREDENTIALS_KEY);
+  public String getHetznerToken() {
+    return System.getenv(HETZNER_TOKEN_KEY);
   }
 
   private URI checkAndReturnUri(String endpointEnvKey, URI defaultValue) {

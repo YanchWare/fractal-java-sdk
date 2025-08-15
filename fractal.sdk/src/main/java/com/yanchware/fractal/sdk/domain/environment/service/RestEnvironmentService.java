@@ -305,21 +305,14 @@ public class RestEnvironmentService extends Service implements EnvironmentServic
     HetznerRegion region,
     Map<String, String> tags) throws InstantiatorException
   {
-    var hetznerServiceAccountId = sdkConfiguration.getHetznerServiceAccountId();
-    if (isBlank(hetznerServiceAccountId)) {
+    var hetznerToken = sdkConfiguration.getHetznerToken();
+    if (isBlank(hetznerToken)) {
       throw new IllegalArgumentException(
-        String.format("The environment variable %s is required and it has not been defined", HETZNER_SERVICE_ACCOUNT_ID_KEY));
-    }
-
-    var hetznerServiceAccountCredentials = sdkConfiguration.getHetznerServiceAccountCredentials();
-    if (isBlank(hetznerServiceAccountCredentials)) {
-      throw new IllegalArgumentException(
-        String.format("The environment variable %s is required and it has not been defined", HETZNER_SERVICE_ACCOUNT_CREDENTIALS_KEY));
+        String.format("The environment variable %s is required and it has not been defined", HETZNER_TOKEN_KEY));
     }
 
     Map<String, String> additionalHeaders = new HashMap<>();
-    additionalHeaders.put(X_HETZNER_SERVICE_ACCOUNT_ID_HEADER, hetznerServiceAccountId);
-    additionalHeaders.put(X_HETZNER_SERVICE_ACCOUNT_CREDENTIALS_HEADER, hetznerServiceAccountCredentials);
+    additionalHeaders.put(X_HETZNER_TOKEN_HEADER, hetznerToken);
 
     executeRequestWithRetries(
       "InitializeHetznerProject",
