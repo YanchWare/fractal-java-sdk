@@ -6,6 +6,7 @@ import com.yanchware.fractal.sdk.domain.blueprint.iaas.DnsZone;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.aws.AwsRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GcpRegion;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.hetzner.HetznerRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciRegion;
 import com.yanchware.fractal.sdk.utils.TestUtils;
 import org.junit.jupiter.api.Test;
@@ -279,6 +280,7 @@ class ManagementEnvironmentTest {
         .withAzureCloudAgent(AzureRegion.WEST_EUROPE, UUID.randomUUID(), UUID.randomUUID())
         .withGcpCloudAgent(GcpRegion.EUROPE_WEST1, UUID.randomUUID().toString(), UUID.randomUUID().toString())
         .withOciCloudAgent(OciRegion.EU_ZURICH_1, UUID.randomUUID().toString(), UUID.randomUUID().toString())
+        .withHetznerCloudAgent(HetznerRegion.DE_FALKENSTEIN_1, UUID.randomUUID().toString())
         .withDnsZone(
             DnsZone.builder()
                 .withName("dns.name")

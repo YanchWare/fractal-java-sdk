@@ -28,7 +28,7 @@ class LiveSystemGkeComponentDtoTest extends LiveSystemKubernetesComponentDtoTest
         var postgres = TestUtils.getGcpPostgresExample();
         var liveSystem = factory.builder()
                 .withId(new LiveSystemIdValue("test", "test"))
-                .withStandardProvider(ProviderType.AZURE)
+                .withStandardProvider(ProviderType.GCP)
                 .withComponents(List.of(gke, postgres))
                 .build();
 

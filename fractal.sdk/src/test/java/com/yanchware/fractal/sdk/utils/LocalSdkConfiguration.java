@@ -83,4 +83,9 @@ public class LocalSdkConfiguration implements SdkConfiguration {
   public String getOciServiceAccountCredentials() {
     return "xxx";
   }
+
+  @Override
+  public String getHetznerToken() {
+    return "xxx";
+  }
 }

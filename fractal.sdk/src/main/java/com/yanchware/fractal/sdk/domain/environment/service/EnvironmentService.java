@@ -11,6 +11,7 @@ import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.aws.AwsRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GcpRegion;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.hetzner.HetznerRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciRegion;
 
 import java.util.Collection;
@@ -66,10 +67,17 @@ public interface EnvironmentService {
             OciRegion region,
             Map<String, String> tags) throws InstantiatorException;
 
+    void startHetznerCloudAgentInitialization(
+            EnvironmentIdValue environmentId,
+            String projectId,
+            HetznerRegion region,
+            Map<String, String> tags) throws InstantiatorException;
+
     InitializationRunResponse fetchCurrentAwsInitialization(EnvironmentIdValue environmentId) throws InstantiatorException;
     InitializationRunResponse fetchCurrentAzureInitialization(EnvironmentIdValue environmentId) throws InstantiatorException;
     InitializationRunResponse fetchCurrentGcpInitialization(EnvironmentIdValue environmentId) throws InstantiatorException;
     InitializationRunResponse fetchCurrentOciInitialization(EnvironmentIdValue environmentId) throws InstantiatorException;
+    InitializationRunResponse fetchCurrentHetznerInitialization(EnvironmentIdValue environmentId) throws InstantiatorException;
     CiCdProfileResponse[] manageCiCdProfiles(EnvironmentIdValue environmentId, Collection<CreateCiCdProfileRequest> ciCdProfiles) throws InstantiatorException;
     SecretResponse[] manageSecrets(EnvironmentIdValue environmentId, Collection<Secret> secrets) throws InstantiatorException;
 }

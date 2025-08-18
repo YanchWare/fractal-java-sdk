@@ -6,10 +6,12 @@ import com.yanchware.fractal.sdk.domain.blueprint.iaas.DnsZone;
 import com.yanchware.fractal.sdk.domain.environment.aws.AwsCloudAgent;
 import com.yanchware.fractal.sdk.domain.environment.azure.AzureCloudAgent;
 import com.yanchware.fractal.sdk.domain.environment.gcp.GcpCloudAgent;
+import com.yanchware.fractal.sdk.domain.environment.hetzner.HetznerCloudAgent;
 import com.yanchware.fractal.sdk.domain.environment.oci.OciCloudAgent;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.aws.AwsRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GcpRegion;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.hetzner.HetznerRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import com.yanchware.fractal.sdk.utils.CollectionUtils;
@@ -112,6 +114,11 @@ public abstract class BaseEnvironment implements Environment, Validatable {
 
   protected void registerOciCloudAgent(OciRegion region, String tenancyId, String compartmentId) {
     var agent = new OciCloudAgent(getId(), region, tenancyId, compartmentId, getTags());
+    registerCloudAgent(agent);
+  }
+
+  protected void registerHetznerCloudAgent(HetznerRegion region, String projectId) {
+    var agent = new HetznerCloudAgent(getId(), region, projectId, getTags());
     registerCloudAgent(agent);
   }
 

@@ -30,6 +30,8 @@ import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GcpPostgre
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GcpPostgreSqlDbms;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GoogleKubernetesEngine;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GoogleKubernetesEngine.GoogleKubernetesEngineBuilder;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.hetzner.HetznerKubernetes;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.hetzner.HetznerRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciContainerEngineForKubernetes;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciContainerEngineForKubernetes.OciContainerEngineForKubernetesBuilder;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
@@ -161,6 +163,36 @@ public class TestUtils {
             .build());
   }
 
+  public static AwsElasticKubernetesServiceBuilder getEksBuilder() {
+    return AwsElasticKubernetesService.builder()
+      .withId("eks-1")
+      .withDescription("Test EKS cluster")
+      .withDisplayName("EKS #1")
+      .withRegion(EU_NORTH_1)
+      .withPodIpRange("10.3.0.0/16")
+      .withServiceIpRange("10.2.0.0/16");
+  }
+
+  public static HetznerKubernetes.HetznerKubernetesBuilder getHetznerKubernetesBuilder() {
+    return HetznerKubernetes.builder()
+      .withId("hetzner-k8s-1")
+      .withDescription("Test Hetzner Kubernetes cluster")
+      .withDisplayName("Hetzner K8s #1")
+      .withRegion(HetznerRegion.DE_FALKENSTEIN_1)
+      .withPodIpRange("10.3.0.0/16")
+      .withServiceIpRange("10.2.0.0/16");
+  }
+
+  public static OciContainerEngineForKubernetesBuilder getOkeBuilder() {
+    return OciContainerEngineForKubernetes.builder()
+      .withId("oke-1")
+      .withDescription("Test OKE cluster")
+      .withDisplayName("OKE #1")
+      .withRegion(EU_ZURICH_1)
+      .withPodIpRange("10.3.0.0/16")
+      .withServiceIpRange("10.2.0.0/16");
+  }
+
   public static AzureKubernetesService getAksExample() {
     return getAksBuilder()
         .withK8sWorkload(getK8sWorkloadExample())
@@ -181,6 +213,39 @@ public class TestUtils {
         .withLogging(getElasticLoggingExample())
         .withDocumentDB(getElasticDataStoreExample())
         .build();
+  }
+
+  public static OciContainerEngineForKubernetes getOkeExample() {
+    return getOkeBuilder()
+      .withK8sWorkload(getK8sWorkloadExample())
+      .withMonitoring(getPrometheusExample())
+      .withAPIGateway(getAmbassadorExample())
+      .withServiceMeshSecurity(getOcelotExample())
+      .withLogging(getElasticLoggingExample())
+      .withDocumentDB(getElasticDataStoreExample())
+      .build();
+  }
+
+  public static HetznerKubernetes getHetznerKubernetesExample() {
+    return getHetznerKubernetesBuilder()
+      .withK8sWorkload(getK8sWorkloadExample())
+      .withMonitoring(getPrometheusExample())
+      .withAPIGateway(getAmbassadorExample())
+      .withServiceMeshSecurity(getOcelotExample())
+      .withLogging(getElasticLoggingExample())
+      .withDocumentDB(getElasticDataStoreExample())
+      .build();
+  }
+
+  public static AwsElasticKubernetesService getEksExample() {
+    return getEksBuilder()
+      .withK8sWorkload(getK8sWorkloadExample())
+      .withMonitoring(getPrometheusExample())
+      .withAPIGateway(getAmbassadorExample())
+      .withServiceMeshSecurity(getOcelotExample())
+      .withLogging(getElasticLoggingExample())
+      .withDocumentDB(getElasticDataStoreExample())
+      .build();
   }
 
   public static CaaSKubernetesWorkload getK8sWorkloadExample() {

@@ -6,5 +6,6 @@ public enum ProviderType {
     AZURE,
     CAAS,
     SAAS,
-    OCI
+    OCI,
+    HETZNER
 }

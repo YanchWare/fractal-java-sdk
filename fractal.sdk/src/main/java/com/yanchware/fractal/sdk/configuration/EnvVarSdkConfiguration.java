@@ -206,6 +206,11 @@ public class EnvVarSdkConfiguration implements SdkConfiguration {
     return System.getenv(OCI_SERVICE_ACCOUNT_CREDENTIALS_KEY);
   }
 
+  @Override
+  public String getHetznerToken() {
+    return System.getenv(HETZNER_TOKEN_KEY);
+  }
+
   private URI checkAndReturnUri(String endpointEnvKey, URI defaultValue) {
     String endpoint = System.getenv(endpointEnvKey);
     if (isBlank(endpoint)) {

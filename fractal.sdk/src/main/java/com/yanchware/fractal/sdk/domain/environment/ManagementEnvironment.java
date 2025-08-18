@@ -3,6 +3,7 @@ package com.yanchware.fractal.sdk.domain.environment;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.aws.AwsRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GcpRegion;
+import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.hetzner.HetznerRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.EnvironmentDto;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
@@ -99,6 +100,11 @@ public class ManagementEnvironment extends BaseEnvironment {
 
     public ManagementEnvironmentBuilder withOciCloudAgent(OciRegion region, String tenancyId, String compartmentId) {
       environment.registerOciCloudAgent(region, tenancyId, compartmentId);
+      return builder;
+    }
+
+    public ManagementEnvironmentBuilder withHetznerCloudAgent(HetznerRegion region, String projectId) {
+      environment.registerHetznerCloudAgent(region, projectId);
       return builder;
     }
 
