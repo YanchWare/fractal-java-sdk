@@ -167,6 +167,11 @@ public class ManagementEnvironment extends BaseEnvironment {
                 getPropertyFromManagementAgent(provider, "tenancyId"),
                 (String) config.get("compartmentId"));
             break;
+          case HETZNER:
+            operationalEnvironment.registerHetznerCloudAgent(
+              (HetznerRegion) config.get("region"),
+              (String) config.get("projectId"));
+            break;
           default:
             throw new IllegalArgumentException("Unsupported cloud provider: " + provider);
         }
