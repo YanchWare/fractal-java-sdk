@@ -5,6 +5,7 @@ import com.yanchware.fractal.sdk.domain.environment.service.dtos.SecretResponse;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.EnvironmentIdDto;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.EnvironmentTypeDto;
+import com.yanchware.fractal.sdk.domain.values.ResourceGroupId;
 import org.junit.jupiter.api.Test;
 
 import java.util.Date;
@@ -19,14 +20,14 @@ class EnvironmentAggregateTest {
   public void noErrors_When_ManagingSecrets() throws InstantiatorException {
     var mockedEnvironmentService = mock(EnvironmentService.class);
     var aggregate = new EnvironmentAggregate(mockedEnvironmentService);
-
+    var ownerId = UUID.randomUUID();
     var envId = new EnvironmentIdValue(
             EnvironmentType.PERSONAL,
-            UUID.randomUUID(),
+            ownerId,
             "production-001");
     var managementEnvironment = ManagementEnvironment.builder()
             .withId(envId)
-            .withResourceGroup(UUID.randomUUID())
+            .withResourceGroup(ResourceGroupId.fromString(String.format("Personal/%s/rg", ownerId)))
             .build();
 
     aggregate.setManagementEnvironment(managementEnvironment);

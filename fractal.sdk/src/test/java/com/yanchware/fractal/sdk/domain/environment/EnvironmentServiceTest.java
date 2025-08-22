@@ -14,6 +14,7 @@ import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.aws.AwsRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GcpRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciRegion;
+import com.yanchware.fractal.sdk.domain.values.ResourceGroupId;
 import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
 import com.yanchware.fractal.sdk.utils.StringHandler;
 import io.github.resilience4j.retry.RetryRegistry;
@@ -41,14 +42,15 @@ class EnvironmentServiceTest {
         .build();
 
     var sdkConfiguration = new LocalSdkConfiguration(wmRuntimeInfo.getHttpBaseUrl());
+    var ownerId = UUID.randomUUID();
     mockEnvironment = ManagementEnvironment.builder()
         .withId(new EnvironmentIdValue(
             EnvironmentType.PERSONAL,
-            UUID.randomUUID(),
+          ownerId,
             "test-env"
         ))
         .withName("Test Environment")
-        .withResourceGroup(UUID.randomUUID())
+        .withResourceGroup(ResourceGroupId.fromString(String.format("Personal/%s/rg", ownerId)))
         .build();
     
     environmentService = new RestEnvironmentService(httpClient, sdkConfiguration, RetryRegistry.ofDefaults());
@@ -102,7 +104,7 @@ class EnvironmentServiceTest {
     assertThat(response.id().ownerId()).isEqualTo(mockEnvironment.getId().ownerId());
     assertThat(response.id().shortName()).isEqualTo(mockEnvironment.getId().shortName());
     assertThat(response.name()).isEqualTo(mockEnvironment.getName());
-    assertThat(response.resourceGroups()).containsExactlyElementsOf(mockEnvironment.getResourceGroups());
+    assertThat(response.resourceGroups()).containsExactlyElementsOf(mockEnvironment.getResourceGroups().stream().map(ResourceGroupId::toString).toList());
     assertThat(response.parameters()).isEqualTo(mockEnvironment.toDto().parameters());
 
   }

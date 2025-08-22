@@ -9,7 +9,7 @@ import java.util.UUID;
 public record UpdateEnvironmentRequest(
         EnvironmentIdValue managementEnvironmentId,
         String name,
-        Collection<UUID> resourceGroups,
+        Collection<String> resourceGroups,
         Map<String, Object> parameters,
         String defaultCiCdProfileShortName) {
 }

@@ -37,6 +37,7 @@ import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciContain
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import com.yanchware.fractal.sdk.domain.services.contracts.ComponentDto;
 import com.yanchware.fractal.sdk.domain.values.ComponentId;
+import com.yanchware.fractal.sdk.domain.values.ResourceGroupId;
 import io.github.resilience4j.retry.RetryRegistry;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.SoftAssertions;
@@ -405,7 +406,7 @@ public class TestUtils {
             EnvironmentType.PERSONAL,
             UUID.fromString("2e114308-14ec-4d77-b610-490324fa1844"),
             "test"))
-        .withResourceGroup(UUID.randomUUID())
+        .withResourceGroup(ResourceGroupId.fromString("Personal/2e114308-14ec-4d77-b610-490324fa1844/rg"))
         .build();
   }
 

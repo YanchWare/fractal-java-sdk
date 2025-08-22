@@ -14,6 +14,7 @@ import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GcpRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.hetzner.HetznerRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
+import com.yanchware.fractal.sdk.domain.values.ResourceGroupId;
 import com.yanchware.fractal.sdk.utils.CollectionUtils;
 import com.yanchware.fractal.sdk.utils.SerializationUtils;
 import lombok.Getter;
@@ -38,7 +39,7 @@ public abstract class BaseEnvironment implements Environment, Validatable {
 
   private final Map<String, Object> parameters;
   private String name;
-  private Collection<UUID> resourceGroups;
+  private Collection<ResourceGroupId> resourceGroups;
   private Map<String, String> tags;
   private Collection<Secret> secrets;
   private CiCdProfile defaultCiCdProfile;
@@ -51,7 +52,7 @@ public abstract class BaseEnvironment implements Environment, Validatable {
   }
 
   @Override
-  public Collection<UUID> getResourceGroups() {
+  public Collection<ResourceGroupId> getResourceGroups() {
     return resourceGroups;
   }
 
@@ -162,11 +163,11 @@ public abstract class BaseEnvironment implements Environment, Validatable {
       return builder;
     }
 
-    public B withResourceGroup(UUID resourceGroupId) {
+    public B withResourceGroup(ResourceGroupId resourceGroupId) {
       return withResourceGroups(List.of(resourceGroupId));
     }
 
-    public B withResourceGroups(Collection<UUID> resourceGroups) {
+    public B withResourceGroups(Collection<ResourceGroupId> resourceGroups) {
       if (CollectionUtils.isBlank(resourceGroups)) {
         return builder;
       }

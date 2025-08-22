@@ -14,6 +14,7 @@ import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GcpRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.hetzner.HetznerRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
+import com.yanchware.fractal.sdk.domain.values.ResourceGroupId;
 import com.yanchware.fractal.sdk.utils.HttpUtils;
 import com.yanchware.fractal.sdk.utils.StringHelper;
 import io.github.resilience4j.retry.RetryRegistry;
@@ -44,7 +45,7 @@ public class RestEnvironmentService extends Service implements EnvironmentServic
       EnvironmentIdValue managementEnvironmentId,
       EnvironmentIdValue environmentId,
       String name,
-      Collection<UUID> resourceGroups,
+      Collection<ResourceGroupId> resourceGroups,
       Map<String, Object> parameters) throws InstantiatorException {
     return executeRequestWithRetries(
         "createEnvironment",
@@ -57,7 +58,7 @@ public class RestEnvironmentService extends Service implements EnvironmentServic
             serializeSafely(new CreateEnvironmentRequest(
                 managementEnvironmentId,
                 name,
-                resourceGroups,
+                resourceGroups.stream().map(ResourceGroupId::toString).toList(),
                 parameters))),
         new int[]{201},
         EnvironmentResponse.class);
@@ -68,7 +69,7 @@ public class RestEnvironmentService extends Service implements EnvironmentServic
       EnvironmentIdValue managementEnvironmentId,
       EnvironmentIdValue environmentId,
       String name,
-      Collection<UUID> resourceGroups,
+      Collection<ResourceGroupId> resourceGroups,
       Map<String, Object> parameters,
       String defaultCiCdProfileShortName) throws InstantiatorException {
     return executeRequestWithRetries(
@@ -79,7 +80,7 @@ public class RestEnvironmentService extends Service implements EnvironmentServic
         HttpUtils.buildPutRequest(
             getEnvironmentsUri(environmentId),
             sdkConfiguration,
-            serializeSafely(new UpdateEnvironmentRequest(managementEnvironmentId, name, resourceGroups, parameters, defaultCiCdProfileShortName))),
+            serializeSafely(new UpdateEnvironmentRequest(managementEnvironmentId, name, resourceGroups.stream().map(ResourceGroupId::toString).toList(), parameters, defaultCiCdProfileShortName))),
         new int[]{200},
         EnvironmentResponse.class);
   }

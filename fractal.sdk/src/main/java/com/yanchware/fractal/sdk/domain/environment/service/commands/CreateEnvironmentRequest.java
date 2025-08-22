@@ -9,6 +9,6 @@ import java.util.UUID;
 public record CreateEnvironmentRequest(
         EnvironmentIdValue managementEnvironmentId,
         String name,
-        Collection<UUID> resourceGroups,
+        Collection<String> resourceGroups,
         Map<String, Object> parameters) {
 }

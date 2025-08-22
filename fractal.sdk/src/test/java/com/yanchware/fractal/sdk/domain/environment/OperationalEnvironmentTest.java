@@ -4,6 +4,7 @@ import com.yanchware.fractal.sdk.domain.blueprint.iaas.DnsAaaaRecord;
 import com.yanchware.fractal.sdk.domain.blueprint.iaas.DnsPtrRecord;
 import com.yanchware.fractal.sdk.domain.blueprint.iaas.DnsZone;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion;
+import com.yanchware.fractal.sdk.domain.values.ResourceGroupId;
 import com.yanchware.fractal.sdk.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 
@@ -18,9 +19,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class OperationalEnvironmentTest {
     private static final String VALID_SHORT_NAME = "operational-001";
+    private static final UUID VALID_OWNER_ID = UUID.randomUUID();
     private static final String VALID_DISPLAY_NAME = "My Operational Environment";
-    private static final UUID VALID_RESOURCE_GROUP_ID = UUID.randomUUID();
-    
+    private static final ResourceGroupId VALID_RESOURCE_GROUP_ID = ResourceGroupId.fromString(String.format("Personal/%s/rg", VALID_OWNER_ID));
+
     @Test
     void exceptionThrown_when_environmentCreatedWithNullShortName() {
         assertThatThrownBy(() -> generateBuilderWithInfo(null))
@@ -152,7 +154,7 @@ class OperationalEnvironmentTest {
     void noValidationErrors_when_environmentCreateWithRequiredData() {
         var environment = OperationalEnvironment.builder()
                 .withShortName("production-001")
-                .withResourceGroup(UUID.randomUUID())
+                .withResourceGroup(VALID_RESOURCE_GROUP_ID)
                 .withAzureSubscription(AzureRegion.WEST_EUROPE, UUID.randomUUID())
                 .build();
 
@@ -189,7 +191,7 @@ class OperationalEnvironmentTest {
                 .withAzureSubscription(
                         AzureRegion.AUSTRALIA_CENTRAL,
                         UUID.randomUUID())
-                .withResourceGroup(UUID.randomUUID())
+                .withResourceGroup(VALID_RESOURCE_GROUP_ID)
                 .withDefaultCiCdProfile(new CiCdProfile("default", "Default", "data", "pass"))
                 .withCiCdProfile(new CiCdProfile("custom", "Custom", "data", "pass"))
                 .withCiCdProfile(new CiCdProfile("additional", "Additional","data", "pass"))
