@@ -13,6 +13,7 @@ import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureReg
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GcpRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.hetzner.HetznerRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciRegion;
+import com.yanchware.fractal.sdk.domain.values.ResourceGroupId;
 
 import java.util.Collection;
 import java.util.Map;
@@ -23,14 +24,14 @@ public interface EnvironmentService {
             EnvironmentIdValue managementEnvironmentId,
             EnvironmentIdValue environmentId,
             String name,
-            Collection<UUID> resourceGroups,
+            Collection<ResourceGroupId> resourceGroups,
             Map<String, Object> parameters) throws InstantiatorException;
 
     EnvironmentResponse update(
             EnvironmentIdValue managementEnvironmentId,
             EnvironmentIdValue environmentId,
             String name,
-            Collection<UUID> resourceGroups,
+            Collection<ResourceGroupId> resourceGroups,
             Map<String, Object> parameters,
             String defaultCiCdProfileShortName) throws InstantiatorException;
 

@@ -8,6 +8,7 @@ import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureReg
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GcpRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.hetzner.HetznerRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.oci.OciRegion;
+import com.yanchware.fractal.sdk.domain.values.ResourceGroupId;
 import com.yanchware.fractal.sdk.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 
@@ -157,12 +158,13 @@ class ManagementEnvironmentTest {
 
   @Test
   public void noValidationErrors_when_environmentCreatedWithDnsZone() {
+    var ownerId = UUID.randomUUID();
     var managementEnvironment = ManagementEnvironment.builder()
         .withId(new EnvironmentIdValue(
             EnvironmentType.PERSONAL,
-            UUID.randomUUID(),
+            ownerId,
             "production-001"))
-        .withResourceGroup(UUID.randomUUID())
+        .withResourceGroup(ResourceGroupId.fromString(String.format("Personal/%s/rg", ownerId)))
         .withDnsZone(
             DnsZone.builder()
                 .withName("dns.name")
@@ -192,16 +194,17 @@ class ManagementEnvironmentTest {
 
   @Test
   public void noValidationErrors_when_environmentCreatedWithRegionTenantIdAndSubscriptionId() {
+    var ownerId = UUID.randomUUID();
     var managementEnvironment = ManagementEnvironment.builder()
         .withId(new EnvironmentIdValue(
             EnvironmentType.PERSONAL,
-            UUID.randomUUID(),
+            ownerId,
             "production-001"))
         .withAzureCloudAgent(
             AzureRegion.AUSTRALIA_CENTRAL,
             UUID.randomUUID(),
             UUID.randomUUID())
-        .withResourceGroup(UUID.randomUUID())
+        .withResourceGroup(ResourceGroupId.fromString(String.format("Personal/%s/rg", ownerId)))
         .withDnsZone(
             DnsZone.builder()
                 .withName("dns.name")
@@ -230,16 +233,17 @@ class ManagementEnvironmentTest {
 
   @Test
   public void noValidationErrors_when_environmentCreatedWithTags() {
+    var ownerId = UUID.randomUUID();
     var managementEnvironment = ManagementEnvironment.builder()
         .withId(new EnvironmentIdValue(
             EnvironmentType.PERSONAL,
-            UUID.randomUUID(),
+            ownerId,
             "production-001"))
         .withAzureCloudAgent(
             AzureRegion.AUSTRALIA_CENTRAL,
             UUID.randomUUID(),
             UUID.randomUUID())
-        .withResourceGroup(UUID.randomUUID())
+        .withResourceGroup(ResourceGroupId.fromString(String.format("Personal/%s/rg", ownerId)))
         .withTags(Map.of("key1", "value1", "key2", "value2"))
         .withTag("key1", "value2")
         .withTag("key3", "value3")
@@ -263,7 +267,7 @@ class ManagementEnvironmentTest {
 
     var operationalEnvironment = OperationalEnvironment.builder()
         .withShortName("operational-001")
-        .withResourceGroup(UUID.randomUUID())
+        .withResourceGroup(ResourceGroupId.fromString(String.format("Personal/%s/rg", ownerId)))
         .withAzureSubscription(AzureRegion.WEST_EUROPE, UUID.randomUUID())
         .withTag("key1", "value1")
         .withTag("key2", "value3")
@@ -275,7 +279,7 @@ class ManagementEnvironmentTest {
             environmentType,
             ownerId,
             "production-001"))
-        .withResourceGroup(UUID.randomUUID())
+        .withResourceGroup(ResourceGroupId.fromString(String.format("Personal/%s/rg2", ownerId)))
         .withAwsCloudAgent(AwsRegion.EU_NORTH_1, UUID.randomUUID().toString(), UUID.randomUUID().toString())
         .withAzureCloudAgent(AzureRegion.WEST_EUROPE, UUID.randomUUID(), UUID.randomUUID())
         .withGcpCloudAgent(GcpRegion.EUROPE_WEST1, UUID.randomUUID().toString(), UUID.randomUUID().toString())
@@ -310,16 +314,17 @@ class ManagementEnvironmentTest {
 
   @Test
   public void noValidationErrors_when_environmentCreatedWithSecrets() {
+    var ownerId = UUID.randomUUID();
     var managementEnvironment = ManagementEnvironment.builder()
         .withId(new EnvironmentIdValue(
             EnvironmentType.PERSONAL,
-            UUID.randomUUID(),
+            ownerId,
             "production-001"))
         .withAzureCloudAgent(
             AzureRegion.AUSTRALIA_CENTRAL,
             UUID.randomUUID(),
             UUID.randomUUID())
-        .withResourceGroup(UUID.randomUUID())
+        .withResourceGroup(ResourceGroupId.fromString(String.format("Personal/%s/rg", ownerId)))
         .withSecret(new Secret("secret-1", "Secret Display Name","Secret Description", "value-1"))
         .withSecret(new Secret("secret-2", "Secret 2 Display Name","Secret 2 Description", "value-2"))
         .withSecrets(List.of(
@@ -340,16 +345,17 @@ class ManagementEnvironmentTest {
 
   @Test
   public void noValidationErrors_when_environmentCreatedWithCiCdProfiles() {
+    var ownerId = UUID.randomUUID();
     var managementEnvironment = ManagementEnvironment.builder()
         .withId(new EnvironmentIdValue(
             EnvironmentType.PERSONAL,
-            UUID.randomUUID(),
+            ownerId,
             "production-001"))
         .withAzureCloudAgent(
             AzureRegion.AUSTRALIA_CENTRAL,
             UUID.randomUUID(),
             UUID.randomUUID())
-        .withResourceGroup(UUID.randomUUID())
+        .withResourceGroup(ResourceGroupId.fromString(String.format("Personal/%s/rg", ownerId)))
         .withDefaultCiCdProfile(new CiCdProfile("default", "Default", "data", "pass"))
         .withCiCdProfile(new CiCdProfile("custom", "Custom", "data", "pass"))
         .withCiCdProfile(new CiCdProfile("additional", "Additional","data", "pass"))
@@ -387,12 +393,16 @@ class ManagementEnvironmentTest {
 
   @Test
   public void noValidationErrors_when_environmentCreatedWithResourceGroups() {
+    var ownerId = UUID.randomUUID();
     var managementEnvironment = ManagementEnvironment.builder()
             .withId(new EnvironmentIdValue(
                     EnvironmentType.PERSONAL,
-                    UUID.randomUUID(),
+                    ownerId,
                     "production-001"))
-            .withResourceGroups(List.of(UUID.randomUUID(), UUID.randomUUID()))
+            .withResourceGroups(
+              List.of(
+                ResourceGroupId.fromString(String.format("Personal/%s/rg", ownerId)),
+                ResourceGroupId.fromString(String.format("Personal/%s/rg2", ownerId))))
             .build();
 
     assertThat(managementEnvironment.validate()).isEmpty();
@@ -415,11 +425,12 @@ class ManagementEnvironmentTest {
   }
 
   private ManagementEnvironment.ManagementEnvironmentBuilder generateBuilderWithId(String shortName) {
+    var ownerId = UUID.randomUUID();
     return ManagementEnvironment.builder()
             .withId(new EnvironmentIdValue(
                     EnvironmentType.PERSONAL,
-                    UUID.randomUUID(),
+                    ownerId,
                     shortName))
-            .withResourceGroup(UUID.randomUUID());
+            .withResourceGroup(ResourceGroupId.fromString(String.format("Personal/%s/rg", ownerId)));
   }
 }

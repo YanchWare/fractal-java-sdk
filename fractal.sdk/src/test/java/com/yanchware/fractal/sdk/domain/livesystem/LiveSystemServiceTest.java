@@ -14,6 +14,7 @@ import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.cosmos.A
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.cosmos.AzureCosmosGremlinDbms;
 import com.yanchware.fractal.sdk.domain.livesystem.service.LiveSystemService;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
+import com.yanchware.fractal.sdk.domain.values.ResourceGroupId;
 import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
 import com.yanchware.fractal.sdk.utils.StringHandler;
 import io.github.resilience4j.retry.RetryRegistry;
@@ -51,7 +52,7 @@ public class LiveSystemServiceTest {
                     EnvironmentType.PERSONAL,
                     UUID.fromString("b2bd7eab-ee3d-4603-86ac-3112ff6b2175"),
                     "5d5bc38d-1d23-4d10-8"))
-            .withResourceGroup(UUID.randomUUID())
+            .withResourceGroup(ResourceGroupId.fromString("Personal/b2bd7eab-ee3d-4603-86ac-3112ff6b2175/rg"))
             .build();
     
     var liveSystem = liveSystemsFactory.builder()
