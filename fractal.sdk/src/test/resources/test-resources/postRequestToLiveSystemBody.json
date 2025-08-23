@@ -1,6 +1,6 @@
 {
-  "liveSystemId": "resourceGroupId/livesystem-name",
-  "fractalId": "resourceGroupId/fractalName:fractalVersion",
+  "liveSystemId": "Personal/b2bd7eab-ee3d-4603-86ac-3112ff6b2175/rg/livesystem-name",
+  "fractalId": "Personal/b2bd7eab-ee3d-4603-86ac-3112ff6b2175/rg/fractalName:fractalVersion",
   "description": "prod",
   "blueprintMap": {
     "graph-db-1": {

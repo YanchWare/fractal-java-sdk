@@ -407,7 +407,7 @@ public class LiveSystemService extends Service {
   private URI getInstantiateComponentUri(LiveSystemIdValue liveSystemId, String componentId) {
     return URI.create(String.format(
         "%s/%s/%s/component/%s/instantiate",
-        getLiveSystemUri(), liveSystemId.resourceGroupId(), liveSystemId.name(), componentId));
+        getLiveSystemUri(), liveSystemId.resourceGroupId().toString(), liveSystemId.name(), componentId));
   }
 
   private URI getComponentStateUri(String liveSystemId, String componentId, String mutationId) {

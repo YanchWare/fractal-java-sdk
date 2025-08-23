@@ -6,6 +6,8 @@ import com.yanchware.fractal.sdk.domain.blueprint.FractalIdValue;
 import com.yanchware.fractal.sdk.domain.blueprint.service.commands.CreateBlueprintCommandRequest;
 import com.yanchware.fractal.sdk.domain.blueprint.service.dtos.BlueprintComponentDto;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
+import com.yanchware.fractal.sdk.domain.values.ResourceGroupId;
+import com.yanchware.fractal.sdk.domain.values.ResourceGroupType;
 import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
 import com.yanchware.fractal.sdk.utils.StringHandler;
 import io.github.resilience4j.retry.RetryRegistry;
@@ -13,6 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import java.net.http.HttpClient;
 import java.util.List;
+import java.util.UUID;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static java.util.Collections.emptyMap;
@@ -35,9 +38,11 @@ public class BlueprintServiceTest {
 
         assertThat(inputStream).isNotNull();
 
+        var resourceGroupId = new ResourceGroupId(ResourceGroupType.PERSONAL, UUID.randomUUID(), "rg");
         var postRequestToBlueprintBody = StringHandler.getStringFromInputStream(inputStream);
+        var url = String.format("/blueprints/%s/fr/fr", resourceGroupId);
         
-        stubFor(post(urlPathMatching("/blueprints/resource-group/fr/fr"))
+        stubFor(post(urlPathMatching(url))
           .withRequestBody(equalToJson(postRequestToBlueprintBody))
           .willReturn(aResponse()
             .withStatus(202)
@@ -45,9 +50,9 @@ public class BlueprintServiceTest {
 
         blueprintService.create(
                 buildBlueprintRequest(),
-                new FractalIdValue("resource-group", "fr", "fr"));
+                new FractalIdValue(resourceGroupId, "fr", "fr"));
 
-        verify(postRequestedFor(urlPathEqualTo("/blueprints/resource-group/fr/fr")));
+        verify(postRequestedFor(urlPathEqualTo(url)));
     }
 
     private CreateBlueprintCommandRequest buildBlueprintRequest() {

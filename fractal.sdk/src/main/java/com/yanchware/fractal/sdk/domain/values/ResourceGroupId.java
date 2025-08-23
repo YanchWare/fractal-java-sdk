@@ -32,14 +32,13 @@ public record ResourceGroupId(
     if (o == this){
       return true;
     }
-    if (!(o instanceof ResourceGroupId)) {
+    if (!(o instanceof ResourceGroupId(ResourceGroupType groupType, UUID id, String name))) {
       return false;
     }
 
-    ResourceGroupId other = (ResourceGroupId)o;
-    return this.resourceGroupType.getValue().equals(other.resourceGroupType.getValue())
-      && this.ownerId.toString().equals(other.ownerId.toString())
-      && this.shortName.equals(other.shortName);
+    return this.resourceGroupType.getValue().equals(groupType.getValue())
+      && this.ownerId.toString().equals(id.toString())
+      && this.shortName.equals(name);
   }
 
   @Override
