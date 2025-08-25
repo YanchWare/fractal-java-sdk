@@ -148,7 +148,7 @@ public class LiveSystemAggregate implements Validatable {
             errors.add(NAME_IS_NULL);
         }
 
-        if (isBlank(id.resourceGroupId())) {
+        if (id.resourceGroupId() == null) {
             errors.add(RESOURCE_GROUP_ID_IS_NULL);
         }
 

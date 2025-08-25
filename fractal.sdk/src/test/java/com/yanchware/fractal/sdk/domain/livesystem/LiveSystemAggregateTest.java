@@ -10,6 +10,8 @@ import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRes
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.cosmos.AzureCosmosGremlinDatabase;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.cosmos.AzureCosmosGremlinDbms;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
+import com.yanchware.fractal.sdk.domain.values.ResourceGroupId;
+import com.yanchware.fractal.sdk.domain.values.ResourceGroupType;
 import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
 import io.github.resilience4j.retry.RetryRegistry;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,7 +37,7 @@ class LiveSystemAggregateTest {
         var sdkConfiguration = new LocalSdkConfiguration(wmRuntimeInfo.getHttpBaseUrl());
         liveSystemAggregate = new LiveSystemsFactory(httpClient, sdkConfiguration, RetryRegistry.ofDefaults())
                 .builder()
-                .withId(new LiveSystemIdValue(UUID.randomUUID().toString(), UUID.randomUUID().toString()))
+                .withId(new LiveSystemIdValue(new ResourceGroupId(ResourceGroupType.PERSONAL, UUID.randomUUID(), "rg"), UUID.randomUUID().toString()))
                 .withStandardProvider(ProviderType.AZURE)
                 .withEnvironmentId(new EnvironmentIdValue(
                         EnvironmentType.PERSONAL,

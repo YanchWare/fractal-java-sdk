@@ -18,11 +18,11 @@ public class UpdateBlueprintCommandRequest {
     Collection<BlueprintComponentDto> components;
 
     public static UpdateBlueprintCommandRequest fromCreateCommand(CreateBlueprintCommandRequest command, FractalIdValue fractalId) {
-        String[] splitId = fractalId.toString().split("/|\\:");
+        String[] splitId = fractalId.toString().split("[/:]");
         return UpdateBlueprintCommandRequest.builder()
-                .resourceGroupId(splitId[0])
-                .fractalName(splitId[1])
-                .fractalVersion(splitId[2])
+                .resourceGroupId(String.format("%s/%s/%s", splitId[0], splitId[1], splitId[2]))
+                .fractalName(splitId[3])
+                .fractalVersion(splitId[4])
                 .description(command.description())
                 .isPrivate(command.isPrivate())
                 .components(command.components())

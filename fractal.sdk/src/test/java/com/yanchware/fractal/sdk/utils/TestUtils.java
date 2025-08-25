@@ -38,6 +38,7 @@ import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import com.yanchware.fractal.sdk.domain.services.contracts.ComponentDto;
 import com.yanchware.fractal.sdk.domain.values.ComponentId;
 import com.yanchware.fractal.sdk.domain.values.ResourceGroupId;
+import com.yanchware.fractal.sdk.domain.values.ResourceGroupType;
 import io.github.resilience4j.retry.RetryRegistry;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.SoftAssertions;
@@ -411,13 +412,14 @@ public class TestUtils {
   }
 
   public static LiveSystemAggregate getLiveSystemExample() {
+    var resourceGroupId = new ResourceGroupId(ResourceGroupType.PERSONAL, UUID.randomUUID(), "rg");
     var liveSystemsFactory = new LiveSystemsFactory(
         HttpClient.newBuilder().build(),
         new LocalSdkConfiguration(""),
         RetryRegistry.ofDefaults());
     return liveSystemsFactory.builder()
-        .withId(new LiveSystemIdValue("test-resource-group", "business-platform-test"))
-        .withFractalId(new FractalIdValue("test-resource-group", "business-platform-test", "v1.0"))
+        .withId(new LiveSystemIdValue(resourceGroupId, "business-platform-test"))
+        .withFractalId(new FractalIdValue(resourceGroupId, "business-platform-test", "v1.0"))
         .withDescription("Business platform")
         .withStandardProvider(ProviderType.AZURE)
         .withComponent(getAksExample())

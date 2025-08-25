@@ -5,6 +5,8 @@ import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.LiveSystemCompon
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.LiveSystemKubernetesComponentDtoTest;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import com.yanchware.fractal.sdk.domain.values.ComponentType;
+import com.yanchware.fractal.sdk.domain.values.ResourceGroupId;
+import com.yanchware.fractal.sdk.domain.values.ResourceGroupType;
 import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
 import com.yanchware.fractal.sdk.utils.TestUtils;
 import io.github.resilience4j.retry.RetryRegistry;
@@ -13,11 +15,12 @@ import org.junit.jupiter.api.Test;
 import java.net.http.HttpClient;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import static com.yanchware.fractal.sdk.utils.TestUtils.assertGenericComponent;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class LiveSystemHetznerComponentDtoTest extends LiveSystemKubernetesComponentDtoTest {
+class LiveSystemHetznerKubernetesDtoTest extends LiveSystemKubernetesComponentDtoTest {
     @Test
     public void liveSystemComponentDto_matches_liveSystemComponents_withCorrectTypeForLiveSystem_forHetznerKubernetes() {
         var factory = new LiveSystemsFactory(
@@ -27,7 +30,7 @@ class LiveSystemHetznerComponentDtoTest extends LiveSystemKubernetesComponentDto
         var hetznerKubernetes = TestUtils.getHetznerKubernetesExample();
         var postgres = TestUtils.getGcpPostgresExample();
         var liveSystem = factory.builder()
-                .withId(new LiveSystemIdValue("test", "test"))
+                .withId(new LiveSystemIdValue(new ResourceGroupId(ResourceGroupType.PERSONAL, UUID.randomUUID(), "rg"), "test"))
                 .withStandardProvider(ProviderType.HETZNER)
                 .withComponents(List.of(hetznerKubernetes, postgres))
                 .build();
