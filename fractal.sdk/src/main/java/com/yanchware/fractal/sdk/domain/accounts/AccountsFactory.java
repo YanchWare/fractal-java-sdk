@@ -2,7 +2,7 @@ package com.yanchware.fractal.sdk.domain.accounts;
 
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.accounts.service.RestAccountsService;
-import com.yanchware.fractal.sdk.domain.environment.EnvironmentsFactory;
+import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import io.github.resilience4j.retry.RetryRegistry;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,8 +36,8 @@ public class AccountsFactory {
             return this;
         }
 
-        public AccountBuilder withManagementEnvironment(AccountAggregate accountAggregate) {
-            aggregate.setAccount(accountAggregate);
+        public AccountBuilder withResourceGroup(String shortName, String displayName) throws InstantiatorException {
+            aggregate.createOrUpdateResourceGroup(shortName,displayName);
             return builder;
         }
 
