@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.configuration.EnvVarSdkConfiguration;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.configuration.instantiation.InstantiationConfiguration;
+import com.yanchware.fractal.sdk.domain.accounts.AccountsFactory;
 import com.yanchware.fractal.sdk.domain.blueprint.BlueprintFactory;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentAggregate;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentIdValue;
@@ -40,6 +41,7 @@ public class Automaton {
   private static BlueprintFactory blueprintFactory;
   private static LiveSystemsFactory liveSystemFactory;
   private static EnvironmentsFactory environmentsFactory;
+  private static AccountsFactory accountsFactory;
   private static RetryRegistry serviceRetryRegistry;
 
   private Automaton(HttpClient httpClient, SdkConfiguration sdkConfiguration) {
@@ -47,6 +49,7 @@ public class Automaton {
     Automaton.blueprintFactory = new BlueprintFactory(httpClient, sdkConfiguration, Automaton.serviceRetryRegistry);
     Automaton.liveSystemFactory = new LiveSystemsFactory(httpClient, sdkConfiguration, Automaton.serviceRetryRegistry);
     Automaton.environmentsFactory = new EnvironmentsFactory(httpClient, sdkConfiguration, Automaton.serviceRetryRegistry);
+    Automaton.accountsFactory = new AccountsFactory(httpClient, sdkConfiguration, Automaton.serviceRetryRegistry);
   }
 
   /**
@@ -79,6 +82,13 @@ public class Automaton {
   public LiveSystemsFactory.LiveSystemBuilder getLiveSystemBuilder() {
     return liveSystemFactory.builder();
   }
+
+  /**
+   * Get builder for Account Aggregate
+   *
+   * @retun
+   */
+   public AccountsFactory.AccountBuilder getAccountBuilder() {return accountsFactory.builder();}
 
   /**
    * Instantiates the given environment.

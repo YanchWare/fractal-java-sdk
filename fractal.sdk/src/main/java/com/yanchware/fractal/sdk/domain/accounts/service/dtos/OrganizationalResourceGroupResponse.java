@@ -1,10 +1,10 @@
-package com.yanchware.fractal.sdk.domain.accounts.services.dto;
+package com.yanchware.fractal.sdk.domain.accounts.service.dtos;
 
 import com.yanchware.fractal.sdk.domain.accounts.EntityStatus;
 import com.yanchware.fractal.sdk.domain.values.ResourceGroupId;
 import java.util.Collection;
 
-public record OrganizationalResourceGroup(
+public record OrganizationalResourceGroupResponse(
     ResourceGroupId Id,
     String DisplayName,
     String Description,
