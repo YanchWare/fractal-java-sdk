@@ -1,7 +1,6 @@
 package com.yanchware.fractal.sdk.domain.account;
 
 import com.yanchware.fractal.sdk.domain.accounts.AccountAggregate;
-import com.yanchware.fractal.sdk.domain.accounts.service.AccountsService;
 import com.yanchware.fractal.sdk.domain.accounts.service.dtos.PersonalResourceGroupResponse;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.domain.values.ResourceGroupId;
@@ -11,9 +10,14 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.UUID;
 
-import static com.yanchware.fractal.sdk.domain.accounts.service.dtos.PersonalResourceGroupResponse.*;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 class AccountAggregateTest {
     private static final String SHORT_NAME = "test-rg";
