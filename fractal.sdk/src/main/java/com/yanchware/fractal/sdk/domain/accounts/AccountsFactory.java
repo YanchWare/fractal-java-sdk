@@ -2,7 +2,6 @@ package com.yanchware.fractal.sdk.domain.accounts;
 
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.accounts.service.RestAccountsService;
-import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import io.github.resilience4j.retry.RetryRegistry;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,11 +15,11 @@ public class AccountsFactory {
     private final SdkConfiguration sdkConfiguration;
     private final RetryRegistry retryRegistry;
 
-    public AccountBuilder builder(){
+    public AccountBuilder builder() {
         return new AccountBuilder(client, sdkConfiguration, retryRegistry);
     }
 
-    public static class AccountBuilder{
+    public static class AccountBuilder {
         private final AccountAggregate aggregate;
         private final AccountBuilder builder;
 
@@ -32,18 +31,14 @@ public class AccountsFactory {
         protected AccountAggregate create(HttpClient client, SdkConfiguration sdkConfiguration, RetryRegistry retryRegistry) {
             return new AccountAggregate(new RestAccountsService(client, sdkConfiguration, retryRegistry));
         }
+
         protected AccountsFactory.AccountBuilder getBuilder() {
             return this;
         }
 
-        public AccountBuilder withResourceGroup(String shortName, String displayName) throws InstantiatorException {
-            aggregate.createOrUpdateResourceGroup(shortName,displayName);
+        public AccountBuilder withResourceGroup(String shortName, String displayName) {
+            aggregate.addPersonalResourceGroup(shortName, displayName);
             return builder;
-        }
-
-
-        public AccountAggregate build() {
-            return aggregate;
         }
     }
 }

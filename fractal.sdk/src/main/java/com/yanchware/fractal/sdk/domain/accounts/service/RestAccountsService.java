@@ -6,10 +6,7 @@ import com.yanchware.fractal.sdk.domain.Service;
 import com.yanchware.fractal.sdk.domain.accounts.service.commands.UpsertPersonalResourceGroupRequest;
 import com.yanchware.fractal.sdk.domain.accounts.service.dtos.OrganizationalResourceGroupResponse;
 import com.yanchware.fractal.sdk.domain.accounts.service.dtos.PersonalResourceGroupResponse;
-import com.yanchware.fractal.sdk.domain.environment.EnvironmentIdValue;
-import com.yanchware.fractal.sdk.domain.environment.service.dtos.EnvironmentResponse;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
-import com.yanchware.fractal.sdk.domain.values.ResourceGroupId;
 import com.yanchware.fractal.sdk.utils.HttpUtils;
 import io.github.resilience4j.retry.RetryRegistry;
 
@@ -33,7 +30,7 @@ public class RestAccountsService extends Service implements AccountsService {
     @Override
     public PersonalResourceGroupResponse upsertPersonalResourceGroup(String shortName, String displayName) throws InstantiatorException {
         return executeRequestWithRetries(
-                "",
+                "upsertPersonalResourceGroup",
                 "upsertPersonalResourceGroup",
                 client,
                 retryRegistry,
@@ -41,6 +38,20 @@ public class RestAccountsService extends Service implements AccountsService {
                         getResourceGroupsUri(shortName),
                         sdkConfiguration,
                         serializeSafely(new UpsertPersonalResourceGroupRequest(displayName, null, null))),
+                new int[]{200},
+                PersonalResourceGroupResponse.class);
+    }
+
+    @Override
+    public PersonalResourceGroupResponse getByShortName(String shortName) throws InstantiatorException {
+        return executeRequestWithRetries(
+                "upsertPersonalResourceGroup",
+                "upsertPersonalResourceGroup",
+                client,
+                retryRegistry,
+                HttpUtils.buildGetRequest(
+                        getResourceGroupsUri(shortName),
+                        sdkConfiguration),
                 new int[]{200},
                 PersonalResourceGroupResponse.class);
     }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.configuration.EnvVarSdkConfiguration;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.configuration.instantiation.InstantiationConfiguration;
+import com.yanchware.fractal.sdk.domain.accounts.AccountAggregate;
 import com.yanchware.fractal.sdk.domain.accounts.AccountsFactory;
 import com.yanchware.fractal.sdk.domain.blueprint.BlueprintFactory;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentAggregate;
@@ -88,7 +89,9 @@ public class Automaton {
    *
    * @retun
    */
-   public AccountsFactory.AccountBuilder getAccountBuilder() {return accountsFactory.builder();}
+   public AccountsFactory.AccountBuilder getAccountBuilder() {
+       return accountsFactory.builder();
+   }
 
   /**
    * Instantiates the given environment.
@@ -100,7 +103,12 @@ public class Automaton {
     instantiateEnvironment(environment);
   }
 
-  /**
+  public void instantiate(AccountAggregate accounts) throws InstantiatorException {
+        accounts.createOrUpdate();
+  }
+
+
+    /**
    * Instantiates the given list of live systems.
    *
    * @param liveSystems the list of live systems to be instantiated
