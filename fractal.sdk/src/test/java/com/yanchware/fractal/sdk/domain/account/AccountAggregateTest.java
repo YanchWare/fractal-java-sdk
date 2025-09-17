@@ -44,10 +44,10 @@ class AccountAggregateTest {
         when(mockService.upsertPersonalResourceGroup(eq(SHORT_NAME), eq(DISPLAY_NAME)))
                 .thenReturn(createdResponse);
 
-        // Act
+
         aggregate.createOrUpdate();
 
-        // Assert
+
         verify(mockService, times(1)).getPersonalResourceGroupByShortName(eq(SHORT_NAME));
         verify(mockService, times(1)).upsertPersonalResourceGroup(eq(SHORT_NAME), eq(DISPLAY_NAME));
         verifyNoMoreInteractions(mockService);
@@ -55,17 +55,15 @@ class AccountAggregateTest {
 
     @Test
     void skipsUpsert_when_AlreadyExists() throws InstantiatorException {
-        // Arrange
+
         var mockService = mock(com.yanchware.fractal.sdk.domain.accounts.service.RestAccountsService.class);
         var aggregate = new AccountAggregate(mockService);
 
-        var shortName = "short-name-rg";
-        var displayName = "Display Name RG";
-        aggregate.addPersonalResourceGroup(shortName, displayName);
+        aggregate.addPersonalResourceGroup(SHORT_NAME, DISPLAY_NAME);
 
         var existingResponse = new PersonalResourceGroupResponse(
-                ResourceGroupId.fromString(String.format("Personal/%s/%s", UUID.randomUUID(), shortName)),
-                "Existing Bob",
+                ResourceGroupId.fromString(String.format("Personal/%s/%s", UUID.randomUUID(), SHORT_NAME)),
+                "Existing RG",
                 null,
                 EntityStatus.ACTIVE,
                 null,
@@ -73,11 +71,11 @@ class AccountAggregateTest {
                 List.of()
         );
 
-        when(mockService.getPersonalResourceGroupByShortName(eq(shortName))).thenReturn(existingResponse);
+        when(mockService.getPersonalResourceGroupByShortName(eq(SHORT_NAME))).thenReturn(existingResponse);
 
         aggregate.createOrUpdate();
 
-        verify(mockService, times(1)).getPersonalResourceGroupByShortName(eq(shortName));
+        verify(mockService, times(1)).getPersonalResourceGroupByShortName(eq(SHORT_NAME));
         verify(mockService, never()).upsertPersonalResourceGroup(anyString(), anyString());
         verifyNoMoreInteractions(mockService);
     }
@@ -87,18 +85,18 @@ class AccountAggregateTest {
         var mockService = mock(com.yanchware.fractal.sdk.domain.accounts.service.RestAccountsService.class);
         var aggregate = new AccountAggregate(mockService);
 
-        var shortName = "rg-x";
-        aggregate.addPersonalResourceGroup(shortName, "Old Name");
-        aggregate.addPersonalResourceGroup(shortName, "New Name");
 
-        when(mockService.getPersonalResourceGroupByShortName(eq(shortName))).thenReturn(null);
-        when(mockService.upsertPersonalResourceGroup(eq(shortName), eq("New Name")))
+        aggregate.addPersonalResourceGroup(SHORT_NAME, "Old Name");
+        aggregate.addPersonalResourceGroup(SHORT_NAME, "New Name");
+
+        when(mockService.getPersonalResourceGroupByShortName(eq(SHORT_NAME))).thenReturn(null);
+        when(mockService.upsertPersonalResourceGroup(eq(SHORT_NAME), eq("New Name")))
                 .thenReturn(mock(PersonalResourceGroupResponse.class));
 
         aggregate.createOrUpdate();
 
-        verify(mockService, times(1)).getPersonalResourceGroupByShortName(eq(shortName));
-        verify(mockService, times(1)).upsertPersonalResourceGroup(eq(shortName), eq("New Name"));
+        verify(mockService, times(1)).getPersonalResourceGroupByShortName(eq(SHORT_NAME));
+        verify(mockService, times(1)).upsertPersonalResourceGroup(eq(SHORT_NAME), eq("New Name"));
         verifyNoMoreInteractions(mockService);
     }
 
@@ -117,21 +115,21 @@ class AccountAggregateTest {
         var mockService = mock(com.yanchware.fractal.sdk.domain.accounts.service.RestAccountsService.class);
         var aggregate = new AccountAggregate(mockService);
 
-        aggregate.addPersonalResourceGroup("rg-a", "A");
-        aggregate.addPersonalResourceGroup("rg-b", "B");
+        aggregate.addPersonalResourceGroup(SHORT_NAME + "a", DISPLAY_NAME + "A");
+        aggregate.addPersonalResourceGroup(SHORT_NAME + "b", DISPLAY_NAME + "B");
 
-        when(mockService.getPersonalResourceGroupByShortName("rg-a")).thenReturn(null);
-        when(mockService.getPersonalResourceGroupByShortName("rg-b")).thenReturn(null);
+        when(mockService.getPersonalResourceGroupByShortName(SHORT_NAME + "a")).thenReturn(null);
+        when(mockService.getPersonalResourceGroupByShortName(SHORT_NAME + "b")).thenReturn(null);
 
-        when(mockService.upsertPersonalResourceGroup("rg-a", "A")).thenReturn(mock(PersonalResourceGroupResponse.class));
-        when(mockService.upsertPersonalResourceGroup("rg-b", "B")).thenReturn(mock(PersonalResourceGroupResponse.class));
+        when(mockService.upsertPersonalResourceGroup(SHORT_NAME + "a", DISPLAY_NAME + "A")).thenReturn(mock(PersonalResourceGroupResponse.class));
+        when(mockService.upsertPersonalResourceGroup(SHORT_NAME + "b", DISPLAY_NAME + "B")).thenReturn(mock(PersonalResourceGroupResponse.class));
 
         aggregate.createOrUpdate();
 
-        verify(mockService, times(1)).getPersonalResourceGroupByShortName("rg-a");
-        verify(mockService, times(1)).getPersonalResourceGroupByShortName("rg-b");
-        verify(mockService, times(1)).upsertPersonalResourceGroup("rg-a", "A");
-        verify(mockService, times(1)).upsertPersonalResourceGroup("rg-b", "B");
+        verify(mockService, times(1)).getPersonalResourceGroupByShortName(SHORT_NAME + "a");
+        verify(mockService, times(1)).getPersonalResourceGroupByShortName(SHORT_NAME + "b");
+        verify(mockService, times(1)).upsertPersonalResourceGroup(SHORT_NAME + "a", DISPLAY_NAME + "A");
+        verify(mockService, times(1)).upsertPersonalResourceGroup(SHORT_NAME + "b", DISPLAY_NAME + "B");
         verifyNoMoreInteractions(mockService);
     }
 
@@ -140,14 +138,13 @@ class AccountAggregateTest {
         var mockService = mock(com.yanchware.fractal.sdk.domain.accounts.service.RestAccountsService.class);
         var aggregate = new AccountAggregate(mockService);
 
-        var shortName = "rg-error";
-        aggregate.addPersonalResourceGroup(shortName, "X");
+        aggregate.addPersonalResourceGroup(SHORT_NAME, DISPLAY_NAME);
 
-        when(mockService.getPersonalResourceGroupByShortName(eq(shortName)))
-                .thenThrow(new InstantiatorException("boom"));
+        when(mockService.getPersonalResourceGroupByShortName(eq(SHORT_NAME)))
+                .thenThrow(new InstantiatorException("error"));
 
         assertThatThrownBy(aggregate::createOrUpdate)
                 .isInstanceOf(InstantiatorException.class)
-                .hasMessageContaining("boom");
+                .hasMessageContaining("error");
     }
 }
