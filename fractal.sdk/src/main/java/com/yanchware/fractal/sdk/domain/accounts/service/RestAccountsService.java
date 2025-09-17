@@ -47,7 +47,7 @@ public class RestAccountsService extends Service implements AccountsService {
                 HttpUtils.buildGetRequest(
                         getOrganizationalResourceGroupsUri(organizationId, shortName),
                         sdkConfiguration),
-                new int[]{200},
+                new int[]{200, 404},
                 OrganizationalResourceGroupResponse.class);
     }
 
@@ -77,7 +77,7 @@ public class RestAccountsService extends Service implements AccountsService {
                 HttpUtils.buildGetRequest(
                         getPersonalResourceGroupsUri(shortName),
                         sdkConfiguration),
-                new int[]{200},
+                new int[]{200, 404},
                 PersonalResourceGroupResponse.class);
     }
 

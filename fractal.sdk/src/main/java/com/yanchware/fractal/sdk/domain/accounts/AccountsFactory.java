@@ -40,5 +40,9 @@ public class AccountsFactory {
             aggregate.addPersonalResourceGroup(shortName, displayName);
             return builder;
         }
+
+        public AccountAggregate build() {
+            return aggregate;
+        }
     }
 }
