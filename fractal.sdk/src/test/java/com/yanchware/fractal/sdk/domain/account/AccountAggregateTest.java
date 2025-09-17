@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.mock;
@@ -79,5 +80,74 @@ class AccountAggregateTest {
         verify(mockService, times(1)).getPersonalResourceGroupByShortName(eq(shortName));
         verify(mockService, never()).upsertPersonalResourceGroup(anyString(), anyString());
         verifyNoMoreInteractions(mockService);
+    }
+
+    @Test
+    void updatesDisplayName_when_AddedTwiceWithDifferentDisplayName() throws InstantiatorException {
+        var mockService = mock(com.yanchware.fractal.sdk.domain.accounts.service.RestAccountsService.class);
+        var aggregate = new AccountAggregate(mockService);
+
+        var shortName = "rg-x";
+        aggregate.addPersonalResourceGroup(shortName, "Old Name");
+        aggregate.addPersonalResourceGroup(shortName, "New Name");
+
+        when(mockService.getPersonalResourceGroupByShortName(eq(shortName))).thenReturn(null);
+        when(mockService.upsertPersonalResourceGroup(eq(shortName), eq("New Name")))
+                .thenReturn(mock(PersonalResourceGroupResponse.class));
+
+        aggregate.createOrUpdate();
+
+        verify(mockService, times(1)).getPersonalResourceGroupByShortName(eq(shortName));
+        verify(mockService, times(1)).upsertPersonalResourceGroup(eq(shortName), eq("New Name"));
+        verifyNoMoreInteractions(mockService);
+    }
+
+    @Test
+    void doesNothing_when_NoResourceGroupsStaged() throws InstantiatorException {
+        var mockService = mock(com.yanchware.fractal.sdk.domain.accounts.service.RestAccountsService.class);
+        var aggregate = new AccountAggregate(mockService);
+
+        aggregate.createOrUpdate();
+
+        verifyNoMoreInteractions(mockService);
+    }
+
+    @Test
+    void createsMultipleResourceGroups_when_MultipleStaged() throws InstantiatorException {
+        var mockService = mock(com.yanchware.fractal.sdk.domain.accounts.service.RestAccountsService.class);
+        var aggregate = new AccountAggregate(mockService);
+
+        aggregate.addPersonalResourceGroup("rg-a", "A");
+        aggregate.addPersonalResourceGroup("rg-b", "B");
+
+        when(mockService.getPersonalResourceGroupByShortName("rg-a")).thenReturn(null);
+        when(mockService.getPersonalResourceGroupByShortName("rg-b")).thenReturn(null);
+
+        when(mockService.upsertPersonalResourceGroup("rg-a", "A")).thenReturn(mock(PersonalResourceGroupResponse.class));
+        when(mockService.upsertPersonalResourceGroup("rg-b", "B")).thenReturn(mock(PersonalResourceGroupResponse.class));
+
+        aggregate.createOrUpdate();
+
+        verify(mockService, times(1)).getPersonalResourceGroupByShortName("rg-a");
+        verify(mockService, times(1)).getPersonalResourceGroupByShortName("rg-b");
+        verify(mockService, times(1)).upsertPersonalResourceGroup("rg-a", "A");
+        verify(mockService, times(1)).upsertPersonalResourceGroup("rg-b", "B");
+        verifyNoMoreInteractions(mockService);
+    }
+
+    @Test
+    void propagatesException_when_ServiceGetFails() throws InstantiatorException {
+        var mockService = mock(com.yanchware.fractal.sdk.domain.accounts.service.RestAccountsService.class);
+        var aggregate = new AccountAggregate(mockService);
+
+        var shortName = "rg-error";
+        aggregate.addPersonalResourceGroup(shortName, "X");
+
+        when(mockService.getPersonalResourceGroupByShortName(eq(shortName)))
+                .thenThrow(new InstantiatorException("boom"));
+
+        assertThatThrownBy(aggregate::createOrUpdate)
+                .isInstanceOf(InstantiatorException.class)
+                .hasMessageContaining("boom");
     }
 }
