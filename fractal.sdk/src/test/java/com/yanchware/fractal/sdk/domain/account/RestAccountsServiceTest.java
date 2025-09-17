@@ -54,6 +54,69 @@ class RestAccountsServiceTest {
     }
 
     @Test
+    void upsertPersonalResourceGroup_sendsDisplayNameInBody() throws Exception {
+        // Given
+        var urlPattern = urlPathMatching("/accounts/accounts/resourcegroups/" + SHORT_NAME);
+        var accountId = UUID.randomUUID().toString();
+        stubFor(post(urlPattern)
+                .withRequestBody(matchingJsonPath("$.DisplayName", equalTo(DISPLAY_NAME)))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody("""
+                                {"Id":"%s/%s/%s","DisplayName":"%s","Status":"%s"}
+                                """.formatted(ResourceGroupType.PERSONAL, accountId, SHORT_NAME, DISPLAY_NAME, EntityStatus.ACTIVE))));
+
+        // When
+        var resp = accountsService.upsertPersonalResourceGroup(SHORT_NAME, DISPLAY_NAME);
+
+        // Then
+        verify(postRequestedFor(urlPattern).withRequestBody(matchingJsonPath("$.DisplayName", equalTo(DISPLAY_NAME))));
+        assertThat(resp).isNotNull();
+        assertThat(resp.DisplayName()).isEqualTo(DISPLAY_NAME);
+    }
+
+    @Test
+    void upsertPersonalResourceGroup_throwsInstantiatorException_on500() {
+        // Given
+        var urlPattern = urlPathMatching("/accounts/accounts/resourcegroups/" + SHORT_NAME);
+
+        stubFor(post(urlPattern)
+                .willReturn(aResponse()
+                        .withStatus(500)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody("{\"message\":\"Internal Server Error\"}")));
+
+        // When / Then
+        org.assertj.core.api.Assertions.assertThatThrownBy(() ->
+                accountsService.upsertPersonalResourceGroup(SHORT_NAME, DISPLAY_NAME)
+        ).isInstanceOf(com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException.class);
+    }
+
+    @Test
+    void getPersonalResourceGroupByShortName_returnsResponse_on200() throws Exception {
+        // Given
+        var accountId = java.util.UUID.randomUUID();
+        var urlPattern = urlPathMatching("/accounts/accounts/resourcegroups/" + SHORT_NAME);
+
+        stubFor(get(urlPattern)
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody("""
+                                    {"Id":"%s/%s/%s","DisplayName":"%s","Status":"%s"}
+                                """.formatted(ResourceGroupType.PERSONAL, accountId, SHORT_NAME, DISPLAY_NAME, EntityStatus.ACTIVE))));
+
+        // When
+        var resp = accountsService.getPersonalResourceGroupByShortName(SHORT_NAME);
+
+        // Then
+        verify(1, getRequestedFor(urlPattern));
+        assertThat(resp).isNotNull();
+        assertThat(resp.DisplayName()).isEqualTo(DISPLAY_NAME);
+    }
+
+    @Test
     void getPersonalResourceGroupByShortName_throwsInstantiatorException_on500() {
         // Given
         var urlPattern = urlPathMatching("/accounts/accounts/resourcegroups/" + SHORT_NAME);
@@ -110,6 +173,49 @@ class RestAccountsServiceTest {
     }
 
     @Test
+    void upsertOrganizationalResourceGroup_sendsDisplayNameInBody() throws Exception {
+        // Given
+        var organizationId = java.util.UUID.randomUUID();
+        var urlPattern = urlPathMatching("/accounts/organizations/" + organizationId + "/resourcegroups/" + SHORT_NAME);
+
+        stubFor(post(urlPattern)
+                .withRequestBody(matchingJsonPath("$.DisplayName", equalTo(DISPLAY_NAME)))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody("""
+                                {"Id":"%s/%s/%s","DisplayName":"%s","Status":"%s"}
+                                """.formatted(ResourceGroupType.ORGANIZATIONAL, organizationId, SHORT_NAME, DISPLAY_NAME, EntityStatus.ACTIVE))));
+
+
+        // When
+        var resp = accountsService.upsertOrganizationalResourceGroup(organizationId, SHORT_NAME, DISPLAY_NAME);
+
+        // Then
+        verify(postRequestedFor(urlPattern).withRequestBody(matchingJsonPath("$.DisplayName", equalTo(DISPLAY_NAME))));
+        assertThat(resp).isNotNull();
+        assertThat(resp.DisplayName()).isEqualTo(DISPLAY_NAME);
+    }
+
+    @Test
+    void upsertOrganizationalResourceGroup_throwsInstantiatorException_on500() {
+        // Given
+        var organizationId = java.util.UUID.randomUUID();
+        var urlPattern = urlPathMatching("/accounts/organizations/" + organizationId + "/resourcegroups/" + SHORT_NAME);
+
+        stubFor(post(urlPattern)
+                .willReturn(aResponse()
+                        .withStatus(500)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody("{\"message\":\"Internal Server Error\"}")));
+
+        // When / Then
+        org.assertj.core.api.Assertions.assertThatThrownBy(() ->
+                accountsService.upsertOrganizationalResourceGroup(organizationId, SHORT_NAME, DISPLAY_NAME)
+        ).isInstanceOf(com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException.class);
+    }
+
+    @Test
     void getOrganizationalResourceGroupByShortName_returnsResponse_on200() throws Exception {
         // Given
         var organizationId = java.util.UUID.randomUUID();
@@ -120,8 +226,8 @@ class RestAccountsServiceTest {
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
                         .withBody("""
-                                  {"Id":"Organizational/%s/%s","DisplayName":"%s","Status":"Active"}
-                                """.formatted(organizationId, SHORT_NAME, DISPLAY_NAME))));
+                                  {"Id":"%s/%s/%s","DisplayName":"%s","Status":"%s"}
+                                """.formatted(ResourceGroupType.ORGANIZATIONAL, organizationId, SHORT_NAME, DISPLAY_NAME, EntityStatus.ACTIVE))));
 
         // When
         var resp = accountsService.getOrganizationalResourceGroupByShortName(organizationId, SHORT_NAME);
@@ -130,22 +236,6 @@ class RestAccountsServiceTest {
         verify(1, getRequestedFor(urlPattern));
         assertThat(resp).isNotNull();
         assertThat(resp.DisplayName()).isEqualTo(DISPLAY_NAME);
-    }
-
-    @Test
-    void getOrganizationalResourceGroupByShortName_returnsNull_on404() throws Exception {
-        // Given
-        var organizationId = java.util.UUID.randomUUID();
-        var urlPattern = urlPathMatching("/accounts/organizations/" + organizationId + "/resourcegroups/" + SHORT_NAME);
-
-        stubFor(get(urlPattern).willReturn(aResponse().withStatus(404)));
-
-        // When
-        var resp = accountsService.getOrganizationalResourceGroupByShortName(organizationId, SHORT_NAME);
-
-        // Then
-        verify(1, getRequestedFor(urlPattern));
-        assertThat(resp).isNull();
     }
 
     @Test
@@ -166,5 +256,21 @@ class RestAccountsServiceTest {
         ).isInstanceOf(com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException.class);
 
         verify(3, getRequestedFor(urlPattern));
+    }
+
+    @Test
+    void getOrganizationalResourceGroupByShortName_returnsNull_on404() throws Exception {
+        // Given
+        var organizationId = java.util.UUID.randomUUID();
+        var urlPattern = urlPathMatching("/accounts/organizations/" + organizationId + "/resourcegroups/" + SHORT_NAME);
+
+        stubFor(get(urlPattern).willReturn(aResponse().withStatus(404)));
+
+        // When
+        var resp = accountsService.getOrganizationalResourceGroupByShortName(organizationId, SHORT_NAME);
+
+        // Then
+        verify(1, getRequestedFor(urlPattern));
+        assertThat(resp).isNull();
     }
 }
