@@ -12,9 +12,11 @@ import com.yanchware.fractal.sdk.domain.values.ResourceGroupType;
 import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
 import io.github.resilience4j.retry.RetryRegistry;
 import org.junit.jupiter.api.Test;
+
 import java.net.http.HttpClient;
 import java.util.List;
 import java.util.UUID;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -26,7 +28,7 @@ public class AccountFactoryTest {
     private static final String DISPLAY_NAME = "RG One";
 
     @Test
-    void builder_buildsAggregate_and_stagesPersonalResourceGroup() throws Exception {
+    void builder_buildsAggregate_and_stagesPersonalResourceGroup() {
         var httpClient = HttpClient.newHttpClient();
         var sdkConfig = new LocalSdkConfiguration(BASE_URL);
         var retry = RetryRegistry.ofDefaults();

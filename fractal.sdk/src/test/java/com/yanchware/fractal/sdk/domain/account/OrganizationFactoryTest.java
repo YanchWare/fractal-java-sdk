@@ -9,8 +9,10 @@ import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.utils.LocalSdkConfiguration;
 import io.github.resilience4j.retry.RetryRegistry;
 import org.junit.jupiter.api.Test;
+
 import java.net.http.HttpClient;
 import java.util.UUID;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -22,7 +24,7 @@ class OrganizationFactoryTest {
     private static final String DISPLAY_NAME = "RG One";
 
     @Test
-    void builder_buildsAggregate_and_stagesOrganizationalResourceGroup() throws Exception {
+    void builder_buildsAggregate_and_stagesOrganizationalResourceGroup() {
         var httpClient = HttpClient.newHttpClient();
         var sdkConfig = new LocalSdkConfiguration(BASE_URL);
         var retry = RetryRegistry.ofDefaults();
