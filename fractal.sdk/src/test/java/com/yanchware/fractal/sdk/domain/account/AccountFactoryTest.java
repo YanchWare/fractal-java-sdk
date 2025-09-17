@@ -10,6 +10,9 @@ import java.net.http.HttpClient;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class AccountFactoryTest {
+    private static final String SHORT_NAME= "rg-1";
+    private  static final String DISPLAY_NAME = "RG One";
+
     @Test
     void builder_buildsAggregate_and_stagesPersonalResourceGroup() throws Exception {
         var httpClient = HttpClient.newHttpClient();
@@ -18,10 +21,12 @@ public class AccountFactoryTest {
 
         var factory = new AccountsFactory(httpClient, sdkConfig, retry);
         var aggregate = factory.builder()
-                .withResourceGroup("rg-1", "RG One")
+                .withResourceGroup(SHORT_NAME, DISPLAY_NAME)
                 .build();
 
         assertThat(aggregate).isNotNull();
 
     }
+
+
 }
