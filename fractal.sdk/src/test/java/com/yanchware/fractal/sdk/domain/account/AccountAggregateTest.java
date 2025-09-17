@@ -30,7 +30,7 @@ class AccountAggregateTest {
 
         aggregate.addPersonalResourceGroup(SHORT_NAME, DISPLAY_NAME);
 
-        when(mockService.getByShortName(eq(SHORT_NAME))).thenReturn(null);
+        when(mockService.getPersonalResourceGroupByShortName(eq(SHORT_NAME))).thenReturn(null);
         var createdResponse = new PersonalResourceGroupResponse(
                 ResourceGroupId.fromString(String.format("Personal/%s/%s", UUID.randomUUID(), SHORT_NAME)),
                 DISPLAY_NAME,
@@ -47,7 +47,7 @@ class AccountAggregateTest {
         aggregate.createOrUpdate();
 
         // Assert
-        verify(mockService, times(1)).getByShortName(eq(SHORT_NAME));
+        verify(mockService, times(1)).getPersonalResourceGroupByShortName(eq(SHORT_NAME));
         verify(mockService, times(1)).upsertPersonalResourceGroup(eq(SHORT_NAME), eq(DISPLAY_NAME));
         verifyNoMoreInteractions(mockService);
     }
@@ -72,11 +72,11 @@ class AccountAggregateTest {
                 List.of()
         );
 
-        when(mockService.getByShortName(eq(shortName))).thenReturn(existingResponse);
+        when(mockService.getPersonalResourceGroupByShortName(eq(shortName))).thenReturn(existingResponse);
 
         aggregate.createOrUpdate();
 
-        verify(mockService, times(1)).getByShortName(eq(shortName));
+        verify(mockService, times(1)).getPersonalResourceGroupByShortName(eq(shortName));
         verify(mockService, never()).upsertPersonalResourceGroup(anyString(), anyString());
         verifyNoMoreInteractions(mockService);
     }

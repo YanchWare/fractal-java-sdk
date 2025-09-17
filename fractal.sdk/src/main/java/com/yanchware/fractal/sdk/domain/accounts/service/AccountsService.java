@@ -7,10 +7,11 @@ import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import java.util.UUID;
 
 public interface AccountsService {
-     OrganizationalResourceGroupResponse upsertOrganizationalResourceGroup(
-     UUID organizationId,
-     String shortName) throws InstantiatorException;
+    OrganizationalResourceGroupResponse upsertOrganizationalResourceGroup(UUID organizationId, String shortName, String displayName) throws InstantiatorException;
+
+    OrganizationalResourceGroupResponse getOrganizationalResourceGroupByShortName(UUID organizationId, String shortName) throws InstantiatorException;
 
     PersonalResourceGroupResponse upsertPersonalResourceGroup(String shortName, String displayName) throws InstantiatorException;
-    PersonalResourceGroupResponse getByShortName(String shortName) throws InstantiatorException;
+
+    PersonalResourceGroupResponse getPersonalResourceGroupByShortName(String shortName) throws InstantiatorException;
 }

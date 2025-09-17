@@ -56,7 +56,7 @@ public class AccountAggregate {
             var shortName = rg.shortName();
             var displayName = rg.displayName();
 
-            PersonalResourceGroupResponse existing = service.getByShortName(shortName);
+            PersonalResourceGroupResponse existing = service.getPersonalResourceGroupByShortName(shortName);
 
             if (existing == null) {
                 log.info("Creating Personal Resource Group [shortName: '{}', displayName: '{}']", shortName, displayName);

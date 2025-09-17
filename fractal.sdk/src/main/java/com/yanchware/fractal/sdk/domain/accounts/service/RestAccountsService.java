@@ -23,19 +23,44 @@ public class RestAccountsService extends Service implements AccountsService {
     }
 
     @Override
-    public OrganizationalResourceGroupResponse upsertOrganizationalResourceGroup(UUID organizationId, String shortName) throws InstantiatorException {
-        return null;
+    public OrganizationalResourceGroupResponse upsertOrganizationalResourceGroup(UUID organizationId, String shortName, String displayName) throws InstantiatorException {
+        return executeRequestWithRetries(
+                "upsertOrganizationalResourceGroup",
+                shortName,
+                client,
+                retryRegistry,
+                HttpUtils.buildPostRequest(
+                        getOrganizationalResourceGroupsUri(organizationId,shortName),
+                        sdkConfiguration,
+                        serializeSafely(new UpsertPersonalResourceGroupRequest(displayName, null, null))),
+                new int[]{200},
+                OrganizationalResourceGroupResponse.class);
     }
+
+    @Override
+    public OrganizationalResourceGroupResponse getOrganizationalResourceGroupByShortName(UUID organizationId, String shortName) throws InstantiatorException {
+        return executeRequestWithRetries(
+                "getOrganizationalResourceGroupByShortName",
+                organizationId + "/" + shortName,
+                client,
+                retryRegistry,
+                HttpUtils.buildGetRequest(
+                        getOrganizationalResourceGroupsUri(organizationId, shortName),
+                        sdkConfiguration),
+                new int[]{200},
+                OrganizationalResourceGroupResponse.class);
+    }
+
 
     @Override
     public PersonalResourceGroupResponse upsertPersonalResourceGroup(String shortName, String displayName) throws InstantiatorException {
         return executeRequestWithRetries(
                 "upsertPersonalResourceGroup",
-                "upsertPersonalResourceGroup",
+                shortName,
                 client,
                 retryRegistry,
                 HttpUtils.buildPostRequest(
-                        getResourceGroupsUri(shortName),
+                        getPersonalResourceGroupsUri(shortName),
                         sdkConfiguration,
                         serializeSafely(new UpsertPersonalResourceGroupRequest(displayName, null, null))),
                 new int[]{200},
@@ -43,18 +68,35 @@ public class RestAccountsService extends Service implements AccountsService {
     }
 
     @Override
-    public PersonalResourceGroupResponse getByShortName(String shortName) throws InstantiatorException {
+    public PersonalResourceGroupResponse getPersonalResourceGroupByShortName(String shortName) throws InstantiatorException {
         return executeRequestWithRetries(
-                "upsertPersonalResourceGroup",
-                "upsertPersonalResourceGroup",
+                "getPersonalResourceGroupByShortName",
+                shortName,
                 client,
                 retryRegistry,
                 HttpUtils.buildGetRequest(
-                        getResourceGroupsUri(shortName),
+                        getPersonalResourceGroupsUri(shortName),
                         sdkConfiguration),
                 new int[]{200},
                 PersonalResourceGroupResponse.class);
     }
+
+    private URI getPersonalResourceGroupsUri(String shortName) {
+        var path = String.format("%s/%s/",
+                sdkConfiguration.getAccountsEndpoint(),
+                "accounts/resourcegroups"); // or your existing segment if already correct
+        return URI.create(path + shortName);
+    }
+
+    private URI getOrganizationalResourceGroupsUri(UUID organizationId, String shortName) {
+        var base = String.format("%s/%s/%s/%s/",
+                sdkConfiguration.getAccountsEndpoint(),
+                "organizations",
+                organizationId,
+                "resourcegroups");
+        return URI.create(base + shortName);
+    }
+
 
     private String serializeSafely(Object command) throws InstantiatorException {
         try {
@@ -62,12 +104,5 @@ public class RestAccountsService extends Service implements AccountsService {
         } catch (JsonProcessingException e) {
             throw new InstantiatorException("Error serializing command because of JsonProcessing error", e);
         }
-    }
-
-    private URI getResourceGroupsUri(String shortName) {
-        var path = String.format("%s/%s/",
-                sdkConfiguration.getAccountsEndpoint(),
-                "resourceGroups");
-        return URI.create(path + shortName);
     }
 }
