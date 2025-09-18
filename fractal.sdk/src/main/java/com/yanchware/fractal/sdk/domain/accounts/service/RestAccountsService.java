@@ -84,7 +84,7 @@ public class RestAccountsService extends Service implements AccountsService {
     private URI getPersonalResourceGroupsUri(String shortName) {
         var path = String.format("%s/%s/",
                 sdkConfiguration.getAccountsEndpoint(),
-                "accounts/resourcegroups"); // or your existing segment if already correct
+                "resourcegroups"); // or your existing segment if already correct
         return URI.create(path + shortName);
     }
 
