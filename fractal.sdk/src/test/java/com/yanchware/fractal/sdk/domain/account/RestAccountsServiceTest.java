@@ -35,7 +35,7 @@ class RestAccountsServiceTest {
     @Test
     void upsertPersonalResourceGroup_postsToCorrectUrl_andReturnsResponse() throws Exception {
         // Given
-        var urlPattern = urlPathMatching("/accounts/accounts/resourcegroups/" + SHORT_NAME);
+        var urlPattern = urlPathMatching("/accounts/resourcegroups/" + SHORT_NAME);
         var accountId = UUID.randomUUID().toString();
         stubFor(post(urlPattern)
                 .willReturn(aResponse()
@@ -56,7 +56,7 @@ class RestAccountsServiceTest {
     @Test
     void upsertPersonalResourceGroup_sendsDisplayNameInBody() throws Exception {
         // Given
-        var urlPattern = urlPathMatching("/accounts/accounts/resourcegroups/" + SHORT_NAME);
+        var urlPattern = urlPathMatching("/accounts/resourcegroups/" + SHORT_NAME);
         var accountId = UUID.randomUUID().toString();
         stubFor(post(urlPattern)
                 .withRequestBody(matchingJsonPath("$.DisplayName", equalTo(DISPLAY_NAME)))
@@ -79,7 +79,7 @@ class RestAccountsServiceTest {
     @Test
     void upsertPersonalResourceGroup_throwsInstantiatorException_on500() {
         // Given
-        var urlPattern = urlPathMatching("/accounts/accounts/resourcegroups/" + SHORT_NAME);
+        var urlPattern = urlPathMatching("/accounts/resourcegroups/" + SHORT_NAME);
 
         stubFor(post(urlPattern)
                 .willReturn(aResponse()
@@ -97,7 +97,7 @@ class RestAccountsServiceTest {
     void getPersonalResourceGroupByShortName_returnsResponse_on200() throws Exception {
         // Given
         var accountId = java.util.UUID.randomUUID();
-        var urlPattern = urlPathMatching("/accounts/accounts/resourcegroups/" + SHORT_NAME);
+        var urlPattern = urlPathMatching("/accounts/resourcegroups/" + SHORT_NAME);
 
         stubFor(get(urlPattern)
                 .willReturn(aResponse()
@@ -119,7 +119,7 @@ class RestAccountsServiceTest {
     @Test
     void getPersonalResourceGroupByShortName_throwsInstantiatorException_on500() {
         // Given
-        var urlPattern = urlPathMatching("/accounts/accounts/resourcegroups/" + SHORT_NAME);
+        var urlPattern = urlPathMatching("/accounts/resourcegroups/" + SHORT_NAME);
 
         stubFor(get(urlPattern)
                 .willReturn(aResponse()
@@ -137,7 +137,7 @@ class RestAccountsServiceTest {
     @Test
     void getPersonalResourceGroupByShortName_returnsNull_on404() throws Exception {
         // Given
-        var urlPattern = urlPathMatching("/accounts/accounts/resourcegroups/" + SHORT_NAME);
+        var urlPattern = urlPathMatching("/accounts/resourcegroups/" + SHORT_NAME);
 
         stubFor(get(urlPattern).willReturn(aResponse().withStatus(404)));
 

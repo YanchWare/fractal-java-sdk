@@ -68,7 +68,7 @@ public class AutomatonTest extends TestWithFixture {
         Automaton.initializeAutomaton(httpClient, sdkConfiguration);
         var sut = Automaton.getInstance();
 
-        var getUrl = urlPathMatching("/accounts/accounts/resourcegroups/" + SHORT_NAME);
+        var getUrl = urlPathMatching("/accounts/resourcegroups/" + SHORT_NAME);
         stubFor(get(getUrl).willReturn(aResponse().withStatus(404)));
 
         stubFor(post(getUrl)
@@ -129,7 +129,7 @@ public class AutomatonTest extends TestWithFixture {
         Automaton.initializeAutomaton(httpClient, sdkConfiguration);
         var sut = Automaton.getInstance();
 
-        var getUrl = urlPathMatching("/accounts/accounts/resourcegroups/" + SHORT_NAME);
+        var getUrl = urlPathMatching("/accounts/resourcegroups/" + SHORT_NAME);
 
         // Existing RG → GET returns 200, so no POST should be issued
         stubFor(get(getUrl)
