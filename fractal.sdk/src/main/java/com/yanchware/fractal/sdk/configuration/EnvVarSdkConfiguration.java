@@ -42,7 +42,7 @@ public class EnvVarSdkConfiguration implements SdkConfiguration {
     DEFAULT_LIVESYSTEM_ENDPOINT = new URI("https://api.fractal.cloud/livesystems");
     DEFAULT_BLUEPRINT_ENDPOINT = new URI("https://api.fractal.cloud/blueprints");
     DEFAULT_ENVIRONMENTS_ENDPOINT = new URI("https://api.fractal.cloud/environments");
-    DEFAULT_ACCOUNTS_ENDPOINT = new URI("https://api.fractal.cloud/accounts");
+    DEFAULT_ACCOUNTS_ENDPOINT = new URI("http://localhost:5001/accounts");
   }
 
   /**
