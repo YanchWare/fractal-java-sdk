@@ -10,7 +10,7 @@ import java.util.stream.Stream;
  * Represents a configurable operational service window, which defines a schedule of active time periods
  * based on rules, blackouts, and optional exclusions. These windows are defined within a specified time zone
  * and applicable for determining whether a given point in time is allowed or excluded.
- * &nbsp;
+ * <p/>
  * Instances of this class are immutable and can be created via the static {@code builder} method.
  */
 public class OperationalServiceWindow {
@@ -62,7 +62,7 @@ public class OperationalServiceWindow {
 
   /**
    * Determines if the given instant falls within any of the currently defined operational service windows.
-   * &nbsp;
+   * <p/>
    * The method evaluates whether the provided instant, when converted to the defined time zone,
    * is within any current active window.
    *
@@ -77,7 +77,7 @@ public class OperationalServiceWindow {
 
   /**
    * Determines the current operational service window for the provided instant.
-   * &nbsp;
+   * <p/>
    * This method converts the input {@code Instant} to the configured time zone
    * and identifies the {@code Window} in which the given time falls, if any.
    * If no window is active at the given instant, an empty {@code Optional} is returned.
@@ -93,7 +93,7 @@ public class OperationalServiceWindow {
 
   /**
    * Determines the current operational service window for the provided time.
-   * &nbsp;
+   * <p/>
    * The method evaluates whether the given {@code ZonedDateTime} is within the active bounds
    * of the operational service window and not excluded by additional conditions. It searches
    * for windows that overlap with the specified time, returning the first matching window
@@ -114,7 +114,7 @@ public class OperationalServiceWindow {
 
   /**
    * Searches for the next available operational service window starting after the given instant and within the specified search horizon.
-   * &nbsp;
+   * <p/>
    * The search is conducted in the configured time zone of the service window, considering any applicable blackouts,
    * active periods, and exclusions defined in the rules of the operational service window.
    *
