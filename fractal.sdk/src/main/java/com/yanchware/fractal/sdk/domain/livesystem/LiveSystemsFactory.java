@@ -3,6 +3,7 @@ package com.yanchware.fractal.sdk.domain.livesystem;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
 import com.yanchware.fractal.sdk.domain.blueprint.FractalIdValue;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentIdValue;
+import com.yanchware.fractal.sdk.domain.livesystem.operationalservicewindow.OperationalServiceWindow;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import com.yanchware.fractal.sdk.utils.CollectionUtils;
 import io.github.resilience4j.retry.RetryRegistry;
@@ -54,7 +55,15 @@ public class LiveSystemsFactory {
             return builder;
         }
 
-        public LiveSystemBuilder withFractalId(FractalIdValue fractalId) {
+      public LiveSystemBuilder withServiceWindow(OperationalServiceWindow serviceWindow) {
+        if(serviceWindow == null) {
+          throw new IllegalArgumentException("Service Window cannot be null");
+        }
+        liveSystem.setOperationalServiceWindow(serviceWindow);
+        return builder;
+      }
+
+      public LiveSystemBuilder withFractalId(FractalIdValue fractalId) {
             if(fractalId == null) {
                 throw new IllegalArgumentException("Fractal id cannot be null or empty");
             }

@@ -9,6 +9,7 @@ import com.yanchware.fractal.sdk.domain.environment.service.RestEnvironmentServi
 import com.yanchware.fractal.sdk.domain.exceptions.EnvironmentException;
 import com.yanchware.fractal.sdk.domain.exceptions.EnvironmentNotFoundException;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
+import com.yanchware.fractal.sdk.domain.livesystem.operationalservicewindow.OperationalServiceWindow;
 import com.yanchware.fractal.sdk.domain.livesystem.service.LiveSystemService;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.*;
 import com.yanchware.fractal.sdk.utils.ReflectionUtils;
@@ -52,6 +53,8 @@ public class LiveSystemAggregate implements Validatable {
     private Collection<LiveSystemComponent> components;
     @Getter
     private ProviderType provider;
+    @Getter
+    private OperationalServiceWindow operationalServiceWindow;
 
     protected LiveSystemAggregate(
             HttpClient client,
