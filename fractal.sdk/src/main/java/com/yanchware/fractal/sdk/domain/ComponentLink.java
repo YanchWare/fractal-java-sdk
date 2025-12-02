@@ -76,8 +76,8 @@ public class ComponentLink implements Validatable {
 
       if (!errors.isEmpty()) {
         throw new IllegalArgumentException(String.format(
-            "ComponentLink validation failed. Errors: %s",
-            Arrays.toString(errors.toArray())));
+          "ComponentLink validation failed. Errors: %s",
+          Arrays.toString(errors.toArray())));
       }
 
       return componentLink;

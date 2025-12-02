@@ -6,13 +6,15 @@ import java.util.Date;
 import java.util.UUID;
 
 public record SecretResponse(
-    UUID id,
-    EnvironmentIdDto environmentId,
-    String name,
-    String value,
-    Date createdAt,
-    String createdBy,
-    Date updatedAt,
-    String updatedBy){ }
+  UUID id,
+  EnvironmentIdDto environmentId,
+  String name,
+  String value,
+  Date createdAt,
+  String createdBy,
+  Date updatedAt,
+  String updatedBy)
+{
+}
 
 

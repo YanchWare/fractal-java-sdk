@@ -25,8 +25,10 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
 public class CaaSElasticDataStore extends CaaSSearchImpl implements LiveSystemComponent {
-  private final static String ELASTIC_INSTANCES_NEGATIVE_OR_ZERO = "[CaaSElasticDataStore Validation] Elastic Instances defined was either 0 or negative and it needs to be greater than 0";
-  private final static String VERSION_IS_BLANK = "[CaaSElasticDataStore Validation] Elastic Version has not been defined and it is required";
+  private final static String ELASTIC_INSTANCES_NEGATIVE_OR_ZERO = "[CaaSElasticDataStore Validation] Elastic " +
+    "Instances defined was either 0 or negative and it needs to be greater than 0";
+  private final static String VERSION_IS_BLANK = "[CaaSElasticDataStore Validation] Elastic Version has not been " +
+    "defined and it is required";
 
   private boolean isKibanaRequired;
   private String elasticVersion;
@@ -105,7 +107,8 @@ public class CaaSElasticDataStore extends CaaSSearchImpl implements LiveSystemCo
     /**
      * Storage that will be used for PersistentVolumeClaim
      * <p>
-     * For more details check <a href="https://www.elastic.co/guide/en/cloud-on-k8s/master/k8s-volume-claim-templates.html">Elastic documentation</a>
+     * For more details check
+     * <a href="https://www.elastic.co/guide/en/cloud-on-k8s/master/k8s-volume-claim-templates.html">Elastic documentation</a>
      *
      * @param storage
      */
@@ -119,7 +122,8 @@ public class CaaSElasticDataStore extends CaaSSearchImpl implements LiveSystemCo
      * <p>
      * Default: 'standard'
      * <p>
-     * For more details check <a href="https://www.elastic.co/guide/en/cloud-on-k8s/master/k8s-volume-claim-templates.html">Elastic documentation</a>
+     * For more details check
+     * <a href="https://www.elastic.co/guide/en/cloud-on-k8s/master/k8s-volume-claim-templates.html">Elastic documentation</a>
      *
      * @param storageClassName
      */
@@ -132,7 +136,8 @@ public class CaaSElasticDataStore extends CaaSSearchImpl implements LiveSystemCo
      * Amount of memory, in gigabytes, that will be used for requests and limits
      * Default: '8'
      * <p>
-     * For more details check <a href="https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-managing-compute-resources.html#k8s-compute-resources-elasticsearch">Elastic documentation</a>
+     * For more details check
+     * <a href="https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-managing-compute-resources.html#k8s-compute-resources-elasticsearch">Elastic documentation</a>
      *
      * @param memory
      */
@@ -145,7 +150,8 @@ public class CaaSElasticDataStore extends CaaSSearchImpl implements LiveSystemCo
      * CPU resources that will be used for requests and limits
      * Default: '8'
      * <p>
-     * For more details check <a href="https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-managing-compute-resources.html#k8s-compute-resources-elasticsearch">Elastic documentation</a>
+     * For more details check
+     * <a href="https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-managing-compute-resources.html#k8s-compute-resources-elasticsearch">Elastic documentation</a>
      *
      * @param cpu
      */

@@ -38,10 +38,10 @@ public class AzureIpRule {
       instance.setAction(action);
       return builder;
     }
-    
+
     /**
      * <pre>
-     * Specifies the IP or IP range in CIDR format. 
+     * Specifies the IP or IP range in CIDR format.
      * Only IPV4 address is allowed.
      * </pre>
      */

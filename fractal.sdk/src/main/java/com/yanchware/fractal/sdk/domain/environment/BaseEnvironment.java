@@ -2,12 +2,12 @@ package com.yanchware.fractal.sdk.domain.environment;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.domain.Validatable;
-import com.yanchware.fractal.sdk.domain.blueprint.iaas.DnsZone;
 import com.yanchware.fractal.sdk.domain.environment.aws.AwsCloudAgent;
 import com.yanchware.fractal.sdk.domain.environment.azure.AzureCloudAgent;
 import com.yanchware.fractal.sdk.domain.environment.gcp.GcpCloudAgent;
 import com.yanchware.fractal.sdk.domain.environment.hetzner.HetznerCloudAgent;
 import com.yanchware.fractal.sdk.domain.environment.oci.OciCloudAgent;
+import com.yanchware.fractal.sdk.domain.fractal.iaas.DnsZone;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.aws.AwsRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.gcp.GcpRegion;
@@ -22,7 +22,7 @@ import lombok.Setter;
 
 import java.util.*;
 
-import static com.yanchware.fractal.sdk.domain.blueprint.iaas.DnsZone.DNS_ZONES_PARAM_KEY;
+import static com.yanchware.fractal.sdk.domain.fractal.iaas.DnsZone.DNS_ZONES_PARAM_KEY;
 
 @Getter
 @Setter
@@ -30,11 +30,15 @@ public abstract class BaseEnvironment implements Environment, Validatable {
   private static final String CLOUD_AGENTS_PARAM_KEY = "agents";
   private static final String TAGS_PARAM_KEY = "tags";
   protected final static String SHORT_NAME_IS_NULL = "Environment ShortName has not been defined and it is required";
-  private final static String RESOURCE_GROUPS_IS_EMPTY = "Environment ResourceGroups has not been defined and it is required";
+  private final static String RESOURCE_GROUPS_IS_EMPTY = "Environment ResourceGroups has not been defined and it is " +
+    "required";
   private final static String SECRET_IS_NULL = "[Secret Validation] The secret cannot be null";
-  private final static String DEFAULT_CI_CD_PROFILE_IS_NULL = "[CI/CD Profile Validation] The default CI/CD profile cannot be null";
-  private final static String DEFAULT_CI_CD_PROFILE_IS_MISSING = "[CI/CD Profile Validation] A default CI/CD profile must be set if additional CI/CD profiles are defined";
-  private final static String CI_CD_PROFILE_SHORT_NAME_NOT_UNIQUE = "[CI/CD Profile Validation] CI/CD profile short names must be unique, including the default profile";
+  private final static String DEFAULT_CI_CD_PROFILE_IS_NULL = "[CI/CD Profile Validation] The default CI/CD profile " +
+    "cannot be null";
+  private final static String DEFAULT_CI_CD_PROFILE_IS_MISSING = "[CI/CD Profile Validation] A default CI/CD profile " +
+    "must be set if additional CI/CD profiles are defined";
+  private final static String CI_CD_PROFILE_SHORT_NAME_NOT_UNIQUE = "[CI/CD Profile Validation] CI/CD profile short " +
+    "names must be unique, including the default profile";
   private final static String SECRET_SHORT_NAMES_NOT_UNIQUE = "[Secret Validation] Secret short names must be unique";
 
   private final Map<String, Object> parameters;
@@ -86,12 +90,12 @@ public abstract class BaseEnvironment implements Environment, Validatable {
     this.tags.putAll(tags);
   }
 
-  public void addDnsZones(Collection<DnsZone> dnsZones){
+  public void addDnsZones(Collection<DnsZone> dnsZones) {
     try {
       parameters.put(DNS_ZONES_PARAM_KEY,
-          SerializationUtils.deserialize(
-              SerializationUtils.serialize(dnsZones),
-              DnsZone[].class));
+        SerializationUtils.deserialize(
+          SerializationUtils.serialize(dnsZones),
+          DnsZone[].class));
 
     } catch (JsonProcessingException e) {
       throw new RuntimeException(e);
@@ -123,9 +127,8 @@ public abstract class BaseEnvironment implements Environment, Validatable {
     registerCloudAgent(agent);
   }
 
-  private void registerCloudAgent(CloudAgentEntity cloudAgent){
-    if (cloudAgentByProviderType.containsKey(cloudAgent.getProvider()))
-    {
+  private void registerCloudAgent(CloudAgentEntity cloudAgent) {
+    if (cloudAgentByProviderType.containsKey(cloudAgent.getProvider())) {
       if (!cloudAgent.equals(cloudAgentByProviderType.get(cloudAgent.getProvider()))) {
         throw new IllegalArgumentException(
           String.format("A Cloud agent for Provider %s has already been defined", cloudAgent.getProvider()));
@@ -136,7 +139,8 @@ public abstract class BaseEnvironment implements Environment, Validatable {
 
     cloudAgentByProviderType.put(cloudAgent.getProvider(), cloudAgent);
 
-    Collection<Map<String, Object>> existingAgents = (Collection<Map<String, Object>>) getParameters().get(CLOUD_AGENTS_PARAM_KEY);
+    Collection<Map<String, Object>> existingAgents =
+      (Collection<Map<String, Object>>) getParameters().get(CLOUD_AGENTS_PARAM_KEY);
     if (existingAgents == null) {
       existingAgents = new ArrayList<>();
       getParameters().put(CLOUD_AGENTS_PARAM_KEY, existingAgents);
@@ -145,7 +149,7 @@ public abstract class BaseEnvironment implements Environment, Validatable {
     existingAgents.add(cloudAgent.getConfigurationForEnvironmentParameters());
   }
 
-  public static abstract class EnvironmentBuilder<T extends BaseEnvironment, B extends EnvironmentBuilder<T, B>>  {
+  public static abstract class EnvironmentBuilder<T extends BaseEnvironment, B extends EnvironmentBuilder<T, B>> {
     protected T environment; // Protected to allow access in subclasses
     protected B builder;
 
@@ -153,9 +157,10 @@ public abstract class BaseEnvironment implements Environment, Validatable {
       environment = createEnvironment();
       builder = getBuilder();
     }
-    
+
 
     protected abstract T createEnvironment();
+
     protected abstract B getBuilder();
 
     public B withName(String name) {
@@ -202,28 +207,26 @@ public abstract class BaseEnvironment implements Environment, Validatable {
 
     /**
      * <pre>
-     * Adds a single secret to the environment. This secret can be referenced by its name in 
+     * Adds a single secret to the environment. This secret can be referenced by its name in
      * custom workload components that require access to sensitive information.</pre>
      *
      * @param secret The secret to add.
-     *
      * @return The builder instance.
      */
     public B withSecret(Secret secret) {
       if (secret == null) {
         throw new IllegalArgumentException(SECRET_IS_NULL);
       }
-      
+
       return withSecrets(List.of(secret));
     }
 
     /**
      * <pre>
-     * Adds a collection of secrets to the environment. These secrets can be referenced by their 
+     * Adds a collection of secrets to the environment. These secrets can be referenced by their
      * names in custom workload components that require access to sensitive information.</pre>
      *
      * @param secrets The collection of secrets to add.
-     *
      * @return The builder instance.
      */
     public B withSecrets(Collection<Secret> secrets) {
@@ -245,7 +248,7 @@ public abstract class BaseEnvironment implements Environment, Validatable {
       if (ciCdProfile == null) {
         throw new IllegalArgumentException(DEFAULT_CI_CD_PROFILE_IS_NULL);
       }
-      
+
       environment.setDefaultCiCdProfile(ciCdProfile);
       return builder;
     }
@@ -280,8 +283,8 @@ public abstract class BaseEnvironment implements Environment, Validatable {
 
       if (!errors.isEmpty()) {
         throw new IllegalArgumentException(String.format(
-            "Environment validation failed. Errors: %s",
-            Arrays.toString(errors.toArray())));
+          "Environment validation failed. Errors: %s",
+          Arrays.toString(errors.toArray())));
       }
 
       return environment;

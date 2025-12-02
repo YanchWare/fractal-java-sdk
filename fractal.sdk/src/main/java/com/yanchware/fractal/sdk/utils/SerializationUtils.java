@@ -19,8 +19,8 @@ public class SerializationUtils {
   private static ObjectMapper objectMapper;
 
   private static final ObjectMapper orderedMapper = new ObjectMapper()
-      .enable(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS)
-      .setSerializationInclusion(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL);
+    .enable(SerializationFeature.ORDER_MAP_ENTRIES_BY_KEYS)
+    .setSerializationInclusion(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL);
 
   public static String serializeSortedJson(Object value) throws JsonProcessingException {
     return orderedMapper.writeValueAsString(value);
@@ -70,7 +70,7 @@ public class SerializationUtils {
 
   private static void initializeObjectMapper() {
     objectMapper = new ObjectMapper()
-        .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+      .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
     objectMapper.registerModule(new JavaTimeModule());
     objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);

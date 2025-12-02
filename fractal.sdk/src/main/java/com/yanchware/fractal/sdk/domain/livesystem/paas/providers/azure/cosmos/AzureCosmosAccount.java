@@ -8,11 +8,15 @@ import java.util.Collection;
 public interface AzureCosmosAccount extends AzureResourceEntity {
 
   <C extends Component & AzureCosmosEntity> Collection<C> getCosmosEntities();
+
   Integer getMaxTotalThroughput();
+
   void setMaxTotalThroughput(Integer maxTotalThroughput);
+
   AzureCosmosBackupPolicy getBackupPolicy();
+
   void setBackupPolicy(AzureCosmosBackupPolicy backupPolicy);
-  
+
   void setPublicNetworkAccess(String publicNetworkAccessMode);
 
   static Collection<String> validateCosmosAccount(AzureCosmosAccount cosmosAccount, String accountType) {

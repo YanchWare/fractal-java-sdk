@@ -10,23 +10,23 @@ public class AzureLargeFileSharesStateTest {
   @Test
   public void azureLargeFileSharesStateConstants_shouldNotBeNull() {
     assertThat(AzureLargeFileSharesState.DISABLED)
-        .as("DISABLED constant should not be null")
-        .isNotNull();
-    
+      .as("DISABLED constant should not be null")
+      .isNotNull();
+
     assertThat(AzureLargeFileSharesState.ENABLED)
-        .as("ENABLED constant should not be null")
-        .isNotNull();
+      .as("ENABLED constant should not be null")
+      .isNotNull();
   }
 
   @Test
   public void fromString_shouldReturnCorrespondingAzureAction() {
     assertThat(AzureLargeFileSharesState.fromString("Disabled"))
-        .as("fromString should return DISABLED for 'Disabled'")
-        .isEqualTo(AzureLargeFileSharesState.DISABLED);
+      .as("fromString should return DISABLED for 'Disabled'")
+      .isEqualTo(AzureLargeFileSharesState.DISABLED);
 
     assertThat(AzureLargeFileSharesState.fromString("Enabled"))
-        .as("fromString should return ENABLED for 'Enabled'")
-        .isEqualTo(AzureLargeFileSharesState.ENABLED);
+      .as("fromString should return ENABLED for 'Enabled'")
+      .isEqualTo(AzureLargeFileSharesState.ENABLED);
   }
 
   @Test
@@ -34,8 +34,8 @@ public class AzureLargeFileSharesStateTest {
     Collection<AzureLargeFileSharesState> values = AzureLargeFileSharesState.values();
 
     assertThat(values)
-        .as("Values should contain DISABLED, ENABLED and have exactly 2 values")
-        .containsExactlyInAnyOrder(AzureLargeFileSharesState.DISABLED, 
-            AzureLargeFileSharesState.ENABLED);
+      .as("Values should contain DISABLED, ENABLED and have exactly 2 values")
+      .containsExactlyInAnyOrder(AzureLargeFileSharesState.DISABLED,
+        AzureLargeFileSharesState.ENABLED);
   }
 }

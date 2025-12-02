@@ -113,10 +113,10 @@ public class ComponentDto {
       withDisplayName(String.valueOf(allFields.get(DISPLAY_NAME_KEY)));
       withDescription(String.valueOf(allFields.get(DESCRIPTION_KEY)));
       withVersion(String.valueOf(allFields.get(VERSION_KEY)));
-      if ((Boolean)allFields.get(LOCKED_KEY)) {
+      if ((Boolean) allFields.get(LOCKED_KEY)) {
         lock();
       }
-      withRecreateOnFailure((Boolean)allFields.get(RECREATE_ON_FAILURE_KEY));
+      withRecreateOnFailure((Boolean) allFields.get(RECREATE_ON_FAILURE_KEY));
       withParameters((Map<String, Object>) allFields.get(PARAMETERS_KEY));
       withDependencies(componentIds.stream().map(ComponentId::getValue).collect(toSet()));
       withLinks((Set<ComponentLink>) allFields.get(Constants.LINKS_KEY));

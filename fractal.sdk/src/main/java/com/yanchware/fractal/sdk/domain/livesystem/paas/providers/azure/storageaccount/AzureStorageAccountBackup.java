@@ -45,7 +45,7 @@ public class AzureStorageAccountBackup {
 
     /**
      * <pre>
-     * Specifies the geographic location of the Recovery Services vault, ensuring data residency and compliance 
+     * Specifies the geographic location of the Recovery Services vault, ensuring data residency and compliance
      * requirements are met.
      * </pre>
      */
@@ -66,7 +66,7 @@ public class AzureStorageAccountBackup {
 
     /**
      * <pre>
-     * Specifies the SKU level for the Recovery Services vault, which determines the pricing and features available 
+     * Specifies the SKU level for the Recovery Services vault, which determines the pricing and features available
      * for backup and recovery services.
      * </pre>
      */
@@ -77,7 +77,7 @@ public class AzureStorageAccountBackup {
 
     /**
      * <pre>
-     * A unique identifier for a particular configuration version of the Recovery Services vault, used for optimistic 
+     * A unique identifier for a particular configuration version of the Recovery Services vault, used for optimistic
      * concurrency during updates.
      * </pre>
      */
@@ -88,7 +88,7 @@ public class AzureStorageAccountBackup {
 
     /**
      * <pre>
-     * The name of the backup policy applied to the storage account. Backup policies define the schedule and retention 
+     * The name of the backup policy applied to the storage account. Backup policies define the schedule and retention
      * rules for backups.
      * </pre>
      */
@@ -119,7 +119,7 @@ public class AzureStorageAccountBackup {
 
     /**
      * <pre>
-     * Determines the type of Azure workload the backup policy is designed for, allowing for targeted backup strategies 
+     * Determines the type of Azure workload the backup policy is designed for, allowing for targeted backup strategies
      * tailored to specific service types.
      * </pre>
      */
@@ -130,7 +130,7 @@ public class AzureStorageAccountBackup {
 
     /**
      * <pre>
-     * A JSON string representing the detailed configuration of the backup policy, including backup frequency, 
+     * A JSON string representing the detailed configuration of the backup policy, including backup frequency,
      * retention duration, and other parameters.
      * </pre>
      */

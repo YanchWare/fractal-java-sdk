@@ -3,23 +3,23 @@ package com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.appserv
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum AzureAppServiceClientCertMode {
-    REQUIRED("Required"),
-    OPTIONAL("Optional"),
-    OPTIONAL_INTERACTIVE_USER("OptionalInteractiveUser");
+  REQUIRED("Required"),
+  OPTIONAL("Optional"),
+  OPTIONAL_INTERACTIVE_USER("OptionalInteractiveUser");
 
-    private final String id;
+  private final String id;
 
-    AzureAppServiceClientCertMode(final String id) {
-        this.id = id;
-    }
+  AzureAppServiceClientCertMode(final String id) {
+    this.id = id;
+  }
 
-    @JsonValue
-    public String getId() {
-        return id;
-    }
+  @JsonValue
+  public String getId() {
+    return id;
+  }
 
-    @Override
-    public String toString() {
-        return id;
-    }
+  @Override
+  public String toString() {
+    return id;
+  }
 }

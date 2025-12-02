@@ -1,4 +1,3 @@
-
 package com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure;
 
 import com.yanchware.fractal.sdk.TestWithFixture;
@@ -32,7 +31,7 @@ public class CosmosPostgreSqlAccountTest extends TestWithFixture {
 
     var component = builder.build();
 
-    assert(component.getTags()).equals(Map.ofEntries(
+    assert (component.getTags()).equals(Map.ofEntries(
       entry("a", "tag A"),
       entry("b", "tag B")
     ));
@@ -47,7 +46,7 @@ public class CosmosPostgreSqlAccountTest extends TestWithFixture {
 
     var component = builder.build();
 
-    assert(component.getTags()).equals(Map.ofEntries(
+    assert (component.getTags()).equals(Map.ofEntries(
       entry("a", "tag A")
     ));
   }
@@ -101,7 +100,7 @@ public class CosmosPostgreSqlAccountTest extends TestWithFixture {
 
     var component = builder.build();
     assertThat(component).extracting(
-      "id",
+        "id",
         "backupRetentionDays",
         "coordinatorCores",
         "coordinatorStorageGb",

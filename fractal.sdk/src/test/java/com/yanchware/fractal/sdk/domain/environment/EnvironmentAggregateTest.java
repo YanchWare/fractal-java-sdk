@@ -22,26 +22,26 @@ class EnvironmentAggregateTest {
     var aggregate = new EnvironmentAggregate(mockedEnvironmentService);
     var ownerId = UUID.randomUUID();
     var envId = new EnvironmentIdValue(
-            EnvironmentType.PERSONAL,
-            ownerId,
-            "production-001");
+      EnvironmentType.PERSONAL,
+      ownerId,
+      "production-001");
     var managementEnvironment = ManagementEnvironment.builder()
-            .withId(envId)
-            .withResourceGroup(ResourceGroupId.fromString(String.format("Personal/%s/rg", ownerId)))
-            .build();
+      .withId(envId)
+      .withResourceGroup(ResourceGroupId.fromString(String.format("Personal/%s/rg", ownerId)))
+      .build();
 
     aggregate.setManagementEnvironment(managementEnvironment);
 
     var secrets = new SecretResponse[]{
-            new SecretResponse(
-                    UUID.randomUUID(),
-                    new EnvironmentIdDto(EnvironmentTypeDto.PERSONAL, envId.ownerId(), envId.shortName()),
-                    "Secret-1",
-                    null,
-                    new Date(),
-                    "Whoever",
-                    new Date(),
-                    "Whoever")
+      new SecretResponse(
+        UUID.randomUUID(),
+        new EnvironmentIdDto(EnvironmentTypeDto.PERSONAL, envId.ownerId(), envId.shortName()),
+        "Secret-1",
+        null,
+        new Date(),
+        "Whoever",
+        new Date(),
+        "Whoever")
     };
     when(mockedEnvironmentService.manageSecrets(envId, managementEnvironment.getSecrets())).thenReturn(secrets);
 

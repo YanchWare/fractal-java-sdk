@@ -6,11 +6,11 @@ import lombok.Data;
 @Data
 @Builder
 public class ReflectionClassUnder {
-    private boolean isBlueprintComponent;
-    private boolean isLiveSystemComponent;
-    private boolean isValidatable;
+  private boolean isBlueprintComponent;
+  private boolean isLiveSystemComponent;
+  private boolean isValidatable;
 
-    public boolean isAnyComponent() {
-        return isBlueprintComponent || isLiveSystemComponent;
-    }
+  public boolean isAnyComponent() {
+    return isBlueprintComponent || isLiveSystemComponent;
+  }
 }

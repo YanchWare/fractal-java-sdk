@@ -9,13 +9,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class CollectionUtilsTest {
 
-    @Test
-    public void isBlank_when_collectionIsNull() {
-        assertThat(isBlank(null)).isTrue();
-    }
+  @Test
+  public void isBlank_when_collectionIsNull() {
+    assertThat(isBlank(null)).isTrue();
+  }
 
-    @Test
-    public void isBlank_when_collectionIsEmpty() {
-        assertThat(isBlank(new ArrayList<>())).isTrue();
-    }
+  @Test
+  public void isBlank_when_collectionIsEmpty() {
+    assertThat(isBlank(new ArrayList<>())).isTrue();
+  }
 }

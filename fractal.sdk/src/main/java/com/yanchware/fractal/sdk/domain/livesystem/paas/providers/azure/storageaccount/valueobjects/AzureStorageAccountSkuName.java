@@ -6,7 +6,7 @@ import com.yanchware.fractal.sdk.utils.ExtendableEnum;
 import java.util.Collection;
 
 /**
- * The SKU name. 
+ * The SKU name.
  * Required for account creation.
  */
 public final class AzureStorageAccountSkuName extends ExtendableEnum<AzureStorageAccountSkuName> {

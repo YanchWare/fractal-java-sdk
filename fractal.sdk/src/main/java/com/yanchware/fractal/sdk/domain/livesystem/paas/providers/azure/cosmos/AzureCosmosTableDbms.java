@@ -1,6 +1,6 @@
 package com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.cosmos;
 
-import com.yanchware.fractal.sdk.domain.blueprint.paas.PaaSRelationalDbms;
+import com.yanchware.fractal.sdk.domain.fractal.paas.PaaSRelationalDbms;
 import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureResourceGroup;
@@ -24,7 +24,9 @@ import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLengt
 public class AzureCosmosTableDbms extends PaaSRelationalDbms implements LiveSystemComponent, AzureCosmosAccount {
 
   public static final String TYPE = PAAS_COSMOS_ACCOUNT.getId();
-  private final static String NAME_NOT_VALID = "[AzureCosmosTableDbms Validation] The name must only contains lowercase letters, numbers, and hyphens. The name must not start or end in a hyphen and must be between 3 and 44 characters long";
+  private final static String NAME_NOT_VALID = "[AzureCosmosTableDbms Validation] The name must only contains " +
+    "lowercase letters, numbers, and hyphens. The name must not start or end in a hyphen and must be between 3 and 44" +
+    " characters long";
 
   private String name;
   private Integer maxTotalThroughput;
@@ -51,7 +53,8 @@ public class AzureCosmosTableDbms extends PaaSRelationalDbms implements LiveSyst
     return new AzureCosmosTableDbmsBuilder();
   }
 
-  public static class AzureCosmosTableDbmsBuilder extends AzureCosmosAccountBuilder<AzureCosmosTableDbms, AzureCosmosTableDbmsBuilder> {
+  public static class AzureCosmosTableDbmsBuilder extends AzureCosmosAccountBuilder<AzureCosmosTableDbms,
+    AzureCosmosTableDbmsBuilder> {
 
     @Override
     protected AzureCosmosTableDbms createComponent() {
@@ -68,14 +71,14 @@ public class AzureCosmosTableDbms extends PaaSRelationalDbms implements LiveSyst
     Collection<String> errors = super.validate();
     errors.addAll(AzureCosmosAccount.validateCosmosAccount(this, "Table DBMS"));
 
-    if(StringUtils.isNotBlank(name)) {
+    if (StringUtils.isNotBlank(name)) {
       var hasValidCharacters = isValidLowercaseLettersNumbersAndHyphens(name);
       var hasValidLengths = isValidStringLength(name, 3, 44);
-      if(!hasValidCharacters || !hasValidLengths) {
+      if (!hasValidCharacters || !hasValidLengths) {
         errors.add(NAME_NOT_VALID);
       }
     }
-    
+
     return errors;
   }
 

@@ -1,6 +1,6 @@
 package com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.cosmos;
 
-import com.yanchware.fractal.sdk.domain.blueprint.paas.PaaSRelationalDbms;
+import com.yanchware.fractal.sdk.domain.fractal.paas.PaaSRelationalDbms;
 import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.PaaSPostgreSqlDbms;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion;
@@ -27,7 +27,9 @@ import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLengt
 public class AzureCosmosPostgreSqlDbms extends PaaSPostgreSqlDbms implements LiveSystemComponent, AzureResourceEntity {
 
   public static final String TYPE = PAAS_COSMOS_POSTGRESQL_CLUSTER.getId();
-  private final static String NAME_NOT_VALID = "[AzureCosmosPostgreSqlDbms Validation] The name must only contains lowercase letters, numbers, and hyphens. The name must not start or end in a hyphen and must be between 3 and 40 characters long";
+  private final static String NAME_NOT_VALID = "[AzureCosmosPostgreSqlDbms Validation] The name must only contains " +
+    "lowercase letters, numbers, and hyphens. The name must not start or end in a hyphen and must be between 3 and 40" +
+    " characters long";
 
   private String name;
   private String rootUser;
@@ -61,7 +63,8 @@ public class AzureCosmosPostgreSqlDbms extends PaaSPostgreSqlDbms implements Liv
     return new AzureCosmosPostgreSqlDbmsBuilder();
   }
 
-  public static class AzureCosmosPostgreSqlDbmsBuilder extends PaaSRelationalDbms.Builder<AzureCosmosPostgreSqlDbms, AzureCosmosPostgreSqlDbmsBuilder> {
+  public static class AzureCosmosPostgreSqlDbmsBuilder extends PaaSRelationalDbms.Builder<AzureCosmosPostgreSqlDbms,
+    AzureCosmosPostgreSqlDbmsBuilder> {
 
     @Override
     protected AzureCosmosPostgreSqlDbms createComponent() {
@@ -75,6 +78,7 @@ public class AzureCosmosPostgreSqlDbms extends PaaSPostgreSqlDbms implements Liv
 
     /**
      * Name of the root user to be set for the PostgreSql DBMS
+     *
      * @param rootUser
      */
     public AzureCosmosPostgreSqlDbmsBuilder withRootUser(String rootUser) {
@@ -94,6 +98,7 @@ public class AzureCosmosPostgreSqlDbms extends PaaSPostgreSqlDbms implements Liv
 
     /**
      * SKU name for PostgreSql DBMS
+     *
      * @param skuName
      */
     public AzureCosmosPostgreSqlDbmsBuilder withSkuName(AzureCosmosPostgreSqlDbmsSkuName skuName) {
@@ -103,6 +108,7 @@ public class AzureCosmosPostgreSqlDbms extends PaaSPostgreSqlDbms implements Liv
 
     /**
      * Enable/Disable storage auto grow
+     *
      * @param storageAutoGrow
      */
     public AzureCosmosPostgreSqlDbmsBuilder withStorageAutoGrow(AzureStorageAutoGrow storageAutoGrow) {
@@ -112,6 +118,7 @@ public class AzureCosmosPostgreSqlDbms extends PaaSPostgreSqlDbms implements Liv
 
     /**
      * PostgreSql DBMS storage in GB
+     *
      * @param storageGb
      */
     public AzureCosmosPostgreSqlDbmsBuilder withStorageGb(int storageGb) {
@@ -121,6 +128,7 @@ public class AzureCosmosPostgreSqlDbms extends PaaSPostgreSqlDbms implements Liv
 
     /**
      * Setting for backup retention days
+     *
      * @param backupRetentionDays
      */
     public AzureCosmosPostgreSqlDbmsBuilder withBackupRetentionDays(int backupRetentionDays) {
@@ -130,6 +138,7 @@ public class AzureCosmosPostgreSqlDbms extends PaaSPostgreSqlDbms implements Liv
 
     /**
      * PostgreSql DBMS high replication role
+     *
      * @param replicationRole
      */
     public AzureCosmosPostgreSqlDbmsBuilder withReplicationRole(ReplicationRole replicationRole) {
@@ -139,6 +148,7 @@ public class AzureCosmosPostgreSqlDbms extends PaaSPostgreSqlDbms implements Liv
 
     /**
      * PostgreSql DBMS high availability mode
+     *
      * @param highAvailabilityMode
      */
     public AzureCosmosPostgreSqlDbmsBuilder withHighAvailabilityMode(HighAvailabilityMode highAvailabilityMode) {
@@ -148,6 +158,7 @@ public class AzureCosmosPostgreSqlDbms extends PaaSPostgreSqlDbms implements Liv
 
     /**
      * PostgreSql DBMS subnet address cidr
+     *
      * @param subnetAddressCidr
      */
     public AzureCosmosPostgreSqlDbmsBuilder withSubnetAddressCidr(String subnetAddressCidr) {
@@ -157,6 +168,7 @@ public class AzureCosmosPostgreSqlDbms extends PaaSPostgreSqlDbms implements Liv
 
     /**
      * PostgreSql DBMS private cluster
+     *
      * @param isPrivate
      */
     public AzureCosmosPostgreSqlDbmsBuilder withIsPrivate(boolean isPrivate) {
@@ -166,6 +178,7 @@ public class AzureCosmosPostgreSqlDbms extends PaaSPostgreSqlDbms implements Liv
 
     /**
      * PostgreSql DBMS coordinator storage GB
+     *
      * @param coordinatorStorageGb
      */
     public AzureCosmosPostgreSqlDbmsBuilder withCoordinatorStorageGb(Integer coordinatorStorageGb) {
@@ -175,6 +188,7 @@ public class AzureCosmosPostgreSqlDbms extends PaaSPostgreSqlDbms implements Liv
 
     /**
      * PostgreSql DBMS workers storage GB
+     *
      * @param workerStorageGb
      */
     public AzureCosmosPostgreSqlDbmsBuilder withWorkerStorageGb(Integer workerStorageGb) {
@@ -184,6 +198,7 @@ public class AzureCosmosPostgreSqlDbms extends PaaSPostgreSqlDbms implements Liv
 
     /**
      * PostgreSql DBMS coordinator cores
+     *
      * @param coordinatorCores
      */
     public AzureCosmosPostgreSqlDbmsBuilder withCoordinatorCores(Integer coordinatorCores) {
@@ -193,6 +208,7 @@ public class AzureCosmosPostgreSqlDbms extends PaaSPostgreSqlDbms implements Liv
 
     /**
      * PostgreSql DBMS workers cores
+     *
      * @param workerCores
      */
     public AzureCosmosPostgreSqlDbmsBuilder withWorkerCores(Integer workerCores) {
@@ -202,6 +218,7 @@ public class AzureCosmosPostgreSqlDbms extends PaaSPostgreSqlDbms implements Liv
 
     /**
      * PostgreSql DBMS node count
+     *
      * @param nodeCount
      */
     public AzureCosmosPostgreSqlDbmsBuilder withNodeCount(Integer nodeCount) {
@@ -211,6 +228,7 @@ public class AzureCosmosPostgreSqlDbms extends PaaSPostgreSqlDbms implements Liv
 
     /**
      * PostgreSql DBMS coordinator server edition
+     *
      * @param coordinatorServerEdition
      */
     public AzureCosmosPostgreSqlDbmsBuilder withCoordinatorServerEdition(String coordinatorServerEdition) {
@@ -220,6 +238,7 @@ public class AzureCosmosPostgreSqlDbms extends PaaSPostgreSqlDbms implements Liv
 
     /**
      * PostgreSql DBMS node server edition
+     *
      * @param nodeServerEdition
      */
     public AzureCosmosPostgreSqlDbmsBuilder withNodeServerEdition(String nodeServerEdition) {
@@ -229,6 +248,7 @@ public class AzureCosmosPostgreSqlDbms extends PaaSPostgreSqlDbms implements Liv
 
     /**
      * Name of the PostgreSql DBms
+     *
      * @param name
      */
     public AzureCosmosPostgreSqlDbmsBuilder withName(String name) {
@@ -273,14 +293,14 @@ public class AzureCosmosPostgreSqlDbms extends PaaSPostgreSqlDbms implements Liv
   public Collection<String> validate() {
     Collection<String> errors = super.validate();
 
-    if(StringUtils.isNotBlank(name)) {
+    if (StringUtils.isNotBlank(name)) {
       var hasValidCharacters = isValidLowercaseLettersNumbersAndHyphens(name);
       var hasValidLengths = isValidStringLength(name, 3, 40);
-      if(!hasValidCharacters || !hasValidLengths) {
+      if (!hasValidCharacters || !hasValidLengths) {
         errors.add(NAME_NOT_VALID);
       }
     }
-    
+
     return errors;
   }
 

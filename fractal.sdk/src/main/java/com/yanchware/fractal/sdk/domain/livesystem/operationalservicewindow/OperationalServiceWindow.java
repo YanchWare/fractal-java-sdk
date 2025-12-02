@@ -113,7 +113,8 @@ public class OperationalServiceWindow {
   }
 
   /**
-   * Searches for the next available operational service window starting after the given instant and within the specified search horizon.
+   * Searches for the next available operational service window starting after the given instant and within the
+   * specified search horizon.
    * <p/>
    * The search is conducted in the configured time zone of the service window, considering any applicable blackouts,
    * active periods, and exclusions defined in the rules of the operational service window.
@@ -162,7 +163,8 @@ public class OperationalServiceWindow {
    *
    * @param fromIncl the inclusive start of the time range to evaluate, represented as a {@code ZonedDateTime}
    * @param toExcl   the exclusive end of the time range to evaluate, represented as a {@code ZonedDateTime}
-   * @return a {@code Stream<Window>} containing the resulting operational service windows that match the specified criteria
+   * @return a {@code Stream<Window>} containing the resulting operational service windows that match the specified
+   * criteria
    */
   public Stream<Window> windowsBetween(ZonedDateTime fromIncl, ZonedDateTime toExcl) {
     // Respect active range

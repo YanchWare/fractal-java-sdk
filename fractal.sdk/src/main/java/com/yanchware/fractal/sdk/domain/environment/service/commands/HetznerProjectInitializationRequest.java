@@ -5,4 +5,6 @@ import java.util.Map;
 public record HetznerProjectInitializationRequest(
   String projectId,
   String region,
-  Map<String, String> tags){}
+  Map<String, String> tags)
+{
+}

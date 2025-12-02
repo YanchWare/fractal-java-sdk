@@ -46,7 +46,7 @@ public class OperationalServiceWindowTest {
 
     var inside = ZonedDateTime.of(2025, 12, 27, 8, 0, 0, 0, ZONE_ID).toInstant();
     var before = ZonedDateTime.of(2025, 12, 26, 23, 59, 0, 0, ZONE_ID).toInstant();
-    var after  = ZonedDateTime.of(2025, 12, 27, 12, 0, 0, 0, ZONE_ID).toInstant();
+    var after = ZonedDateTime.of(2025, 12, 27, 12, 0, 0, 0, ZONE_ID).toInstant();
 
     assertTrue(osw.isAllowed(inside));
     assertFalse(osw.isAllowed(before));
@@ -115,7 +115,7 @@ public class OperationalServiceWindowTest {
       .build();
 
     var from = ZonedDateTime.of(2025, 6, 3, 0, 0, 0, 0, ZONE_ID); // Tue
-    var to   = from.plusDays(1);
+    var to = from.plusDays(1);
 
     var list = osw.windowsBetween(from, to).toList();
     assertEquals(1, list.size(), "overlapping rules should merge into one window");
@@ -132,7 +132,7 @@ public class OperationalServiceWindowTest {
       .build();
 
     var from = ZonedDateTime.of(2025, 3, 30, 0, 0, 0, 0, ZONE_ID);
-    var to   = from.plusDays(1);
+    var to = from.plusDays(1);
 
     var list = osw.windowsBetween(from, to).toList();
     assertEquals(1, list.size());
@@ -161,7 +161,7 @@ public class OperationalServiceWindowTest {
     var osw = nightly();
 
     var start = ZonedDateTime.of(2025, 6, 2, 0, 0, 0, 0, ZONE_ID); // Monday
-    var end   = start.plusDays(7);
+    var end = start.plusDays(7);
 
     var windows = osw.windowsBetween(start, end).toList();
     assertFalse(windows.isEmpty());

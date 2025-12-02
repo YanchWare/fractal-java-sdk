@@ -10,7 +10,8 @@ import lombok.Setter;
 public class AzureWebAppPushSettings {
 
   /**
-   * JSON string containing a list of dynamic tags that will be evaluated from user claims in the push registration endpoint.
+   * JSON string containing a list of dynamic tags that will be evaluated from user claims in the push registration
+   * endpoint.
    */
   private String dynamicTagsJson;
 
@@ -25,7 +26,8 @@ public class AzureWebAppPushSettings {
   private String tagWhitelistJson;
 
   /**
-   * JSON string containing a list of tags that require user authentication to be used in the push registration endpoint.
+   * JSON string containing a list of tags that require user authentication to be used in the push registration
+   * endpoint.
    */
   private String tagsRequiringAuth;
 }

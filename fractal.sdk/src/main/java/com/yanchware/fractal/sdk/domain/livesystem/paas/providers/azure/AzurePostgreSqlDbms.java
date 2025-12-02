@@ -21,13 +21,17 @@ import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLengt
 @ToString(callSuper = true)
 public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms implements AzureResourceEntity, LiveSystemComponent {
 
-  private final static String REGION_IS_NULL = "[AzurePostgreSQL Validation] Region has not been defined and it is required";
+  private final static String REGION_IS_NULL = "[AzurePostgreSQL Validation] Region has not been defined and it is " +
+    "required";
 
-  private final static String INVALID_STORAGE_GB = "[AzurePostgreSQL Validation] Storage GB is less than minimum requirement of 5 GB";
+  private final static String INVALID_STORAGE_GB = "[AzurePostgreSQL Validation] Storage GB is less than minimum " +
+    "requirement of 5 GB";
 
-  private final static String INVALID_BACKUP_RETENTION_DAYS = "[AzurePostgreSQL Validation] Backup Retention Days must be between 7 and 35 days";
+  private final static String INVALID_BACKUP_RETENTION_DAYS = "[AzurePostgreSQL Validation] Backup Retention Days " +
+    "must be between 7 and 35 days";
 
-  private final static String NAME_NOT_VALID = "[AzurePostgreSQL Validation] The name must only contain lowercase letters, numbers, and hyphens. It must not start or end in a hyphen and must be between 3 and 63 characters long";
+  private final static String NAME_NOT_VALID = "[AzurePostgreSQL Validation] The name must only contain lowercase " +
+    "letters, numbers, and hyphens. It must not start or end in a hyphen and must be between 3 and 63 characters long";
 
   private String rootUser;
 
@@ -73,6 +77,7 @@ public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms implements AzureReso
 
     /**
      * Database definition to be created part of this DBMS
+     *
      * @param db
      */
     public AzurePostgreSqlBuilder withDatabase(AzurePostgreSqlDatabase db) {
@@ -81,6 +86,7 @@ public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms implements AzureReso
 
     /**
      * List of databases to be created part of this DBMS
+     *
      * @param dbs
      */
     public AzurePostgreSqlBuilder withDatabases(Collection<? extends AzurePostgreSqlDatabase> dbs) {
@@ -103,6 +109,7 @@ public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms implements AzureReso
 
     /**
      * Name of the root user to be set for the PostgreSql DBMS
+     *
      * @param rootUser
      */
     public AzurePostgreSqlBuilder withRootUser(String rootUser) {
@@ -122,6 +129,7 @@ public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms implements AzureReso
 
     /**
      * SKU name for PostgreSql DBMS
+     *
      * @param skuName
      */
     public AzurePostgreSqlBuilder withSkuName(AzureAppServiceSkuName skuName) {
@@ -131,6 +139,7 @@ public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms implements AzureReso
 
     /**
      * Enable/Disable storage auto grow
+     *
      * @param storageAutoGrow
      */
     public AzurePostgreSqlBuilder withStorageAutoGrow(AzureStorageAutoGrow storageAutoGrow) {
@@ -140,6 +149,7 @@ public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms implements AzureReso
 
     /**
      * PostgreSql DBMS storage in GB
+     *
      * @param storageGb
      */
     public AzurePostgreSqlBuilder withStorageGb(int storageGb) {
@@ -149,6 +159,7 @@ public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms implements AzureReso
 
     /**
      * Setting for backup retention days
+     *
      * @param backupRetentionDays
      */
     public AzurePostgreSqlBuilder withBackupRetentionDays(int backupRetentionDays) {
@@ -158,6 +169,7 @@ public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms implements AzureReso
 
     /**
      * Name of the PostgreSql DBms
+     *
      * @param name
      */
     public AzurePostgreSqlBuilder withName(String name) {
@@ -213,9 +225,9 @@ public class AzurePostgreSqlDbms extends PaaSPostgreSqlDbms implements AzureReso
     }
 
     getDatabases().stream()
-        .map(x -> AzureResourceEntity.validateAzureResourceEntity((AzureResourceEntity) x, "PostgreSql Database"))
-        .forEach(errors::addAll);
-    
+      .map(x -> AzureResourceEntity.validateAzureResourceEntity((AzureResourceEntity) x, "PostgreSql Database"))
+      .forEach(errors::addAll);
+
     return errors;
   }
 }

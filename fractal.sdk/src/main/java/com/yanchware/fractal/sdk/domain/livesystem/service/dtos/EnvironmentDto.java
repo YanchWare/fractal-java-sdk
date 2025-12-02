@@ -4,5 +4,7 @@ import java.util.Map;
 
 public record EnvironmentDto(
   EnvironmentIdDto id,
-  Map<String, Object> parameters) { }
+  Map<String, Object> parameters)
+{
+}
 

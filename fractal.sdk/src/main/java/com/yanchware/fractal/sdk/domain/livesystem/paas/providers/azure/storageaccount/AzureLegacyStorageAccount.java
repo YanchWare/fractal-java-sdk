@@ -57,7 +57,7 @@ public class AzureLegacyStorageAccount extends BaseAzureStorageAccount {
     public AzureLegacyStorageAccountBuilder withFileShare(AzureFileShare fileShare) {
       return withFileShares(List.of(fileShare));
     }
-    
+
     @Override
     protected AzureLegacyStorageAccount createComponent() {
       return new AzureLegacyStorageAccount();

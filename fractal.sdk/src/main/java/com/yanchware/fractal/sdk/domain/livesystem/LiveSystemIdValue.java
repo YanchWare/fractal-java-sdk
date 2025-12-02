@@ -7,7 +7,7 @@ public record LiveSystemIdValue(ResourceGroupId resourceGroupId, String name) {
 
   @NotNull
   @Override
-  public String toString(){
+  public String toString() {
     return String.format("%s/%s", resourceGroupId.toString(), name);
   }
 

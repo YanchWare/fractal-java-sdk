@@ -15,15 +15,15 @@ public class AzureBlobStorageAccountTest extends TestWithFixture {
   @Test
   public void kindIsValid_when_ValidationPasses() throws JsonProcessingException {
     var storage = AzureBlobStorageAccount.builder()
-        .withId(aComponentId())
-        .withName(aLowerCaseAlphanumericString(10))
-        .withDisplayName(aAlphanumericString(50))
-        .withRegion(a(AzureRegion.class))
-        .withResourceGroup(a(AzureResourceGroup.class))
-        .withTag(a(String.class), a(String.class))
-        .withContainer(a(AzureBlobContainer.class))
-        .build();
-    
+      .withId(aComponentId())
+      .withName(aLowerCaseAlphanumericString(10))
+      .withDisplayName(aAlphanumericString(50))
+      .withRegion(a(AzureRegion.class))
+      .withResourceGroup(a(AzureResourceGroup.class))
+      .withTag(a(String.class), a(String.class))
+      .withContainer(a(AzureBlobContainer.class))
+      .build();
+
     assertTrue(storage.validate().isEmpty());
 
     var json = TestUtils.getJsonRepresentation(storage);

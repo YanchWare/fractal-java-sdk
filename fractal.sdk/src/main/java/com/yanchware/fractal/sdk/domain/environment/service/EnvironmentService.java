@@ -20,65 +20,75 @@ import java.util.Map;
 import java.util.UUID;
 
 public interface EnvironmentService {
-    EnvironmentResponse create(
-            EnvironmentIdValue managementEnvironmentId,
-            EnvironmentIdValue environmentId,
-            String name,
-            Collection<ResourceGroupId> resourceGroups,
-            Map<String, Object> parameters) throws InstantiatorException;
+  EnvironmentResponse create(
+    EnvironmentIdValue managementEnvironmentId,
+    EnvironmentIdValue environmentId,
+    String name,
+    Collection<ResourceGroupId> resourceGroups,
+    Map<String, Object> parameters) throws InstantiatorException;
 
-    EnvironmentResponse update(
-            EnvironmentIdValue managementEnvironmentId,
-            EnvironmentIdValue environmentId,
-            String name,
-            Collection<ResourceGroupId> resourceGroups,
-            Map<String, Object> parameters,
-            String defaultCiCdProfileShortName) throws InstantiatorException;
+  EnvironmentResponse update(
+    EnvironmentIdValue managementEnvironmentId,
+    EnvironmentIdValue environmentId,
+    String name,
+    Collection<ResourceGroupId> resourceGroups,
+    Map<String, Object> parameters,
+    String defaultCiCdProfileShortName) throws InstantiatorException;
 
-    EnvironmentResponse fetch(EnvironmentIdValue environmentId) throws InstantiatorException;
-    
-    EnvironmentResponse tryGetById(EnvironmentIdValue environmentId);
+  EnvironmentResponse fetch(EnvironmentIdValue environmentId) throws InstantiatorException;
 
-    void startAzureCloudAgentInitialization(
-            EnvironmentIdValue managementEnvironmentId,
-            EnvironmentIdValue environmentId,
-            UUID tenantId,
-            UUID subscriptionId,
-            AzureRegion region,
-            Map<String, String> tags) throws InstantiatorException;
+  EnvironmentResponse tryGetById(EnvironmentIdValue environmentId);
 
-    void startAwsCloudAgentInitialization(
-            EnvironmentIdValue environmentId,
-            String organizationId,
-            String accountId,
-            AwsRegion region,
-            Map<String, String> tags) throws InstantiatorException;
+  void startAzureCloudAgentInitialization(
+    EnvironmentIdValue managementEnvironmentId,
+    EnvironmentIdValue environmentId,
+    UUID tenantId,
+    UUID subscriptionId,
+    AzureRegion region,
+    Map<String, String> tags) throws InstantiatorException;
 
-    void startGcpCloudAgentInitialization(
-            EnvironmentIdValue environmentId,
-            String organizationId,
-            String projectId,
-            GcpRegion region,
-            Map<String, String> tags) throws InstantiatorException;
+  void startAwsCloudAgentInitialization(
+    EnvironmentIdValue environmentId,
+    String organizationId,
+    String accountId,
+    AwsRegion region,
+    Map<String, String> tags) throws InstantiatorException;
 
-    void startOciCloudAgentInitialization(
-            EnvironmentIdValue environmentId,
-            String tenancyId,
-            String compartmentId,
-            OciRegion region,
-            Map<String, String> tags) throws InstantiatorException;
+  void startGcpCloudAgentInitialization(
+    EnvironmentIdValue environmentId,
+    String organizationId,
+    String projectId,
+    GcpRegion region,
+    Map<String, String> tags) throws InstantiatorException;
 
-    void startHetznerCloudAgentInitialization(
-            EnvironmentIdValue environmentId,
-            String projectId,
-            HetznerRegion region,
-            Map<String, String> tags) throws InstantiatorException;
+  void startOciCloudAgentInitialization(
+    EnvironmentIdValue environmentId,
+    String tenancyId,
+    String compartmentId,
+    OciRegion region,
+    Map<String, String> tags) throws InstantiatorException;
 
-    InitializationRunResponse fetchCurrentAwsInitialization(EnvironmentIdValue environmentId) throws InstantiatorException;
-    InitializationRunResponse fetchCurrentAzureInitialization(EnvironmentIdValue environmentId) throws InstantiatorException;
-    InitializationRunResponse fetchCurrentGcpInitialization(EnvironmentIdValue environmentId) throws InstantiatorException;
-    InitializationRunResponse fetchCurrentOciInitialization(EnvironmentIdValue environmentId) throws InstantiatorException;
-    InitializationRunResponse fetchCurrentHetznerInitialization(EnvironmentIdValue environmentId) throws InstantiatorException;
-    CiCdProfileResponse[] manageCiCdProfiles(EnvironmentIdValue environmentId, Collection<CreateCiCdProfileRequest> ciCdProfiles) throws InstantiatorException;
-    SecretResponse[] manageSecrets(EnvironmentIdValue environmentId, Collection<Secret> secrets) throws InstantiatorException;
+  void startHetznerCloudAgentInitialization(
+    EnvironmentIdValue environmentId,
+    String projectId,
+    HetznerRegion region,
+    Map<String, String> tags) throws InstantiatorException;
+
+  InitializationRunResponse fetchCurrentAwsInitialization(EnvironmentIdValue environmentId) throws InstantiatorException;
+
+  InitializationRunResponse fetchCurrentAzureInitialization(EnvironmentIdValue environmentId) throws InstantiatorException;
+
+  InitializationRunResponse fetchCurrentGcpInitialization(EnvironmentIdValue environmentId) throws InstantiatorException;
+
+  InitializationRunResponse fetchCurrentOciInitialization(EnvironmentIdValue environmentId) throws InstantiatorException;
+
+  InitializationRunResponse fetchCurrentHetznerInitialization(EnvironmentIdValue environmentId) throws InstantiatorException;
+
+  CiCdProfileResponse[] manageCiCdProfiles(
+    EnvironmentIdValue environmentId,
+    Collection<CreateCiCdProfileRequest> ciCdProfiles) throws InstantiatorException;
+
+  SecretResponse[] manageSecrets(
+    EnvironmentIdValue environmentId,
+    Collection<Secret> secrets) throws InstantiatorException;
 }

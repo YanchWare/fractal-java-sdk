@@ -17,7 +17,8 @@ public record ResourceGroupId(
       throw new IllegalArgumentException("Invalid resource group id");
     }
 
-    return new ResourceGroupId(ResourceGroupType.valueOf(rdIdArr[0].toUpperCase()),  UUID.fromString(rdIdArr[1]), rdIdArr[2]);
+    return new ResourceGroupId(ResourceGroupType.valueOf(rdIdArr[0].toUpperCase()), UUID.fromString(rdIdArr[1]),
+      rdIdArr[2]);
   }
 
   @NotNull
@@ -29,7 +30,7 @@ public record ResourceGroupId(
 
   @Override
   public boolean equals(Object o) {
-    if (o == this){
+    if (o == this) {
       return true;
     }
     if (!(o instanceof ResourceGroupId(ResourceGroupType groupType, UUID id, String name))) {

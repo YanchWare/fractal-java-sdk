@@ -19,7 +19,7 @@ public class AzureStorageAccount extends BaseAzureStorageAccount {
   public AzureStorageAccount() {
     this.containers = new ArrayList<>();
   }
-  
+
   @Override
   public String getKind() {
     return "StorageV2";

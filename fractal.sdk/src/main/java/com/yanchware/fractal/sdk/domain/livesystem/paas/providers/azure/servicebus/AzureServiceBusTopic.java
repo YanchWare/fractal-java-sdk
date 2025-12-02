@@ -1,6 +1,6 @@
 package com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.servicebus;
 
-import com.yanchware.fractal.sdk.domain.blueprint.paas.PaaSMessageEntity;
+import com.yanchware.fractal.sdk.domain.fractal.paas.PaaSMessageEntity;
 import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import lombok.Getter;
@@ -45,6 +45,7 @@ public class AzureServiceBusTopic extends PaaSMessageEntity implements LiveSyste
 
     /**
      * Idle after which the topic is automatically deleted
+     *
      * @param autoDeleteOnIdle
      */
     public AzureServiceBusQueueBuilder withAutoDeleteOnIdle(Duration autoDeleteOnIdle) {
@@ -54,6 +55,7 @@ public class AzureServiceBusTopic extends PaaSMessageEntity implements LiveSyste
 
     /**
      * Duration after which the message expires
+     *
      * @param defaultMessageTimeToLive
      */
     public AzureServiceBusQueueBuilder withDefaultMessageTimeToLive(Duration defaultMessageTimeToLive) {
@@ -63,6 +65,7 @@ public class AzureServiceBusTopic extends PaaSMessageEntity implements LiveSyste
 
     /**
      * Duration of duplicate detection history
+     *
      * @param duplicateDetectionHistoryTimeWindow
      */
     public AzureServiceBusQueueBuilder withDuplicateDetectionHistoryTimeWindow(Duration duplicateDetectionHistoryTimeWindow) {
@@ -72,6 +75,7 @@ public class AzureServiceBusTopic extends PaaSMessageEntity implements LiveSyste
 
     /**
      * Indicates if Express Entities are enabled
+     *
      * @param enableExpress
      */
     public AzureServiceBusQueueBuilder withEnableExpress(Boolean enableExpress) {
@@ -81,6 +85,7 @@ public class AzureServiceBusTopic extends PaaSMessageEntity implements LiveSyste
 
     /**
      * Indicates if batched operations are enabled
+     *
      * @param enableBatchedOperations
      */
     public AzureServiceBusQueueBuilder withEnableBatchedOperations(Boolean enableBatchedOperations) {
@@ -90,6 +95,7 @@ public class AzureServiceBusTopic extends PaaSMessageEntity implements LiveSyste
 
     /**
      * Indicates if the topic will be partitioned across multiple message brokers
+     *
      * @param enablePartitioning
      */
     public AzureServiceBusQueueBuilder withEnablePartitioning(Boolean enablePartitioning) {
@@ -99,6 +105,7 @@ public class AzureServiceBusTopic extends PaaSMessageEntity implements LiveSyste
 
     /**
      * Maximum size of the topic in megabytes
+     *
      * @param maxSizeInMegabytes
      */
     public AzureServiceBusQueueBuilder withMaxSizeInMegabytes(Integer maxSizeInMegabytes) {
@@ -108,6 +115,7 @@ public class AzureServiceBusTopic extends PaaSMessageEntity implements LiveSyste
 
     /**
      * Maximum size of message payload in kilobytes
+     *
      * @param maxMessageSizeInKilobytes
      */
     public AzureServiceBusQueueBuilder withMaxMessageSizeInKilobytes(Long maxMessageSizeInKilobytes) {
@@ -117,6 +125,7 @@ public class AzureServiceBusTopic extends PaaSMessageEntity implements LiveSyste
 
     /**
      * Indicates if the topic requires duplicate detection
+     *
      * @param requiresDuplicateDetection
      */
     public AzureServiceBusQueueBuilder withRequiresDuplicateDetection(Boolean requiresDuplicateDetection) {
@@ -126,6 +135,7 @@ public class AzureServiceBusTopic extends PaaSMessageEntity implements LiveSyste
 
     /**
      * Indicates if the topic supports ordering
+     *
      * @param supportOrdering
      */
     public AzureServiceBusQueueBuilder withSupportOrdering(Boolean supportOrdering) {

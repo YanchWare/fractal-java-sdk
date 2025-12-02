@@ -1,9 +1,6 @@
 package com.yanchware.fractal.sdk;
 
 import com.flextrade.jfixture.JFixture;
-import com.yanchware.fractal.sdk.domain.environment.service.dtos.EnvironmentResponse;
-import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.EnvironmentIdDto;
-import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.EnvironmentTypeDto;
 import com.yanchware.fractal.sdk.utils.EnvironmentIdDtoBuilder;
 import com.yanchware.fractal.sdk.utils.ExtendableEnum;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,7 +27,7 @@ public class TestWithFixture {
     if (ExtendableEnum.class.isAssignableFrom(classToInstantiate)) {
       return createExtendableEnumInstance(classToInstantiate);
     }
-    
+
     return fixture.create(classToInstantiate);
   }
 
@@ -43,11 +40,12 @@ public class TestWithFixture {
   }
 
   protected String aLowerCaseAlphanumericString(int length) {
-    return aAlphanumericString(length, true, false,null);
+    return aAlphanumericString(length, true, false, null);
   }
 
   /**
    * Generates a positive integer less than or equal to 999
+   *
    * @return A random positive integer less than or equal to 999
    */
   protected int aPositiveInteger() {
@@ -79,7 +77,7 @@ public class TestWithFixture {
 
   protected String aAlphanumericString(int length) {
 
-    return aAlphanumericString(length, false, false,null);
+    return aAlphanumericString(length, false, false, null);
   }
 
   protected String aAlphanumericString(int length, boolean mustStartWithLetter) {
@@ -87,15 +85,22 @@ public class TestWithFixture {
     return aAlphanumericString(length, false, mustStartWithLetter, null);
   }
 
-  protected String aAlphanumericString(int length, boolean lowercaseOnly, boolean mustStartWithLetter, String additionalChars) {
+  protected String aAlphanumericString(
+    int length,
+    boolean lowercaseOnly,
+    boolean mustStartWithLetter,
+    String additionalChars)
+  {
     String lowercaseChars = "abcdefghijklmnopqrstuvwxyz";
     String uppercaseChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     String numberChars = "0123456789";
-    String characters = lowercaseChars + (lowercaseOnly ? "" : uppercaseChars) + numberChars + (additionalChars != null ? additionalChars : "");
+    String characters =
+      lowercaseChars + (lowercaseOnly ? "" : uppercaseChars) + numberChars + (additionalChars != null ?
+        additionalChars : "");
     StringBuilder sb = new StringBuilder();
 
-    char lastChar = '\0'; 
-    
+    char lastChar = '\0';
+
     for (int i = 0; i < length; i++) {
       char nextChar;
       do {
@@ -107,11 +112,11 @@ public class TestWithFixture {
           }
         }
       } while (nextChar == lastChar);
-      
+
       sb.append(nextChar);
       lastChar = nextChar;
     }
-    
+
     if (mustStartWithLetter && !Character.isLetter(sb.charAt(0))) {
       char startChar = lowercaseChars.charAt(random.nextInt(lowercaseChars.length()));
       sb.setCharAt(0, startChar);

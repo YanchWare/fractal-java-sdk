@@ -1,7 +1,7 @@
 package com.yanchware.fractal.sdk.domain.livesystem.paas;
 
 import com.yanchware.fractal.sdk.domain.Component;
-import com.yanchware.fractal.sdk.domain.blueprint.paas.PaaSColumnOrientedDbms;
+import com.yanchware.fractal.sdk.domain.fractal.paas.PaaSColumnOrientedDbms;
 import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemComponent;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -16,18 +16,20 @@ import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_CASANDR
 @Setter(AccessLevel.PROTECTED)
 @ToString(callSuper = true)
 public abstract class PaaSCassandra extends PaaSColumnOrientedDbms implements LiveSystemComponent {
-    public static final String TYPE = PAAS_CASANDRA_DBMS.getId();
-    public static abstract class Builder<T extends PaaSCassandra, B extends Builder<T, B>> extends Component.Builder<T, B> {
+  public static final String TYPE = PAAS_CASANDRA_DBMS.getId();
 
-        @Override
-        public T build() {
-            component.setType(PAAS_CASANDRA_DBMS);
-            return super.build();
-        }
-    }
+  public static abstract class Builder<T extends PaaSCassandra, B extends Builder<T, B>> extends Component.Builder<T,
+    B> {
 
     @Override
-    public Collection<String> validate() {
-        return super.validate();
+    public T build() {
+      component.setType(PAAS_CASANDRA_DBMS);
+      return super.build();
     }
+  }
+
+  @Override
+  public Collection<String> validate() {
+    return super.validate();
+  }
 }

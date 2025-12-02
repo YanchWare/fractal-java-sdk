@@ -11,15 +11,16 @@ class AzureOutboundIpTest {
   @Test
   public void validationError_when_azureOutboundIpWithNullName() {
     assertThatThrownBy(() -> AzureOutboundIp.builder().withName(null).build())
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("name is empty or it exceeds 80 characters");
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("name is empty or it exceeds 80 characters");
   }
-  
+
   @Test
   public void validationError_when_azureOutboundIpWithNameTooLong() {
-    assertThatThrownBy(() -> AzureOutboundIp.builder().withName("fractalfractalfractalfractalfractalfractalfractalfractalfractalfractalfractalfractal").build())
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining("name is empty or it exceeds 80 characters");
+    assertThatThrownBy(() -> AzureOutboundIp.builder().withName(
+      "fractalfractalfractalfractalfractalfractalfractalfractalfractalfractalfractalfractal").build())
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining("name is empty or it exceeds 80 characters");
   }
 
   @Test
@@ -30,14 +31,14 @@ class AzureOutboundIpTest {
   @Test
   public void azureOutboundIpHasAllFields() {
     AzureOutboundIp outboundIp = AzureOutboundIp
+      .builder()
+      .withName("fractal")
+      .withAzureResourceGroup(AzureResourceGroup
         .builder()
-        .withName("fractal")
-        .withAzureResourceGroup(AzureResourceGroup
-            .builder()
-            .withName("name")
-            .withRegion(WEST_EUROPE)
-            .build())
-        .build();
+        .withName("name")
+        .withRegion(WEST_EUROPE)
+        .build())
+      .build();
     assertThat(outboundIp.getName()).isEqualTo("fractal");
     assertThat(outboundIp.getAzureResourceGroup()).extracting("name", "region").containsExactly("name", WEST_EUROPE);
   }

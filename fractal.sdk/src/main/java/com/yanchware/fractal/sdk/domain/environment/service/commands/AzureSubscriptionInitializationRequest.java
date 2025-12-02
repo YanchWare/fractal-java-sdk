@@ -6,9 +6,10 @@ import java.util.Map;
 import java.util.UUID;
 
 public record AzureSubscriptionInitializationRequest(
-    EnvironmentIdValue ManagementEnvironmentId,
-    UUID tenantId,
-    UUID subscriptionId,
-    String region,
-    Map<String, String> tags) {
+  EnvironmentIdValue ManagementEnvironmentId,
+  UUID tenantId,
+  UUID subscriptionId,
+  String region,
+  Map<String, String> tags)
+{
 }

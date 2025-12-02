@@ -22,10 +22,10 @@ public enum EnvironmentType {
   }
 
   public static EnvironmentType fromString(String text) {
-    if(isBlank(text)) {
+    if (isBlank(text)) {
       throw new IllegalArgumentException(
-              String.format("Environment type cannot be null or blank. Allowed values: %s", 
-                      Arrays.toString(EnvironmentType.values())));
+        String.format("Environment type cannot be null or blank. Allowed values: %s",
+          Arrays.toString(EnvironmentType.values())));
     }
 
     for (var item : EnvironmentType.values()) {
@@ -35,8 +35,8 @@ public enum EnvironmentType {
     }
 
     throw new IllegalArgumentException(
-            String.format("Invalid environment type: '%s'. Allowed values: %s", 
-                    text, Arrays.toString(EnvironmentType.values())));
+      String.format("Invalid environment type: '%s'. Allowed values: %s",
+        text, Arrays.toString(EnvironmentType.values())));
   }
 
   @Override

@@ -21,51 +21,51 @@ import static com.yanchware.fractal.sdk.utils.TestUtils.assertGenericComponent;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class LiveSystemGkeComponentDtoTest extends LiveSystemKubernetesComponentDtoTest {
-    @Test
-    public void liveSystemComponentDto_matches_liveSystemComponents_withCorrectTypeForLiveSystem_forGke() {
-        var factory = new LiveSystemsFactory(
-                HttpClient.newBuilder().build(),
-                new LocalSdkConfiguration(""),
-                RetryRegistry.ofDefaults());
-        var gke = TestUtils.getGkeExample();
-        var postgres = TestUtils.getGcpPostgresExample();
-        var liveSystem = factory.builder()
-                .withId(new LiveSystemIdValue(new ResourceGroupId(ResourceGroupType.PERSONAL, UUID.randomUUID(), "rg"), "test"))
-                .withStandardProvider(ProviderType.GCP)
-                .withComponents(List.of(gke, postgres))
-                .build();
+  @Test
+  public void liveSystemComponentDto_matches_liveSystemComponents_withCorrectTypeForLiveSystem_forGke() {
+    var factory = new LiveSystemsFactory(
+      HttpClient.newBuilder().build(),
+      new LocalSdkConfiguration(""),
+      RetryRegistry.ofDefaults());
+    var gke = TestUtils.getGkeExample();
+    var postgres = TestUtils.getGcpPostgresExample();
+    var liveSystem = factory.builder()
+      .withId(new LiveSystemIdValue(new ResourceGroupId(ResourceGroupType.PERSONAL, UUID.randomUUID(), "rg"), "test"))
+      .withStandardProvider(ProviderType.GCP)
+      .withComponents(List.of(gke, postgres))
+      .build();
 
-        var lsDtoMap  = liveSystem.blueprintMapFromLiveSystemComponents();
-        assertGke(gke, lsDtoMap);
-        assertCaaSComponents(gke, lsDtoMap);
-    }
+    var lsDtoMap = liveSystem.blueprintMapFromLiveSystemComponents();
+    assertGke(gke, lsDtoMap);
+    assertCaaSComponents(gke, lsDtoMap);
+  }
 
-    private void assertGke(GoogleKubernetesEngine gke, Map<String, LiveSystemComponentDto> lsDtoMap) {
-        var dto = lsDtoMap.get(gke.getId().getValue());
-        assertGenericComponent(dto, gke, ComponentType.PAAS_KUBERNETES.getId());
-        assertThat(dto.getProvider()).isEqualTo(gke.getProvider());
-        assertThat(dto.getParameters())
-                .extracting(
-                        "networkName",
-                        "nodePools",
-                        "podIpRange",
-                        "podsRangeName",
-                        "priorityClasses",
-                        "region",
-                        "serviceIpRange",
-                        "servicesRangeName",
-                        "subnetworkIpRange",
-                        "subnetworkName")
-                .containsExactly(
-                        gke.getNetworkName(),
-                        gke.getNodePools(),
-                        gke.getPodIpRange(),
-                        gke.getPodsRangeName(),
-                        gke.getPriorityClasses(),
-                        gke.getRegion(),
-                        gke.getServiceIpRange(),
-                        gke.getServicesRangeName(),
-                        gke.getSubnetworkIpRange(),
-                        gke.getSubnetworkName());
-    }
+  private void assertGke(GoogleKubernetesEngine gke, Map<String, LiveSystemComponentDto> lsDtoMap) {
+    var dto = lsDtoMap.get(gke.getId().getValue());
+    assertGenericComponent(dto, gke, ComponentType.PAAS_KUBERNETES.getId());
+    assertThat(dto.getProvider()).isEqualTo(gke.getProvider());
+    assertThat(dto.getParameters())
+      .extracting(
+        "networkName",
+        "nodePools",
+        "podIpRange",
+        "podsRangeName",
+        "priorityClasses",
+        "region",
+        "serviceIpRange",
+        "servicesRangeName",
+        "subnetworkIpRange",
+        "subnetworkName")
+      .containsExactly(
+        gke.getNetworkName(),
+        gke.getNodePools(),
+        gke.getPodIpRange(),
+        gke.getPodsRangeName(),
+        gke.getPriorityClasses(),
+        gke.getRegion(),
+        gke.getServiceIpRange(),
+        gke.getServicesRangeName(),
+        gke.getSubnetworkIpRange(),
+        gke.getSubnetworkName());
+  }
 }

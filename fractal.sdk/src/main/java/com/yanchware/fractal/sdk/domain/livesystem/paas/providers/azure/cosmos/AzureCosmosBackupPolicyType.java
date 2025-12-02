@@ -26,9 +26,9 @@ public enum AzureCosmosBackupPolicyType {
 
   public static AzureCosmosBackupPolicyType fromString(String redundancy) {
     return Arrays.stream(values())
-        .filter(t -> t.value.equalsIgnoreCase(redundancy))
-        .findFirst()
-        .orElse(null);
+      .filter(t -> t.value.equalsIgnoreCase(redundancy))
+      .findFirst()
+      .orElse(null);
   }
-    
+
 }

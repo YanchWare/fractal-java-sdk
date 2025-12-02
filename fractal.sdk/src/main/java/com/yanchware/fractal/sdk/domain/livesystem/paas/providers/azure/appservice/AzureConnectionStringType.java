@@ -27,7 +27,7 @@ public final class AzureConnectionStringType extends ExtendableEnum<AzureConnect
   }
 
   public static Collection<AzureConnectionStringType> values() {
-    
+
     return values(AzureConnectionStringType.class);
   }
 }

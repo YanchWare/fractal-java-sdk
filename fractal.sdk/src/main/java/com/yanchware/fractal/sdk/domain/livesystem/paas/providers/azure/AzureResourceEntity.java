@@ -7,8 +7,11 @@ import java.util.Collection;
 
 public interface AzureResourceEntity extends ResourceEntity {
   AzureResourceGroup getAzureResourceGroup();
+
   void setAzureResourceGroup(AzureResourceGroup azureResourceGroup);
+
   AzureRegion getAzureRegion();
+
   void setAzureRegion(AzureRegion region);
 
   static Collection<String> validateAzureResourceEntity(AzureResourceEntity resourceEntity, String entityName) {

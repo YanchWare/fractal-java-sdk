@@ -15,8 +15,9 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
-public class UnmanagedBrokerComponent extends com.yanchware.fractal.sdk.domain.blueprint.saas.UnmanagedBrokerComponent implements LiveSystemComponent {
-  private final static String SECRET_VALUE_IS_BLANK = "[SaaSUnmanagedBrokerComponent Validation] Secret Value has not been defined and it is required";
+public class UnmanagedBrokerComponent extends com.yanchware.fractal.sdk.domain.fractal.saas.UnmanagedBrokerComponent implements LiveSystemComponent {
+  private final static String SECRET_VALUE_IS_BLANK = "[SaaSUnmanagedBrokerComponent Validation] Secret Value has not" +
+    " been defined and it is required";
 
   private String secretName;
   private String secretValue;
@@ -30,7 +31,8 @@ public class UnmanagedBrokerComponent extends com.yanchware.fractal.sdk.domain.b
     return new UnmanagedStorageComponentBuilder();
   }
 
-  public static class UnmanagedStorageComponentBuilder extends Builder<UnmanagedBrokerComponent, UnmanagedStorageComponentBuilder> {
+  public static class UnmanagedStorageComponentBuilder extends Builder<UnmanagedBrokerComponent,
+    UnmanagedStorageComponentBuilder> {
 
     @Override
     protected UnmanagedBrokerComponent createComponent() {
@@ -44,6 +46,7 @@ public class UnmanagedBrokerComponent extends com.yanchware.fractal.sdk.domain.b
 
     /**
      * Name of the secret
+     *
      * @param secretName
      */
     public UnmanagedStorageComponentBuilder withSecretName(String secretName) {
@@ -53,6 +56,7 @@ public class UnmanagedBrokerComponent extends com.yanchware.fractal.sdk.domain.b
 
     /**
      * Value of the secret
+     *
      * @param secretValue
      */
     public UnmanagedStorageComponentBuilder withSecretValue(String secretValue) {

@@ -62,7 +62,8 @@ public class ManagementEnvironment extends BaseEnvironment {
   }
 
   @SuppressWarnings("unchecked")
-  public static class ManagementEnvironmentBuilder extends EnvironmentBuilder<ManagementEnvironment, ManagementEnvironmentBuilder> { // Specify Builder type
+  public static class ManagementEnvironmentBuilder extends EnvironmentBuilder<ManagementEnvironment,
+    ManagementEnvironmentBuilder> { // Specify Builder type
 
     public ManagementEnvironmentBuilder withId(EnvironmentIdValue environmentId) {
       environment.setId(environmentId);
@@ -137,35 +138,35 @@ public class ManagementEnvironment extends BaseEnvironment {
         Map<String, Object> config = entry.getValue();
 
         CloudAgentEntity managementAgent = environment.getCloudAgentByProviderType().get(provider);
-        
-        if(managementAgent == null) {
+
+        if (managementAgent == null) {
           continue;
         }
 
         switch (provider) {
           case AWS:
             operationalEnvironment.registerAwsCloudAgent(
-                (AwsRegion) config.get("region"),
-                getPropertyFromManagementAgent(provider, "organizationId"),
-                (String) config.get("accountId"));
+              (AwsRegion) config.get("region"),
+              getPropertyFromManagementAgent(provider, "organizationId"),
+              (String) config.get("accountId"));
             break;
           case AZURE:
             operationalEnvironment.registerAzureCloudAgent(
-                (AzureRegion) config.get("region"),
-                getPropertyFromManagementAgent(provider, "tenantId"),
-                (UUID) config.get("subscriptionId"));
+              (AzureRegion) config.get("region"),
+              getPropertyFromManagementAgent(provider, "tenantId"),
+              (UUID) config.get("subscriptionId"));
             break;
           case GCP:
             operationalEnvironment.registerGcpCloudAgent(
-                (GcpRegion) config.get("region"),
-                getPropertyFromManagementAgent(provider, "organizationId"),
-                (String) config.get("projectId"));
+              (GcpRegion) config.get("region"),
+              getPropertyFromManagementAgent(provider, "organizationId"),
+              (String) config.get("projectId"));
             break;
           case OCI:
             operationalEnvironment.registerOciCloudAgent(
-                (OciRegion) config.get("region"),
-                getPropertyFromManagementAgent(provider, "tenancyId"),
-                (String) config.get("compartmentId"));
+              (OciRegion) config.get("region"),
+              getPropertyFromManagementAgent(provider, "tenancyId"),
+              (String) config.get("compartmentId"));
             break;
           case HETZNER:
             operationalEnvironment.registerHetznerCloudAgent(
@@ -188,10 +189,11 @@ public class ManagementEnvironment extends BaseEnvironment {
       try {
         var field = cloudAgent.getClass().getDeclaredField(propertyName);
         field.setAccessible(true);
-        
+
         return (T) field.get(cloudAgent);
       } catch (NoSuchFieldException | IllegalAccessException e) {
-        throw new RuntimeException("Error getting property " + propertyName + " from " + providerType + " Cloud Agent", e);
+        throw new RuntimeException("Error getting property " + propertyName + " from " + providerType + " Cloud " +
+          "Agent", e);
       }
     }
   }

@@ -17,6 +17,8 @@ public record EnvironmentResponse(
   Date createdAt,
   String createdBy,
   Date updatedAt,
-  String updatedBy){ }
+  String updatedBy)
+{
+}
 
 

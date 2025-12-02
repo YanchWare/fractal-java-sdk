@@ -10,23 +10,23 @@ public class AzureRoutingChoiceTest {
   @Test
   public void azureRoutingChoiceConstants_shouldNotBeNull() {
     assertThat(AzureRoutingChoice.MICROSOFT_ROUTING)
-        .as("MICROSOFT_ROUTING constant should not be null")
-        .isNotNull();
+      .as("MICROSOFT_ROUTING constant should not be null")
+      .isNotNull();
 
     assertThat(AzureRoutingChoice.INTERNET_ROUTING)
-        .as("INTERNET_ROUTING constant should not be null")
-        .isNotNull();
+      .as("INTERNET_ROUTING constant should not be null")
+      .isNotNull();
   }
 
   @Test
   public void fromString_shouldReturnCorrespondingAzureRoutingChoice() {
     assertThat(AzureRoutingChoice.fromString("MicrosoftRouting"))
-        .as("fromString should return MICROSOFT_ROUTING for 'MicrosoftRouting'")
-        .isEqualTo(AzureRoutingChoice.MICROSOFT_ROUTING);
-    
+      .as("fromString should return MICROSOFT_ROUTING for 'MicrosoftRouting'")
+      .isEqualTo(AzureRoutingChoice.MICROSOFT_ROUTING);
+
     assertThat(AzureRoutingChoice.fromString("InternetRouting"))
-        .as("fromString should return INTERNET_ROUTING for 'InternetRouting'")
-        .isEqualTo(AzureRoutingChoice.INTERNET_ROUTING);
+      .as("fromString should return INTERNET_ROUTING for 'InternetRouting'")
+      .isEqualTo(AzureRoutingChoice.INTERNET_ROUTING);
   }
 
   @Test
@@ -34,8 +34,8 @@ public class AzureRoutingChoiceTest {
     Collection<AzureRoutingChoice> values = AzureRoutingChoice.values();
 
     assertThat(values)
-        .as("Values should contain MICROSOFT_ROUTING, and INTERNET_ROUTING and have exactly 2 values")
-        .containsExactlyInAnyOrder(AzureRoutingChoice.MICROSOFT_ROUTING, AzureRoutingChoice.INTERNET_ROUTING);
+      .as("Values should contain MICROSOFT_ROUTING, and INTERNET_ROUTING and have exactly 2 values")
+      .containsExactlyInAnyOrder(AzureRoutingChoice.MICROSOFT_ROUTING, AzureRoutingChoice.INTERNET_ROUTING);
   }
 
 }

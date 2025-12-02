@@ -15,10 +15,10 @@ public class AzureFileShareAccessPolicyTest {
     String permission = "rwx";
 
     AzureFileShareAccessPolicy policy = AzureFileShareAccessPolicy.builder()
-        .withStartTime(startTime)
-        .withExpiryTime(expiryTime)
-        .withPermission(permission)
-        .build();
+      .withStartTime(startTime)
+      .withExpiryTime(expiryTime)
+      .withPermission(permission)
+      .build();
 
     assertEquals(startTime, policy.getStartTime());
     assertEquals(expiryTime, policy.getExpiryTime());
@@ -28,10 +28,10 @@ public class AzureFileShareAccessPolicyTest {
   @Test
   public void exceptionThrown_when_ExpiryTimeIsNull() {
     Exception exception = assertThrows(IllegalArgumentException.class, () ->
-        AzureFileShareAccessPolicy.builder()
-            .withPermission("rwx")
-            .withStartTime(OffsetDateTime.now())
-            .build()
+      AzureFileShareAccessPolicy.builder()
+        .withPermission("rwx")
+        .withStartTime(OffsetDateTime.now())
+        .build()
     );
 
     assertTrue(exception.getMessage().contains("Expiry time cannot be null"));
@@ -42,11 +42,11 @@ public class AzureFileShareAccessPolicyTest {
     OffsetDateTime time = OffsetDateTime.now();
 
     Exception exception = assertThrows(IllegalArgumentException.class, () ->
-        AzureFileShareAccessPolicy.builder()
-            .withStartTime(time)
-            .withExpiryTime(time.minusHours(1))
-            .withPermission("rwx")
-            .build()
+      AzureFileShareAccessPolicy.builder()
+        .withStartTime(time)
+        .withExpiryTime(time.minusHours(1))
+        .withPermission("rwx")
+        .build()
     );
 
     assertTrue(exception.getMessage().contains("Expiry time must be after start time"));
@@ -55,10 +55,10 @@ public class AzureFileShareAccessPolicyTest {
   @Test
   public void exceptionThrown_when_PermissionIsNull() {
     Exception exception = assertThrows(IllegalArgumentException.class, () ->
-        AzureFileShareAccessPolicy.builder()
-            .withStartTime(OffsetDateTime.now())
-            .withExpiryTime(OffsetDateTime.now().plusHours(1))
-            .build()
+      AzureFileShareAccessPolicy.builder()
+        .withStartTime(OffsetDateTime.now())
+        .withExpiryTime(OffsetDateTime.now().plusHours(1))
+        .build()
     );
 
     assertTrue(exception.getMessage().contains("Permission cannot be null or empty"));
@@ -67,10 +67,10 @@ public class AzureFileShareAccessPolicyTest {
   @Test
   public void exceptionThrown_when_StartTimeIsNull() {
     Exception exception = assertThrows(IllegalArgumentException.class, () ->
-        AzureFileShareAccessPolicy.builder()
-            .withExpiryTime(OffsetDateTime.now().plusHours(1))
-            .withPermission("rwx")
-            .build()
+      AzureFileShareAccessPolicy.builder()
+        .withExpiryTime(OffsetDateTime.now().plusHours(1))
+        .withPermission("rwx")
+        .build()
     );
 
     assertTrue(exception.getMessage().contains("Start time cannot be null"));

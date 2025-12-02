@@ -34,7 +34,7 @@ public class TraefikTracing implements Validatable {
 
       if (!errors.isEmpty()) {
         throw new IllegalArgumentException(String.format("TraefikTracingBuilder validation failed. Errors: %s",
-            Arrays.toString(errors.toArray())));
+          Arrays.toString(errors.toArray())));
       }
 
       return tracing;

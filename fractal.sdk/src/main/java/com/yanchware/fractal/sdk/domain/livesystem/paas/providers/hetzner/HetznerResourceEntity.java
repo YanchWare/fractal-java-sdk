@@ -7,6 +7,7 @@ import java.util.Collection;
 
 public interface HetznerResourceEntity extends ResourceEntity {
   HetznerRegion getHetznerRegion();
+
   void setHetznerRegion(HetznerRegion region);
 
   static Collection<String> validateHetznerResourceEntity(HetznerResourceEntity resourceEntity, String entityName) {

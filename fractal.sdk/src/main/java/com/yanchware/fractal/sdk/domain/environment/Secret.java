@@ -18,7 +18,8 @@ import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidAlphan
  * Secret values cannot be empty or null.</pre>
  */
 public record Secret(String shortName, String displayName, String description, String value) {
-  private final static String SHORT_NAME_NOT_VALID = "[Secret Validation] The Short Name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen";
+  private final static String SHORT_NAME_NOT_VALID = "[Secret Validation] The Short Name only allow alphanumeric " +
+    "characters and hyphens, cannot start or end in a hyphen";
   private final static String DISPLAY_NAME_NOT_VALID = "[Secret Validation] The Display Name cannot be empty or null";
   private final static String VALUE_NOT_VALID = "[Secret Validation] The value cannot be empty or null";
 
@@ -62,8 +63,8 @@ public record Secret(String shortName, String displayName, String description, S
 
     if (!errors.isEmpty()) {
       throw new IllegalArgumentException(String.format(
-          "Secret validation failed. Errors: %s",
-          Arrays.toString(errors.toArray())));
+        "Secret validation failed. Errors: %s",
+        Arrays.toString(errors.toArray())));
     }
   }
 

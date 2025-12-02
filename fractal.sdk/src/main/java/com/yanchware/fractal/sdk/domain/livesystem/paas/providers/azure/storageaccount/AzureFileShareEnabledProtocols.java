@@ -8,7 +8,7 @@ import java.util.Collection;
 public final class AzureFileShareEnabledProtocols extends ExtendableEnum<AzureFileShareEnabledProtocols> {
   public static final AzureFileShareEnabledProtocols NFS = fromString("NFS");
   public static final AzureFileShareEnabledProtocols SMB = fromString("SMB");
-  
+
   public AzureFileShareEnabledProtocols() {
   }
 

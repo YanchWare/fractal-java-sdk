@@ -40,7 +40,7 @@ public class AzureStorageAccountEncryption {
 
     /**
      * <pre>
-     * The encryption keySource (provider). 
+     * The encryption keySource (provider).
      * Possible values (case-insensitive): Microsoft.Storage, Microsoft.Keyvault
      * </pre>
      */
@@ -58,10 +58,10 @@ public class AzureStorageAccountEncryption {
       encryption.setKeyVaultProperties(keyVaultProperties);
       return builder;
     }
-    
+
     /**
      * <pre>
-     * A boolean indicating whether the service applies a secondary layer of encryption 
+     * A boolean indicating whether the service applies a secondary layer of encryption
      * with platform managed keys for data at rest.
      * </pre>
      */
@@ -69,7 +69,7 @@ public class AzureStorageAccountEncryption {
       encryption.setRequireInfrastructureEncryption(requireInfrastructureEncryption);
       return builder;
     }
-    
+
     /**
      * <pre>
      * List of services which support encryption.
