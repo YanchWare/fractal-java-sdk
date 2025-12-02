@@ -15,8 +15,9 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
-public class UnmanagedSecurityComponent extends com.yanchware.fractal.sdk.domain.blueprint.saas.UnmanagedSecurityComponent implements LiveSystemComponent {
-  private final static String SECRET_VALUE_IS_BLANK = "[SaaSUnmanagedSecurityComponent Validation] Secret Value has not been defined and it is required";
+public class UnmanagedSecurityComponent extends com.yanchware.fractal.sdk.domain.fractal.saas.UnmanagedSecurityComponent implements LiveSystemComponent {
+  private final static String SECRET_VALUE_IS_BLANK = "[SaaSUnmanagedSecurityComponent Validation] Secret Value has " +
+    "not been defined and it is required";
 
   private String secretName;
   private String secretValue;
@@ -30,7 +31,8 @@ public class UnmanagedSecurityComponent extends com.yanchware.fractal.sdk.domain
     return new ExternalSecurityComponentBuilder();
   }
 
-  public static class ExternalSecurityComponentBuilder extends Builder<UnmanagedSecurityComponent, ExternalSecurityComponentBuilder> {
+  public static class ExternalSecurityComponentBuilder extends Builder<UnmanagedSecurityComponent,
+    ExternalSecurityComponentBuilder> {
 
     @Override
     protected UnmanagedSecurityComponent createComponent() {
@@ -44,7 +46,7 @@ public class UnmanagedSecurityComponent extends com.yanchware.fractal.sdk.domain
 
     /**
      * Sets the name of the secret.
-     * 
+     *
      * @param secretName The name of the secret.
      * @return The builder instance for method chaining.
      */
@@ -55,7 +57,7 @@ public class UnmanagedSecurityComponent extends com.yanchware.fractal.sdk.domain
 
     /**
      * Sets the value of the secret.
-     * 
+     *
      * @param secretValue The value of the secret.
      * @return The builder instance for method chaining.
      */

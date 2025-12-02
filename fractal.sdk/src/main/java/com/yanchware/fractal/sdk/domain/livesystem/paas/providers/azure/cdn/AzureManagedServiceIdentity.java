@@ -41,9 +41,10 @@ public class AzureManagedServiceIdentity {
     }
 
     /**
-     * The set of user assigned identity id's associated with the resource. It should be ARM 
+     * The set of user assigned identity id's associated with the resource. It should be ARM
      * resource ids in the form:
-     * '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/{identityName}.'
+     * '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft
+     * .ManagedIdentity/userAssignedIdentities/{identityName}.'
      */
     public AzureManagedServiceIdentityBuilder withUserAssignedIdentities(Collection<String> userAssignedIdentities) {
       instance.setUserAssignedIdentities(userAssignedIdentities);
@@ -52,7 +53,8 @@ public class AzureManagedServiceIdentity {
 
     /**
      * User assigned identity associated with the resource. It should be ARM resource id in the form:
-     * '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/{identityName}.'
+     * '/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft
+     * .ManagedIdentity/userAssignedIdentities/{identityName}.'
      */
     public AzureManagedServiceIdentityBuilder withUserAssignedIdentity(String userAssignedIdentityId) {
       if (instance.getUserAssignedIdentities() == null) {

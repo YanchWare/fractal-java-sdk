@@ -38,7 +38,7 @@ public class AzureResourceAccessRule {
       instance.setResourceId(resourceId);
       return builder;
     }
-    
+
     /**
      * <pre>
      * Tenant Id

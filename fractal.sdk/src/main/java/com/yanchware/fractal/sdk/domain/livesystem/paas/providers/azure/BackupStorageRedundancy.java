@@ -27,8 +27,8 @@ public enum BackupStorageRedundancy {
 
   public static BackupStorageRedundancy fromString(String redundancy) {
     return Arrays.stream(values())
-        .filter(r -> r.value.equalsIgnoreCase(redundancy))
-        .findFirst()
-        .orElse(null);
+      .filter(r -> r.value.equalsIgnoreCase(redundancy))
+      .findFirst()
+      .orElse(null);
   }
 }

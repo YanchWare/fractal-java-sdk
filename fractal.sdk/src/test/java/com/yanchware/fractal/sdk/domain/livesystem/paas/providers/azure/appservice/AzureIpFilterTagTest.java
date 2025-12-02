@@ -9,9 +9,9 @@ class AzureIpFilterTagTest {
   @Test
   public void shouldReturnProperValue() {
     assertAll(
-        () -> assertEquals(AzureIpFilterTag.fromString("Default"), AzureIpFilterTag.DEFAULT),
-        () -> assertEquals(AzureIpFilterTag.fromString("ServiceTag"), AzureIpFilterTag.SERVICE_TAG),
-        () -> assertEquals(AzureIpFilterTag.fromString("XffProxy"), AzureIpFilterTag.XFF_PROXY)
+      () -> assertEquals(AzureIpFilterTag.fromString("Default"), AzureIpFilterTag.DEFAULT),
+      () -> assertEquals(AzureIpFilterTag.fromString("ServiceTag"), AzureIpFilterTag.SERVICE_TAG),
+      () -> assertEquals(AzureIpFilterTag.fromString("XffProxy"), AzureIpFilterTag.XFF_PROXY)
     );
   }
 }

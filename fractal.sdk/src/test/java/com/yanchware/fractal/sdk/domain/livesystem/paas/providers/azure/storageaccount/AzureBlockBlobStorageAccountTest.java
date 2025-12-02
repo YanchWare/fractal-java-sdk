@@ -10,18 +10,18 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AzureBlockBlobStorageAccountTest extends TestWithFixture  {
+public class AzureBlockBlobStorageAccountTest extends TestWithFixture {
   @Test
   public void kindIsValid_when_ValidationPasses() throws JsonProcessingException {
     var storage = AzureBlockBlobStorageAccount.builder()
-        .withId(aComponentId())
-        .withName(aLowerCaseAlphanumericString(10))
-        .withDisplayName(aAlphanumericString(50))
-        .withRegion(a(AzureRegion.class))
-        .withResourceGroup(a(AzureResourceGroup.class))
-        .withTag(a(String.class), a(String.class))
-        .build();
-    
+      .withId(aComponentId())
+      .withName(aLowerCaseAlphanumericString(10))
+      .withDisplayName(aAlphanumericString(50))
+      .withRegion(a(AzureRegion.class))
+      .withResourceGroup(a(AzureResourceGroup.class))
+      .withTag(a(String.class), a(String.class))
+      .build();
+
     assertThat(storage.validate().isEmpty()).isTrue();
 
     var json = TestUtils.getJsonRepresentation(storage);

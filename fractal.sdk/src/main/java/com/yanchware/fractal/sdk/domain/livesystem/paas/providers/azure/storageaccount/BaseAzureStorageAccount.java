@@ -23,14 +23,17 @@ import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_STORAGE
 
 @Getter
 @Setter
-public abstract class BaseAzureStorageAccount extends PaaSDataStorage implements AzureResourceEntity, LiveSystemComponent {
+public abstract class BaseAzureStorageAccount extends PaaSDataStorage implements AzureResourceEntity,
+  LiveSystemComponent {
   private static final Pattern NAME_PATTERN = Pattern.compile("^[a-z0-9]{3,24}$");
 
   @JsonIgnore
-  public static final String NAME_IS_NOT_VALID = "Name must be between 3 and 24 characters in length and use numbers and lower-case letters only";
+  public static final String NAME_IS_NOT_VALID = "Name must be between 3 and 24 characters in length and use numbers " +
+    "and lower-case letters only";
 
   @JsonIgnore
-  public static final String AZURE_RESOURCE_GROUP_IS_BLANK = "Azure Resource group has not been defined and it is required";
+  public static final String AZURE_RESOURCE_GROUP_IS_BLANK = "Azure Resource group has not been defined and it is " +
+    "required";
 
   @JsonIgnore
   public static final String AZURE_REGION_IS_BLANK = "Region has not been defined and it is required";
@@ -90,7 +93,7 @@ public abstract class BaseAzureStorageAccount extends PaaSDataStorage implements
      * <pre>
      * The name of the storage account within the specified resource group.
      * Storage account names must be between 3 and 24 characters in length and use numbers and lower-case letters only.
-     * 
+     *
      * Regex pattern: ^[a-z0-9]+$
      * </pre>
      */
@@ -136,7 +139,7 @@ public abstract class BaseAzureStorageAccount extends PaaSDataStorage implements
 
     /**
      * <pre>
-     * Set the extended location of the resource. 
+     * Set the extended location of the resource.
      * If not set, the storage account will be created in Azure main region.
      * </pre>
      */
@@ -159,7 +162,7 @@ public abstract class BaseAzureStorageAccount extends PaaSDataStorage implements
 
     /**
      * <pre>
-     * Required for Blob Storage accounts. 
+     * Required for Blob Storage accounts.
      * The access tier is used for billing.
      * </pre>
      */
@@ -182,8 +185,8 @@ public abstract class BaseAzureStorageAccount extends PaaSDataStorage implements
 
     /**
      * <pre>
-     * Allow or disallow cross AAD tenant object replication. 
-     * Set this property to true for new or existing accounts only if object replication policies will involve 
+     * Allow or disallow cross AAD tenant object replication.
+     * Set this property to true for new or existing accounts only if object replication policies will involve
      * storage accounts in different AAD tenants.
      * </pre>
      */
@@ -196,7 +199,7 @@ public abstract class BaseAzureStorageAccount extends PaaSDataStorage implements
     /**
      * <pre>
      * Indicates whether the storage account permits requests to be authorized with the account access key via Shared Key.
-     * If false, then all requests, including shared access signatures, 
+     * If false, then all requests, including shared access signatures,
      * must be authorized with Azure Active Directory (Azure AD).
      * </pre>
      */
@@ -230,9 +233,9 @@ public abstract class BaseAzureStorageAccount extends PaaSDataStorage implements
 
     /**
      * <pre>
-     * User domain assigned to the storage account. 
-     * Name is the CNAME source. 
-     * Only one custom domain is supported per storage account at this time. 
+     * User domain assigned to the storage account.
+     * Name is the CNAME source.
+     * Only one custom domain is supported per storage account at this time.
      * To clear the existing custom domain, use an empty string for the custom domain name property.
      * </pre>
      */
@@ -255,8 +258,8 @@ public abstract class BaseAzureStorageAccount extends PaaSDataStorage implements
 
     /**
      * <pre>
-     * Allows you to specify the type of endpoint. 
-     * Set this to AzureDNSZone to create a large number of accounts in a single subscription, 
+     * Allows you to specify the type of endpoint.
+     * Set this to AzureDNSZone to create a large number of accounts in a single subscription,
      * which creates accounts in an Azure DNS Zone and the endpoint URL will have an alphanumeric DNS Zone identifier.
      * </pre>
      */
@@ -279,7 +282,7 @@ public abstract class BaseAzureStorageAccount extends PaaSDataStorage implements
 
     /**
      * <pre>
-     * This property enables and defines account-level immutability. 
+     * This property enables and defines account-level immutability.
      * Enabling the feature auto-enables Blob Versioning.
      * </pre>
      */
@@ -439,8 +442,8 @@ public abstract class BaseAzureStorageAccount extends PaaSDataStorage implements
     }
 
     /**
-     * Specifies settings for the backup configuration of the Azure Storage Account, including details about 
-     * the Recovery Services vault, backup policy, and other related settings. This configuration ensures data 
+     * Specifies settings for the backup configuration of the Azure Storage Account, including details about
+     * the Recovery Services vault, backup policy, and other related settings. This configuration ensures data
      * protection and facilitates disaster recovery scenarios.
      */
     public B withBackup(AzureStorageAccountBackup backup) {

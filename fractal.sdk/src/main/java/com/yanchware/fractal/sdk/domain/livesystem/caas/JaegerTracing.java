@@ -32,7 +32,7 @@ public class JaegerTracing implements Validatable {
       jaeger.collectorEndpoint = collectorEndpoint;
       return builder;
     }
-    
+
 
     public JaegerTracingBuilder withLocalAgentPort(Integer localAgentPort) {
       jaeger.localAgentPort = localAgentPort;
@@ -49,7 +49,7 @@ public class JaegerTracing implements Validatable {
 
       if (!errors.isEmpty()) {
         throw new IllegalArgumentException(String.format("JaegerTracingBuilder validation failed. Errors: %s",
-            Arrays.toString(errors.toArray())));
+          Arrays.toString(errors.toArray())));
       }
 
       return jaeger;
@@ -71,7 +71,7 @@ public class JaegerTracing implements Validatable {
       if (localAgentUrlPath == null || localAgentUrlPath.isEmpty()) {
         errors.add("localAgentUrlPath must be defined");
       }
-     
+
       if (localAgentPort == null) {
         errors.add("localAgentPort must be defined");
       } else if (localAgentPort < 1 || localAgentPort > 65535) {

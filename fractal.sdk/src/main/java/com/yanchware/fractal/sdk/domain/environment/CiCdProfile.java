@@ -8,10 +8,15 @@ import java.util.Collection;
 
 import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidAlphanumericsHyphens;
 
-public record CiCdProfile(String shortName, String displayName, String description, String sshPrivateKeyData, String sshPrivateKeyPassphrase) {
-  private final static String SHORT_NAME_NOT_VALID = "[CI/CD Profile Validation] The Short Name only allow alphanumeric characters and hyphens, cannot start or end in a hyphen";
-  private final static String DISPLAY_NAME_NOT_VALID = "[CI/CD Profile Validation] The Display Name cannot be empty or null";
-  private final static String SSH_PRIVATE_KEY_DATA_NOT_VALID = "[CI/CD Profile Validation] The SSH Private Key Data cannot be empty or null";
+public record CiCdProfile(String shortName, String displayName, String description, String sshPrivateKeyData,
+                          String sshPrivateKeyPassphrase)
+{
+  private final static String SHORT_NAME_NOT_VALID = "[CI/CD Profile Validation] The Short Name only allow " +
+    "alphanumeric characters and hyphens, cannot start or end in a hyphen";
+  private final static String DISPLAY_NAME_NOT_VALID = "[CI/CD Profile Validation] The Display Name cannot be empty " +
+    "or null";
+  private final static String SSH_PRIVATE_KEY_DATA_NOT_VALID = "[CI/CD Profile Validation] The SSH Private Key Data " +
+    "cannot be empty or null";
 
   /**
    * Creates a new CI/CD profile with the specified parameters, without a description.
@@ -37,7 +42,8 @@ public record CiCdProfile(String shortName, String displayName, String descripti
    * Creates a new CI/CD profile with the specified parameters.
    *
    * <p>This constructor allows for the creation of a CI/CD profile with description.
-   * If a description is not needed, you can use the constructor overload that omits the {@code description} parameter.</p>
+   * If a description is not needed, you can use the constructor overload that omits the {@code description}
+   * parameter.</p>
    *
    * @param shortName               The short name of the CI/CD profile, which must adhere to the following constraints:
    *                                <ul>
@@ -56,8 +62,8 @@ public record CiCdProfile(String shortName, String displayName, String descripti
 
     if (!errors.isEmpty()) {
       throw new IllegalArgumentException(String.format(
-          "CI/CD Profile validation failed. Errors: %s",
-          Arrays.toString(errors.toArray())));
+        "CI/CD Profile validation failed. Errors: %s",
+        Arrays.toString(errors.toArray())));
     }
   }
 
@@ -79,8 +85,7 @@ public record CiCdProfile(String shortName, String displayName, String descripti
         errors.add(SHORT_NAME_NOT_VALID);
       }
     }
-    
-    
+
 
     if (StringUtils.isBlank(displayName)) {
       errors.add(DISPLAY_NAME_NOT_VALID);

@@ -7,6 +7,7 @@ import java.util.Collection;
 
 public interface AwsResourceEntity extends ResourceEntity {
   AwsRegion getAwsRegion();
+
   void setAwsRegion(AwsRegion region);
 
   static Collection<String> validateAwsResourceEntity(AwsResourceEntity resourceEntity, String entityName) {

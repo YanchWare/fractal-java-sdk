@@ -11,8 +11,9 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
- * A container that holds related resources for an Azure solution. 
- * The resource group can include all the resources for the solution, or only those resources that you want to manage as a group. 
+ * A container that holds related resources for an Azure solution.
+ * The resource group can include all the resources for the solution, or only those resources that you want to manage
+ * as a group.
  * You decide how you want to allocate resources to resource groups based on what makes the most sense for you  .
  */
 public class AzureResourceGroup extends AzureProxyResource implements Validatable {
@@ -21,13 +22,16 @@ public class AzureResourceGroup extends AzureProxyResource implements Validatabl
   private static final String NAME_EXCEEDS_LENGTH_LIMIT = "[AzureResourceGroup Validation] Name exceeds 90 characters";
 
   @JsonIgnore
-  public static final String NAME_IS_NOT_VALID = "[AzureResourceGroup Validation] Name can only include alphanumeric, underscore, parentheses, hyphen, period (except at end), and Unicode characters that match the allowed characters";
+  public static final String NAME_IS_NOT_VALID = "[AzureResourceGroup Validation] Name can only include alphanumeric," +
+    " underscore, parentheses, hyphen, period (except at end), and Unicode characters that match the allowed " +
+    "characters";
 
   @JsonIgnore
-  public final static String REGION_IS_BLANK = "[AzureResourceGroup Validation] Region has not been defined and it is required";
+  public final static String REGION_IS_BLANK = "[AzureResourceGroup Validation] Region has not been defined and it is" +
+    " required";
 
   private static final Pattern RESOURCE_GROUP_NAME_PATTERN = Pattern.compile("^[\\w()-.]+[\\w()-]$");
-  
+
   public AzureResourceGroup() {
   }
 
@@ -49,8 +53,8 @@ public class AzureResourceGroup extends AzureProxyResource implements Validatabl
 
       if (!errors.isEmpty()) {
         throw new IllegalArgumentException(String.format(
-            "AzureResourceGroup validation failed. Errors: %s",
-            Arrays.toString(errors.toArray())));
+          "AzureResourceGroup validation failed. Errors: %s",
+          Arrays.toString(errors.toArray())));
       }
 
       return azureResourceGroup;
@@ -61,7 +65,7 @@ public class AzureResourceGroup extends AzureProxyResource implements Validatabl
   public Collection<String> validate() {
     Collection<String> errors = new ArrayList<>();
     var name = this.getName();
-   
+
     if (StringUtils.isBlank(name)) {
       errors.add(NAME_IS_NULL_OR_EMPTY);
     }

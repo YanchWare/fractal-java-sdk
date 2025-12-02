@@ -9,7 +9,7 @@ public final class ManagedClusterSkuTier extends ExtendableEnum<ManagedClusterSk
   /**
    * Static value Premium for ManagedClusterSkuTier.
    */
-  
+
   public static final ManagedClusterSkuTier PREMIUM = fromString("Premium");
 
   /**

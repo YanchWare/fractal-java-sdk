@@ -25,10 +25,10 @@ public interface Rule {
    * the given range, adhering to the scheduling logic of the implemented rule.
    *
    * @param fromIncl the start of the range, inclusive; must not be {@code null}
-   * @param toExcl the end of the range, exclusive; must not be {@code null}
-   * @param zone the time zone in which the windows should be calculated; must not be {@code null}
+   * @param toExcl   the end of the range, exclusive; must not be {@code null}
+   * @param zone     the time zone in which the windows should be calculated; must not be {@code null}
    * @return a stream of {@code Window} objects representing the enumerated time intervals
-   *         within the specified range; an empty stream is returned if no intervals match
+   * within the specified range; an empty stream is returned if no intervals match
    */
   Stream<Window> enumerate(ZonedDateTime fromIncl, ZonedDateTime toExcl, ZoneId zone);
 }

@@ -26,78 +26,80 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @WireMockTest
 class LiveSystemAggregateTest {
 
-    private LiveSystemAggregate liveSystemAggregate;
+  private LiveSystemAggregate liveSystemAggregate;
 
-    @BeforeEach
-    void setUp(WireMockRuntimeInfo wmRuntimeInfo) {
-        var httpClient = HttpClient.newBuilder()
-                .version(HttpClient.Version.HTTP_2)
-                .build();
+  @BeforeEach
+  void setUp(WireMockRuntimeInfo wmRuntimeInfo) {
+    var httpClient = HttpClient.newBuilder()
+      .version(HttpClient.Version.HTTP_2)
+      .build();
 
-        var sdkConfiguration = new LocalSdkConfiguration(wmRuntimeInfo.getHttpBaseUrl());
-        liveSystemAggregate = new LiveSystemsFactory(httpClient, sdkConfiguration, RetryRegistry.ofDefaults())
-                .builder()
-                .withId(new LiveSystemIdValue(new ResourceGroupId(ResourceGroupType.PERSONAL, UUID.randomUUID(), "rg"), UUID.randomUUID().toString()))
-                .withStandardProvider(ProviderType.AZURE)
-                .withEnvironmentId(new EnvironmentIdValue(
-                        EnvironmentType.PERSONAL,
-                        UUID.randomUUID(),
-                        "test-env"
-                ))
-                .withComponent(AzureCosmosGremlinDbms.builder()
-                        .withId("cosmos-graph-1")
-                        .withMaxTotalThroughput(500)
-                        .withAzureResourceGroup(
-                                AzureResourceGroup.builder()
-                                        .withName("MyRg")
-                                        .withRegion(AzureRegion.EAST_ASIA)
-                                        .build())
-                        .withCosmosEntity(AzureCosmosGremlinDatabase.builder()
-                                .withId("graph-db-1")
-                                .build())
-                        .build())
-                .build();
-    }
+    var sdkConfiguration = new LocalSdkConfiguration(wmRuntimeInfo.getHttpBaseUrl());
+    liveSystemAggregate = new LiveSystemsFactory(httpClient, sdkConfiguration, RetryRegistry.ofDefaults())
+      .builder()
+      .withId(new LiveSystemIdValue(new ResourceGroupId(ResourceGroupType.PERSONAL, UUID.randomUUID(), "rg"),
+        UUID.randomUUID().toString()))
+      .withStandardProvider(ProviderType.AZURE)
+      .withEnvironmentId(new EnvironmentIdValue(
+        EnvironmentType.PERSONAL,
+        UUID.randomUUID(),
+        "test-env"
+      ))
+      .withComponent(AzureCosmosGremlinDbms.builder()
+        .withId("cosmos-graph-1")
+        .withMaxTotalThroughput(500)
+        .withAzureResourceGroup(
+          AzureResourceGroup.builder()
+            .withName("MyRg")
+            .withRegion(AzureRegion.EAST_ASIA)
+            .build())
+        .withCosmosEntity(AzureCosmosGremlinDatabase.builder()
+          .withId("graph-db-1")
+          .build())
+        .build())
+      .build();
+  }
 
-    @Test
-    void should_throwEnvironmentNotFoundException_when_environmentDoesNotExist() {
-        // Arrange
-        var environmentId = liveSystemAggregate.getEnvironment().id();
+  @Test
+  void should_throwEnvironmentNotFoundException_when_environmentDoesNotExist() {
+    // Arrange
+    var environmentId = liveSystemAggregate.getEnvironment().id();
 
-        // Configure WireMock to return a 404 Not Found response
-        stubFor(get(urlEqualTo("/environments/" + environmentId))
-                .willReturn(notFound()));
+    // Configure WireMock to return a 404 Not Found response
+    stubFor(get(urlEqualTo("/environments/" + environmentId))
+      .willReturn(notFound()));
 
-        // Act & Assert
-        assertThatThrownBy(() -> liveSystemAggregate.instantiate())
-                .isInstanceOf(EnvironmentNotFoundException.class)
-                .hasMessageContaining(
-                        String.format("Unable to instantiate LiveSystem [id: '%s']. Environment [id: '%s'] not found",
-                                liveSystemAggregate.getId(),
-                                environmentId));
+    // Act & Assert
+    assertThatThrownBy(() -> liveSystemAggregate.instantiate())
+      .isInstanceOf(EnvironmentNotFoundException.class)
+      .hasMessageContaining(
+        String.format("Unable to instantiate LiveSystem [id: '%s']. Environment [id: '%s'] not found",
+          liveSystemAggregate.getId(),
+          environmentId));
 
-        // Verify that the request was made to the environment service
-        verify(getRequestedFor(urlEqualTo("/environments/" + environmentId)));
-    }
+    // Verify that the request was made to the environment service
+    verify(getRequestedFor(urlEqualTo("/environments/" + environmentId)));
+  }
 
-    @Test
-    void should_throwEnvironmentException_when_badRequest() {
-        // Arrange
-        var environmentId = liveSystemAggregate.getEnvironment().id();
+  @Test
+  void should_throwEnvironmentException_when_badRequest() {
+    // Arrange
+    var environmentId = liveSystemAggregate.getEnvironment().id();
 
-        // Configure WireMock to return a 500 Internal Server Error response
-        stubFor(get(urlEqualTo("/environments/" + environmentId))
-                .willReturn(badRequest()));
+    // Configure WireMock to return a 500 Internal Server Error response
+    stubFor(get(urlEqualTo("/environments/" + environmentId))
+      .willReturn(badRequest()));
 
-        // Act & Assert
-        assertThatThrownBy(() -> liveSystemAggregate.instantiate())
-                .isInstanceOf(EnvironmentNotFoundException.class)
-                .hasMessageContaining(String.format("Unable to instantiate LiveSystem [id: '%s']. Environment [id: '%s'] not found",
-                        liveSystemAggregate.getId(),
-                        environmentId));
+    // Act & Assert
+    assertThatThrownBy(() -> liveSystemAggregate.instantiate())
+      .isInstanceOf(EnvironmentNotFoundException.class)
+      .hasMessageContaining(String.format("Unable to instantiate LiveSystem [id: '%s']. Environment [id: '%s'] not " +
+          "found",
+        liveSystemAggregate.getId(),
+        environmentId));
 
-        // Verify that the request was made to the environment service
-        verify(getRequestedFor(urlEqualTo("/environments/" + environmentId)));
-    }
+    // Verify that the request was made to the environment service
+    verify(getRequestedFor(urlEqualTo("/environments/" + environmentId)));
+  }
 
 }

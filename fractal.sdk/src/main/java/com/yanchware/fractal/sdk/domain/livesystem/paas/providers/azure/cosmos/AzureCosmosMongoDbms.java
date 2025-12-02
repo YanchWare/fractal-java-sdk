@@ -1,6 +1,6 @@
 package com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.cosmos;
 
-import com.yanchware.fractal.sdk.domain.blueprint.paas.PaaSDocumentDbms;
+import com.yanchware.fractal.sdk.domain.fractal.paas.PaaSDocumentDbms;
 import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureResourceGroup;
@@ -25,7 +25,9 @@ public class AzureCosmosMongoDbms extends PaaSDocumentDbms implements LiveSystem
 
   public static final String TYPE = PAAS_COSMOS_ACCOUNT.getId();
 
-  private final static String NAME_NOT_VALID = "[AzureCosmosMongoDbms Validation] The name must only contains lowercase letters, numbers, and hyphens. The name must not start or end in a hyphen and must be between 3 and 44 characters long";
+  private final static String NAME_NOT_VALID = "[AzureCosmosMongoDbms Validation] The name must only contains " +
+    "lowercase letters, numbers, and hyphens. The name must not start or end in a hyphen and must be between 3 and 44" +
+    " characters long";
 
   private String name;
   private Integer maxTotalThroughput;
@@ -51,7 +53,8 @@ public class AzureCosmosMongoDbms extends PaaSDocumentDbms implements LiveSystem
     return new AzureCosmosMongoDbmsBuilder();
   }
 
-  public static class AzureCosmosMongoDbmsBuilder extends AzureCosmosAccountBuilder<AzureCosmosMongoDbms, AzureCosmosMongoDbmsBuilder> {
+  public static class AzureCosmosMongoDbmsBuilder extends AzureCosmosAccountBuilder<AzureCosmosMongoDbms,
+    AzureCosmosMongoDbmsBuilder> {
 
     @Override
     protected AzureCosmosMongoDbms createComponent() {
@@ -68,14 +71,14 @@ public class AzureCosmosMongoDbms extends PaaSDocumentDbms implements LiveSystem
     Collection<String> errors = super.validate();
     errors.addAll(AzureCosmosAccount.validateCosmosAccount(this, "Mongo DBMS"));
 
-    if(StringUtils.isNotBlank(name)) {
+    if (StringUtils.isNotBlank(name)) {
       var hasValidCharacters = isValidLowercaseLettersNumbersAndHyphens(name);
       var hasValidLengths = isValidStringLength(name, 3, 44);
-      if(!hasValidCharacters || !hasValidLengths) {
+      if (!hasValidCharacters || !hasValidLengths) {
         errors.add(NAME_NOT_VALID);
       }
     }
-    
+
     return errors;
   }
 

@@ -20,7 +20,7 @@ public class AzureFileStorageAccount extends BaseAzureStorageAccount {
   public AzureFileStorageAccount() {
     this.fileShares = new ArrayList<>();
   }
-  
+
   @Override
   public String getKind() {
     return "FileStorage";
@@ -30,7 +30,8 @@ public class AzureFileStorageAccount extends BaseAzureStorageAccount {
     return new AzureFileStorageAccountBuilder();
   }
 
-  public static class AzureFileStorageAccountBuilder extends Builder<AzureFileStorageAccount, AzureFileStorageAccountBuilder> {
+  public static class AzureFileStorageAccountBuilder extends Builder<AzureFileStorageAccount,
+    AzureFileStorageAccountBuilder> {
 
     @Override
     protected AzureFileStorageAccount createComponent() {
@@ -58,7 +59,7 @@ public class AzureFileStorageAccount extends BaseAzureStorageAccount {
         f.setAzureRegion(component.getAzureRegion());
         f.setAzureResourceGroup(component.getAzureResourceGroup());
       });
-      
+
       this.component.fileShares.addAll(fileShares);
       return this;
     }

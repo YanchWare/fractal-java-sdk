@@ -10,12 +10,12 @@ import java.util.Collection;
  */
 public final class AzureDefaultSharePermission extends ExtendableEnum<AzureDefaultSharePermission> {
   public static final AzureDefaultSharePermission NONE = fromString("None");
-  public static final AzureDefaultSharePermission STORAGE_FILE_DATA_SMB_SHARE_READER = 
-      fromString("StorageFileDataSmbShareReader");
-  public static final AzureDefaultSharePermission STORAGE_FILE_DATA_SMB_SHARE_CONTRIBUTOR = 
-      fromString("StorageFileDataSmbShareContributor");
-  public static final AzureDefaultSharePermission STORAGE_FILE_DATA_SMB_SHARE_ELEVATED_CONTRIBUTOR = 
-      fromString("StorageFileDataSmbShareElevatedContributor");
+  public static final AzureDefaultSharePermission STORAGE_FILE_DATA_SMB_SHARE_READER =
+    fromString("StorageFileDataSmbShareReader");
+  public static final AzureDefaultSharePermission STORAGE_FILE_DATA_SMB_SHARE_CONTRIBUTOR =
+    fromString("StorageFileDataSmbShareContributor");
+  public static final AzureDefaultSharePermission STORAGE_FILE_DATA_SMB_SHARE_ELEVATED_CONTRIBUTOR =
+    fromString("StorageFileDataSmbShareElevatedContributor");
 
   @JsonCreator
   public static AzureDefaultSharePermission fromString(String name) {

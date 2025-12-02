@@ -10,44 +10,58 @@ import java.util.Map;
 
 public interface CustomWorkload {
   String getPrivateSSHKeyPassphraseEnvironmentSecretShortName();
+
   void setPrivateSSHKeyPassphraseEnvironmentSecretShortName(String privateSSHKeyPassphraseEnvironmentSecretShortName);
 
   String getPrivateSSHKeyEnvironmentSecretShortName();
+
   void setPrivateSSHKeyEnvironmentSecretShortName(String privateSSHKeyEnvironmentSecretShortName);
 
   String getSshRepositoryURI();
+
   void setSshRepositoryURI(String SshRepositoryURI);
 
   String getRepoId();
+
   void setRepoId(String repoId);
 
   String getBranchName();
+
   void setBranchName(String branchName);
 
   String getWorkloadSecretIdKey();
+
   void setWorkloadSecretIdKey(String workloadSecretIdKey);
 
   String getWorkloadSecretPasswordKey();
+
   void setWorkloadSecretPasswordKey(String WorkloadSecretPasswordKey);
 
   List<CustomWorkloadRole> getRoles();
+
   void setRoles(List<CustomWorkloadRole> roles);
 
   Map<String, List<Object>> getDnsZoneConfig();
+
   void setDnsZoneConfig(Map<String, List<Object>> getDnsZoneConfig);
 
   List<String> getEnvironmentSecretShortNames();
+
   void setEnvironmentSecretShortNames(List<String> secrets);
 
   String getCiCdProfileShortName();
+
   void setCiCdProfileShortName(String ciCdProfileShortName);
 
-  static Collection<String> validateCustomWorkload(CustomWorkload customWorkload, String workloadType){
-    final var SSH_REPO_URI_IS_EMPTY_TEMPLATE = "[%s Validation] sshRepositoryURI is either empty or blank and it is required";
+  static Collection<String> validateCustomWorkload(CustomWorkload customWorkload, String workloadType) {
+    final var SSH_REPO_URI_IS_EMPTY_TEMPLATE = "[%s Validation] sshRepositoryURI is either empty or blank and it is " +
+      "required";
     final var REPO_ID_IS_EMPTY_TEMPLATE = "[%s Validation] repoId is either empty or blank and it is required";
     final var BRANCH_NAME_IS_EMPTY_TEMPLATE = "[%s Validation] branchName is either empty or blank and it is required";
-    final var WORKLOAD_SECRET_ID_KEY_IS_EMPTY_TEMPLATE = "[%s Validation] Workload Secret Id Key is either empty or blank and it is required";
-    final var WORKLOAD_SECRET_PASSWORD_KEY_IS_EMPTY_TEMPLATE = "[%s Validation] Workload Secret Password Key is either empty or blank and it is required";
+    final var WORKLOAD_SECRET_ID_KEY_IS_EMPTY_TEMPLATE = "[%s Validation] Workload Secret Id Key is either empty or " +
+      "blank and it is required";
+    final var WORKLOAD_SECRET_PASSWORD_KEY_IS_EMPTY_TEMPLATE = "[%s Validation] Workload Secret Password Key is " +
+      "either empty or blank and it is required";
 
     var errors = new ArrayList<String>();
 

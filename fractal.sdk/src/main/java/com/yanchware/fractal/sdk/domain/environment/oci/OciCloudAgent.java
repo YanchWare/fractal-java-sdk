@@ -18,90 +18,99 @@ import static com.yanchware.fractal.sdk.domain.environment.EnvironmentAggregate.
 @Slf4j
 @Getter
 public class OciCloudAgent extends CloudAgentEntity {
-    public static final String TENANCY_ID_PARAM_KEY = "tenancyId";
-    public static final String COMPARTMENT_ID_PARAM_KEY = "compartmentId";
+  public static final String TENANCY_ID_PARAM_KEY = "tenancyId";
+  public static final String COMPARTMENT_ID_PARAM_KEY = "compartmentId";
 
-    private final OciRegion region;
-    private final String tenancyId;
-    private final String compartmentId;
+  private final OciRegion region;
+  private final String tenancyId;
+  private final String compartmentId;
 
-    public OciCloudAgent(
-            EnvironmentIdValue environmentId,
-            OciRegion region,
-            String tenancyId,
-            String compartmentId,
-            Map<String, String> tags)
+  public OciCloudAgent(
+    EnvironmentIdValue environmentId,
+    OciRegion region,
+    String tenancyId,
+    String compartmentId,
+    Map<String, String> tags)
+  {
+    super(environmentId, tags);
+    this.region = region;
+    this.tenancyId = tenancyId;
+    this.compartmentId = compartmentId;
+  }
+
+  @Override
+  public ProviderType getProvider() {
+    return ProviderType.OCI;
+  }
+
+  @Override
+  public void initialize(EnvironmentService environmentService) throws InstantiatorException {
+    initialize(environmentService, null);
+  }
+
+  @Override
+  public void initialize(
+    EnvironmentService environmentService,
+    EnvironmentIdValue managementEnvironmentId) throws InstantiatorException
+  {
+    var currentInitialization = environmentService.fetchCurrentOciInitialization(environmentId);
+
+    if (currentInitialization == null ||
+      "Failed".equals(currentInitialization.status()) ||
+      "Cancelled".equals(currentInitialization.status()))
     {
-        super(environmentId, tags);
-        this.region = region;
-        this.tenancyId = tenancyId;
-        this.compartmentId = compartmentId;
+
+      environmentService.startOciCloudAgentInitialization(
+        environmentId,
+        tenancyId,
+        compartmentId,
+        region,
+        tags);
+
+      log.info("New initialization started, checking initialization status for environment [id: '{}']", environmentId);
+      checkInitializationStatus(() -> fetchCurrentOciInitialization(environmentService));
+    } else {
+      checkInitializationStatus(() -> fetchCurrentOciInitialization(environmentService));
+    }
+  }
+
+  @Override
+  protected Map<String, Object> getConfigurationForEnvironmentParameters() {
+    return Map.of(
+      PROVIDER_PARAM_KEY, getProvider(),
+      REGION_PARAM_KEY, region,
+      TENANCY_ID_PARAM_KEY, tenancyId,
+      COMPARTMENT_ID_PARAM_KEY, compartmentId
+    );
+  }
+
+  private InitializationRunResponse fetchCurrentOciInitialization(EnvironmentService environmentService) {
+    try {
+      return environmentService.fetchCurrentOciInitialization(environmentId);
+    } catch (InstantiatorException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
     }
 
-    @Override
-    public ProviderType getProvider() {
-        return ProviderType.OCI;
-    }
+    OciCloudAgent member = (OciCloudAgent) o;
 
-    @Override
-    public void initialize(EnvironmentService environmentService) throws InstantiatorException {
-        initialize(environmentService, null);
-    }
+    return region.equals(member.region)
+      && tenancyId.equals(member.tenancyId)
+      && compartmentId.equals(member.compartmentId)
+      && environmentId.equals(member.environmentId);
+  }
 
-    @Override
-    public void initialize(EnvironmentService environmentService, EnvironmentIdValue managementEnvironmentId) throws InstantiatorException {
-        var currentInitialization = environmentService.fetchCurrentOciInitialization(environmentId);
-
-        if (currentInitialization == null ||
-                "Failed".equals(currentInitialization.status()) ||
-                "Cancelled".equals(currentInitialization.status())) {
-
-            environmentService.startOciCloudAgentInitialization(
-                    environmentId,
-                    tenancyId,
-                    compartmentId,
-                    region,
-                    tags);
-
-            log.info("New initialization started, checking initialization status for environment [id: '{}']", environmentId);
-            checkInitializationStatus(() -> fetchCurrentOciInitialization(environmentService));
-        } else {
-            checkInitializationStatus(() -> fetchCurrentOciInitialization(environmentService));
-        }
-    }
-    @Override
-    protected Map<String, Object> getConfigurationForEnvironmentParameters() {
-        return Map.of(
-                PROVIDER_PARAM_KEY, getProvider(),
-                REGION_PARAM_KEY, region,
-                TENANCY_ID_PARAM_KEY, tenancyId,
-                COMPARTMENT_ID_PARAM_KEY, compartmentId
-        );
-    }
-
-    private InitializationRunResponse fetchCurrentOciInitialization(EnvironmentService environmentService) {
-        try {
-            return environmentService.fetchCurrentOciInitialization(environmentId);
-        } catch (InstantiatorException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        OciCloudAgent member = (OciCloudAgent) o;
-
-      return region.equals(member.region)
-        && tenancyId.equals(member.tenancyId)
-        && compartmentId.equals(member.compartmentId)
-        && environmentId.equals(member.environmentId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(region, tenancyId, compartmentId,  environmentId);
-    }
+  @Override
+  public int hashCode() {
+    return Objects.hash(region, tenancyId, compartmentId, environmentId);
+  }
 }

@@ -12,23 +12,24 @@ import java.util.Collection;
 @Getter
 @Setter(AccessLevel.PROTECTED)
 @ToString(callSuper = true)
-public abstract class PaaSDataStorage extends com.yanchware.fractal.sdk.domain.blueprint.paas.PaaSDataStorage
-    implements LiveSystemComponent {
+public abstract class PaaSDataStorage extends com.yanchware.fractal.sdk.domain.fractal.paas.PaaSDataStorage
+  implements LiveSystemComponent
+{
 
-    protected PaaSDataStorage() {
-    }
+  protected PaaSDataStorage() {
+  }
 
-    public static abstract class Builder<T extends PaaSDataStorage, B extends Builder<T, B>> extends Component.Builder<T, B> {
-
-        @Override
-        public T build() {
-            return super.build();
-        }
-    }
+  public static abstract class Builder<T extends PaaSDataStorage, B extends Builder<T, B>> extends Component.Builder<T, B> {
 
     @Override
-    public Collection<String> validate() {
-        Collection<String> errors = super.validate();
-        return errors;
+    public T build() {
+      return super.build();
     }
+  }
+
+  @Override
+  public Collection<String> validate() {
+    Collection<String> errors = super.validate();
+    return errors;
+  }
 }

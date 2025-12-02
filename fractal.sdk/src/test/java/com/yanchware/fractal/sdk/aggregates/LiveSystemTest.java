@@ -21,7 +21,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class LiveSystemTest {
 
-  private static ResourceGroupId validResourceGroupId = new ResourceGroupId(ResourceGroupType.PERSONAL, UUID.randomUUID(), "rg");
+  private static ResourceGroupId validResourceGroupId = new ResourceGroupId(ResourceGroupType.PERSONAL,
+    UUID.randomUUID(), "rg");
   LiveSystemsFactory factory;
 
   @BeforeEach

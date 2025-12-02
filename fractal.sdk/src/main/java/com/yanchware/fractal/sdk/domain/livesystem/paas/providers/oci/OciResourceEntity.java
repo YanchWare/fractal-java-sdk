@@ -7,8 +7,11 @@ import java.util.Collection;
 
 public interface OciResourceEntity extends ResourceEntity {
   Compartment getCompartment();
+
   void setCompartment(Compartment compartment);
+
   OciRegion getOciRegion();
+
   void setOciRegion(OciRegion region);
 
   static Collection<String> validateOciResourceEntity(OciResourceEntity resourceEntity, String entityName) {

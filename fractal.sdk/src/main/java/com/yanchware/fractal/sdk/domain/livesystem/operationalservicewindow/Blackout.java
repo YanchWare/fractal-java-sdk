@@ -9,14 +9,17 @@ import java.time.ZonedDateTime;
  * The start time is inclusive, while the end time is exclusive.
  *
  * @param start the start time of the blackout period, inclusive; must not be {@code null}
- * @param end the end time of the blackout period, exclusive; must not be {@code null};
- *            must be strictly after {@code start}
+ * @param end   the end time of the blackout period, exclusive; must not be {@code null};
+ *              must be strictly after {@code start}
  * @throws IllegalArgumentException if {@code end} is not after {@code start}
  */
 public record Blackout(ZonedDateTime start, ZonedDateTime end) {
   public Blackout {
-    if (!end.isAfter(start)) throw new IllegalArgumentException("Blackout end must be after start");
+    if (!end.isAfter(start)) {
+      throw new IllegalArgumentException("Blackout end must be after start");
+    }
   }
+
   boolean overlaps(Window w) {
     return !(w.end().isBefore(start) || w.start().isAfter(end));
   }

@@ -6,7 +6,7 @@ import com.yanchware.fractal.sdk.utils.ExtendableEnum;
 import java.util.Collection;
 
 
-public final class AzureSiteLoadBalancing extends ExtendableEnum<AzureSiteLoadBalancing>  {
+public final class AzureSiteLoadBalancing extends ExtendableEnum<AzureSiteLoadBalancing> {
   public static final AzureSiteLoadBalancing LEAST_REQUESTS = fromString("LeastRequests");
   public static final AzureSiteLoadBalancing LEAST_RESPONSE_TIME = fromString("LeastResponseTime");
   public static final AzureSiteLoadBalancing PER_SITE_ROUND_ROBIN = fromString("PerSiteRoundRobin");
@@ -26,5 +26,5 @@ public final class AzureSiteLoadBalancing extends ExtendableEnum<AzureSiteLoadBa
 
     return values(AzureSiteLoadBalancing.class);
   }
-  
+
 }

@@ -1,7 +1,7 @@
 package com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.servicebus;
 
 import com.yanchware.fractal.sdk.domain.Component;
-import com.yanchware.fractal.sdk.domain.blueprint.paas.PaaSMessageEntity;
+import com.yanchware.fractal.sdk.domain.fractal.paas.PaaSMessageEntity;
 import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
 import lombok.Getter;
@@ -37,7 +37,8 @@ public class AzureServiceBusQueue extends PaaSMessageEntity implements LiveSyste
   protected AzureServiceBusQueue() {
   }
 
-  public static class AzureServiceBusQueueBuilder extends Component.Builder<AzureServiceBusQueue, AzureServiceBusQueueBuilder> {
+  public static class AzureServiceBusQueueBuilder extends Component.Builder<AzureServiceBusQueue,
+    AzureServiceBusQueueBuilder> {
 
     @Override
     protected AzureServiceBusQueue createComponent() {
@@ -51,6 +52,7 @@ public class AzureServiceBusQueue extends PaaSMessageEntity implements LiveSyste
 
     /**
      * Idle after which the queue is automatically deleted
+     *
      * @param autoDeleteOnIdle
      */
     public AzureServiceBusQueueBuilder withAutoDeleteOnIdle(Duration autoDeleteOnIdle) {
@@ -60,6 +62,7 @@ public class AzureServiceBusQueue extends PaaSMessageEntity implements LiveSyste
 
     /**
      * If enabled, dead letter support is available when a message expires
+     *
      * @param deadLetteringOnMessageExpiration
      */
     public AzureServiceBusQueueBuilder withDeadLetteringOnMessageExpiration(Boolean deadLetteringOnMessageExpiration) {
@@ -69,6 +72,7 @@ public class AzureServiceBusQueue extends PaaSMessageEntity implements LiveSyste
 
     /**
      * Duration after which the message expires
+     *
      * @param defaultMessageTimeToLive
      */
     public AzureServiceBusQueueBuilder withDefaultMessageTimeToLive(Duration defaultMessageTimeToLive) {
@@ -78,6 +82,7 @@ public class AzureServiceBusQueue extends PaaSMessageEntity implements LiveSyste
 
     /**
      * Duration of duplicate detection history
+     *
      * @param duplicateDetectionHistoryTimeWindow
      */
     public AzureServiceBusQueueBuilder withDuplicateDetectionHistoryTimeWindow(Duration duplicateDetectionHistoryTimeWindow) {
@@ -87,6 +92,7 @@ public class AzureServiceBusQueue extends PaaSMessageEntity implements LiveSyste
 
     /**
      * Indicates if Express Entities are enabled
+     *
      * @param enableExpress
      */
     public AzureServiceBusQueueBuilder withEnableExpress(Boolean enableExpress) {
@@ -95,7 +101,8 @@ public class AzureServiceBusQueue extends PaaSMessageEntity implements LiveSyste
     }
 
     /**
-     * Indicates if batched operations are enabled 
+     * Indicates if batched operations are enabled
+     *
      * @param enableBatchedOperations
      */
     public AzureServiceBusQueueBuilder withEnableBatchedOperations(Boolean enableBatchedOperations) {
@@ -105,6 +112,7 @@ public class AzureServiceBusQueue extends PaaSMessageEntity implements LiveSyste
 
     /**
      * Indicates if the queue will be partitioned across multiple message brokers
+     *
      * @param enablePartitioning
      */
     public AzureServiceBusQueueBuilder withEnablePartitioning(Boolean enablePartitioning) {
@@ -114,6 +122,7 @@ public class AzureServiceBusQueue extends PaaSMessageEntity implements LiveSyste
 
     /**
      * Name of the queue where to forward messages
+     *
      * @param forwardTo
      */
     public AzureServiceBusQueueBuilder withForwardTo(String forwardTo) {
@@ -123,6 +132,7 @@ public class AzureServiceBusQueue extends PaaSMessageEntity implements LiveSyste
 
     /**
      * Name of the queue where to forward dead letter messages
+     *
      * @param forwardDeadLetteredMessagesTo
      */
     public AzureServiceBusQueueBuilder withForwardDeadLetteredMessagesTo(String forwardDeadLetteredMessagesTo) {
@@ -132,6 +142,7 @@ public class AzureServiceBusQueue extends PaaSMessageEntity implements LiveSyste
 
     /**
      * Duration of a peek-lock (amount of time that a message is locked for other receivers)
+     *
      * @param lockDuration
      */
     public AzureServiceBusQueueBuilder withLockDuration(Duration lockDuration) {
@@ -141,6 +152,7 @@ public class AzureServiceBusQueue extends PaaSMessageEntity implements LiveSyste
 
     /**
      * Maximum delivery count
+     *
      * @param maxDeliveryCount
      */
     public AzureServiceBusQueueBuilder withMaxDeliveryCount(Integer maxDeliveryCount) {
@@ -150,6 +162,7 @@ public class AzureServiceBusQueue extends PaaSMessageEntity implements LiveSyste
 
     /**
      * Maximum size of the queue in megabytes
+     *
      * @param maxSizeInMegabytes
      */
     public AzureServiceBusQueueBuilder withMaxSizeInMegabytes(Integer maxSizeInMegabytes) {
@@ -159,6 +172,7 @@ public class AzureServiceBusQueue extends PaaSMessageEntity implements LiveSyste
 
     /**
      * Maximum size of message payload in kilobytes
+     *
      * @param maxMessageSizeInKilobytes
      */
     public AzureServiceBusQueueBuilder withMaxMessageSizeInKilobytes(Long maxMessageSizeInKilobytes) {
@@ -168,6 +182,7 @@ public class AzureServiceBusQueue extends PaaSMessageEntity implements LiveSyste
 
     /**
      * Indicates if the queue supports the concept of sessions
+     *
      * @param requiresSession
      */
     public AzureServiceBusQueueBuilder withRequiresSession(Boolean requiresSession) {
@@ -177,6 +192,7 @@ public class AzureServiceBusQueue extends PaaSMessageEntity implements LiveSyste
 
     /**
      * Indicates if the queue requires duplicate detection
+     *
      * @param requiresDuplicateDetection
      */
     public AzureServiceBusQueueBuilder withRequiresDuplicateDetection(Boolean requiresDuplicateDetection) {

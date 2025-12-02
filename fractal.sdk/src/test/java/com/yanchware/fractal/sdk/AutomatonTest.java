@@ -16,15 +16,13 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
-import static com.github.tomakehurst.wiremock.client.WireMock.verify;
 
 @WireMockTest
 public class AutomatonTest extends TestWithFixture {
 
   @Test
-  public void success_when_deleteLiveSystem(WireMockRuntimeInfo wmRuntimeInfo) throws URISyntaxException, InstantiatorException, JsonProcessingException {
+  public void success_when_deleteLiveSystem(WireMockRuntimeInfo wmRuntimeInfo) throws URISyntaxException,
+    InstantiatorException, JsonProcessingException {
     var httpClient = HttpClient.newBuilder()
       .version(HttpClient.Version.HTTP_2)
       .build();
@@ -36,7 +34,8 @@ public class AutomatonTest extends TestWithFixture {
     var environmentResponse = a(EnvironmentResponse.class);
     var environmentId = environmentResponse.id();
 
-    stubFor(get(urlPathMatching(String.format("/environments/%s/%s/%s", environmentId.type(), environmentId.ownerId(), environmentId.shortName())))
+    stubFor(get(urlPathMatching(String.format("/environments/%s/%s/%s", environmentId.type(), environmentId.ownerId()
+      , environmentId.shortName())))
       .willReturn(aResponse()
         .withStatus(200)
         .withHeader("Content-Type", "application/json")
@@ -50,8 +49,8 @@ public class AutomatonTest extends TestWithFixture {
 
     sut.delete(EnvironmentIdValue.fromDto(environmentResponse.id()), liveSystemIds);
 
-    for(var liveSystemId : liveSystemIds) {
-      verify(deleteRequestedFor(urlPathEqualTo(String.format("/livesystems/%s",  liveSystemId))));
+    for (var liveSystemId : liveSystemIds) {
+      verify(deleteRequestedFor(urlPathEqualTo(String.format("/livesystems/%s", liveSystemId))));
     }
   }
 

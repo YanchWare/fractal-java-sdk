@@ -13,7 +13,7 @@ import java.util.Collection;
 public final class AzureRoutingChoice extends ExtendableEnum<AzureRoutingChoice> {
   public static final AzureRoutingChoice MICROSOFT_ROUTING = fromString("MicrosoftRouting");
   public static final AzureRoutingChoice INTERNET_ROUTING = fromString("InternetRouting");
-  
+
 
   /**
    * Creates or finds a RoutingChoice from its string representation.

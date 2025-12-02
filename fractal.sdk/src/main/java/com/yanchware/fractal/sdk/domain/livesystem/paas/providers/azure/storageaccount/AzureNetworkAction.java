@@ -12,6 +12,7 @@ import java.util.Collection;
  */
 public final class AzureNetworkAction extends ExtendableEnum<AzureNetworkAction> {
   public static final AzureNetworkAction ALLOW = fromString("Allow");
+
   /**
    * Creates or finds an Azure Network Action from its string representation.
    *

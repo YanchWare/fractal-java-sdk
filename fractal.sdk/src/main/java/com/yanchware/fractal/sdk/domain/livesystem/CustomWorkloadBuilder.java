@@ -18,11 +18,12 @@ import static com.yanchware.fractal.sdk.utils.CollectionUtils.isBlank;
  * our <a href="https://fractal.cloud/docs/docs-ht-create-kubernetes-workload">documentation page</a>
  * </p>
  */
-public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload, B extends CustomWorkloadBuilder<T, B>> extends Component.Builder<T, B> {
+public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload, B extends CustomWorkloadBuilder<T,
+  B>> extends Component.Builder<T, B> {
 
   /**
    * <pre>
-   * Sets the short name of the environment secret containing the passphrase protecting the SSH private key 
+   * Sets the short name of the environment secret containing the passphrase protecting the SSH private key
    * used to access the code repository.
    *
    * This secret should be defined at the Environment level.
@@ -64,7 +65,7 @@ public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload
 
   /**
    * <pre>
-   * The ID of the repository as it is in the version control solution of your choice. 
+   * The ID of the repository as it is in the version control solution of your choice.
    * The repoId needs to match the repository ID that is being sent by the webhook.
    * </pre>
    *
@@ -78,7 +79,7 @@ public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload
 
   /**
    * <pre>
-   * Adds a role to the Custom Workload. 
+   * Adds a role to the Custom Workload.
    * The role can vary from a specific Cloud Vendor Built-in role to an AppRoleAssignment or other custom role.
    * </pre>
    * <p>
@@ -93,7 +94,7 @@ public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload
 
   /**
    * <pre>
-   * Adds a list of roles to the Custom Workload. 
+   * Adds a list of roles to the Custom Workload.
    * The roles can vary from specific Cloud Vendor Built-in roles to AppRoleAssignments or other custom roles.
    * </pre>
    * <p>
@@ -156,7 +157,7 @@ public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload
 
   /**
    * <pre>
-   * Adds a single secret short name to the component. 
+   * Adds a single secret short name to the component.
    * This secret should be defined in the environment associated with this component.</pre>
    *
    * @param environmentSecretShortNames The short name of the secret to add.
@@ -168,7 +169,7 @@ public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload
 
   /**
    * <pre>
-   * Adds a list of secret names to the component. 
+   * Adds a list of secret names to the component.
    * These secrets should be defined in the environment associated with this component.</pre>
    *
    * @param environmentSecretShortNames The list of secret names to add.
@@ -183,7 +184,7 @@ public abstract class CustomWorkloadBuilder<T extends Component & CustomWorkload
   }
 
   /**
-   * Adds a CI/CD profile short name to the component. 
+   * Adds a CI/CD profile short name to the component.
    * This is to specify which CI/CD profile should be used by the component.
    * The profile should be defined at the Environment level.
    * This method only adds a reference to the profile by its short name.

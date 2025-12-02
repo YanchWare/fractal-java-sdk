@@ -1,7 +1,7 @@
 package com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.servicebus;
 
 import com.yanchware.fractal.sdk.domain.Component;
-import com.yanchware.fractal.sdk.domain.blueprint.paas.PaaSMessaging;
+import com.yanchware.fractal.sdk.domain.fractal.paas.PaaSMessaging;
 import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureIdentityType;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion;
@@ -29,8 +29,8 @@ public class AzureServiceBus extends PaaSMessaging implements AzureResourceEntit
   private static final Integer ID_MIN_LENGTH = 6;
   private static final Integer ID_MAX_LENGTH = 50;
   private final static String NAME_LENGTH_MISMATCH_TEMPLATE =
-      "[AzureServiceBus validation] Service Bus name is illegal. A valid Service Bus name must be between " + ID_MIN_LENGTH +
-          " and " + ID_MAX_LENGTH + " characters of length";
+    "[AzureServiceBus validation] Service Bus name is illegal. A valid Service Bus name must be between " + ID_MIN_LENGTH +
+      " and " + ID_MAX_LENGTH + " characters of length";
   private String name;
   private AzureRegion azureRegion;
   private AzureResourceGroup azureResourceGroup;
@@ -61,6 +61,7 @@ public class AzureServiceBus extends PaaSMessaging implements AzureResourceEntit
     /**
      * Name of the component
      * Must be between 6 and 50 characters
+     *
      * @param name
      */
     public AzureServiceBusBuilder withName(String name) {
@@ -112,6 +113,7 @@ public class AzureServiceBus extends PaaSMessaging implements AzureResourceEntit
 
     /**
      * Service Bus SKU
+     *
      * @param sku
      */
     public AzureServiceBusBuilder withSku(ServiceBusSku sku) {
@@ -121,6 +123,7 @@ public class AzureServiceBus extends PaaSMessaging implements AzureResourceEntit
 
     /**
      * Identity of the Service Bus
+     *
      * @param identity
      */
     public AzureServiceBusBuilder withIdentity(AzureIdentityType identity) {
@@ -130,6 +133,7 @@ public class AzureServiceBus extends PaaSMessaging implements AzureResourceEntit
 
     /**
      * Encryption properties for the Service Bus
+     *
      * @param encryption
      */
     public AzureServiceBusBuilder withEncryption(Encryption encryption) {
@@ -139,6 +143,7 @@ public class AzureServiceBus extends PaaSMessaging implements AzureResourceEntit
 
     /**
      * If enabled, creates a Zone Redundant Service Bus in regions supported availability zones
+     *
      * @param zoneRedundant
      */
     public AzureServiceBusBuilder withZoneRedundant(Boolean zoneRedundant) {
@@ -148,6 +153,7 @@ public class AzureServiceBus extends PaaSMessaging implements AzureResourceEntit
 
     /**
      * Disabling local auth for the Service Bus
+     *
      * @param disableLocalAuth
      */
     public AzureServiceBusBuilder withDisableLocalAuth(Boolean disableLocalAuth) {
@@ -157,6 +163,7 @@ public class AzureServiceBus extends PaaSMessaging implements AzureResourceEntit
 
     /**
      * Queue that will be created part of the Service Bus
+     *
      * @param queue
      */
     public AzureServiceBusBuilder withQueue(AzureServiceBusQueue queue) {
@@ -165,6 +172,7 @@ public class AzureServiceBus extends PaaSMessaging implements AzureResourceEntit
 
     /**
      * List of queues that will be created part of the Service Bus
+     *
      * @param queues
      */
     public AzureServiceBusBuilder withQueues(Collection<AzureServiceBusQueue> queues) {
@@ -183,6 +191,7 @@ public class AzureServiceBus extends PaaSMessaging implements AzureResourceEntit
 
     /**
      * Topic that will be created part of the Service Bus
+     *
      * @param topic
      */
     public AzureServiceBusBuilder withTopic(AzureServiceBusTopic topic) {
@@ -191,6 +200,7 @@ public class AzureServiceBus extends PaaSMessaging implements AzureResourceEntit
 
     /**
      * List of topics that will be created part of the Service Bus
+     *
      * @param topics
      */
     public AzureServiceBusBuilder withTopics(Collection<AzureServiceBusTopic> topics) {

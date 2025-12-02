@@ -12,13 +12,13 @@ class AzureWebAppDeploymentSlotTest {
 
     // Act
     var deploymentSlot = AzureWebAppDeploymentSlot.builder()
-        .withName("slot")
-        .withCloneSettingsFromWebApp(expectedCloneSettings)
-        .build();
+      .withName("slot")
+      .withCloneSettingsFromWebApp(expectedCloneSettings)
+      .build();
 
     // Assert
     assertEquals(expectedCloneSettings, deploymentSlot.isCloneSettingsFromWebApp(),
-        "The cloneSettingsFromWebApp should match the expected value.");
+      "The cloneSettingsFromWebApp should match the expected value.");
   }
 
   @Test
@@ -29,14 +29,14 @@ class AzureWebAppDeploymentSlotTest {
 
     // Act
     var deploymentSlot = AzureWebAppDeploymentSlot.builder()
-        .withName(slotName)
-        .build();
+      .withName(slotName)
+      .build();
 
     // Assert
     assertEquals(expectedCloneSettings, deploymentSlot.isCloneSettingsFromWebApp(),
-        "The cloneSettingsFromWebApp should match the expected value.");
+      "The cloneSettingsFromWebApp should match the expected value.");
 
     assertEquals(slotName, deploymentSlot.getName(),
-        "The name should match the expected value.");
+      "The name should match the expected value.");
   }
 }

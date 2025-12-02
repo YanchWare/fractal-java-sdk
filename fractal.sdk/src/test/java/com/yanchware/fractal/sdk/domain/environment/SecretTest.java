@@ -11,67 +11,70 @@ class SecretTest {
   private static final String VALID_DESCRIPTION = "Test secret";
   private static final String VALID_VALUE = "secret-value";
 
-  private static final String SHORT_NAME_NOT_VALID_ERROR_STARTS_WITH = "[Secret Validation] The Short Name only allow alphanumeric characters and hyphens";
-  private static final String DISPLAY_NAME_NOT_VALID_ERROR_STARTS_WITH = "[Secret Validation] The Display Name cannot be empty or null";
-  private static final String VALUE_NOT_VALID_ERROR_STARTS_WITH = "[Secret Validation] The value cannot be empty or null";
+  private static final String SHORT_NAME_NOT_VALID_ERROR_STARTS_WITH = "[Secret Validation] The Short Name only allow" +
+    " alphanumeric characters and hyphens";
+  private static final String DISPLAY_NAME_NOT_VALID_ERROR_STARTS_WITH = "[Secret Validation] The Display Name cannot" +
+    " be empty or null";
+  private static final String VALUE_NOT_VALID_ERROR_STARTS_WITH = "[Secret Validation] The value cannot be empty or " +
+    "null";
 
 
   @Test
   void exceptionThrown_when_shortNameIsEmpty() {
     assertThatThrownBy(() -> new Secret("", VALID_DISPLAY_NAME, VALID_VALUE))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining(SHORT_NAME_NOT_VALID_ERROR_STARTS_WITH);
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining(SHORT_NAME_NOT_VALID_ERROR_STARTS_WITH);
   }
 
   @Test
   void exceptionThrown_when_shortNameIsNull() {
     assertThatThrownBy(() -> new Secret(null, VALID_DISPLAY_NAME, VALID_VALUE))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining(SHORT_NAME_NOT_VALID_ERROR_STARTS_WITH);
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining(SHORT_NAME_NOT_VALID_ERROR_STARTS_WITH);
   }
 
   @Test
   void exceptionThrown_when_shortNameStartsWithHyphen() {
     assertThatThrownBy(() -> new Secret("-my-secret", VALID_DISPLAY_NAME, VALID_VALUE))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining(SHORT_NAME_NOT_VALID_ERROR_STARTS_WITH);
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining(SHORT_NAME_NOT_VALID_ERROR_STARTS_WITH);
   }
 
   @Test
   void exceptionThrown_when_shortNameEndsWithHyphen() {
     assertThatThrownBy(() -> new Secret("my-secret-", VALID_DISPLAY_NAME, VALID_VALUE))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining(SHORT_NAME_NOT_VALID_ERROR_STARTS_WITH);
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining(SHORT_NAME_NOT_VALID_ERROR_STARTS_WITH);
   }
 
   @Test
   void exceptionThrown_when_shortNameContainsInvalidCharacters() {
     assertThatThrownBy(() -> new Secret("my_secret%", VALID_DISPLAY_NAME, VALID_VALUE))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining(SHORT_NAME_NOT_VALID_ERROR_STARTS_WITH);
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining(SHORT_NAME_NOT_VALID_ERROR_STARTS_WITH);
   }
-  
+
   @Test
   void exceptionThrown_when_valueIsEmpty() {
-    assertThatThrownBy(() -> new Secret(VALID_SHORT_NAME, VALID_DISPLAY_NAME,""))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining(VALUE_NOT_VALID_ERROR_STARTS_WITH);
+    assertThatThrownBy(() -> new Secret(VALID_SHORT_NAME, VALID_DISPLAY_NAME, ""))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining(VALUE_NOT_VALID_ERROR_STARTS_WITH);
   }
 
   @Test
   void exceptionThrown_when_valueIsNull() {
-    assertThatThrownBy(() -> new Secret(VALID_SHORT_NAME, VALID_DISPLAY_NAME,null))
-        .isInstanceOf(IllegalArgumentException.class)
-        .hasMessageContaining(VALUE_NOT_VALID_ERROR_STARTS_WITH);
+    assertThatThrownBy(() -> new Secret(VALID_SHORT_NAME, VALID_DISPLAY_NAME, null))
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining(VALUE_NOT_VALID_ERROR_STARTS_WITH);
   }
 
   @Test
   void exceptionThrown_when_nameAndValueAreInvalid() {
     assertThatThrownBy(() -> new Secret(null, null, null))
-            .isInstanceOf(IllegalArgumentException.class)
-            .hasMessageContaining(SHORT_NAME_NOT_VALID_ERROR_STARTS_WITH)
-            .hasMessageContaining(DISPLAY_NAME_NOT_VALID_ERROR_STARTS_WITH)
-            .hasMessageContaining(VALUE_NOT_VALID_ERROR_STARTS_WITH);
+      .isInstanceOf(IllegalArgumentException.class)
+      .hasMessageContaining(SHORT_NAME_NOT_VALID_ERROR_STARTS_WITH)
+      .hasMessageContaining(DISPLAY_NAME_NOT_VALID_ERROR_STARTS_WITH)
+      .hasMessageContaining(VALUE_NOT_VALID_ERROR_STARTS_WITH);
   }
 
   @Test

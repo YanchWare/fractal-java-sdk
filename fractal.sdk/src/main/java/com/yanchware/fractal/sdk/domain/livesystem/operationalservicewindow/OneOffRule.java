@@ -27,10 +27,10 @@ public class OneOffRule implements Rule {
    * Constructs a new instance of {@code OneOffRule} that defines a single operational
    * service window for a specific date and time range.
    *
-   * @param date the specific date for the one-off rule; must not be {@code null}
+   * @param date  the specific date for the one-off rule; must not be {@code null}
    * @param start the start time of the service window on the specified date; must not be {@code null}
-   * @param end the end time of the service window on the specified date; must not be {@code null}
-   *            (if {@code end} is earlier than or equal to {@code start}, the window rolls over into the next day)
+   * @param end   the end time of the service window on the specified date; must not be {@code null}
+   *              (if {@code end} is earlier than or equal to {@code start}, the window rolls over into the next day)
    */
   public OneOffRule(LocalDate date, LocalTime start, LocalTime end) {
     this.date = Objects.requireNonNull(date);

@@ -10,20 +10,20 @@ import java.util.stream.Collectors;
 public class StringHelper {
   private static final String WORD_SEPARATOR = " ";
   private static final Pattern WORD_FINDER = Pattern.compile("(([A-Z]?[a-z]+)|([A-Z]))");
-  
+
   public static String convertToTitleCase(String text) {
     if (text == null || text.isEmpty()) {
       return text;
     }
 
     return Arrays
-        .stream(text.split(WORD_SEPARATOR))
-        .map(word -> word.isEmpty()
-            ? word
-            : Character.toTitleCase(text.charAt(0)) + word
-            .substring(1)
-            .toLowerCase())
-        .collect(Collectors.joining(WORD_SEPARATOR));
+      .stream(text.split(WORD_SEPARATOR))
+      .map(word -> word.isEmpty()
+        ? word
+        : Character.toTitleCase(text.charAt(0)) + word
+        .substring(1)
+        .toLowerCase())
+      .collect(Collectors.joining(WORD_SEPARATOR));
   }
 
   public static String toWords(String text) {

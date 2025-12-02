@@ -824,7 +824,7 @@ public final class AzureMachineType extends ExtendableEnum<AzureMachineType> {
   public static final AzureMachineType STANDARD_NV6_PROMO = fromString("Standard_NV6_Promo");
   public static final AzureMachineType STANDARD_NV72ADS_A10_V5 = fromString("Standard_NV72ads_A10_v5");
   public static final AzureMachineType STANDARD_NV8AS_V4 = fromString("Standard_NV8as_v4");
-  public static final AzureMachineType STANDARD_PB6S= fromString("Standard_PB6s");
+  public static final AzureMachineType STANDARD_PB6S = fromString("Standard_PB6s");
 
   public AzureMachineType() {
   }

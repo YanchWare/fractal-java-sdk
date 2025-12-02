@@ -16,8 +16,9 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 @Getter
 @Setter(AccessLevel.PRIVATE)
 @ToString(callSuper = true)
-public class UnmanagedStorageComponent extends com.yanchware.fractal.sdk.domain.blueprint.saas.UnmanagedStorageComponent implements LiveSystemComponent {
-  private final static String SECRET_VALUE_IS_BLANK = "[SaaSUnmanagedStorageComponent Validation] Secret Value has not been defined and it is required";
+public class UnmanagedStorageComponent extends com.yanchware.fractal.sdk.domain.fractal.saas.UnmanagedStorageComponent implements LiveSystemComponent {
+  private final static String SECRET_VALUE_IS_BLANK = "[SaaSUnmanagedStorageComponent Validation] Secret Value has " +
+    "not been defined and it is required";
 
   private String secretName;
   private String secretValue;
@@ -31,7 +32,8 @@ public class UnmanagedStorageComponent extends com.yanchware.fractal.sdk.domain.
     return new UnmanagedStorageComponentBuilder();
   }
 
-  public static class UnmanagedStorageComponentBuilder extends Component.Builder<UnmanagedStorageComponent, UnmanagedStorageComponentBuilder> {
+  public static class UnmanagedStorageComponentBuilder extends Component.Builder<UnmanagedStorageComponent,
+    UnmanagedStorageComponentBuilder> {
 
     @Override
     protected UnmanagedStorageComponent createComponent() {
@@ -42,18 +44,20 @@ public class UnmanagedStorageComponent extends com.yanchware.fractal.sdk.domain.
     protected UnmanagedStorageComponentBuilder getBuilder() {
       return this;
     }
-    
+
     /**
      * Name of the secret
+     *
      * @param secretName
      */
     public UnmanagedStorageComponentBuilder withSecretName(String secretName) {
       component.setSecretName(secretName);
       return builder;
     }
-    
+
     /**
      * Value of the secret
+     *
      * @param secretValue
      */
     public UnmanagedStorageComponentBuilder withSecretValue(String secretValue) {

@@ -15,7 +15,8 @@ public class CosmosCassandraTest extends TestWithFixture {
   public void exceptionThrown_when_componentBuiltWithEmptyValues() {
     assertThatThrownBy(() -> AzureCosmosCassandraCluster.builder().withId("a-legal-id").build()).
       isInstanceOf(IllegalArgumentException.class).
-      hasMessageContaining("Cosmos Cassandra Cluster periodic backup feature needs a value of hours between backups that is larger or equal to 1");
+      hasMessageContaining("Cosmos Cassandra Cluster periodic backup feature needs a value of hours between backups " +
+        "that is larger or equal to 1");
   }
 
   @Test
@@ -36,7 +37,7 @@ public class CosmosCassandraTest extends TestWithFixture {
       .withDelegatedManagementSubnetId(subnetId)
       .withAuditLoggingEnabled(enableAuditLogging)
       .withHoursBetweenBackups(hoursBetweenBackups)
-    .build();
+      .build();
 
     assertThat(component.getType()).isEqualTo(PAAS_CASANDRA_DBMS);
     assertThat(component)

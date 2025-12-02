@@ -34,11 +34,11 @@ public class WeeklyRule implements Rule {
    * the duration of each interval. The end time can roll over into the next day if it is earlier than or equal
    * to the start time.
    *
-   * @param days the days of the week when the rule applies; must not be empty
+   * @param days  the days of the week when the rule applies; must not be empty
    * @param start the start time of the interval; must not be {@code null}
-   * @param end the end time of the interval; must not be {@code null}
+   * @param end   the end time of the interval; must not be {@code null}
    * @throws IllegalArgumentException if {@code days} is empty
-   * @throws NullPointerException if {@code start} or {@code end} is {@code null}
+   * @throws NullPointerException     if {@code start} or {@code end} is {@code null}
    */
   public WeeklyRule(EnumSet<DayOfWeek> days, LocalTime start, LocalTime end) {
     if (days.isEmpty()) {

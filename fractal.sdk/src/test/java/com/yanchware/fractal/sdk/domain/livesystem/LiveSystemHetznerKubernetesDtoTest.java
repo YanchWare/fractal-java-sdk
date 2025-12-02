@@ -21,39 +21,42 @@ import static com.yanchware.fractal.sdk.utils.TestUtils.assertGenericComponent;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class LiveSystemHetznerKubernetesDtoTest extends LiveSystemKubernetesComponentDtoTest {
-    @Test
-    public void liveSystemComponentDto_matches_liveSystemComponents_withCorrectTypeForLiveSystem_forHetznerKubernetes() {
-        var factory = new LiveSystemsFactory(
-                HttpClient.newBuilder().build(),
-                new LocalSdkConfiguration(""),
-                RetryRegistry.ofDefaults());
-        var hetznerKubernetes = TestUtils.getHetznerKubernetesExample();
-        var postgres = TestUtils.getGcpPostgresExample();
-        var liveSystem = factory.builder()
-                .withId(new LiveSystemIdValue(new ResourceGroupId(ResourceGroupType.PERSONAL, UUID.randomUUID(), "rg"), "test"))
-                .withStandardProvider(ProviderType.HETZNER)
-                .withComponents(List.of(hetznerKubernetes, postgres))
-                .build();
+  @Test
+  public void liveSystemComponentDto_matches_liveSystemComponents_withCorrectTypeForLiveSystem_forHetznerKubernetes() {
+    var factory = new LiveSystemsFactory(
+      HttpClient.newBuilder().build(),
+      new LocalSdkConfiguration(""),
+      RetryRegistry.ofDefaults());
+    var hetznerKubernetes = TestUtils.getHetznerKubernetesExample();
+    var postgres = TestUtils.getGcpPostgresExample();
+    var liveSystem = factory.builder()
+      .withId(new LiveSystemIdValue(new ResourceGroupId(ResourceGroupType.PERSONAL, UUID.randomUUID(), "rg"), "test"))
+      .withStandardProvider(ProviderType.HETZNER)
+      .withComponents(List.of(hetznerKubernetes, postgres))
+      .build();
 
-        var lsDtoMap  = liveSystem.blueprintMapFromLiveSystemComponents();
-        assertHetznerKubernetes(hetznerKubernetes, lsDtoMap);
-        assertCaaSComponents(hetznerKubernetes, lsDtoMap);
-    }
+    var lsDtoMap = liveSystem.blueprintMapFromLiveSystemComponents();
+    assertHetznerKubernetes(hetznerKubernetes, lsDtoMap);
+    assertCaaSComponents(hetznerKubernetes, lsDtoMap);
+  }
 
-    private void assertHetznerKubernetes(HetznerKubernetes hetznerKubernetes, Map<String, LiveSystemComponentDto> lsDtoMap) {
-        var dto = lsDtoMap.get(hetznerKubernetes.getId().getValue());
-        assertGenericComponent(dto, hetznerKubernetes, ComponentType.PAAS_KUBERNETES.getId());
-        assertThat(dto.getProvider()).isEqualTo(hetznerKubernetes.getProvider());
-        assertThat(dto.getParameters())
-                .extracting(
-                        "podIpRange",
-                        "priorityClasses",
-                        "hetznerRegion",
-                        "serviceIpRange")
-                .containsExactly(
-                        hetznerKubernetes.getPodIpRange(),
-                        hetznerKubernetes.getPriorityClasses(),
-                        hetznerKubernetes.getHetznerRegion(),
-                        hetznerKubernetes.getServiceIpRange());
-    }
+  private void assertHetznerKubernetes(
+    HetznerKubernetes hetznerKubernetes,
+    Map<String, LiveSystemComponentDto> lsDtoMap)
+  {
+    var dto = lsDtoMap.get(hetznerKubernetes.getId().getValue());
+    assertGenericComponent(dto, hetznerKubernetes, ComponentType.PAAS_KUBERNETES.getId());
+    assertThat(dto.getProvider()).isEqualTo(hetznerKubernetes.getProvider());
+    assertThat(dto.getParameters())
+      .extracting(
+        "podIpRange",
+        "priorityClasses",
+        "hetznerRegion",
+        "serviceIpRange")
+      .containsExactly(
+        hetznerKubernetes.getPodIpRange(),
+        hetznerKubernetes.getPriorityClasses(),
+        hetznerKubernetes.getHetznerRegion(),
+        hetznerKubernetes.getServiceIpRange());
+  }
 }

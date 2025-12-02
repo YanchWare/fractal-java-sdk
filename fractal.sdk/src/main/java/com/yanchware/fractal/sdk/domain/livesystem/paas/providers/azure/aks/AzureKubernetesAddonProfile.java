@@ -15,11 +15,12 @@ import java.util.Map;
 @Setter(AccessLevel.PRIVATE)
 @Builder(setterPrefix = "with")
 public class AzureKubernetesAddonProfile implements Validatable {
-  private static final String ADDON_TO_ENABLE_VARIABLE_NOT_SET = "[AzureKubernetesAddonProfile Validation] addonToEnable variable is not set";
-  
+  private static final String ADDON_TO_ENABLE_VARIABLE_NOT_SET = "[AzureKubernetesAddonProfile Validation] " +
+    "addonToEnable variable is not set";
+
   private AzureKubernetesAddon addonToEnable;
   private Map<String, Object> config;
-  
+
   private AzureKubernetesAddonProfile() {
   }
 
@@ -31,7 +32,7 @@ public class AzureKubernetesAddonProfile implements Validatable {
     private final AzureKubernetesAddonProfile component;
     private final AzureKubernetesAddonProfileBuilder builder;
 
-    public AzureKubernetesAddonProfileBuilder () {
+    public AzureKubernetesAddonProfileBuilder() {
       component = createComponent();
       builder = getBuilder();
     }
@@ -48,19 +49,19 @@ public class AzureKubernetesAddonProfile implements Validatable {
       component.setAddonToEnable(azureKubernetesAddon);
       return builder;
     }
-    
+
     public AzureKubernetesAddonProfileBuilder withConfig(Map<String, Object> config) {
       component.setConfig(config);
       return builder;
     }
 
-    public AzureKubernetesAddonProfile build(){
+    public AzureKubernetesAddonProfile build() {
       Collection<String> errors = component.validate();
 
       if (!errors.isEmpty()) {
         throw new IllegalArgumentException(String.format(
-            "AzureKubernetesAddonProfile validation failed. Errors: %s",
-            Arrays.toString(errors.toArray())));
+          "AzureKubernetesAddonProfile validation failed. Errors: %s",
+          Arrays.toString(errors.toArray())));
       }
 
       return component;

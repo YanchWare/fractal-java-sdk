@@ -15,15 +15,15 @@ public class AzureStorageAccountTest {
   @Test
   public void kindIsValid_when_ValidationPasses() throws JsonProcessingException {
     var storage = AzureStorageAccount.builder()
-        .withId("storage-account")
-        .withName("a23456789012345678901234")
+      .withId("storage-account")
+      .withName("a23456789012345678901234")
+      .withRegion(AzureRegion.WEST_EUROPE)
+      .withResourceGroup(AzureResourceGroup.builder()
+        .withName("validName123")
         .withRegion(AzureRegion.WEST_EUROPE)
-        .withResourceGroup(AzureResourceGroup.builder()
-            .withName("validName123")
-            .withRegion(AzureRegion.WEST_EUROPE)
-            .build())
-        .withTag("key1", "value1")
-        .build();
+        .build())
+      .withTag("key1", "value1")
+      .build();
     assertTrue(storage.validate().isEmpty());
 
     var json = TestUtils.getJsonRepresentation(storage);

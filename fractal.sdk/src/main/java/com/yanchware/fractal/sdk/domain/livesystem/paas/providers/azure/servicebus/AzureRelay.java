@@ -1,7 +1,7 @@
 package com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.servicebus;
 
 import com.yanchware.fractal.sdk.domain.Component;
-import com.yanchware.fractal.sdk.domain.blueprint.paas.PaaSMessaging;
+import com.yanchware.fractal.sdk.domain.fractal.paas.PaaSMessaging;
 import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureRegion;
 import com.yanchware.fractal.sdk.domain.livesystem.paas.providers.azure.AzureResourceEntity;
@@ -27,8 +27,8 @@ public class AzureRelay extends PaaSMessaging implements AzureResourceEntity, Li
   private static final Integer ID_MIN_LENGTH = 6;
   private static final Integer ID_MAX_LENGTH = 50;
   private final static String NAME_LENGTH_MISMATCH_TEMPLATE =
-      "[AzureRelay validation] Relay name is illegal. A valid Relay name must be between " + ID_MIN_LENGTH +
-          " and " + ID_MAX_LENGTH + " characters of length";
+    "[AzureRelay validation] Relay name is illegal. A valid Relay name must be between " + ID_MIN_LENGTH +
+      " and " + ID_MAX_LENGTH + " characters of length";
   private String name;
   private AzureRegion azureRegion;
   private AzureResourceGroup azureResourceGroup;

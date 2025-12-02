@@ -47,7 +47,9 @@ public class LocalSdkConfiguration implements SdkConfiguration {
 
   @SneakyThrows
   @Override
-  public URI getEnvironmentsEndpoint() { return new URI(httpBaseUrl + "/environments"); }
+  public URI getEnvironmentsEndpoint() {
+    return new URI(httpBaseUrl + "/environments");
+  }
 
   @Override
   public String getAwsAccessKeyId() {

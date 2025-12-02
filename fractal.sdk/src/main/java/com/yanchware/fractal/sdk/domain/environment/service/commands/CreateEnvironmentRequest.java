@@ -4,11 +4,11 @@ import com.yanchware.fractal.sdk.domain.environment.EnvironmentIdValue;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.UUID;
 
 public record CreateEnvironmentRequest(
-        EnvironmentIdValue managementEnvironmentId,
-        String name,
-        Collection<String> resourceGroups,
-        Map<String, Object> parameters) {
+  EnvironmentIdValue managementEnvironmentId,
+  String name,
+  Collection<String> resourceGroups,
+  Map<String, Object> parameters)
+{
 }

@@ -15,11 +15,13 @@ public class AzurePostgreSqlDatabase extends PaaSPostgreSqlDatabase implements A
   public static AzurePostgreSqlDbBuilder builder() {
     return new AzurePostgreSqlDbBuilder();
   }
-  private final static String NAME_IS_BLANK = "[AzurePostgreSqlDatabase Validation] name has not been defined and it is required";
+
+  private final static String NAME_IS_BLANK = "[AzurePostgreSqlDatabase Validation] name has not been defined and it " +
+    "is required";
 
   private String name;
-  
-  
+
+
   @Override
   public ProviderType getProvider() {
     return ProviderType.AZURE;
@@ -29,25 +31,26 @@ public class AzurePostgreSqlDatabase extends PaaSPostgreSqlDatabase implements A
   private AzureResourceGroup azureResourceGroup;
   private Map<String, String> tags;
 
-  public static class AzurePostgreSqlDbBuilder extends PaaSPostgreSqlDatabase.Builder<AzurePostgreSqlDatabase, AzurePostgreSqlDatabase.AzurePostgreSqlDbBuilder> {
+  public static class AzurePostgreSqlDbBuilder extends PaaSPostgreSqlDatabase.Builder<AzurePostgreSqlDatabase,
+    AzurePostgreSqlDatabase.AzurePostgreSqlDbBuilder> {
 
-      @Override
-      protected AzurePostgreSqlDbBuilder getBuilder() {
-        return this;
-      }
-
-      @Override
-      protected AzurePostgreSqlDatabase createComponent() {
-        return new AzurePostgreSqlDatabase();
-      }
+    @Override
+    protected AzurePostgreSqlDbBuilder getBuilder() {
+      return this;
     }
+
+    @Override
+    protected AzurePostgreSqlDatabase createComponent() {
+      return new AzurePostgreSqlDatabase();
+    }
+  }
 
   @Override
   public Collection<String> validate() {
     Collection<String> errors = super.validate();
 
-    if(StringUtils.isBlank(name)) {
-        errors.add(NAME_IS_BLANK);
+    if (StringUtils.isBlank(name)) {
+      errors.add(NAME_IS_BLANK);
     }
 
     return errors;
