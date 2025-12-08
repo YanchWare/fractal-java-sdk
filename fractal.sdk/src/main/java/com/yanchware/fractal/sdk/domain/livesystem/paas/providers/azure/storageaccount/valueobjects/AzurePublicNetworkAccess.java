@@ -7,14 +7,15 @@ import java.util.Collection;
 
 /**
  * <pre>
- * Allow or disallow public network access to Storage Account. 
- * Value is optional but if passed in, must be 'Enabled' or 'Disabled'.
+ * Allow or disallow public network access to Storage Account.
+ * Value is optional but if passed in, must be either 'Enabled', 'Disabled', or 'SecuredByPerimeter'.
  * </pre>
  */
 public final class AzurePublicNetworkAccess extends ExtendableEnum<AzurePublicNetworkAccess> {
   public static final AzurePublicNetworkAccess ENABLED = fromString("Enabled");
-  
+
   public static final AzurePublicNetworkAccess DISABLED = fromString("Disabled");
+  public static final AzurePublicNetworkAccess SECURED_BY_PERIMETER = fromString("SecuredByPerimeter");
 
 
   /**
