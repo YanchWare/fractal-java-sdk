@@ -35,7 +35,9 @@ public class AzurePublicNetworkAccessTest {
 
     assertThat(values)
         .as("Values should contain ENABLED, and DISABLED and have exactly 2 values")
-        .containsExactlyInAnyOrder(AzurePublicNetworkAccess.ENABLED,
-            AzurePublicNetworkAccess.DISABLED);
+        .containsExactlyInAnyOrder(
+          AzurePublicNetworkAccess.ENABLED,
+          AzurePublicNetworkAccess.DISABLED,
+          AzurePublicNetworkAccess.SECURED_BY_PERIMETER);
   }
 }
