@@ -90,6 +90,7 @@ public class LiveSystemServiceTest {
             liveSystem.getDescription(),
             null,
             liveSystem.blueprintMapFromLiveSystemComponents(),
+            liveSystem.getParameters(),
             liveSystem.getEnvironment());
 
     verify(postRequestedFor(urlPathEqualTo("/livesystems/")));

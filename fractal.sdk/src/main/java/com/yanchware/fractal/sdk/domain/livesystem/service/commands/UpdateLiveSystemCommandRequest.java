@@ -5,10 +5,14 @@ import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.LiveSystemCompon
 
 import java.util.Map;
 
-public record UpdateLiveSystemCommandRequest (
-    String liveSystemId,
-    String fractalId,
-    String description,
-    String provider, //not set, here just to match the request in liveSystem. We will have provider at LiveSystemComponent level
-    Map<String, LiveSystemComponentDto> blueprintMap,
-    EnvironmentReference environment){ }
+public record UpdateLiveSystemCommandRequest(
+  String liveSystemId,
+  String fractalId,
+  String description,
+  String provider,
+  //not set, here just to match the request in liveSystem. We will have provider at LiveSystemComponent level
+  Map<String, LiveSystemComponentDto> blueprintMap,
+  Map<String, Object> parameters,
+  EnvironmentReference environment)
+{
+}
