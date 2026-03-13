@@ -62,8 +62,8 @@ mavenPublishing {
         url = "https://fractal.cloud"
         licenses {
             license {
-                name = "GNU GENERAL PUBLIC LICENSE, Version 3.0"
-                url = "https://www.gnu.org/licenses/gpl-3.0.en.html"
+                name = "GNU AFFERO GENERAL PUBLIC LICENSE, Version 3.0"
+                url = "https://www.gnu.org/licenses/agpl-3.0.en.html"
             }
         }
         developers {

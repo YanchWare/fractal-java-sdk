@@ -54,6 +54,7 @@
       "provider": "AZURE"
     }
   },
+  "parameters" : { },
   "environment": {
     "id": {
       "type": "Personal",

@@ -432,6 +432,7 @@ public class LiveSystemService extends Service {
       String description,
       String provider,
       Map<String, LiveSystemComponentDto> blueprintMap,
+      Map<String, Object> parameters,
       EnvironmentReference environmentReference
   ) throws InstantiatorException {
 
@@ -441,6 +442,7 @@ public class LiveSystemService extends Service {
         description,
         provider,
         blueprintMap,
+        parameters,
         environmentReference);
 
     HttpRequest request;
@@ -484,6 +486,7 @@ public class LiveSystemService extends Service {
       String description,
       String provider,
       Map<String, LiveSystemComponentDto> blueprintMap,
+      Map<String, Object> parameters,
       EnvironmentReference environmentReference) throws InstantiatorException {
     var command = new InstantiateLiveSystemCommandRequest(
         liveSystemId,
@@ -491,6 +494,7 @@ public class LiveSystemService extends Service {
         description,
         provider,
         blueprintMap,
+        parameters,
         environmentReference);
 
     HttpRequest request;

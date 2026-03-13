@@ -17,6 +17,7 @@ class InstantiateLiveSystemCommandRequestTest {
                 ls.getDescription(),
                 null,
                 ls.blueprintMapFromLiveSystemComponents(),
+                ls.getParameters(),
                 ls.getEnvironment());
         
         assertLiveSystemInfo(commandRequest, ls);

@@ -55,6 +55,8 @@ public class LiveSystemAggregate implements Validatable {
     private ProviderType provider;
     @Getter
     private OperationalServiceWindow operationalServiceWindow;
+    @Getter
+    private Map<String, Object> parameters;
 
     protected LiveSystemAggregate(
             HttpClient client,
@@ -64,6 +66,7 @@ public class LiveSystemAggregate implements Validatable {
         service = new LiveSystemService(client, sdkConfiguration, retryRegistry);
         environmentService = new RestEnvironmentService(client, sdkConfiguration, retryRegistry);
         components = new ArrayList<>();
+        parameters = new HashMap<>();
     }
 
     // TODO FRA-1870: Use entity instead of LiveSystemComponentMutationDto
@@ -98,6 +101,7 @@ public class LiveSystemAggregate implements Validatable {
                     description,
                     provider.toString(),
                     blueprintMapFromLiveSystemComponents(),
+                    parameters,
                     environment);
         }
 
@@ -107,6 +111,7 @@ public class LiveSystemAggregate implements Validatable {
                 description,
                 provider.toString(),
                 blueprintMapFromLiveSystemComponents(),
+                parameters,
                 environment);
     }
 

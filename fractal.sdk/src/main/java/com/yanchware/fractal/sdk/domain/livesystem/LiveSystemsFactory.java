@@ -98,7 +98,20 @@ public class LiveSystemsFactory {
             return withComponents(List.of(component));
         }
 
-        public LiveSystemBuilder withStandardProvider(ProviderType provider) {
+      public LiveSystemBuilder withParameters(Map<String, Object> parameters) {
+        if (parameters.isEmpty()) {
+          return builder;
+        }
+
+        if (liveSystem.getParameters() == null) {
+          liveSystem.setParameters(new HashMap<>());
+        }
+
+        liveSystem.getParameters().putAll(parameters);
+        return builder;
+      }
+
+      public LiveSystemBuilder withStandardProvider(ProviderType provider) {
             liveSystem.setProvider(provider);
             return this;
         }
