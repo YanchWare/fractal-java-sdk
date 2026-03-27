@@ -57,6 +57,13 @@ public interface SdkConfiguration {
   URI getEnvironmentsEndpoint();
 
   /**
+   * Gets the URI of the accounts endpoint.
+   *
+   * @return the URI of the accounts endpoint
+   */
+  URI getAccountsEndpoint();
+
+  /**
    * Gets the AWS Access Key ID.
    *
    * @return the AWS Access Key ID

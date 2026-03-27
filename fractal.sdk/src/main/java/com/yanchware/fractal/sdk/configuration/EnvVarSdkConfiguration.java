@@ -29,6 +29,10 @@ public class EnvVarSdkConfiguration implements SdkConfiguration {
    */
   public final URI DEFAULT_ENVIRONMENTS_ENDPOINT;
 
+    /**
+     * The default URI for the accounts endpoint.
+     */
+    public final URI DEFAULT_ACCOUNTS_ENDPOINT;
   /**
    * Constructs an instance of {@link EnvVarSdkConfiguration}.
    *
@@ -38,6 +42,7 @@ public class EnvVarSdkConfiguration implements SdkConfiguration {
     DEFAULT_LIVESYSTEM_ENDPOINT = new URI("https://api.fractal.cloud/livesystems");
     DEFAULT_BLUEPRINT_ENDPOINT = new URI("https://api.fractal.cloud/blueprints");
     DEFAULT_ENVIRONMENTS_ENDPOINT = new URI("https://api.fractal.cloud/environments");
+    DEFAULT_ACCOUNTS_ENDPOINT = new URI("http://localhost:5001/accounts");
   }
 
   /**
@@ -129,6 +134,14 @@ public class EnvVarSdkConfiguration implements SdkConfiguration {
     return checkAndReturnUri(ENVIRONMENTS_ENDPOINT_KEY, DEFAULT_ENVIRONMENTS_ENDPOINT);
   }
 
+  /**
+   * Gets the URI of the accounts endpoint from environment variables or default.
+   * @return the URI of the accounts endpoint
+   */
+  @Override
+  public URI getAccountsEndpoint(){
+      return checkAndReturnUri(ACCOUNTS_ENDPOINT_KEY, DEFAULT_ACCOUNTS_ENDPOINT);
+  }
   /**
    * Gets the AWS Access Key ID, part of the temporary credentials of an AWS role, from environment variables.
    * The environment variable key is {@value com.yanchware.fractal.sdk.configuration.Constants#AWS_ACCESS_KEY_ID_KEY}.
