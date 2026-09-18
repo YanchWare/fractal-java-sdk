@@ -41,6 +41,17 @@ public enum ComponentType {
   PAAS_COSMOS_NOSQL_DATABASE("Storage.PaaS.CosmosDbNoSqlDatabase"),
   PAAS_COSMOS_TABLE("Storage.PaaS.CosmosDbTable"),
   PAAS_COSMOS_ACCOUNT("Storage.PaaS.CosmosDbAccount"),
+  /**
+   * Deprecated. Azure has retired provisioning of Azure Cosmos DB for PostgreSQL (Citus). Creating a
+   * cluster returns HTTP 400 ("Provisioning new Azure Cosmos DB for PostgreSQL clusters is no longer
+   * supported as part of service retirement"), on every subscription, so a topology declaring one can
+   * no longer be deployed. Clusters that already exist keep running and are still reconciled.
+   *
+   * <p>For new workloads use Azure Database for PostgreSQL with Elastic Clusters, which carries the
+   * same Citus distributed-PostgreSQL features. See
+   * <a href="https://azure.microsoft.com/en-us/updates?id=556085">the Azure retirement notice</a>.
+   */
+  @Deprecated
   PAAS_COSMOS_POSTGRESQL_CLUSTER("Storage.PaaS.CosmosDbPostgresSqlCluster"),
   PAAS_DOCUMENT_DBMS("Storage.PaaS.DocumentDbms"),
   PAAS_DOCUMENT_DATABASE("Storage.PaaS.DocumentDatabase"),

@@ -5,6 +5,17 @@ import com.yanchware.fractal.sdk.utils.ExtendableEnum;
 
 import java.util.Collection;
 
+/**
+ * Deprecated. Compute sizes for {@link AzureCosmosPostgreSqlDbms}, which Azure no longer
+ * provisions.   * cluster returns HTTP 400 ("Provisioning new Azure Cosmos DB for PostgreSQL clusters is no longer
+  * supported as part of service retirement"), on every subscription, so a topology declaring one can
+  * no longer be deployed. Clusters that already exist keep running and are still reconciled.
+  *
+  * <p>For new workloads use Azure Database for PostgreSQL with Elastic Clusters, which carries the
+  * same Citus distributed-PostgreSQL features. See
+  * <a href="https://azure.microsoft.com/en-us/updates?id=556085">the Azure retirement notice</a>.
+ */
+@Deprecated
 public class AzureCosmosPostgreSqlDbmsSkuName extends ExtendableEnum<AzureCosmosPostgreSqlDbmsSkuName> {
   public static final AzureCosmosPostgreSqlDbmsSkuName STANDARD_D4DS_V5 = fromString("Standard_D4ds_v5");
   public static final AzureCosmosPostgreSqlDbmsSkuName STANDARD_D8DS_V5 = fromString("Standard_D8ds_v5");

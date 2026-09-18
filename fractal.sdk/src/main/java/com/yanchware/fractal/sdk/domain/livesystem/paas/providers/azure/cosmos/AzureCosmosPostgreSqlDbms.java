@@ -21,6 +21,17 @@ import static com.yanchware.fractal.sdk.domain.values.ComponentType.PAAS_COSMOS_
 import static com.yanchware.fractal.sdk.utils.RegexValidationUtils.isValidLowercaseLettersNumbersAndHyphens;
 import static com.yanchware.fractal.sdk.utils.ValidationUtils.isValidStringLength;
 
+/**
+ * Deprecated. Azure has retired provisioning of Azure Cosmos DB for PostgreSQL (Citus). Creating a
+   * cluster returns HTTP 400 ("Provisioning new Azure Cosmos DB for PostgreSQL clusters is no longer
+   * supported as part of service retirement"), on every subscription, so a topology declaring one can
+   * no longer be deployed. Clusters that already exist keep running and are still reconciled.
+   *
+   * <p>For new workloads use Azure Database for PostgreSQL with Elastic Clusters, which carries the
+   * same Citus distributed-PostgreSQL features. See
+   * <a href="https://azure.microsoft.com/en-us/updates?id=556085">the Azure retirement notice</a>.
+ */
+@Deprecated
 @Getter
 @Setter
 @ToString(callSuper = true)
