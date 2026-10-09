@@ -272,7 +272,7 @@ public abstract class KubernetesCluster extends PaaSContainerPlatform implements
       errors.addAll(podManagedIdentity.validate());
     }
 
-    //FRA-684 - Add error until we implement in GCP
+    // The GCP agent does not implement these: reject them rather than drop them silently.
     if(this.getProvider().equals(ProviderType.GCP)) {
       if(podManagedIdentity != null) errors.add("Pod Managed Identity is not fully supported yet for GCP");
       if(!priorityClasses.isEmpty()) errors.add("Priority classes are not fully supported yet for GCP");
