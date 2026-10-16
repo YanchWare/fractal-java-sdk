@@ -45,6 +45,7 @@ public abstract class KubernetesCluster extends PaaSContainerPlatform implements
   private List<CaaSServiceMeshSecurityImpl> serviceMeshSecurityInstances;
   private List<CaaSLoggingImpl> loggingInstances;
   private List<CaaSSearchImpl> documentDBInstances;
+  private List<CaaSTracingImpl> tracingInstances;
   private PodManagedIdentity podManagedIdentity;
   private String windowsAdminUsername;
   private Boolean workloadIdentityEnabled;
@@ -58,6 +59,7 @@ public abstract class KubernetesCluster extends PaaSContainerPlatform implements
     serviceMeshSecurityInstances = new ArrayList<>();
     loggingInstances = new ArrayList<>();
     documentDBInstances = new ArrayList<>();
+    tracingInstances = new ArrayList<>();
   }
 
   public static abstract class Builder<T extends KubernetesCluster, B extends Builder<T, B>> extends Component.Builder<T, B> {
@@ -192,6 +194,11 @@ public abstract class KubernetesCluster extends PaaSContainerPlatform implements
 
     //TODO: try to throw validation/comment out KubernetesCluster priority classes/taints
 
+    /**
+     * Adds a search component (e.g. {@link CaaSOpenSearch}) to the cluster.
+     *
+     * @param documentDB the search component
+     */
     public B withDocumentDB(CaaSSearchImpl documentDB) {
       return withDocumentDB(List.of(documentDB));
     }
@@ -208,6 +215,35 @@ public abstract class KubernetesCluster extends PaaSContainerPlatform implements
         documentDB.getDependencies().add(component.getId());
       });
       component.getDocumentDBInstances().addAll(documentDBInstances);
+      return builder;
+    }
+
+    /**
+     * Adds a tracing component (e.g. {@link CaaSJaeger}) to the cluster.
+     *
+     * @param tracing the tracing component
+     */
+    public B withTracing(CaaSTracingImpl tracing) {
+      return withTracing(List.of(tracing));
+    }
+
+    /**
+     * Adds tracing components (e.g. {@link CaaSJaeger}) to the cluster.
+     *
+     * @param tracingInstances the tracing components
+     */
+    public B withTracing(Collection<? extends CaaSTracingImpl> tracingInstances) {
+      if (isBlank(tracingInstances)) {
+        return builder;
+      }
+      if (isBlank(component.getTracingInstances())) {
+        component.setTracingInstances(new ArrayList<>());
+      }
+      tracingInstances.forEach(tracing -> {
+        tracing.setContainerPlatform(component.getId().getValue());
+        tracing.getDependencies().add(component.getId());
+      });
+      component.getTracingInstances().addAll(tracingInstances);
       return builder;
     }
 
@@ -266,6 +302,9 @@ public abstract class KubernetesCluster extends PaaSContainerPlatform implements
         .forEach(errors::addAll);
     documentDBInstances.stream()
         .map(CaaSSearch::validate)
+        .forEach(errors::addAll);
+    tracingInstances.stream()
+        .map(CaaSTracing::validate)
         .forEach(errors::addAll);
 
     if(podManagedIdentity != null) {

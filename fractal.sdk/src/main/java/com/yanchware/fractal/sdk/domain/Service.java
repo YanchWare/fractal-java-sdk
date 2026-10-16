@@ -2,7 +2,6 @@ package com.yanchware.fractal.sdk.domain;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yanchware.fractal.sdk.configuration.SdkConfiguration;
-import com.yanchware.fractal.sdk.domain.exceptions.EnvironmentException;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
 import com.yanchware.fractal.sdk.utils.StringHelper;
 import io.github.resilience4j.retry.Retry;

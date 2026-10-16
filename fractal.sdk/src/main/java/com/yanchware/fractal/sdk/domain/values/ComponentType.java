@@ -8,7 +8,7 @@ public enum ComponentType {
   CAAS_WORKLOAD("CustomWorkloads.CaaS.Workload"),
   CAAS_K8S_WORKLOAD("CustomWorkloads.CaaS.KubernetesWorkload"),
   CAAS_SEARCH("Storage.CaaS.Search"),
-  CAAS_ELASTIC_DATASTORE("Storage.CaaS.Elastic"),
+  CAAS_OPENSEARCH("Storage.CaaS.OpenSearch"),
   CAAS_MESSAGE_BROKER("Messaging.CaaS.Broker"),
   CAAS_KAFKA("Messaging.CaaS.Kafka"),
   CAAS_KAFKA_TOPIC("Messaging.CaaS.KafkaTopic"),
@@ -21,7 +21,6 @@ public enum ComponentType {
   CAAS_TRACING("Observability.CaaS.Tracing"),
   CAAS_JAEGER("Observability.CaaS.Jaeger"),
   CAAS_LOGGING("Observability.CaaS.Logging"),
-  CAAS_ELASTIC_LOGGING("Observability.CaaS.Elastic"),
   CAAS_SERVICE_MESH_SECURITY("Security.CaaS.ServiceMeshSecurity"),
   CAAS_OCELOT("Security.CaaS.Ocelot"),
 

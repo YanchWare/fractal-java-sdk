@@ -12,7 +12,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 
 /**
  * <p>
- * Builder class to represent an Ambassador API Gateway.
+ * Builder class to represent an Ambassador API Gateway, served by Emissary-ingress.
  * </p>
  * <br>
  * <p>
@@ -26,13 +26,11 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 public class CaaSAmbassador extends CaaSAPIGatewayImpl {
   private final static String HOST_OWNER_EMAIL_IS_BLANK = "[CaaSAmbassador Validation] Host Owner Email has not been defined and it is required";
   private final static String ACME_PROVIDER_AUTHORITY_IS_BLANK = "[CaaSAmbassador Validation] Automated Certificate Management Environment (ACME) Provider Authority has not been defined and it is required";
-  private final static String LICENSE_IS_BLANK = "[CaaSAmbassador Validation] License Key defined was either empty or blank and it is required";
   private final static String TLS_SECRET_IS_BLANK = "[CaaSAmbassador Validation] TLS Secret has not been defined and it is required";
 
   private String host;
   private String hostOwnerEmail;
   private String acmeProviderAuthority;
-  private String licenseKey;
   private String tlsSecretName;
 
   protected CaaSAmbassador() {
@@ -74,9 +72,10 @@ public class CaaSAmbassador extends CaaSAPIGatewayImpl {
     }
 
     /**
-     * Ambassador hostname
+     * Public hostname of the gateway. Components that publish consoles through this gateway use it
+     * as their public host.
      * <p>
-     * For more details please check <a href="https://www.getambassador.io/docs/edge-stack/latest/topics/running/tls#host">Ambassador documentation</a>
+     * For more details please check <a href="https://www.getambassador.io/docs/emissary/latest/topics/running/host-crd">Emissary-ingress documentation</a>
      *
      * @param host
      */
@@ -88,7 +87,7 @@ public class CaaSAmbassador extends CaaSAPIGatewayImpl {
     /**
      * Ambassador host owner email used for ACME TLS
      * <p>
-     * For more details please check <a href="https://www.getambassador.io/docs/edge-stack/latest/topics/running/tls#host">Ambassador documentation</a>
+     * For more details please check <a href="https://www.getambassador.io/docs/emissary/latest/topics/running/host-crd">Emissary-ingress documentation</a>
      *
      * @param hostOwnerEmail
      */
@@ -108,19 +107,9 @@ public class CaaSAmbassador extends CaaSAPIGatewayImpl {
     }
 
     /**
-     * Ambassador license key
-     *
-     * @param licenseKey
-     */
-    public AmbassadorBuilder withLicenseKey(String licenseKey) {
-      component.setLicenseKey(licenseKey);
-      return builder;
-    }
-
-    /**
      * The name of the TLS secret that Ambassador will look for to use.
      * 
-     * For more details check <a href="https://www.getambassador.io/docs/edge-stack/latest/topics/running/tls#bring-your-own-certificate">Ambassador documentation</a>
+     * For more details check <a href="https://www.getambassador.io/docs/emissary/latest/topics/running/tls">Emissary-ingress documentation</a>
      *
      * @param tlsSecretName
      */
@@ -146,10 +135,6 @@ public class CaaSAmbassador extends CaaSAPIGatewayImpl {
 
     if (isBlank(acmeProviderAuthority)) {
       errors.add(ACME_PROVIDER_AUTHORITY_IS_BLANK);
-    }
-
-    if (licenseKey != null && isBlank(licenseKey)) {
-      errors.add(LICENSE_IS_BLANK);
     }
 
     if (isBlank(tlsSecretName)) {

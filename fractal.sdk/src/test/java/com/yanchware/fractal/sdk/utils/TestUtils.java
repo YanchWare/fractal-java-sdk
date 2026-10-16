@@ -201,8 +201,8 @@ public class TestUtils {
         .withMonitoring(getPrometheusExample())
         .withAPIGateway(getAmbassadorExample())
         .withServiceMeshSecurity(getOcelotExample())
-        .withLogging(getElasticLoggingExample())
-        .withDocumentDB(getElasticDataStoreExample())
+        .withDocumentDB(getOpenSearchExample())
+        .withTracing(getJaegerExample())
         .build();
   }
 
@@ -212,8 +212,8 @@ public class TestUtils {
         .withMonitoring(getPrometheusExample())
         .withAPIGateway(getAmbassadorExample())
         .withServiceMeshSecurity(getOcelotExample())
-        .withLogging(getElasticLoggingExample())
-        .withDocumentDB(getElasticDataStoreExample())
+        .withDocumentDB(getOpenSearchExample())
+        .withTracing(getJaegerExample())
         .build();
   }
 
@@ -223,8 +223,8 @@ public class TestUtils {
       .withMonitoring(getPrometheusExample())
       .withAPIGateway(getAmbassadorExample())
       .withServiceMeshSecurity(getOcelotExample())
-      .withLogging(getElasticLoggingExample())
-      .withDocumentDB(getElasticDataStoreExample())
+      .withDocumentDB(getOpenSearchExample())
+      .withTracing(getJaegerExample())
       .build();
   }
 
@@ -234,8 +234,8 @@ public class TestUtils {
       .withMonitoring(getPrometheusExample())
       .withAPIGateway(getAmbassadorExample())
       .withServiceMeshSecurity(getOcelotExample())
-      .withLogging(getElasticLoggingExample())
-      .withDocumentDB(getElasticDataStoreExample())
+      .withDocumentDB(getOpenSearchExample())
+      .withTracing(getJaegerExample())
       .build();
   }
 
@@ -245,8 +245,8 @@ public class TestUtils {
       .withMonitoring(getPrometheusExample())
       .withAPIGateway(getAmbassadorExample())
       .withServiceMeshSecurity(getOcelotExample())
-      .withLogging(getElasticLoggingExample())
-      .withDocumentDB(getElasticDataStoreExample())
+      .withDocumentDB(getOpenSearchExample())
+      .withTracing(getJaegerExample())
       .build();
   }
 
@@ -308,36 +308,28 @@ public class TestUtils {
         .build();
   }
 
-  public static CaaSElasticLogging getElasticLoggingExample() {
-    return CaaSElasticLogging.builder()
-        .withId("elastic-logging")
-        .withDescription("Elastic Logging")
-        .withDisplayName("Elastic Logging")
-        .withNamespace("logging")
-        .withAPM(true)
-        .withKibana(true)
-        .withElasticVersion("1")
-        .withInstances(3)
+  public static CaaSOpenSearch getOpenSearchExample() {
+    return CaaSOpenSearch.builder()
+        .withId("opensearch")
+        .withDescription("OpenSearch")
+        .withDisplayName("OpenSearch")
+        .withNamespace("search")
+        .withReplicas(3)
         .withStorage("250Gi")
-        .withStorageClassName("standard")
-        .withMemory(3)
-        .withCpu(3)
+        .withStorageClassName("ssd")
+        .withMemory("4Gi")
+        .withCpu("2")
+        .withDashboards(true)
         .build();
   }
 
-  public static CaaSElasticDataStore getElasticDataStoreExample() {
-    return CaaSElasticDataStore.builder()
-        .withId("elastic-data")
-        .withDescription("Elastic Data Store")
-        .withDisplayName("Elastic Data Store")
-        .withNamespace("elastic-data")
-        .withKibana(false)
-        .withElasticVersion("1")
-        .withInstances(3)
-        .withStorage("250Gi")
-        .withStorageClassName("ssd")
-        .withMemory(3)
-        .withCpu(3)
+  public static CaaSJaeger getJaegerExample() {
+    return CaaSJaeger.builder()
+        .withId("jaeger")
+        .withDescription("Jaeger tracing")
+        .withDisplayName("Jaeger")
+        .withNamespace("tracing")
+        .linkToOpenSearch(getOpenSearchExample())
         .build();
   }
 

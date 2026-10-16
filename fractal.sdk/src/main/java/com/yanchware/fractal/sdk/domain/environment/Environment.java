@@ -5,7 +5,6 @@ import com.yanchware.fractal.sdk.domain.values.ResourceGroupId;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.UUID;
 
 public interface Environment {
   EnvironmentIdValue getId();

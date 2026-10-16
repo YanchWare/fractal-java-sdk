@@ -1,7 +1,10 @@
 package com.yanchware.fractal.sdk.domain.livesystem.caas;
 
 import com.yanchware.fractal.sdk.domain.values.ComponentId;
+import com.yanchware.fractal.sdk.utils.ReflectionUtils;
 import org.junit.jupiter.api.Test;
+
+import java.util.Map;
 
 import static com.yanchware.fractal.sdk.domain.values.ComponentType.CAAS_AMBASSADOR;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -38,10 +41,11 @@ class CaaSAmbassadorTest {
   }
 
   @Test
-  public void exceptionThrown_when_ambassadorCreatedWithEmptyLicense() {
-    var ambassadorBuilder = ambassadorBuilder().withLicenseKey("");
-    assertThatThrownBy(ambassadorBuilder::build).isInstanceOf(IllegalArgumentException.class)
-      .hasMessageContaining("License Key defined was either empty or blank");
+  public void parametersHaveNoLicenseKey_when_ambassadorIsBuilt() {
+    var parameters = (Map<String, Object>) ReflectionUtils.getAllFields(ambassadorBuilder().build()).get("parameters");
+    assertThat(parameters)
+      .containsEntry("host", "host")
+      .doesNotContainKey("licenseKey");
   }
   
   @Test

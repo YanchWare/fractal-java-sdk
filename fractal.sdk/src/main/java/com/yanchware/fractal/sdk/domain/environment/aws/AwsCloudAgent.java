@@ -2,7 +2,6 @@ package com.yanchware.fractal.sdk.domain.environment.aws;
 
 import com.yanchware.fractal.sdk.domain.environment.CloudAgentEntity;
 import com.yanchware.fractal.sdk.domain.environment.EnvironmentIdValue;
-import com.yanchware.fractal.sdk.domain.environment.oci.OciCloudAgent;
 import com.yanchware.fractal.sdk.domain.environment.service.EnvironmentService;
 import com.yanchware.fractal.sdk.domain.environment.service.dtos.InitializationRunResponse;
 import com.yanchware.fractal.sdk.domain.exceptions.InstantiatorException;
