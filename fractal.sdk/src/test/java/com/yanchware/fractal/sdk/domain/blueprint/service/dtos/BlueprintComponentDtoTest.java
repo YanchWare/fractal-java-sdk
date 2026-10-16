@@ -90,56 +90,48 @@ public class BlueprintComponentDtoTest {
   }
 
   @Test
-  public void blueprintComponentValid_when_aksWithElasticLogging() {
-    var aks = getAksBuilder().withLogging(getElasticLoggingExample()).build();
+  public void blueprintComponentValid_when_aksWithOpenSearch() {
+    var aks = getAksBuilder().withDocumentDB(getOpenSearchExample()).build();
     var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(aks));
 
-    var elasticLogging = (CaaSElasticLogging) aks.getLoggingInstances().getFirst();
-    var elasticLoggingDto = getBlueprintComponentDto(blueprintComponentDtoList, elasticLogging.getId().getValue());
+    var openSearch = (CaaSOpenSearch) aks.getDocumentDBInstances().getFirst();
+    var openSearchDto = getBlueprintComponentDto(blueprintComponentDtoList, openSearch.getId().getValue());
     var aksId = aks.getId().getValue();
 
-    assertGenericComponent(elasticLoggingDto, elasticLogging, CaaSLogging.TYPE);
+    assertGenericComponent(openSearchDto, openSearch, CaaSSearch.TYPE);
     assertSoftly(softly -> softly
-        .assertThat(elasticLoggingDto.getParameters().values())
+        .assertThat(openSearchDto.getParameters().values())
         .as("Component Parameters")
         .containsExactlyInAnyOrder(
-            elasticLogging.getNamespace(),
-            elasticLogging.isApmRequired(),
-            elasticLogging.isKibanaRequired(),
-            elasticLogging.getElasticVersion(),
-            elasticLogging.getElasticInstances(),
-            elasticLogging.getStorage(),
-            elasticLogging.getStorageClassName(),
-            elasticLogging.getMemory(),
-            elasticLogging.getCpu(),
+            openSearch.getNamespace(),
+            openSearch.getReplicas(),
+            openSearch.getStorage(),
+            openSearch.getStorageClassName(),
+            openSearch.getMemory(),
+            openSearch.getCpu(),
+            openSearch.getDashboards(),
             aksId
         ));
   }
 
   @Test
-  public void blueprintComponentValid_when_aksWithElasticDataStore() {
-    var aks = getAksBuilder().withDocumentDB(getElasticDataStoreExample()).build();
+  public void blueprintComponentValid_when_aksWithJaeger() {
+    var aks = getAksBuilder().withTracing(getJaegerExample()).build();
     var blueprintComponentDtoList = BlueprintComponentDto.fromLiveSystemComponents(List.of(aks));
 
-    var elasticDataStore = (CaaSElasticDataStore) aks.getDocumentDBInstances().getFirst();
-    var elasticDataStoreDto = getBlueprintComponentDto(blueprintComponentDtoList, elasticDataStore.getId().getValue());
+    var jaeger = (CaaSJaeger) aks.getTracingInstances().getFirst();
+    var jaegerDto = getBlueprintComponentDto(blueprintComponentDtoList, jaeger.getId().getValue());
     var aksId = aks.getId().getValue();
 
-    assertGenericComponent(elasticDataStoreDto, elasticDataStore, CaaSSearch.TYPE);
-    assertSoftly(softly -> softly
-        .assertThat(elasticDataStoreDto.getParameters().values())
-        .as("Component Parameters")
-        .containsExactlyInAnyOrder(
-            elasticDataStore.getNamespace(),
-            elasticDataStore.isKibanaRequired(),
-            elasticDataStore.getElasticVersion(),
-            elasticDataStore.getElasticInstances(),
-            elasticDataStore.getStorage(),
-            elasticDataStore.getStorageClassName(),
-            elasticDataStore.getMemory(),
-            elasticDataStore.getCpu(),
-            aksId
-        ));
+    assertGenericComponent(jaegerDto, jaeger, CaaSTracing.TYPE);
+    assertSoftly(softly -> {
+      softly.assertThat(jaegerDto.getParameters().values())
+          .as("Component Parameters")
+          .containsExactlyInAnyOrder(jaeger.getNamespace(), aksId);
+      softly.assertThat(jaegerDto.getDependencies())
+          .as("Component Dependencies")
+          .containsExactlyInAnyOrder("opensearch", aksId);
+    });
   }
 
   @Test
@@ -317,6 +309,7 @@ public class BlueprintComponentDtoTest {
     componentSize += kubernetesCluster.getServiceMeshSecurityInstances().size();
     componentSize += kubernetesCluster.getLoggingInstances().size();
     componentSize += kubernetesCluster.getDocumentDBInstances().size();
+    componentSize += kubernetesCluster.getTracingInstances().size();
 
     assertThat(blueprintComponentDtos).hasSize(componentSize);
   }

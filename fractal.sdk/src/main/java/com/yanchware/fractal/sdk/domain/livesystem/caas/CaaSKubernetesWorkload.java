@@ -6,6 +6,7 @@ import com.yanchware.fractal.sdk.domain.livesystem.CustomWorkload;
 import com.yanchware.fractal.sdk.domain.livesystem.CustomWorkloadBuilder;
 import com.yanchware.fractal.sdk.domain.livesystem.LiveSystemComponent;
 import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.ProviderType;
+import com.yanchware.fractal.sdk.domain.values.ComponentId;
 import com.yanchware.fractal.sdk.utils.SerializationUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -171,6 +172,55 @@ public class CaaSKubernetesWorkload extends CaaSWorkload implements LiveSystemCo
         public KubernetesWorkloadBuilder withWorkloadIdentityEnabled(boolean workloadIdentityEnabled) {
             component.setWorkloadIdentityEnabled(workloadIdentityEnabled);
             return builder;
+        }
+
+        /**
+         * <pre>
+         * Declares that the workload uses the given search component (e.g. OpenSearch), on the index prefix
+         * {@code <workloadId>-}.
+         *
+         * The search component creates the workload's own user, scoped by {@code access} to that prefix, and places
+         * its credentials in a Kubernetes Secret in the workload's namespace. The workload receives
+         * SEARCH_URL, SEARCH_USERNAME, SEARCH_PASSWORD_REF, SEARCH_INDEX_PREFIX and SEARCH_CA_REF.</pre>
+         *
+         * @param search the search component
+         * @param access the access granted to the workload
+         * @return The builder instance.
+         */
+        public KubernetesWorkloadBuilder linkToSearch(CaaSOpenSearch search, SearchAccess access) {
+            return linkToSearch(search, access, null);
+        }
+
+        /**
+         * <pre>
+         * Declares that the workload uses the given search component (e.g. OpenSearch), on the given index prefix.
+         * See {@link #linkToSearch(CaaSOpenSearch, SearchAccess)}.</pre>
+         *
+         * @param search      the search component
+         * @param access      the access granted to the workload
+         * @param indexPrefix prefix of the indices the workload may use; {@code null} for {@code <workloadId>-}.
+         *                    Lowercase letters, digits, '-', '_' and '.' only.
+         * @return The builder instance.
+         */
+        public KubernetesWorkloadBuilder linkToSearch(CaaSOpenSearch search, SearchAccess access, String indexPrefix) {
+            if (search == null) {
+                throw new IllegalArgumentException("[KubernetesWorkload Validation] Search component has not been defined and it is required");
+            }
+            return linkToSearch(search.getId(), access, indexPrefix);
+        }
+
+        /**
+         * <pre>
+         * Declares that the workload uses the search component with the given id, e.g. a local reference to the
+         * OpenSearch component of another Live System. See {@link #linkToSearch(CaaSOpenSearch, SearchAccess)}.</pre>
+         *
+         * @param searchId    id of the search component (or of a local reference to one)
+         * @param access      the access granted to the workload
+         * @param indexPrefix prefix of the indices the workload may use; {@code null} for {@code <workloadId>-}
+         * @return The builder instance.
+         */
+        public KubernetesWorkloadBuilder linkToSearch(ComponentId searchId, SearchAccess access, String indexPrefix) {
+            return withLink(SearchLink.to(searchId, access, indexPrefix));
         }
 
         @Override

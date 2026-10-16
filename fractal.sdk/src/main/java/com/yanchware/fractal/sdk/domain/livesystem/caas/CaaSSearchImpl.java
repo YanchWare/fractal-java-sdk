@@ -18,8 +18,8 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 public abstract class CaaSSearchImpl extends CaaSSearch implements LiveSystemComponent {
     private String storage;
     private String storageClassName;
-    private Integer memory;
-    private Integer cpu;
+    private String memory;
+    private String cpu;
 
     @Override
     public ProviderType getProvider(){
@@ -30,14 +30,26 @@ public abstract class CaaSSearchImpl extends CaaSSearch implements LiveSystemCom
     public Collection<String> validate() {
         Collection<String> errors = super.validate();
 
-        if (isBlank(storage)) {
-            errors.add(getStorageIsBlankErrorMessage());
+        if (storage != null && isBlank(storage)) {
+            errors.add(getBlankErrorMessage("Storage"));
+        }
+
+        if (storageClassName != null && isBlank(storageClassName)) {
+            errors.add(getBlankErrorMessage("Storage class name"));
+        }
+
+        if (memory != null && isBlank(memory)) {
+            errors.add(getBlankErrorMessage("Memory"));
+        }
+
+        if (cpu != null && isBlank(cpu)) {
+            errors.add(getBlankErrorMessage("CPU"));
         }
 
         return errors;
     }
 
-    private String getStorageIsBlankErrorMessage() {
-        return String.format("[%s Validation] Storage has not been defined and it is required", this.getClass().getName());
+    private String getBlankErrorMessage(String field) {
+        return String.format("[%s Validation] %s defined was either empty or blank", this.getClass().getSimpleName(), field);
     }
 }

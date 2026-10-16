@@ -16,36 +16,42 @@ public class LiveSystemKubernetesComponentDtoTest {
         k8sCluster.getApiGatewayInstances().forEach(component -> assertApiGatewayComponent(lsDtoMap, (CaaSAmbassador) component, provider));
         k8sCluster.getK8sWorkloadInstances().forEach(component -> assertK8sWorkloadComponent(lsDtoMap, component, provider));
         k8sCluster.getServiceMeshSecurityInstances().forEach(component -> assertSericeMeshSecurityComponent(lsDtoMap, component, provider));
-        k8sCluster.getLoggingInstances().forEach(component -> assertLoggingComponent(lsDtoMap, (CaaSElasticLogging) component, provider));
+        k8sCluster.getDocumentDBInstances().forEach(component -> assertSearchComponent(lsDtoMap, (CaaSOpenSearch) component, provider));
+        k8sCluster.getTracingInstances().forEach(component -> assertTracingComponent(lsDtoMap, (CaaSJaeger) component, provider));
     }
 
-    private void assertLoggingComponent(Map<String, LiveSystemComponentDto> lsDtoMap, CaaSElasticLogging component, ProviderType provider) {
+    private void assertSearchComponent(Map<String, LiveSystemComponentDto> lsDtoMap, CaaSOpenSearch component, ProviderType provider) {
         var dto = lsDtoMap.get(component.getId().getValue());
-        assertGenericComponent(dto, component, ComponentType.CAAS_ELASTIC_LOGGING.getId());
+        assertGenericComponent(dto, component, ComponentType.CAAS_OPENSEARCH.getId());
         assertThat(dto.getProvider()).isEqualTo(provider);
         assertThat(dto.getParameters())
                 .extracting(
                         "containerPlatform",
                         "cpu",
-                        "elasticInstances",
-                        "elasticVersion",
-                        "isApmRequired",
-                        "isKibanaRequired",
+                        "dashboards",
                         "memory",
                         "namespace",
+                        "replicas",
                         "storage",
                         "storageClassName")
                 .containsExactly(
                         component.getContainerPlatform(),
                         component.getCpu(),
-                        component.getElasticInstances(),
-                        component.getElasticVersion(),
-                        component.isApmRequired(),
-                        component.isKibanaRequired(),
+                        component.getDashboards(),
                         component.getMemory(),
                         component.getNamespace(),
+                        component.getReplicas(),
                         component.getStorage(),
                         component.getStorageClassName());
+    }
+
+    private void assertTracingComponent(Map<String, LiveSystemComponentDto> lsDtoMap, CaaSJaeger component, ProviderType provider) {
+        var dto = lsDtoMap.get(component.getId().getValue());
+        assertGenericComponent(dto, component, ComponentType.CAAS_JAEGER.getId());
+        assertThat(dto.getProvider()).isEqualTo(provider);
+        assertThat(dto.getParameters())
+                .containsOnlyKeys("containerPlatform", "namespace")
+                .containsEntry("namespace", component.getNamespace());
     }
 
     private void assertSericeMeshSecurityComponent(Map<String, LiveSystemComponentDto> lsDtoMap, CaaSServiceMeshSecurityImpl component, ProviderType provider) {
