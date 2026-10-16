@@ -1,9 +1,6 @@
 package com.yanchware.fractal.sdk;
 
 import com.flextrade.jfixture.JFixture;
-import com.yanchware.fractal.sdk.domain.environment.service.dtos.EnvironmentResponse;
-import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.EnvironmentIdDto;
-import com.yanchware.fractal.sdk.domain.livesystem.service.dtos.EnvironmentTypeDto;
 import com.yanchware.fractal.sdk.utils.EnvironmentIdDtoBuilder;
 import com.yanchware.fractal.sdk.utils.ExtendableEnum;
 import org.junit.jupiter.api.BeforeEach;
